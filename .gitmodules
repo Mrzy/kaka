@@ -1,3 +1,6 @@
 [submodule "HDLocker/submodules/NineOldAndroids"]
 	path = HDLocker/submodules/NineOldAndroids
 	url = https://github.com/JakeWharton/NineOldAndroids
+[submodule "HDLocker/submodules/volley"]
+	path = HDLocker/submodules/volley
+	url = https://github.com/mcxiaoke/android-volley
