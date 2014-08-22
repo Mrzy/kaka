@@ -4,3 +4,6 @@
 [submodule "HDLocker/submodules/volley"]
 	path = HDLocker/submodules/volley
 	url = https://github.com/Mrzy/android-volley.git
+[submodule "HDLocker/submodules/appcompat-v7"]
+	path = HDLocker/submodules/appcompat-v7
+	url = git@github.com:Mrzy/appcompat-v7.git
