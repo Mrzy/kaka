@@ -2,7 +2,6 @@ package cn.zmdx.kaka.locker.utils;
 
 import java.io.File;
 import java.util.concurrent.CountDownLatch;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.IPackageDataObserver;
 import android.content.pm.IPackageStatsObserver;
@@ -280,7 +279,6 @@ public class StorageUtils {
 
         // NOTE: To call a hidden method from PackageManager
         boolean invokeSuccess = PackageCompat.packageManager_getPackageSizeInfo(pm, pkgName, new IPackageStatsObserver.Stub() {
-            @SuppressLint("NewApi")
             @Override
             public void onGetStatsCompleted(PackageStats stats, boolean succeeded) {
                 if (succeeded && stats != null) {
