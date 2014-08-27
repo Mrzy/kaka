@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.zmdx.kaka.locker.gesturelock;
+package cn.zmdx.kaka.locker.gesturelock;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
-import com.zmdx.kaka.locker.gesturelock.LockPatternView;
+import cn.zmdx.kaka.locker.gesturelock.LockPatternView;
 
 public class LockPatternUtils {
 
