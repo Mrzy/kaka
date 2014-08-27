@@ -19,6 +19,7 @@ package cn.zmdx.kaka.locker.gesturelock;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -647,7 +648,7 @@ public class LockPatternView extends View {
         return -1;
     }
 
-    @Override
+    @SuppressLint("NewApi") @Override
     public boolean onHoverEvent(MotionEvent event) {
         if (isEnabled()) {
             final int action = event.getAction();
