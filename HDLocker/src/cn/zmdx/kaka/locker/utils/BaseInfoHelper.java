@@ -27,7 +27,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-
 public class BaseInfoHelper {
 
     private static final String TAG = "BaseInfoHelper";
@@ -40,7 +39,8 @@ public class BaseInfoHelper {
         try {
             String ret = null;
 
-            WifiManager wifiMgr = (WifiManager) context.getSystemService(android.content.Context.WIFI_SERVICE);
+            WifiManager wifiMgr = (WifiManager) context
+                    .getSystemService(android.content.Context.WIFI_SERVICE);
             WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
             if (wifiInfo != null) {
                 ret = wifiInfo.getMacAddress();
@@ -158,7 +158,8 @@ public class BaseInfoHelper {
 
     public static String getResolution(Context context) {
         try {
-            Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE))
+                    .getDefaultDisplay();
             DisplayMetrics metrics = new DisplayMetrics();
             display.getMetrics(metrics);
 
@@ -179,7 +180,8 @@ public class BaseInfoHelper {
 
     private static DisplayMetrics getMetrics(Context context) {
         try {
-            Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE))
+                    .getDefaultDisplay();
             DisplayMetrics metrics = new DisplayMetrics();
             display.getMetrics(metrics);
             return metrics;
