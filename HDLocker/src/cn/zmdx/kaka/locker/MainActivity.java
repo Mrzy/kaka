@@ -12,5 +12,6 @@ public class MainActivity extends Activity {
         TextView tv = new TextView(this);
         tv.setText("test");
         setContentView(tv);
+        //TODO
     }
 }
