@@ -24,6 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".settings.MainSettingsActivity"
+            android:exported="false" />
+
         <!-- umeng -->
         <service
             android:name="com.umeng.update.net.DownloadingService"

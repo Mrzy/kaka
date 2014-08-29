@@ -1,17 +1,17 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+
 import com.umeng.analytics.MobclickAgent;
 
-import android.app.Activity;
-import android.os.Bundle;
-
-public class MainSettingsActivity extends Activity {
+public class MainSettingsActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getSupportFragmentManager().beginTransaction().add(new MainSettingsFragment(), null).commit();
     }
 
     @Override
