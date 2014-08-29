@@ -40,9 +40,8 @@ import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
-
-import com.example.hdlocker.R;
 
 /**
  * Displays and detects the user's unlock attempt, which is a drag of a finger
@@ -648,7 +647,8 @@ public class LockPatternView extends View {
         return -1;
     }
 
-    @SuppressLint("NewApi") @Override
+    @SuppressLint("NewApi")
+    @Override
     public boolean onHoverEvent(MotionEvent event) {
         if (isEnabled()) {
             final int action = event.getAction();
