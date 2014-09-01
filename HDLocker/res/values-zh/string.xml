@@ -1,0 +1,11 @@
+<resources>
+
+    <!-- setting -->
+    <string name="setting_open_pandoralocker">开启潘多拉锁屏</string>
+    <string name="setting_close_pandoralocker">关闭潘多拉锁屏</string>
+    <string name="setting_close_systemlocker">关闭系统锁屏</string>
+    <string name="setting_lock_type">设置锁屏模式</string>
+    <string name="setting_feedback">用户反馈</string>
+    <string name="setting_check_new_version">检查新版本</string>
+
+</resources>
