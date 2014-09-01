@@ -3,6 +3,10 @@ package cn.zmdx.kaka.locker.settings;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Window;
+import cn.zmdx.kaka.locker.R;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -11,7 +15,17 @@ public class MainSettingsActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportFragmentManager().beginTransaction().add(new MainSettingsFragment(), null).commit();
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.main_setting_activity);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.content, new MainSettingsFragment()).commit();
+//        DisplayMetrics metric = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(metric);
+//        int width = metric.widthPixels; // 屏幕宽度（像素）
+//        int height = metric.heightPixels; // 屏幕高度（像素）
+//        float density = metric.density; // 屏幕密度（0.75 / 1.0 / 1.5）
+//        int densityDpi = metric.densityDpi; // 屏幕密度DPI（120 / 160 / 240）
+//        Log.d("syc", "width="+width+" height="+height+" densityDpi="+densityDpi+" density="+density);
     }
 
     @Override
