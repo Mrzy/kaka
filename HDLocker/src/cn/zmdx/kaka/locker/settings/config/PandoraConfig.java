@@ -23,8 +23,6 @@ public class PandoraConfig {
 
     private static final String PANDOLA_LOCKER_SP_NAME = "pandolaLockerName";
 
-    private static final String SYSTEM_LOCKER_SP_NAME = "systemLockerName";
-
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -49,16 +47,6 @@ public class PandoraConfig {
     public void savePandolaLockerState(boolean isOn) {
         Editor editor = mSp.edit();
         editor.putBoolean(PANDOLA_LOCKER_SP_NAME, isOn);
-        editor.commit();
-    }
-
-    public boolean isSystemLockerOn() {
-        return mSp.getBoolean(SYSTEM_LOCKER_SP_NAME, false);
-    }
-
-    public void saveSystemLockerState(boolean isOn) {
-        Editor editor = mSp.edit();
-        editor.putBoolean(SYSTEM_LOCKER_SP_NAME, isOn);
         editor.commit();
     }
 

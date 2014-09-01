@@ -44,16 +44,8 @@ public abstract class BaseSettingsFragment extends Fragment {
         return mPandoraConfig.isPandolaLockerOn();
     }
 
-    protected void openSystemLocker() {
-        mPandoraConfig.saveSystemLockerState(true);
-    }
-
     protected void closeSystemLocker() {
-        mPandoraConfig.saveSystemLockerState(false);
-    }
-
-    protected boolean isSystemLockerOn() {
-        return mPandoraConfig.isSystemLockerOn();
+        // TODO
     }
 
     protected void setUnLockType(int type) {

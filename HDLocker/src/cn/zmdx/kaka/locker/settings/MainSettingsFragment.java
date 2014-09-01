@@ -3,7 +3,6 @@ package cn.zmdx.kaka.locker.settings;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,8 +29,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private SettingSwitchButton mPandoraLockerSButton;
 
-    private SettingSwitchButton mSystemLockerSButton;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -52,16 +49,14 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mPandoraLockerPrompt = (TextView) mRootView.findViewById(R.id.setting_pandoralocker_prompt);
 
         mSystemLockerPrompt = (TextView) mRootView.findViewById(R.id.setting_systemlocker_prompt);
+        mSystemLockerPrompt.setOnClickListener(this);
 
         mLockTypePrompt = (TextView) mRootView.findViewById(R.id.setting_lock_type_prompt);
+        mLockTypePrompt.setOnClickListener(this);
 
         mPandoraLockerSButton = (SettingSwitchButton) mRootView
                 .findViewById(R.id.setting_pandoralocker_switch_button);
         mPandoraLockerSButton.setOnCheckedChangeListener(this);
-
-        mSystemLockerSButton = (SettingSwitchButton) mRootView
-                .findViewById(R.id.setting_systemlocker_switch_button);
-        mSystemLockerSButton.setOnCheckedChangeListener(this);
 
         mFeedback = (TextView) mRootView.findViewById(R.id.setting_feedback_prompt);
         mFeedback.setOnClickListener(this);
@@ -73,7 +68,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private void initSwitchButtonState() {
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
-        mSystemLockerSButton.setChecked(isSystemLockerOn());
     }
 
     @Override
@@ -90,17 +84,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                     disablePandoraLocker();
                 }
                 break;
-            case R.id.setting_systemlocker_switch_button:
-                if (isChecked) {
-                    mSystemLockerPrompt.setText(getResources().getString(
-                            R.string.setting_open_systemlocker));
-                    openSystemLocker();
-                } else {
-                    mSystemLockerPrompt.setText(getResources().getString(
-                            R.string.setting_close_systemlocker));
-                    closeSystemLocker();
-                }
-                break;
 
             default:
                 break;
@@ -110,6 +93,12 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.setting_systemlocker_prompt:
+                closeSystemLocker();
+                break;
+            case R.id.setting_lock_type_prompt:
+
+                break;
             case R.id.setting_feedback_prompt:
                 startFeedback();
                 break;

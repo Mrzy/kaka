@@ -40,15 +40,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:clickable="true"
             android:gravity="center_vertical"
-            android:text="@string/setting_open_systemlocker" />
-
-        <cn.zmdx.kaka.locker.settings.ui.SettingSwitchButton
-            android:id="@+id/setting_systemlocker_switch_button"
-            style="@style/setting_Switch"
-            android:background="@drawable/setting_switchbutton_selector"
-            android:button="@null"
-            android:gravity="right" />
+            android:text="@string/setting_close_systemlocker" />
     </LinearLayout>
 
     <LinearLayout
@@ -63,6 +57,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:clickable="true"
             android:gravity="center_vertical"
             android:text="@string/setting_lock_type" />
     </LinearLayout>
