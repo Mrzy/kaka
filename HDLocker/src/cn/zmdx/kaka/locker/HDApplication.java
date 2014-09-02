@@ -14,6 +14,7 @@ public class HDApplication extends Application {
     @Override
     public void onCreate() {
         mRequestQueue = Volley.newRequestQueue(this);
+        String manufacturer= android.os.Build.MANUFACTURER;//获取制造商名字
         super.onCreate();
     }
 
