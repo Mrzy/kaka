@@ -21,6 +21,7 @@ public class MainSettingsActivity extends FragmentActivity {
         setContentView(R.layout.main_setting_activity);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content, new MainSettingsFragment()).commit();
+        
         // DisplayMetrics metric = new DisplayMetrics();
         // getWindowManager().getDefaultDisplay().getMetrics(metric);
         // int width = metric.widthPixels; // 屏幕宽度（像素）
