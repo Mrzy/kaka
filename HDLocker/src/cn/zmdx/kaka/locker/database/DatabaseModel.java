@@ -10,9 +10,9 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 public class DatabaseModel {
     private final static int DATABASE_VERSION = 1;
 
-    MySqlitDatabase mMySqlitDatabase;
+    private MySqlitDatabase mMySqlitDatabase;
 
-    private static DatabaseModel databaseModel = null;
+    private static DatabaseModel sDatabaseModel = null;
 
     private DatabaseModel() {
         mMySqlitDatabase = new MySqlitDatabase(HDApplication.getInstannce(),
@@ -22,17 +22,14 @@ public class DatabaseModel {
     public synchronized void close() {
         mMySqlitDatabase.close();
         mMySqlitDatabase = null;
-        databaseModel = null;
+        sDatabaseModel = null;
     }
 
     public static DatabaseModel getInstance() {
-        if (databaseModel == null) {
-            databaseModel = new DatabaseModel();
+        if (sDatabaseModel == null) {
+            sDatabaseModel = new DatabaseModel();
         }
-        return databaseModel;
+        return sDatabaseModel;
     }
 
-    public void createTable() {
-        mMySqlitDatabase.getWritableDatabase();
-    }
 }

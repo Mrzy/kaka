@@ -23,7 +23,7 @@ public class PandoraConfig {
 
     private static final String PANDORA_LOCKER_SP_NAME = "pandoraLockerName";
 
-    public static boolean IS_DEBUG = true;
+    public static boolean sDebug = true;
 
     public static final String DATABASE_NAME = "PandoraLocker.db";
 

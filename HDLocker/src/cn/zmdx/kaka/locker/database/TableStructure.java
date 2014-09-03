@@ -21,7 +21,7 @@ public class TableStructure {
 
     /* content表结构 */
 
-    public final static String CONTENT_ID = "id";
+    public final static String CONTENT_ID = "_id";
 
     public final static String CONTENT_BAIDU_ID = "baidu_id";
 
