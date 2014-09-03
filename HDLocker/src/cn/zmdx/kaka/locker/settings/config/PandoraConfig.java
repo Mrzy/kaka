@@ -21,7 +21,11 @@ public class PandoraConfig {
 
     private static final int UNLOCKER_TYPE_NUMBER = 2;
 
-    private static final String PANDOLA_LOCKER_SP_NAME = "pandolaLockerName";
+    private static final String PANDORA_LOCKER_SP_NAME = "pandoraLockerName";
+
+    public static boolean IS_DEBUG = true;
+
+    public static final String DATABASE_NAME = "PandoraLocker.db";
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -41,12 +45,12 @@ public class PandoraConfig {
     }
 
     public boolean isPandolaLockerOn() {
-        return mSp.getBoolean(PANDOLA_LOCKER_SP_NAME, true);
+        return mSp.getBoolean(PANDORA_LOCKER_SP_NAME, true);
     }
 
     public void savePandolaLockerState(boolean isOn) {
         Editor editor = mSp.edit();
-        editor.putBoolean(PANDOLA_LOCKER_SP_NAME, isOn);
+        editor.putBoolean(PANDORA_LOCKER_SP_NAME, isOn);
         editor.commit();
     }
 
