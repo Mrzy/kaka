@@ -18,6 +18,7 @@ public class MainSettingsActivity extends FragmentActivity {
         MobclickAgent.openActivityDurationTrack(false);
         UmengUpdateAgent.update(this);
         UmengUpdateAgent.silentUpdate(this);
+        String manufacturer = android.os.Build.MANUFACTURER;// 获取制造商名字
         setContentView(R.layout.main_setting_activity);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content, new MainSettingsFragment()).commit();
