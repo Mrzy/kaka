@@ -162,7 +162,6 @@ public class HDBEventSource {
         filter.addDataScheme("file");
         appContext.registerReceiver(sReceiverStorage, filter);
 
-        // init all other event tracker in com.dianxinos.library.events.*
         HDBNetworkState.init(sAppContext);
     }
 
