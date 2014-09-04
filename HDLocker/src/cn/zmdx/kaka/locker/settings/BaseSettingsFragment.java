@@ -1,13 +1,12 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import cn.zmdx.kaka.locker.settings.MAboutFragment.onAboutCallBack;
+import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 import com.umeng.analytics.MobclickAgent;
@@ -19,8 +18,6 @@ public abstract class BaseSettingsFragment extends Fragment {
     private PandoraConfig mPandoraConfig;
 
     private Context mContext;
-
-    private onAboutCallBack mCallBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,13 +48,13 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
 
     protected void aboutUs() {
-        mCallBack.gotoAbout();
+        gotoAbout();
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mCallBack = (onAboutCallBack) activity;
+    public void gotoAbout() {
+        MAboutFragment fragment = new MAboutFragment();
+        getFragmentManager().beginTransaction().addToBackStack(null)
+                .add(R.id.content, fragment).commit();
     }
 
     protected void closeSystemLocker() {
@@ -86,7 +83,6 @@ public abstract class BaseSettingsFragment extends Fragment {
     protected void setUnLockType(int type) {
         mPandoraConfig.saveUnlockType(type);
     }
-    
 
     protected int getUnLockType() {
         return mPandoraConfig.getUnLockType();

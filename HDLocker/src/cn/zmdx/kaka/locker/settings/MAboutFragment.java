@@ -11,13 +11,9 @@ import android.widget.TextView;
 public class MAboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        TextView asd=new TextView(getActivity());
+        TextView asd = new TextView(getActivity());
         asd.setText("asdasd");
         return asd;
     }
 
-    public interface onAboutCallBack {
-        void gotoAbout();
-    }
-    
 }

@@ -1,10 +1,8 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,13 +32,10 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private TextView mCheckNewVersion;
 
-    private TextView mAbout;
-
     private SettingSwitchButton mPandoraLockerSButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
     }
 
@@ -77,9 +72,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mConcernTeam.setOnClickListener(this);
         mChangeBackground = (TextView) mRootView.findViewById(R.id.setting_change_background);
         mChangeBackground.setOnClickListener(this);
-
-        mAbout = (TextView) mRootView.findViewById(R.id.setting_concern_team);
-        mAbout.setOnClickListener(this);
 
     }
 
@@ -122,8 +114,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             case R.id.setting_concern_team:
                 aboutUs();
                 break;
-               
-
             case R.id.setting_checkout_new_version_prompt:
                 checkNewVersion();
                 break;
