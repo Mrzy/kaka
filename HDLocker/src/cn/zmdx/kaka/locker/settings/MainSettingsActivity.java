@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.MAboutFragment.onAboutCallBack;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
-public class MainSettingsActivity extends FragmentActivity {
+public class MainSettingsActivity extends FragmentActivity implements onAboutCallBack {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +22,7 @@ public class MainSettingsActivity extends FragmentActivity {
         setContentView(R.layout.main_setting_activity);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content, new MainSettingsFragment()).commit();
-        
+
         // DisplayMetrics metric = new DisplayMetrics();
         // getWindowManager().getDefaultDisplay().getMetrics(metric);
         // int width = metric.widthPixels; // 屏幕宽度（像素）
@@ -42,5 +43,12 @@ public class MainSettingsActivity extends FragmentActivity {
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    public void gotoAbout() {
+        MAboutFragment fragment = new MAboutFragment();
+        getSupportFragmentManager().beginTransaction().addToBackStack(null).
+        add(R.id.content, fragment).commit();
     }
 }
