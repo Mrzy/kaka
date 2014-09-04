@@ -15,17 +15,19 @@ public class PandoraConfig {
 
     private SharedPreferences mSp;
 
-    private static final int UNLOCKER_TYPE_DEFAULT = 0;
+    public static final int UNLOCKER_TYPE_DEFAULT = 0;
 
-    private static final int UNLOCKER_TYPE_GUSTURE = 1;
+    public static final int UNLOCKER_TYPE_GUSTURE = 1;
 
-    private static final int UNLOCKER_TYPE_NUMBER = 2;
+    public static final int UNLOCKER_TYPE_NUMBER = 2;
 
     private static final String PANDORA_LOCKER_SP_NAME = "pandoraLockerName";
 
     public static boolean sDebug = true;
 
     public static final String DATABASE_NAME = "PandoraLocker.db";
+
+    private static final String UNLOCK_TYPE = "unlocktype";
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -40,8 +42,7 @@ public class PandoraConfig {
     }
 
     public int getUnLockType() {
-        // TODO
-        return UNLOCKER_TYPE_DEFAULT;
+        return mSp.getInt(UNLOCK_TYPE, UNLOCKER_TYPE_DEFAULT);
     }
 
     public boolean isPandolaLockerOn() {
@@ -51,6 +52,12 @@ public class PandoraConfig {
     public void savePandolaLockerState(boolean isOn) {
         Editor editor = mSp.edit();
         editor.putBoolean(PANDORA_LOCKER_SP_NAME, isOn);
+        editor.commit();
+    }
+
+    public void saveUnlockType(int type) {
+        Editor editor = mSp.edit();
+        editor.putInt(UNLOCK_TYPE, type);
         editor.commit();
     }
 

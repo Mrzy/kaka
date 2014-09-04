@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.ui.SettingSwitchButton;
 
 public class MainSettingsFragment extends BaseSettingsFragment implements OnCheckedChangeListener,
@@ -20,6 +21,10 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     private TextView mPandoraLockerPrompt;
 
     private TextView mSystemLockerPrompt;
+
+    private TextView mConcernTeam;
+
+    private TextView mChangeBackground;
 
     private TextView mLockTypePrompt;
 
@@ -31,7 +36,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
     }
 
@@ -63,6 +67,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mCheckNewVersion = (TextView) mRootView
                 .findViewById(R.id.setting_checkout_new_version_prompt);
         mCheckNewVersion.setOnClickListener(this);
+
+        mConcernTeam = (TextView) mRootView.findViewById(R.id.setting_concern_team);
+        mConcernTeam.setOnClickListener(this);
+        mChangeBackground = (TextView) mRootView.findViewById(R.id.setting_change_background);
+        mChangeBackground.setOnClickListener(this);
 
     }
 
@@ -97,12 +106,14 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 closeSystemLocker();
                 break;
             case R.id.setting_lock_type_prompt:
-
+                setUnLockType(PandoraConfig.UNLOCKER_TYPE_DEFAULT);
                 break;
             case R.id.setting_feedback_prompt:
                 startFeedback();
                 break;
-
+            case R.id.setting_concern_team:
+                aboutUs();
+                break;
             case R.id.setting_checkout_new_version_prompt:
                 checkNewVersion();
                 break;

@@ -9,7 +9,7 @@ import cn.zmdx.kaka.locker.R;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
-public class MainSettingsActivity extends FragmentActivity {
+public class MainSettingsActivity extends FragmentActivity   {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class MainSettingsActivity extends FragmentActivity {
         setContentView(R.layout.main_setting_activity);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content, new MainSettingsFragment()).commit();
-        
+
         // DisplayMetrics metric = new DisplayMetrics();
         // getWindowManager().getDefaultDisplay().getMetrics(metric);
         // int width = metric.widthPixels; // 屏幕宽度（像素）
@@ -44,4 +44,5 @@ public class MainSettingsActivity extends FragmentActivity {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+
 }

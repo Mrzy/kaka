@@ -4,10 +4,9 @@ package cn.zmdx.kaka.locker.settings;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 import com.umeng.analytics.MobclickAgent;
@@ -48,6 +47,16 @@ public abstract class BaseSettingsFragment extends Fragment {
         return mPandoraConfig.isPandolaLockerOn();
     }
 
+    protected void aboutUs() {
+        gotoAbout();
+    }
+
+    public void gotoAbout() {
+        MAboutFragment fragment = new MAboutFragment();
+        getFragmentManager().beginTransaction().addToBackStack(null)
+                .add(R.id.content, fragment).commit();
+    }
+
     protected void closeSystemLocker() {
         try {
             Intent intent = new Intent("/");
@@ -60,7 +69,7 @@ public abstract class BaseSettingsFragment extends Fragment {
             // Intent intent = new
             // Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
             // startActivity(intent);
-            
+
             // 根据包名跳转到系统自带的应用程序信息界面
             // Uri packageURI = Uri.parse("package:" + "cn.zmdx.kaka.locker");
             // Intent intent = new
@@ -72,11 +81,10 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
 
     protected void setUnLockType(int type) {
-        // TODO
+        mPandoraConfig.saveUnlockType(type);
     }
 
     protected int getUnLockType() {
-        // TODO
         return mPandoraConfig.getUnLockType();
     }
 
