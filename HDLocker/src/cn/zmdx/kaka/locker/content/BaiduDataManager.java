@@ -121,6 +121,8 @@ public class BaiduDataManager {
 
         public int mImageHeight;
 
+        public int mIsImageDownloaded;
+
         public String mTthumbLargeUrl;
 
         public int mThumbLargeWidth;
@@ -156,6 +158,7 @@ public class BaiduDataManager {
                     bd.setImageUrl(image_url);
                     bd.setImageWidth(image_width);
                     bd.setImageHeight(image_height);
+                    bd.setIsImageDownloaded(0);
                     bd.setTthumbLargeUrl(thumb_large_url);
                     bd.setThumbLargeWidth(thumb_large_width);
                     bd.setThumbLargeHeight(thumb_large_height);
@@ -223,6 +226,17 @@ public class BaiduDataManager {
 
         public void setImageHeight(int mImageHeight) {
             this.mImageHeight = mImageHeight;
+        }
+
+        /*
+         * return: 0:未被下载。1：已经下载
+         */
+        public int isImageDownloaded() {
+            return mIsImageDownloaded;
+        }
+
+        public void setIsImageDownloaded(int mIsImageDownloaded) {
+            this.mIsImageDownloaded = mIsImageDownloaded;
         }
 
         public String getTthumbLargeUrl() {
