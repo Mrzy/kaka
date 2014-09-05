@@ -52,16 +52,14 @@ public class DatabaseModel {
         sDatabaseModel = null;
     }
 
-    public static DatabaseModel getInstance() {
+    public static synchronized DatabaseModel getInstance() {
         if (sDatabaseModel == null) {
             sDatabaseModel = new DatabaseModel();
         }
         return sDatabaseModel;
     }
 
-    // private long size=0;
-    public synchronized boolean saveBaiduData(List<BaiduData> list) {
-        boolean isSuccess = false;
+    public synchronized void saveBaiduData(List<BaiduData> list) {
         SQLiteDatabase mysql = mMySqlitDatabase.getWritableDatabase();
         try {
             mysql.beginTransaction();
@@ -79,10 +77,7 @@ public class DatabaseModel {
                 sqLiteStatement.bindLong(INDEX_NINE, bd.getThumbLargeHeight());
                 sqLiteStatement.bindString(INDEX_TEN, bd.getTag1());
                 sqLiteStatement.bindString(INDEX_ELEVEN, bd.getTag2());
-                long size = sqLiteStatement.executeInsert();
-                if (size < list.size()) {
-                    isSuccess = true;
-                }
+                sqLiteStatement.executeInsert();
             }
             mysql.setTransactionSuccessful();
         } catch (Exception e) {
@@ -90,7 +85,6 @@ public class DatabaseModel {
         } finally {
             mysql.endTransaction();
         }
-        return isSuccess;
     }
 
 }

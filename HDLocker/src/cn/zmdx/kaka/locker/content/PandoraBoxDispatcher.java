@@ -7,7 +7,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
@@ -34,6 +33,7 @@ public class PandoraBoxDispatcher extends Handler {
     public void handleMessage(Message msg) {
         switch (msg.what) {
             case MSG_BAIDU_DATA_ARRIVED:
+                @SuppressWarnings("unchecked")
                 final List<BaiduData> bdList = (List<BaiduData>) msg.obj;
                 BaiduData.saveToDatabase(bdList);
                 break;

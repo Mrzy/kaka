@@ -173,8 +173,8 @@ public class BaiduDataManager {
             return bdList;
         }
 
-        public static boolean saveToDatabase(List<BaiduData> bdList) {
-            return DatabaseModel.getInstance().saveBaiduData(bdList);
+        public static void saveToDatabase(List<BaiduData> bdList) {
+            DatabaseModel.getInstance().saveBaiduData(bdList);
         }
 
         public String getId() {
