@@ -94,4 +94,14 @@ public class DatabaseModel {
         }
     }
 
+    /**
+     * 从本地数据库查询一定数量的数据。这里查询的条件是，是否下载图片字段必须为0
+     * @param tag1 大分类
+     * @param count 取的数量
+     * @return
+     */
+    public synchronized List<BaiduData> queryNonImageData(int tag1, int count) {
+        //TODO
+        return null;
+    }
 }

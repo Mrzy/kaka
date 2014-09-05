@@ -4,6 +4,8 @@ package cn.zmdx.kaka.locker;
 import android.app.Application;
 import android.content.Context;
 
+import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
@@ -19,16 +21,10 @@ public class HDApplication extends Application {
         return instance;
     }
 
-    private RequestQueue mRequestQueue;
-
     @Override
     public void onCreate() {
-        mRequestQueue = Volley.newRequestQueue(this);
+        PandoraBoxDispatcher.getInstance().sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
         super.onCreate();
-    }
-
-    public RequestQueue getRequestQueue() {
-        return mRequestQueue;
     }
 
 }
