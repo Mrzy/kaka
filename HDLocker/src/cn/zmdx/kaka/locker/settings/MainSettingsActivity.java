@@ -9,7 +9,7 @@ import cn.zmdx.kaka.locker.R;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
-public class MainSettingsActivity extends FragmentActivity   {
+public class MainSettingsActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

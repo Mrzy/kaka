@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker.content;
 
+import java.util.List;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,9 +13,9 @@ import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 public class PandoraBoxDispatcher extends Handler {
 
     public static final int MSG_BAIDU_DATA_ARRIVED = 0;
-    
-    
+
     private static PandoraBoxDispatcher INSTANCE;
+
     private Context mContext;
 
     private PandoraBoxDispatcher(Looper looper) {
@@ -29,10 +31,11 @@ public class PandoraBoxDispatcher extends Handler {
 
     @Override
     public void handleMessage(Message msg) {
-        switch(msg.what) {
+        switch (msg.what) {
             case MSG_BAIDU_DATA_ARRIVED:
-                final BaiduData bd = (BaiduData)msg.obj;
-                bd.saveToDatabase();
+                @SuppressWarnings("unchecked")
+                final List<BaiduData> bdList = (List<BaiduData>) msg.obj;
+                BaiduData.saveToDatabase(bdList);
                 break;
         }
 
