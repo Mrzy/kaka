@@ -114,41 +114,48 @@ public class DatabaseModel {
                 + " = '" + BaiduTagMapping.getStringTag1(tag1) + "' and "
                 + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = " + DOWNLOAD_FALSE
                 + " ORDER BY random() limit " + count, null, null);
-        while (cursor.moveToNext()) {
-            BaiduData bd = new BaiduData();
-            String id = cursor.getString(cursor.getColumnIndex(TableStructure.CONTENT_ID));
-            String baiduId = cursor.getString(cursor
-                    .getColumnIndex(TableStructure.CONTENT_BAIDU_ID));
-            String describe = cursor.getString(cursor
-                    .getColumnIndex(TableStructure.CONTENT_DESCRIBE));
-            String imageurl = cursor.getString(cursor
-                    .getColumnIndex(TableStructure.CONTENT_IMAGE_URL));
-            int imagewidth = cursor.getInt(cursor
-                    .getColumnIndex(TableStructure.CONTENT_IMAGE_WIDTH));
-            int imageheight = cursor.getInt(cursor
-                    .getColumnIndex(TableStructure.CONTENT_IMAGE_HEIGHT));
-            int isimagedownloaded = cursor.getInt(cursor
-                    .getColumnIndex(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED));
-            String thumblargeurl = cursor.getString(cursor
-                    .getColumnIndex(TableStructure.CONTENT_THUMB_LARGE_URL));
-            int thumblargewidth = cursor.getInt(cursor
-                    .getColumnIndex(TableStructure.CONTENT_THUMB_LARGE_WIDTH));
-            int thumblargeheight = cursor.getInt(cursor
-                    .getColumnIndex(TableStructure.CONTENT_THUMB_LARGE_HEIGHT));
+        try {
+            while (cursor.moveToNext()) {
+                BaiduData bd = new BaiduData();
+                String id = cursor.getString(cursor.getColumnIndex(TableStructure.CONTENT_ID));
+                String baiduId = cursor.getString(cursor
+                        .getColumnIndex(TableStructure.CONTENT_BAIDU_ID));
+                String describe = cursor.getString(cursor
+                        .getColumnIndex(TableStructure.CONTENT_DESCRIBE));
+                String imageurl = cursor.getString(cursor
+                        .getColumnIndex(TableStructure.CONTENT_IMAGE_URL));
+                int imagewidth = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_IMAGE_WIDTH));
+                int imageheight = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_IMAGE_HEIGHT));
+                int isimagedownloaded = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED));
+                String thumblargeurl = cursor.getString(cursor
+                        .getColumnIndex(TableStructure.CONTENT_THUMB_LARGE_URL));
+                int thumblargewidth = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_THUMB_LARGE_WIDTH));
+                int thumblargeheight = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_THUMB_LARGE_HEIGHT));
 
-            bd.setId(id);
-            bd.setBaiduId(baiduId);
-            bd.setDescribe(describe);
-            bd.setImageUrl(imageurl);
-            bd.setImageWidth(imagewidth);
-            bd.setImageHeight(imageheight);
-            bd.setIsImageDownloaded(isimagedownloaded);
-            bd.setTthumbLargeUrl(thumblargeurl);
-            bd.setThumbLargeWidth(thumblargewidth);
-            bd.setThumbLargeHeight(thumblargeheight);
-            list.add(bd);
+                bd.setId(id);
+                bd.setBaiduId(baiduId);
+                bd.setDescribe(describe);
+                bd.setImageUrl(imageurl);
+                bd.setImageWidth(imagewidth);
+                bd.setImageHeight(imageheight);
+                bd.setIsImageDownloaded(isimagedownloaded);
+                bd.setTthumbLargeUrl(thumblargeurl);
+                bd.setThumbLargeWidth(thumblargewidth);
+                bd.setThumbLargeHeight(thumblargeheight);
+                list.add(bd);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
         }
+
         // sqliteDatabase.close();
         return list;
     }
