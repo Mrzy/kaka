@@ -26,6 +26,13 @@ public class MainSettingsActivity extends FragmentActivity {
         UmengUpdateAgent.silentUpdate(this);
         String manufacturer = android.os.Build.MANUFACTURER;// 获取制造商名字
         setContentView(R.layout.main_setting_activity);
+//        BaiduDataManager bdm =  new BaiduDataManager(); 
+//        bdm.pullAllFunnyData();
+//        List<BaiduData> list=DatabaseModel.getInstance().queryNonImageData(1, 10);
+//        for(int i=0;i<list.size();i++){
+//            Log.i("zlflf", list.get(i).mBaiduId);
+//        }
+        
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content, new MainSettingsFragment()).commit();

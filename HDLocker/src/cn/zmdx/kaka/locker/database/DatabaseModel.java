@@ -4,13 +4,12 @@ package cn.zmdx.kaka.locker.database;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.content.BaiduTagMapping;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
+import cn.zmdx.kaka.locker.content.BaiduTagMapping;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 /**
@@ -105,7 +104,6 @@ public class DatabaseModel {
      * @param count 取的数量
      * @return
      */
-    @SuppressLint("NewApi")
     public synchronized List<BaiduData> queryNonImageData(int tag1, int count) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         List<BaiduData> list = new ArrayList<BaiduData>();
@@ -113,7 +111,8 @@ public class DatabaseModel {
                 + TableStructure.TABLE_NAME_CONTENT + " where " + TableStructure.CONTENT_TAG1
                 + " = '" + BaiduTagMapping.getStringTag1(tag1) + "' and "
                 + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = " + DOWNLOAD_FALSE
-                + " ORDER BY random() limit " + count, null, null);
+                + " ORDER BY random() limit " + count, null);
+
         try {
             while (cursor.moveToNext()) {
                 BaiduData bd = new BaiduData();
@@ -165,8 +164,27 @@ public class DatabaseModel {
      * @return
      */
     public synchronized boolean isImageDownloaded(String id) {
-        // TODO
-        return false;
+        boolean isDownloaded = false;
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.rawQuery("select "
+                + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " from "
+                + TableStructure.TABLE_NAME_CONTENT + " where " + TableStructure.CONTENT_ID + " = "
+                + id, null);
+        try {
+            while (cursor.moveToNext()) {
+                int isimagedownloaded = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED));
+                if (isimagedownloaded == 1) {
+                    isDownloaded = true;
+                }
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return isDownloaded;
     }
 
     /**
@@ -175,7 +193,6 @@ public class DatabaseModel {
      * @param id
      */
     public synchronized void markAlreadyDownload(String id) {
-        // TODO
     }
 
     public synchronized boolean deleteById(String id) {
