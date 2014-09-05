@@ -37,6 +37,12 @@ public class DatabaseModel {
 
     private static final int INDEX_ELEVEN = 11;
 
+    private static final int INDEX_TWELVE = 12;
+
+    public static final int DOWNLOAD_FALSE = 0;
+
+    public static final int DOWNLOAD_TRUE = 1;
+
     private MySqlitDatabase mMySqlitDatabase;
 
     private static DatabaseModel sDatabaseModel = null;
@@ -64,7 +70,7 @@ public class DatabaseModel {
         try {
             mysql.beginTransaction();
             SQLiteStatement sqLiteStatement = mysql.compileStatement("replace INTO "
-                    + TableStructure.TABLE_NAME_CONTENT + " VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+                    + TableStructure.TABLE_NAME_CONTENT + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
             for (BaiduData bd : list) {
                 sqLiteStatement.clearBindings();
                 sqLiteStatement.bindString(INDEX_TWO, bd.getBaiduId());
@@ -72,11 +78,12 @@ public class DatabaseModel {
                 sqLiteStatement.bindString(INDEX_FOUR, bd.getImageUrl());
                 sqLiteStatement.bindLong(INDEX_FIVE, bd.getImageWidth());
                 sqLiteStatement.bindLong(INDEX_SIX, bd.getImageHeight());
-                sqLiteStatement.bindString(INDEX_SEVEN, bd.getTthumbLargeUrl());
-                sqLiteStatement.bindLong(INDEX_EIGHT, bd.getThumbLargeWidth());
-                sqLiteStatement.bindLong(INDEX_NINE, bd.getThumbLargeHeight());
-                sqLiteStatement.bindString(INDEX_TEN, bd.getTag1());
-                sqLiteStatement.bindString(INDEX_ELEVEN, bd.getTag2());
+                sqLiteStatement.bindLong(INDEX_SEVEN, bd.isImageDownloaded());
+                sqLiteStatement.bindString(INDEX_EIGHT, bd.getTthumbLargeUrl());
+                sqLiteStatement.bindLong(INDEX_NINE, bd.getThumbLargeWidth());
+                sqLiteStatement.bindLong(INDEX_TEN, bd.getThumbLargeHeight());
+                sqLiteStatement.bindString(INDEX_ELEVEN, bd.getTag1());
+                sqLiteStatement.bindString(INDEX_TWELVE, bd.getTag2());
                 sqLiteStatement.executeInsert();
             }
             mysql.setTransactionSuccessful();

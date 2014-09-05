@@ -20,6 +20,8 @@ public class TableStructure {
 
     public final static String CONTENT_IMAGE_HEIGHT = "image_height";
 
+    public final static String CONTENT_IS_IMAGE_DOWNLOADED = "is_image_downloaded";
+
     public final static String CONTENT_THUMB_LARGE_URL = "thumb_large_url";
 
     public final static String CONTENT_THUMB_LARGE_WIDTH = "thumb_large_width";
@@ -34,9 +36,10 @@ public class TableStructure {
         String str_sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_CONTENT + " (" + CONTENT_ID
                 + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," + CONTENT_BAIDU_ID + " TEXT,"
                 + CONTENT_DESCRIBE + " TEXT," + CONTENT_IMAGE_URL + " TEXT," + CONTENT_IMAGE_WIDTH
-                + " INTEGER," + CONTENT_IMAGE_HEIGHT + " INTEGER," + CONTENT_THUMB_LARGE_URL
-                + " TEXT," + CONTENT_THUMB_LARGE_WIDTH + " INTEGER," + CONTENT_THUMB_LARGE_HEIGHT
-                + " INTEGER," + CONTENT_TAG1 + " TEXT," + CONTENT_TAG2 + " TEXT)";
+                + " INTEGER," + CONTENT_IMAGE_HEIGHT + " INTEGER," + CONTENT_IS_IMAGE_DOWNLOADED
+                + " INTEGER," + CONTENT_THUMB_LARGE_URL + " TEXT," + CONTENT_THUMB_LARGE_WIDTH
+                + " INTEGER," + CONTENT_THUMB_LARGE_HEIGHT + " INTEGER," + CONTENT_TAG1 + " TEXT,"
+                + CONTENT_TAG2 + " TEXT)";
         db.execSQL(str_sql);
     }
 
