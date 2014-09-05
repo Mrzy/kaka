@@ -9,19 +9,20 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
+import cn.zmdx.kaka.locker.RequestManager;
+import cn.zmdx.kaka.locker.cache.ImageCacheManager;
 import cn.zmdx.kaka.locker.database.DatabaseModel;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader.ImageContainer;
+import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 
 public class BaiduDataManager {
 
@@ -31,10 +32,7 @@ public class BaiduDataManager {
 
     private static final int REQUEST_COUNT_PER_PAGE = 30;
 
-    private RequestQueue mQueue;
-
-    public BaiduDataManager(Context context) {
-        mQueue = Volley.newRequestQueue(context);
+    public BaiduDataManager() {
     }
 
     /**
@@ -69,9 +67,39 @@ public class BaiduDataManager {
                 public void onErrorResponse(VolleyError error) {
                 }
             });
-            mQueue.add(request);
+            RequestManager.getRequestQueue().add(request);
         }
 
+    }
+
+    public void downloadBaiduImage(final BaiduData bd) {
+        String url = bd.mImageUrl;
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+        ImageCacheManager.getInstance().getImage(url, new ImageListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // 若请求失败，此处认为
+                if (error.networkResponse.statusCode >= 500)
+                    DatabaseModel.getInstance().deleteById(bd.mId);
+            }
+
+            @Override
+            public void onResponse(ImageContainer response, boolean isImmediate) {
+                // update local db isDownload flag
+                DatabaseModel.getInstance().markAlreadyDownload(bd.mId);
+            }
+        });
+    }
+
+    public void batchDownloadBaiduImage(List<BaiduData> list) {
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            BaiduData bd = list.get(i);
+            downloadBaiduImage(bd);
+        }
     }
 
     /**
