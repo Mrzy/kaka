@@ -1,11 +1,15 @@
 
 package cn.zmdx.kaka.locker.database;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.content.BaiduTagMapping;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
@@ -96,12 +100,63 @@ public class DatabaseModel {
 
     /**
      * 从本地数据库查询一定数量的数据。这里查询的条件是，是否下载图片字段必须为0
+     * 
      * @param tag1 大分类
      * @param count 取的数量
      * @return
      */
+    @SuppressLint("NewApi")
     public synchronized List<BaiduData> queryNonImageData(int tag1, int count) {
-        //TODO
-        return null;
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        List<BaiduData> list = new ArrayList<BaiduData>();
+        Cursor cursor = sqliteDatabase.rawQuery("select * from "
+                + TableStructure.TABLE_NAME_CONTENT + " where " + TableStructure.CONTENT_TAG1
+                + " = '" + BaiduTagMapping.getStringTag1(tag1) + "' and "
+                + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = " + DOWNLOAD_FALSE
+                + " ORDER BY random() limit " + count, null, null);
+        try {
+            while (cursor.moveToNext()) {
+                BaiduData bd = new BaiduData();
+                String id = cursor.getString(cursor.getColumnIndex(TableStructure.CONTENT_ID));
+                String baiduId = cursor.getString(cursor
+                        .getColumnIndex(TableStructure.CONTENT_BAIDU_ID));
+                String describe = cursor.getString(cursor
+                        .getColumnIndex(TableStructure.CONTENT_DESCRIBE));
+                String imageurl = cursor.getString(cursor
+                        .getColumnIndex(TableStructure.CONTENT_IMAGE_URL));
+                int imagewidth = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_IMAGE_WIDTH));
+                int imageheight = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_IMAGE_HEIGHT));
+                int isimagedownloaded = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED));
+                String thumblargeurl = cursor.getString(cursor
+                        .getColumnIndex(TableStructure.CONTENT_THUMB_LARGE_URL));
+                int thumblargewidth = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_THUMB_LARGE_WIDTH));
+                int thumblargeheight = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_THUMB_LARGE_HEIGHT));
+
+                bd.setId(id);
+                bd.setBaiduId(baiduId);
+                bd.setDescribe(describe);
+                bd.setImageUrl(imageurl);
+                bd.setImageWidth(imagewidth);
+                bd.setImageHeight(imageheight);
+                bd.setIsImageDownloaded(isimagedownloaded);
+                bd.setTthumbLargeUrl(thumblargeurl);
+                bd.setThumbLargeWidth(thumblargewidth);
+                bd.setThumbLargeHeight(thumblargeheight);
+                list.add(bd);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+
+        // sqliteDatabase.close();
+        return list;
     }
 }

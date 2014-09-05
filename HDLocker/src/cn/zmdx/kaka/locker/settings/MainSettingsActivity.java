@@ -1,10 +1,17 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.BaiduDataManager;
+import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
+import cn.zmdx.kaka.locker.content.BaiduTagMapping;
+import cn.zmdx.kaka.locker.database.DatabaseModel;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -20,6 +27,7 @@ public class MainSettingsActivity extends FragmentActivity {
         UmengUpdateAgent.silentUpdate(this);
         String manufacturer = android.os.Build.MANUFACTURER;// 获取制造商名字
         setContentView(R.layout.main_setting_activity);
+
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content, new MainSettingsFragment()).commit();
 
