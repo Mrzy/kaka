@@ -158,7 +158,7 @@ public class BaiduDataManager {
                     bd.setImageUrl(image_url);
                     bd.setImageWidth(image_width);
                     bd.setImageHeight(image_height);
-                    bd.setIsImageDownloaded(0);
+                    bd.setIsImageDownloaded(DatabaseModel.DOWNLOAD_FALSE);
                     bd.setTthumbLargeUrl(thumb_large_url);
                     bd.setThumbLargeWidth(thumb_large_width);
                     bd.setThumbLargeHeight(thumb_large_height);

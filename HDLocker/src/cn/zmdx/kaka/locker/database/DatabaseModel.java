@@ -39,6 +39,10 @@ public class DatabaseModel {
 
     private static final int INDEX_TWELVE = 12;
 
+    public static final int DOWNLOAD_FALSE = 0;
+
+    public static final int DOWNLOAD_TRUE = 1;
+
     private MySqlitDatabase mMySqlitDatabase;
 
     private static DatabaseModel sDatabaseModel = null;
