@@ -15,6 +15,8 @@ public class BaiduTagMapping {
 
     public static final String S_TAG2_ALL = "全部";
 
+    public static final int INT_ERROR = -1;
+
     public static final int INT_TAG2_ALL = 0;
 
     public static final int INT_TAG1_MINGXING = 1;
@@ -50,6 +52,30 @@ public class BaiduTagMapping {
                 return S_TAG2_ALL;
             default:
                 return null;
+        }
+    }
+
+    public static int getIntTag1(String tag1) {
+        if (tag1.equals(S_TAG1_MINGXING)) {
+            return INT_TAG1_MINGXING;
+        } else if (tag1.equals(S_TAG1_MEINV)) {
+            return INT_TAG1_MEINV;
+        } else if (tag1.equals(S_TAG1_BIZHI)) {
+            return INT_TAG1_BIZHI;
+        } else if (tag1.equals(S_TAG1_GAOXIAO)) {
+            return INT_TAG1_GAOXIAO;
+        } else if (tag1.equals(S_TAG1_SHEYING)) {
+            return INT_TAG1_SHEYING;
+        } else {
+            return INT_ERROR;
+        }
+    }
+
+    public static int getIntTag2(String tag2) {
+        if (tag2.equals(S_TAG2_ALL)) {
+            return INT_TAG2_ALL;
+        } else {
+            return INT_ERROR;
         }
     }
 }

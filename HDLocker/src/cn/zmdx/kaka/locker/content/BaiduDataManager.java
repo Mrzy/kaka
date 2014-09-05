@@ -3,11 +3,18 @@ package cn.zmdx.kaka.locker.content;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.Message;
+import android.text.TextUtils;
+import cn.zmdx.kaka.locker.database.DatabaseModel;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response.ErrorListener;
@@ -20,7 +27,7 @@ public class BaiduDataManager {
 
     private String mBaseUrl = "http://image.baidu.com/channel/listjson?";
 
-    private static final int REQUEST_PAGE_COUNT_DEFAULT = 5;
+    private static final int REQUEST_PAGE_COUNT_DEFAULT = 10;
 
     private static final int REQUEST_COUNT_PER_PAGE = 30;
 
@@ -43,27 +50,28 @@ public class BaiduDataManager {
 
     public void pullFunnyDataByTag1(final int tag1) {
         JsonObjectRequest request = null;
+
         for (int i = 0; i < REQUEST_PAGE_COUNT_DEFAULT; i++) {
-            request = new JsonObjectRequest(getUrl(tag1, REQUEST_PAGE_COUNT_DEFAULT), null,
-                    new Listener<JSONObject>() {
+            request = new JsonObjectRequest(getUrl(tag1, i), null, new Listener<JSONObject>() {
 
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            final BaiduData bd = BaiduData.parseJson(response);
-                            Message msg = new Message();
-                            msg.what = PandoraBoxDispatcher.MSG_BAIDU_DATA_ARRIVED;
-                            msg.obj = bd;
-                            PandoraBoxDispatcher.getInstance().sendMessage(msg);
-                        }
+                @Override
+                public void onResponse(JSONObject response) {
+                    final List<BaiduData> bdList = BaiduData.parseJson(response);
+                    Message msg = Message.obtain();
+                    msg.what = PandoraBoxDispatcher.MSG_BAIDU_DATA_ARRIVED;
+                    msg.obj = bdList;
+                    PandoraBoxDispatcher.getInstance().sendMessage(msg);
+                }
 
-                    }, new ErrorListener() {
+            }, new ErrorListener() {
 
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                        }
-                    });
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+            mQueue.add(request);
         }
-        mQueue.add(request);
+
     }
 
     /**
@@ -81,14 +89,14 @@ public class BaiduDataManager {
      * pn是请求的页号 rn是每页的数据条数
      */
     public String getUrl(int tag1, int tag2, int pageNum, int pageCount) {
-        StringBuilder sb = new StringBuilder(getBaseUrl());
-        sb.append("pn=" + pageNum);
-        sb.append("rn=" + pageCount);
-        sb.append("&tag1=" + BaiduTagMapping.getStringTag1(tag1));
-        sb.append("&tag2=" + BaiduTagMapping.getStringTag2(tag2));
-        sb.append("&ie=utf8");
         try {
-            return URLEncoder.encode(sb.toString(), "utf-8");
+            StringBuilder sb = new StringBuilder(getBaseUrl());
+            sb.append("pn=" + pageNum);
+            sb.append("&rn=" + pageCount);
+            sb.append("&tag1=" + URLEncoder.encode(BaiduTagMapping.getStringTag1(tag1), "utf-8"));
+            sb.append("&tag2=" + URLEncoder.encode(BaiduTagMapping.getStringTag2(tag2), "utf-8"));
+            sb.append("&ie=utf8");
+            return sb.toString();
         } catch (UnsupportedEncodingException e) {
             // never execute
             return null;
@@ -101,23 +109,162 @@ public class BaiduDataManager {
 
     public static class BaiduData implements IData {
 
-        // TODO
-        // id
-        // baidu_id
-        // url
-        // ...
-        // get,set方法
+        public String mId;
+
+        public String mBaiduId;
+
+        public String mDescribe;
+
+        public String mImageUrl;
+
+        public int mImageWidth;
+
+        public int mImageHeight;
+
+        public String mTthumbLargeUrl;
+
+        public int mThumbLargeWidth;
+
+        public int mThumbLargeHeight;
+
+        public String mTag1;
+
+        public String mTag2;
 
         // 将从百度服务器拉取的json解析为我们自己的实体对象
-        public static BaiduData parseJson(JSONObject jsonObj) {
-            BaiduData bd = new BaiduData();
-            // TODO
-            return bd;
+        public static List<BaiduData> parseJson(JSONObject jsonObj) {
+            List<BaiduData> bdList = new ArrayList<BaiduData>();
+            String tag1 = jsonObj.optString("tag1");
+            String tag2 = jsonObj.optString("tag2");
+            JSONArray jsonArray = jsonObj.optJSONArray("data");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.optJSONObject(i);
+                String baiduId = jsonObject.optString("id");
+                String describe = jsonObject.optString("desc");
+                String image_url = jsonObject.optString("image_url");
+                int image_width = jsonObject.optInt("image_width");
+                int image_height = jsonObject.optInt("image_height");
+                String thumb_large_url = jsonObject.optString("thumb_large_url");
+                int thumb_large_width = jsonObject.optInt("thumb_large_width");
+                int thumb_large_height = jsonObject.optInt("thumb_large_height");
+                if (!TextUtils.isEmpty(image_url)) {
+                    BaiduData bd = new BaiduData();
+                    bd.setTag1(tag1);
+                    bd.setTag2(tag2);
+                    bd.setBaiduId(baiduId);
+                    bd.setDescribe(describe);
+                    bd.setImageUrl(image_url);
+                    bd.setImageWidth(image_width);
+                    bd.setImageHeight(image_height);
+                    bd.setTthumbLargeUrl(thumb_large_url);
+                    bd.setThumbLargeWidth(thumb_large_width);
+                    bd.setThumbLargeHeight(thumb_large_height);
+                    bdList.add(bd);
+                    if (PandoraConfig.sDebug) {
+                        HDBLOG.logD("tag1=" + "tag1" + " tag2=" + tag2 + "baiduId=" + baiduId
+                                + " describe=" + describe + " image_url=" + image_url
+                                + " image_width=" + image_width + " image_height=" + image_height
+                                + " thumb_large_url=" + thumb_large_url + " thumb_large_width="
+                                + thumb_large_width + " thumb_large_height=" + thumb_large_height);
+                    }
+                }
+            }
+
+            return bdList;
         }
 
-        @Override
-        public boolean saveToDatabase() {
-            return false;
+        public static boolean saveToDatabase(List<BaiduData> bdList) {
+            return DatabaseModel.getInstance().saveBaiduData(bdList);
         }
+
+        public String getId() {
+            return mId;
+        }
+
+        public void setId(String mId) {
+            this.mId = mId;
+        }
+
+        public String getBaiduId() {
+            return mBaiduId;
+        }
+
+        public void setBaiduId(String mBaiduId) {
+            this.mBaiduId = mBaiduId;
+        }
+
+        public String getDescribe() {
+            return mDescribe;
+        }
+
+        public void setDescribe(String mDescribe) {
+            this.mDescribe = mDescribe;
+        }
+
+        public String getImageUrl() {
+            return mImageUrl;
+        }
+
+        public void setImageUrl(String mImageUrl) {
+            this.mImageUrl = mImageUrl;
+        }
+
+        public int getImageWidth() {
+            return mImageWidth;
+        }
+
+        public void setImageWidth(int mImageWidth) {
+            this.mImageWidth = mImageWidth;
+        }
+
+        public int getImageHeight() {
+            return mImageHeight;
+        }
+
+        public void setImageHeight(int mImageHeight) {
+            this.mImageHeight = mImageHeight;
+        }
+
+        public String getTthumbLargeUrl() {
+            return mTthumbLargeUrl;
+        }
+
+        public void setTthumbLargeUrl(String mTthumbLargeUrl) {
+            this.mTthumbLargeUrl = mTthumbLargeUrl;
+        }
+
+        public int getThumbLargeWidth() {
+            return mThumbLargeWidth;
+        }
+
+        public void setThumbLargeWidth(int mThumbLargeWidth) {
+            this.mThumbLargeWidth = mThumbLargeWidth;
+        }
+
+        public int getThumbLargeHeight() {
+            return mThumbLargeHeight;
+        }
+
+        public void setThumbLargeHeight(int mThumbLargeHeight) {
+            this.mThumbLargeHeight = mThumbLargeHeight;
+        }
+
+        public String getTag1() {
+            return mTag1;
+        }
+
+        public void setTag1(String mTag1) {
+            this.mTag1 = mTag1;
+        }
+
+        public String getTag2() {
+            return mTag2;
+        }
+
+        public void setTag2(String mTag2) {
+            this.mTag2 = mTag2;
+        }
+
     }
+
 }
