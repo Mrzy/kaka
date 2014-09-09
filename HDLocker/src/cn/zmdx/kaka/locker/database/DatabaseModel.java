@@ -194,12 +194,11 @@ public class DatabaseModel {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         ContentValues values = new ContentValues();
         values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, DatabaseModel.DOWNLOAD_TRUE);
-        sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values,
+        int count = sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values,
                 TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, new String[] {
                     id
                 });
-
-        return false;
+        return count != 0;
     }
 
     public synchronized boolean deleteById(String id) {
