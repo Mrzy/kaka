@@ -1,25 +1,24 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import java.util.List;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.content.BaiduDataManager;
-import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
-import cn.zmdx.kaka.locker.content.BaiduTagMapping;
-import cn.zmdx.kaka.locker.database.DatabaseModel;
+import cn.zmdx.kaka.locker.service.PandoraService;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
 public class MainSettingsActivity extends FragmentActivity {
 
+    private Intent mServiceIntent = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mServiceIntent = new Intent(getApplicationContext(), PandoraService.class);
+        startService(mServiceIntent);
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         MobclickAgent.openActivityDurationTrack(false);

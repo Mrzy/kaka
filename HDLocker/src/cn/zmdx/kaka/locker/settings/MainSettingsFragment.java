@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.ui.SettingSwitchButton;
 
@@ -36,6 +37,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        PandoraBoxDispatcher.getInstance().sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 10000);
         super.onCreate(savedInstanceState);
     }
 

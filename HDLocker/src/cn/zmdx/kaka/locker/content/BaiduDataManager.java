@@ -11,12 +11,16 @@ import org.json.JSONObject;
 
 import android.os.Message;
 import android.text.TextUtils;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.cache.ImageCacheManager;
 import cn.zmdx.kaka.locker.database.DatabaseModel;
+import cn.zmdx.kaka.locker.network.DownloadRequest;
+import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
+import com.android.volley.Request;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
@@ -28,10 +32,6 @@ public class BaiduDataManager {
 
     private String mBaseUrl = "http://image.baidu.com/channel/listjson?";
 
-    private static final int REQUEST_PAGE_COUNT_DEFAULT = 10;
-
-    private static final int REQUEST_COUNT_PER_PAGE = 30;
-
     public BaiduDataManager() {
     }
 
@@ -39,17 +39,16 @@ public class BaiduDataManager {
      * 从百度服务器拉取这5个频道的数据，每个频道请求5次(每页一次，一页31条数据)，执行此方法后，一共获得数据31*5*5=775条
      */
     public void pullAllFunnyData() {
-        pullFunnyDataByTag1(BaiduTagMapping.INT_TAG1_BIZHI);
-        pullFunnyDataByTag1(BaiduTagMapping.INT_TAG1_GAOXIAO);
-        pullFunnyDataByTag1(BaiduTagMapping.INT_TAG1_MEINV);
-        pullFunnyDataByTag1(BaiduTagMapping.INT_TAG1_MINGXING);
-        pullFunnyDataByTag1(BaiduTagMapping.INT_TAG1_SHEYING);
+        int length = PandoraPolicy.BAIDU_IMAGE_MODULE.length;
+        for (int i = 0; i < length; i++) {
+            pullFunnyDataByTag1(PandoraPolicy.BAIDU_IMAGE_MODULE[i]);
+        }
     }
 
     public void pullFunnyDataByTag1(final int tag1) {
         JsonObjectRequest request = null;
 
-        for (int i = 0; i < REQUEST_PAGE_COUNT_DEFAULT; i++) {
+        for (int i = 0; i < PandoraPolicy.REQUEST_PAGE_COUNT_DEFAULT; i++) {
             request = new JsonObjectRequest(getUrl(tag1, i), null, new Listener<JSONObject>() {
 
                 @Override
@@ -65,40 +64,84 @@ public class BaiduDataManager {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    // TODO
                 }
             });
             RequestManager.getRequestQueue().add(request);
         }
+    }
 
+    public void downloadImage(final BaiduData bd) {
+        Request<String> request = new DownloadRequest(bd.mImageUrl, new Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("download image finished,path=" + response);
+                }
+            }
+
+        }, new ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.networkResponse.statusCode >= 500) {
+                    // invalidate url
+                    DiskImageHelper.remove(bd.mImageUrl);
+                }
+            }
+        });
+        RequestManager.getRequestQueue().add(request);
     }
 
     public void downloadBaiduImage(final BaiduData bd) {
+        if (bd == null) {
+            return;
+        }
+
         String url = bd.mImageUrl;
         if (TextUtils.isEmpty(url)) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logE("url is empty, id:" + bd.mId);
+            }
             return;
         }
         ImageCacheManager.getInstance().getImage(url, new ImageListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("下载图片失败，" + error.toString());
+                }
                 // 若请求失败，此处认为
-                if (error.networkResponse.statusCode >= 500)
+                if (error.networkResponse.statusCode >= 500) {
                     DatabaseModel.getInstance().deleteById(bd.mId);
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("下载图片时，服务器异常，认为图片已不能正常下载，所以删除本地库中的这条数据");
+                    }
+                }
             }
 
             @Override
             public void onResponse(ImageContainer response, boolean isImmediate) {
-                // update local db isDownload flag
-                DatabaseModel.getInstance().markAlreadyDownload(bd.mId);
+                if (response.getBitmap() != null) {
+                    // update local db isDownload flag
+                    DatabaseModel.getInstance().markAlreadyDownload(bd.mId);
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("下载图片请求的onResponse被调用，response.getBitmap()="
+                                + response.getBitmap() + "更新数据库标记为已下载");
+                    }
+                }
             }
         });
     }
 
     public void batchDownloadBaiduImage(List<BaiduData> list) {
         int size = list.size();
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("开始批量下载百度图片程序，总数：" + size);
+        }
         for (int i = 0; i < size; i++) {
             BaiduData bd = list.get(i);
-            downloadBaiduImage(bd);
+            downloadImage(bd);
         }
     }
 
@@ -110,7 +153,7 @@ public class BaiduDataManager {
      * @return
      */
     public String getUrl(int tag1, int pageNum) {
-        return getUrl(tag1, BaiduTagMapping.INT_TAG2_ALL, pageNum, REQUEST_COUNT_PER_PAGE);
+        return getUrl(tag1, BaiduTagMapping.INT_TAG2_ALL, pageNum, PandoraPolicy.REQUEST_COUNT_PER_PAGE);
     }
 
     /*
@@ -124,6 +167,10 @@ public class BaiduDataManager {
             sb.append("&tag1=" + URLEncoder.encode(BaiduTagMapping.getStringTag1(tag1), "utf-8"));
             sb.append("&tag2=" + URLEncoder.encode(BaiduTagMapping.getStringTag2(tag2), "utf-8"));
             sb.append("&ie=utf8");
+
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("请求url：" + sb.toString());
+            }
             return sb.toString();
         } catch (UnsupportedEncodingException e) {
             // never execute
@@ -192,7 +239,7 @@ public class BaiduDataManager {
                     bd.setThumbLargeHeight(thumb_large_height);
                     bdList.add(bd);
                     if (PandoraConfig.sDebug) {
-                        HDBLOG.logD("tag1=" + "tag1" + " tag2=" + tag2 + "baiduId=" + baiduId
+                        HDBLOG.logD("tag1=" + tag1 + " tag2=" + tag2 + "baiduId=" + baiduId
                                 + " describe=" + describe + " image_url=" + image_url
                                 + " image_width=" + image_width + " image_height=" + image_height
                                 + " thumb_large_url=" + thumb_large_url + " thumb_large_width="

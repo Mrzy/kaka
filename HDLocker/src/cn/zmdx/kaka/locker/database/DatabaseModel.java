@@ -105,7 +105,8 @@ public class DatabaseModel {
      * @param count 取的数量
      * @return
      */
-    @SuppressLint("NewApi") public synchronized List<BaiduData> queryNonImageData(int tag1, int count) {
+    @SuppressLint("NewApi")
+    public synchronized List<BaiduData> queryNonImageData(int tag1, int count) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         List<BaiduData> list = new ArrayList<BaiduData>();
         Cursor cursor = sqliteDatabase.rawQuery("select * from "
@@ -159,24 +160,54 @@ public class DatabaseModel {
 
     /**
      * 判断一条数据的图片是否已下载到本地磁盘
+     * 
      * @param id
      * @return
      */
     public synchronized boolean isImageDownloaded(String id) {
-        //TODO
+        // TODO
         return false;
     }
-    
+
     /**
      * 将一条数据标记为图片已下载到本地
+     * 
      * @param id
      */
     public synchronized void markAlreadyDownload(String id) {
-        //TODO
+        // TODO
     }
 
     public synchronized boolean deleteById(String id) {
-        //TODO
+        // TODO
         return false;
+    }
+
+    /**
+     * 查询数据总数
+     * 
+     * @return
+     */
+    public synchronized int queryTotalCount() {
+        // TODO
+        return 0;
+    }
+
+    /**
+     * 查询已下载图片的数据条数
+     * 
+     * @return
+     */
+    public synchronized int queryCountHasImage() {
+        // TODO Auto-generated method stub
+        return 10;
+    }
+
+    /**
+     * 标记所有数据的是否下载字段为否
+     */
+    public synchronized void markAllNonDownload() {
+        // TODO Auto-generated method stub
+
     }
 }

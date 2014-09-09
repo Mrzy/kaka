@@ -7,6 +7,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.os.AsyncTask;
 
 import cn.zmdx.kaka.locker.RequestManager;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageCache;
@@ -102,8 +103,14 @@ public class ImageCacheManager {
      * @param url location of image
      * @param listener Listener for completion
      */
-    public void getImage(String url, ImageListener listener) {
-        mImageLoader.get(url, listener);
+    public void getImage(final String url, final ImageListener listener) {
+        HDBThreadUtils.runOnUi(new Runnable() {
+
+            @Override
+            public void run() {
+                mImageLoader.get(url, listener);
+            }
+        });
     }
 
     /**

@@ -15,6 +15,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 
@@ -42,6 +43,9 @@ public class DiskLruImageCache implements ImageCache {
             CompressFormat compressFormat, int quality) {
         try {
             final File diskCacheDir = getDiskCacheDir(context, uniqueName);
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("DiskLruImageCache path=" + diskCacheDir.getAbsolutePath());
+            }
             mDiskCache = DiskLruCache.open(diskCacheDir, APP_VERSION, VALUE_COUNT, diskCacheSize);
             mCompressFormat = compressFormat;
             mCompressQuality = quality;
@@ -64,8 +68,11 @@ public class DiskLruImageCache implements ImageCache {
     }
 
     private File getDiskCacheDir(Context context, String uniqueName) {
-
-        final String cachePath = context.getCacheDir().getPath();
+        File cache = context.getExternalFilesDir(null);
+        if (cache == null) {
+            cache = context.getCacheDir();
+        }
+        final String cachePath = cache.getPath();
         return new File(cachePath + File.separator + uniqueName);
     }
 
@@ -83,17 +90,17 @@ public class DiskLruImageCache implements ImageCache {
                 mDiskCache.flush();
                 editor.commit();
                 if (BuildConfig.DEBUG) {
-                    Log.d("cache_test_DISK_", "image put on disk cache " + key);
+                    Log.d("pandora", "image put on disk cache " + key);
                 }
             } else {
                 editor.abort();
                 if (BuildConfig.DEBUG) {
-                    Log.d("cache_test_DISK_", "ERROR on: image put on disk cache " + key);
+                    Log.d("pandora", "ERROR on: image put on disk cache " + key);
                 }
             }
         } catch (IOException e) {
             if (BuildConfig.DEBUG) {
-                Log.d("cache_test_DISK_", "ERROR on: image put on disk cache " + key);
+                Log.d("pandora", "ERROR on: image put on disk cache " + key + ",message:" + e.getMessage());
             }
             try {
                 if (editor != null) {
@@ -130,7 +137,7 @@ public class DiskLruImageCache implements ImageCache {
         }
 
         if (BuildConfig.DEBUG) {
-            Log.d("cache_test_DISK_", bitmap == null ? "" : "image read from disk " + key);
+            Log.d("pandora", bitmap == null ? "" : "image read from disk " + key);
         }
 
         return bitmap;
@@ -158,7 +165,7 @@ public class DiskLruImageCache implements ImageCache {
 
     public void clearCache() {
         if (BuildConfig.DEBUG) {
-            Log.d("cache_test_DISK_", "disk cache CLEARED");
+            Log.d("pandora", "disk cache CLEARED");
         }
         try {
             mDiskCache.delete();

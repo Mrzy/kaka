@@ -2,15 +2,14 @@
 package cn.zmdx.kaka.locker;
 
 import android.app.Application;
-import android.content.Context;
 import android.graphics.Bitmap.CompressFormat;
-
+import android.util.Log;
 import cn.zmdx.kaka.locker.cache.ImageCacheManager;
 import cn.zmdx.kaka.locker.cache.ImageCacheManager.CacheType;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import cn.zmdx.kaka.locker.utils.HDBEventSource;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
 public class HDApplication extends Application {
 
@@ -34,9 +33,10 @@ public class HDApplication extends Application {
 
     @Override
     public void onCreate() {
+        HDBEventSource.startup(getApplicationContext(), null);
         // Intialize the request manager and the image cache
         RequestManager.init(this);
-        createImageCache();
+//        createImageCache();
         // Pull baidu image data to local db
         PandoraBoxDispatcher.getInstance().sendEmptyMessage(
                 PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
@@ -48,7 +48,7 @@ public class HDApplication extends Application {
      * a Disk based LRU implementation.
      */
     private void createImageCache() {
-        ImageCacheManager.getInstance().init(this, this.getPackageCodePath(), DISK_IMAGECACHE_SIZE,
+        ImageCacheManager.getInstance().init(this, "PandoraLocker", DISK_IMAGECACHE_SIZE,
                 DISK_IMAGECACHE_COMPRESS_FORMAT, DISK_IMAGECACHE_QUALITY, CacheType.DISK);
     }
 }

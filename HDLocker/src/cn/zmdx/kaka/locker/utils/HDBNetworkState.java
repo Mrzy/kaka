@@ -53,7 +53,7 @@ public class HDBNetworkState {
         }
     };
 
-    synchronized static void init(Context ctx) {
+    public synchronized static void init(Context ctx) {
         sCM = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         sNetworkInfo = sCM.getActiveNetworkInfo();
 

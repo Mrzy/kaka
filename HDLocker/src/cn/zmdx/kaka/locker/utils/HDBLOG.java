@@ -30,7 +30,7 @@ public class HDBLOG {
 
         callerFile = callerFile.length() > 5 ? callerFile.substring(0, callerFile.length() - 5) : callerFile;
 
-        final String tag = "DXL";
+        final String tag = "pandora";
         final String message;
 
         StringBuilder logBuilder = sLocalLogBuilder.get();

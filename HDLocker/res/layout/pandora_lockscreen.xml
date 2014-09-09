@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.zmdx.kaka.locker.widget.LockerViewGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <cn.zmdx.kaka.locker.widget.PandoraBoxView
+        android:id="@+id/pandora_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+    </cn.zmdx.kaka.locker.widget.PandoraBoxView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/lock_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/lock_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp" >
+
+            <Button
+                android:id="@+id/lock_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="下拉"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</cn.zmdx.kaka.locker.widget.LockerViewGroup>

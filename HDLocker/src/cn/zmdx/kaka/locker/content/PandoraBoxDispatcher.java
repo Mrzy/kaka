@@ -7,9 +7,11 @@ import java.util.List;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
 import cn.zmdx.kaka.locker.database.DatabaseModel;
+import cn.zmdx.kaka.locker.policy.PandoraPolicy;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
@@ -44,14 +46,49 @@ public class PandoraBoxDispatcher extends Handler {
 
                 break;
             case MSG_PULL_BAIDU_DATA:
-                if (HDBNetworkState.isNetworkAvailable()) {
-                    BaiduDataManager bdm = new BaiduDataManager();
-                    bdm.pullAllFunnyData();
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("收到抓取百度数据的消息");
                 }
+                int totalCount = DatabaseModel.getInstance().queryTotalCount();
+                // 如果本地的百度图片库中的数据条数已经少于一定的值，则启动拉取程序
+                if (totalCount < PandoraPolicy.MIN_COUNT_LOCAL_DB) {
+                    if (HDBNetworkState.isNetworkAvailable()) {
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("本地数据库的数据还有" + totalCount + "条数据，少于最小阀值，马上启动抓取程序");
+                        }
+
+                        BaiduDataManager bdm = new BaiduDataManager();
+                        bdm.pullAllFunnyData();
+                    } else {
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("当前无网络，停止启动抓取程序");
+                        }
+                    }
+                } else {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("本地数据库的数据还有" + totalCount + "条数据，无需启动抓取程序");
+                    }
+                }
+                break;
             case MSG_LOAD_BAIDU_IMG:
                 if (HDBNetworkState.isNetworkAvailable()) {
-                    downloadBaiduImage();
+                    // 如果磁盘缓存区图片数为0，则更新数据库中的是否下载字段为否
+                    if (DiskImageHelper.getFileCountOnDisk() == 0) {
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("百度图片的本地磁盘存储的数量为0，清空数据库中的已下载标记，并开启下载图片程序");
+                        }
+                        DatabaseModel.getInstance().markAllNonDownload();
+                        downloadPartImages();
+                        return;
+                    }
 
+                    if (DatabaseModel.getInstance().queryCountHasImage() < PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE) {
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("数据库中标记为已下载的数据总数已小于阀值:"
+                                    + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",立即开启下载图片程序");
+                        }
+                        downloadPartImages();
+                    }
                 }
                 break;
         }
@@ -59,22 +96,17 @@ public class PandoraBoxDispatcher extends Handler {
         super.handleMessage(msg);
     }
 
-    private void downloadBaiduImage() {
-        //根据不同网络情况查询出不同数量的数据，准备下载其图片
-        //规则说明：若wifi,则每个频道取5条数据，共5*5=25条数据；若非wifi，则每个频道取1条，共1 * 5 = 5条数据
-        int count = HDBNetworkState.isWifiNetwork() ? 5 : 1;
+    private void downloadPartImages() {
+        // 根据不同网络情况查询出不同数量的数据，准备下载其图片
+        // 规则说明：若wifi,则每个频道取5条数据，共5*5=25条数据；若非wifi，则每个频道取1条，共1 * 5 = 5条数据
+        int count = HDBNetworkState.isWifiNetwork() ? PandoraPolicy.COUNT_DOWNLOAD_IMAGE_WIFI
+                : PandoraPolicy.COUNT_DOWNLOAD_IMAGE_NON_WIFI;
         List<BaiduData> list = new ArrayList<BaiduData>();
-        list.addAll(DatabaseModel.getInstance().queryNonImageData(BaiduTagMapping.INT_TAG1_BIZHI,
-                count));
-        list.addAll(DatabaseModel.getInstance().queryNonImageData(BaiduTagMapping.INT_TAG1_GAOXIAO,
-                count));
-        list.addAll(DatabaseModel.getInstance().queryNonImageData(BaiduTagMapping.INT_TAG1_MEINV,
-                count));
-        list.addAll(DatabaseModel.getInstance().queryNonImageData(
-                BaiduTagMapping.INT_TAG1_MINGXING, count));
-        list.addAll(DatabaseModel.getInstance().queryNonImageData(BaiduTagMapping.INT_TAG1_SHEYING,
-                count));
-
+        int length = PandoraPolicy.BAIDU_IMAGE_MODULE.length;
+        for (int i = 0; i < length; i++) {
+            list.addAll(DatabaseModel.getInstance().queryNonImageData(
+                    PandoraPolicy.BAIDU_IMAGE_MODULE[i], count));
+        }
         new BaiduDataManager().batchDownloadBaiduImage(list);
     }
 }

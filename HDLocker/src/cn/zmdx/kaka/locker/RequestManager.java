@@ -9,7 +9,7 @@ import android.content.Context;
 /**
  * Manager for the queue
  * 
- * @author Trey Robinson
+ * @author zhangyan
  */
 public class RequestManager {
 
