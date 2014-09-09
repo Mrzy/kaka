@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.database;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -177,7 +178,6 @@ public class DatabaseModel {
                 isDownloaded = isimagedownloaded == DOWNLOAD_TRUE;
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             cursor.close();
@@ -190,11 +190,29 @@ public class DatabaseModel {
      * 
      * @param id
      */
-    public synchronized void markAlreadyDownload(String id) {
+    public synchronized boolean markAlreadyDownload(String id) {
+        boolean islabelimage = false;
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.rawQuery("select "
+                + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " from "
+                + TableStructure.TABLE_NAME_CONTENT + " where " + TableStructure.CONTENT_ID + " = "
+                + id, null);
+        try {
+            while (cursor.moveToNext()) {
+                int datalabelimage = cursor.getInt(cursor
+                        .getColumnIndex(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED));
+                islabelimage = datalabelimage == DOWNLOAD_TRUE;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return islabelimage;
     }
 
     public synchronized boolean deleteById(String id) {
-        // TODO
+
         return false;
     }
 
@@ -204,8 +222,20 @@ public class DatabaseModel {
      * @return
      */
     public synchronized int queryTotalCount() {
-        // TODO
-        return 0;
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        int count = 0;
+        Cursor cursor = sqliteDatabase.rawQuery("select count(*) from "
+                + TableStructure.TABLE_NAME_CONTENT, null);
+        try {
+            while (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return count;
     }
 
     /**
@@ -214,15 +244,31 @@ public class DatabaseModel {
      * @return
      */
     public synchronized int queryCountHasImage() {
-        // TODO Auto-generated method stub
-        return 10;
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        int count = 0;
+        Cursor cursor = sqliteDatabase.rawQuery("select count(*) from "
+                + TableStructure.TABLE_NAME_CONTENT + " where "
+                + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = " + DatabaseModel.DOWNLOAD_TRUE,
+                null);
+        try {
+            while (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return count;
     }
 
     /**
      * 标记所有数据的是否下载字段为否
      */
     public synchronized void markAllNonDownload() {
-        // TODO Auto-generated method stub
-
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, DatabaseModel.DOWNLOAD_FALSE);
+        sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values, null, null);
     }
 }
