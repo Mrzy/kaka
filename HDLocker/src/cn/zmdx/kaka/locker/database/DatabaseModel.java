@@ -191,35 +191,24 @@ public class DatabaseModel {
      * @param id
      */
     public synchronized boolean markAlreadyDownload(String id) {
-        boolean islabelimage = false;
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
-        Cursor cursor = sqliteDatabase.rawQuery("select "
-                + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " from "
-                + TableStructure.TABLE_NAME_CONTENT + " where " + TableStructure.CONTENT_ID + " = "
-                + id, null);
-        try {
-            while (cursor.moveToNext()) {
-                int datalabelimage = cursor.getInt(cursor
-                        .getColumnIndex(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED));
-                islabelimage = datalabelimage == DOWNLOAD_TRUE;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            cursor.close();
-        }
-        return islabelimage;
+        ContentValues values = new ContentValues();
+        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, DatabaseModel.DOWNLOAD_TRUE);
+        sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values,
+                TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, new String[] {
+                    id
+                });
+
+        return false;
     }
 
     public synchronized boolean deleteById(String id) {
-        boolean isSqlSuccess = false;
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
         int count = sqliteDatabase.delete(TableStructure.TABLE_NAME_CONTENT,
                 TableStructure.CONTENT_ID, new String[] {
                     id
                 });
-        isSqlSuccess = count != 0;
-        return isSqlSuccess;
+        return count != 0;
     }
 
     /**
