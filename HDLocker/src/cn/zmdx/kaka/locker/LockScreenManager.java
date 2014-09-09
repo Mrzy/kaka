@@ -12,10 +12,12 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.widget.LockerViewGroup;
 import cn.zmdx.kaka.locker.widget.LockerViewGroup.LockScreenListener;
+import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 
 public class LockScreenManager {
 
-    private LockerViewGroup mEntireView;
+//    private LockerViewGroup mEntireView;
+    private SlidingUpPanelLayout mEntireView;
 
     private static LockScreenManager INSTANCE = null;
 
@@ -71,10 +73,13 @@ public class LockScreenManager {
     }
 
     private void initLockScreenViews() {
-        mEntireView = (LockerViewGroup) LayoutInflater.from(HDApplication.getInstannce()).inflate(
+//        mEntireView = (LockerViewGroup) LayoutInflater.from(HDApplication.getInstannce()).inflate(
+//                R.layout.pandora_lockscreen, null);
+//        mEntireView.setForegroundResource(R.drawable.locker_foreground);
+//        mEntireView.setOnLockScreenListener(mLockScreenListener);
+        mEntireView = (SlidingUpPanelLayout) LayoutInflater.from(HDApplication.getInstannce()).inflate(
                 R.layout.pandora_lockscreen, null);
-        mEntireView.setForegroundResource(R.drawable.locker_foreground);
-        mEntireView.setOnLockScreenListener(mLockScreenListener);
+        
     }
 
     public void unLock() {
