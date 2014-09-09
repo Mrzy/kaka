@@ -174,9 +174,7 @@ public class DatabaseModel {
             while (cursor.moveToNext()) {
                 int isimagedownloaded = cursor.getInt(cursor
                         .getColumnIndex(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED));
-                if (isimagedownloaded == 1) {
-                    isDownloaded = true;
-                }
+                isDownloaded = isimagedownloaded == DOWNLOAD_TRUE;
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
