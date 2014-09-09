@@ -212,8 +212,14 @@ public class DatabaseModel {
     }
 
     public synchronized boolean deleteById(String id) {
-
-        return false;
+        boolean isSqlSuccess = false;
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
+        int count = sqliteDatabase.delete(TableStructure.TABLE_NAME_CONTENT,
+                TableStructure.CONTENT_ID, new String[] {
+                    id
+                });
+        isSqlSuccess = count != 0;
+        return isSqlSuccess;
     }
 
     /**
