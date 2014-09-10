@@ -3,20 +3,18 @@ package cn.zmdx.kaka.locker;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.widget.TextView;
-import cn.zmdx.kaka.locker.widget.LockerViewGroup;
-import cn.zmdx.kaka.locker.widget.LockerViewGroup.LockScreenListener;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
+import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.PanelSlideListener;
 
 public class LockScreenManager {
 
-//    private LockerViewGroup mEntireView;
+    // private LockerViewGroup mEntireView;
     private SlidingUpPanelLayout mEntireView;
 
     private static LockScreenManager INSTANCE = null;
@@ -57,9 +55,9 @@ public class LockScreenManager {
         params.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         params.gravity = Gravity.TOP | Gravity.LEFT;
 
-        if (mEntireView == null) {
-            initLockScreenViews();
-        }
+        // if (mEntireView == null) {
+        initLockScreenViews();
+        // }
 
         refreshContent();
         mWinManager.addView(mEntireView, params);
@@ -73,13 +71,14 @@ public class LockScreenManager {
     }
 
     private void initLockScreenViews() {
-//        mEntireView = (LockerViewGroup) LayoutInflater.from(HDApplication.getInstannce()).inflate(
-//                R.layout.pandora_lockscreen, null);
-//        mEntireView.setForegroundResource(R.drawable.locker_foreground);
-//        mEntireView.setOnLockScreenListener(mLockScreenListener);
-        mEntireView = (SlidingUpPanelLayout) LayoutInflater.from(HDApplication.getInstannce()).inflate(
-                R.layout.pandora_lockscreen, null);
-        
+        // mEntireView = (LockerViewGroup)
+        // LayoutInflater.from(HDApplication.getInstannce()).inflate(
+        // R.layout.pandora_lockscreen, null);
+        // mEntireView.setForegroundResource(R.drawable.locker_foreground);
+        // mEntireView.setOnLockScreenListener(mLockScreenListener);
+        mEntireView = (SlidingUpPanelLayout) LayoutInflater.from(HDApplication.getInstannce())
+                .inflate(R.layout.pandora_lockscreen, null);
+        mEntireView.setPanelSlideListener(mSlideListener);
     }
 
     public void unLock() {
@@ -94,21 +93,30 @@ public class LockScreenManager {
         return mIsLocked;
     }
 
-    private LockScreenListener mLockScreenListener = new LockScreenListener() {
+    private PanelSlideListener mSlideListener = new PanelSlideListener() {
 
         @Override
-        public void onStartTouch() {
+        public void onPanelSlide(View panel, float slideOffset) {
+        }
+
+        @Override
+        public void onPanelCollapsed(View panel) {
+            unLock();
+        }
+
+        @Override
+        public void onPanelExpanded(View panel) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onPanelAnchored(View panel) {
             // TODO Auto-generated method stub
 
         }
 
         @Override
-        public void onDeadLine() {
-            unLock();
-        }
-
-        @Override
-        public void onFixed() {
+        public void onPanelHidden(View panel) {
             // TODO Auto-generated method stub
 
         }

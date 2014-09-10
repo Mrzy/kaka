@@ -7,7 +7,8 @@
     android:gravity="bottom"
     sothree:panelHeight="68dp"
     sothree:paralaxOffset="100dp"
-    sothree:shadowHeight="4dp" >
+    sothree:foregroundDrawable = "@drawable/locker_foreground"
+    sothree:shadowHeight="8dp" >
 
     <cn.zmdx.kaka.locker.widget.PandoraBoxView
         android:id="@+id/pandora_box"
@@ -19,16 +20,16 @@
 
     <RelativeLayout
         android:id="@+id/lock_top"
+        android:background="#cccccc"
         android:layout_width="match_parent"
-        android:background="#F8F8FF"
         android:layout_height="match_parent" >
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/lock_bottom"
+        android:background="#cccccc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#CFCFCF"
         android:paddingTop="5dp" >
 
         <Button

@@ -19,6 +19,7 @@
         <attr name="dragView" format="reference" />
         <attr name="overlay" format="boolean" />
         <attr name="anchorPoint" format="float" />
+        <attr name ="foregroundDrawable" format="reference" />
         <attr name="initialState" format="enum">
             <enum name="expanded" value="0" />
             <enum name="collapsed" value="1" />
