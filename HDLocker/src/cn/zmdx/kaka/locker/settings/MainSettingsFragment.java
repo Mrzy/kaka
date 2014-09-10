@@ -37,7 +37,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        PandoraBoxDispatcher.getInstance().sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 10000);
+        PandoraBoxDispatcher.getInstance().sendEmptyMessageDelayed(
+                PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 10000);
         super.onCreate(savedInstanceState);
     }
 
@@ -64,6 +65,10 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 .findViewById(R.id.setting_pandoralocker_switch_button);
         mPandoraLockerSButton.setOnCheckedChangeListener(this);
 
+        mPandoraLockerSButton = (SwitchButton) mRootView
+                .findViewById(R.id.setting_pandoralocker_password);
+        mPandoraLockerSButton.setOnCheckedChangeListener(this);
+
         mFeedback = (TextView) mRootView.findViewById(R.id.setting_feedback_prompt);
         mFeedback.setOnClickListener(this);
         mCheckNewVersion = (TextView) mRootView
@@ -86,14 +91,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         switch (buttonView.getId()) {
             case R.id.setting_pandoralocker_switch_button:
                 if (isChecked) {
-                    mPandoraLockerPrompt.setText(getResources().getString(
-                            R.string.setting_open_pandoralocker));
                     enablePandoraLocker();
                 } else {
-                    mPandoraLockerPrompt.setText(getResources().getString(
-                            R.string.setting_close_pandoralocker));
                     disablePandoraLocker();
                 }
+            case R.id.setting_pandoralocker_password:
                 break;
 
             default:
