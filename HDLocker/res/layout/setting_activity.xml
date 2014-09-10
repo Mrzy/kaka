@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:baselineAligned="true"
     android:orientation="vertical" >
 
@@ -21,12 +23,15 @@
             android:gravity="center_vertical"
             android:text="@string/setting_close_pandoralocker" />
 
-        <cn.zmdx.kaka.locker.settings.ui.SettingSwitchButton
+        <cn.zmdx.kaka.locker.widget.SwitchButton
             android:id="@+id/setting_pandoralocker_switch_button"
             style="@style/setting_Switch"
-            android:background="@drawable/setting_switchbutton_selector"
-            android:button="@null"
-            android:gravity="right" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:frameDrawable="@drawable/switch_frame"
+            app:sliderDrawable="@drawable/switch_slider_normal"
+            app:stateDrawable="@drawable/switch_state_normal"
+            app:stateMaskDrawable="@drawable/switch_state_mask" />
     </LinearLayout>
 
     <LinearLayout

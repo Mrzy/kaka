@@ -2,12 +2,13 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="setting_Switch">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">31dp</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginRight">5dip</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">false</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
 </resources>
