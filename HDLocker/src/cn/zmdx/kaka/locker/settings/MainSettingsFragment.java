@@ -91,16 +91,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         switch (buttonView.getId()) {
             case R.id.setting_pandoralocker_switch_button:
                 if (isChecked) {
-                    mPandoraLockerPrompt.setText(getResources().getString(
-                            R.string.setting_open_pandoralocker));
                     enablePandoraLocker();
                 } else {
-                    mPandoraLockerPrompt.setText(getResources().getString(
-                            R.string.setting_close_pandoralocker));
                     disablePandoraLocker();
                 }
             case R.id.setting_pandoralocker_password:
-                System.out.println("是否设置密码锁");
                 break;
 
             default:

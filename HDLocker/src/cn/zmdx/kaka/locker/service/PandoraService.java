@@ -67,7 +67,7 @@ public class PandoraService extends Service {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("receive broadcast,action=" + action);
             }
-//            LockScreenManager.getInstance().lock();
+            LockScreenManager.getInstance().lock();
         }
     };
     // private IntentListener mIntentListener = new IntentListener() {

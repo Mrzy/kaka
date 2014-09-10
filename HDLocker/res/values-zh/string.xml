@@ -1,10 +1,9 @@
 <resources>
 
     <!-- setting -->
-    <string name="setting_open_pandoralocker">是否开启pandora</string>
-    <string name="setting_close_pandoralocker">是否开启pandora</string>
-    <string name="setting_lock_type">是否设置密码锁</string>
-    <string name="setting_background">壁纸</string>
+    <string name="setting_open_pandoralocker">启用锁屏</string>
+    <string name="setting_lock_type">开启锁屏密码</string>
+    <string name="setting_background">锁屏壁纸</string>
     <string name="setting_close_systemlocker">关闭系统锁屏</string>
     <string name="setting_feedback">意见反馈</string>
     <string name="setting_check_new_version">检查新版本</string>
