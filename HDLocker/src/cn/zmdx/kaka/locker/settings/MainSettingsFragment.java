@@ -13,7 +13,7 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.ui.SettingSwitchButton;
+import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 public class MainSettingsFragment extends BaseSettingsFragment implements OnCheckedChangeListener,
         OnClickListener {
@@ -33,7 +33,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private TextView mCheckNewVersion;
 
-    private SettingSwitchButton mPandoraLockerSButton;
+    private SwitchButton mPandoraLockerSButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mLockTypePrompt = (TextView) mRootView.findViewById(R.id.setting_lock_type_prompt);
         mLockTypePrompt.setOnClickListener(this);
 
-        mPandoraLockerSButton = (SettingSwitchButton) mRootView
+        mPandoraLockerSButton = (SwitchButton) mRootView
                 .findViewById(R.id.setting_pandoralocker_switch_button);
         mPandoraLockerSButton.setOnCheckedChangeListener(this);
 
