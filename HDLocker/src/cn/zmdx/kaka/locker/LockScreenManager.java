@@ -15,7 +15,9 @@ import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.PanelSlideListener;
 public class LockScreenManager {
 
     // private LockerViewGroup mEntireView;
-    private SlidingUpPanelLayout mEntireView;
+    private SlidingUpPanelLayout mSliderView;
+
+    private View mEntireView;
 
     private static LockScreenManager INSTANCE = null;
 
@@ -76,9 +78,10 @@ public class LockScreenManager {
         // R.layout.pandora_lockscreen, null);
         // mEntireView.setForegroundResource(R.drawable.locker_foreground);
         // mEntireView.setOnLockScreenListener(mLockScreenListener);
-        mEntireView = (SlidingUpPanelLayout) LayoutInflater.from(HDApplication.getInstannce())
-                .inflate(R.layout.pandora_lockscreen, null);
-        mEntireView.setPanelSlideListener(mSlideListener);
+        mEntireView = LayoutInflater.from(HDApplication.getInstannce()).inflate(
+                R.layout.pandora_lockscreen, null);
+        mSliderView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.locker_view);
+        mSliderView.setPanelSlideListener(mSlideListener);
     }
 
     public void unLock() {
