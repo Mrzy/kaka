@@ -53,8 +53,8 @@ public abstract class BaseSettingsFragment extends Fragment {
 
     public void gotoAbout() {
         MAboutFragment fragment = new MAboutFragment();
-        getFragmentManager().beginTransaction().addToBackStack(null)
-                .add(R.id.content, fragment).commit();
+        getFragmentManager().beginTransaction().addToBackStack(null).add(R.id.content, fragment)
+                .commit();
     }
 
     protected void closeSystemLocker() {

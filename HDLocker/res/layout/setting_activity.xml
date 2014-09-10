@@ -50,6 +50,16 @@
             android:clickable="true"
             android:gravity="center_vertical"
             android:text="@string/setting_lock_type" />
+
+        <cn.zmdx.kaka.locker.widget.SwitchButton
+            android:id="@+id/setting_pandoralocker_password"
+            style="@style/setting_Switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:frameDrawable="@drawable/switch_frame"
+            app:sliderDrawable="@drawable/switch_slider_normal"
+            app:stateDrawable="@drawable/switch_state_normal"
+            app:stateMaskDrawable="@drawable/switch_state_mask" />
     </LinearLayout>
 
     <LinearLayout
