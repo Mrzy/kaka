@@ -184,7 +184,7 @@ public class BaiduDataManager {
 
     public static class BaiduData implements IData {
 
-        public String mId;
+        public int mId;
 
         public String mBaiduId;
 
@@ -255,11 +255,11 @@ public class BaiduDataManager {
             DatabaseModel.getInstance().saveBaiduData(bdList);
         }
 
-        public String getId() {
+        public int getId() {
             return mId;
         }
 
-        public void setId(String mId) {
+        public void setId(int mId) {
             this.mId = mId;
         }
 

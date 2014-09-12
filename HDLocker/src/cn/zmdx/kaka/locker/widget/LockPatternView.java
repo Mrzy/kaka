@@ -35,7 +35,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
@@ -130,9 +129,9 @@ public class LockPatternView extends View {
 
     private Bitmap mBitmapCircleRed;
 
-    private Bitmap mBitmapArrowGreenUp;
+//    private Bitmap mBitmapArrowGreenUp;
 
-    private Bitmap mBitmapArrowRedUp;
+//    private Bitmap mBitmapArrowRedUp;
 
     private final Path mCurrentPath = new Path();
 
@@ -144,7 +143,7 @@ public class LockPatternView extends View {
 
     private int mAspect;
 
-    private final Matrix mArrowMatrix = new Matrix();
+//    private final Matrix mArrowMatrix = new Matrix();
 
     private final Matrix mCircleMatrix = new Matrix();
 
@@ -283,21 +282,21 @@ public class LockPatternView extends View {
 
         mPathPaint.setAntiAlias(true);
         mPathPaint.setDither(true);
-        mPathPaint.setColor(Color.WHITE); // TODO this should be from the style
+        mPathPaint.setColor(Color.WHITE); // TODO this should be from the style  th line color
         mPathPaint.setAlpha(mStrokeAlpha);
         mPathPaint.setStyle(Paint.Style.STROKE);
         mPathPaint.setStrokeJoin(Paint.Join.ROUND);
         mPathPaint.setStrokeCap(Paint.Cap.ROUND);
 
         // lot's of bitmaps!
-        mBitmapBtnDefault = getBitmapFor(R.drawable.btn_code_lock_default_holo);
-        mBitmapBtnTouched = getBitmapFor(R.drawable.btn_code_lock_touched_holo);
-        mBitmapCircleDefault = getBitmapFor(R.drawable.indicator_code_lock_point_area_default_holo);
-        mBitmapCircleGreen = getBitmapFor(R.drawable.indicator_code_lock_point_area_green_holo);
-        mBitmapCircleRed = getBitmapFor(R.drawable.indicator_code_lock_point_area_red_holo);
+        mBitmapBtnDefault = getBitmapFor(R.drawable.gusture_center_normal);
+        mBitmapBtnTouched = getBitmapFor(R.drawable.gusture_center_press);
+        mBitmapCircleDefault = getBitmapFor(R.drawable.gusture_center_normal);
+        mBitmapCircleGreen = getBitmapFor(R.drawable.gusture_outer_normal);
+        mBitmapCircleRed = getBitmapFor(R.drawable.gusture_outer_error);
 
-        mBitmapArrowGreenUp = getBitmapFor(R.drawable.indicator_code_lock_drag_direction_green_up_holo);
-        mBitmapArrowRedUp = getBitmapFor(R.drawable.indicator_code_lock_drag_direction_red_up_holo);
+//        mBitmapArrowGreenUp = getBitmapFor(R.drawable.indicator_code_lock_drag_direction_green_up_holo);
+//        mBitmapArrowRedUp = getBitmapFor(R.drawable.indicator_code_lock_drag_direction_red_up_holo);
 
         // bitmaps have the size of the largest bitmap in this group
         final Bitmap bitmaps[] = {
@@ -942,7 +941,7 @@ public class LockPatternView extends View {
         final float squareWidth = mSquareWidth;
         final float squareHeight = mSquareHeight;
 
-        float radius = (squareWidth * mDiameterFactor * 0.5f);
+        float radius = (squareWidth * mDiameterFactor * 0.2f);
         mPathPaint.setStrokeWidth(radius);
 
         final Path currentPath = mCurrentPath;
@@ -1027,52 +1026,52 @@ public class LockPatternView extends View {
     }
 
     private void drawArrow(Canvas canvas, float leftX, float topY, Cell start, Cell end) {
-        boolean green = mPatternDisplayMode != DisplayMode.Wrong;
-
-        final int endRow = end.row;
-        final int startRow = start.row;
-        final int endColumn = end.column;
-        final int startColumn = start.column;
-
-        // offsets for centering the bitmap in the cell
-        final int offsetX = ((int) mSquareWidth - mBitmapWidth) / 2;
-        final int offsetY = ((int) mSquareHeight - mBitmapHeight) / 2;
-
-        Log.v("--->>", offsetX + " " + offsetY + " offset");
+//        boolean green = mPatternDisplayMode != DisplayMode.Wrong;
+//
+//        final int endRow = end.row;
+//        final int startRow = start.row;
+//        final int endColumn = end.column;
+//        final int startColumn = start.column;
+//
+//        // offsets for centering the bitmap in the cell
+//        final int offsetX = ((int) mSquareWidth - mBitmapWidth) / 2;
+//        final int offsetY = ((int) mSquareHeight - mBitmapHeight) / 2;
+//
+//        Log.v("--->>", offsetX + " " + offsetY + " offset");
 
         // compute transform to place arrow bitmaps at correct angle inside
         // circle.
         // This assumes that the arrow image is drawn at 12:00 with it's top
         // edge
         // coincident with the circle bitmap's top edge.
-        Bitmap arrow = green ? mBitmapArrowGreenUp : mBitmapArrowRedUp;
-        final int cellWidth = mBitmapWidth;
-        final int cellHeight = mBitmapHeight;
-
-        // the up arrow bitmap is at 12:00, so find the rotation from x axis and
-        // add 90 degrees.
-        final float theta = (float) Math.atan2((double) (endRow - startRow),
-                (double) (endColumn - startColumn));
-        final float angle = (float) Math.toDegrees(theta) + 90.0f;
-
-        // compose matrix
-        float sx = Math.min(mSquareWidth / mBitmapWidth, 1.0f);
-        float sy = Math.min(mSquareHeight / mBitmapHeight, 1.0f);
-        mArrowMatrix.setTranslate(leftX + offsetX, topY + offsetY); // transform
-                                                                    // to cell
-                                                                    // position
-        mArrowMatrix.preTranslate(mBitmapWidth / 2, mBitmapHeight / 2);
-        mArrowMatrix.preScale(sx, sy);
-        mArrowMatrix.preTranslate(-mBitmapWidth / 2, -mBitmapHeight / 2);
-        mArrowMatrix.preRotate(angle, cellWidth / 2.0f, cellHeight / 2.0f); // rotate
-                                                                            // about
-                                                                            // cell
-                                                                            // center
-        mArrowMatrix.preTranslate((cellWidth - arrow.getWidth()) / 2.0f, 0.0f); // translate
-                                                                                // to
-                                                                                // 12:00
-                                                                                // pos
-        canvas.drawBitmap(arrow, mArrowMatrix, mPaint);
+//        Bitmap arrow = green ? mBitmapArrowGreenUp : mBitmapArrowRedUp;
+//        final int cellWidth = mBitmapWidth;
+//        final int cellHeight = mBitmapHeight;
+//
+//        // the up arrow bitmap is at 12:00, so find the rotation from x axis and
+//        // add 90 degrees.
+//        final float theta = (float) Math.atan2((double) (endRow - startRow),
+//                (double) (endColumn - startColumn));
+//        final float angle = (float) Math.toDegrees(theta) + 90.0f;
+//
+//        // compose matrix
+//        float sx = Math.min(mSquareWidth / mBitmapWidth, 1.0f);
+//        float sy = Math.min(mSquareHeight / mBitmapHeight, 1.0f);
+//        mArrowMatrix.setTranslate(leftX + offsetX, topY + offsetY); // transform
+//                                                                    // to cell
+//                                                                    // position
+//        mArrowMatrix.preTranslate(mBitmapWidth / 2, mBitmapHeight / 2);
+//        mArrowMatrix.preScale(sx, sy);
+//        mArrowMatrix.preTranslate(-mBitmapWidth / 2, -mBitmapHeight / 2);
+//        mArrowMatrix.preRotate(angle, cellWidth / 2.0f, cellHeight / 2.0f); // rotate
+//                                                                            // about
+//                                                                            // cell
+//                                                                            // center
+//        mArrowMatrix.preTranslate((cellWidth - arrow.getWidth()) / 2.0f, 0.0f); // translate
+//                                                                                // to
+//                                                                                // 12:00
+//                                                                                // pos
+//        canvas.drawBitmap(arrow, mArrowMatrix, mPaint);
     }
 
     /**
