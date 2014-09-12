@@ -17,6 +17,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,8 @@ import com.nineoldandroids.view.animation.AnimatorProxy;
 public class SlidingUpPanelLayout extends ViewGroup {
 
     private static final String TAG = SlidingUpPanelLayout.class.getSimpleName();
+
+    private static final int MIN_DURATION_TO_FIXED = 1000;
 
     /**
      * Default peeking out panel height
@@ -190,6 +193,21 @@ public class SlidingUpPanelLayout extends ViewGroup {
     private boolean mIsUnableToDrag;
 
     /**
+     * 当滑动到页面底部停止时的开始时间
+     */
+    private long mPressOnStartTime;
+
+    /**
+     * 按住面板停住时，是否已经开始计时的标记
+     */
+    private boolean mIsStartKeepTime = false;
+
+    /**
+     * 当前面板是否已被固定住的标记
+     */
+    private boolean mIsFixed = false;
+
+    /**
      * Flag indicating that sliding feature is enabled\disabled
      */
     private boolean mIsSlidingEnabled;
@@ -260,6 +278,12 @@ public class SlidingUpPanelLayout extends ViewGroup {
          * @param panel The child view that was slid to a hidden position
          */
         public void onPanelHidden(View panel);
+
+        public void onPanelFixed(View panel);
+
+        public void onPanelClickedDuringFixed();
+
+        public void onPanelStartDown(View panel);
     }
 
     /**
@@ -286,6 +310,22 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
         @Override
         public void onPanelHidden(View panel) {
+        }
+
+        @Override
+        public void onPanelFixed(View panel) {
+        }
+
+        @Override
+        public void onPanelClickedDuringFixed() {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void onPanelStartDown(View panel) {
+            // TODO Auto-generated method stub
+            
         }
     }
 
@@ -388,7 +428,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
         setWillNotDraw(false);
 
-        mDragHelper = ViewDragHelper.create(this, 2.0f, new DragHelperCallback());
+        mDragHelper = ViewDragHelper.create(this, 1.0f, new DragHelperCallback());
         mDragHelper.setMinVelocity(mMinFlingVelocity * density);
 
         mIsSlidingEnabled = true;
@@ -505,10 +545,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 public void onClick(View v) {
                     if (!isEnabled())
                         return;
-                    if (!isPanelExpanded()) {
-                        expandPanel(mAnchorPoint);
-                    } else {
-                        collapsePanel();
+                    if (!isPanelExpanded() && mIsFixed) {
+                        dispatchOnPanelClickDuringFixed();
                     }
                 }
             });
@@ -551,6 +589,18 @@ public class SlidingUpPanelLayout extends ViewGroup {
      */
     public boolean isOverlayed() {
         return mOverlayContent;
+    }
+
+    void dispatchOnPanelClickDuringFixed() {
+        if (mPanelSlideListener != null) {
+            mPanelSlideListener.onPanelClickedDuringFixed();
+        }
+    }
+    
+    void dispatchOnPanelFixed(View panel) {
+        if (mPanelSlideListener != null) {
+            mPanelSlideListener.onPanelFixed(panel);
+        }
     }
 
     void dispatchOnPanelSlide(View panel) {
@@ -782,7 +832,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 childBottom = computeTopPanelBottomPosition(mSlideOffset);
                 childTop = childBottom - childHeight;
             } else if (child == mMainView) {
-                childBottom = getMeasuredHeight() - getPaddingBottom() - mTopViewSeekOutHeight;
+                childTop = mTopViewSeekOutHeight;
+                childBottom = mTopViewSeekOutHeight + mMainView.getMeasuredHeight();
             }
 
             childLeft = paddingLeft;
@@ -885,6 +936,16 @@ public class SlidingUpPanelLayout extends ViewGroup {
     public boolean onTouchEvent(MotionEvent ev) {
         if (!isSlidingEnabled()) {
             return super.onTouchEvent(ev);
+        }
+        int action = ev.getAction();
+        switch(action) {
+            case MotionEvent.ACTION_DOWN:
+                if (mSlideState == SlideState.EXPANDED) {
+                    if (mPanelSlideListener != null) {
+                        mPanelSlideListener.onPanelStartDown(mSlideableView);
+                    }
+                }
+                break;
         }
         mDragHelper.processTouchEvent(ev);
         return true;
@@ -1073,6 +1134,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
         mSlideState = SlideState.DRAGGING;
         // Recompute the slide offset based on the new top position
         mSlideOffset = computeSlideOffset(newTop);
+        // 处理面板是否需要固定在页面底部的逻辑
+        processPanelFixed();
 
         int topPanelBottomPosition = computeTopPanelBottomPosition(mSlideOffset);
         mTopView.offsetTopAndBottom(topPanelBottomPosition - mTopView.getBottom());
@@ -1091,13 +1154,25 @@ public class SlidingUpPanelLayout extends ViewGroup {
         // If the slide offset is negative, and overlay is not on, we need to
         // increase the
         // height of the main content
-        if (mSlideOffset <= 0 && !mOverlayContent) {
-            // expand the main view
-            LayoutParams lp = (LayoutParams) mMainView.getLayoutParams();
-            lp.height = mIsSlidingUp ? (newTop - getPaddingBottom()) : (getHeight()
-                    - getPaddingBottom() - mSlideableView.getMeasuredHeight() - newTop);
-            mMainView.requestLayout();
+    }
+
+    private void processPanelFixed() {
+        if (mSlideOffset == 0 && !mIsStartKeepTime && !mIsFixed) {
+            mPressOnStartTime = System.currentTimeMillis();
+            mIsStartKeepTime = true;
+        } else if (mSlideOffset != 0 && mIsStartKeepTime && !mIsFixed) {
+            mIsStartKeepTime = false;
+        } else if (mSlideOffset == 0 && mIsStartKeepTime && !mIsFixed) {
+            final long curTime = System.currentTimeMillis();
+            if (curTime - mPressOnStartTime > MIN_DURATION_TO_FIXED) {
+                mIsFixed = true;
+                dispatchOnPanelFixed(mSlideableView);
+            }
         }
+    }
+
+    public void recovery() {
+        //TODO
     }
 
     @Override
@@ -1315,7 +1390,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 } else if (mSlideOffset == 0) {
                     if (mSlideState != SlideState.COLLAPSED) {
                         mSlideState = SlideState.COLLAPSED;
-                        dispatchOnPanelCollapsed(mSlideableView);
+                        if (!mIsFixed)
+                            dispatchOnPanelCollapsed(mSlideableView);
                     }
                 } else if (mSlideOffset < 0) {
                     mSlideState = SlideState.HIDDEN;
@@ -1337,42 +1413,25 @@ public class SlidingUpPanelLayout extends ViewGroup {
         @Override
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
             onPanelDragged(top);
+
             invalidate();
         }
 
         @Override
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
-            int target = 0;
-
-            // direction is always positive if we are sliding in the expanded
-            // direction
-            float direction = mIsSlidingUp ? -yvel : yvel;
-
-            if (direction > 0) {
-                // swipe up -> expand
-                target = computePanelTopPosition(1.0f);
-            } else if (direction < 0) {
-                // swipe down -> collapse
-                target = computePanelTopPosition(0.0f);
-            } else if (mAnchorPoint != 1 && mSlideOffset >= (1.f + mAnchorPoint) / 2) {
-                // zero velocity, and far enough from anchor point => expand to
-                // the top
-                target = computePanelTopPosition(1.0f);
-            } else if (mAnchorPoint == 1 && mSlideOffset >= 0.5f) {
-                // zero velocity, and far enough from anchor point => expand to
-                // the top
-                target = computePanelTopPosition(1.0f);
-            } else if (mAnchorPoint != 1 && mSlideOffset >= mAnchorPoint) {
-                target = computePanelTopPosition(mAnchorPoint);
-            } else if (mAnchorPoint != 1 && mSlideOffset >= mAnchorPoint / 2) {
-                target = computePanelTopPosition(mAnchorPoint);
-            } else {
-                // settle at the bottom
-                target = computePanelTopPosition(0.0f);
+            if (mSlideOffset == 0 && mIsFixed) {
+                return;
+            } else if (mSlideOffset != 0 && mIsFixed) {
+                mIsFixed = false;
             }
 
-            mDragHelper.settleCapturedViewAt(releasedChild.getLeft(), target);
-            invalidate();
+            if (mSlideOffset == 0) {
+                dispatchOnPanelCollapsed(releasedChild);
+            } else {
+                int target = computePanelTopPosition(1.0f);
+                mDragHelper.settleCapturedViewAt(releasedChild.getLeft(), target);
+                invalidate();
+            }
         }
 
         @Override

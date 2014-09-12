@@ -168,9 +168,9 @@ public class BaiduDataManager {
             sb.append("&tag2=" + URLEncoder.encode(BaiduTagMapping.getStringTag2(tag2), "utf-8"));
             sb.append("&ie=utf8");
 
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("请求url：" + sb.toString());
-            }
+//            if (BuildConfig.DEBUG) {
+//                HDBLOG.logD("请求url：" + sb.toString());
+//            }
             return sb.toString();
         } catch (UnsupportedEncodingException e) {
             // never execute
@@ -238,13 +238,13 @@ public class BaiduDataManager {
                     bd.setThumbLargeWidth(thumb_large_width);
                     bd.setThumbLargeHeight(thumb_large_height);
                     bdList.add(bd);
-                    if (PandoraConfig.sDebug) {
-                        HDBLOG.logD("tag1=" + tag1 + " tag2=" + tag2 + "baiduId=" + baiduId
-                                + " describe=" + describe + " image_url=" + image_url
-                                + " image_width=" + image_width + " image_height=" + image_height
-                                + " thumb_large_url=" + thumb_large_url + " thumb_large_width="
-                                + thumb_large_width + " thumb_large_height=" + thumb_large_height);
-                    }
+//                    if (PandoraConfig.sDebug) {
+//                        HDBLOG.logD("tag1=" + tag1 + " tag2=" + tag2 + "baiduId=" + baiduId
+//                                + " describe=" + describe + " image_url=" + image_url
+//                                + " image_width=" + image_width + " image_height=" + image_height
+//                                + " thumb_large_url=" + thumb_large_url + " thumb_large_width="
+//                                + thumb_large_width + " thumb_large_height=" + thumb_large_height);
+//                    }
                 }
             }
 

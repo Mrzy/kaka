@@ -73,7 +73,7 @@ public class PandoraBoxDispatcher extends Handler {
             case MSG_LOAD_BAIDU_IMG:
                 if (HDBNetworkState.isNetworkAvailable()) {
                     // 如果磁盘缓存区图片数为0，则更新数据库中的是否下载字段为否
-                    if (DiskImageHelper.getFileCountOnDisk() == 0) {
+                    if (DiskImageHelper.getFileCountOnDisk() <= 1) {
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("百度图片的本地磁盘存储的数量为0，清空数据库中的已下载标记，并开启下载图片程序");
                         }

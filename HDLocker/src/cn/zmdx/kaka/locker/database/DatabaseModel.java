@@ -221,7 +221,7 @@ public class DatabaseModel {
         Cursor cursor = sqliteDatabase.rawQuery("select count(*) from "
                 + TableStructure.TABLE_NAME_CONTENT, null);
         try {
-            while (cursor.moveToFirst()) {
+            while (cursor.moveToNext()) {
                 count = cursor.getInt(0);
             }
         } catch (Exception e) {
@@ -245,7 +245,7 @@ public class DatabaseModel {
                 + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = " + DatabaseModel.DOWNLOAD_TRUE,
                 null);
         try {
-            while (cursor.moveToFirst()) {
+            while (cursor.moveToNext()) {
                 count = cursor.getInt(0);
             }
         } catch (Exception e) {

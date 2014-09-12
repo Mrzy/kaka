@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.PanelSlideListener;
+import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
 
 public class LockScreenManager {
 
@@ -65,7 +66,6 @@ public class LockScreenManager {
         mWinManager.addView(mEntireView, params);
 
         mIsLocked = true;
-
     }
 
     private void refreshContent() {
@@ -96,7 +96,7 @@ public class LockScreenManager {
         return mIsLocked;
     }
 
-    private PanelSlideListener mSlideListener = new PanelSlideListener() {
+    private PanelSlideListener mSlideListener = new SimplePanelSlideListener() {
 
         @Override
         public void onPanelSlide(View panel, float slideOffset) {
@@ -113,16 +113,26 @@ public class LockScreenManager {
         }
 
         @Override
-        public void onPanelAnchored(View panel) {
+        public void onPanelHidden(View panel) {
+            // TODO Auto-generated method stub
+            Log.e("zy", "onPanelHidden");
+
+        }
+
+        @Override
+        public void onPanelFixed(View panel) {
             // TODO Auto-generated method stub
 
         }
 
         @Override
-        public void onPanelHidden(View panel) {
-            // TODO Auto-generated method stub
-
+        public void onPanelClickedDuringFixed() {
+            mSliderView.hidePanel();
+            unLock();
         }
 
+        public void onPanelStartDown(View panel) {
+
+        };
     };
 }
