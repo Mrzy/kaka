@@ -61,10 +61,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private LinearLayout mPicView;
 
-    private final int[] mWallpapers = {
-            R.drawable.wallpaper, R.drawable.wallpaper, R.drawable.wallpaper, R.drawable.wallpaper
-    };
-
     private SparseArray<ImageView> mImageViewItems = new SparseArray<ImageView>();
 
     private boolean mIsWallpaperShow = false;
@@ -133,13 +129,13 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private void bindPicData() {
         if (mPicView != null) {
-            for (int i = 0; i < mWallpapers.length; i++) {
+            for (int i = 0; i < PandoraConfig.sWallpapers.length; i++) {
                 RelativeLayout artistPiclay = (RelativeLayout) LayoutInflater.from(
                         HDApplication.getInstannce())
                         .inflate(R.layout.setting_wallpaper_item, null);
                 ImageView mWallpaper = (ImageView) artistPiclay
                         .findViewById(R.id.setting_wallpaper_image);
-                mWallpaper.setImageResource(mWallpapers[i]);
+                mWallpaper.setImageResource(PandoraConfig.sWallpapers[i]);
                 ImageView mWallpaperCircle = (ImageView) artistPiclay
                         .findViewById(R.id.setting_wallpaper_image_border);
                 mImageViewItems.put(i, mWallpaperCircle);
