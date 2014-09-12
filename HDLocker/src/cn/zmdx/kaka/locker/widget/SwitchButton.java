@@ -1,7 +1,6 @@
 
 package cn.zmdx.kaka.locker.widget;
 
-import cn.zmdx.kaka.locker.R;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -24,6 +23,7 @@ import android.view.ViewConfiguration;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CompoundButton;
 import android.widget.Scroller;
+import cn.zmdx.kaka.locker.R;
 
 /**
  * 开关按钮

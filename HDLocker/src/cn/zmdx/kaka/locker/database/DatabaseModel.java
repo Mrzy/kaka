@@ -117,7 +117,7 @@ public class DatabaseModel {
         try {
             while (cursor.moveToNext()) {
                 BaiduData bd = new BaiduData();
-                String id = cursor.getString(cursor.getColumnIndex(TableStructure.CONTENT_ID));
+                int id = cursor.getInt(cursor.getColumnIndex(TableStructure.CONTENT_ID));
                 String baiduId = cursor.getString(cursor
                         .getColumnIndex(TableStructure.CONTENT_BAIDU_ID));
                 String describe = cursor.getString(cursor
@@ -190,22 +190,22 @@ public class DatabaseModel {
      * 
      * @param id
      */
-    public synchronized boolean markAlreadyDownload(String id) {
+    public synchronized boolean markAlreadyDownload(int id) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         ContentValues values = new ContentValues();
         values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, DatabaseModel.DOWNLOAD_TRUE);
         int count = sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values,
-                TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, new String[] {
-                    id
+                TableStructure.CONTENT_ID, new String[] {
+                    String.valueOf(id)
                 });
         return count != 0;
     }
 
-    public synchronized boolean deleteById(String id) {
+    public synchronized boolean deleteById(int id) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
         int count = sqliteDatabase.delete(TableStructure.TABLE_NAME_CONTENT,
                 TableStructure.CONTENT_ID, new String[] {
-                    id
+                    String.valueOf(id)
                 });
         return count != 0;
     }

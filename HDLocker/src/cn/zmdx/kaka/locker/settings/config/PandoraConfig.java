@@ -29,6 +29,10 @@ public class PandoraConfig {
 
     private static final String UNLOCK_TYPE = "unlocktype";
 
+    private static final String WHICH_WALLPAPER = "whichWallpaper";
+
+    private static final String LOCKPATTERN = "lockPattern";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -39,10 +43,6 @@ public class PandoraConfig {
             sConfig = new PandoraConfig(context);
         }
         return sConfig;
-    }
-
-    public int getUnLockType() {
-        return mSp.getInt(UNLOCK_TYPE, UNLOCKER_TYPE_DEFAULT);
     }
 
     public boolean isPandolaLockerOn() {
@@ -59,6 +59,32 @@ public class PandoraConfig {
         Editor editor = mSp.edit();
         editor.putInt(UNLOCK_TYPE, type);
         editor.commit();
+    }
+
+    public int getUnLockType() {
+        return mSp.getInt(UNLOCK_TYPE, UNLOCKER_TYPE_DEFAULT);
+    }
+
+    public void saveWhichWallpaper(int which) {
+        Editor editor = mSp.edit();
+        editor.putInt(WHICH_WALLPAPER, which);
+        editor.commit();
+
+    }
+
+    public int getWhichWallpaper() {
+        return mSp.getInt(WHICH_WALLPAPER, 0);
+    }
+
+    public void saveLockPattern(String pattern) {
+        Editor editor = mSp.edit();
+        editor.putString(LOCKPATTERN, pattern);
+        editor.commit();
+
+    }
+
+    public String getLockPaternString() {
+        return mSp.getString(LOCKPATTERN, "");
     }
 
 }

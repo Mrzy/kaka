@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ############################################################################################## -->
+<!-- 以下资源内容适配如下机型 [2014.09.11 11:13]   shiyc -->
+<!--  -->
+<!-- 为方便以后的维护，如果此文件适配的机型未在下方列表，请您补全: -->
+<!-- M3        1920x1080          480dpi   px/dp = 3 -->
+<!--  -->
+<!-- ############################################################################################## -->
+<resources>
+
+    <dimen name="setting_padding_left">32dp</dimen>
+    <dimen name="setting_padding_right">32dp</dimen>
+    <dimen name="setting_padding_top">13dp</dimen>
+    <dimen name="setting_item_height">66dp</dimen>
+    <dimen name="setting_wallpaper_bg_height">133dp</dimen>
+    <dimen name="setting_wallpaper_bg_margin_left">8dp</dimen>
+    <dimen name="setting_wallpaper_bg_margin_right">8dp</dimen>
+    <dimen name="setting_wallpaper_height">96dp</dimen>
+    <dimen name="setting_wallpaper_width">54dp</dimen>
+    <dimen name="setting_wallpaper_margin_left">17dp</dimen>
+    <dimen name="setting_wallpaper_margin_right">17dp</dimen>
+    <dimen name="setting_wallpaper_border_height">104dp</dimen>
+    <dimen name="setting_wallpaper_border_width">61dp</dimen>
+
+</resources>

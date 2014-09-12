@@ -5,28 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
-
 import cn.zmdx.kaka.locker.widget.LockPatternView;
 
 public class LockPatternUtils {
 
-    // private static final String TAG = "LockPatternUtils";
-    private final static String KEY_LOCK_PWD = "lock_pwd";
-
-    private static Context mContext;
-
-    private static SharedPreferences preference;
-
-    // private final ContentResolver mContentResolver;
-
-    public LockPatternUtils(Context context) {
-        mContext = context;
-        preference = PreferenceManager.getDefaultSharedPreferences(mContext);
-        // mContentResolver = context.getContentResolver();
+    private LockPatternUtils() {
     }
 
     /**
@@ -65,27 +48,4 @@ public class LockPatternUtils {
         }
         return Arrays.toString(res);
     }
-
-    public void saveLockPattern(List<LockPatternView.Cell> pattern) {
-        Editor editor = preference.edit();
-        editor.putString(KEY_LOCK_PWD, patternToString(pattern));
-        editor.commit();
-    }
-
-    public String getLockPaternString() {
-        return preference.getString(KEY_LOCK_PWD, "");
-    }
-
-    public int checkPattern(List<LockPatternView.Cell> pattern) {
-        String stored = getLockPaternString();
-        if (!stored.isEmpty()) {
-            return stored.equals(patternToString(pattern)) ? 1 : 0;
-        }
-        return -1;
-    }
-
-    public void clearLock() {
-        saveLockPattern(null);
-    }
-
 }
