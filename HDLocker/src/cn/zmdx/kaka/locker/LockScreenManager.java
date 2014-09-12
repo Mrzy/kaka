@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker;
 
+import com.nineoldandroids.animation.ObjectAnimator;
+
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.util.Log;
@@ -54,6 +56,7 @@ public class LockScreenManager {
 
         params.x = 0;
         params.y = 0;
+        params.windowAnimations = R.style.anim_locker_window;
         params.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
         params.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         params.gravity = Gravity.TOP | Gravity.LEFT;
@@ -88,7 +91,7 @@ public class LockScreenManager {
         if (!mIsLocked)
             return;
 
-        mWinManager.removeView(mEntireView);
+         mWinManager.removeView(mEntireView);
         mIsLocked = false;
     }
 
@@ -104,7 +107,8 @@ public class LockScreenManager {
 
         @Override
         public void onPanelCollapsed(View panel) {
-            unLock();
+            Log.e("zy","onPanelCollapsed");
+            mSliderView.hidePanel();
         }
 
         @Override
@@ -115,24 +119,28 @@ public class LockScreenManager {
         @Override
         public void onPanelHidden(View panel) {
             // TODO Auto-generated method stub
-            Log.e("zy", "onPanelHidden");
 
         }
 
         @Override
         public void onPanelFixed(View panel) {
-            // TODO Auto-generated method stub
+            Log.e("zy", "onPanelFixed");
 
         }
 
         @Override
         public void onPanelClickedDuringFixed() {
+            //判断是否开启密码解锁
             mSliderView.hidePanel();
-            unLock();
         }
 
-        public void onPanelStartDown(View panel) {
-            Log.e("zy","onPanelStartDown");
+        public void onPanelStartDown(View view) {
+            Log.e("zy", "onPanelStartDown");
+        };
+
+        public void onPanelHiddenEnd() {
+            Log.e("zy","onPanelHiddenEnd");
+            unLock();
         };
     };
 }

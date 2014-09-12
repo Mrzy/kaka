@@ -15,7 +15,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,6 +23,8 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.FileHelper;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 import com.nineoldandroids.view.animation.AnimatorProxy;
@@ -283,7 +284,9 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
         public void onPanelClickedDuringFixed();
 
-        public void onPanelStartDown(View panel);
+        public void onPanelStartDown(View view);
+
+        public void onPanelHiddenEnd();
     }
 
     /**
@@ -319,13 +322,19 @@ public class SlidingUpPanelLayout extends ViewGroup {
         @Override
         public void onPanelClickedDuringFixed() {
             // TODO Auto-generated method stub
-            
+
         }
 
         @Override
-        public void onPanelStartDown(View panel) {
+        public void onPanelStartDown(View view) {
             // TODO Auto-generated method stub
-            
+
+        }
+
+        @Override
+        public void onPanelHiddenEnd() {
+            // TODO Auto-generated method stub
+
         }
     }
 
@@ -472,7 +481,11 @@ public class SlidingUpPanelLayout extends ViewGroup {
         mIsSlidingEnabled = enabled;
     }
 
+    private boolean mIsForeBackgroundCutOff = false;
+
     private void cutOffForegroundDrawable() {
+        if (mIsForeBackgroundCutOff)
+            return;
         int width = Integer.parseInt(BaseInfoHelper.getWidth(getContext()));
         int height = Integer.parseInt(BaseInfoHelper.getHeight(getContext()));
         Bitmap srcBmp = ImageUtils.drawable2Bitmap(mForegroundDrawable);
@@ -483,7 +496,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 srcBmp.getWidth(), mSlideableView.getMeasuredHeight());
         mTopPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), topBmp);
         mBottomPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), bottomBmp);
-
+        mIsForeBackgroundCutOff = true;
     }
 
     public boolean isSlidingEnabled() {
@@ -591,12 +604,18 @@ public class SlidingUpPanelLayout extends ViewGroup {
         return mOverlayContent;
     }
 
+    void dispatchOnPanelHiddenEnd() {
+        if (mPanelSlideListener != null) {
+            mPanelSlideListener.onPanelHiddenEnd();
+        }
+    }
+
     void dispatchOnPanelClickDuringFixed() {
         if (mPanelSlideListener != null) {
             mPanelSlideListener.onPanelClickedDuringFixed();
         }
     }
-    
+
     void dispatchOnPanelFixed(View panel) {
         if (mPanelSlideListener != null) {
             mPanelSlideListener.onPanelFixed(panel);
@@ -745,7 +764,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
             }
 
             int height = layoutHeight;
-            if (child == mMainView && !mOverlayContent && mSlideState != SlideState.HIDDEN) {
+            if (child == mMainView && !mOverlayContent) {
                 height -= (mPanelHeight + mTopViewSeekOutHeight);
             } else if (child == mSlideableView) {
                 height = layoutHeight - topPanelHeight;
@@ -937,16 +956,6 @@ public class SlidingUpPanelLayout extends ViewGroup {
         if (!isSlidingEnabled()) {
             return super.onTouchEvent(ev);
         }
-        int action = ev.getAction();
-        switch(action) {
-            case MotionEvent.ACTION_DOWN:
-                if (mSlideState == SlideState.EXPANDED) {
-                    if (mPanelSlideListener != null) {
-                        mPanelSlideListener.onPanelStartDown(mSlideableView);
-                    }
-                }
-                break;
-        }
         mDragHelper.processTouchEvent(ev);
         return true;
     }
@@ -1125,7 +1134,16 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 return;
             int newTop = computePanelTopPosition(0.0f)
                     + (mIsSlidingUp ? +mPanelHeight : -mPanelHeight);
-            smoothSlideTo(computeSlideOffset(newTop), 0);
+            int delayTime = 300;
+            smoothSlideTo(computeSlideOffset(newTop), 0, delayTime);
+            HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    dispatchOnPanelHiddenEnd();
+                }
+
+            }, delayTime);
         }
     }
 
@@ -1172,7 +1190,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
     }
 
     public void recovery() {
-        //TODO
+        // TODO
     }
 
     @Override
@@ -1229,7 +1247,23 @@ public class SlidingUpPanelLayout extends ViewGroup {
         }
 
         int panelTop = computePanelTopPosition(slideOffset);
-        if (mDragHelper.smoothSlideViewTo(mSlideableView, mSlideableView.getLeft(), panelTop)) {
+        if (mDragHelper.smoothSlideViewTo(mSlideableView, mSlideableView.getLeft(), panelTop, 300)) {
+            setAllChildrenVisible();
+            ViewCompat.postInvalidateOnAnimation(this);
+            return true;
+        }
+        return false;
+    }
+
+    boolean smoothSlideTo(float slideOffset, int velocity, int duration) {
+        if (!isSlidingEnabled()) {
+            // Nothing to do.
+            return false;
+        }
+
+        int panelTop = computePanelTopPosition(slideOffset);
+        if (mDragHelper.smoothSlideViewTo(mSlideableView, mSlideableView.getLeft(), panelTop,
+                duration)) {
             setAllChildrenVisible();
             ViewCompat.postInvalidateOnAnimation(this);
             return true;
@@ -1408,6 +1442,9 @@ public class SlidingUpPanelLayout extends ViewGroup {
         @Override
         public void onViewCaptured(View capturedChild, int activePointerId) {
             setAllChildrenVisible();
+            if (mPanelSlideListener != null) {
+                mPanelSlideListener.onPanelStartDown(capturedChild);
+            }
         }
 
         @Override
@@ -1425,9 +1462,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 mIsFixed = false;
             }
 
-            if (mSlideOffset == 0) {
-                dispatchOnPanelCollapsed(releasedChild);
-            } else {
+            if (mSlideOffset != 0) {
                 int target = computePanelTopPosition(1.0f);
                 mDragHelper.settleCapturedViewAt(releasedChild.getLeft(), target);
                 invalidate();
