@@ -1,6 +1,7 @@
 
 package cn.zmdx.kaka.locker.settings.config;
 
+import cn.zmdx.kaka.locker.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -32,6 +33,10 @@ public class PandoraConfig {
     private static final String WHICH_WALLPAPER = "whichWallpaper";
 
     private static final String LOCKPATTERN = "lockPattern";
+
+    public static final int[] sWallpapers = {
+            R.drawable.wallpaper, R.drawable.wallpaper, R.drawable.wallpaper, R.drawable.wallpaper
+    };
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -74,6 +79,10 @@ public class PandoraConfig {
 
     public int getWhichWallpaper() {
         return mSp.getInt(WHICH_WALLPAPER, 0);
+    }
+
+    public int getWhichWallpaperResId() {
+        return sWallpapers[mSp.getInt(WHICH_WALLPAPER, 0)];
     }
 
     public void saveLockPattern(String pattern) {
