@@ -195,7 +195,7 @@ public class DatabaseModel {
         ContentValues values = new ContentValues();
         values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, DatabaseModel.DOWNLOAD_TRUE);
         int count = sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values,
-                TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, new String[] {
+                TableStructure.CONTENT_ID, new String[] {
                     String.valueOf(id)
                 });
         return count != 0;
