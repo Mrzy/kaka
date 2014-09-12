@@ -195,7 +195,7 @@ public class DatabaseModel {
         ContentValues values = new ContentValues();
         values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, DatabaseModel.DOWNLOAD_TRUE);
         int count = sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values,
-                TableStructure.CONTENT_ID, new String[] {
+                TableStructure.CONTENT_ID + "=?", new String[] {
                     String.valueOf(id)
                 });
         return count != 0;
@@ -204,7 +204,7 @@ public class DatabaseModel {
     public synchronized boolean deleteById(int id) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
         int count = sqliteDatabase.delete(TableStructure.TABLE_NAME_CONTENT,
-                TableStructure.CONTENT_ID, new String[] {
+                TableStructure.CONTENT_ID + "=?", new String[] {
                     String.valueOf(id)
                 });
         return count != 0;

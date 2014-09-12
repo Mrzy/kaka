@@ -82,12 +82,18 @@ public class PandoraBoxDispatcher extends Handler {
                         return;
                     }
 
-                    if (DatabaseModel.getInstance().queryCountHasImage() < PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE) {
+                    int hasImageCount = DatabaseModel.getInstance().queryCountHasImage();
+                    if (hasImageCount < PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE) {
                         if (BuildConfig.DEBUG) {
-                            HDBLOG.logD("数据库中标记为已下载的数据总数已小于阀值:"
+                            HDBLOG.logD("数据库中标记为已下载的数据总数:"+hasImageCount+"已小于阀值:"
                                     + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",立即开启下载图片程序");
                         }
                         downloadPartImages();
+                    } else {
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("数据库中标记为已下载的数据总数为:"+hasImageCount+"大于最小阀值"
+                                    + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",无需启动下载图片程序");
+                        }
                     }
                 }
                 break;

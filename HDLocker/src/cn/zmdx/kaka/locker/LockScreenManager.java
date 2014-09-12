@@ -132,7 +132,7 @@ public class LockScreenManager {
         }
 
         public void onPanelStartDown(View panel) {
-
+            Log.e("zy","onPanelStartDown");
         };
     };
 }

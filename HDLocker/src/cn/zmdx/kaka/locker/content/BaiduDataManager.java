@@ -78,6 +78,7 @@ public class BaiduDataManager {
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("download image finished,path=" + response);
                 }
+                DatabaseModel.getInstance().markAlreadyDownload(bd.mId);
             }
 
         }, new ErrorListener() {
@@ -92,7 +93,8 @@ public class BaiduDataManager {
         RequestManager.getRequestQueue().add(request);
     }
 
-    public void downloadBaiduImage(final BaiduData bd) {
+    //暂废弃
+    private void downloadBaiduImage(final BaiduData bd) {
         if (bd == null) {
             return;
         }
