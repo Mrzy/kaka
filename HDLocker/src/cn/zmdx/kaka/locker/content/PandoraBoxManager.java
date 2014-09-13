@@ -30,8 +30,10 @@ public class PandoraBoxManager {
 
     public IPandoraBox getNextPandoraData() {
         final PandoraData pd = new PandoraData();
-        final List<BaiduData> list = DatabaseModel.getInstance().queryWithImgByTag1(BaiduTagMapping.S_TAG1_GAOXIAO, 1);
-        if (list.size() <= 0) return getDefaultData();
+        final List<BaiduData> list = DatabaseModel.getInstance().queryWithImgByTag1(
+                BaiduTagMapping.S_TAG1_GAOXIAO, 1);
+        if (list.size() <= 0)
+            return getDefaultData();
         final BaiduData bd = list.get(0);
         final Bitmap bmp = DiskImageHelper.getBitmapByUrl(bd.mImageUrl);
         pd.setmImage(bmp);
@@ -39,10 +41,11 @@ public class PandoraBoxManager {
         IPandoraBox box = new SingleImageBox(mContext, pd);
         return box;
     }
-    
+
     public IPandoraBox getDefaultData() {
         PandoraData pd = new PandoraData();
-        pd.setmImage(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher));
+        pd.setmImage(BitmapFactory.decodeResource(mContext.getResources(),
+                R.drawable.locker_screen_nondata_default));
         return new SingleImageBox(mContext, pd);
     }
 }

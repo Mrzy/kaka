@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,13 +16,13 @@ import cn.zmdx.kaka.locker.content.IPandoraBox;
 import cn.zmdx.kaka.locker.content.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.database.DatabaseModel;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
 
 public class LockScreenManager {
 
-    // private LockerViewGroup mEntireView;
     private SlidingUpPanelLayout mSliderView;
 
     private View mEntireView;
@@ -91,6 +92,16 @@ public class LockScreenManager {
         mMainView = (ViewGroup) mEntireView.findViewById(R.id.mainView);
         mSliderView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
+        setDrawable();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setDrawable() {
+        HDApplication context = HDApplication.getInstannce();
+        int resId = PandoraConfig.newInstance(context).getWhichWallpaperResId();
+        Drawable drawable = context.getResources().getDrawable(resId);
+        mSliderView.setForegroundDrawable(drawable);
+        mMainView.setBackgroundDrawable(drawable);
     }
 
     public void unLock() {

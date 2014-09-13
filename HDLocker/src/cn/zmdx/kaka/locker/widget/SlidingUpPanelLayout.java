@@ -577,6 +577,12 @@ public class SlidingUpPanelLayout extends ViewGroup {
         }
     }
 
+    public void setForegroundDrawable(Drawable drawable) {
+        mForegroundDrawable = drawable;
+        mIsForeBackgroundCutOff = false;
+        invalidate();
+    }
+
     /**
      * Gets the currently set anchor point
      * 
