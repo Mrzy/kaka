@@ -5,6 +5,7 @@ import cn.zmdx.kaka.locker.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.SparseIntArray;
 
 public class PandoraConfig {
 
@@ -34,9 +35,12 @@ public class PandoraConfig {
 
     private static final String LOCKPATTERN = "lockPattern";
 
-    public static final int[] sWallpapers = {
-            R.drawable.wallpaper, R.drawable.wallpaper, R.drawable.wallpaper, R.drawable.wallpaper
+    public static final int[] sThumbWallpapers = {
+            R.drawable.setting_wallpaper_blue, R.drawable.setting_wallpaper_green,
+            R.drawable.setting_wallpaper_purple, R.drawable.setting_wallpaper_yellow
     };
+
+    public static SparseIntArray sBackgroundArray = new SparseIntArray();
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -82,7 +86,7 @@ public class PandoraConfig {
     }
 
     public int getWhichWallpaperResId() {
-        return sWallpapers[mSp.getInt(WHICH_WALLPAPER, 0)];
+        return sBackgroundArray.get(sThumbWallpapers[getWhichWallpaper()]);
     }
 
     public void saveLockPattern(String pattern) {

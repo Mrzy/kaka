@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/setting_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    sothree:dragView="@+id/lock_btn"
+    sothree:foregroundDrawable="@drawable/locker_foreground"
+    sothree:panelHeight="80dp"
+    sothree:shadowHeight="8dp"
+    sothree:topSeekoutHeight="80dp" >
+
+    <include layout="@layout/setting_activity" />
+
+    <RelativeLayout
+        android:id="@+id/lock_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#cccccc" >
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lock_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#cccccc"
+        android:clickable="true"
+        android:focusable="false"
+        android:paddingTop="5dp" >
+
+        <ImageView
+            android:id="@+id/setting_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/setting_icon_selector"
+            android:contentDescription="@string/contentDescription" />
+    </RelativeLayout>
+
+</cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>

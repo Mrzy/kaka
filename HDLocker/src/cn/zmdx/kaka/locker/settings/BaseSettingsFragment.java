@@ -1,19 +1,13 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import java.util.List;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.utils.LockPatternUtils;
-import cn.zmdx.kaka.locker.widget.LockPatternView;
-import cn.zmdx.kaka.locker.widget.LockPatternView.Cell;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
@@ -86,14 +80,10 @@ public abstract class BaseSettingsFragment extends Fragment {
 
     }
 
-    protected void setUnLockType(int type) {
-        mPandoraConfig.saveUnlockType(type);
-    }
-
     protected int getUnLockType() {
         return mPandoraConfig.getUnLockType();
     }
-    
+
     protected void setWhichWallpaper(int which) {
         mPandoraConfig.saveWhichWallpaper(which);
     }
@@ -101,25 +91,9 @@ public abstract class BaseSettingsFragment extends Fragment {
     protected int getWhichWallpaper() {
         return mPandoraConfig.getWhichWallpaper();
     }
-
-    protected void saveLockPattern(String pattern) {
-        mPandoraConfig.saveLockPattern(pattern);
-    }
-
-    protected String getLockPaternString() {
-        return mPandoraConfig.getLockPaternString();
-    }
-
-    protected boolean checkPattern(List<Cell> pattern) {
-        String stored = getLockPaternString();
-        if (!stored.equals(null)) {
-            return stored.equals(LockPatternUtils.patternToString(pattern)) ? true : false;
-        }
-        return false;
-    }
-
-    protected void clearLockPatern() {
-        saveLockPattern("");
+    
+    protected int getWhichWallpaperResId() {
+        return mPandoraConfig.getWhichWallpaperResId();
     }
 
     public void onResume() {
