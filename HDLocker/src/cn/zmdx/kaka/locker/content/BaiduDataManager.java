@@ -184,7 +184,7 @@ public class BaiduDataManager {
         return mBaseUrl;
     }
 
-    public static class BaiduData implements IData {
+    public static class BaiduData {
 
         public int mId;
 

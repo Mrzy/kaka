@@ -265,4 +265,39 @@ public class DatabaseModel {
         values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, DatabaseModel.DOWNLOAD_FALSE);
         sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values, null, null);
     }
+
+    /**
+     * 根据tag1类型查询数据
+     * 
+     * @param tag1
+     * @param count 需要的条数
+     * @return
+     */
+    public synchronized List<BaiduData> queryWithImgByTag1(String tag1, int count) {
+        List<BaiduData> list = new ArrayList<BaiduData>();
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_CONTENT, new String[] {
+                TableStructure.CONTENT_ID, TableStructure.CONTENT_IMAGE_URL
+        }, TableStructure.CONTENT_TAG1 + "=? and " + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED
+                + "=?", new String[] {
+                tag1, String.valueOf(DatabaseModel.DOWNLOAD_TRUE)
+        }, null, null, null, String.valueOf(count));
+
+        try {
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(0);
+                String url = cursor.getString(1);
+                BaiduData bd = new BaiduData();
+                bd.setId(id);
+                bd.setImageUrl(url);
+                list.add(bd);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+
+        return list;
+    }
 }

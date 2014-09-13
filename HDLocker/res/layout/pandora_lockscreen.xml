@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="#ffffff"
     android:orientation="vertical" >
 
@@ -12,22 +12,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
+        sothree:dragView="@+id/lock_btn"
         sothree:foregroundDrawable="@drawable/locker_foreground"
         sothree:panelHeight="80dp"
-        sothree:topSeekoutHeight="80dp"
-        sothree:dragView="@+id/lock_btn"
-        sothree:shadowHeight="8dp" >
+        sothree:shadowHeight="8dp"
+        sothree:topSeekoutHeight="80dp" >
 
-
-            <TextView 
-                android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff"
-            android:text="床前明月光，疑是地上霜，举头望明月，低头思故乡"
-            android:textSize="25sp"
+            android:id="@+id/mainView"
             android:gravity="center"
-            android:textColor="#000000"
-                />
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:gravity="center"
+                android:textColor="#000000"
+                android:textSize="25sp" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/lock_top"
