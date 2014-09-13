@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.Scroller;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
-import cn.zmdx.kaka.locker.utils.ImageUtils;
+import cn.zmdx.kaka.locker.utils.MImageUtils;
 
 public class LockerViewGroup extends FrameLayout {
 
@@ -119,15 +119,15 @@ public class LockerViewGroup extends FrameLayout {
 
     @SuppressWarnings("deprecation")
     public void setForegroundDrawable(Drawable drawable) {
-        Bitmap srcBmp = ImageUtils.drawable2Bitmap(drawable);
-        srcBmp = ImageUtils.scaleTo(srcBmp, mWinWidth, mWinHeight);
+        Bitmap srcBmp = MImageUtils.drawable2Bitmap(drawable);
+        srcBmp = MImageUtils.scaleTo(srcBmp, mWinWidth, mWinHeight);
         Bitmap topBmp = Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(), mTopViewHeight);
         Log.e("zy", "topBmp.height:" + topBmp.getHeight());
         Bitmap bottomBmp = Bitmap.createBitmap(srcBmp, 0, mTopViewHeight, srcBmp.getWidth(),
                 mBottomViewHeight);
         Log.e("zy", "bottomBmp.height:" + bottomBmp.getHeight());
-        mTopContainerView.setBackgroundDrawable(ImageUtils.bitmap2Drawable(getContext(), topBmp));
-        mBottomContainerView.setBackgroundDrawable(ImageUtils.bitmap2Drawable(getContext(),
+        mTopContainerView.setBackgroundDrawable(MImageUtils.bitmap2Drawable(getContext(), topBmp));
+        mBottomContainerView.setBackgroundDrawable(MImageUtils.bitmap2Drawable(getContext(),
                 bottomBmp));
         srcBmp.recycle();
         srcBmp = null;

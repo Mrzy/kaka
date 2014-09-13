@@ -1,25 +1,18 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import java.util.List;
-
 import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnKeyListener;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.HorizontalScrollView;
@@ -31,17 +24,17 @@ import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.utils.LockPatternUtils;
-import cn.zmdx.kaka.locker.widget.LockPatternView;
-import cn.zmdx.kaka.locker.widget.LockPatternView.Cell;
-import cn.zmdx.kaka.locker.widget.LockPatternView.DisplayMode;
-import cn.zmdx.kaka.locker.widget.LockPatternView.OnPatternListener;
+import cn.zmdx.kaka.locker.widget.LockPatternDialog;
+import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 public class MainSettingsFragment extends BaseSettingsFragment implements OnCheckedChangeListener,
         OnClickListener {
     private View mRootView;
+
+    private SlidingUpPanelLayout mSettingView;
 
     private TextView mSystemLockerPrompt;
 
@@ -61,7 +54,16 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private LinearLayout mPicView;
 
+    private ImageView mSettingImageView;
+
+    private View mSettingMainView;
+
     private SparseArray<ImageView> mImageViewItems = new SparseArray<ImageView>();
+
+    private int[] mWallpapers = {
+            R.drawable.setting_background_blue, R.drawable.setting_background_green,
+            R.drawable.setting_background_purple, R.drawable.setting_background_yellow
+    };
 
     private boolean mIsWallpaperShow = false;
 
@@ -69,15 +71,13 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private static final int MSG_SAVE_WALLPAPER_DELAY = 100;
 
-    private static final int TIMES_DRAW_GUSTURE = 1;
+    private boolean mIsCurrentlyPressed = false;
 
-    private static final int TIMES_DRAW_GUSTURE_AGAIN = 2;
+    private static final int TIME_COLLAPSE_PANEL_DELAY = 1000;
 
-    private boolean mForbidGustureViewShowWhenCreate = false;
+    public static final int GUSTURE_REQUEST_CODE_SUCCESS = 37;
 
-    private static final int GUSTURE_LEAST_POINT_COUNT = 4;
-
-    private static final int THREAD_GUSTURE_PROMPT_DELAY = 300;
+    public static final int GUSTURE_REQUEST_CODE_FAIL = 38;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,13 +90,27 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     public View onCreateView(LayoutInflater inflater, @Nullable
     ViewGroup container, @Nullable
     Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.setting_activity, container, false);
+        mRootView = inflater.inflate(R.layout.pandora_setting, container, false);
         initView();
         initSwitchButtonState();
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                mSettingView.collapsePanel();
+            }
+        }, TIME_COLLAPSE_PANEL_DELAY);
         return mRootView;
     }
 
     private void initView() {
+
+        mSettingView = (SlidingUpPanelLayout) mRootView.findViewById(R.id.setting_view);
+        mSettingImageView = (ImageView) mRootView.findViewById(R.id.setting_icon);
+
+        mSettingMainView = mRootView.findViewById(R.id.setting_main);
+
+        mSettingImageView.setOnClickListener(this);
 
         mSystemLockerPrompt = (TextView) mRootView.findViewById(R.id.setting_systemlocker_prompt);
         mSystemLockerPrompt.setOnClickListener(this);
@@ -108,7 +122,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mLockerTypeSButton = (SwitchButton) mRootView
                 .findViewById(R.id.setting_pandoralocker_password);
         mLockerTypeSButton.setOnCheckedChangeListener(this);
-        // mLockerTypeSButton.setOnClickListener(this);
 
         mFeedback = (TextView) mRootView.findViewById(R.id.setting_feedback_prompt);
         mFeedback.setOnClickListener(this);
@@ -129,19 +142,21 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private void bindPicData() {
         if (mPicView != null) {
-            for (int i = 0; i < PandoraConfig.sWallpapers.length; i++) {
-                RelativeLayout artistPiclay = (RelativeLayout) LayoutInflater.from(
+            for (int i = 0; i < PandoraConfig.sThumbWallpapers.length; i++) {
+                RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
                         HDApplication.getInstannce())
                         .inflate(R.layout.setting_wallpaper_item, null);
-                ImageView mWallpaper = (ImageView) artistPiclay
+                ImageView mWallpaper = (ImageView) mWallpaperRl
                         .findViewById(R.id.setting_wallpaper_image);
-                mWallpaper.setImageResource(PandoraConfig.sWallpapers[i]);
-                ImageView mWallpaperCircle = (ImageView) artistPiclay
+                mWallpaper.setImageResource(PandoraConfig.sThumbWallpapers[i]);
+                ImageView mWallpaperCircle = (ImageView) mWallpaperRl
                         .findViewById(R.id.setting_wallpaper_image_border);
                 mImageViewItems.put(i, mWallpaperCircle);
+                PandoraConfig.sBackgroundArray.put(PandoraConfig.sThumbWallpapers[i],
+                        mWallpapers[i]);
                 mWallpaper.setTag(i);
                 mWallpaper.setOnClickListener(mPicClickListener);
-                mPicView.addView(artistPiclay);
+                mPicView.addView(mWallpaperRl);
             }
             checkWhichWallpaper();
         }
@@ -152,6 +167,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         if (null != mImageViewItems) {
             mImageViewItems.get(which).setVisibility(View.VISIBLE);
         }
+
+        setSettingBackground(getWhichWallpaperResId());
     }
 
     private View.OnClickListener mPicClickListener = new OnClickListener() {
@@ -167,6 +184,10 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                         mImageViewItems.get(pos).setVisibility(View.GONE);
                     }
                 }
+
+                setSettingBackground(PandoraConfig.sBackgroundArray
+                        .get(PandoraConfig.sThumbWallpapers[position]));
+
                 if (mHandler.hasMessages(MSG_SAVE_WALLPAPER)) {
                     mHandler.removeMessages(MSG_SAVE_WALLPAPER);
                 }
@@ -194,7 +215,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     private void initSwitchButtonState() {
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
         mLockerTypeSButton.setChecked(getUnLockType() == PandoraConfig.UNLOCKER_TYPE_GUSTURE);
-        mForbidGustureViewShowWhenCreate = true;
+        mIsCurrentlyPressed = true;
+    }
+
+    protected void setSettingBackground(int resid) {
+        mSettingMainView.setBackgroundResource(resid);
     }
 
     @Override
@@ -209,13 +234,13 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 break;
             case R.id.setting_pandoralocker_password:
                 if (isChecked) {
-                    if (mForbidGustureViewShowWhenCreate) {
-                        showGustureView();
+                    if (mIsCurrentlyPressed) {
+                        showGustureView(LockPatternDialog.LOCK_PATTERN_TYPE_OPEN);
                     }
-                    setUnLockType(PandoraConfig.UNLOCKER_TYPE_GUSTURE);
                 } else {
-                    clearLockPatern();
-                    setUnLockType(PandoraConfig.UNLOCKER_TYPE_DEFAULT);
+                    if (mIsCurrentlyPressed) {
+                        showGustureView(LockPatternDialog.LOCK_PATTERN_TYPE_CLOSE);
+                    }
                 }
                 break;
 
@@ -224,136 +249,41 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         }
     }
 
-    private int onPatternDetectedTimes = 0;
+    private void showGustureView(final int type) {
+        View decorView = getActivity().getWindow().getDecorView();
+        Bitmap blurBitmap = PandoraUtils.fastBlur(decorView);
+        Intent in = new Intent();
+        in.setClass(getActivity(), LockPatternDialog.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", type);
+        bundle.putParcelable("bitmap", blurBitmap);
+        in.putExtra("bundle", bundle);
+        startActivityForResult(in, GUSTURE_REQUEST_CODE_SUCCESS);
+    }
 
-    private void showGustureView() {
-        onPatternDetectedTimes = 0;
-        final Dialog builder = new Dialog(getActivity(), R.style.gusture_dialog);
-        builder.show();
-        builder.getWindow().setContentView(R.layout.gusture_view);
-        builder.setCancelable(true);
-        builder.setCanceledOnTouchOutside(false);
-        final TextView mGusturePrompt = (TextView) builder.findViewById(R.id.gusture_prompt);
-        final Button mResetBtn = (Button) builder.findViewById(R.id.gusture_reset);
-        final Button mSureBtn = (Button) builder.findViewById(R.id.gusture_sure);
-        final LockPatternView lockPatternView = (LockPatternView) builder
-                .findViewById(R.id.gusture);
-        lockPatternView.setOnPatternListener(new OnPatternListener() {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case GUSTURE_REQUEST_CODE_FAIL:
+                int type = data.getExtras().getInt("type");
+                mIsCurrentlyPressed = false;
+                switch (type) {
+                    case LockPatternDialog.LOCK_PATTERN_TYPE_CLOSE:
+                        mLockerTypeSButton.setChecked(true);
+                        break;
+                    case LockPatternDialog.LOCK_PATTERN_TYPE_OPEN:
+                        mLockerTypeSButton.setChecked(false);
+                        break;
 
-            @Override
-            public void onPatternStart() {
-                setGuseturePromptString(getActivity().getResources().getString(
-                        R.string.gusture_complete));
-            }
-
-            @Override
-            public void onPatternDetected(final List<Cell> pattern) {
-                if (isLeastPointCount(pattern.size())) {
-                    setGuseturePromptString(getActivity().getResources().getString(
-                            R.string.gusture_limit_prompt));
-                    lockPatternView.setDisplayMode(DisplayMode.Wrong);
-                    return;
+                    default:
+                        break;
                 }
-                if (isPatternDetectedOnce(onPatternDetectedTimes)) {
-                    if (checkPattern(pattern)) {
-                        setGuseturePromptString(getActivity().getResources().getString(
-                                R.string.gusture_new_pattern));
-                    } else {
-                        lockPatternView.setDisplayMode(DisplayMode.Wrong);
-                        setGuseturePromptString(getActivity().getResources().getString(
-                                R.string.gusture_error));
-                        return;
-                    }
-                }
-                onPatternDetectedTimes = onPatternDetectedTimes + 1;
-                if (isPatternDetectedForConfirmation(onPatternDetectedTimes)) {
-
-                    mResetBtn.setClickable(false);
-                    lockPatternView.setOnTouchListener(new OnTouchListener() {
-
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            return true;
-                        }
-                    });
-                    return;
-                }
-                // success to detected once
-                setGuseturePromptString(getActivity().getResources().getString(
-                        R.string.gusture_save_prompt));
-                HDBThreadUtils.postOnUiDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        mResetBtn.setVisibility(View.VISIBLE);
-                        mSureBtn.setVisibility(View.VISIBLE);
-                        saveLockPattern(LockPatternUtils.patternToString(pattern));
-                        setGuseturePromptString(getActivity().getResources().getString(
-                                R.string.gusture_confirmation_prompt));
-                        lockPatternView.clearPattern();
-                    }
-                }, THREAD_GUSTURE_PROMPT_DELAY);
-
-            }
-
-            private void setGuseturePromptString(String prompt) {
-                mGusturePrompt.setText(prompt);
-            }
-
-            private boolean isPatternDetectedForConfirmation(int onPatternDetectedTimes) {
-                return onPatternDetectedTimes == TIMES_DRAW_GUSTURE_AGAIN;
-            }
-
-            private boolean isLeastPointCount(int size) {
-                return size < GUSTURE_LEAST_POINT_COUNT;
-            }
-
-            private boolean isPatternDetectedOnce(int onPatternDetectedTimes) {
-                return onPatternDetectedTimes == TIMES_DRAW_GUSTURE;
-            }
-
-            @Override
-            public void onPatternCleared() {
-                clearLockPatern();
-            }
-
-            @Override
-            public void onPatternCellAdded(List<Cell> pattern) {
-
-            }
-        });
-        mResetBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                mGusturePrompt.setText(getActivity().getResources().getString(
-                        R.string.gustrue_prompt));
-                mResetBtn.setVisibility(View.INVISIBLE);
-                mSureBtn.setVisibility(View.INVISIBLE);
-                onPatternDetectedTimes = 0;
-                lockPatternView.clearPattern();
-                clearLockPatern();
-            }
-
-        });
-        mSureBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                builder.dismiss();
-            }
-        });
-        builder.setOnKeyListener(new OnKeyListener() {
-
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    mLockerTypeSButton.setChecked(false);
-                }
-                return false;
-            }
-        });
-
+                mIsCurrentlyPressed = true;
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -379,15 +309,13 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                     mPicScrollView.setVisibility(View.GONE);
                 }
                 break;
-            // case R.id.setting_pandoralocker_password:
-            // Log.d("syc", "LockerTypeSButton.isChecked()=" +
-            // mLockerTypeSButton.isChecked());
-            // if (mLockerTypeSButton.isChecked()) {
-            // showGustureView();
-            // } else {
-            // clearLockPatern();
-            // }
-            // break;
+            case R.id.setting_icon:
+                if (mSettingView.isPanelExpanded()) {
+                    mSettingView.collapsePanel();
+                } else {
+                    mSettingView.expandPanel();
+                }
+                break;
             default:
                 break;
         }

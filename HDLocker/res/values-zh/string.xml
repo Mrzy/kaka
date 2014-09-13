@@ -21,5 +21,7 @@
     <string name="gusture_save_prompt">已经记录在案</string>
     <string name="gusture_confirmation_prompt">再次绘制图案进行确定</string>
     <string name="gusture_redraw">重绘</string>
+    <string name="gusture_close_prompt">确认已保存的图案</string>
+    <string name="gusture_verify_fail">验证失败，请重试!</string>
 
 </resources>

@@ -16,10 +16,11 @@
 
     <ImageView
         android:id="@+id/setting_wallpaper_image_border"
-        android:layout_width="@dimen/setting_wallpaper_border_width"
-        android:layout_height="@dimen/setting_wallpaper_border_height"
+        android:layout_width="@dimen/setting_wallpaper_width"
+        android:layout_height="@dimen/setting_wallpaper_height"
         android:layout_centerInParent="true"
         android:contentDescription="@string/contentDescription"
+        android:scaleType="fitXY"
         android:src="@drawable/setting_wallpaper_border"
         android:visibility="gone" />
 
