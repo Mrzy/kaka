@@ -12,6 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:shadowColor="#80ffffff"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:textColor="@color/gusture_textview_color"
+        android:shadowRadius="1"
         android:text="@string/gustrue_prompt"
         android:textSize="15sp" />
 

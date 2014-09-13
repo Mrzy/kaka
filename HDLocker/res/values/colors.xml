@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="gusture_button_color">#33ffffff</color>
+    <color name="gusture_textview_color">#a5ffffff</color>
+    <color name="gusture_button_color">#aaffffff</color>
     <color name="setting_textview_color">#66ffffff</color>
-    <color name="gusture_button_unpress_color">#88ffffff</color>
+    <color name="gusture_button_unpress_color">#30ffffff</color>
 
 </resources>
