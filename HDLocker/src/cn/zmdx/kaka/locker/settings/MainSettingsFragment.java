@@ -65,6 +65,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             R.drawable.setting_background_purple, R.drawable.setting_background_yellow
     };
 
+    private int[] mForeWallpapers = {
+            R.drawable.setting_background_blue_fore, R.drawable.setting_background_green_fore,
+            R.drawable.setting_background_purple_fore, R.drawable.setting_background_yellow_fore
+    };
+
     private boolean mIsWallpaperShow = false;
 
     private static final int MSG_SAVE_WALLPAPER = 11;
@@ -73,7 +78,9 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private boolean mIsCurrentlyPressed = false;
 
-    private static final int TIME_COLLAPSE_PANEL_DELAY = 1000;
+    private static final int TIME_COLLAPSE_PANEL_DELAY = 500;
+
+    private static final int TIME_COLLAPSE_PANEL_DURATION = 1000;
 
     public static final int GUSTURE_REQUEST_CODE_SUCCESS = 37;
 
@@ -97,7 +104,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
             @Override
             public void run() {
-                mSettingView.collapsePanel();
+                mSettingView.collapsePanel(TIME_COLLAPSE_PANEL_DURATION);
             }
         }, TIME_COLLAPSE_PANEL_DELAY);
         return mRootView;
@@ -154,6 +161,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 mImageViewItems.put(i, mWallpaperCircle);
                 PandoraConfig.sBackgroundArray.put(PandoraConfig.sThumbWallpapers[i],
                         mWallpapers[i]);
+                PandoraConfig.sForeBackgroundArray.put(mWallpapers[i], mForeWallpapers[i]);
                 mWallpaper.setTag(i);
                 mWallpaper.setOnClickListener(mPicClickListener);
                 mPicView.addView(mWallpaperRl);
@@ -220,6 +228,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     protected void setSettingBackground(int resid) {
         mSettingMainView.setBackgroundResource(resid);
+        mSettingView.setForegroundDrawable(getActivity().getResources().getDrawable(resid));
     }
 
     @Override
@@ -311,7 +320,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 break;
             case R.id.setting_icon:
                 if (mSettingView.isPanelExpanded()) {
-                    mSettingView.collapsePanel();
+                    mSettingView.collapsePanel(TIME_COLLAPSE_PANEL_DURATION);
                 } else {
                     mSettingView.expandPanel();
                 }

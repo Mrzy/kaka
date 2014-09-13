@@ -985,6 +985,10 @@ public class SlidingUpPanelLayout extends ViewGroup {
         return mFirstLayout || smoothSlideTo(0.0f, initialVelocity);
     }
 
+    private boolean collapsePanel(View pane, int initialVelocity, int duration) {
+        return mFirstLayout || smoothSlideTo(0.0f, initialVelocity, duration);
+    }
+
     /*
      * Computes the top position of the panel based on the slide offset.
      */
@@ -1037,6 +1041,17 @@ public class SlidingUpPanelLayout extends ViewGroup {
             if (mSlideState == SlideState.HIDDEN || mSlideState == SlideState.COLLAPSED)
                 return false;
             return collapsePanel(mSlideableView, 0);
+        }
+    }
+
+    public boolean collapsePanel(int duration) {
+        if (mFirstLayout) {
+            mSlideState = SlideState.COLLAPSED;
+            return true;
+        } else {
+            if (mSlideState == SlideState.HIDDEN || mSlideState == SlideState.COLLAPSED)
+                return false;
+            return collapsePanel(mSlideableView, 0, duration);
         }
     }
 

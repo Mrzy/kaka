@@ -1,11 +1,11 @@
 
 package cn.zmdx.kaka.locker.settings.config;
 
-import cn.zmdx.kaka.locker.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.SparseIntArray;
+import cn.zmdx.kaka.locker.R;
 
 public class PandoraConfig {
 
@@ -41,6 +41,8 @@ public class PandoraConfig {
     };
 
     public static SparseIntArray sBackgroundArray = new SparseIntArray();
+
+    public static SparseIntArray sForeBackgroundArray = new SparseIntArray();
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -87,6 +89,13 @@ public class PandoraConfig {
 
     public int getWhichWallpaperResId() {
         return sBackgroundArray.get(sThumbWallpapers[getWhichWallpaper()]);
+    }
+
+    /*
+     * 返回前景颜色对应resId
+     */
+    public int getWhichForeWallpaperResId() {
+        return sForeBackgroundArray.get(getWhichWallpaperResId());
     }
 
     public void saveLockPattern(String pattern) {
