@@ -38,6 +38,7 @@ public class PandoraBoxManager {
         final Bitmap bmp = DiskImageHelper.getBitmapByUrl(bd.mImageUrl);
         pd.setmImage(bmp);
         pd.setmId(bd.getId());
+        pd.setmImageUrl(bd.getImageUrl());
         IPandoraBox box = new SingleImageBox(mContext, pd);
         return box;
     }

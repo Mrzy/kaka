@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.SparseIntArray;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
 
 public class PandoraConfig {
 
@@ -34,6 +35,8 @@ public class PandoraConfig {
     private static final String WHICH_WALLPAPER = "whichWallpaper";
 
     private static final String LOCKPATTERN = "lockPattern";
+
+    private static final String THEME_ID = "theme_id";
 
     public static final int[] sThumbWallpapers = {
             R.drawable.setting_wallpaper_blue, R.drawable.setting_wallpaper_green,
@@ -98,15 +101,23 @@ public class PandoraConfig {
         return sForeBackgroundArray.get(getWhichWallpaperResId());
     }
 
+    public int getCurrentThemeId() {
+        return mSp.getInt(THEME_ID, ThemeManager.THEME_ID_BLUE);
+    }
+
+    public void saveThemeId(int themeId) {
+        Editor editor = mSp.edit();
+        editor.putInt(THEME_ID, themeId);
+        editor.commit();
+    }
+
     public void saveLockPattern(String pattern) {
         Editor editor = mSp.edit();
         editor.putString(LOCKPATTERN, pattern);
         editor.commit();
-
     }
 
     public String getLockPaternString() {
         return mSp.getString(LOCKPATTERN, "");
     }
-
 }

@@ -41,6 +41,8 @@ public interface IPandoraBox {
 
         private String from;
 
+        private String mImageUrl;
+
         public String getFrom() {
             return from;
         }
@@ -71,6 +73,14 @@ public interface IPandoraBox {
 
         public void setmImage(Bitmap mImage) {
             this.mImage = mImage;
+        }
+
+        public void setmImageUrl(String imageUrl) {
+            mImageUrl = imageUrl;
+        }
+
+        public String getmImageUrl() {
+            return mImageUrl;
         }
     }
 }

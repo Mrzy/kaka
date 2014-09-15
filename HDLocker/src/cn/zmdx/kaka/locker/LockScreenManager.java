@@ -12,11 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.IPandoraBox;
 import cn.zmdx.kaka.locker.content.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.database.DatabaseModel;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
@@ -98,10 +102,11 @@ public class LockScreenManager {
     @SuppressWarnings("deprecation")
     private void setDrawable() {
         HDApplication context = HDApplication.getInstannce();
-        int resId = PandoraConfig.newInstance(context).getWhichWallpaperResId();
-        Drawable drawable = context.getResources().getDrawable(resId);
-        mSliderView.setForegroundDrawable(drawable);
-        mMainView.setBackgroundDrawable(drawable);
+        Theme curTheme = ThemeManager.getCurrentTheme();
+        Drawable foreDrawable = context.getResources().getDrawable(curTheme.getmForegroundResId());
+        mSliderView.setForegroundDrawable(foreDrawable);
+        Drawable backDrawable = context.getResources().getDrawable(curTheme.getmBackgroundResId());
+        mMainView.setBackgroundDrawable(backDrawable);
     }
 
     public void unLock() {
@@ -110,7 +115,13 @@ public class LockScreenManager {
 
         mWinManager.removeView(mEntireView);
         mIsLocked = false;
-        releaseResource();
+        HDBThreadUtils.runOnWorker(new Runnable() {
+
+            @Override
+            public void run() {
+                releaseResource();
+            }
+        });
     }
 
     private void releaseResource() {
@@ -122,6 +133,7 @@ public class LockScreenManager {
             }
         }
         DatabaseModel.getInstance().deleteById(data.getmId());
+        DiskImageHelper.remove(data.getmImageUrl());
     }
 
     public boolean isLocked() {
