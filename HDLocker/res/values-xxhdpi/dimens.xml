@@ -33,5 +33,11 @@
     <dimen name="gusture_view_button_margin_top">10dp</dimen>
     <dimen name="gusture_view_button_height">44dp</dimen>
     <dimen name="gusture_view_button_margin_left">10dp</dimen>
+    
+    <dimen name="setting_about_us_height">60dp</dimen>
+    <dimen name="setting_about_us_imageview_width">60dp</dimen>
+    <dimen name="setting_about_us_imageview_height">60dp</dimen>
+    <dimen name="setting_about_us_textview_height">40dp</dimen>
+    
 
 </resources>
