@@ -21,6 +21,8 @@
     <dimen name="setting_wallpaper_margin_right">17dp</dimen>
     <dimen name="setting_wallpaper_border_height">98dp</dimen>
     <dimen name="setting_wallpaper_border_width">56dp</dimen>
+    <dimen name="setting_MIUI_item_height">120dp</dimen>
+    
     
     <dimen name="gusture_view_padding_top">125dp</dimen>
     <dimen name="gusture_pattern_lock_width">300dp</dimen>

@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 public class TableStructure {
     public final static String TABLE_NAME_CONTENT = "content"; // content表
 
+    public final static String TABLE_NAME_JOKE = "joke"; // joke表
+
     /* content表结构 */
 
     public final static String CONTENT_ID = "_id";
@@ -43,4 +45,32 @@ public class TableStructure {
         db.execSQL(str_sql);
     }
 
+    /* joke表结构 */
+
+    public final static String JOKE_ID = "_id";
+
+    public final static String JOKE_SERVER_ID = "server_id";
+
+    public final static String JOKE_CONTENT = "joke_content";
+
+    public final static String JOKE_TOP = "joke_top";
+
+    public final static String JOKE_SETP = "joke_setp";
+
+    public final static String JOKE_COLLECT_DATE = "joke_collect_date";
+
+    public final static String JOKE_RELEASE_DATE = "joke_release_date";
+
+    public final static String JOKE_COLLECT_WEBSITE = "joke_collect_website";
+
+    public final static String JOKE_TITLE = "joke_title";
+
+    public static synchronized void createJokeTable(SQLiteDatabase db) {
+        String str_sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_JOKE + " (" + JOKE_ID
+                + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," + JOKE_SERVER_ID + " TEXT,"
+                + JOKE_CONTENT + " TEXT," + JOKE_TOP + " TEXT," + JOKE_SETP + " TEXT,"
+                + JOKE_COLLECT_DATE + " TEXT," + JOKE_RELEASE_DATE + " TEXT,"
+                + JOKE_COLLECT_WEBSITE + " TEXT," + JOKE_TITLE + " TEXT)";
+        db.execSQL(str_sql);
+    }
 }

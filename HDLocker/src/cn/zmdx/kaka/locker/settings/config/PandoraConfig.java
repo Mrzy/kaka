@@ -4,8 +4,6 @@ package cn.zmdx.kaka.locker.settings.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.util.SparseIntArray;
-import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 
 public class PandoraConfig {
@@ -32,20 +30,9 @@ public class PandoraConfig {
 
     private static final String UNLOCK_TYPE = "unlocktype";
 
-    private static final String WHICH_WALLPAPER = "whichWallpaper";
-
     private static final String LOCKPATTERN = "lockPattern";
 
     private static final String THEME_ID = "theme_id";
-
-    public static final int[] sThumbWallpapers = {
-            R.drawable.setting_wallpaper_blue, R.drawable.setting_wallpaper_green,
-            R.drawable.setting_wallpaper_purple, R.drawable.setting_wallpaper_yellow
-    };
-
-    public static SparseIntArray sBackgroundArray = new SparseIntArray();
-
-    public static SparseIntArray sForeBackgroundArray = new SparseIntArray();
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -77,28 +64,6 @@ public class PandoraConfig {
 
     public int getUnLockType() {
         return mSp.getInt(UNLOCK_TYPE, UNLOCKER_TYPE_DEFAULT);
-    }
-
-    public void saveWhichWallpaper(int which) {
-        Editor editor = mSp.edit();
-        editor.putInt(WHICH_WALLPAPER, which);
-        editor.commit();
-
-    }
-
-    public int getWhichWallpaper() {
-        return mSp.getInt(WHICH_WALLPAPER, 0);
-    }
-
-    public int getWhichWallpaperResId() {
-        return sBackgroundArray.get(sThumbWallpapers[getWhichWallpaper()]);
-    }
-
-    /*
-     * 返回前景颜色对应resId
-     */
-    public int getWhichForeWallpaperResId() {
-        return sForeBackgroundArray.get(getWhichWallpaperResId());
     }
 
     public int getCurrentThemeId() {
