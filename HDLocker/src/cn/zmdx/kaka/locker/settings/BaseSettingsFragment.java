@@ -91,7 +91,7 @@ public abstract class BaseSettingsFragment extends Fragment {
     protected int getWhichWallpaper() {
         return mPandoraConfig.getWhichWallpaper();
     }
-    
+
     protected int getWhichWallpaperResId() {
         return mPandoraConfig.getWhichWallpaperResId();
     }

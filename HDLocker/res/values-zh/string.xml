@@ -11,6 +11,7 @@
     <string name="setting_check_new_version">检查新版本</string>
     <string name="setting_about_us">关于我们</string>
     <string name="contentDescription"></string>
+    <string name="setting_version_number">版本号：0.9v</string>
 
     <!-- gusture -->
     <string name="gustrue_prompt">绘制解锁图案，请至少连接四个点</string>
