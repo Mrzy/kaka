@@ -17,6 +17,7 @@ public class MySqlitDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         TableStructure.createContentTable(db);
+        TableStructure.createJokeTable(db);
         db.execSQL("create unique index if not exists baiduId_index on "
                 + TableStructure.TABLE_NAME_CONTENT + "(" + TableStructure.CONTENT_BAIDU_ID + ")");
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/setting_view"
+    android:id="@+id/setting_fore_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/setting_icon_selector"
+            android:background="@drawable/ic_setting_blue"
             android:contentDescription="@string/contentDescription" />
     </RelativeLayout>
 

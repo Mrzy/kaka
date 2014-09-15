@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/setting_background_blue"
+    android:baselineAligned="true"
+    android:orientation="vertical"
+    android:overScrollMode="never"
+    android:scrollbars="none" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/setting_padding_top" >
+
+        <LinearLayout
+            android:id="@+id/setting_close_systemlocker_guide"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_MIUI_item_height"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/setting_padding_left"
+            android:paddingRight="@dimen/setting_padding_right"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/setting_close_systemlocker"
+                style="@style/setting_textview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/setting_close_systemlocker" />
+
+            <Button
+                android:id="@+id/setting_close_systemlocker_to_set"
+                style="@style/setting_textview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/setting_to_set" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_MIUI_item_height"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/setting_padding_left"
+            android:paddingRight="@dimen/setting_padding_right" >
+
+            <TextView
+                android:id="@+id/setting_MIUI_allow_floating_window"
+                style="@style/setting_textview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/setting_MIUI_allow_floating_window" />
+
+            <Button
+                android:id="@+id/setting_MIUI_allow_floating_window_to_set"
+                style="@style/setting_textview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/setting_to_set" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_MIUI_item_height"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/setting_padding_left"
+            android:paddingRight="@dimen/setting_padding_right" >
+
+            <TextView
+                android:id="@+id/setting_MIUI_trust"
+                style="@style/setting_textview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/setting_MIUI_trust" />
+
+            <Button
+                android:id="@+id/setting_MIUI_trust_to_set"
+                style="@style/setting_textview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/setting_to_set" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

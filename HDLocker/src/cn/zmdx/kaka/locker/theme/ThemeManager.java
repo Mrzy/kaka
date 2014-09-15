@@ -12,7 +12,7 @@ public class ThemeManager {
 
     public static final int THEME_ID_BLUE = 1; // default
 
-    public static final int THEME_ID_GREEN = 2;
+    public static final int THEME_ID_WOOD_GRAIN = 2;
 
     public static final int THEME_ID_PURPLE = 3;
 
@@ -34,23 +34,23 @@ public class ThemeManager {
                 theme.setmBackgroundResId(R.drawable.setting_background_blue);
                 theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
                 // theme.setmDragViewIconResId(0);
-                theme.setmSettingsIconResId(R.drawable.setting_icon_selector);
+                theme.setmSettingsIconResId(R.drawable.ic_setting_blue);
                 theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
                 theme.setmThemeId(THEME_ID_BLUE);
                 break;
-            case THEME_ID_GREEN:
-                theme.setmBackgroundResId(R.drawable.setting_background_green);
-                theme.setmForegroundResId(R.drawable.setting_background_green_fore);
+            case THEME_ID_WOOD_GRAIN:
+                theme.setmBackgroundResId(R.drawable.setting_background_wood_grain);
+                theme.setmForegroundResId(R.drawable.setting_background_wood_grain_fore);
                 // theme.setmDragViewIconResId(0);
-                theme.setmSettingsIconResId(R.drawable.setting_icon_selector);
+                theme.setmSettingsIconResId(R.drawable.ic_setting_wood_grain);
                 theme.setmThumbnailResId(R.drawable.setting_wallpaper_green);
-                theme.setmThemeId(THEME_ID_GREEN);
+                theme.setmThemeId(THEME_ID_WOOD_GRAIN);
                 break;
             case THEME_ID_PURPLE:
                 theme.setmBackgroundResId(R.drawable.setting_background_purple);
                 theme.setmForegroundResId(R.drawable.setting_background_purple_fore);
                 // theme.setmDragViewIconResId(0);
-                theme.setmSettingsIconResId(R.drawable.setting_icon_selector);
+                theme.setmSettingsIconResId(R.drawable.ic_setting_blue);
                 theme.setmThumbnailResId(R.drawable.setting_wallpaper_purple);
                 theme.setmThemeId(THEME_ID_PURPLE);
                 break;
@@ -58,7 +58,7 @@ public class ThemeManager {
                 theme.setmBackgroundResId(R.drawable.setting_background_yellow);
                 theme.setmForegroundResId(R.drawable.setting_background_yellow_fore);
                 // theme.setmDragViewIconResId(0);
-                theme.setmSettingsIconResId(R.drawable.setting_icon_selector);
+                theme.setmSettingsIconResId(R.drawable.ic_setting_blue);
                 theme.setmThumbnailResId(R.drawable.setting_wallpaper_yellow);
                 theme.setmThemeId(THEME_ID_YELLOW);
                 break;
@@ -66,7 +66,7 @@ public class ThemeManager {
                 theme.setmBackgroundResId(R.drawable.setting_background_blue);
                 theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
                 // theme.setmDragViewIconResId(0);
-                theme.setmSettingsIconResId(R.drawable.setting_icon_selector);
+                theme.setmSettingsIconResId(R.drawable.ic_setting_blue);
                 theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
                 theme.setmThemeId(THEME_ID_BLUE);
                 break;
@@ -80,25 +80,25 @@ public class ThemeManager {
         theme.setmBackgroundResId(R.drawable.setting_background_blue);
         theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
         // theme.setmDragViewIconResId(0);
-        theme.setmSettingsIconResId(R.drawable.setting_icon_selector);
+        theme.setmSettingsIconResId(R.drawable.ic_setting_blue);
         theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
         theme.setmThemeId(THEME_ID_BLUE);
         list.add(theme);
 
         theme = new Theme();
-        theme.setmBackgroundResId(R.drawable.setting_background_green);
-        theme.setmForegroundResId(R.drawable.setting_background_green_fore);
+        theme.setmBackgroundResId(R.drawable.setting_background_wood_grain);
+        theme.setmForegroundResId(R.drawable.setting_background_wood_grain_fore);
         // theme.setmDragViewIconResId(0);
-        theme.setmSettingsIconResId(R.drawable.setting_icon_selector);
+        theme.setmSettingsIconResId(R.drawable.ic_setting_wood_grain);
         theme.setmThumbnailResId(R.drawable.setting_wallpaper_green);
-        theme.setmThemeId(THEME_ID_GREEN);
+        theme.setmThemeId(THEME_ID_WOOD_GRAIN);
         list.add(theme);
 
         theme = new Theme();
         theme.setmBackgroundResId(R.drawable.setting_background_purple);
         theme.setmForegroundResId(R.drawable.setting_background_purple_fore);
         // theme.setmDragViewIconResId(0);
-        theme.setmSettingsIconResId(R.drawable.setting_icon_selector);
+        theme.setmSettingsIconResId(R.drawable.ic_setting_blue);
         theme.setmThumbnailResId(R.drawable.setting_wallpaper_purple);
         theme.setmThemeId(THEME_ID_PURPLE);
         list.add(theme);
@@ -107,7 +107,7 @@ public class ThemeManager {
         theme.setmBackgroundResId(R.drawable.setting_background_yellow);
         theme.setmForegroundResId(R.drawable.setting_background_yellow_fore);
         // theme.setmDragViewIconResId(0);
-        theme.setmSettingsIconResId(R.drawable.setting_icon_selector);
+        theme.setmSettingsIconResId(R.drawable.ic_setting_blue);
         theme.setmThumbnailResId(R.drawable.setting_wallpaper_yellow);
         theme.setmThemeId(THEME_ID_YELLOW);
         list.add(theme);

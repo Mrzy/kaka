@@ -1,13 +1,12 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
@@ -19,11 +18,14 @@ public abstract class BaseSettingsFragment extends Fragment {
 
     private Context mContext;
 
+    public boolean isMIUI = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         mPandoraConfig = PandoraConfig.newInstance(mContext);
+        isMIUI = PandoraUtils.isMIUI(mContext);
     }
 
     protected void checkNewVersion() {
@@ -57,43 +59,26 @@ public abstract class BaseSettingsFragment extends Fragment {
                 .commit();
     }
 
+    public void gotoMIUI() {
+        MIUISettingFragment fragment = new MIUISettingFragment();
+        getFragmentManager().beginTransaction().addToBackStack(null).add(R.id.content, fragment)
+                .commit();
+    }
+
     protected void closeSystemLocker() {
-        try {
-            Intent intent = new Intent("/");
-            ComponentName cm = new ComponentName("com.android.settings",
-                    "com.android.settings.ChooseLockGeneric");
-            intent.setComponent(cm);
-            startActivityForResult(intent, 0);
-        } catch (Exception e) {
-            // 打开开发者选项
-            // Intent intent = new
-            // Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
-            // startActivity(intent);
-
-            // 根据包名跳转到系统自带的应用程序信息界面
-            // Uri packageURI = Uri.parse("package:" + "cn.zmdx.kaka.locker");
-            // Intent intent = new
-            // Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,packageURI);
-            // startActivity(intent);
-
-        }
-
+        PandoraUtils.closeSystemLocker(getActivity(), isMIUI);
     }
 
     protected int getUnLockType() {
         return mPandoraConfig.getUnLockType();
     }
 
-    protected void setWhichWallpaper(int which) {
-        mPandoraConfig.saveWhichWallpaper(which);
+    protected void saveThemeId(int themeId) {
+        mPandoraConfig.saveThemeId(themeId);
     }
 
-    protected int getWhichWallpaper() {
-        return mPandoraConfig.getWhichWallpaper();
-    }
-    
-    protected int getWhichWallpaperResId() {
-        return mPandoraConfig.getWhichWallpaperResId();
+    protected int getCurrentThemeId() {
+        return mPandoraConfig.getCurrentThemeId();
     }
 
     public void onResume() {

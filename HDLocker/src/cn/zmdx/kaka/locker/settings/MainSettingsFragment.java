@@ -1,7 +1,10 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import java.util.List;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -9,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +29,8 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.widget.LockPatternDialog;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
@@ -34,9 +40,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         OnClickListener {
     private View mRootView;
 
-    private SlidingUpPanelLayout mSettingView;
+    private SlidingUpPanelLayout mSettingForeView;
 
     private TextView mSystemLockerPrompt;
+
+    private TextView mMIUI;
 
     private TextView mConcernTeam;
 
@@ -54,21 +62,13 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private LinearLayout mPicView;
 
-    private ImageView mSettingImageView;
+    private ImageView mSettingIcon;
 
-    private View mSettingMainView;
+    private View mSettingBackground;
 
-    private SparseArray<ImageView> mImageViewItems = new SparseArray<ImageView>();
+    private SparseArray<ImageView> mBorderArray = new SparseArray<ImageView>();
 
-    private int[] mWallpapers = {
-            R.drawable.setting_background_blue, R.drawable.setting_background_green,
-            R.drawable.setting_background_purple, R.drawable.setting_background_yellow
-    };
-
-    private int[] mForeWallpapers = {
-            R.drawable.setting_background_blue_fore, R.drawable.setting_background_green_fore,
-            R.drawable.setting_background_purple_fore, R.drawable.setting_background_yellow_fore
-    };
+    private SparseIntArray mThumbIdArray = new SparseIntArray();
 
     private boolean mIsWallpaperShow = false;
 
@@ -94,6 +94,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
     ViewGroup container, @Nullable
     Bundle savedInstanceState) {
@@ -104,20 +109,26 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
             @Override
             public void run() {
-                mSettingView.collapsePanel(TIME_COLLAPSE_PANEL_DURATION);
+                mSettingForeView.collapsePanel(TIME_COLLAPSE_PANEL_DURATION);
             }
         }, TIME_COLLAPSE_PANEL_DELAY);
         return mRootView;
     }
 
     private void initView() {
+        if (isMIUI) {
+            mRootView.findViewById(R.id.setting_MIUI_layout).setVisibility(View.VISIBLE);
+        }
 
-        mSettingView = (SlidingUpPanelLayout) mRootView.findViewById(R.id.setting_view);
-        mSettingImageView = (ImageView) mRootView.findViewById(R.id.setting_icon);
+        mMIUI = (TextView) mRootView.findViewById(R.id.setting_MIUI);
+        mMIUI.setOnClickListener(this);
 
-        mSettingMainView = mRootView.findViewById(R.id.setting_main);
+        mSettingForeView = (SlidingUpPanelLayout) mRootView.findViewById(R.id.setting_fore_view);
+        mSettingIcon = (ImageView) mRootView.findViewById(R.id.setting_icon);
 
-        mSettingImageView.setOnClickListener(this);
+        mSettingBackground = mRootView.findViewById(R.id.setting_background);
+
+        mSettingIcon.setOnClickListener(this);
 
         mSystemLockerPrompt = (TextView) mRootView.findViewById(R.id.setting_systemlocker_prompt);
         mSystemLockerPrompt.setOnClickListener(this);
@@ -149,34 +160,37 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private void bindPicData() {
         if (mPicView != null) {
-            for (int i = 0; i < PandoraConfig.sThumbWallpapers.length; i++) {
+            List<Theme> mThemeList = ThemeManager.getAllTheme();
+            for (int i = 0; i < mThemeList.size(); i++) {
                 RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
                         HDApplication.getInstannce())
                         .inflate(R.layout.setting_wallpaper_item, null);
-                ImageView mWallpaper = (ImageView) mWallpaperRl
+                ImageView mWallpaperIv = (ImageView) mWallpaperRl
                         .findViewById(R.id.setting_wallpaper_image);
-                mWallpaper.setImageResource(PandoraConfig.sThumbWallpapers[i]);
-                ImageView mWallpaperCircle = (ImageView) mWallpaperRl
+                mWallpaperIv.setImageResource(mThemeList.get(i).getmThumbnailResId());
+                ImageView mWallpaperBorder = (ImageView) mWallpaperRl
                         .findViewById(R.id.setting_wallpaper_image_border);
-                mImageViewItems.put(i, mWallpaperCircle);
-                PandoraConfig.sBackgroundArray.put(PandoraConfig.sThumbWallpapers[i],
-                        mWallpapers[i]);
-                PandoraConfig.sForeBackgroundArray.put(mWallpapers[i], mForeWallpapers[i]);
-                mWallpaper.setTag(i);
-                mWallpaper.setOnClickListener(mPicClickListener);
+                int themeId = mThemeList.get(i).getmThemeId();
+                mThumbIdArray.put(i, themeId);
+                mBorderArray.put(i, mWallpaperBorder);
+                mWallpaperIv.setTag(i);
+                mWallpaperIv.setOnClickListener(mPicClickListener);
                 mPicView.addView(mWallpaperRl);
             }
-            checkWhichWallpaper();
+            checkCurrentThemeId();
         }
     }
 
-    private void checkWhichWallpaper() {
-        int which = getWhichWallpaper();
-        if (null != mImageViewItems) {
-            mImageViewItems.get(which).setVisibility(View.VISIBLE);
+    private void checkCurrentThemeId() {
+        int themeId = getCurrentThemeId();
+        for (int i = 0; i < mThumbIdArray.size(); i++) {
+            if (themeId == mThumbIdArray.get(i)) {
+                if (null != mBorderArray) {
+                    mBorderArray.get(i).setVisibility(View.VISIBLE);
+                }
+            }
         }
-
-        setSettingBackground(getWhichWallpaperResId());
+        setSettingBackground(themeId);
     }
 
     private View.OnClickListener mPicClickListener = new OnClickListener() {
@@ -185,23 +199,22 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         public void onClick(View view) {
             if (null != view) {
                 int position = (Integer) view.getTag();
-                for (int pos = 0; pos < mImageViewItems.size(); pos++) {
+                for (int pos = 0; pos < mBorderArray.size(); pos++) {
                     if (pos == position) {
-                        mImageViewItems.get(pos).setVisibility(View.VISIBLE);
+                        mBorderArray.get(pos).setVisibility(View.VISIBLE);
                     } else {
-                        mImageViewItems.get(pos).setVisibility(View.GONE);
+                        mBorderArray.get(pos).setVisibility(View.GONE);
                     }
                 }
-
-                setSettingBackground(PandoraConfig.sBackgroundArray
-                        .get(PandoraConfig.sThumbWallpapers[position]));
+                int themeId = mThumbIdArray.get(position);
+                setSettingBackground(themeId);
 
                 if (mHandler.hasMessages(MSG_SAVE_WALLPAPER)) {
                     mHandler.removeMessages(MSG_SAVE_WALLPAPER);
                 }
                 Message message = Message.obtain();
                 message.what = MSG_SAVE_WALLPAPER;
-                message.arg1 = position;
+                message.arg1 = themeId;
                 mHandler.sendMessageDelayed(message, MSG_SAVE_WALLPAPER_DELAY);
             }
         }
@@ -212,8 +225,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_SAVE_WALLPAPER:
-                    int which = msg.arg1;
-                    setWhichWallpaper(which);
+                    int themeId = msg.arg1;
+                    saveThemeId(themeId);
                     break;
             }
             super.handleMessage(msg);
@@ -226,9 +239,12 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mIsCurrentlyPressed = true;
     }
 
-    protected void setSettingBackground(int resid) {
-        mSettingMainView.setBackgroundResource(resid);
-        mSettingView.setForegroundDrawable(getActivity().getResources().getDrawable(resid));
+    protected void setSettingBackground(int themeId) {
+        Theme theme = ThemeManager.getThemeById(themeId);
+        mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
+        mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
+                theme.getmForegroundResId()));
+        mSettingIcon.setBackgroundResource(theme.getmSettingsIconResId());
     }
 
     @Override
@@ -319,11 +335,15 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 }
                 break;
             case R.id.setting_icon:
-                if (mSettingView.isPanelExpanded()) {
-                    mSettingView.collapsePanel(TIME_COLLAPSE_PANEL_DURATION);
+                if (mSettingForeView.isPanelExpanded()) {
+                    mSettingForeView.collapsePanel(TIME_COLLAPSE_PANEL_DURATION);
                 } else {
-                    mSettingView.expandPanel();
+                    mSettingForeView.expandPanel();
                 }
+                break;
+
+            case R.id.setting_MIUI:
+                gotoMIUI();
                 break;
             default:
                 break;
@@ -332,8 +352,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     @Override
     public void onDestroyView() {
-        if (null != mImageViewItems) {
-            mImageViewItems.clear();
+        if (null != mBorderArray) {
+            mBorderArray.clear();
         }
         super.onDestroyView();
     }
