@@ -5,5 +5,7 @@
     <color name="gusture_button_color">#aaffffff</color>
     <color name="setting_textview_color">#66ffffff</color>
     <color name="gusture_button_unpress_color">#30ffffff</color>
+    <color name="setting_background">#ffffff</color>
+    <color name="setting_about_us_text_color">#ffffff</color>
 
 </resources>
