@@ -19,12 +19,12 @@ public class ThemeManager {
     public static final int THEME_ID_YELLOW = 4;
 
     public static Theme getCurrentTheme() {
-        int themeId = PandoraConfig.newInstance(HDApplication.getInstannce()).getWhichWallpaper();
+        int themeId = PandoraConfig.newInstance(HDApplication.getInstannce()).getCurrentThemeId();
         return getThemeById(themeId);
     }
 
     public void saveTheme(int themeId) {
-        PandoraConfig.newInstance(HDApplication.getInstannce()).saveWhichWallpaper(themeId);
+        PandoraConfig.newInstance(HDApplication.getInstannce()).saveThemeId(themeId);
     }
 
     public static Theme getThemeById(int themeId) {
@@ -85,6 +85,7 @@ public class ThemeManager {
         theme.setmThemeId(THEME_ID_BLUE);
         list.add(theme);
 
+        theme = new Theme();
         theme.setmBackgroundResId(R.drawable.setting_background_green);
         theme.setmForegroundResId(R.drawable.setting_background_green_fore);
         // theme.setmDragViewIconResId(0);
@@ -93,6 +94,7 @@ public class ThemeManager {
         theme.setmThemeId(THEME_ID_GREEN);
         list.add(theme);
 
+        theme = new Theme();
         theme.setmBackgroundResId(R.drawable.setting_background_purple);
         theme.setmForegroundResId(R.drawable.setting_background_purple_fore);
         // theme.setmDragViewIconResId(0);
@@ -101,6 +103,7 @@ public class ThemeManager {
         theme.setmThemeId(THEME_ID_PURPLE);
         list.add(theme);
 
+        theme = new Theme();
         theme.setmBackgroundResId(R.drawable.setting_background_yellow);
         theme.setmForegroundResId(R.drawable.setting_background_yellow_fore);
         // theme.setmDragViewIconResId(0);
