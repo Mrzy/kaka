@@ -9,7 +9,7 @@ import android.graphics.BitmapFactory;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
 import cn.zmdx.kaka.locker.content.IPandoraBox.PandoraData;
-import cn.zmdx.kaka.locker.database.DatabaseModel;
+import cn.zmdx.kaka.locker.database.BaiduDataModel;
 
 public class PandoraBoxManager {
 
@@ -36,7 +36,7 @@ public class PandoraBoxManager {
 
     public IPandoraBox getNextPandoraData() {
         final PandoraData pd = new PandoraData();
-        final List<BaiduData> list = DatabaseModel.getInstance().queryWithImgByTag1(
+        final List<BaiduData> list = BaiduDataModel.getInstance().queryWithImgByTag1(
                 BaiduTagMapping.S_TAG1_GAOXIAO, 1);
         if (list.size() <= 0)
             return getDefaultData();

@@ -11,38 +11,12 @@ import android.database.sqlite.SQLiteStatement;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
 import cn.zmdx.kaka.locker.content.BaiduTagMapping;
-import cn.zmdx.kaka.locker.content.ServerDataManager.ServerData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 /**
  * 操作数据库方法
  */
-public class DatabaseModel {
-    private static final int DATABASE_VERSION = 1;
-
-    private static final int INDEX_ONE = 1;
-
-    private static final int INDEX_TWO = 2;
-
-    private static final int INDEX_THREE = 3;
-
-    private static final int INDEX_FOUR = 4;
-
-    private static final int INDEX_FIVE = 5;
-
-    private static final int INDEX_SIX = 6;
-
-    private static final int INDEX_SEVEN = 7;
-
-    private static final int INDEX_EIGHT = 8;
-
-    private static final int INDEX_NINE = 9;
-
-    private static final int INDEX_TEN = 10;
-
-    private static final int INDEX_ELEVEN = 11;
-
-    private static final int INDEX_TWELVE = 12;
+public class BaiduDataModel {
 
     public static final int DOWNLOAD_FALSE = 0;
 
@@ -50,24 +24,24 @@ public class DatabaseModel {
 
     private MySqlitDatabase mMySqlitDatabase;
 
-    private static DatabaseModel sDatabaseModel = null;
+    private static BaiduDataModel sBaiduDataModel = null;
 
-    private DatabaseModel() {
-        mMySqlitDatabase = new MySqlitDatabase(HDApplication.getInstannce(),
-                PandoraConfig.DATABASE_NAME, null, DATABASE_VERSION);
+    private BaiduDataModel() {
+        mMySqlitDatabase = MySqlitDatabase.getInstance(HDApplication.getInstannce(),
+                PandoraConfig.DATABASE_NAME, null);
     }
 
     public synchronized void close() {
         mMySqlitDatabase.close();
         mMySqlitDatabase = null;
-        sDatabaseModel = null;
+        sBaiduDataModel = null;
     }
 
-    public static synchronized DatabaseModel getInstance() {
-        if (sDatabaseModel == null) {
-            sDatabaseModel = new DatabaseModel();
+    public static synchronized BaiduDataModel getInstance() {
+        if (sBaiduDataModel == null) {
+            sBaiduDataModel = new BaiduDataModel();
         }
-        return sDatabaseModel;
+        return sBaiduDataModel;
     }
 
     public synchronized void saveBaiduData(List<BaiduData> list) {
@@ -78,17 +52,17 @@ public class DatabaseModel {
                     + TableStructure.TABLE_NAME_CONTENT + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
             for (BaiduData bd : list) {
                 sqLiteStatement.clearBindings();
-                sqLiteStatement.bindString(INDEX_TWO, bd.getBaiduId());
-                sqLiteStatement.bindString(INDEX_THREE, bd.getDescribe());
-                sqLiteStatement.bindString(INDEX_FOUR, bd.getImageUrl());
-                sqLiteStatement.bindLong(INDEX_FIVE, bd.getImageWidth());
-                sqLiteStatement.bindLong(INDEX_SIX, bd.getImageHeight());
-                sqLiteStatement.bindLong(INDEX_SEVEN, bd.isImageDownloaded());
-                sqLiteStatement.bindString(INDEX_EIGHT, bd.getTthumbLargeUrl());
-                sqLiteStatement.bindLong(INDEX_NINE, bd.getThumbLargeWidth());
-                sqLiteStatement.bindLong(INDEX_TEN, bd.getThumbLargeHeight());
-                sqLiteStatement.bindString(INDEX_ELEVEN, bd.getTag1());
-                sqLiteStatement.bindString(INDEX_TWELVE, bd.getTag2());
+                sqLiteStatement.bindString(MySqlitDatabase.INDEX_TWO, bd.getBaiduId());
+                sqLiteStatement.bindString(MySqlitDatabase.INDEX_THREE, bd.getDescribe());
+                sqLiteStatement.bindString(MySqlitDatabase.INDEX_FOUR, bd.getImageUrl());
+                sqLiteStatement.bindLong(MySqlitDatabase.INDEX_FIVE, bd.getImageWidth());
+                sqLiteStatement.bindLong(MySqlitDatabase.INDEX_SIX, bd.getImageHeight());
+                sqLiteStatement.bindLong(MySqlitDatabase.INDEX_SEVEN, bd.isImageDownloaded());
+                sqLiteStatement.bindString(MySqlitDatabase.INDEX_EIGHT, bd.getTthumbLargeUrl());
+                sqLiteStatement.bindLong(MySqlitDatabase.INDEX_NINE, bd.getThumbLargeWidth());
+                sqLiteStatement.bindLong(MySqlitDatabase.INDEX_TEN, bd.getThumbLargeHeight());
+                sqLiteStatement.bindString(MySqlitDatabase.INDEX_ELEVEN, bd.getTag1());
+                sqLiteStatement.bindString(MySqlitDatabase.INDEX_TWELVE, bd.getTag2());
                 sqLiteStatement.executeInsert();
             }
             mysql.setTransactionSuccessful();
@@ -194,7 +168,7 @@ public class DatabaseModel {
     public synchronized boolean markAlreadyDownload(int id) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, DatabaseModel.DOWNLOAD_TRUE);
+        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, BaiduDataModel.DOWNLOAD_TRUE);
         int count = sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values,
                 TableStructure.CONTENT_ID + "=?", new String[] {
                     String.valueOf(id)
@@ -241,10 +215,10 @@ public class DatabaseModel {
     public synchronized int queryCountHasImage() {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         int count = 0;
-        Cursor cursor = sqliteDatabase.rawQuery("select count(*) from "
-                + TableStructure.TABLE_NAME_CONTENT + " where "
-                + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = " + DatabaseModel.DOWNLOAD_TRUE,
-                null);
+        Cursor cursor = sqliteDatabase.rawQuery(
+                "select count(*) from " + TableStructure.TABLE_NAME_CONTENT + " where "
+                        + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = "
+                        + BaiduDataModel.DOWNLOAD_TRUE, null);
         try {
             while (cursor.moveToNext()) {
                 count = cursor.getInt(0);
@@ -263,7 +237,7 @@ public class DatabaseModel {
     public synchronized void markAllNonDownload() {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, DatabaseModel.DOWNLOAD_FALSE);
+        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, BaiduDataModel.DOWNLOAD_FALSE);
         sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values, null, null);
     }
 
@@ -281,7 +255,7 @@ public class DatabaseModel {
                 TableStructure.CONTENT_ID, TableStructure.CONTENT_IMAGE_URL
         }, TableStructure.CONTENT_TAG1 + "=? and " + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED
                 + "=?", new String[] {
-                tag1, String.valueOf(DatabaseModel.DOWNLOAD_TRUE)
+                tag1, String.valueOf(BaiduDataModel.DOWNLOAD_TRUE)
         }, null, null, null, String.valueOf(count));
 
         try {
@@ -302,33 +276,4 @@ public class DatabaseModel {
         return list;
     }
 
-//    public void saveServerData(List<ServerData> list) {
-//        SQLiteDatabase mysql = mMySqlitDatabase.getWritableDatabase();
-//        try {
-//            mysql.beginTransaction();
-//            SQLiteStatement sqLiteStatement = mysql.compileStatement("replace INTO "
-//                    + TableStructure.TABLE_NAME_SERVER_IMAGE + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-//            for (ServerData bd : list) {
-//                sqLiteStatement.clearBindings();
-//                sqLiteStatement.bindString(INDEX_TWO, bd.getBaiduId());
-//                sqLiteStatement.bindString(INDEX_THREE, bd.getDescribe());
-//                sqLiteStatement.bindString(INDEX_FOUR, bd.getImageUrl());
-//                sqLiteStatement.bindLong(INDEX_FIVE, bd.getImageWidth());
-//                sqLiteStatement.bindLong(INDEX_SIX, bd.getImageHeight());
-//                sqLiteStatement.bindLong(INDEX_SEVEN, bd.isImageDownloaded());
-//                sqLiteStatement.bindString(INDEX_EIGHT, bd.getTthumbLargeUrl());
-//                sqLiteStatement.bindLong(INDEX_NINE, bd.getThumbLargeWidth());
-//                sqLiteStatement.bindLong(INDEX_TEN, bd.getThumbLargeHeight());
-//                sqLiteStatement.bindString(INDEX_ELEVEN, bd.getTag1());
-//                sqLiteStatement.bindString(INDEX_TWELVE, bd.getTag2());
-//                sqLiteStatement.executeInsert();
-//            }
-//            mysql.setTransactionSuccessful();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            mysql.endTransaction();
-//        }
-//
-//    }
 }

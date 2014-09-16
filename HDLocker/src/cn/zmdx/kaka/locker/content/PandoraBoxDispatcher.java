@@ -7,9 +7,12 @@ import java.util.List;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
-import cn.zmdx.kaka.locker.database.DatabaseModel;
+import cn.zmdx.kaka.locker.content.ServerDataManager.ServerData;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.database.BaiduDataModel;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -22,6 +25,10 @@ public class PandoraBoxDispatcher extends Handler {
     public static final int MSG_PULL_BAIDU_DATA = 1;
 
     public static final int MSG_LOAD_BAIDU_IMG = 2;
+
+    public static final int MSG_SERVER_DATA_ARRIVED = 3;
+
+    public static final int MSG_SERVER_IMAGE_DATA_ARRIVED = 4;
 
     private static PandoraBoxDispatcher INSTANCE;
 
@@ -49,7 +56,12 @@ public class PandoraBoxDispatcher extends Handler {
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("收到抓取百度数据的消息");
                 }
-                int totalCount = DatabaseModel.getInstance().queryTotalCount();
+//                ServerDataManager serverDataManager=new ServerDataManager();
+//                serverDataManager.pullServerData(10, ServerDataMapping.S_DATATYPE_ALL, ServerDataMapping.S_WEBSITE_ALL);
+//                
+//                ServerImageDataManager serverImageDataManager=new ServerImageDataManager();
+//                serverImageDataManager.pullServerImageData(10, ServerDataMapping.S_DATATYPE_ALL, ServerDataMapping.S_WEBSITE_ALL);
+                int totalCount = BaiduDataModel.getInstance().queryTotalCount();
                 // 如果本地的百度图片库中的数据条数已经少于一定的值，则启动拉取程序
                 if (totalCount < PandoraPolicy.MIN_COUNT_LOCAL_DB) {
                     if (HDBNetworkState.isNetworkAvailable()) {
@@ -77,25 +89,35 @@ public class PandoraBoxDispatcher extends Handler {
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("百度图片的本地磁盘存储的数量为0，清空数据库中的已下载标记，并开启下载图片程序");
                         }
-                        DatabaseModel.getInstance().markAllNonDownload();
+                        BaiduDataModel.getInstance().markAllNonDownload();
                         downloadPartImages();
                         return;
                     }
 
-                    int hasImageCount = DatabaseModel.getInstance().queryCountHasImage();
+                    int hasImageCount = BaiduDataModel.getInstance().queryCountHasImage();
                     if (hasImageCount < PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE) {
                         if (BuildConfig.DEBUG) {
-                            HDBLOG.logD("数据库中标记为已下载的数据总数:"+hasImageCount+"已小于阀值:"
+                            HDBLOG.logD("数据库中标记为已下载的数据总数:" + hasImageCount + "已小于阀值:"
                                     + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",立即开启下载图片程序");
                         }
                         downloadPartImages();
                     } else {
                         if (BuildConfig.DEBUG) {
-                            HDBLOG.logD("数据库中标记为已下载的数据总数为:"+hasImageCount+"大于最小阀值"
+                            HDBLOG.logD("数据库中标记为已下载的数据总数为:" + hasImageCount + "大于最小阀值"
                                     + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",无需启动下载图片程序");
                         }
                     }
                 }
+                break;
+            case MSG_SERVER_DATA_ARRIVED:
+                @SuppressWarnings("unchecked")
+                final List<ServerData> sdList = (List<ServerData>) msg.obj;
+                ServerData.saveToDatabase(sdList);
+                break;
+            case MSG_SERVER_IMAGE_DATA_ARRIVED:
+                @SuppressWarnings("unchecked")
+                final List<ServerImageData> sidList = (List<ServerImageData>) msg.obj;
+                ServerImageData.saveToDatabase(sidList);
                 break;
         }
 
@@ -110,7 +132,7 @@ public class PandoraBoxDispatcher extends Handler {
         List<BaiduData> list = new ArrayList<BaiduData>();
         int length = PandoraPolicy.BAIDU_IMAGE_MODULE.length;
         for (int i = 0; i < length; i++) {
-            list.addAll(DatabaseModel.getInstance().queryNonImageData(
+            list.addAll(BaiduDataModel.getInstance().queryNonImageData(
                     PandoraPolicy.BAIDU_IMAGE_MODULE[i], count));
         }
         new BaiduDataManager().batchDownloadBaiduImage(list);

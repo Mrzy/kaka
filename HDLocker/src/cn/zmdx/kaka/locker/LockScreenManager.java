@@ -18,7 +18,7 @@ import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.IPandoraBox;
 import cn.zmdx.kaka.locker.content.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
-import cn.zmdx.kaka.locker.database.DatabaseModel;
+import cn.zmdx.kaka.locker.database.BaiduDataModel;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -158,7 +158,7 @@ public class LockScreenManager {
             if (bmp != null && !bmp.isRecycled()) {
                 bmp.recycle();
             }
-            DatabaseModel.getInstance().deleteById(data.getmId());
+            BaiduDataModel.getInstance().deleteById(data.getmId());
             DiskImageHelper.remove(data.getmImageUrl());
         }
     }

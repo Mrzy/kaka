@@ -14,10 +14,9 @@ import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.cache.ImageCacheManager;
-import cn.zmdx.kaka.locker.database.DatabaseModel;
+import cn.zmdx.kaka.locker.database.BaiduDataModel;
 import cn.zmdx.kaka.locker.network.DownloadRequest;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
-import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 import com.android.volley.Request;
@@ -78,7 +77,7 @@ public class BaiduDataManager {
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("download image finished,path=" + response);
                 }
-                DatabaseModel.getInstance().markAlreadyDownload(bd.mId);
+                BaiduDataModel.getInstance().markAlreadyDownload(bd.mId);
             }
 
         }, new ErrorListener() {
@@ -94,6 +93,7 @@ public class BaiduDataManager {
     }
 
     //暂废弃
+    @SuppressWarnings("unused")
     private void downloadBaiduImage(final BaiduData bd) {
         if (bd == null) {
             return;
@@ -115,7 +115,7 @@ public class BaiduDataManager {
                 }
                 // 若请求失败，此处认为
                 if (error.networkResponse.statusCode >= 500) {
-                    DatabaseModel.getInstance().deleteById(bd.mId);
+                    BaiduDataModel.getInstance().deleteById(bd.mId);
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("下载图片时，服务器异常，认为图片已不能正常下载，所以删除本地库中的这条数据");
                     }
@@ -126,7 +126,7 @@ public class BaiduDataManager {
             public void onResponse(ImageContainer response, boolean isImmediate) {
                 if (response.getBitmap() != null) {
                     // update local db isDownload flag
-                    DatabaseModel.getInstance().markAlreadyDownload(bd.mId);
+                    BaiduDataModel.getInstance().markAlreadyDownload(bd.mId);
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("下载图片请求的onResponse被调用，response.getBitmap()="
                                 + response.getBitmap() + "更新数据库标记为已下载");
@@ -235,7 +235,7 @@ public class BaiduDataManager {
                     bd.setImageUrl(image_url);
                     bd.setImageWidth(image_width);
                     bd.setImageHeight(image_height);
-                    bd.setIsImageDownloaded(DatabaseModel.DOWNLOAD_FALSE);
+                    bd.setIsImageDownloaded(BaiduDataModel.DOWNLOAD_FALSE);
                     bd.setTthumbLargeUrl(thumb_large_url);
                     bd.setThumbLargeWidth(thumb_large_width);
                     bd.setThumbLargeHeight(thumb_large_height);
@@ -254,7 +254,7 @@ public class BaiduDataManager {
         }
 
         public static void saveToDatabase(List<BaiduData> bdList) {
-            DatabaseModel.getInstance().saveBaiduData(bdList);
+            BaiduDataModel.getInstance().saveBaiduData(bdList);
         }
 
         public int getId() {
