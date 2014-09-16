@@ -35,10 +35,15 @@
     <dimen name="gusture_view_button_margin_left">10dp</dimen>
     
     <dimen name="setting_about_us_height">60dp</dimen>
-    <dimen name="setting_about_us_imageview_width">60dp</dimen>
-    <dimen name="setting_about_us_imageview_height">60dp</dimen>
+    <dimen name="setting_about_pandora_imageview_width">121dp</dimen>
+    <dimen name="setting_about_pandora_imageview_height">90dp</dimen>
     <dimen name="setting_about_us_textview_height">40dp</dimen>
-    
+    <dimen name="setting_about_pandora_height">84dp</dimen>
+    <dimen name="setting_about_pandora_text_height">195dp</dimen>
+    <dimen name="setting_about_pandora_margin">9dp</dimen>
+    <dimen name="setting_about_pandora_version_height">30dp</dimen>
+    <dimen name="setting_about_pandora_margin_one">23dp</dimen>
+    <dimen name="setting_about_cooperation_margin">0dp</dimen>
 
     <dimen name="locker_key_padding_top">6dp</dimen>
 </resources>

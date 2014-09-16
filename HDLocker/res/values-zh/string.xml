@@ -10,12 +10,16 @@
     <string name="setting_MIUI">小米用户特别设置</string>
     <string name="setting_feedback">意见反馈</string>
     <string name="setting_check_new_version">检查新版本</string>
-    <string name="setting_about_us">关于我们</string>
+    <string name="setting_about_us">关于潘多拉</string>
+    <string name="setting_about_pandora">潘多拉锁屏</string>
     <string name="setting_MIUI_allow_floating_window">允许显示悬浮窗</string>
     <string name="setting_MIUI_trust">信任程序和允许自动启动</string>
     <string name="setting_to_set">前往设置</string>
     <string name="contentDescription"></string>
-    <string name="setting_version_number">版本号：0.9v</string>
+    <string name="setting_about_text">下拉有料</string>
+    <string name="setting_version_number">1.0.0v</string>
+    <string name="setting_about_email">pandora@hdlocker.com</string>
+    <string name="setting_about_cooperation">商务合作：13910064771</string>
 
     <!-- gusture -->
     <string name="gustrue_prompt">绘制解锁图案，请至少连接四个点</string>

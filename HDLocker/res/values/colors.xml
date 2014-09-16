@@ -7,5 +7,7 @@
     <color name="gusture_button_unpress_color">#30ffffff</color>
     <color name="setting_background">#ffffff</color>
     <color name="setting_about_us_text_color">#ffffff</color>
+    <color name="setting_about_pandora_color">#2f3035</color>
+    
 
 </resources>
