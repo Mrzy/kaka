@@ -14,7 +14,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/setting_about_us_textview_margin_top"
             android:text="@string/setting_about_us"
             android:textColor="@color/setting_about_us_text_color"
             android:textSize="20sp" />

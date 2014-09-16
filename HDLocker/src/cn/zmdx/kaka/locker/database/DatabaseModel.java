@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteStatement;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
 import cn.zmdx.kaka.locker.content.BaiduTagMapping;
+import cn.zmdx.kaka.locker.content.ServerDataManager.ServerData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 /**
@@ -300,4 +301,34 @@ public class DatabaseModel {
 
         return list;
     }
+
+//    public void saveServerData(List<ServerData> list) {
+//        SQLiteDatabase mysql = mMySqlitDatabase.getWritableDatabase();
+//        try {
+//            mysql.beginTransaction();
+//            SQLiteStatement sqLiteStatement = mysql.compileStatement("replace INTO "
+//                    + TableStructure.TABLE_NAME_SERVER_IMAGE + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+//            for (ServerData bd : list) {
+//                sqLiteStatement.clearBindings();
+//                sqLiteStatement.bindString(INDEX_TWO, bd.getBaiduId());
+//                sqLiteStatement.bindString(INDEX_THREE, bd.getDescribe());
+//                sqLiteStatement.bindString(INDEX_FOUR, bd.getImageUrl());
+//                sqLiteStatement.bindLong(INDEX_FIVE, bd.getImageWidth());
+//                sqLiteStatement.bindLong(INDEX_SIX, bd.getImageHeight());
+//                sqLiteStatement.bindLong(INDEX_SEVEN, bd.isImageDownloaded());
+//                sqLiteStatement.bindString(INDEX_EIGHT, bd.getTthumbLargeUrl());
+//                sqLiteStatement.bindLong(INDEX_NINE, bd.getThumbLargeWidth());
+//                sqLiteStatement.bindLong(INDEX_TEN, bd.getThumbLargeHeight());
+//                sqLiteStatement.bindString(INDEX_ELEVEN, bd.getTag1());
+//                sqLiteStatement.bindString(INDEX_TWELVE, bd.getTag2());
+//                sqLiteStatement.executeInsert();
+//            }
+//            mysql.setTransactionSuccessful();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            mysql.endTransaction();
+//        }
+//
+//    }
 }

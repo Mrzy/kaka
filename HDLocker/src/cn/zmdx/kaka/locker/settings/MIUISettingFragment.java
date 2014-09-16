@@ -2,13 +2,7 @@
 package cn.zmdx.kaka.locker.settings;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
 
 public class MIUISettingFragment extends Fragment implements OnClickListener {
 
@@ -28,6 +24,10 @@ public class MIUISettingFragment extends Fragment implements OnClickListener {
     private Button mFolatfingWindowBtn;
 
     private Button mTrustBtn;
+
+    private PandoraConfig mPandoraConfig;
+
+    private int mThemeId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,9 +40,13 @@ public class MIUISettingFragment extends Fragment implements OnClickListener {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mMIUIVersion = PandoraUtils.getSystemProperty();
+        mPandoraConfig = PandoraConfig.newInstance(activity);
+        mThemeId = mPandoraConfig.getCurrentThemeId();
     }
 
     private void initView() {
+        int resId = ThemeManager.getThemeById(mThemeId).getmBackgroundResId();
+        mRootView.findViewById(R.id.setting_miui_background).setBackgroundResource(resId);
         mFolatfingWindowBtn = (Button) mRootView
                 .findViewById(R.id.setting_MIUI_allow_floating_window_to_set);
         mFolatfingWindowBtn.setOnClickListener(this);
@@ -67,5 +71,11 @@ public class MIUISettingFragment extends Fragment implements OnClickListener {
 
     private void showToast() {
         Toast toast = new Toast(getActivity());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getFragmentManager().beginTransaction().remove(this).commit();
     }
 }
