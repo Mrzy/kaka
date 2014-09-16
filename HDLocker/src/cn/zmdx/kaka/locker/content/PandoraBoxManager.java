@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
 import cn.zmdx.kaka.locker.content.IPandoraBox.PandoraData;
@@ -46,6 +47,7 @@ public class PandoraBoxManager {
         pd.setmId(bd.getId());
         pd.setFrom(DATA_FROM_BAIDU);
         pd.setmImageUrl(bd.getImageUrl());
+        pd.setmDesc(bd.getDescribe());
         IPandoraBox box = new SingleImageBox(mContext, pd);
         return box;
     }

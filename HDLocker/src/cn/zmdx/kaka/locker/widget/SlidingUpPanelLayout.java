@@ -31,7 +31,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
     private static final String TAG = SlidingUpPanelLayout.class.getSimpleName();
 
-    private static final int MIN_DURATION_TO_FIXED = 1000;
+    private static final int MIN_DURATION_TO_FIXED = 500;
 
     /**
      * Default peeking out panel height
@@ -583,6 +583,11 @@ public class SlidingUpPanelLayout extends ViewGroup {
         invalidate();
     }
 
+    public void setForegroundResource(int resId) {
+        Drawable drawable = mContext.getResources().getDrawable(resId);
+        setForegroundDrawable(drawable);
+    }
+
     /**
      * Gets the currently set anchor point
      * 
@@ -891,9 +896,6 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
     @Override
     public void setEnabled(boolean enabled) {
-        if (!enabled) {
-            collapsePanel();
-        }
         super.setEnabled(enabled);
     }
 

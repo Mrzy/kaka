@@ -252,7 +252,7 @@ public class BaiduDataModel {
         List<BaiduData> list = new ArrayList<BaiduData>();
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_CONTENT, new String[] {
-                TableStructure.CONTENT_ID, TableStructure.CONTENT_IMAGE_URL
+                TableStructure.CONTENT_ID, TableStructure.CONTENT_IMAGE_URL, TableStructure.CONTENT_DESCRIBE
         }, TableStructure.CONTENT_TAG1 + "=? and " + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED
                 + "=?", new String[] {
                 tag1, String.valueOf(BaiduDataModel.DOWNLOAD_TRUE)
@@ -265,6 +265,7 @@ public class BaiduDataModel {
                 BaiduData bd = new BaiduData();
                 bd.setId(id);
                 bd.setImageUrl(url);
+                bd.setDescribe(cursor.getString(2));
                 list.add(bd);
             }
         } catch (Exception e) {

@@ -25,14 +25,6 @@ public interface IPandoraBox {
     public static class PandoraData {
         private int mId = -1;
 
-        public int getmId() {
-            return mId;
-        }
-
-        public void setmId(int mId) {
-            this.mId = mId;
-        }
-
         private String mTitle;
 
         private String mContent;
@@ -42,6 +34,24 @@ public interface IPandoraBox {
         private int from;
 
         private String mImageUrl;
+
+        private String mDesc;
+
+        public String getmDesc() {
+            return mDesc;
+        }
+
+        public void setmDesc(String mDesc) {
+            this.mDesc = mDesc;
+        }
+
+        public int getmId() {
+            return mId;
+        }
+
+        public void setmId(int mId) {
+            this.mId = mId;
+        }
 
         public int getFrom() {
             return from;

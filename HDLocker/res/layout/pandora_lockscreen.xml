@@ -11,11 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        sothree:dragView="@+id/lock_btn"
+        sothree:dragView="@+id/lock_key"
         sothree:foregroundDrawable="@drawable/locker_foreground"
-        sothree:panelHeight="80dp"
+        sothree:panelHeight="100dp"
         sothree:shadowHeight="8dp"
-        sothree:topSeekoutHeight="80dp" >
+        sothree:topSeekoutHeight="60dp" >
 
         <RelativeLayout
             android:id="@+id/mainView"
@@ -47,13 +47,12 @@
             android:clickable="true"
             android:focusable="false" >
 
-            <Button
-                android:id="@+id/lock_btn"
+            <ImageView
+                android:id="@+id/lock_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/locker_key_padding_top"
-                android:text="下拉" />
+                android:layout_marginTop="@dimen/locker_key_padding_top" />
         </RelativeLayout>
     </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
 
@@ -61,8 +60,7 @@
         android:id="@+id/keyhole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_launcher" />
+        android:visibility="invisible" />
 
 </FrameLayout>

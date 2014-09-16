@@ -2,8 +2,12 @@
 package cn.zmdx.kaka.locker.content;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+import cn.zmdx.kaka.locker.R;
 
 public class SingleImageBox implements IPandoraBox {
 
@@ -11,14 +15,20 @@ public class SingleImageBox implements IPandoraBox {
 
     private PandoraData mData;
 
-    private ImageView mEntireView;
+    private ViewGroup mEntireView;
+    
+    private ImageView mSingleImgView;
+    
+    private TextView mDescView;
 
     private boolean mIsRendered = false;
 
     public SingleImageBox(Context context, PandoraData data) {
         mData = data;
         mContext = context;
-        mEntireView = new ImageView(mContext);
+        mEntireView = (ViewGroup)LayoutInflater.from(context).inflate(R.layout.pandora_box_single_image, null);
+        mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
+        mDescView = (TextView) mEntireView.findViewById(R.id.desc);
     }
 
     @Override
@@ -49,7 +59,8 @@ public class SingleImageBox implements IPandoraBox {
         if (mData == null || mData.getmImage() == null) {
             return false;
         }
-        mEntireView.setImageBitmap(mData.getmImage());
+        mSingleImgView.setImageBitmap(mData.getmImage());
+        mDescView.setText(mData.getmDesc());
         return true;
     }
 }
