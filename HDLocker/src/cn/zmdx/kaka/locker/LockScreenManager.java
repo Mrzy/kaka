@@ -12,24 +12,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.IPandoraBox;
 import cn.zmdx.kaka.locker.content.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.database.DatabaseModel;
-import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
+
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.Animator.AnimatorListener;
+import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.view.ViewHelper;
 
 public class LockScreenManager {
 
     private SlidingUpPanelLayout mSliderView;
 
-    private View mEntireView;
+    private View mEntireView, mKeyholeView;
 
     private ViewGroup mMainView;
 
@@ -40,6 +46,8 @@ public class LockScreenManager {
     private boolean mIsLocked = false;
 
     private IPandoraBox mPandoraBox = null;
+
+    private int mKeyholeMarginTop = -1;
 
     private LockScreenManager() {
         mWinManager = (WindowManager) HDApplication.getInstannce().getSystemService(
@@ -61,7 +69,8 @@ public class LockScreenManager {
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
 
         params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        params.flags = LayoutParams.FLAG_NOT_FOCUSABLE;
+        params.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
+                | LayoutParams.FLAG_LAYOUT_IN_SCREEN | LayoutParams.FLAG_HARDWARE_ACCELERATED;
 
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
 
@@ -86,6 +95,9 @@ public class LockScreenManager {
         mPandoraBox = PandoraBoxManager.newInstance(HDApplication.getInstannce())
                 .getNextPandoraData();
         View contentView = mPandoraBox.getRenderedView();
+        if (contentView == null) {
+            return;
+        }
         mMainView.removeAllViews();
         mMainView.addView(contentView);
     }
@@ -96,7 +108,22 @@ public class LockScreenManager {
         mMainView = (ViewGroup) mEntireView.findViewById(R.id.mainView);
         mSliderView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
+        mKeyholeView = (ImageView) mEntireView.findViewById(R.id.keyhole);
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mKeyholeView.getLayoutParams();
+        calKeyholeMarginTop();
+        lp.setMargins(0, mKeyholeMarginTop, 0, 0);
+        mKeyholeView.setLayoutParams(lp);
         setDrawable();
+    }
+
+    private void calKeyholeMarginTop() {
+        if (mKeyholeMarginTop != -1) {
+            return;
+        }
+        String screenHeight = BaseInfoHelper.getHeight(HDApplication.getInstannce());
+        int padding = HDApplication.getInstannce().getResources()
+                .getDimensionPixelOffset(R.dimen.locker_key_padding_top);
+        mKeyholeMarginTop = Integer.parseInt(screenHeight) - mSliderView.getPanelHeight() + padding;
     }
 
     @SuppressWarnings("deprecation")
@@ -115,29 +142,73 @@ public class LockScreenManager {
 
         mWinManager.removeView(mEntireView);
         mIsLocked = false;
-        HDBThreadUtils.runOnWorker(new Runnable() {
-
-            @Override
-            public void run() {
-                releaseResource();
-            }
-        });
+        releaseResource();
+        // HDBThreadUtils.runOnWorker(new Runnable() {
+        //
+        // @Override
+        // public void run() {
+        // }
+        // });
     }
 
     private void releaseResource() {
         PandoraData data = mPandoraBox.getData();
-        if (data != null) {
+        if (data != null && data.getFrom() != PandoraBoxManager.DATA_FROM_DEFAULT) {
             Bitmap bmp = data.getmImage();
             if (bmp != null && !bmp.isRecycled()) {
                 bmp.recycle();
             }
+            DatabaseModel.getInstance().deleteById(data.getmId());
+            DiskImageHelper.remove(data.getmImageUrl());
         }
-        DatabaseModel.getInstance().deleteById(data.getmId());
-        DiskImageHelper.remove(data.getmImageUrl());
     }
 
     public boolean isLocked() {
         return mIsLocked;
+    }
+
+    private ObjectAnimator mFadeAnimator;
+
+    private void visibleKeyhole() {
+        ViewHelper.setAlpha(mKeyholeView, 0);
+        mKeyholeView.setVisibility(View.VISIBLE);
+        if (mFadeAnimator != null && mFadeAnimator.isRunning()) {
+            mFadeAnimator.cancel();
+        }
+        mFadeAnimator = ObjectAnimator.ofFloat(mKeyholeView, "alpha", 0, 1);
+        mFadeAnimator.setDuration(300).start();
+    }
+
+    private void invisibleKeyhole() {
+        mFadeAnimator = ObjectAnimator.ofFloat(mKeyholeView, "alpha", 1, 0);
+        mFadeAnimator.setDuration(300);
+        if (mFadeAnimator != null && mFadeAnimator.isRunning()) {
+            mFadeAnimator.cancel();
+            mKeyholeView.setVisibility(View.VISIBLE);
+        }
+
+        mFadeAnimator.addListener(new AnimatorListener() {
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mKeyholeView.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+
+        });
+        mFadeAnimator.start();
     }
 
     private PanelSlideListener mSlideListener = new SimplePanelSlideListener() {
@@ -148,13 +219,13 @@ public class LockScreenManager {
 
         @Override
         public void onPanelCollapsed(View panel) {
-            Log.e("zy", "onPanelCollapsed");
-            mSliderView.hidePanel();
+            // mSliderView.hidePanel();
+            unLock();
         }
 
         @Override
         public void onPanelExpanded(View panel) {
-            // TODO Auto-generated method stub
+            invisibleKeyhole();
         }
 
         @Override
@@ -165,23 +236,23 @@ public class LockScreenManager {
 
         @Override
         public void onPanelFixed(View panel) {
-            Log.e("zy", "onPanelFixed");
 
         }
 
         @Override
         public void onPanelClickedDuringFixed() {
+            Log.e("zy", "onPanelClickedDuringFixed");
             // 判断是否开启密码解锁
-            mSliderView.hidePanel();
+            // mSliderView.hidePanel();
+            unLock();
         }
 
         public void onPanelStartDown(View view) {
             Log.e("zy", "onPanelStartDown");
+            visibleKeyhole();
         };
 
         public void onPanelHiddenEnd() {
-            Log.e("zy", "onPanelHiddenEnd");
-            unLock();
         };
     };
 }

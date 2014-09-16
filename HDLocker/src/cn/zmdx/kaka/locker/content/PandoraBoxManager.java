@@ -13,6 +13,12 @@ import cn.zmdx.kaka.locker.database.DatabaseModel;
 
 public class PandoraBoxManager {
 
+    public static final int DATA_FROM_DEFAULT = 1;
+    public static final int DATA_FROM_BAIDU = 2;
+    public static final int DATA_FROM_CAODAN = 3;
+    public static final int DATA_FROM_QIUBAI = 4;
+    public static final int DATA_FROM_JOKE = 5;
+
     private static PandoraBoxManager mPbManager;
 
     private Context mContext;
@@ -38,6 +44,7 @@ public class PandoraBoxManager {
         final Bitmap bmp = DiskImageHelper.getBitmapByUrl(bd.mImageUrl);
         pd.setmImage(bmp);
         pd.setmId(bd.getId());
+        pd.setFrom(DATA_FROM_BAIDU);
         pd.setmImageUrl(bd.getImageUrl());
         IPandoraBox box = new SingleImageBox(mContext, pd);
         return box;
@@ -47,6 +54,7 @@ public class PandoraBoxManager {
         PandoraData pd = new PandoraData();
         pd.setmImage(BitmapFactory.decodeResource(mContext.getResources(),
                 R.drawable.locker_screen_nondata_default));
+        pd.setFrom(DATA_FROM_DEFAULT);
         return new SingleImageBox(mContext, pd);
     }
 }

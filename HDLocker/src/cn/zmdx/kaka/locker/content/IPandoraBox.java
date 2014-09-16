@@ -39,15 +39,15 @@ public interface IPandoraBox {
 
         private Bitmap mImage;
 
-        private String from;
+        private int from;
 
         private String mImageUrl;
 
-        public String getFrom() {
+        public int getFrom() {
             return from;
         }
 
-        public void setFrom(String from) {
+        public void setFrom(int from) {
             this.from = from;
         }
 

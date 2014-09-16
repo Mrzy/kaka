@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="vertical" >
+    android:background="#ffffff" >
 
     <cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
@@ -19,11 +18,10 @@
         sothree:topSeekoutHeight="80dp" >
 
         <RelativeLayout
+            android:id="@+id/mainView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/mainView"
-            android:gravity="center"
-            >
+            android:gravity="center" >
 
             <TextView
                 android:layout_width="match_parent"
@@ -47,16 +45,24 @@
             android:layout_height="match_parent"
             android:background="#cccccc"
             android:clickable="true"
-            android:focusable="false"
-            android:paddingTop="5dp" >
+            android:focusable="false" >
 
             <Button
                 android:id="@+id/lock_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/locker_key_padding_top"
                 android:text="下拉" />
         </RelativeLayout>
     </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/keyhole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_launcher" />
+
+</FrameLayout>

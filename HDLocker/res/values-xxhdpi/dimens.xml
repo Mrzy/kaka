@@ -40,4 +40,5 @@
     <dimen name="setting_about_us_textview_height">40dp</dimen>
     
 
+    <dimen name="locker_key_padding_top">6dp</dimen>
 </resources>
