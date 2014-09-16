@@ -96,9 +96,9 @@ public class TableStructure {
 
     public final static String SERVER_IMAGE_SETP = "setp";
 
-    public final static String SERVER_IMAGE_COLLECT_DATE = "collect_date";
+    public final static String SERVER_IMAGE_COLLECT_TIME = "collect_time";
 
-    public final static String SERVER_IMAGE_RELEASE_DATE = "release_date";
+    public final static String SERVER_IMAGE_RELEASE_TIME = "release_time";
 
     public final static String SERVER_IMAGE_COLLECT_WEBSITE = "collect_website";
 
@@ -108,8 +108,8 @@ public class TableStructure {
                 + SERVER_IMAGE_CLOUD_ID + " TEXT," + SERVER_IMAGE_TITLE + " TEXT,"
                 + SERVER_IMAGE_URL + " TEXT," + SERVER_IMAGE_IMAGE_URL + " TEXT,"
                 + SERVER_IMAGE_DATA_TYPE + " TEXT," + SERVER_IMAGE_TOP + " TEXT,"
-                + SERVER_IMAGE_SETP + " TEXT," + SERVER_IMAGE_COLLECT_DATE + " TEXT,"
-                + SERVER_IMAGE_RELEASE_DATE + " TEXT," + SERVER_IMAGE_COLLECT_WEBSITE + " TEXT)";
+                + SERVER_IMAGE_SETP + " TEXT," + SERVER_IMAGE_COLLECT_TIME + " TEXT,"
+                + SERVER_IMAGE_RELEASE_TIME + " TEXT," + SERVER_IMAGE_COLLECT_WEBSITE + " TEXT)";
         db.execSQL(str_sql);
     }
 }

@@ -9,27 +9,28 @@ import org.json.JSONObject;
 
 import android.os.Message;
 import cn.zmdx.kaka.locker.RequestManager;
+import cn.zmdx.kaka.locker.content.ServerDataManager.ServerData;
 import cn.zmdx.kaka.locker.database.DatabaseModel;
 
+import com.android.volley.VolleyError;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
-public class ServerDataManager {
+public class ServerImageDataManager {
 
-    private String mBaseUrl = "http://192.168.1.103:8080/pandora/locker!queryDataTable.action?";
+    private String mBaseUrl = "http://192.168.1.103:8080/pandora/locker!queryDataImgTable.action?";
 
-    public void pullServerData(int limit, String dataType, String webSite) {
+    public void pullServerImageData(int limit, String dataType, String webSite) {
         JsonObjectRequest request = null;
         request = new JsonObjectRequest(getUrl(limit, dataType, webSite), null,
                 new Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        final List<ServerData> sdList = ServerData.parseJson(response);
+                        final List<ServerImageData> sdList = ServerImageData.parseJson(response);
                         Message msg = Message.obtain();
-                        msg.what = PandoraBoxDispatcher.MSG_SERVER_DATA_ARRIVED;
+                        msg.what = PandoraBoxDispatcher.MSG_SERVER_IMAGE_DATA_ARRIVED;
                         msg.obj = sdList;
                         PandoraBoxDispatcher.getInstance().sendMessage(msg);
                     }
@@ -61,37 +62,49 @@ public class ServerDataManager {
         return mBaseUrl;
     }
 
-    public static class ServerData extends BaseDataManager {
+    public static class ServerImageData extends BaseDataManager {
 
-        private String mContent;
+        private String mUrl;
 
-        public String getContent() {
-            return mContent;
+        private String mImageUrl;
+
+        public String getUrl() {
+            return mUrl;
         }
 
-        public void setContent(String mContent) {
-            this.mContent = mContent;
+        public void setUrl(String mUrl) {
+            this.mUrl = mUrl;
         }
 
-        public static List<ServerData> parseJson(JSONObject jsonObj) {
-            List<ServerData> sdList = new ArrayList<ServerData>();
+        public String getImageUrl() {
+            return mImageUrl;
+        }
+
+        public void setImageUrl(String mImageUrl) {
+            this.mImageUrl = mImageUrl;
+        }
+
+        public static List<ServerImageData> parseJson(JSONObject jsonObj) {
+            List<ServerImageData> sdList = new ArrayList<ServerImageData>();
             String state = jsonObj.optString("state");
             if (state.equals("success")) {
                 JSONArray jsonArray = jsonObj.optJSONArray("data");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.optJSONObject(i);
-                    ServerData serverData = new ServerData();
-                    serverData.parseBaseJson(jsonObject);
-                    String content = jsonObject.optString("content");
-                    serverData.setContent(content);
-                    sdList.add(serverData);
+                    ServerImageData serverImageData = new ServerImageData();
+                    serverImageData.parseBaseJson(jsonObject);
+                    String url = jsonObject.optString("url");
+                    String imgUrl = jsonObject.optString("imgUrl");
+                    serverImageData.setUrl(url);
+                    serverImageData.setImageUrl(imgUrl);
+                    sdList.add(serverImageData);
                 }
             }
             return sdList;
         }
 
-        public static void saveToDatabase(List<ServerData> sdList) {
-            DatabaseModel.getInstance().saveServerData(sdList);
+        public static void saveToDatabase(List<ServerImageData> sidList) {
+            DatabaseModel.getInstance().saveServerImageData(sidList);
         }
 
     }

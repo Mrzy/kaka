@@ -12,6 +12,7 @@ import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
 import cn.zmdx.kaka.locker.content.BaiduTagMapping;
 import cn.zmdx.kaka.locker.content.ServerDataManager.ServerData;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 /**
@@ -302,33 +303,60 @@ public class DatabaseModel {
         return list;
     }
 
-//    public void saveServerData(List<ServerData> list) {
-//        SQLiteDatabase mysql = mMySqlitDatabase.getWritableDatabase();
-//        try {
-//            mysql.beginTransaction();
-//            SQLiteStatement sqLiteStatement = mysql.compileStatement("replace INTO "
-//                    + TableStructure.TABLE_NAME_SERVER_IMAGE + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-//            for (ServerData bd : list) {
-//                sqLiteStatement.clearBindings();
-//                sqLiteStatement.bindString(INDEX_TWO, bd.getBaiduId());
-//                sqLiteStatement.bindString(INDEX_THREE, bd.getDescribe());
-//                sqLiteStatement.bindString(INDEX_FOUR, bd.getImageUrl());
-//                sqLiteStatement.bindLong(INDEX_FIVE, bd.getImageWidth());
-//                sqLiteStatement.bindLong(INDEX_SIX, bd.getImageHeight());
-//                sqLiteStatement.bindLong(INDEX_SEVEN, bd.isImageDownloaded());
-//                sqLiteStatement.bindString(INDEX_EIGHT, bd.getTthumbLargeUrl());
-//                sqLiteStatement.bindLong(INDEX_NINE, bd.getThumbLargeWidth());
-//                sqLiteStatement.bindLong(INDEX_TEN, bd.getThumbLargeHeight());
-//                sqLiteStatement.bindString(INDEX_ELEVEN, bd.getTag1());
-//                sqLiteStatement.bindString(INDEX_TWELVE, bd.getTag2());
-//                sqLiteStatement.executeInsert();
-//            }
-//            mysql.setTransactionSuccessful();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            mysql.endTransaction();
-//        }
-//
-//    }
+    public void saveServerData(List<ServerData> list) {
+        SQLiteDatabase mysql = mMySqlitDatabase.getWritableDatabase();
+        try {
+            mysql.beginTransaction();
+            SQLiteStatement sqLiteStatement = mysql.compileStatement("replace INTO "
+                    + TableStructure.TABLE_NAME_SERVER + " VALUES(?,?,?,?,?,?,?,?,?,?)");
+            for (ServerData bd : list) {
+                sqLiteStatement.clearBindings();
+                sqLiteStatement.bindString(INDEX_TWO, bd.getCloudId());
+                sqLiteStatement.bindString(INDEX_THREE, bd.getTitle());
+                sqLiteStatement.bindString(INDEX_FOUR, bd.getContent());
+                sqLiteStatement.bindString(INDEX_FIVE, bd.getDataType());
+                sqLiteStatement.bindString(INDEX_SIX, bd.getCollectWebsite());
+                sqLiteStatement.bindString(INDEX_SEVEN, bd.getTop());
+                sqLiteStatement.bindString(INDEX_EIGHT, bd.getSetp());
+                sqLiteStatement.bindString(INDEX_NINE, bd.getCollectTime());
+                sqLiteStatement.bindString(INDEX_TEN, bd.getReleaseTime());
+                sqLiteStatement.executeInsert();
+            }
+            mysql.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mysql.endTransaction();
+        }
+
+    }
+
+    public void saveServerImageData(List<ServerImageData> list) {
+        SQLiteDatabase mysql = mMySqlitDatabase.getWritableDatabase();
+        try {
+            mysql.beginTransaction();
+            SQLiteStatement sqLiteStatement = mysql.compileStatement("replace INTO "
+                    + TableStructure.TABLE_NAME_SERVER_IMAGE + " VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+            for (ServerImageData bd : list) {
+                sqLiteStatement.clearBindings();
+                sqLiteStatement.bindString(INDEX_TWO, bd.getCloudId());
+                sqLiteStatement.bindString(INDEX_THREE, bd.getTitle());
+                sqLiteStatement.bindString(INDEX_FOUR, bd.getUrl());
+                sqLiteStatement.bindString(INDEX_FIVE, bd.getImageUrl());
+                sqLiteStatement.bindString(INDEX_SIX, bd.getDataType());
+                sqLiteStatement.bindString(INDEX_SEVEN, bd.getTop());
+                sqLiteStatement.bindString(INDEX_EIGHT, bd.getSetp());
+                sqLiteStatement.bindString(INDEX_NINE, bd.getCollectTime());
+                sqLiteStatement.bindString(INDEX_TEN, bd.getReleaseTime());
+                sqLiteStatement.bindString(INDEX_ELEVEN, bd.getCollectWebsite());
+                sqLiteStatement.executeInsert();
+            }
+            mysql.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mysql.endTransaction();
+        }
+
+    }
 }

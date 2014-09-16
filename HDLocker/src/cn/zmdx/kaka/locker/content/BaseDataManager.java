@@ -109,7 +109,7 @@ public class BaseDataManager {
     }
 
     public void parseBaseJson(JSONObject jsonObject) {
-        mCloudId = jsonObject.optString("id");
+        this.mCloudId = jsonObject.optString("id");
         mTitle = jsonObject.optString("title");
         mTop = jsonObject.optString("top");
         mSetp = jsonObject.optString("step");
