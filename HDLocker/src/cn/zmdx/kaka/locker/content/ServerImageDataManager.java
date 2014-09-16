@@ -9,12 +9,11 @@ import org.json.JSONObject;
 
 import android.os.Message;
 import cn.zmdx.kaka.locker.RequestManager;
-import cn.zmdx.kaka.locker.content.ServerDataManager.ServerData;
-import cn.zmdx.kaka.locker.database.DatabaseModel;
+import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 
-import com.android.volley.VolleyError;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 public class ServerImageDataManager {
@@ -104,7 +103,7 @@ public class ServerImageDataManager {
         }
 
         public static void saveToDatabase(List<ServerImageData> sidList) {
-            DatabaseModel.getInstance().saveServerImageData(sidList);
+            ServerImageDataModel.getInstance().saveServerImageData(sidList);
         }
 
     }

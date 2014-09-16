@@ -10,8 +10,44 @@ import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class MySqlitDatabase extends SQLiteOpenHelper {
 
-    public MySqlitDatabase(Context context, String name, CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    private static final int DATABASE_VERSION = 1;
+
+    public static final int INDEX_ONE = 1;
+
+    public static final int INDEX_TWO = 2;
+
+    public static final int INDEX_THREE = 3;
+
+    public static final int INDEX_FOUR = 4;
+
+    public static final int INDEX_FIVE = 5;
+
+    public static final int INDEX_SIX = 6;
+
+    public static final int INDEX_SEVEN = 7;
+
+    public static final int INDEX_EIGHT = 8;
+
+    public static final int INDEX_NINE = 9;
+
+    public static final int INDEX_TEN = 10;
+
+    public static final int INDEX_ELEVEN = 11;
+
+    public static final int INDEX_TWELVE = 12;
+
+    private static MySqlitDatabase sMySqlitDatabase = null;
+
+    public MySqlitDatabase(Context context, String name, CursorFactory factory) {
+        super(context, name, factory, DATABASE_VERSION);
+    }
+
+    public static synchronized MySqlitDatabase getInstance(Context context, String name,
+            CursorFactory factory) {
+        if (sMySqlitDatabase == null) {
+            sMySqlitDatabase = new MySqlitDatabase(context, name, factory);
+        }
+        return sMySqlitDatabase;
     }
 
     @Override

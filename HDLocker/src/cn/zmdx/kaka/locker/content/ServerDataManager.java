@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import android.os.Message;
 import cn.zmdx.kaka.locker.RequestManager;
-import cn.zmdx.kaka.locker.database.DatabaseModel;
+import cn.zmdx.kaka.locker.database.ServerDataModel;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -91,7 +91,7 @@ public class ServerDataManager {
         }
 
         public static void saveToDatabase(List<ServerData> sdList) {
-            DatabaseModel.getInstance().saveServerData(sdList);
+            ServerDataModel.getInstance().saveServerData(sdList);
         }
 
     }
