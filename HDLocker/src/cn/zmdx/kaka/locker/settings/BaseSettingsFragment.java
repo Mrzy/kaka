@@ -20,12 +20,18 @@ public abstract class BaseSettingsFragment extends Fragment {
 
     public boolean isMIUI = false;
 
+    private MAboutFragment mAboutFragment;
+
+    private MIUISettingFragment mMIUIFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         mPandoraConfig = PandoraConfig.newInstance(mContext);
         isMIUI = PandoraUtils.isMIUI(mContext);
+        mAboutFragment = new MAboutFragment();
+        mMIUIFragment = new MIUISettingFragment();
     }
 
     protected void checkNewVersion() {
@@ -54,15 +60,13 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
 
     public void gotoAbout() {
-        MAboutFragment fragment = new MAboutFragment();
-        getFragmentManager().beginTransaction().addToBackStack(null).add(R.id.content, fragment)
-                .commit();
+        getFragmentManager().beginTransaction().addToBackStack(null)
+                .replace(R.id.content, mAboutFragment).commit();
     }
 
     public void gotoMIUI() {
-        MIUISettingFragment fragment = new MIUISettingFragment();
-        getFragmentManager().beginTransaction().addToBackStack(null).add(R.id.content, fragment)
-                .commit();
+        getFragmentManager().beginTransaction().addToBackStack(null)
+                .replace(R.id.content, mMIUIFragment).commit();
     }
 
     protected void closeSystemLocker() {

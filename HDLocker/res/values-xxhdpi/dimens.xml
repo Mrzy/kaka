@@ -38,6 +38,7 @@
     <dimen name="setting_about_us_imageview_width">60dp</dimen>
     <dimen name="setting_about_us_imageview_height">60dp</dimen>
     <dimen name="setting_about_us_textview_height">40dp</dimen>
+    <dimen name="setting_about_us_textview_margin_top">10dp</dimen>
     
 
     <dimen name="locker_key_padding_top">6dp</dimen>
