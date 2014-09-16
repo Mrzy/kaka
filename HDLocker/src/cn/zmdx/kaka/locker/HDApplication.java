@@ -3,11 +3,10 @@ package cn.zmdx.kaka.locker;
 
 import android.app.Application;
 import android.graphics.Bitmap.CompressFormat;
-import android.util.Log;
 import cn.zmdx.kaka.locker.cache.ImageCacheManager;
 import cn.zmdx.kaka.locker.cache.ImageCacheManager.CacheType;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.settings.config.CrashHandler;
 import cn.zmdx.kaka.locker.utils.HDBEventSource;
 
 public class HDApplication extends Application {
@@ -39,6 +38,8 @@ public class HDApplication extends Application {
         // Pull baidu image data to local db
         PandoraBoxDispatcher.getInstance().sendEmptyMessage(
                 PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(getApplicationContext());
         super.onCreate();
     }
 
