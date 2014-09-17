@@ -14,7 +14,7 @@ public class ThemeManager {
 
     public static final int THEME_ID_PINK = 2;
 
-    public static final int THEME_ID_GREEN = 3;
+    public static final int THEME_ID_YELLOW = 3;
 
     public static final int THEME_ID_WOOD_GRAIN = 4;
 
@@ -35,9 +35,9 @@ public class ThemeManager {
                 theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
                 theme.setmSettingsIconResId(R.drawable.ic_setting_common);
                 theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
-                theme.setmDragViewIconResId(R.drawable.ic_key_common_selector);
-                theme.setmHoleIconResId(R.drawable.ic_hole_common);
-                theme.setmKeyholeIconResId(R.drawable.ic_key_hole_common);
+                theme.setmDragViewIconResId(R.drawable.ic_key_blue_selector);
+                theme.setmHoleIconResId(R.drawable.ic_hole_blue);
+                theme.setmKeyholeIconResId(R.drawable.ic_key_hole_blue);
                 theme.setmThemeId(THEME_ID_BLUE);
                 break;
             case THEME_ID_PINK:
@@ -45,20 +45,20 @@ public class ThemeManager {
                 theme.setmForegroundResId(R.drawable.setting_background_pink_fore);
                 theme.setmSettingsIconResId(R.drawable.ic_setting_common);
                 theme.setmThumbnailResId(R.drawable.setting_wallpaper_pink);
-                theme.setmDragViewIconResId(R.drawable.ic_key_common_selector);
-                theme.setmHoleIconResId(R.drawable.ic_hole_common);
-                theme.setmKeyholeIconResId(R.drawable.ic_key_hole_common);
+                theme.setmDragViewIconResId(R.drawable.ic_key_pink_selector);
+                theme.setmHoleIconResId(R.drawable.ic_hole_pink);
+                theme.setmKeyholeIconResId(R.drawable.ic_key_hole_pink);
                 theme.setmThemeId(THEME_ID_PINK);
                 break;
-            case THEME_ID_GREEN:
-                theme.setmBackgroundResId(R.drawable.setting_background_green);
-                theme.setmForegroundResId(R.drawable.setting_background_green_fore);
+            case THEME_ID_YELLOW:
+                theme.setmBackgroundResId(R.drawable.setting_background_yellow);
+                theme.setmForegroundResId(R.drawable.setting_background_yellow_fore);
                 theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-                theme.setmThumbnailResId(R.drawable.setting_wallpaper_green);
-                theme.setmDragViewIconResId(R.drawable.ic_key_common_selector);
-                theme.setmHoleIconResId(R.drawable.ic_hole_common);
-                theme.setmKeyholeIconResId(R.drawable.ic_key_hole_common);
-                theme.setmThemeId(THEME_ID_GREEN);
+                theme.setmThumbnailResId(R.drawable.setting_wallpaper_yellow);
+                theme.setmDragViewIconResId(R.drawable.ic_key_yellow_selector);
+                theme.setmHoleIconResId(R.drawable.ic_hole_yellow);
+                theme.setmKeyholeIconResId(R.drawable.ic_key_hole_yellow);
+                theme.setmThemeId(THEME_ID_YELLOW);
                 break;
             case THEME_ID_WOOD_GRAIN:
                 theme.setmBackgroundResId(R.drawable.setting_background_wood_grain);
@@ -75,9 +75,9 @@ public class ThemeManager {
                 theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
                 theme.setmSettingsIconResId(R.drawable.ic_setting_common);
                 theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
-                theme.setmDragViewIconResId(R.drawable.ic_key_common_selector);
-                theme.setmHoleIconResId(R.drawable.ic_hole_common);
-                theme.setmKeyholeIconResId(R.drawable.ic_key_hole_common);
+                theme.setmDragViewIconResId(R.drawable.ic_key_blue_selector);
+                theme.setmHoleIconResId(R.drawable.ic_hole_blue);
+                theme.setmKeyholeIconResId(R.drawable.ic_key_hole_blue);
                 theme.setmThemeId(THEME_ID_BLUE);
                 break;
         }
@@ -91,9 +91,9 @@ public class ThemeManager {
         theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
         theme.setmSettingsIconResId(R.drawable.ic_setting_common);
         theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
-        theme.setmDragViewIconResId(R.drawable.ic_key_common_selector);
-        theme.setmHoleIconResId(R.drawable.ic_hole_common);
-        theme.setmKeyholeIconResId(R.drawable.ic_key_hole_common);
+        theme.setmDragViewIconResId(R.drawable.ic_key_blue_selector);
+        theme.setmHoleIconResId(R.drawable.ic_hole_blue);
+        theme.setmKeyholeIconResId(R.drawable.ic_key_hole_blue);
         theme.setmThemeId(THEME_ID_BLUE);
         list.add(theme);
 
@@ -102,21 +102,21 @@ public class ThemeManager {
         theme.setmForegroundResId(R.drawable.setting_background_pink_fore);
         theme.setmSettingsIconResId(R.drawable.ic_setting_common);
         theme.setmThumbnailResId(R.drawable.setting_wallpaper_pink);
-        theme.setmDragViewIconResId(R.drawable.ic_key_common_selector);
-        theme.setmHoleIconResId(R.drawable.ic_hole_common);
-        theme.setmKeyholeIconResId(R.drawable.ic_key_hole_common);
+        theme.setmDragViewIconResId(R.drawable.ic_key_pink_selector);
+        theme.setmHoleIconResId(R.drawable.ic_hole_pink);
+        theme.setmKeyholeIconResId(R.drawable.ic_key_hole_pink);
         theme.setmThemeId(THEME_ID_PINK);
         list.add(theme);
 
         theme = new Theme();
-        theme.setmBackgroundResId(R.drawable.setting_background_green);
-        theme.setmForegroundResId(R.drawable.setting_background_green_fore);
+        theme.setmBackgroundResId(R.drawable.setting_background_yellow);
+        theme.setmForegroundResId(R.drawable.setting_background_yellow_fore);
         theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-        theme.setmThumbnailResId(R.drawable.setting_wallpaper_green);
-        theme.setmDragViewIconResId(R.drawable.ic_key_common_selector);
-        theme.setmHoleIconResId(R.drawable.ic_hole_common);
-        theme.setmKeyholeIconResId(R.drawable.ic_key_hole_common);
-        theme.setmThemeId(THEME_ID_GREEN);
+        theme.setmThumbnailResId(R.drawable.setting_wallpaper_yellow);
+        theme.setmDragViewIconResId(R.drawable.ic_key_yellow_selector);
+        theme.setmHoleIconResId(R.drawable.ic_hole_yellow);
+        theme.setmKeyholeIconResId(R.drawable.ic_key_hole_yellow);
+        theme.setmThemeId(THEME_ID_YELLOW);
         list.add(theme);
 
         theme = new Theme();

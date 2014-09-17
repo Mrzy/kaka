@@ -308,12 +308,16 @@ public class LockPatternDialog extends Activity implements OnClickListener, OnPa
         in.putExtra("type", mLockPatternType);
         setResult(MainSettingsFragment.GUSTURE_REQUEST_CODE_FAIL, in);
         finish();
+        overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                R.anim.umeng_fb_slide_out_from_right);
     }
 
     private void finishWithNoResult() {
         Intent in = new Intent();
         setResult(MainSettingsFragment.GUSTURE_REQUEST_CODE_SUCCESS, in);
         finish();
+        overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                R.anim.umeng_fb_slide_out_from_right);
     }
 
 }

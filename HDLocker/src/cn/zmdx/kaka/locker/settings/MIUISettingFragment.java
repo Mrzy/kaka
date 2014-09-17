@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.settings;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,8 +46,8 @@ public class MIUISettingFragment extends Fragment implements OnClickListener {
     }
 
     private void initView() {
-        int resId = ThemeManager.getThemeById(mThemeId).getmBackgroundResId();
-        mRootView.findViewById(R.id.setting_miui_background).setBackgroundResource(resId);
+//        int resId = ThemeManager.getThemeById(mThemeId).getmBackgroundResId();
+//        mRootView.findViewById(R.id.setting_miui_background).setBackgroundResource(resId);
         mFolatfingWindowBtn = (Button) mRootView
                 .findViewById(R.id.setting_MIUI_allow_floating_window_to_set);
         mFolatfingWindowBtn.setOnClickListener(this);
@@ -71,11 +72,12 @@ public class MIUISettingFragment extends Fragment implements OnClickListener {
 
     private void showToast() {
         Toast toast = new Toast(getActivity());
+        toast.setText("");
     }
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         getFragmentManager().beginTransaction().remove(this).commit();
+        super.onDestroyView();
     }
 }

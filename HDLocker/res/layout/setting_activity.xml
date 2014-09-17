@@ -17,18 +17,21 @@
         android:paddingTop="@dimen/setting_padding_top" >
 
         <LinearLayout
+            android:id="@+id/setting_pandoralocker_prompt"
             android:layout_width="match_parent"
             android:layout_height="@dimen/setting_item_height"
+            android:background="@drawable/setting_item_selector"
+            android:clickable="true"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/setting_padding_left"
             android:paddingRight="@dimen/setting_padding_right" >
 
             <TextView
-                android:id="@+id/setting_pandoralocker_prompt"
                 style="@style/setting_textview"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:clickable="false"
                 android:gravity="center_vertical"
                 android:text="@string/setting_open_pandoralocker" />
 
@@ -45,18 +48,21 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/setting_lock_type_prompt"
             android:layout_width="match_parent"
             android:layout_height="@dimen/setting_item_height"
+            android:background="@drawable/setting_item_selector"
+            android:clickable="true"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/setting_padding_left"
             android:paddingRight="@dimen/setting_padding_right" >
 
             <TextView
-                android:id="@+id/setting_lock_type_prompt"
                 style="@style/setting_textview"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:clickable="false"
                 android:gravity="center_vertical"
                 android:text="@string/setting_lock_type" />
 
@@ -82,7 +88,7 @@
                 style="@style/setting_textview"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:clickable="true"
+                android:background="@drawable/setting_item_selector"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/setting_padding_left"
                 android:paddingRight="@dimen/setting_padding_right"
@@ -92,7 +98,6 @@
                 android:id="@+id/setting_bg_hs"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/setting_wallpaper_bg_height"
-                android:layout_marginTop="-20dp"
                 android:background="@drawable/setting_wallpaper_background"
                 android:fadingEdge="none"
                 android:overScrollMode="never"
@@ -112,93 +117,102 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/setting_systemlocker_prompt"
             android:layout_width="match_parent"
             android:layout_height="@dimen/setting_item_height"
+            android:background="@drawable/setting_item_selector"
+            android:clickable="true"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/setting_padding_left"
             android:paddingRight="@dimen/setting_padding_right" >
 
             <TextView
-                android:id="@+id/setting_systemlocker_prompt"
                 style="@style/setting_textview"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:clickable="true"
+                android:clickable="false"
                 android:gravity="center_vertical"
                 android:text="@string/setting_close_systemlocker" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/setting_MIUI_layout"
+            android:id="@+id/setting_MIUI"
             android:layout_width="match_parent"
             android:layout_height="@dimen/setting_item_height"
+            android:background="@drawable/setting_item_selector"
+            android:clickable="true"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/setting_padding_left"
             android:paddingRight="@dimen/setting_padding_right"
             android:visibility="gone" >
 
             <TextView
-                android:id="@+id/setting_MIUI"
                 style="@style/setting_textview"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:clickable="true"
+                android:clickable="false"
                 android:gravity="center_vertical"
                 android:text="@string/setting_MIUI" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/setting_feedback_prompt"
             android:layout_width="match_parent"
             android:layout_height="@dimen/setting_item_height"
+            android:background="@drawable/setting_item_selector"
+            android:clickable="true"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/setting_padding_left"
             android:paddingRight="@dimen/setting_padding_right" >
 
             <TextView
-                android:id="@+id/setting_feedback_prompt"
                 style="@style/setting_textview"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:clickable="true"
+                android:clickable="false"
                 android:gravity="center_vertical"
                 android:text="@string/setting_feedback" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/setting_checkout_new_version_prompt"
             android:layout_width="match_parent"
             android:layout_height="@dimen/setting_item_height"
+            android:background="@drawable/setting_item_selector"
+            android:clickable="true"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/setting_padding_left"
             android:paddingRight="@dimen/setting_padding_right" >
 
             <TextView
-                android:id="@+id/setting_checkout_new_version_prompt"
                 style="@style/setting_textview"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:clickable="true"
+                android:clickable="false"
                 android:gravity="center_vertical"
                 android:text="@string/setting_check_new_version" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/setting_concern_team"
             android:layout_width="match_parent"
             android:layout_height="@dimen/setting_item_height"
+            android:background="@drawable/setting_item_selector"
+            android:clickable="true"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/setting_padding_left"
             android:paddingRight="@dimen/setting_padding_right" >
 
             <TextView
-                android:id="@+id/setting_concern_team"
                 style="@style/setting_textview"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:clickable="true"
+                android:clickable="false"
                 android:gravity="center_vertical"
                 android:text="@string/setting_about_us" />
         </LinearLayout>

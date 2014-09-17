@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="setting_item_press_color">#22ffffff</color>
     <color name="gusture_textview_color">#a5ffffff</color>
     <color name="gusture_button_color">#aaffffff</color>
     <color name="setting_textview_color">#ffffff</color>
@@ -8,6 +9,5 @@
     <color name="setting_background">#ffffff</color>
     <color name="setting_about_us_text_color">#ffffff</color>
     <color name="setting_about_pandora_color">#2f3035</color>
-    
 
 </resources>

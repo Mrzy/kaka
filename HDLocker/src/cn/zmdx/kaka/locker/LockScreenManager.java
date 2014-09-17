@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker;
 
+import java.util.List;
+
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 import cn.zmdx.kaka.locker.animation.AnimationFactory;
 import cn.zmdx.kaka.locker.animation.AnimationFactory.FlipDirection;
@@ -24,6 +27,11 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.LockPatternUtils;
+import cn.zmdx.kaka.locker.widget.LockPatternView;
+import cn.zmdx.kaka.locker.widget.LockPatternView.Cell;
+import cn.zmdx.kaka.locker.widget.LockPatternView.DisplayMode;
+import cn.zmdx.kaka.locker.widget.LockPatternView.OnPatternListener;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
@@ -54,6 +62,10 @@ public class LockScreenManager {
     private int mKeyholeMarginTop = -1;
 
     private Theme mCurTheme;
+
+    private LockPatternView mLockPatternView;
+
+    private TextView mGusturePrompt;
 
     private LockScreenManager() {
         mWinManager = (WindowManager) HDApplication.getInstannce().getSystemService(
@@ -115,6 +127,9 @@ public class LockScreenManager {
                 R.layout.pandora_lockscreen, null);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
         mViewFlipper = (ViewFlipper) mEntireView.findViewById(R.id.viewFlipper);
+        mLockPatternView = (LockPatternView) mEntireView.findViewById(R.id.gusture);
+        mLockPatternView.setOnPatternListener(mPatternListener);
+        mGusturePrompt = (TextView) mEntireView.findViewById(R.id.gusture_prompt);
 
         mSliderView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mKeyView = mEntireView.findViewById(R.id.lock_key);
@@ -217,6 +232,48 @@ public class LockScreenManager {
         if (unlockType != PandoraConfig.UNLOCKER_TYPE_DEFAULT) {
             AnimationFactory.flipTransition(mViewFlipper, FlipDirection.BOTTOM_TOP, 300);
             return true;
+        }
+        return false;
+    }
+
+    private OnPatternListener mPatternListener = new OnPatternListener() {
+
+        @Override
+        public void onPatternStart() {
+
+        }
+
+        @Override
+        public void onPatternDetected(List<Cell> pattern) {
+            verifyGustureLock(pattern);
+        }
+
+        @Override
+        public void onPatternCleared() {
+
+        }
+
+        @Override
+        public void onPatternCellAdded(List<Cell> pattern) {
+
+        }
+    };
+
+    private void verifyGustureLock(List<Cell> pattern) {
+        if (checkPattern(pattern)) {
+            unLock();
+        } else {
+            mGusturePrompt.setText(HDApplication.getInstannce().getResources()
+                    .getString(R.string.gusture_verify_fail));
+            mLockPatternView.setDisplayMode(DisplayMode.Wrong);
+        }
+    }
+
+    private boolean checkPattern(List<Cell> pattern) {
+        PandoraConfig mPandoraConfig = PandoraConfig.newInstance(HDApplication.getInstannce());
+        String stored = mPandoraConfig.getLockPaternString();
+        if (!stored.equals(null)) {
+            return stored.equals(LockPatternUtils.patternToString(pattern)) ? true : false;
         }
         return false;
     }
