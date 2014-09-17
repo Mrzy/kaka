@@ -4,11 +4,9 @@ package cn.zmdx.kaka.locker.settings;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
@@ -57,18 +55,24 @@ public abstract class BaseSettingsFragment extends Fragment {
         return mPandoraConfig.isPandolaLockerOn();
     }
 
-    protected void aboutUs() {
-        gotoAbout();
+    protected void gotoAbout() {
+        getFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .setCustomAnimations(R.anim.umeng_fb_slide_in_from_right,
+                        R.anim.umeng_fb_slide_out_from_left, R.anim.umeng_fb_slide_in_from_left,
+                        R.anim.umeng_fb_slide_out_from_right).add(R.id.content, mMIUIFragment)
+                .add(R.id.content, mAboutFragment).commit();
     }
 
-    public void gotoAbout() {
-        getFragmentManager().beginTransaction().addToBackStack(null)
-                .replace(R.id.content, mAboutFragment).commit();
-    }
-
-    public void gotoMIUI() {
-        getFragmentManager().beginTransaction().addToBackStack(null)
-                .replace(R.id.content, mMIUIFragment).commit();
+    protected void gotoMIUI() {
+        getFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .setCustomAnimations(R.anim.umeng_fb_slide_in_from_right,
+                        R.anim.umeng_fb_slide_out_from_left, R.anim.umeng_fb_slide_in_from_left,
+                        R.anim.umeng_fb_slide_out_from_right).add(R.id.content, mMIUIFragment)
+                .commit();
     }
 
     protected void closeSystemLocker() {

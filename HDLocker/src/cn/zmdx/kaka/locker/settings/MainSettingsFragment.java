@@ -42,17 +42,17 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private SlidingUpPanelLayout mSettingForeView;
 
-    private TextView mSystemLockerPrompt;
+    private LinearLayout mSystemLockerPrompt;
 
-    private TextView mMIUI;
+    private LinearLayout mMIUI;
 
-    private TextView mConcernTeam;
+    private LinearLayout mConcernTeam;
 
     private TextView mChangeBackground;
 
-    private TextView mFeedback;
+    private LinearLayout mFeedback;
 
-    private TextView mCheckNewVersion;
+    private LinearLayout mCheckNewVersion;
 
     private SwitchButton mPandoraLockerSButton;
 
@@ -116,12 +116,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     }
 
     private void initView() {
+        mMIUI = (LinearLayout) mRootView.findViewById(R.id.setting_MIUI);
         if (isMIUI) {
-            mRootView.findViewById(R.id.setting_MIUI_layout).setVisibility(View.VISIBLE);
+            mMIUI.setVisibility(View.VISIBLE);
+            mMIUI.setOnClickListener(this);
         }
-
-        mMIUI = (TextView) mRootView.findViewById(R.id.setting_MIUI);
-        mMIUI.setOnClickListener(this);
 
         mSettingForeView = (SlidingUpPanelLayout) mRootView.findViewById(R.id.setting_fore_view);
         mSettingIcon = (ImageView) mRootView.findViewById(R.id.setting_icon);
@@ -130,7 +129,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
         mSettingIcon.setOnClickListener(this);
 
-        mSystemLockerPrompt = (TextView) mRootView.findViewById(R.id.setting_systemlocker_prompt);
+        mSystemLockerPrompt = (LinearLayout) mRootView
+                .findViewById(R.id.setting_systemlocker_prompt);
         mSystemLockerPrompt.setOnClickListener(this);
 
         mPandoraLockerSButton = (SwitchButton) mRootView
@@ -141,13 +141,13 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 .findViewById(R.id.setting_pandoralocker_password);
         mLockerTypeSButton.setOnCheckedChangeListener(this);
 
-        mFeedback = (TextView) mRootView.findViewById(R.id.setting_feedback_prompt);
+        mFeedback = (LinearLayout) mRootView.findViewById(R.id.setting_feedback_prompt);
         mFeedback.setOnClickListener(this);
-        mCheckNewVersion = (TextView) mRootView
+        mCheckNewVersion = (LinearLayout) mRootView
                 .findViewById(R.id.setting_checkout_new_version_prompt);
         mCheckNewVersion.setOnClickListener(this);
 
-        mConcernTeam = (TextView) mRootView.findViewById(R.id.setting_concern_team);
+        mConcernTeam = (LinearLayout) mRootView.findViewById(R.id.setting_concern_team);
         mConcernTeam.setOnClickListener(this);
         mChangeBackground = (TextView) mRootView.findViewById(R.id.setting_change_background);
         mChangeBackground.setOnClickListener(this);
@@ -284,6 +284,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         bundle.putParcelable("bitmap", blurBitmap);
         in.putExtra("bundle", bundle);
         startActivityForResult(in, GUSTURE_REQUEST_CODE_SUCCESS);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
     }
 
     @Override
@@ -321,7 +323,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 startFeedback();
                 break;
             case R.id.setting_concern_team:
-                aboutUs();
+                gotoAbout();
                 break;
             case R.id.setting_checkout_new_version_prompt:
                 checkNewVersion();

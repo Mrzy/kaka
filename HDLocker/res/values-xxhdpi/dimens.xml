@@ -48,4 +48,6 @@
     <dimen name="setting_about_cooperation_margin">0dp</dimen>
 
     <dimen name="locker_key_padding_top">6dp</dimen>
+    
+    <dimen name="lockscreen_gusture_padding_top">25dp</dimen>
 </resources>

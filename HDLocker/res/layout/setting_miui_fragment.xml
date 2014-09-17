@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/setting_background_blue"
     android:baselineAligned="true"
+    android:clickable="true"
     android:orientation="vertical"
     android:overScrollMode="never"
     android:scrollbars="none" >

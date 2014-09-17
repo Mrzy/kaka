@@ -7,9 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
-import cn.zmdx.kaka.locker.utils.HDBConfig;
-import cn.zmdx.kaka.locker.utils.HDBReflectionUtils;
 
 public class MAboutFragment extends Fragment {
     private View mRootView;
@@ -17,6 +14,7 @@ public class MAboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.setting_about_us, container, false);
+
         return mRootView;
     }
 
@@ -25,5 +23,4 @@ public class MAboutFragment extends Fragment {
         super.onDestroyView();
         getFragmentManager().beginTransaction().remove(this).commit();
     }
-
 }
