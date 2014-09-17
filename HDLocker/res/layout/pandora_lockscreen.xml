@@ -17,20 +17,27 @@
         sothree:shadowHeight="8dp"
         sothree:topSeekoutHeight="60dp" >
 
-        <RelativeLayout
-            android:id="@+id/mainView"
+        <ViewFlipper
+            android:id="@+id/viewFlipper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center" >
 
-            <TextView
+            <RelativeLayout
+                android:id="@+id/flipper_box"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ffffff"
-                android:gravity="center"
-                android:textColor="#000000"
-                android:textSize="25sp" />
-        </RelativeLayout>
+                android:gravity="center" >
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/flipper_gesture"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#666666"
+                android:gravity="center" >
+            </RelativeLayout>
+        </ViewFlipper>
 
         <RelativeLayout
             android:id="@+id/lock_top"

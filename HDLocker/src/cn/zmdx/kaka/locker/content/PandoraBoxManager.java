@@ -15,9 +15,13 @@ import cn.zmdx.kaka.locker.database.BaiduDataModel;
 public class PandoraBoxManager {
 
     public static final int DATA_FROM_DEFAULT = 1;
+
     public static final int DATA_FROM_BAIDU = 2;
+
     public static final int DATA_FROM_CAODAN = 3;
+
     public static final int DATA_FROM_QIUBAI = 4;
+
     public static final int DATA_FROM_JOKE = 5;
 
     private static PandoraBoxManager mPbManager;
@@ -43,6 +47,9 @@ public class PandoraBoxManager {
             return getDefaultData();
         final BaiduData bd = list.get(0);
         final Bitmap bmp = DiskImageHelper.getBitmapByUrl(bd.mImageUrl);
+        if (bmp == null) {
+            return getDefaultData();
+        }
         pd.setmImage(bmp);
         pd.setmId(bd.getId());
         pd.setFrom(DATA_FROM_BAIDU);
