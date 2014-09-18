@@ -72,7 +72,7 @@ public class MainSettingsActivity extends FragmentActivity {
 
         // 判断程序与第几次运行，如果是第一次运行则跳转到引导界面，否则跳转到主界面
         if (!isFirstIn) {
-//            mHandler.sendEmptyMessage(GO_HOME);
+            // mHandler.sendEmptyMessage(GO_HOME);
         } else {
             mHandler.sendEmptyMessage(GO_GUIDE);
         }
