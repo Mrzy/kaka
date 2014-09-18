@@ -23,21 +23,21 @@ import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
 public class ViewPagerAdapter extends PagerAdapter {
 
     // 界面列表
-    private List<View> views;
+    private List<View> mList;
 
-    private Activity activity;
+    private Activity mActivity;
 
     private static final String SHAREDPREFERENCES_NAME = "first_pref";
 
     public ViewPagerAdapter(List<View> views, Activity activity) {
-        this.views = views;
-        this.activity = activity;
+        this.mList = views;
+        this.mActivity = activity;
     }
 
     // 销毁arg1位置的界面
     @Override
     public void destroyItem(View arg0, int arg1, Object arg2) {
-        ((ViewPager) arg0).removeView(views.get(arg1));
+        ((ViewPager) arg0).removeView(mList.get(arg1));
     }
 
     @Override
@@ -47,8 +47,8 @@ public class ViewPagerAdapter extends PagerAdapter {
     // 获得当前界面数
     @Override
     public int getCount() {
-        if (views != null) {
-            return views.size();
+        if (mList != null) {
+            return mList.size();
         }
         return 0;
     }
@@ -56,8 +56,8 @@ public class ViewPagerAdapter extends PagerAdapter {
     // 初始化arg1位置的界面
     @Override
     public Object instantiateItem(View arg0, int arg1) {
-        ((ViewPager) arg0).addView(views.get(arg1), 0);
-        if (arg1 == views.size() - 1) {
+        ((ViewPager) arg0).addView(mList.get(arg1), 0);
+        if (arg1 == mList.size() - 1) {
             ImageView mStartWeiboImageButton = (ImageView) arg0.findViewById(R.id.iv_start_weibo);
             mStartWeiboImageButton.setOnClickListener(new OnClickListener() {
 
@@ -71,21 +71,21 @@ public class ViewPagerAdapter extends PagerAdapter {
 
             });
         }
-        return views.get(arg1);
+        return mList.get(arg1);
     }
 
     private void goHome() {
         // 跳转
-        Intent intent = new Intent(activity, MainSettingsActivity.class);
-        activity.startActivity(intent);
-        activity.finish();
+        Intent intent = new Intent(mActivity, MainSettingsActivity.class);
+        mActivity.startActivity(intent);
+        mActivity.finish();
     }
 
     /**
      * 设置已经引导过了，下次启动不用再次引导
      */
     private void setGuided() {
-        SharedPreferences preferences = activity.getSharedPreferences(SHAREDPREFERENCES_NAME,
+        SharedPreferences preferences = mActivity.getSharedPreferences(SHAREDPREFERENCES_NAME,
                 Context.MODE_PRIVATE);
         Editor editor = preferences.edit();
         // 存入数据

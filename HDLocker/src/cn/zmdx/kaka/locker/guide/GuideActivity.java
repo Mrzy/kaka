@@ -22,17 +22,17 @@ import android.widget.LinearLayout;
  */
 public class GuideActivity extends Activity implements OnPageChangeListener {
 
-    private ViewPager vp;
+    private ViewPager mViewPager;
 
-    private ViewPagerAdapter vpAdapter;
+    private ViewPagerAdapter mViewPagerAdapter;
 
-    private List<View> views;
+    private List<View> mList;
 
     // 底部小点图片
-    private ImageView[] dots;
+    private ImageView[] mImageView;
 
     // 记录当前选中位置
-    private int currentIndex;
+    private int mCurrentIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,46 +50,46 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
     private void initViews() {
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        views = new ArrayList<View>();
+        mList = new ArrayList<View>();
         // 初始化引导图片列表
-        views.add(inflater.inflate(R.layout.pandora_guide_image_one, null));
-        views.add(inflater.inflate(R.layout.pandora_guide_image_two, null));
-        views.add(inflater.inflate(R.layout.pandora_guide_image_three, null));
-        views.add(inflater.inflate(R.layout.pandora_guide_image_four, null));
+        mList.add(inflater.inflate(R.layout.pandora_guide_image_one, null));
+        mList.add(inflater.inflate(R.layout.pandora_guide_image_two, null));
+        mList.add(inflater.inflate(R.layout.pandora_guide_image_three, null));
+        mList.add(inflater.inflate(R.layout.pandora_guide_image_four, null));
 
         // 初始化Adapter
-        vpAdapter = new ViewPagerAdapter(views, this);
+        mViewPagerAdapter = new ViewPagerAdapter(mList, this);
 
-        vp = (ViewPager) findViewById(R.id.viewpager);
-        vp.setAdapter(vpAdapter);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager.setAdapter(mViewPagerAdapter);
         // 绑定回调
-        vp.setOnPageChangeListener(this);
+        mViewPager.setOnPageChangeListener(this);
     }
 
     private void initDots() {
         LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
 
-        dots = new ImageView[views.size()];
+        mImageView = new ImageView[mList.size()];
 
         // 循环取得小点图片
-        for (int i = 0; i < views.size(); i++) {
-            dots[i] = (ImageView) ll.getChildAt(i);
-            dots[i].setEnabled(true);// 都设为灰色
+        for (int i = 0; i < mList.size(); i++) {
+            mImageView[i] = (ImageView) ll.getChildAt(i);
+            mImageView[i].setEnabled(true);// 都设为灰色
         }
 
-        currentIndex = 0;
-        dots[currentIndex].setEnabled(false);// 设置为白色，即选中状态
+        mCurrentIndex = 0;
+        mImageView[mCurrentIndex].setEnabled(false);// 设置为白色，即选中状态
     }
 
     private void setCurrentDot(int position) {
-        if (position < 0 || position > views.size() - 1 || currentIndex == position) {
+        if (position < 0 || position > mList.size() - 1 || mCurrentIndex == position) {
             return;
         }
 
-        dots[position].setEnabled(false);
-        dots[currentIndex].setEnabled(true);
+        mImageView[position].setEnabled(false);
+        mImageView[mCurrentIndex].setEnabled(true);
 
-        currentIndex = position;
+        mCurrentIndex = position;
     }
 
     // 当滑动状态改变时调用
