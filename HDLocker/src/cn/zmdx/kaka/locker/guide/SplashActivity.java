@@ -1,28 +1,29 @@
 
-package cn.zmdx.kaka.locker.settings;
+package cn.zmdx.kaka.locker.guide;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
+import android.view.Window;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.guide.GuideActivity;
-import cn.zmdx.kaka.locker.service.PandoraService;
+import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
 
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
-
-public class MainSettingsActivity extends FragmentActivity {
-
-    private Intent mServiceIntent = null;
-
+/**
+ * 启动画面 (1)判断是否是首次加载应用--采取读取SharedPreferences的方法
+ * (2)是，则进入GuideActivity；否，则进入MainActivity (3)1s后执行(2)操作
+ */
+public class SplashActivity extends Activity {
     boolean isFirstIn = false;
 
     private static final int GO_HOME = 1000;
 
     private static final int GO_GUIDE = 1001;
+
+    // 延迟1秒
+    private static final long SPLASH_DELAY_MILLIS = 2000;
 
     private static final String SHAREDPREFERENCES_NAME = "first_pref";
 
@@ -47,18 +48,11 @@ public class MainSettingsActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mServiceIntent = new Intent(getApplicationContext(), PandoraService.class);
-        startService(mServiceIntent);
-        init();
         super.onCreate(savedInstanceState);
-        MobclickAgent.openActivityDurationTrack(false);
-        UmengUpdateAgent.update(this);
-        UmengUpdateAgent.silentUpdate(this);
-        setContentView(R.layout.main_setting_activity);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.pandora_splash);
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.content, new MainSettingsFragment()).commit();
-
+        init();
     }
 
     private void init() {
@@ -71,32 +65,23 @@ public class MainSettingsActivity extends FragmentActivity {
 
         // 判断程序与第几次运行，如果是第一次运行则跳转到引导界面，否则跳转到主界面
         if (!isFirstIn) {
-            // mHandler.sendEmptyMessage(GO_HOME);
+            // 使用Handler的postDelayed方法，1秒后执行跳转到MainActivity
+            mHandler.sendEmptyMessageDelayed(GO_HOME, SPLASH_DELAY_MILLIS);
         } else {
-            mHandler.sendEmptyMessage(GO_GUIDE);
+            mHandler.sendEmptyMessageDelayed(GO_GUIDE, SPLASH_DELAY_MILLIS);
         }
 
     }
 
     private void goHome() {
-        Intent intent = new Intent(this, MainSettingsActivity.class);
+        Intent intent = new Intent(SplashActivity.this, MainSettingsActivity.class);
+        SplashActivity.this.startActivity(intent);
+        SplashActivity.this.finish();
     }
 
     private void goGuide() {
-        Intent intent = new Intent(this, GuideActivity.class);
-        this.startActivity(intent);
+        Intent intent = new Intent(SplashActivity.this, GuideActivity.class);
+        SplashActivity.this.startActivity(intent);
+        SplashActivity.this.finish();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
-    }
-
 }

@@ -22,17 +22,11 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/setting_rl"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_pandora_height"
-        android:layout_below="@+id/setting_about_us" >
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/pandora_logo"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_pandora_imageview_height"
-        android:layout_below="@+id/setting_rl" >
+        android:layout_below="@+id/setting_about_us"
+        android:layout_marginTop="@dimen/setting_about_pandora_height" >
 
         <ImageView
             android:layout_width="@dimen/setting_about_pandora_imageview_width"
@@ -42,17 +36,11 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/setting_rl_margin"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_pandora_margin"
-        android:layout_below="@+id/pandora_logo" >
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/setting_pandoralocker"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_us_textview_height"
-        android:layout_below="@+id/setting_rl_margin" >
+        android:layout_below="@+id/pandora_logo"
+        android:layout_marginTop="@dimen/setting_about_pandora_margin" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -65,56 +53,44 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/setting_rl_margin_one"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_pandora_margin"
-        android:layout_below="@+id/setting_pandoralocker" >
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/setting_pandoralocker_version"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_pandora_version_height"
-        android:layout_below="@+id/setting_rl_margin_one" >
+        android:layout_below="@+id/setting_pandoralocker"
+        android:layout_marginTop="@dimen/setting_about_pandora_margin" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/setting_about_pandora_version_height"
             android:layout_centerInParent="true"
             android:text="@string/setting_version_number"
-            android:textColor="@color/setting_about_pandora_color"
-            android:textSize="18sp"
+            android:textColor="@color/setting_about_pandora_down"
+            android:textSize="14sp"
             android:typeface="monospace" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/setting_rl_margin_two"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_pandora_margin_one"
-        android:layout_below="@+id/setting_pandoralocker_version" >
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/setting_pandoralocker_text"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_pandora_version_height"
-        android:layout_below="@+id/setting_rl_margin_two" >
+        android:layout_below="@+id/setting_pandoralocker_version"
+        android:layout_marginTop="@dimen/setting_about_pandora_margin" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/setting_about_pandora_version_height"
             android:layout_centerInParent="true"
             android:text="@string/setting_about_text"
-            android:textColor="@color/setting_about_pandora_color"
-            android:textSize="20sp" 
-            />
+            android:textColor="@color/setting_about_pandora_down"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/setting_pandoralocker_email"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_pandora_version_height"
-        android:layout_above="@+id/setting_bottom_margin" >
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/setting_about_pandora_version_height" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -122,22 +98,14 @@
             android:layout_centerInParent="true"
             android:text="@string/setting_about_email"
             android:textColor="@color/setting_about_pandora_color"
-            android:textSize="18sp" 
-            />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/setting_bottom_margin_one"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_cooperation_margin"
-        android:layout_above="@+id/setting_pandoralocker_email" >
+            android:textSize="15sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/setting_pandoralocker_cooperation"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_pandora_version_height"
-        android:layout_above="@+id/setting_bottom_margin_one" >
+        android:layout_above="@+id/setting_pandoralocker_email" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -145,15 +113,7 @@
             android:layout_centerInParent="true"
             android:text="@string/setting_about_cooperation"
             android:textColor="@color/setting_about_pandora_color"
-            android:textSize="18sp"
-             />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/setting_bottom_margin"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_pandora_version_height"
-        android:layout_alignParentBottom="true" >
+            android:textSize="15sp" />
     </RelativeLayout>
 
 </RelativeLayout>
