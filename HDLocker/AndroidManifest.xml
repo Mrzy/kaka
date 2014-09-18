@@ -22,7 +22,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:name=".settings.MainSettingsActivity"
+            android:name=".guide.SplashActivity"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -35,6 +35,14 @@
             android:name=".widget.LockPatternDialog"
             android:screenOrientation="portrait"
             android:theme="@style/gusture_dialog" >
+        </activity>
+        <activity
+            android:name=".guide.GuideActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".settings.MainSettingsActivity"
+            android:screenOrientation="portrait" >
         </activity>
 
         <service android:name=".service.PandoraService" />
@@ -56,12 +64,12 @@
             android:name="com.umeng.fb.ContactActivity"
             android:theme="@android:style/Theme.NoTitleBar" />
 
-        <receiver android:name=".receiver.PandoraReceiver">
+        <receiver android:name=".receiver.PandoraReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        
+
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="53fff35ffd98c5033403e909" >

@@ -42,9 +42,9 @@
     
     <dimen name="setting_about_pandora_height">84dp</dimen>
     <dimen name="setting_about_pandora_text_height">195dp</dimen>
-    <dimen name="setting_about_pandora_margin">9dp</dimen>
-    <dimen name="setting_about_pandora_version_height">30dp</dimen>
-    <dimen name="setting_about_pandora_margin_one">23dp</dimen>
+    <dimen name="setting_about_pandora_margin">1dp</dimen>
+    <dimen name="setting_about_pandora_version_height">25dp</dimen>
+    <dimen name="setting_about_pandora_margin_one">10dp</dimen>
     <dimen name="setting_about_cooperation_margin">0dp</dimen>
 
     <dimen name="locker_key_padding_top">6dp</dimen>

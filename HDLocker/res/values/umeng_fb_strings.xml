@@ -12,8 +12,8 @@
     <string name="umeng_fb_reply_content_default">Your precious feedback are appriciated.</string>
     <string name="umeng_fb_reply_date_default">2013-3-12 13:24:00</string>
 
-    <color name="umeng_fb_color_btn_pressed">#548ae4</color>
-    <color name="umeng_fb_color_btn_normal">#6c9def</color>
+    <color name="umeng_fb_color_btn_pressed">#4a515d</color>
+    <color name="umeng_fb_color_btn_normal">#717b8d</color>
 
     <string name="umeng_fb_powered_by">Powered by</string>
     <string name="umeng_fb_notification_ticker_text">Got new reply</string>

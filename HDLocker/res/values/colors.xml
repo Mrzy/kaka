@@ -8,6 +8,7 @@
     <color name="setting_background">#ffffff</color>
     <color name="setting_about_us_text_color">#ffffff</color>
     <color name="setting_about_pandora_color">#2f3035</color>
+    <color name="setting_about_pandora_down">#626a6e</color>
     
 
 </resources>
