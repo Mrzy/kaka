@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.settings.config;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.util.List;
 
 import android.content.ComponentName;
@@ -135,5 +136,40 @@ public class PandoraUtils {
 
         }
 
+    }
+
+    /**
+     * 获得程序版本号
+     * 
+     * @return
+     */
+    public static String getVersionCode(Context context) {
+        String versionName = "v1.0.0";
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            versionName = packageInfo.versionName;
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return versionName;
+    }
+
+    public static int getStatusBarHeight(Context context) {
+        Class<?> c = null;
+        Object obj = null;
+        Field field = null;
+        int x = 0, statusBarHeight = 0;
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("status_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            statusBarHeight = context.getResources().getDimensionPixelSize(x);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return statusBarHeight;
     }
 }

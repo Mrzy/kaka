@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import android.os.Message;
 import cn.zmdx.kaka.locker.RequestManager;
+import cn.zmdx.kaka.locker.database.MySqlitDatabase;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 
 import com.android.volley.Response.ErrorListener;
@@ -67,6 +68,8 @@ public class ServerImageDataManager {
 
         private String mImageUrl;
 
+        public int mIsImageDownloaded;
+
         public String getUrl() {
             return mUrl;
         }
@@ -83,6 +86,14 @@ public class ServerImageDataManager {
             this.mImageUrl = mImageUrl;
         }
 
+        public int isImageDownloaded() {
+            return mIsImageDownloaded;
+        }
+
+        public void setIsImageDownloaded(int mIsImageDownloaded) {
+            this.mIsImageDownloaded = mIsImageDownloaded;
+        }
+
         public static List<ServerImageData> parseJson(JSONObject jsonObj) {
             List<ServerImageData> sdList = new ArrayList<ServerImageData>();
             String state = jsonObj.optString("state");
@@ -96,6 +107,7 @@ public class ServerImageDataManager {
                     String imgUrl = jsonObject.optString("imgUrl");
                     serverImageData.setUrl(url);
                     serverImageData.setImageUrl(imgUrl);
+                    serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_FALSE);
                     sdList.add(serverImageData);
                 }
             }

@@ -25,7 +25,7 @@
             android:name=".settings.MainSettingsActivity"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,12 +33,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".widget.LockPatternDialog"
+            android:name=".settings.LockPatternActivity"
             android:screenOrientation="portrait"
             android:theme="@style/gusture_dialog" >
         </activity>
         <activity
             android:name=".guide.GuideActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".settings.MIUISettingActivity"
             android:screenOrientation="portrait" >
         </activity>
 

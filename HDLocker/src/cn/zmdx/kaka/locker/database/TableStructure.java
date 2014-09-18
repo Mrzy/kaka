@@ -102,6 +102,8 @@ public class TableStructure {
 
     public final static String SERVER_IMAGE_COLLECT_WEBSITE = "collect_website";
 
+    public final static String SERVER_IMAGE_IS_IMAGE_DOWNLOADED = "is_image_downloaded";
+
     public static synchronized void createServerImageTable(SQLiteDatabase db) {
         String str_sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_SERVER_IMAGE + " ("
                 + SERVER_IMAGE_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
@@ -109,7 +111,8 @@ public class TableStructure {
                 + SERVER_IMAGE_URL + " TEXT," + SERVER_IMAGE_IMAGE_URL + " TEXT,"
                 + SERVER_IMAGE_DATA_TYPE + " TEXT," + SERVER_IMAGE_TOP + " TEXT,"
                 + SERVER_IMAGE_SETP + " TEXT," + SERVER_IMAGE_COLLECT_TIME + " TEXT,"
-                + SERVER_IMAGE_RELEASE_TIME + " TEXT," + SERVER_IMAGE_COLLECT_WEBSITE + " TEXT)";
+                + SERVER_IMAGE_RELEASE_TIME + " TEXT," + SERVER_IMAGE_COLLECT_WEBSITE + " TEXT,"
+                + SERVER_IMAGE_IS_IMAGE_DOWNLOADED + " INTEGER)";
         db.execSQL(str_sql);
     }
 }

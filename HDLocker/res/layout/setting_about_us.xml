@@ -3,117 +3,97 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/setting_background"
+    android:clickable="true"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/setting_about_us"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:id="@+id/setting_about_top"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_us_height"
-        android:background="@drawable/setting_about_pandora_bg" >
+        android:layout_alignParentTop="true"
+        android:background="#2f3035" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/setting_about_us"
+            android:textColor="@color/setting_about_us_text_color"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/setting_anout_middle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/setting_about_top"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/setting_about_pandora_height" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/pandora_logo"
+            android:contentDescription="@string/contentDescription" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/setting_about_us_textview_margin_top"
-            android:text="@string/setting_about_us"
-            android:textColor="@color/setting_about_us_text_color"
-            android:textSize="20sp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/pandora_logo"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_pandora_imageview_height"
-        android:layout_below="@+id/setting_about_us"
-        android:layout_marginTop="@dimen/setting_about_pandora_height" >
-
-        <ImageView
-            android:layout_width="@dimen/setting_about_pandora_imageview_width"
-            android:layout_height="@dimen/setting_about_pandora_imageview_height"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/pandora_logo" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/setting_pandoralocker"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_us_textview_height"
-        android:layout_below="@+id/pandora_logo"
-        android:layout_marginTop="@dimen/setting_about_pandora_margin" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/setting_about_us_textview_height"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/setting_about_pandora_margin"
+            android:gravity="center_horizontal"
             android:text="@string/setting_about_pandora"
             android:textColor="@color/setting_about_pandora_color"
-            android:textSize="24sp"
+            android:textSize="19sp"
             android:typeface="sans" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/setting_pandoralocker_version"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_pandora_version_height"
-        android:layout_below="@+id/setting_pandoralocker"
-        android:layout_marginTop="@dimen/setting_about_pandora_margin" >
 
         <TextView
+            android:id="@+id/setting_about_version"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/setting_about_pandora_version_height"
-            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/setting_about_pandora_margin"
+            android:gravity="center_horizontal"
             android:text="@string/setting_version_number"
-            android:textColor="@color/setting_about_pandora_down"
-            android:textSize="14sp"
-            android:typeface="monospace" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/setting_pandoralocker_text"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_pandora_version_height"
-        android:layout_below="@+id/setting_pandoralocker_version"
-        android:layout_marginTop="@dimen/setting_about_pandora_margin" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/setting_about_pandora_version_height"
-            android:layout_centerInParent="true"
-            android:text="@string/setting_about_text"
-            android:textColor="@color/setting_about_pandora_down"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/setting_pandoralocker_email"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_pandora_version_height"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/setting_about_pandora_version_height" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/setting_about_pandora_version_height"
-            android:layout_centerInParent="true"
-            android:text="@string/setting_about_email"
             android:textColor="@color/setting_about_pandora_color"
-            android:textSize="15sp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/setting_pandoralocker_cooperation"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_pandora_version_height"
-        android:layout_above="@+id/setting_pandoralocker_email" >
+            android:textSize="10sp" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/setting_about_pandora_version_height"
-            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/setting_about_pandora_margin_one"
+            android:gravity="center_horizontal"
+            android:text="@string/setting_about_text"
+            android:textColor="#7b7c7e"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
             android:text="@string/setting_about_cooperation"
             android:textColor="@color/setting_about_pandora_color"
-            android:textSize="15sp" />
-    </RelativeLayout>
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:text="@string/setting_about_email"
+            android:textColor="@color/setting_about_pandora_color"
+            android:textSize="12sp" />
+    </LinearLayout>
 
 </RelativeLayout>

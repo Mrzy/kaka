@@ -2,6 +2,7 @@
 package cn.zmdx.kaka.locker.settings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import cn.zmdx.kaka.locker.R;
@@ -22,8 +23,6 @@ public abstract class BaseSettingsFragment extends Fragment {
 
     private MAboutFragment mAboutFragment;
 
-    private MIUISettingFragment mMIUIFragment;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +30,6 @@ public abstract class BaseSettingsFragment extends Fragment {
         mPandoraConfig = PandoraConfig.newInstance(mContext);
         isMIUI = PandoraUtils.isMIUI(mContext);
         mAboutFragment = new MAboutFragment();
-        mMIUIFragment = new MIUISettingFragment();
     }
 
     protected void checkNewVersion() {
@@ -61,18 +59,16 @@ public abstract class BaseSettingsFragment extends Fragment {
                 .addToBackStack(null)
                 .setCustomAnimations(R.anim.umeng_fb_slide_in_from_right,
                         R.anim.umeng_fb_slide_out_from_left, R.anim.umeng_fb_slide_in_from_left,
-                        R.anim.umeng_fb_slide_out_from_right).add(R.id.content, mMIUIFragment)
-                .add(R.id.content, mAboutFragment).commit();
+                        R.anim.umeng_fb_slide_out_from_right).add(R.id.content, mAboutFragment)
+                .commit();
     }
 
     protected void gotoMIUI() {
-        getFragmentManager()
-                .beginTransaction()
-                .addToBackStack(null)
-                .setCustomAnimations(R.anim.umeng_fb_slide_in_from_right,
-                        R.anim.umeng_fb_slide_out_from_left, R.anim.umeng_fb_slide_in_from_left,
-                        R.anim.umeng_fb_slide_out_from_right).add(R.id.content, mMIUIFragment)
-                .commit();
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), MIUISettingActivity.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
     }
 
     protected void closeSystemLocker() {

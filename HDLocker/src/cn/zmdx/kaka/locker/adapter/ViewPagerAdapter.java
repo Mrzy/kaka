@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.MIUISettingActivity;
 import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
 
 /**
@@ -76,7 +77,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     private void goHome() {
         // 跳转
-        Intent intent = new Intent(mActivity, MainSettingsActivity.class);
+        Intent intent = new Intent(mActivity, MIUISettingActivity.class);
         mActivity.startActivity(intent);
         mActivity.finish();
     }

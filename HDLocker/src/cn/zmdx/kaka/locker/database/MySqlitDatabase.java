@@ -36,6 +36,10 @@ public class MySqlitDatabase extends SQLiteOpenHelper {
 
     public static final int INDEX_TWELVE = 12;
 
+    public static final int DOWNLOAD_FALSE = 0;
+
+    public static final int DOWNLOAD_TRUE = 1;
+
     private static MySqlitDatabase sMySqlitDatabase = null;
 
     public MySqlitDatabase(Context context, String name, CursorFactory factory) {
@@ -57,6 +61,11 @@ public class MySqlitDatabase extends SQLiteOpenHelper {
         TableStructure.createServerImageTable(db);
         db.execSQL("create unique index if not exists baiduId_index on "
                 + TableStructure.TABLE_NAME_CONTENT + "(" + TableStructure.CONTENT_BAIDU_ID + ")");
+        db.execSQL("create unique index if not exists cloudId_index on "
+                + TableStructure.TABLE_NAME_SERVER + "(" + TableStructure.SERVER_CLOUD_ID + ")");
+        db.execSQL("create unique index if not exists cloudId_img_index on "
+                + TableStructure.TABLE_NAME_SERVER_IMAGE + "(" + TableStructure.SERVER_CLOUD_ID
+                + ")");
     }
 
     @Override

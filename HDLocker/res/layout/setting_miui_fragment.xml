@@ -6,6 +6,7 @@
     android:background="@drawable/setting_background_blue"
     android:baselineAligned="true"
     android:clickable="true"
+    android:fillViewport="true"
     android:orientation="vertical"
     android:overScrollMode="never"
     android:scrollbars="none" >
@@ -13,88 +14,137 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/setting_padding_top" >
+        android:background="#60000000"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/setting_miui_title_layout_margin_top"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <TextView
+                style="@style/setting_miui_big_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/setting_miui_title_textview_margin_bottom"
+                android:layout_marginLeft="@dimen/setting_miui_title_textview_margin_top"
+                android:gravity="left"
+                android:text="@string/setting_MIUI_init" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_miui_title_line_height"
+                android:contentDescription="@string/contentDescription"
+                android:scaleType="fitXY"
+                android:src="@drawable/setting_miui_line" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/setting_close_systemlocker_guide"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/setting_MIUI_item_height"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/setting_padding_left"
-            android:paddingRight="@dimen/setting_padding_right"
-            android:visibility="gone" >
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/setting_miui_item_margin_left"
+            android:layout_marginRight="@dimen/setting_miui_item_margin_right"
+            android:layout_marginTop="@dimen/setting_miui_item_margin_top"
+            android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/setting_close_systemlocker"
-                style="@style/setting_textview"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
+                style="@style/setting_miui_big_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/setting_close_systemlocker" />
+
+            <TextView
+                style="@style/setting_miui_small_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_close_systemlocker_detail" />
 
             <Button
                 android:id="@+id/setting_close_systemlocker_to_set"
-                style="@style/setting_textview"
+                style="@style/setting_miui_button"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="@string/setting_to_set" />
+                android:layout_height="@dimen/setting_miui_button_height"
+                android:layout_marginTop="@dimen/setting_miui_button_margin_top"
+                android:background="@drawable/setting_miui_button_selector"
+                android:text="@string/setting_MIUI_to_set" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/setting_MIUI_allow_floating_window_guide"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/setting_MIUI_item_height"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/setting_miui_item_margin_left"
+            android:layout_marginRight="@dimen/setting_miui_item_margin_right"
+            android:layout_marginTop="@dimen/setting_miui_item_margin_top"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/setting_padding_left"
-            android:paddingRight="@dimen/setting_padding_right" >
+            android:visibility="gone" >
 
             <TextView
-                android:id="@+id/setting_MIUI_allow_floating_window"
-                style="@style/setting_textview"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
+                style="@style/setting_miui_big_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/setting_MIUI_allow_floating_window" />
+
+            <TextView
+                style="@style/setting_miui_small_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_MIUI_allow_floating_window_detail" />
 
             <Button
                 android:id="@+id/setting_MIUI_allow_floating_window_to_set"
-                style="@style/setting_textview"
+                style="@style/setting_miui_button"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="@string/setting_to_set" />
+                android:layout_height="@dimen/setting_miui_button_height"
+                android:layout_marginTop="@dimen/setting_miui_button_margin_top"
+                android:background="@drawable/setting_miui_button_selector"
+                android:text="@string/setting_MIUI_to_set" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/setting_MIUI_trust_guide"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/setting_MIUI_item_height"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/setting_miui_item_margin_left"
+            android:layout_marginRight="@dimen/setting_miui_item_margin_right"
+            android:layout_marginTop="@dimen/setting_miui_item_margin_top"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/setting_padding_left"
-            android:paddingRight="@dimen/setting_padding_right" >
+            android:visibility="gone" >
 
             <TextView
-                android:id="@+id/setting_MIUI_trust"
-                style="@style/setting_textview"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
+                style="@style/setting_miui_big_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/setting_MIUI_trust" />
+
+            <TextView
+                style="@style/setting_miui_small_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_MIUI_trust_detail" />
 
             <Button
                 android:id="@+id/setting_MIUI_trust_to_set"
-                style="@style/setting_textview"
+                style="@style/setting_miui_button"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="@string/setting_to_set" />
+                android:layout_height="@dimen/setting_miui_button_height"
+                android:layout_marginTop="@dimen/setting_miui_button_margin_top"
+                android:background="@drawable/setting_miui_button_selector"
+                android:text="@string/setting_MIUI_to_set" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/setting_miui_complete"
+            style="@style/setting_miui_button"
+            android:layout_width="@dimen/setting_miui_complete_button_width"
+            android:layout_height="@dimen/setting_miui_button_height"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/setting_miui_complete_button_margin_top"
+            android:background="@drawable/setting_miui_button_selector"
+            android:text="@string/setting_MIUI_complete_to_set" />
     </LinearLayout>
 
 </ScrollView>

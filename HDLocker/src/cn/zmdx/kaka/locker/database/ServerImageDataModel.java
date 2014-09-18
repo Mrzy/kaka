@@ -37,7 +37,7 @@ public class ServerImageDataModel {
         try {
             mysql.beginTransaction();
             SQLiteStatement sqLiteStatement = mysql.compileStatement("replace INTO "
-                    + TableStructure.TABLE_NAME_SERVER_IMAGE + " VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+                    + TableStructure.TABLE_NAME_SERVER_IMAGE + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
             for (ServerImageData bd : list) {
                 sqLiteStatement.clearBindings();
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_TWO, bd.getCloudId());
@@ -50,6 +50,7 @@ public class ServerImageDataModel {
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_NINE, bd.getCollectTime());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_TEN, bd.getReleaseTime());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_ELEVEN, bd.getCollectWebsite());
+                sqLiteStatement.bindLong(MySqlitDatabase.INDEX_TWELVE, bd.isImageDownloaded());
                 sqLiteStatement.executeInsert();
             }
             mysql.setTransactionSuccessful();

@@ -21,18 +21,19 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.animation.ViewAnimation;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.widget.LockPatternDialog;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
@@ -85,6 +86,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     public static final int GUSTURE_REQUEST_CODE_SUCCESS = 37;
 
     public static final int GUSTURE_REQUEST_CODE_FAIL = 38;
+
+    private static final int VIEW_ANIMATION_DURATION = 200;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,6 +170,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                         .inflate(R.layout.setting_wallpaper_item, null);
                 ImageView mWallpaperIv = (ImageView) mWallpaperRl
                         .findViewById(R.id.setting_wallpaper_image);
+                mWallpaperIv.setScaleType(ScaleType.FIT_XY);
                 mWallpaperIv.setImageResource(mThemeList.get(i).getmThumbnailResId());
                 ImageView mWallpaperBorder = (ImageView) mWallpaperRl
                         .findViewById(R.id.setting_wallpaper_image_border);
@@ -260,11 +264,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             case R.id.setting_pandoralocker_password:
                 if (isChecked) {
                     if (mIsCurrentlyPressed) {
-                        showGustureView(LockPatternDialog.LOCK_PATTERN_TYPE_OPEN);
+                        showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_OPEN);
                     }
                 } else {
                     if (mIsCurrentlyPressed) {
-                        showGustureView(LockPatternDialog.LOCK_PATTERN_TYPE_CLOSE);
+                        showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_CLOSE);
                     }
                 }
                 break;
@@ -278,7 +282,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         View decorView = getActivity().getWindow().getDecorView();
         Bitmap blurBitmap = PandoraUtils.fastBlur(decorView);
         Intent in = new Intent();
-        in.setClass(getActivity(), LockPatternDialog.class);
+        in.setClass(getActivity(), LockPatternActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
         bundle.putParcelable("bitmap", blurBitmap);
@@ -296,10 +300,10 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 int type = data.getExtras().getInt("type");
                 mIsCurrentlyPressed = false;
                 switch (type) {
-                    case LockPatternDialog.LOCK_PATTERN_TYPE_CLOSE:
+                    case LockPatternActivity.LOCK_PATTERN_TYPE_CLOSE:
                         mLockerTypeSButton.setChecked(true);
                         break;
-                    case LockPatternDialog.LOCK_PATTERN_TYPE_OPEN:
+                    case LockPatternActivity.LOCK_PATTERN_TYPE_OPEN:
                         mLockerTypeSButton.setChecked(false);
                         break;
 
@@ -330,10 +334,18 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 break;
             case R.id.setting_change_background:
                 mIsWallpaperShow = !mIsWallpaperShow;
+                int height = (int) getActivity().getResources().getDimension(
+                        R.dimen.setting_wallpaper_bg_height);
                 if (mIsWallpaperShow) {
-                    mPicScrollView.setVisibility(View.VISIBLE);
+                    ViewAnimation viewAnimation = new ViewAnimation(mPicScrollView, height,
+                            mIsWallpaperShow);
+                    viewAnimation.setDuration(VIEW_ANIMATION_DURATION);
+                    mPicScrollView.startAnimation(viewAnimation);
                 } else {
-                    mPicScrollView.setVisibility(View.GONE);
+                    ViewAnimation viewAnimation = new ViewAnimation(mPicScrollView, height,
+                            mIsWallpaperShow);
+                    viewAnimation.setDuration(VIEW_ANIMATION_DURATION);
+                    mPicScrollView.startAnimation(viewAnimation);
                 }
                 break;
             case R.id.setting_icon:

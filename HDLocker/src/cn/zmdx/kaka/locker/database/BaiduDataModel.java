@@ -18,10 +18,6 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
  */
 public class BaiduDataModel {
 
-    public static final int DOWNLOAD_FALSE = 0;
-
-    public static final int DOWNLOAD_TRUE = 1;
-
     private MySqlitDatabase mMySqlitDatabase;
 
     private static BaiduDataModel sBaiduDataModel = null;
@@ -86,8 +82,8 @@ public class BaiduDataModel {
         Cursor cursor = sqliteDatabase.rawQuery("select * from "
                 + TableStructure.TABLE_NAME_CONTENT + " where " + TableStructure.CONTENT_TAG1
                 + " = '" + BaiduTagMapping.getStringTag1(tag1) + "' and "
-                + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = " + DOWNLOAD_FALSE
-                + " ORDER BY random() limit " + count, null);
+                + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = "
+                + MySqlitDatabase.DOWNLOAD_FALSE + " ORDER BY random() limit " + count, null);
 
         try {
             while (cursor.moveToNext()) {
@@ -150,7 +146,7 @@ public class BaiduDataModel {
             while (cursor.moveToNext()) {
                 int isimagedownloaded = cursor.getInt(cursor
                         .getColumnIndex(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED));
-                isDownloaded = isimagedownloaded == DOWNLOAD_TRUE;
+                isDownloaded = isimagedownloaded == MySqlitDatabase.DOWNLOAD_FALSE;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,7 +164,7 @@ public class BaiduDataModel {
     public synchronized boolean markAlreadyDownload(int id) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, BaiduDataModel.DOWNLOAD_TRUE);
+        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, MySqlitDatabase.DOWNLOAD_FALSE);
         int count = sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values,
                 TableStructure.CONTENT_ID + "=?", new String[] {
                     String.valueOf(id)
@@ -215,10 +211,10 @@ public class BaiduDataModel {
     public synchronized int queryCountHasImage() {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         int count = 0;
-        Cursor cursor = sqliteDatabase.rawQuery(
-                "select count(*) from " + TableStructure.TABLE_NAME_CONTENT + " where "
-                        + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = "
-                        + BaiduDataModel.DOWNLOAD_TRUE, null);
+        Cursor cursor = sqliteDatabase.rawQuery("select count(*) from "
+                + TableStructure.TABLE_NAME_CONTENT + " where "
+                + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = "
+                + MySqlitDatabase.DOWNLOAD_FALSE, null);
         try {
             while (cursor.moveToNext()) {
                 count = cursor.getInt(0);
@@ -237,7 +233,7 @@ public class BaiduDataModel {
     public synchronized void markAllNonDownload() {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, BaiduDataModel.DOWNLOAD_FALSE);
+        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, MySqlitDatabase.DOWNLOAD_FALSE);
         sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values, null, null);
     }
 
@@ -252,10 +248,11 @@ public class BaiduDataModel {
         List<BaiduData> list = new ArrayList<BaiduData>();
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_CONTENT, new String[] {
-                TableStructure.CONTENT_ID, TableStructure.CONTENT_IMAGE_URL, TableStructure.CONTENT_DESCRIBE
+                TableStructure.CONTENT_ID, TableStructure.CONTENT_IMAGE_URL,
+                TableStructure.CONTENT_DESCRIBE
         }, TableStructure.CONTENT_TAG1 + "=? and " + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED
                 + "=?", new String[] {
-                tag1, String.valueOf(BaiduDataModel.DOWNLOAD_TRUE)
+                tag1, String.valueOf(MySqlitDatabase.DOWNLOAD_FALSE)
         }, null, null, null, String.valueOf(count));
 
         try {

@@ -1,5 +1,5 @@
 
-package cn.zmdx.kaka.locker.widget;
+package cn.zmdx.kaka.locker.settings;
 
 import java.util.List;
 
@@ -14,20 +14,19 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.settings.MainSettingsFragment;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
+import cn.zmdx.kaka.locker.widget.LockPatternView;
 import cn.zmdx.kaka.locker.widget.LockPatternView.Cell;
 import cn.zmdx.kaka.locker.widget.LockPatternView.DisplayMode;
 import cn.zmdx.kaka.locker.widget.LockPatternView.OnPatternListener;
 
-public class LockPatternDialog extends Activity implements OnClickListener, OnPatternListener {
+public class LockPatternActivity extends Activity implements OnClickListener, OnPatternListener {
 
     private Context mContext;
 
@@ -71,7 +70,6 @@ public class LockPatternDialog extends Activity implements OnClickListener, OnPa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.gusture_view);
         mBitmapDrawable = getIntent().getBundleExtra("bundle").getParcelable("bitmap");
         mLockPatternType = getIntent().getBundleExtra("bundle").getInt("type");
