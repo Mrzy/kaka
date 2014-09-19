@@ -21,8 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/setting_miui_title_layout_margin_top"
-            android:orientation="vertical"
-            android:visibility="gone" >
+            android:orientation="vertical" >
 
             <TextView
                 style="@style/setting_miui_big_textview"
@@ -80,7 +79,8 @@
             android:layout_marginLeft="@dimen/setting_miui_item_margin_left"
             android:layout_marginRight="@dimen/setting_miui_item_margin_right"
             android:layout_marginTop="@dimen/setting_miui_item_margin_top"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:visibility="gone" >
 
             <TextView
                 style="@style/setting_miui_big_textview"
@@ -111,7 +111,8 @@
             android:layout_marginLeft="@dimen/setting_miui_item_margin_left"
             android:layout_marginRight="@dimen/setting_miui_item_margin_right"
             android:layout_marginTop="@dimen/setting_miui_item_margin_top"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:visibility="gone" >
 
             <TextView
                 style="@style/setting_miui_big_textview"

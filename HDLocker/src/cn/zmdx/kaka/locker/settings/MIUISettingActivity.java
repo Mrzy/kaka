@@ -71,6 +71,11 @@ public class MIUISettingActivity extends Activity implements OnClickListener {
         if (isFirst) {
             findViewById(R.id.setting_close_systemlocker_guide).setVisibility(View.VISIBLE);
         }
+        
+        if(isMIUI){
+            findViewById(R.id.setting_MIUI_allow_floating_window_guide).setVisibility(View.VISIBLE);
+            findViewById(R.id.setting_MIUI_trust_guide).setVisibility(View.VISIBLE);
+        }
         mCloseSystemLockBtn = (Button) findViewById(R.id.setting_close_systemlocker_to_set);
         mCloseSystemLockBtn.setOnClickListener(this);
         mFolatfingWindowBtn = (Button) findViewById(R.id.setting_MIUI_allow_floating_window_to_set);
