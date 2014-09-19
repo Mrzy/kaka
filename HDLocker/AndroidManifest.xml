@@ -42,8 +42,13 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".settings.MIUISettingActivity"
+            android:name=".settings.InitSettingActivity"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".settings.InitPromptActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/gusture_dialog" >
         </activity>
 
         <service android:name=".service.PandoraService" />

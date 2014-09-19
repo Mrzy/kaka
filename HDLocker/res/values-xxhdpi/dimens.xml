@@ -47,16 +47,16 @@
     <dimen name="locker_key_padding_top">6dp</dimen>
     <dimen name="lockscreen_gusture_padding_top">25dp</dimen>
     
-    <dimen name="setting_miui_title_layout_margin_bottom">8dp</dimen>
-    <dimen name="setting_miui_title_layout_margin_top">12dp</dimen>
-    <dimen name="setting_miui_title_textview_margin_bottom">9dp</dimen>
-    <dimen name="setting_miui_title_textview_margin_top">12dp</dimen>
-    <dimen name="setting_miui_title_line_height">1px</dimen>
-    <dimen name="setting_miui_item_margin_left">33dp</dimen>
-    <dimen name="setting_miui_item_margin_right">33dp</dimen>
-    <dimen name="setting_miui_item_margin_top">23dp</dimen>
-    <dimen name="setting_miui_button_height">33dp</dimen>
-    <dimen name="setting_miui_button_margin_top">10dp</dimen>
-    <dimen name="setting_miui_complete_button_width">157dp</dimen>
-    <dimen name="setting_miui_complete_button_margin_top">106dp</dimen>
+    <dimen name="init_setting_title_layout_margin_bottom">8dp</dimen>
+    <dimen name="init_setting_title_layout_margin_top">12dp</dimen>
+    <dimen name="init_setting_title_textview_margin_bottom">9dp</dimen>
+    <dimen name="init_setting_title_textview_margin_top">12dp</dimen>
+    <dimen name="init_setting_title_line_height">1px</dimen>
+    <dimen name="init_setting_item_margin_left">33dp</dimen>
+    <dimen name="init_setting_item_margin_right">33dp</dimen>
+    <dimen name="init_setting_item_margin_top">23dp</dimen>
+    <dimen name="init_setting_button_height">33dp</dimen>
+    <dimen name="init_setting_button_margin_top">10dp</dimen>
+    <dimen name="init_setting_complete_button_width">157dp</dimen>
+    <dimen name="init_setting_complete_button_margin_top">106dp</dimen>
 </resources>

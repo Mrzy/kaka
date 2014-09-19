@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
@@ -19,8 +18,6 @@ public abstract class BaseSettingsFragment extends Fragment {
 
     private Context mContext;
 
-    public boolean isMIUI = false;
-
     private MAboutFragment mAboutFragment;
 
     @Override
@@ -28,7 +25,6 @@ public abstract class BaseSettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         mPandoraConfig = PandoraConfig.newInstance(mContext);
-        isMIUI = PandoraUtils.isMIUI(mContext);
         mAboutFragment = new MAboutFragment();
     }
 
@@ -63,17 +59,12 @@ public abstract class BaseSettingsFragment extends Fragment {
                 .commit();
     }
 
-    protected void gotoMIUI() {
+    protected void gotoInit() {
         Intent intent = new Intent();
-        intent.setClass(getActivity(), MIUISettingActivity.class);
-        intent.putExtra("isFirst", false);
+        intent.setClass(getActivity(), InitSettingActivity.class);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                 R.anim.umeng_fb_slide_out_from_left);
-    }
-
-    protected void closeSystemLocker() {
-        PandoraUtils.closeSystemLocker(getActivity(), isMIUI);
     }
 
     protected int getUnLockType() {
