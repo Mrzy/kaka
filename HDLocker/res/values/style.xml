@@ -23,7 +23,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:backgroundDimAmount">0.3</item>
+        <item name="android:backgroundDimAmount">0.75</item>
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
@@ -33,18 +33,18 @@
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
-    <style name="setting_miui_big_textview">
+    <style name="init_setting_big_textview">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">17sp</item>
     </style>
 
-    <style name="setting_miui_small_textview">
-        <item name="android:textColor">@color/setting_miui_small_textview_color</item>
+    <style name="init_setting_small_textview">
+        <item name="android:textColor">@color/init_setting_small_textview_color</item>
         <item name="android:textSize">11sp</item>
         <item name="android:layout_marginTop">0dp</item>
     </style>
 
-    <style name="setting_miui_button">
+    <style name="init_setting_button">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">15sp</item>
     </style>

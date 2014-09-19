@@ -6,9 +6,8 @@
     <string name="setting_open_pandoralocker">启用锁屏</string>
     <string name="setting_lock_type">开启锁屏密码</string>
     <string name="setting_background">锁屏壁纸</string>
-    <string name="setting_close_systemlocker">关闭系统锁屏</string>
-    <string name="setting_close_systemlocker_detail">解决潘多拉锁屏和系统锁屏冲突的问题</string>
-    <string name="setting_MIUI">小米用户特别设置</string>
+    <string name="init_setting_close_systemlocker">关闭系统锁屏</string>
+    <string name="init_setting_close_systemlocker_detail">解决潘多拉锁屏和系统锁屏冲突的问题</string>
     <string name="setting_feedback">意见反馈</string>
     <string name="setting_check_new_version">检查新版本</string>
     <string name="setting_about_us">关于潘多拉</string>
@@ -31,18 +30,22 @@
     <string name="gusture_close_prompt">确认已保存的图案</string>
     <string name="gusture_verify_fail">验证失败，请重试!</string>
 
-    <!-- setting MIUI -->
-    <string name="setting_MIUI_init">初始设置</string>
-    <string name="setting_MIUI_allow_floating_window">允许显示悬浮窗</string>
-    <string name="setting_MIUI_allow_floating_window_detail">保证潘多拉锁屏可以正常运行</string>
-    <string name="setting_MIUI_trust">信任程序和允许自动启动</string>
-    <string name="setting_MIUI_trust_detail">保证潘多拉锁屏可以获取必须的权限</string>
-    <string name="setting_MIUI_to_set">前往设置</string>
-    <string name="setting_MIUI_complete_to_set">设置完成</string>
+    <!-- init setting -->
+    <string name="init_setting_title">初始设置</string>
+    <string name="init_setting_MIUI_allow_floating_window">允许显示悬浮窗</string>
+    <string name="init_setting_MIUI_allow_floating_window_detail">保证潘多拉锁屏可以正常运行</string>
+    <string name="init_setting_MIUI_trust">信任程序和允许自动启动</string>
+    <string name="init_setting_MIUI_trust_detail">保证潘多拉锁屏可以获取必须的权限</string>
+    <string name="init_setting_to_set">前往设置</string>
+    <string name="init_setting_complete_to_set">设置完成</string>
     
-    <string name="setting_MIUI_close_systemlocker_prompt"></string>
-    <string name="setting_MIUI_allow_floating_window_prompt">请开启显示悬浮窗开关</string>
-    <string name="setting_MIUI_trust_prompt">请开启我信任该程序开关\n再开启自动启动开关</string>
+    <string name="init_setting_close_systemlocker_prompt">请选择『无』模式</string>
+    <string name="init_setting_MIUI_close_systemlocker_prompt_miui_one">请先开启『开发者选项』开关</string>
+    <string name="init_setting_MIUI_close_systemlocker_prompt_miui_two">再开启『直接进入系统』开关</string>
+    <string name="init_setting_MIUI_close_systemlocker_prompt_miui_three">*需要先关闭系统屏幕密码</string>
+    <string name="init_setting_MIUI_allow_floating_window_prompt">请开启『显示悬浮窗』开关</string>
+    <string name="init_setting_MIUI_trust_prompt_one">请开启『我信任该程序』开关</string>
+    <string name="init_setting_MIUI_trust_prompt_two">再开启『自动启动』开关</string>
     
     
 

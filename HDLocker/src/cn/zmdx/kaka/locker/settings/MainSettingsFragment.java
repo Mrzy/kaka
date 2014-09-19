@@ -43,9 +43,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private SlidingUpPanelLayout mSettingForeView;
 
-    private LinearLayout mSystemLockerPrompt;
-
-    private LinearLayout mMIUI;
+    private LinearLayout mInitSetting;
 
     private LinearLayout mConcernTeam;
 
@@ -119,11 +117,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     }
 
     private void initView() {
-        mMIUI = (LinearLayout) mRootView.findViewById(R.id.setting_MIUI);
-        if (isMIUI) {
-            mMIUI.setVisibility(View.VISIBLE);
-            mMIUI.setOnClickListener(this);
-        }
+        mInitSetting = (LinearLayout) mRootView.findViewById(R.id.setting_init);
+        mInitSetting.setOnClickListener(this);
 
         mSettingForeView = (SlidingUpPanelLayout) mRootView.findViewById(R.id.setting_fore_view);
         mSettingIcon = (ImageView) mRootView.findViewById(R.id.setting_icon);
@@ -131,10 +126,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mSettingBackground = mRootView.findViewById(R.id.setting_background);
 
         mSettingIcon.setOnClickListener(this);
-
-        mSystemLockerPrompt = (LinearLayout) mRootView
-                .findViewById(R.id.setting_systemlocker_prompt);
-        mSystemLockerPrompt.setOnClickListener(this);
 
         mPandoraLockerSButton = (SwitchButton) mRootView
                 .findViewById(R.id.setting_pandoralocker_switch_button);
@@ -320,9 +311,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.setting_systemlocker_prompt:
-                closeSystemLocker();
-                break;
             case R.id.setting_feedback_prompt:
                 startFeedback();
                 break;
@@ -356,8 +344,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 }
                 break;
 
-            case R.id.setting_MIUI:
-                gotoMIUI();
+            case R.id.setting_init:
+                gotoInit();
                 break;
             default:
                 break;
