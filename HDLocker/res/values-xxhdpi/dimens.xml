@@ -23,12 +23,10 @@
     <dimen name="setting_wallpaper_border_width">56dp</dimen>
     <dimen name="setting_MIUI_item_height">120dp</dimen>
     
-    
     <dimen name="gusture_view_padding_top">125dp</dimen>
     <dimen name="gusture_pattern_lock_width">300dp</dimen>
     <dimen name="gusture_pattern_lock_height">300dp</dimen>
     <dimen name="gusture_pattern_lock_margin_top">10dp</dimen>
-    
     <dimen name="gusture_view_button_view_width">253dp</dimen>
     <dimen name="gusture_view_button_margin_top">10dp</dimen>
     <dimen name="gusture_view_button_height">44dp</dimen>
@@ -39,15 +37,26 @@
     <dimen name="setting_about_pandora_imageview_height">90dp</dimen>
     <dimen name="setting_about_us_textview_height">40dp</dimen>
     <dimen name="setting_about_us_textview_margin_top">10dp</dimen>
-    
     <dimen name="setting_about_pandora_height">84dp</dimen>
     <dimen name="setting_about_pandora_text_height">195dp</dimen>
-    <dimen name="setting_about_pandora_margin">1dp</dimen>
-    <dimen name="setting_about_pandora_version_height">25dp</dimen>
-    <dimen name="setting_about_pandora_margin_one">10dp</dimen>
+    <dimen name="setting_about_pandora_margin">4dp</dimen>
+    <dimen name="setting_about_pandora_version_height">30dp</dimen>
+    <dimen name="setting_about_pandora_margin_one">17dp</dimen>
     <dimen name="setting_about_cooperation_margin">0dp</dimen>
 
     <dimen name="locker_key_padding_top">6dp</dimen>
-    
     <dimen name="lockscreen_gusture_padding_top">25dp</dimen>
+    
+    <dimen name="setting_miui_title_layout_margin_bottom">8dp</dimen>
+    <dimen name="setting_miui_title_layout_margin_top">12dp</dimen>
+    <dimen name="setting_miui_title_textview_margin_bottom">9dp</dimen>
+    <dimen name="setting_miui_title_textview_margin_top">12dp</dimen>
+    <dimen name="setting_miui_title_line_height">1px</dimen>
+    <dimen name="setting_miui_item_margin_left">33dp</dimen>
+    <dimen name="setting_miui_item_margin_right">33dp</dimen>
+    <dimen name="setting_miui_item_margin_top">23dp</dimen>
+    <dimen name="setting_miui_button_height">33dp</dimen>
+    <dimen name="setting_miui_button_margin_top">10dp</dimen>
+    <dimen name="setting_miui_complete_button_width">157dp</dimen>
+    <dimen name="setting_miui_complete_button_margin_top">106dp</dimen>
 </resources>

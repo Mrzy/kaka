@@ -15,6 +15,7 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.cache.ImageCacheManager;
 import cn.zmdx.kaka.locker.database.BaiduDataModel;
+import cn.zmdx.kaka.locker.database.MySqlitDatabase;
 import cn.zmdx.kaka.locker.network.DownloadRequest;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -92,7 +93,7 @@ public class BaiduDataManager {
         RequestManager.getRequestQueue().add(request);
     }
 
-    //暂废弃
+    // 暂废弃
     @SuppressWarnings("unused")
     private void downloadBaiduImage(final BaiduData bd) {
         if (bd == null) {
@@ -155,7 +156,8 @@ public class BaiduDataManager {
      * @return
      */
     public String getUrl(int tag1, int pageNum) {
-        return getUrl(tag1, BaiduTagMapping.INT_TAG2_ALL, pageNum, PandoraPolicy.REQUEST_COUNT_PER_PAGE);
+        return getUrl(tag1, BaiduTagMapping.INT_TAG2_ALL, pageNum,
+                PandoraPolicy.REQUEST_COUNT_PER_PAGE);
     }
 
     /*
@@ -170,9 +172,9 @@ public class BaiduDataManager {
             sb.append("&tag2=" + URLEncoder.encode(BaiduTagMapping.getStringTag2(tag2), "utf-8"));
             sb.append("&ie=utf8");
 
-//            if (BuildConfig.DEBUG) {
-//                HDBLOG.logD("请求url：" + sb.toString());
-//            }
+            // if (BuildConfig.DEBUG) {
+            // HDBLOG.logD("请求url：" + sb.toString());
+            // }
             return sb.toString();
         } catch (UnsupportedEncodingException e) {
             // never execute
@@ -235,18 +237,22 @@ public class BaiduDataManager {
                     bd.setImageUrl(image_url);
                     bd.setImageWidth(image_width);
                     bd.setImageHeight(image_height);
-                    bd.setIsImageDownloaded(BaiduDataModel.DOWNLOAD_FALSE);
+                    bd.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_FALSE);
                     bd.setTthumbLargeUrl(thumb_large_url);
                     bd.setThumbLargeWidth(thumb_large_width);
                     bd.setThumbLargeHeight(thumb_large_height);
                     bdList.add(bd);
-//                    if (PandoraConfig.sDebug) {
-//                        HDBLOG.logD("tag1=" + tag1 + " tag2=" + tag2 + "baiduId=" + baiduId
-//                                + " describe=" + describe + " image_url=" + image_url
-//                                + " image_width=" + image_width + " image_height=" + image_height
-//                                + " thumb_large_url=" + thumb_large_url + " thumb_large_width="
-//                                + thumb_large_width + " thumb_large_height=" + thumb_large_height);
-//                    }
+                    // if (PandoraConfig.sDebug) {
+                    // HDBLOG.logD("tag1=" + tag1 + " tag2=" + tag2 + "baiduId="
+                    // + baiduId
+                    // + " describe=" + describe + " image_url=" + image_url
+                    // + " image_width=" + image_width + " image_height=" +
+                    // image_height
+                    // + " thumb_large_url=" + thumb_large_url +
+                    // " thumb_large_width="
+                    // + thumb_large_width + " thumb_large_height=" +
+                    // thumb_large_height);
+                    // }
                 }
             }
 

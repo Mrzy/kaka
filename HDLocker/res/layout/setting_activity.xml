@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<cn.zmdx.kaka.locker.widget.DragScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
     android:id="@+id/setting_background"
     android:layout_width="match_parent"
@@ -97,12 +97,12 @@
             <HorizontalScrollView
                 android:id="@+id/setting_bg_hs"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/setting_wallpaper_bg_height"
+                android:layout_height="0dp"
                 android:background="@drawable/setting_wallpaper_background"
                 android:fadingEdge="none"
                 android:overScrollMode="never"
                 android:scrollbars="none"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <LinearLayout
                     android:id="@+id/setting_bg_image"
@@ -218,4 +218,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</ScrollView>
+</cn.zmdx.kaka.locker.widget.DragScrollView>
