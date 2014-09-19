@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -66,10 +67,13 @@ public class LockScreenManager {
 
     private TextView mGusturePrompt;
 
+    private Vibrator mVibrator;
+
     private LockScreenManager() {
         mWinManager = (WindowManager) HDApplication.getInstannce().getSystemService(
                 Context.WINDOW_SERVICE);
-
+        mVibrator = (Vibrator) HDApplication.getInstannce().getSystemService(
+                Context.VIBRATOR_SERVICE);
     }
 
     public static LockScreenManager getInstance() {
@@ -328,7 +332,7 @@ public class LockScreenManager {
         @Override
         public void onPanelFixed(View panel) {
             Log.e("zy", "onPanelFixed");
-
+            mVibrator.vibrate(50);
         }
 
         @Override

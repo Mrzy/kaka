@@ -1172,7 +1172,12 @@ public class SlidingUpPanelLayout extends ViewGroup {
     private void onPanelDragged(int newTop) {
         mSlideState = SlideState.DRAGGING;
         // Recompute the slide offset based on the new top position
-        mSlideOffset = computeSlideOffset(newTop);
+        float slideOffset = computeSlideOffset(newTop);
+        if (slideOffset <= 0.03) {
+            mSlideOffset = 0;
+        } else {
+            mSlideOffset = slideOffset;
+        }
         // 处理面板是否需要固定在页面底部的逻辑
         processPanelFixed();
 

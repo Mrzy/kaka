@@ -20,8 +20,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 public class ServerImageDataManager {
 
-    private String mBaseUrl = "http://192.168.1.120:8080/pandora/locker!queryDataImgTable.action?";
-
     private static ServerImageDataManager INSTANCE;
 
     private ServerImageDataManager() {
@@ -73,7 +71,11 @@ public class ServerImageDataManager {
     }
 
     public String getBaseUrl() {
-        return mBaseUrl;
+        if (BuildConfig.DEBUG) {
+            return "http://182.254.159.63:8080/pandora/locker!queryDataImgTable.action?";
+        } else {
+            return "http://182.254.159.63:8080/pandora/locker!queryDataImgTable.action?";
+        }
     }
 
     public static class ServerImageData extends BaseDataManager {

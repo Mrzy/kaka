@@ -46,7 +46,6 @@ public class HDApplication extends Application {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
         super.onCreate();
-        registerBroadcastReceiver();
     }
 
     /**
@@ -57,29 +56,4 @@ public class HDApplication extends Application {
         ImageCacheManager.getInstance().init(this, "PandoraLocker", DISK_IMAGECACHE_SIZE,
                 DISK_IMAGECACHE_COMPRESS_FORMAT, DISK_IMAGECACHE_QUALITY, CacheType.DISK);
     }
-    
-    private void registerBroadcastReceiver() {
-        IntentFilter filter = new IntentFilter();
-        filter.setPriority(1000);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-//        filter.addAction(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_USER_PRESENT);
-        registerReceiver(mReceiver, filter);
-    }
-
-    private void unRegisterBroadcastReceiver() {
-        unregisterReceiver(mReceiver);
-    }
-
-    public final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("receive broadcast,action=" + action);
-            }
-            LockScreenManager.getInstance().lock();
-        }
-    };
 }
