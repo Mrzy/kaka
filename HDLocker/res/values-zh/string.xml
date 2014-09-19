@@ -46,7 +46,5 @@
     <string name="init_setting_MIUI_allow_floating_window_prompt">请开启『显示悬浮窗』开关</string>
     <string name="init_setting_MIUI_trust_prompt_one">请开启『我信任该程序』开关</string>
     <string name="init_setting_MIUI_trust_prompt_two">再开启『自动启动』开关</string>
-    
-    
-
+    <string name="app_name">潘多拉锁屏</string>
 </resources>
