@@ -66,6 +66,7 @@ public abstract class BaseSettingsFragment extends Fragment {
     protected void gotoMIUI() {
         Intent intent = new Intent();
         intent.setClass(getActivity(), MIUISettingActivity.class);
+        intent.putExtra("isFirst", false);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                 R.anim.umeng_fb_slide_out_from_left);

@@ -78,6 +78,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     private void goHome() {
         // 跳转
         Intent intent = new Intent(mActivity, MIUISettingActivity.class);
+        intent.putExtra("isFirst", true);
         mActivity.startActivity(intent);
         mActivity.finish();
     }

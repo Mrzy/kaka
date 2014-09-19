@@ -48,6 +48,8 @@ public class MIUISettingActivity extends Activity implements OnClickListener {
 
     private static final int TOAST_SHOW_DURATION = 5000;
 
+    private boolean isFirst;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -56,6 +58,7 @@ public class MIUISettingActivity extends Activity implements OnClickListener {
         mMIUIVersion = PandoraUtils.getSystemProperty();
         mPandoraConfig = PandoraConfig.newInstance(this);
         mThemeId = mPandoraConfig.getCurrentThemeId();
+        isFirst = getIntent().getBooleanExtra("isFirst", false);
         setContentView(R.layout.setting_miui_fragment);
         initView();
         initToastView();
@@ -65,9 +68,8 @@ public class MIUISettingActivity extends Activity implements OnClickListener {
         int resId = ThemeManager.getThemeById(mThemeId).getmBackgroundResId();
         findViewById(R.id.setting_miui_background).setBackgroundResource(resId);
 
-        if (isMIUI) {
-            findViewById(R.id.setting_MIUI_trust_guide).setVisibility(View.VISIBLE);
-            findViewById(R.id.setting_MIUI_allow_floating_window_guide).setVisibility(View.VISIBLE);
+        if (isFirst) {
+            findViewById(R.id.setting_close_systemlocker_guide).setVisibility(View.VISIBLE);
         }
         mCloseSystemLockBtn = (Button) findViewById(R.id.setting_close_systemlocker_to_set);
         mCloseSystemLockBtn.setOnClickListener(this);
