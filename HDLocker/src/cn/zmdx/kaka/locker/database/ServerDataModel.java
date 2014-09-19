@@ -3,6 +3,7 @@ package cn.zmdx.kaka.locker.database;
 
 import java.util.List;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import cn.zmdx.kaka.locker.HDApplication;
@@ -58,5 +59,49 @@ public class ServerDataModel {
             mysql.endTransaction();
         }
 
+    }
+
+    public synchronized ServerData queryByRandom() {
+        ServerData sd = null;
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER, new String[] {
+                TableStructure.SERVER_ID, TableStructure.SERVER_COLLECT_WEBSITE,
+                TableStructure.SERVER_CONTENT, TableStructure.SERVER_DATA_TYPE
+        }, null, null, null, null, "random()", "1");
+        while (cursor.moveToNext()) {
+            sd = new ServerData();
+            sd.setId(cursor.getInt(0));
+            sd.setCollectWebsite(cursor.getString(1));
+            sd.setContent(cursor.getString(2));
+            sd.setDataType(cursor.getString(3));
+        }
+        cursor.close();
+        return sd;
+    }
+
+    public synchronized int queryTotalCount() {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        int count = 0;
+        Cursor cursor = sqliteDatabase.rawQuery("select count(*) from "
+                + TableStructure.TABLE_NAME_SERVER, null);
+        try {
+            while (cursor.moveToNext()) {
+                count = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return count;
+    }
+
+    public boolean deleteById(int id) {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
+        int count = sqliteDatabase.delete(TableStructure.TABLE_NAME_SERVER,
+                TableStructure.SERVER_ID + "=?", new String[] {
+                    String.valueOf(id)
+                });
+        return count != 0;
     }
 }

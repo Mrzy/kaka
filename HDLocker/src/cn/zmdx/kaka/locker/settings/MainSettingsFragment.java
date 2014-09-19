@@ -89,8 +89,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        PandoraBoxDispatcher.getInstance().sendEmptyMessageDelayed(
-                PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 10000);
         super.onCreate(savedInstanceState);
     }
 

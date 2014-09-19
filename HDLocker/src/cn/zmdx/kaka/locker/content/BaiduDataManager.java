@@ -20,6 +20,7 @@ import cn.zmdx.kaka.locker.network.DownloadRequest;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -32,7 +33,16 @@ public class BaiduDataManager {
 
     private String mBaseUrl = "http://image.baidu.com/channel/listjson?";
 
-    public BaiduDataManager() {
+    private static BaiduDataManager INSTANCE;
+
+    private BaiduDataManager() {
+    }
+
+    public static BaiduDataManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new BaiduDataManager();
+        }
+        return INSTANCE;
     }
 
     /**
@@ -45,7 +55,7 @@ public class BaiduDataManager {
         }
     }
 
-    public void pullFunnyDataByTag1(final int tag1) {
+    private void pullFunnyDataByTag1(final int tag1) {
         JsonObjectRequest request = null;
 
         for (int i = 0; i < PandoraPolicy.REQUEST_PAGE_COUNT_DEFAULT; i++) {
@@ -64,7 +74,9 @@ public class BaiduDataManager {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // TODO
+                    if (BuildConfig.DEBUG) {
+                        error.printStackTrace();
+                    }
                 }
             });
             RequestManager.getRequestQueue().add(request);
@@ -115,7 +127,8 @@ public class BaiduDataManager {
                     HDBLOG.logD("下载图片失败，" + error.toString());
                 }
                 // 若请求失败，此处认为
-                if (error.networkResponse.statusCode >= 500) {
+                NetworkResponse response = error.networkResponse;
+                if (response != null && response.statusCode >= 500) {
                     BaiduDataModel.getInstance().deleteById(bd.mId);
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("下载图片时，服务器异常，认为图片已不能正常下载，所以删除本地库中的这条数据");

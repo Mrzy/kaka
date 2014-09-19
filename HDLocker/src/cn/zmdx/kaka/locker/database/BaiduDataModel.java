@@ -146,7 +146,7 @@ public class BaiduDataModel {
             while (cursor.moveToNext()) {
                 int isimagedownloaded = cursor.getInt(cursor
                         .getColumnIndex(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED));
-                isDownloaded = isimagedownloaded == MySqlitDatabase.DOWNLOAD_FALSE;
+                isDownloaded = isimagedownloaded == MySqlitDatabase.DOWNLOAD_TRUE;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,7 +164,7 @@ public class BaiduDataModel {
     public synchronized boolean markAlreadyDownload(int id) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, MySqlitDatabase.DOWNLOAD_FALSE);
+        values.put(TableStructure.CONTENT_IS_IMAGE_DOWNLOADED, MySqlitDatabase.DOWNLOAD_TRUE);
         int count = sqliteDatabase.update(TableStructure.TABLE_NAME_CONTENT, values,
                 TableStructure.CONTENT_ID + "=?", new String[] {
                     String.valueOf(id)
@@ -214,7 +214,7 @@ public class BaiduDataModel {
         Cursor cursor = sqliteDatabase.rawQuery("select count(*) from "
                 + TableStructure.TABLE_NAME_CONTENT + " where "
                 + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED + " = "
-                + MySqlitDatabase.DOWNLOAD_FALSE, null);
+                + MySqlitDatabase.DOWNLOAD_TRUE, null);
         try {
             while (cursor.moveToNext()) {
                 count = cursor.getInt(0);
@@ -252,7 +252,7 @@ public class BaiduDataModel {
                 TableStructure.CONTENT_DESCRIBE
         }, TableStructure.CONTENT_TAG1 + "=? and " + TableStructure.CONTENT_IS_IMAGE_DOWNLOADED
                 + "=?", new String[] {
-                tag1, String.valueOf(MySqlitDatabase.DOWNLOAD_FALSE)
+                tag1, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
         }, null, null, null, String.valueOf(count));
 
         try {

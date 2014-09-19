@@ -126,7 +126,7 @@ public class AnimationFactory {
 		centerX = fromView.getWidth() / 2.0f;
 		centerY = fromView.getHeight() / 2.0f;
 
-        FlipAnimation outFlip= new FlipAnimation(dir.getStartDegreeForFirstView(), dir.getEndDegreeForFirstView(), centerX, centerY, FlipAnimation.SCALE_DEFAULT, FlipAnimation.ScaleUpDownEnum.SCALE_DOWN);
+        FlipAnimation outFlip= new FlipAnimation(dir.getStartDegreeForFirstView(), dir.getEndDegreeForFirstView(), centerX, centerY, 0.5f, FlipAnimation.ScaleUpDownEnum.SCALE_DOWN);
 		outFlip.setDuration(duration);
 		outFlip.setFillAfter(true);
 		outFlip.setInterpolator(interpolator==null?new AccelerateInterpolator():interpolator);
@@ -144,7 +144,7 @@ public class AnimationFactory {
 		//centerX = toView.getWidth() / 2.0f;
 		//centerY = toView.getHeight() / 2.0f; 
 
-        FlipAnimation inFlip = new FlipAnimation(dir.getStartDegreeForSecondView(), dir.getEndDegreeForSecondView(), centerX, centerY, FlipAnimation.SCALE_DEFAULT, FlipAnimation.ScaleUpDownEnum.SCALE_UP);
+        FlipAnimation inFlip = new FlipAnimation(dir.getStartDegreeForSecondView(), dir.getEndDegreeForSecondView(), centerX, centerY, 0.5f, FlipAnimation.ScaleUpDownEnum.SCALE_UP);
 		inFlip.setDuration(duration);
 		inFlip.setFillAfter(true);
 		inFlip.setInterpolator(interpolator == null ? new AccelerateInterpolator() : interpolator);
@@ -190,12 +190,12 @@ public class AnimationFactory {
 		
 		final View toView = viewAnimator.getChildAt(nextIndex);
 
-		Animation[] animc = AnimationFactory.flipAnimation(fromView, toView, (nextIndex < currentIndex?dir.theOtherDirection():dir), duration, null);
+		Animation[] animc = AnimationFactory.flipAnimation(fromView, toView, (nextIndex < currentIndex?dir.theOtherDirection():dir), duration, new DecelerateInterpolator());
   
 		viewAnimator.setOutAnimation(animc[0]);
 		viewAnimator.setInAnimation(animc[1]);
 		
-		viewAnimator.showNext();   
+		viewAnimator.showNext();
 	}
 	
 	//////////////

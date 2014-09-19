@@ -12,6 +12,7 @@ import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.text.TextUtils;
 
 public class DiskImageHelper {
@@ -63,12 +64,12 @@ public class DiskImageHelper {
         return new File(mStorageDir, getHash(url));
     }
 
-    public static Bitmap getBitmapByUrl(String url) {
+    public static Bitmap getBitmapByUrl(String url, Options option) {
         File file = getFileByUrl(url);
         if (file == null) {
             return null;
         }
-        return BitmapFactory.decodeFile(file.getAbsolutePath());
+        return BitmapFactory.decodeFile(file.getAbsolutePath(), option);
     }
 
     public static void remove(String url) {

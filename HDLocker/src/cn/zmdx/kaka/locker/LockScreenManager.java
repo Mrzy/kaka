@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.FrameLayout;
@@ -18,11 +19,9 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 import cn.zmdx.kaka.locker.animation.AnimationFactory;
 import cn.zmdx.kaka.locker.animation.AnimationFactory.FlipDirection;
-import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.IPandoraBox;
-import cn.zmdx.kaka.locker.content.IPandoraBox.PandoraData;
+import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
-import cn.zmdx.kaka.locker.database.BaiduDataModel;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
@@ -115,7 +114,11 @@ public class LockScreenManager {
         if (contentView == null) {
             return;
         }
-        mBoxView.removeAllViews();
+        mBoxView.removeView(contentView);
+        ViewParent parent = contentView.getParent();
+        if (parent != null) {
+            ((ViewGroup) parent).removeView(contentView);
+        }
         ViewGroup.LayoutParams lp = mBoxView.getLayoutParams();
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -175,15 +178,21 @@ public class LockScreenManager {
             return;
 
         mWinManager.removeView(mEntireView);
+        mIsShowGesture = false;
         mIsLocked = false;
-        releaseResource();
+        syncDataIfNeeded();
     }
 
-    private void releaseResource() {
-        PandoraData data = mPandoraBox.getData();
-        if (data != null && data.getFrom() != PandoraBoxManager.DATA_FROM_DEFAULT) {
-            BaiduDataModel.getInstance().deleteById(data.getmId());
-            DiskImageHelper.remove(data.getmImageUrl());
+    private void syncDataIfNeeded() {
+        PandoraBoxDispatcher pd = PandoraBoxDispatcher.getInstance();
+        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
+        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_DATA);
+        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_TEXT_DATA);
+        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG)) {
+            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 10000);
+        }
+        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE)) {
+            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE, 5000);
         }
     }
 
@@ -227,10 +236,15 @@ public class LockScreenManager {
         mKeyholeView.setVisibility(View.INVISIBLE);
     }
 
+    private boolean mIsShowGesture = false;
+
     private boolean showGestureView() {
         int unlockType = PandoraConfig.newInstance(HDApplication.getInstannce()).getUnLockType();
         if (unlockType != PandoraConfig.UNLOCKER_TYPE_DEFAULT) {
-            AnimationFactory.flipTransition(mViewFlipper, FlipDirection.BOTTOM_TOP, 300);
+            if (!mIsShowGesture) {
+                AnimationFactory.flipTransition(mViewFlipper, FlipDirection.BOTTOM_TOP, 200);
+            }
+            mIsShowGesture = true;
             return true;
         }
         return false;
@@ -300,6 +314,10 @@ public class LockScreenManager {
         public void onPanelExpanded(View panel) {
             Log.e("zy", "onPanelExpanded");
             invisibleKeyhole();
+            if (mIsShowGesture) {
+                mViewFlipper.showPrevious();
+                mIsShowGesture = false;
+            }
         }
 
         @Override

@@ -3,6 +3,7 @@ package cn.zmdx.kaka.locker.database;
 
 import java.util.List;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import cn.zmdx.kaka.locker.HDApplication;
@@ -32,7 +33,7 @@ public class ServerImageDataModel {
         return sServerImageDataModel;
     }
 
-    public void saveServerImageData(List<ServerImageData> list) {
+    public synchronized void saveServerImageData(List<ServerImageData> list) {
         SQLiteDatabase mysql = mMySqlitDatabase.getWritableDatabase();
         try {
             mysql.beginTransaction();
@@ -59,6 +60,22 @@ public class ServerImageDataModel {
         } finally {
             mysql.endTransaction();
         }
+    }
 
+    public synchronized int queryTotalCount() {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        int count = 0;
+        Cursor cursor = sqliteDatabase.rawQuery("select count(*) from "
+                + TableStructure.TABLE_NAME_SERVER_IMAGE, null);
+        try {
+            while (cursor.moveToNext()) {
+                count = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return count;
     }
 }

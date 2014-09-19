@@ -16,7 +16,7 @@ public class PandoraService extends Service {
 
     @Override
     public void onCreate() {
-        registerBroadcastReceiver();
+//        registerBroadcastReceiver();
         super.onCreate();
     }
 
@@ -37,33 +37,10 @@ public class PandoraService extends Service {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("PandoraService onDestroy()");
         }
-        unRegisterBroadcastReceiver();
-        super.onDestroy();
+//        unRegisterBroadcastReceiver();
         startService(new Intent(this, PandoraService.class));
+        super.onDestroy();
     }
 
-    private void registerBroadcastReceiver() {
-        IntentFilter filter = new IntentFilter();
-        filter.setPriority(1000);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        filter.addAction(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_USER_PRESENT);
-        registerReceiver(mReceiver, filter);
-    }
 
-    private void unRegisterBroadcastReceiver() {
-        unregisterReceiver(mReceiver);
-    }
-
-    public final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("receive broadcast,action=" + action);
-            }
-            LockScreenManager.getInstance().lock();
-        }
-    };
 }

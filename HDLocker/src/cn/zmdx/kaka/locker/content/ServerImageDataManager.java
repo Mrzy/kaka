@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.os.Message;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.database.MySqlitDatabase;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
@@ -19,7 +20,19 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 public class ServerImageDataManager {
 
-    private String mBaseUrl = "http://192.168.1.103:8080/pandora/locker!queryDataImgTable.action?";
+    private String mBaseUrl = "http://192.168.1.120:8080/pandora/locker!queryDataImgTable.action?";
+
+    private static ServerImageDataManager INSTANCE;
+
+    private ServerImageDataManager() {
+    }
+
+    public static ServerImageDataManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ServerImageDataManager();
+        }
+        return INSTANCE;
+    }
 
     public void pullServerImageData(int limit, String dataType, String webSite) {
         JsonObjectRequest request = null;
@@ -39,8 +52,9 @@ public class ServerImageDataManager {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO
-                        error.printStackTrace();
+                        if (BuildConfig.DEBUG) {
+                            error.printStackTrace();
+                        }
                     }
                 });
         RequestManager.getRequestQueue().add(request);

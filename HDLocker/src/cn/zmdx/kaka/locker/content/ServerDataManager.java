@@ -8,8 +8,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.os.Message;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.database.ServerDataModel;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -18,8 +20,19 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 public class ServerDataManager {
 
-    private String mBaseUrl = "http://192.168.1.103:8080/pandora/locker!queryDataTable.action?";
+    private String mBaseUrl = "http://192.168.1.120:8080/pandora/locker!queryDataTable.action?";
 
+    private static ServerDataManager INSTANCE;
+    
+    private ServerDataManager() {
+    }
+
+    public static ServerDataManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ServerDataManager();
+        }
+        return INSTANCE;
+    }
     public void pullServerData(int limit, String dataType, String webSite) {
         JsonObjectRequest request = null;
         request = new JsonObjectRequest(getUrl(limit, dataType, webSite), null,
@@ -28,6 +41,12 @@ public class ServerDataManager {
                     @Override
                     public void onResponse(JSONObject response) {
                         final List<ServerData> sdList = ServerData.parseJson(response);
+                        if (sdList.size() <= 0) {
+                            if (BuildConfig.DEBUG) {
+                                HDBLOG.logD("拉取文本数据正常返回，但无数据");
+                            }
+                            return;
+                        }
                         Message msg = Message.obtain();
                         msg.what = PandoraBoxDispatcher.MSG_SERVER_DATA_ARRIVED;
                         msg.obj = sdList;
@@ -38,7 +57,6 @@ public class ServerDataManager {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO
                         error.printStackTrace();
                     }
                 });
