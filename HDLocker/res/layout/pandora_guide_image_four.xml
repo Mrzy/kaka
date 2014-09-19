@@ -13,12 +13,12 @@
         android:scaleType="centerCrop" />
 
     <ImageView
-        android:id="@+id/iv_start_weibo"
+        android:id="@+id/iv_start_locker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="108dp"
+        android:layout_marginBottom="160dp"
         android:background="@drawable/guide_image_click_btn"
         android:focusable="true" />
 
