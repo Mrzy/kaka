@@ -1,6 +1,7 @@
 
 package cn.zmdx.kaka.locker;
 
+import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
@@ -24,6 +25,7 @@ import cn.zmdx.kaka.locker.content.IPandoraBox;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -69,6 +71,8 @@ public class LockScreenManager {
 
     private Vibrator mVibrator;
 
+    private TextView mDate;
+
     private LockScreenManager() {
         mWinManager = (WindowManager) HDApplication.getInstannce().getSystemService(
                 Context.WINDOW_SERVICE);
@@ -108,6 +112,7 @@ public class LockScreenManager {
         initLockScreenViews();
 
         refreshContent();
+        setDate();
         mWinManager.addView(mEntireView, params);
     }
 
@@ -137,6 +142,7 @@ public class LockScreenManager {
         mLockPatternView = (LockPatternView) mEntireView.findViewById(R.id.gusture);
         mLockPatternView.setOnPatternListener(mPatternListener);
         mGusturePrompt = (TextView) mEntireView.findViewById(R.id.gusture_prompt);
+        mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
 
         mSliderView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mKeyView = mEntireView.findViewById(R.id.lock_key);
@@ -147,6 +153,14 @@ public class LockScreenManager {
         lp.setMargins(0, mKeyholeMarginTop, 0, 0);
         mKeyholeView.setLayoutParams(lp);
         setDrawable();
+    }
+
+    public void setDate() {
+        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        int week = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        String weekString = PandoraUtils.getWeekString(HDApplication.getInstannce(), week);
+        mDate.setText("" + month + "月" + "" + day + "日" + weekString);
     }
 
     private void combineIcon(boolean combine) {

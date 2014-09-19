@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.util.Calendar;
 import java.util.List;
 
 import android.content.ComponentName;
@@ -21,6 +22,7 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import cn.zmdx.kaka.locker.R;
 
 public class PandoraUtils {
     private PandoraUtils() {
@@ -171,5 +173,37 @@ public class PandoraUtils {
             e1.printStackTrace();
         }
         return statusBarHeight;
+    }
+
+    public static String getWeekString(Context mContext, int weekInt) {
+        String weekString = "";
+        switch (weekInt) {
+            case Calendar.MONDAY:
+                weekString = mContext.getResources().getString(R.string.lock_week_monday);
+                break;
+            case Calendar.TUESDAY:
+                weekString = mContext.getResources().getString(R.string.lock_week_tuesday);
+                break;
+            case Calendar.WEDNESDAY:
+                weekString = mContext.getResources().getString(R.string.lock_week_wednesday);
+                break;
+            case Calendar.THURSDAY:
+                weekString = mContext.getResources().getString(R.string.lock_week_thursday);
+                break;
+            case Calendar.FRIDAY:
+                weekString = mContext.getResources().getString(R.string.lock_week_friday);
+                break;
+            case Calendar.SATURDAY:
+                weekString = mContext.getResources().getString(R.string.lock_week_saturday);
+                break;
+            case Calendar.SUNDAY:
+                weekString = mContext.getResources().getString(R.string.lock_week_sunday);
+                break;
+
+            default:
+                break;
+        }
+
+        return weekString;
     }
 }

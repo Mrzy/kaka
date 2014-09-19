@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap.CompressFormat;
 import cn.zmdx.kaka.locker.cache.ImageCacheManager;
 import cn.zmdx.kaka.locker.cache.ImageCacheManager.CacheType;
-import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.settings.config.CrashHandler;
 import cn.zmdx.kaka.locker.utils.HDBEventSource;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -41,8 +40,8 @@ public class HDApplication extends Application {
         RequestManager.init(this);
         // createImageCache();
         // Pull baidu image data to local db
-//        PandoraBoxDispatcher.getInstance().sendEmptyMessage(
-//                PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
+        // PandoraBoxDispatcher.getInstance().sendEmptyMessage(
+        // PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
         super.onCreate();
