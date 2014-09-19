@@ -39,11 +39,9 @@
     <string name="setting_MIUI_trust_detail">保证潘多拉锁屏可以获取必须的权限</string>
     <string name="setting_MIUI_to_set">前往设置</string>
     <string name="setting_MIUI_complete_to_set">设置完成</string>
-    
     <string name="setting_MIUI_close_systemlocker_prompt"></string>
     <string name="setting_MIUI_allow_floating_window_prompt">请开启显示悬浮窗开关</string>
     <string name="setting_MIUI_trust_prompt">请开启我信任该程序开关\n再开启自动启动开关</string>
-    
-    
+    <string name="app_name">潘多拉锁屏</string>
 
 </resources>
