@@ -1,148 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/init_setting_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/setting_background_blue"
     android:baselineAligned="true"
     android:clickable="true"
-    android:fillViewport="true"
-    android:orientation="vertical"
-    android:overScrollMode="never"
-    android:scrollbars="none" >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="#60000000"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <cn.zmdx.kaka.locker.widget.DragScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/init_setting_title_layout_margin_top"
-            android:orientation="vertical" >
-
-            <TextView
-                style="@style/init_setting_big_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/init_setting_title_textview_margin_bottom"
-                android:layout_marginLeft="@dimen/init_setting_title_textview_margin_top"
-                android:gravity="left"
-                android:text="@string/init_setting_title" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/init_setting_title_line_height"
-                android:contentDescription="@string/contentDescription"
-                android:scaleType="fitXY"
-                android:src="@drawable/setting_miui_line" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/init_setting_item_margin_left"
-            android:layout_marginRight="@dimen/init_setting_item_margin_right"
-            android:layout_marginTop="@dimen/init_setting_item_margin_top"
-            android:orientation="vertical" >
-
-            <TextView
-                style="@style/init_setting_big_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_close_systemlocker" />
-
-            <TextView
-                style="@style/init_setting_small_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_close_systemlocker_detail" />
-
-            <Button
-                android:id="@+id/init_setting_close_systemlocker_to_set"
-                style="@style/init_setting_button"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/init_setting_button_height"
-                android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                android:background="@drawable/init_setting_button_selector"
-                android:text="@string/init_setting_to_set" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/init_setting_MIUI_allow_floating_window_guide"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/init_setting_item_margin_left"
-            android:layout_marginRight="@dimen/init_setting_item_margin_right"
-            android:layout_marginTop="@dimen/init_setting_item_margin_top"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
             android:orientation="vertical"
-            android:visibility="gone" >
+            android:overScrollMode="never"
+            android:scrollbars="none" >
 
-            <TextView
-                style="@style/init_setting_big_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_MIUI_allow_floating_window" />
-
-            <TextView
-                style="@style/init_setting_small_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_MIUI_allow_floating_window_detail" />
-
-            <Button
-                android:id="@+id/init_setting_MIUI_allow_floating_window_to_set"
-                style="@style/init_setting_button"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/init_setting_button_height"
-                android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                android:background="@drawable/init_setting_button_selector"
-                android:text="@string/init_setting_to_set" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/init_setting_MIUI_trust_guide"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/init_setting_item_margin_left"
-            android:layout_marginRight="@dimen/init_setting_item_margin_right"
-            android:layout_marginTop="@dimen/init_setting_item_margin_top"
-            android:orientation="vertical"
-            android:visibility="gone" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/init_setting_title_layout_margin_top"
+                    android:orientation="vertical" >
 
-            <TextView
-                style="@style/init_setting_big_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_MIUI_trust" />
+                    <TextView
+                        style="@style/init_setting_big_textview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/init_setting_title_textview_margin_bottom"
+                        android:layout_marginLeft="@dimen/init_setting_title_textview_margin_top"
+                        android:gravity="left"
+                        android:text="@string/init_setting_title" />
 
-            <TextView
-                style="@style/init_setting_small_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_MIUI_trust_detail" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/init_setting_title_line_height"
+                        android:contentDescription="@string/contentDescription"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/setting_miui_line" />
+                </LinearLayout>
 
-            <Button
-                android:id="@+id/init_setting_MIUI_trust_to_set"
-                style="@style/init_setting_button"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/init_setting_button_height"
-                android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                android:background="@drawable/init_setting_button_selector"
-                android:text="@string/init_setting_to_set" />
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/init_setting_item_margin_left"
+                    android:layout_marginRight="@dimen/init_setting_item_margin_right"
+                    android:layout_marginTop="@dimen/init_setting_item_margin_top"
+                    android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/init_setting_miui_complete"
-            style="@style/init_setting_button"
-            android:layout_width="@dimen/init_setting_complete_button_width"
-            android:layout_height="@dimen/init_setting_button_height"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/init_setting_complete_button_margin_top"
-            android:background="@drawable/init_setting_button_selector"
-            android:text="@string/init_setting_complete_to_set" />
+                    <TextView
+                        style="@style/init_setting_big_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_close_systemlocker" />
+
+                    <TextView
+                        style="@style/init_setting_small_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_close_systemlocker_detail" />
+
+                    <Button
+                        android:id="@+id/init_setting_close_systemlocker_to_set"
+                        style="@style/init_setting_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/init_setting_button_height"
+                        android:layout_marginTop="@dimen/init_setting_button_margin_top"
+                        android:background="@drawable/init_setting_button_selector"
+                        android:text="@string/init_setting_to_set" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/init_setting_MIUI_allow_floating_window_guide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/init_setting_item_margin_left"
+                    android:layout_marginRight="@dimen/init_setting_item_margin_right"
+                    android:layout_marginTop="@dimen/init_setting_item_margin_top"
+                    android:orientation="vertical"
+                    android:visibility="gone" >
+
+                    <TextView
+                        style="@style/init_setting_big_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_MIUI_allow_floating_window" />
+
+                    <TextView
+                        style="@style/init_setting_small_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_MIUI_allow_floating_window_detail" />
+
+                    <Button
+                        android:id="@+id/init_setting_MIUI_allow_floating_window_to_set"
+                        style="@style/init_setting_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/init_setting_button_height"
+                        android:layout_marginTop="@dimen/init_setting_button_margin_top"
+                        android:background="@drawable/init_setting_button_selector"
+                        android:text="@string/init_setting_to_set" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/init_setting_MIUI_trust_guide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/init_setting_item_margin_left"
+                    android:layout_marginRight="@dimen/init_setting_item_margin_right"
+                    android:layout_marginTop="@dimen/init_setting_item_margin_top"
+                    android:orientation="vertical"
+                    android:visibility="gone" >
+
+                    <TextView
+                        style="@style/init_setting_big_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_MIUI_trust" />
+
+                    <TextView
+                        style="@style/init_setting_small_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_MIUI_trust_detail" />
+
+                    <Button
+                        android:id="@+id/init_setting_MIUI_trust_to_set"
+                        style="@style/init_setting_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/init_setting_button_height"
+                        android:layout_marginTop="@dimen/init_setting_button_margin_top"
+                        android:background="@drawable/init_setting_button_selector"
+                        android:text="@string/init_setting_to_set" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/init_setting_miui_complete"
+                    style="@style/init_setting_button"
+                    android:layout_width="@dimen/init_setting_complete_button_width"
+                    android:layout_height="@dimen/init_setting_button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/init_setting_complete_button_margin_top"
+                    android:background="@drawable/init_setting_button_selector"
+                    android:text="@string/init_setting_complete_to_set" />
+            </LinearLayout>
+        </cn.zmdx.kaka.locker.widget.DragScrollView>
     </LinearLayout>
 
-</ScrollView>
+</LinearLayout>

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
-import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class MySqlitDatabase extends SQLiteOpenHelper {
@@ -70,7 +70,7 @@ public class MySqlitDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (PandoraConfig.sDebug) {
+        if (BuildConfig.DEBUG) {
             HDBLOG.logD("oldVersion : " + oldVersion + "newVersion : " + newVersion);
         }
         switch (oldVersion) {
