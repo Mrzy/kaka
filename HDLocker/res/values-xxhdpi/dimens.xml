@@ -43,6 +43,9 @@
     <dimen name="setting_about_pandora_version_height">30dp</dimen>
     <dimen name="setting_about_pandora_margin_one">17dp</dimen>
     <dimen name="setting_about_cooperation_margin">0dp</dimen>
+    
+    <dimen name="pandora_box_nodata_show_image_width">100dp</dimen>
+    <dimen name="pandora_box_nodata_show_image_height">100dp</dimen>
 
     <dimen name="locker_key_padding_top">15dp</dimen>
     <dimen name="lockscreen_gusture_padding_top">25dp</dimen>

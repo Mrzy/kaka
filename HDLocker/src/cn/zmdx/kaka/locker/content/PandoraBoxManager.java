@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.R.layout;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
 import cn.zmdx.kaka.locker.content.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.ServerDataManager.ServerData;
@@ -192,6 +193,6 @@ public class PandoraBoxManager {
         pd.setmImage(BitmapFactory.decodeResource(mContext.getResources(),
                 R.drawable.pandora_box_default));
         pd.setFrom(DATA_FROM_DEFAULT);
-        return new SingleImageBox(mContext, pd);
+        return new DefaultBox(mContext);
     }
 }
