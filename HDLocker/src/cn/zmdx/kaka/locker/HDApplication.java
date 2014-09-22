@@ -42,8 +42,8 @@ public class HDApplication extends Application {
         // Pull baidu image data to local db
         // PandoraBoxDispatcher.getInstance().sendEmptyMessage(
         // PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(getApplicationContext());
+//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        crashHandler.init(getApplicationContext());
         super.onCreate();
     }
 
