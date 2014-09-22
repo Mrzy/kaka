@@ -4,7 +4,6 @@ package cn.zmdx.kaka.locker.widget;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
@@ -70,7 +69,6 @@ public class DragScrollView extends ScrollView {
 
                 y = nowY;
                 // 当滚动到最上或者最下时就不会再滚动，这时移动布局
-                Log.d("syc", "isNeedMove()=" + isNeedMove());
                 if (isNeedMove()) {
                     if (normal.isEmpty()) {
                         // 保存正常的布局位置

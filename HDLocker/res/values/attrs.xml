@@ -19,7 +19,7 @@
         <attr name="dragView" format="reference" />
         <attr name="overlay" format="boolean" />
         <attr name="anchorPoint" format="float" />
-        <attr name ="foregroundDrawable" format="reference" />
+        <attr name="foregroundDrawable" format="reference" />
         <attr name="initialState" format="enum">
             <enum name="expanded" value="0" />
             <enum name="collapsed" value="1" />
@@ -34,6 +34,9 @@
         <attr name="sliderDrawable" format="reference|color" />
         <attr name="sliderCloseDrawable" format="reference|color" />
         <attr name="withTextInterval" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="MyDigialClock">
+        <attr name="format" format="integer" />
     </declare-styleable>
 
 </resources>

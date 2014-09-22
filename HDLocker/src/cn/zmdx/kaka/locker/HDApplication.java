@@ -2,16 +2,10 @@
 package cn.zmdx.kaka.locker;
 
 import android.app.Application;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap.CompressFormat;
 import cn.zmdx.kaka.locker.cache.ImageCacheManager;
 import cn.zmdx.kaka.locker.cache.ImageCacheManager.CacheType;
-import cn.zmdx.kaka.locker.settings.config.CrashHandler;
 import cn.zmdx.kaka.locker.utils.HDBEventSource;
-import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class HDApplication extends Application {
 
