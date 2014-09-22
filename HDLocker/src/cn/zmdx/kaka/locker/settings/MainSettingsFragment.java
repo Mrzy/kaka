@@ -267,6 +267,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         }
     }
 
+    @Override
+    public void onResume() {
+        mPandoraLockerSButton.setChecked(isPandoraLockerOn());
+        super.onResume();
+    }
     private void showGustureView(final int type) {
         View decorView = getActivity().getWindow().getDecorView();
         Bitmap blurBitmap = PandoraUtils.fastBlur(decorView);

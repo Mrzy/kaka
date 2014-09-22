@@ -12,6 +12,9 @@ public class PandoraReceiver extends BroadcastReceiver {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             Intent service = new Intent(context, PandoraService.class);
             context.startService(service);
+        } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
+            Intent service = new Intent(context, PandoraService.class);
+            context.startService(service);
         }
     }
 }

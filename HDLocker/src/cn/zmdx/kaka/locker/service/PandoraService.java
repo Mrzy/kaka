@@ -17,23 +17,24 @@ public class PandoraService extends Service {
 
     @Override
     public void onCreate() {
-         registerBroadcastReceiver();
-         TelephonyManager manager = (TelephonyManager) this  
-                 .getSystemService(TELEPHONY_SERVICE);  
-         manager.listen(new MyPhoneListener(),  
-                 PhoneStateListener.LISTEN_CALL_STATE);  
+        registerBroadcastReceiver();
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        manager.listen(new MyPhoneListener(), PhoneStateListener.LISTEN_CALL_STATE);
         super.onCreate();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
+    @Override
     public boolean onUnbind(Intent intent) {
-        // TODO Auto-generated method stub
         return super.onUnbind(intent);
     }
 
@@ -42,7 +43,7 @@ public class PandoraService extends Service {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("PandoraService onDestroy()");
         }
-         unRegisterBroadcastReceiver();
+        unRegisterBroadcastReceiver();
         startService(new Intent(this, PandoraService.class));
         super.onDestroy();
     }
@@ -52,7 +53,6 @@ public class PandoraService extends Service {
         filter.setPriority(1000);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         // filter.addAction(Intent.ACTION_SCREEN_ON);
-//        filter.addAction(Intent.ACTION_USER_PRESENT);
         registerReceiver(mReceiver, filter);
     }
 
@@ -65,23 +65,23 @@ public class PandoraService extends Service {
         public void onCallStateChanged(int state, String incomingNumber) {
             try {
                 switch (state) {
-                case TelephonyManager.CALL_STATE_IDLE: // 当前电话处于闲置状态
-                    if (BuildConfig.DEBUG) {
-                        HDBLOG.logD("当前电话处于闲置状态CALL_STATE_IDLE");
-                    }
-                    LockScreenManager.getInstance().lock();
-                    break;
-                case TelephonyManager.CALL_STATE_RINGING: // 当前电话处于零响状态
-                    if (BuildConfig.DEBUG) {
-                        HDBLOG.logD("CALL_STATE_RINGING电话号码为 " + incomingNumber);
-                    }
-                    LockScreenManager.getInstance().unLock();
-                    break;
-                case TelephonyManager.CALL_STATE_OFFHOOK: // 当前电话处于接听状态
-                    if (BuildConfig.DEBUG) {
-                        HDBLOG.logD("当前电话处于通话状态CALL_STATE_OFFHOOK ");
-                    }
-                    break;
+                    case TelephonyManager.CALL_STATE_IDLE: // 当前电话处于闲置状态
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("当前电话处于闲置状态CALL_STATE_IDLE");
+                        }
+                        LockScreenManager.getInstance().lock();
+                        break;
+                    case TelephonyManager.CALL_STATE_RINGING: // 当前电话处于零响状态
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("CALL_STATE_RINGING电话号码为 " + incomingNumber);
+                        }
+                        LockScreenManager.getInstance().unLock();
+                        break;
+                    case TelephonyManager.CALL_STATE_OFFHOOK: // 当前电话处于接听状态
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("当前电话处于通话状态CALL_STATE_OFFHOOK ");
+                        }
+                        break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -89,7 +89,7 @@ public class PandoraService extends Service {
             super.onCallStateChanged(state, incomingNumber);
         }
     }
-    
+
     public final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override

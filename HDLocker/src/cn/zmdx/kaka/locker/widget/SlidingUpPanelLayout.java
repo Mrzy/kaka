@@ -1,6 +1,7 @@
 
 package cn.zmdx.kaka.locker.widget;
 
+import android.R.color;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
@@ -20,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -397,8 +400,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 mSlideState = SlideState.values()[ta.getInt(
                         R.styleable.SlidingUpPanelLayout_initialState,
                         DEFAULT_SLIDE_STATE.ordinal())];
-                mForegroundDrawable = ta
-                        .getDrawable(R.styleable.SlidingUpPanelLayout_foregroundDrawable);
+                    mForegroundDrawable = ta
+                            .getDrawable(R.styleable.SlidingUpPanelLayout_foregroundDrawable);
             }
 
             ta.recycle();

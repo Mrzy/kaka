@@ -76,16 +76,15 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"
-                    android:textSize="40sp"
-                    clock:format="24" />
-
+                    clock:format="24"
+                    android:textSize="35sp" />
                 <TextView
                     android:id="@+id/lock_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -106,11 +105,17 @@
         </RelativeLayout>
     </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
 
-    <ImageView
-        android:id="@+id/keyhole"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:visibility="invisible" />
+    <RelativeLayout
+        android:id="@+id/keyholeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/keyhole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible" />
+    </RelativeLayout>
 
 </FrameLayout>

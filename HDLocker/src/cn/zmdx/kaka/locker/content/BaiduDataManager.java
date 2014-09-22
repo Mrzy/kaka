@@ -96,10 +96,8 @@ public class BaiduDataManager {
         }, new ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error.networkResponse.statusCode >= 500) {
                     // invalidate url
                     DiskImageHelper.remove(bd.mImageUrl);
-                }
             }
         });
         RequestManager.getRequestQueue().add(request);

@@ -51,7 +51,7 @@ public class LockScreenManager {
 
     private ViewFlipper mViewFlipper;
 
-    private ViewGroup mBoxView;
+    private ViewGroup mBoxView, mKeyholeLayout;
 
     private static LockScreenManager INSTANCE = null;
 
@@ -90,6 +90,10 @@ public class LockScreenManager {
     public void lock() {
         if (mIsLocked)
             return;
+        boolean isLockerOn = PandoraConfig.newInstance(HDApplication.getInstannce()).isPandolaLockerOn();
+        if (!isLockerOn) {
+            return;
+        }
 
         mIsLocked = true;
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
@@ -148,10 +152,11 @@ public class LockScreenManager {
         mKeyView = mEntireView.findViewById(R.id.lock_key);
         mSliderView.setPanelSlideListener(mSlideListener);
         mKeyholeView = (ImageView) mEntireView.findViewById(R.id.keyhole);
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mKeyholeView.getLayoutParams();
+        mKeyholeLayout = (ViewGroup) mEntireView.findViewById(R.id.keyholeLayout);
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mKeyholeLayout.getLayoutParams();
         calKeyholeMarginTop();
         lp.setMargins(0, mKeyholeMarginTop, 0, 0);
-        mKeyholeView.setLayoutParams(lp);
+        mKeyholeLayout.setLayoutParams(lp);
         setDrawable();
     }
 

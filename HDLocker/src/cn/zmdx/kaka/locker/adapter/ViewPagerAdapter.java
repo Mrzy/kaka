@@ -14,9 +14,11 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.InitSettingActivity;
 import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 /**
  * 引导页面适配器
@@ -67,7 +69,7 @@ public class ViewPagerAdapter extends PagerAdapter {
                     // 设置已经引导
                     setGuided();
                     goHome();
-
+                    PandoraConfig.newInstance(mActivity).savePandolaLockerState(true);
                 }
 
             });

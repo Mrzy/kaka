@@ -46,7 +46,7 @@ public class PandoraBoxManager {
     private static final int TYPE_MIX_IMG_TEXT = 2;
 
     private final int[] DISPLAY_TYPE = {
-            TYPE_PLAIN_TEXT, TYPE_MIX_IMG_TEXT
+            TYPE_PLAIN_TEXT, TYPE_MIX_IMG_TEXT, TYPE_MIX_IMG_TEXT, TYPE_MIX_IMG_TEXT, TYPE_MIX_IMG_TEXT, TYPE_MIX_IMG_TEXT, TYPE_MIX_IMG_TEXT
     };
 
     private static long mPreDisplayTime;
@@ -77,6 +77,7 @@ public class PandoraBoxManager {
                 case DATA_FROM_BAIDU:
                     BaiduDataModel.getInstance().deleteById(data.getmId());
                     DiskImageHelper.remove(data.getmImageUrl());
+                    recycleBitmap(data.getmImage());
                     mPreDisplayBox = null;
                     break;
                 case DATA_FROM_SERVER_TEXT:
@@ -86,9 +87,18 @@ public class PandoraBoxManager {
                 case DATA_FROM_SERVER_IMG:
                     BaiduDataModel.getInstance().deleteById(data.getmId());
                     DiskImageHelper.remove(data.getmImageUrl());
+                    recycleBitmap(data.getmImage());
                     mPreDisplayBox = null;
                     break;
             }
+        }
+    }
+
+    private void recycleBitmap(Bitmap bmp) {
+        if (bmp != null && !bmp.isRecycled()) {
+            bmp.recycle();
+            bmp = null;
+            System.gc();
         }
     }
 

@@ -38,6 +38,6 @@ public class PandoraPolicy {
 //     BaiduTagMapping.INT_TAG1_SHEYING
 //     };
 
-    public static final long MIN_INTERVAL_SAME_BOX = 1000 * 60;// 1 min
+    public static final long MIN_INTERVAL_SAME_BOX = 1000;// 1 min
 
 }

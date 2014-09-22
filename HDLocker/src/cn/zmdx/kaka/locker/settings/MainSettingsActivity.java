@@ -69,12 +69,11 @@ public class MainSettingsActivity extends FragmentActivity {
         if (isFirstIn) {
             mHandler.sendEmptyMessage(GO_GUIDE);
         }
-
     }
 
     private void goGuide() {
         Intent intent = new Intent(this, GuideActivity.class);
-        this.startActivity(intent);
+        startActivity(intent);
     }
 
     @Override
