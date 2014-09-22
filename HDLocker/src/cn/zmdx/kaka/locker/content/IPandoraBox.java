@@ -14,6 +14,8 @@ public interface IPandoraBox {
 
     public static final int CATEGORY_HTML = 3;
 
+    public static final int CATEGORY_DEFAULT = 4;
+
     public int getCategory();
 
     public PandoraData getData();

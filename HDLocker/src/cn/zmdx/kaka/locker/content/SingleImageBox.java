@@ -16,9 +16,9 @@ public class SingleImageBox implements IPandoraBox {
     private PandoraData mData;
 
     private ViewGroup mEntireView;
-    
+
     private ImageView mSingleImgView;
-    
+
     private TextView mDescView;
 
     private boolean mIsRendered = false;

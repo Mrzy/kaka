@@ -1,7 +1,6 @@
 
 package cn.zmdx.kaka.locker.widget;
 
-import android.R.color;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -10,7 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
@@ -22,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
-import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -231,6 +228,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
     private final ViewDragHelper mDragHelper;
 
+    private Context mContext;
+
     /**
      * Stores whether or not the pane was expanded the last time it was
      * slideable. If expand/collapse operations are invoked this state is
@@ -350,6 +349,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
     public SlidingUpPanelLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
+        mContext = context;
+
         if (isInEditMode()) {
             mTopShadowDrawable = null;
             mBottomShadowDrawable = null;
@@ -400,8 +401,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 mSlideState = SlideState.values()[ta.getInt(
                         R.styleable.SlidingUpPanelLayout_initialState,
                         DEFAULT_SLIDE_STATE.ordinal())];
-                    mForegroundDrawable = ta
-                            .getDrawable(R.styleable.SlidingUpPanelLayout_foregroundDrawable);
+                mForegroundDrawable = ta
+                        .getDrawable(R.styleable.SlidingUpPanelLayout_foregroundDrawable);
             }
 
             ta.recycle();

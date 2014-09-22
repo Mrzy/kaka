@@ -4,8 +4,11 @@ package cn.zmdx.kaka.locker;
 import java.util.Calendar;
 import java.util.List;
 
+import android.app.KeyguardManager;
+import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.Gravity;
@@ -73,11 +76,24 @@ public class LockScreenManager {
 
     private TextView mDate;
 
+    private KeyguardLock mKeyguard;
+
     private LockScreenManager() {
         mWinManager = (WindowManager) HDApplication.getInstannce().getSystemService(
                 Context.WINDOW_SERVICE);
         mVibrator = (Vibrator) HDApplication.getInstannce().getSystemService(
                 Context.VIBRATOR_SERVICE);
+        KeyguardManager keyguard = (KeyguardManager) HDApplication.getInstannce().getSystemService(Context.KEYGUARD_SERVICE);
+        mKeyguard = keyguard.newKeyguardLock("pandora");
+        disableSystemLock();
+    }
+
+    public void disableSystemLock() {
+        mKeyguard.disableKeyguard();
+    }
+
+    public void enableSystemLock() {
+        mKeyguard.reenableKeyguard();
     }
 
     public static LockScreenManager getInstance() {
@@ -99,8 +115,11 @@ public class LockScreenManager {
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
 
         params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        params.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
+        params.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | LayoutParams.FLAG_LAYOUT_IN_SCREEN | LayoutParams.FLAG_HARDWARE_ACCELERATED;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            params.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS | LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+        }
 
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
 
@@ -135,6 +154,7 @@ public class LockScreenManager {
         ViewGroup.LayoutParams lp = mBoxView.getLayoutParams();
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        contentView.requestLayout();
         mBoxView.addView(contentView, lp);
     }
 

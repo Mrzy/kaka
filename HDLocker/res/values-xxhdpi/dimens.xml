@@ -44,7 +44,7 @@
     <dimen name="setting_about_pandora_margin_one">17dp</dimen>
     <dimen name="setting_about_cooperation_margin">0dp</dimen>
 
-    <dimen name="locker_key_padding_top">6dp</dimen>
+    <dimen name="locker_key_padding_top">15dp</dimen>
     <dimen name="lockscreen_gusture_padding_top">25dp</dimen>
     
     <dimen name="init_setting_title_layout_margin_bottom">8dp</dimen>

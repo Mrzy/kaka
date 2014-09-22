@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import java.lang.ref.WeakReference;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,21 +27,26 @@ public class MainSettingsActivity extends FragmentActivity {
 
     private static final String SHAREDPREFERENCES_NAME = "first_pref";
 
-    /**
-     * Handler:跳转到不同界面
-     */
-    private Handler mHandler = new Handler() {
+    private MyHandler mHandler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        WeakReference<MainSettingsActivity> mActivity;
+
+        public MyHandler(MainSettingsActivity activity) {
+            mActivity = new WeakReference<MainSettingsActivity>(activity);
+        }
 
         @Override
         public void handleMessage(Message msg) {
+            MainSettingsActivity activity = mActivity.get();
             switch (msg.what) {
                 case GO_GUIDE:
-                    goGuide();
+                    activity.goGuide();
                     break;
             }
             super.handleMessage(msg);
         }
-    };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
