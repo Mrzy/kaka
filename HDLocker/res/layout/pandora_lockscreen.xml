@@ -76,8 +76,9 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"
-                    clock:format="24"
-                    android:textSize="35sp" />
+                    android:textSize="40sp"
+                    clock:format="24" />
+
                 <TextView
                     android:id="@+id/lock_date"
                     android:layout_width="match_parent"
