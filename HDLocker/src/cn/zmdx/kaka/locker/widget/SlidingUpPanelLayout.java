@@ -31,7 +31,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
     private static final String TAG = SlidingUpPanelLayout.class.getSimpleName();
 
-    private static final int MIN_DURATION_TO_FIXED = 500;
+    private static final int MIN_DURATION_TO_FIXED = 300;
 
     /**
      * Default peeking out panel height
