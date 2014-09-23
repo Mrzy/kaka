@@ -8,6 +8,7 @@ import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Vibrator;
 import android.util.Log;
@@ -83,7 +84,8 @@ public class LockScreenManager {
                 Context.WINDOW_SERVICE);
         mVibrator = (Vibrator) HDApplication.getInstannce().getSystemService(
                 Context.VIBRATOR_SERVICE);
-        KeyguardManager keyguard = (KeyguardManager) HDApplication.getInstannce().getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager keyguard = (KeyguardManager) HDApplication.getInstannce().getSystemService(
+                Context.KEYGUARD_SERVICE);
         mKeyguard = keyguard.newKeyguardLock("pandora");
         disableSystemLock();
     }
@@ -106,7 +108,8 @@ public class LockScreenManager {
     public void lock() {
         if (mIsLocked)
             return;
-        boolean isLockerOn = PandoraConfig.newInstance(HDApplication.getInstannce()).isPandolaLockerOn();
+        boolean isLockerOn = PandoraConfig.newInstance(HDApplication.getInstannce())
+                .isPandolaLockerOn();
         if (!isLockerOn) {
             return;
         }
@@ -115,10 +118,12 @@ public class LockScreenManager {
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
 
         params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        params.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | LayoutParams.FLAG_LAYOUT_IN_SCREEN | LayoutParams.FLAG_HARDWARE_ACCELERATED;
+        params.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
+                | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                | LayoutParams.FLAG_HARDWARE_ACCELERATED;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            params.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS | LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+            params.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
         }
 
         params.width = WindowManager.LayoutParams.MATCH_PARENT;

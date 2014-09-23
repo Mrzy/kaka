@@ -3,11 +3,10 @@ package cn.zmdx.kaka.locker.widget;
 
 import java.util.Calendar;
 
-import cn.zmdx.kaka.locker.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -16,6 +15,7 @@ import android.util.AttributeSet;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.DigitalClock;
+import cn.zmdx.kaka.locker.R;
 
 @SuppressWarnings("deprecation")
 public class MyDigitalClock extends DigitalClock {
@@ -48,6 +48,9 @@ public class MyDigitalClock extends DigitalClock {
     private int m24HourMode;
 
     private void initClock(AttributeSet attrs) {
+        Typeface face = Typeface
+                .createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
+        setTypeface(face);
         if (mCalendar == null) {
             mCalendar = Calendar.getInstance();
         }
