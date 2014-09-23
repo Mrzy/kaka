@@ -8,6 +8,7 @@
     android:baselineAligned="true"
     android:orientation="vertical"
     android:overScrollMode="never"
+    android:clickable="false"
     android:scrollbars="none" >
 
     <LinearLayout
