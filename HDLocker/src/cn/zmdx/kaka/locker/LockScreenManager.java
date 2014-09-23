@@ -225,7 +225,7 @@ public class LockScreenManager {
         int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         int week = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         String weekString = PandoraUtils.getWeekString(HDApplication.getInstannce(), week);
-        mDate.setText("" + month + "月" + "" + day + "日" + weekString);
+        mDate.setText("" + month + "月" + "" + day + "日 " + weekString);
     }
 
     private void combineIcon(boolean combine) {
