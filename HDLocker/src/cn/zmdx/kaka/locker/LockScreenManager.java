@@ -44,7 +44,9 @@ import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
 
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
+import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
 public class LockScreenManager {
@@ -60,6 +62,8 @@ public class LockScreenManager {
     private static LockScreenManager INSTANCE = null;
 
     private WindowManager mWinManager = null;
+
+    private PandoraConfig mPandoraConfig;
 
     private boolean mIsLocked = false;
 
@@ -79,6 +83,14 @@ public class LockScreenManager {
 
     private KeyguardLock mKeyguard;
 
+    private TextView mLockPrompt;
+
+    private ImageView mLockArrow;
+
+    private AnimatorSet mAnimatorSet;
+
+    private int mGuideTimes;
+
     private LockScreenManager() {
         mWinManager = (WindowManager) HDApplication.getInstannce().getSystemService(
                 Context.WINDOW_SERVICE);
@@ -87,6 +99,7 @@ public class LockScreenManager {
         KeyguardManager keyguard = (KeyguardManager) HDApplication.getInstannce().getSystemService(
                 Context.KEYGUARD_SERVICE);
         mKeyguard = keyguard.newKeyguardLock("pandora");
+        mPandoraConfig = PandoraConfig.newInstance(HDApplication.getInstannce());
         disableSystemLock();
     }
 
@@ -113,7 +126,7 @@ public class LockScreenManager {
         if (!isLockerOn) {
             return;
         }
-
+        mGuideTimes = mPandoraConfig.getGuideTimesInt();
         mIsLocked = true;
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
 
@@ -172,6 +185,28 @@ public class LockScreenManager {
         mLockPatternView.setOnPatternListener(mPatternListener);
         mGusturePrompt = (TextView) mEntireView.findViewById(R.id.gusture_prompt);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
+        mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(mLockPrompt, "alpha", 1, 0.2f, 1);
+        objectAnimator.setDuration(2000);
+        objectAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        objectAnimator.setRepeatCount(-1);
+        objectAnimator.start();
+
+        mLockArrow = (ImageView) mEntireView.findViewById(R.id.lock_arrow1);
+        int lenght = (int) HDApplication.getInstannce().getResources()
+                .getDimension(R.dimen.locker_arrow_move_lenght);
+        ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(mLockArrow, "alpha", 0, 1, 0);
+        objectAnimatorAlpha.setDuration(2000);
+        objectAnimatorAlpha.setRepeatMode(ValueAnimator.RESTART);
+        objectAnimatorAlpha.setRepeatCount(-1);
+        ObjectAnimator objectAnimatorTranslate = ObjectAnimator.ofFloat(mLockArrow, "translationY",
+                0, lenght);
+        objectAnimatorTranslate.setDuration(2000);
+        objectAnimatorTranslate.setRepeatMode(ValueAnimator.RESTART);
+        objectAnimatorTranslate.setRepeatCount(-1);
+        mAnimatorSet = new AnimatorSet();
+        mAnimatorSet.playTogether(objectAnimatorTranslate, objectAnimatorAlpha);
+        mAnimatorSet.start();
 
         mSliderView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mKeyView = mEntireView.findViewById(R.id.lock_key);
@@ -349,10 +384,19 @@ public class LockScreenManager {
             } else {
                 combineIcon(false);
             }
+            if (mGuideTimes < 3) {
+                if (slideOffset < 1 && slideOffset > 0) {
+                    if (null != mLockPrompt) {
+                        mLockPrompt.setText(HDApplication.getInstannce().getResources()
+                                .getString(R.string.lock_guide_prompt_one));
+                    }
+                }
+            }
         }
 
         @Override
         public void onPanelCollapsed(View panel) {
+            Log.e("zy", "onPanelCollapsed");
             if (!showGestureView()) {
                 unLock();
             }
@@ -361,6 +405,13 @@ public class LockScreenManager {
         @Override
         public void onPanelExpanded(View panel) {
             Log.e("zy", "onPanelExpanded");
+            if (null != mLockPrompt) {
+                mLockPrompt.setText("");
+            }
+            if (null != mLockArrow) {
+                mAnimatorSet.start();
+                mLockArrow.setVisibility(View.VISIBLE);
+            }
             invisibleKeyhole();
             if (mIsShowGesture) {
                 mViewFlipper.showPrevious();
@@ -377,6 +428,12 @@ public class LockScreenManager {
         public void onPanelFixed(View panel) {
             Log.e("zy", "onPanelFixed");
             mVibrator.vibrate(50);
+            if (mGuideTimes < 3) {
+                if (null != mLockPrompt) {
+                    mLockPrompt.setText(HDApplication.getInstannce().getResources()
+                            .getString(R.string.lock_guide_prompt_two));
+                }
+            }
         }
 
         @Override
@@ -384,11 +441,18 @@ public class LockScreenManager {
             if (!showGestureView()) {
                 unLock();
             }
+            if (mGuideTimes < 3) {
+                mPandoraConfig.saveGuideTimes(mGuideTimes + 1);
+            }
         }
 
         public void onPanelStartDown(View view) {
             Log.e("zy", "onPanelStartDown");
             visibleKeyhole();
+            if (null != mLockArrow) {
+                mAnimatorSet.end();
+                mLockArrow.setVisibility(View.GONE);
+            }
         };
 
         public void onPanelHiddenEnd() {

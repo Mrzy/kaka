@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:textColor="@android:color/holo_red_light"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <cn.zmdx.kaka.locker.widget.LockPatternView
                     android:id="@+id/gusture"
@@ -97,12 +97,30 @@
             android:clickable="true"
             android:focusable="false" >
 
+            <TextView
+                android:id="@+id/lock_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
             <ImageView
                 android:id="@+id/lock_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/locker_key_padding_top" />
+
+            <ImageView
+                android:id="@+id/lock_arrow1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lock_key"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/lock_arrow" />
         </RelativeLayout>
     </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
 

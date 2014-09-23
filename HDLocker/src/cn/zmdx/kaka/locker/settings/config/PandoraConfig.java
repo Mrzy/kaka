@@ -32,6 +32,8 @@ public class PandoraConfig {
 
     private static final String THEME_ID = "theme_id";
 
+    private static final String GUIDE_TIMES = "guideTimes";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -82,5 +84,15 @@ public class PandoraConfig {
 
     public String getLockPaternString() {
         return mSp.getString(LOCKPATTERN, "");
+    }
+
+    public void saveGuideTimes(int times) {
+        Editor editor = mSp.edit();
+        editor.putInt(GUIDE_TIMES, times);
+        editor.commit();
+    }
+
+    public int getGuideTimesInt() {
+        return mSp.getInt(GUIDE_TIMES, 0);
     }
 }
