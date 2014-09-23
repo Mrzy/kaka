@@ -49,7 +49,7 @@ public class MyDigitalClock extends DigitalClock {
 
     private void initClock(AttributeSet attrs) {
         Typeface face = Typeface
-                .createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
+                .createFromAsset(getContext().getAssets(), "fonts/Roboto-Thin.ttf");
         setTypeface(face);
         if (mCalendar == null) {
             mCalendar = Calendar.getInstance();
