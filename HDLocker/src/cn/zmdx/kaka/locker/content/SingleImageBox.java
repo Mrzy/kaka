@@ -2,10 +2,13 @@
 package cn.zmdx.kaka.locker.content;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 
@@ -29,6 +32,7 @@ public class SingleImageBox implements IPandoraBox {
         mEntireView = (ViewGroup)LayoutInflater.from(context).inflate(R.layout.pandora_box_single_image, null);
         mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
         mDescView = (TextView) mEntireView.findViewById(R.id.desc);
+//        mBoxContainer = (ViewGroup) mEntireView.findViewById(R.id.boxContainer);
     }
 
     @Override
@@ -59,7 +63,23 @@ public class SingleImageBox implements IPandoraBox {
         if (mData == null || mData.getmImage() == null) {
             return false;
         }
+        final Bitmap bmp = mData.getmImage();
+        int width = bmp.getWidth();
+        int height = bmp.getHeight();
+        final float rate = width / height;
+//        ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams)mBoxContainer.getLayoutParams();
+//        final boolean keepWidth = width >= height;
+//        if (keepWidth) {
+//            lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+//            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//        } else {
+//            lp.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+//            lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+//        }
+//        mBoxContainer.setLayoutParams(lp);
+
         mSingleImgView.setImageBitmap(mData.getmImage());
+
         mDescView.setText(mData.getmDesc());
         return true;
     }

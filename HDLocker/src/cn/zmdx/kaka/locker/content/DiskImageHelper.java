@@ -80,7 +80,11 @@ public class DiskImageHelper {
     }
 
     public static int getFileCountOnDisk() {
-        return mStorageDir.listFiles().length;
+        File[] files = mStorageDir.listFiles();
+        if (files != null) {
+            return files.length;
+        }
+        return 0;
     }
     
     public static String getHash(String url) {

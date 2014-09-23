@@ -163,7 +163,7 @@ public class PandoraBoxManager {
         int w = newOpts.outWidth;
         int h = newOpts.outHeight;
         try {
-            if (w / h > 3 || h / w > 3 || w > 1500 || h > 2000) {
+            if (w / h > 2.5 || h / w > 2.5 || w > 1500 || h > 2000) {
                 BaiduDataModel.getInstance().deleteById(bd.getId());
                 return getMixImgTextBox();
             } else {
