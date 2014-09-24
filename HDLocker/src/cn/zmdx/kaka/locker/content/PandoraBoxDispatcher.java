@@ -246,7 +246,7 @@ public class PandoraBoxDispatcher extends Handler {
         }
         int totalCount = ServerImageDataModel.getInstance().queryCountByType(dataType);
         if (totalCount < PandoraPolicy.MIN_COUNT_PANDORA_IMAGE) {
-            ServerImageDataManager.getInstance().pullServerImageData(15, dataType,
+            ServerImageDataManager.getInstance().pullServerImageData(20, dataType,
                     ServerDataMapping.S_WEBSITE_ALL);
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("满足拉取pandora图片数据条件，开始拉取ServerImageData,当前数据类型为：" + dataType + ",本地数量为:" + totalCount);

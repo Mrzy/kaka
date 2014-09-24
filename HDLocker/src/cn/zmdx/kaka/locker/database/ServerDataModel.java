@@ -110,7 +110,8 @@ public class ServerDataModel {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER, new String[] {
                 TableStructure.SERVER_ID, TableStructure.SERVER_COLLECT_WEBSITE,
-                TableStructure.SERVER_CONTENT, TableStructure.SERVER_DATA_TYPE
+                TableStructure.SERVER_CONTENT, TableStructure.SERVER_DATA_TYPE,
+                TableStructure.SERVER_TITLE
         }, TableStructure.SERVER_COLLECT_WEBSITE + "=?", new String[]{website}, null, null, null, "1");
         while (cursor.moveToNext()) {
             sd = new ServerData();
@@ -118,6 +119,7 @@ public class ServerDataModel {
             sd.setCollectWebsite(cursor.getString(1));
             sd.setContent(cursor.getString(2));
             sd.setDataType(cursor.getString(3));
+            sd.setTitle(cursor.getString(4));
         }
         cursor.close();
         return sd;

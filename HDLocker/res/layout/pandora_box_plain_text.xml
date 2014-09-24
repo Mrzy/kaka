@@ -18,9 +18,9 @@
             android:id="@+id/text1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+            android:gravity="center_horizontal"
+            android:textColor="#85d100"
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/text2"
