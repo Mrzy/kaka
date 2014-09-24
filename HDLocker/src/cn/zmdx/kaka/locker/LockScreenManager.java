@@ -8,7 +8,6 @@ import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Vibrator;
 import android.util.Log;

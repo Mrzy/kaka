@@ -15,6 +15,8 @@ import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class PandoraService extends Service {
 
+    public static final String ALARM_ALERT_ACTION = "com.android.deskclock.ALARM_ALERT";
+
     @Override
     public void onCreate() {
         registerBroadcastReceiver();
@@ -52,6 +54,7 @@ public class PandoraService extends Service {
         IntentFilter filter = new IntentFilter();
         filter.setPriority(1000);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(ALARM_ALERT_ACTION);
         // filter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(mReceiver, filter);
     }
@@ -98,7 +101,11 @@ public class PandoraService extends Service {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("receive broadcast,action=" + action);
             }
-            LockScreenManager.getInstance().lock();
+            if (action.equals(ALARM_ALERT_ACTION)) {
+                LockScreenManager.getInstance().unLock();
+            } else {
+                LockScreenManager.getInstance().lock();
+            }
         }
     };
 }
