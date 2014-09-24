@@ -96,12 +96,30 @@ public class ServerDataModel {
         return count;
     }
 
-    public boolean deleteById(int id) {
+    public synchronized boolean deleteById(int id) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
         int count = sqliteDatabase.delete(TableStructure.TABLE_NAME_SERVER,
                 TableStructure.SERVER_ID + "=?", new String[] {
                     String.valueOf(id)
                 });
         return count != 0;
+    }
+
+    public ServerData queryByWebsite(String website) {
+        ServerData sd = null;
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER, new String[] {
+                TableStructure.SERVER_ID, TableStructure.SERVER_COLLECT_WEBSITE,
+                TableStructure.SERVER_CONTENT, TableStructure.SERVER_DATA_TYPE
+        }, TableStructure.SERVER_COLLECT_WEBSITE + "=?", new String[]{website}, null, null, null, "1");
+        while (cursor.moveToNext()) {
+            sd = new ServerData();
+            sd.setId(cursor.getInt(0));
+            sd.setCollectWebsite(cursor.getString(1));
+            sd.setContent(cursor.getString(2));
+            sd.setDataType(cursor.getString(3));
+        }
+        cursor.close();
+        return sd;
     }
 }

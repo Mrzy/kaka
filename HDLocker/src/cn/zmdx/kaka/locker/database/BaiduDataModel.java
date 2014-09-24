@@ -273,5 +273,4 @@ public class BaiduDataModel {
 
         return list;
     }
-
 }

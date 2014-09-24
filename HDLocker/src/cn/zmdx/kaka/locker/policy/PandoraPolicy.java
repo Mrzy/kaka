@@ -10,6 +10,8 @@ public class PandoraPolicy {
      */
     public static final int MIN_COUNT_LOCAL_DB = 20;
 
+    public static final int MIN_COUNT_PANDORA_IMAGE = 3;
+
     /**
      * 本地的百度图片数据库中，已经下载图片的数据条数的最小阀值。当小于这个值时，会调度下载图片的逻辑
      */

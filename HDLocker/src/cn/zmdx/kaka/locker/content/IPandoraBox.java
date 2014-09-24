@@ -33,11 +33,13 @@ public interface IPandoraBox {
 
         private Bitmap mImage;
 
-        private int from;
+        private String from;
 
         private String mImageUrl;
 
         private String mDesc;
+
+        private String mTableName;
 
         public String getmDesc() {
             return mDesc;
@@ -55,11 +57,11 @@ public interface IPandoraBox {
             this.mId = mId;
         }
 
-        public int getFrom() {
+        public String getFrom() {
             return from;
         }
 
-        public void setFrom(int from) {
+        public void setFrom(String from) {
             this.from = from;
         }
 
@@ -93,6 +95,14 @@ public interface IPandoraBox {
 
         public String getmImageUrl() {
             return mImageUrl;
+        }
+
+        public void setFromTable(String tableNameServer) {
+            mTableName = tableNameServer;
+        }
+
+        public String getFromTable() {
+            return mTableName;
         }
     }
 }

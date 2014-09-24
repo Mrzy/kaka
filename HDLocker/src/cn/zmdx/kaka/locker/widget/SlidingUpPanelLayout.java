@@ -491,7 +491,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
         int width = Integer.parseInt(BaseInfoHelper.getWidth(getContext()));
         int height = Integer.parseInt(BaseInfoHelper.getHeight(getContext()));
         Bitmap srcBmp = ImageUtils.drawable2Bitmap(mForegroundDrawable);
-        srcBmp = ImageUtils.scaleTo(srcBmp, width, height);
+        srcBmp = ImageUtils.scaleTo(srcBmp, width, height, true);
         Bitmap topBmp = Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(),
                 mTopView.getMeasuredHeight());
         Bitmap bottomBmp = Bitmap.createBitmap(srcBmp, 0, mTopView.getMeasuredHeight(),

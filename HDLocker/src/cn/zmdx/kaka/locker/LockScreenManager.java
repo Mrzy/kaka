@@ -159,7 +159,7 @@ public class LockScreenManager {
 
     private void refreshContent() {
         mPandoraBox = PandoraBoxManager.newInstance(HDApplication.getInstannce())
-                .getNextPandoraData();
+                .getNextPandoraBox();
         View contentView = mPandoraBox.getRenderedView();
         if (contentView == null) {
             return;
@@ -269,13 +269,14 @@ public class LockScreenManager {
     private void syncDataIfNeeded() {
         PandoraBoxDispatcher pd = PandoraBoxDispatcher.getInstance();
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
-        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_DATA);
+        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_JOKE);
+        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_NEWS);
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_TEXT_DATA);
         if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG)) {
             pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 10000);
         }
         if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE)) {
-            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE, 5000);
+            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE, 10000);
         }
     }
 

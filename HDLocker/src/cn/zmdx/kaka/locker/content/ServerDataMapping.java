@@ -17,7 +17,7 @@ public class ServerDataMapping {
 
     public static final String S_WEBSITE_CAODANWANG = "caodanwang";
 
-    public static final String S_WEBSITE_BAIDU = "baidiu";
+    public static final String S_WEBSITE_QIUBAI = "qiubai";
 
     public static final String S_WEBSITE_ALL = "";
 

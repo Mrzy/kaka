@@ -113,10 +113,10 @@ public class BaseDataManager {
         mTitle = jsonObject.optString("title");
         mTop = jsonObject.optString("top");
         mSetp = jsonObject.optString("step");
-        mCollectTime = jsonObject.optString("collectTime");
-        mReleaseTime = jsonObject.optString("releaseTime");
-        mCollectWebsite = jsonObject.optString("collectWebsite");
-        mDataType = jsonObject.optString("dataType");
+        mCollectTime = jsonObject.optString("collect_time");
+        mReleaseTime = jsonObject.optString("release_time");
+        mCollectWebsite = jsonObject.optString("collect_website");
+        mDataType = jsonObject.optString("data_type");
     }
 
 }
