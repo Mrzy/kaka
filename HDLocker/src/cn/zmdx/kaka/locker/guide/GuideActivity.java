@@ -2,9 +2,7 @@
 package cn.zmdx.kaka.locker.guide;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,15 +16,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.InitSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.config.UmengCustomEvent;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -126,7 +123,7 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
                     @Override
                     public void onClick(View v) {
                         // 设置已经引导
-                        statisticalGuideTime();
+                        UmengCustomEventManager.statisticalGuideTime(mGuideTime);
                         setGuided();
                         goHome();
                         PandoraConfig.newInstance(mActivity).savePandolaLockerState(true);
@@ -177,16 +174,6 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
         public void startUpdate(View arg0) {
         }
 
-    }
-
-    /**
-     * 计算引导页的总展示时间
-     */
-    private void statisticalGuideTime() {
-        int duration = (int) (System.currentTimeMillis() - mGuideTime);
-        Map<String, String> map_value = new HashMap<String, String>();
-        MobclickAgent.onEventValue(HDApplication.getInstannce(), UmengCustomEvent.EVENT_GUIDE_TIME,
-                map_value, duration);
     }
 
     private void initDots() {
