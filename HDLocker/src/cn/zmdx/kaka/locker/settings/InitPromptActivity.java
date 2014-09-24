@@ -83,13 +83,13 @@ public class InitPromptActivity extends Activity {
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("SplashScreen"); // 统计页面
+        MobclickAgent.onPageStart("InitPromptActivity"); // 统计页面
         MobclickAgent.onResume(this); // 统计时长
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("SplashScreen"); // 保证 onPageEnd 在onPause之前调用,因为
+        MobclickAgent.onPageEnd("InitPromptActivity"); // 保证 onPageEnd 在onPause之前调用,因为
                                                  // onPause 中会保存信息
         MobclickAgent.onPause(this);
     }

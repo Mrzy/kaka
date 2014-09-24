@@ -30,6 +30,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.animation.ViewAnimation;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.settings.config.UmengCustomEvent;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -202,6 +203,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 }
                 int themeId = mThumbIdArray.get(position);
                 setSettingBackground(themeId);
+                statisticalSelectTheme(themeId);
 
                 if (mHandler.hasMessages(MSG_SAVE_WALLPAPER)) {
                     mHandler.removeMessages(MSG_SAVE_WALLPAPER);
@@ -213,6 +215,35 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             }
         }
     };
+
+    /**
+     * 点击某个主题壁纸时统计一次事件
+     */
+    private void statisticalSelectTheme(int themeId) {
+        switch (themeId) {
+            case ThemeManager.THEME_ID_BLUE:
+                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                        UmengCustomEvent.EVENT_WALLPAPER_BLUE_TIMES);
+                break;
+            case ThemeManager.THEME_ID_PINK:
+                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                        UmengCustomEvent.EVENT_WALLPAPER_PINK_TIMES);
+                break;
+            case ThemeManager.THEME_ID_JEAN:
+                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                        UmengCustomEvent.EVENT_WALLPAPER_JEAN_TIMES);
+                break;
+            case ThemeManager.THEME_ID_WOOD_GRAIN:
+                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                        UmengCustomEvent.EVENT_WALLPAPER_WOOD_GRAIN_TIMES);
+                break;
+
+            default:
+                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                        UmengCustomEvent.EVENT_WALLPAPER_BLUE_TIMES);
+                break;
+        }
+    }
 
     private MyHandler mHandler = new MyHandler(this);
 
@@ -263,10 +294,14 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             case R.id.setting_pandoralocker_password:
                 if (isChecked) {
                     if (mIsCurrentlyPressed) {
+                        MobclickAgent.onEvent(getActivity(),
+                                UmengCustomEvent.EVENT_PANDORA_SWITCH_OPEN_TIMES);// 打开/关闭锁屏开关
                         showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_OPEN);
                     }
                 } else {
                     if (mIsCurrentlyPressed) {
+                        MobclickAgent.onEvent(getActivity(),
+                                UmengCustomEvent.EVENT_PANDORA_SWITCH_CLOSE_TIMES);// 打开/关闭锁屏开关
                         showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_CLOSE);
                     }
                 }
@@ -281,12 +316,12 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     public void onResume() {
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
         super.onResume();
-        MobclickAgent.onPageStart("MainScreen"); // 统计页面
+        MobclickAgent.onPageStart("MainSettingsFragment"); // 统计页面
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("MainScreen");
+        MobclickAgent.onPageEnd("MainSettingsFragment");
     }
 
     private void showGustureView(final int type) {

@@ -2,13 +2,14 @@
 package cn.zmdx.kaka.locker;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Vibrator;
 import android.util.Log;
@@ -30,6 +31,7 @@ import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.settings.config.UmengCustomEvent;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -48,6 +50,7 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
+import com.umeng.analytics.MobclickAgent;
 
 public class LockScreenManager {
 
@@ -89,7 +92,9 @@ public class LockScreenManager {
 
     private AnimatorSet mAnimatorSet;
 
-    private int mGuideTimes;
+    private int mTextGuideTimes;
+
+    private long mLockTime;
 
     private LockScreenManager() {
         mWinManager = (WindowManager) HDApplication.getInstannce().getSystemService(
@@ -121,12 +126,19 @@ public class LockScreenManager {
     public void lock() {
         if (mIsLocked)
             return;
-        boolean isLockerOn = PandoraConfig.newInstance(HDApplication.getInstannce())
-                .isPandolaLockerOn();
+        PandoraConfig pandoraConfig = PandoraConfig.newInstance(HDApplication.getInstannce());
+        boolean isLockerOn = pandoraConfig.isPandolaLockerOn();
         if (!isLockerOn) {
             return;
         }
-        mGuideTimes = mPandoraConfig.getGuideTimesInt();
+        mLockTime = System.currentTimeMillis();
+        String currentDate = getCurrentDate();
+        statisticalGuestureLockTime(pandoraConfig, currentDate);// 统计是否开启锁屏
+        statisticalUseTheme(pandoraConfig, currentDate);// 统计当前使用的主题
+        statisticalEntryLockTimes(pandoraConfig, currentDate);// 统计进入锁屏页次数
+        // 每日上报一次事件，作为统计活跃
+
+        mTextGuideTimes = pandoraConfig.getGuideTimesInt();
         mIsLocked = true;
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
 
@@ -155,6 +167,71 @@ public class LockScreenManager {
         refreshContent();
         setDate();
         mWinManager.addView(mEntireView, params);
+    }
+
+    /**
+     * 统计是否开启锁屏
+     * @param pandoraConfig
+     * @param currentDate
+     */
+    private void statisticalGuestureLockTime(PandoraConfig pandoraConfig, String currentDate) {
+        String saveDate = pandoraConfig.getEventGuestureLockTimeString();
+        if (!currentDate.equals(saveDate)) {
+            MobclickAgent.onEvent(HDApplication.getInstannce(),
+                    UmengCustomEvent.EVENT_GUESTURE_LOCK);
+            pandoraConfig.saveEventGuestureLockTime(currentDate);
+        }
+    }
+
+    /**
+     * 统计当前使用的主题
+     * @param pandoraConfig
+     * @param currentDate
+     */
+    private void statisticalUseTheme(PandoraConfig pandoraConfig, String currentDate) {
+        String saveDate = pandoraConfig.getEventUseThemeTimeString();
+        if (!currentDate.equals(saveDate)) {
+            int themeId = pandoraConfig.getCurrentThemeId();
+            switch (themeId) {
+                case ThemeManager.THEME_ID_BLUE:
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEvent.EVENT_USE_BLUE_THEME_TIMES);
+                    break;
+                case ThemeManager.THEME_ID_PINK:
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEvent.EVENT_USE_PINK_THEME_TIMES);
+                    break;
+                case ThemeManager.THEME_ID_JEAN:
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEvent.EVENT_USE_JEAN_THEME_TIMES);
+                    break;
+                case ThemeManager.THEME_ID_WOOD_GRAIN:
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEvent.EVENT_USE_WOOD_GRAIN_THEME_TIMES);
+                    break;
+
+                default:
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEvent.EVENT_USE_BLUE_THEME_TIMES);
+                    break;
+            }
+            pandoraConfig.saveEventEnterLockTime(currentDate);
+        }
+    }
+
+    /**
+     * 统计进入锁屏页次数
+     * @param pandoraConfig
+     * @param currentDate
+     */
+    private void statisticalEntryLockTimes(PandoraConfig pandoraConfig, String currentDate) {
+        String saveDate = pandoraConfig.getEventEnterLockTimeString();
+        if (!currentDate.equals(saveDate)) {
+            MobclickAgent.onEvent(HDApplication.getInstannce(),
+                    UmengCustomEvent.EVENT_ENTER_LOCK_TIME);
+            pandoraConfig.saveEventEnterLockTime(currentDate);
+        }
+
     }
 
     private void refreshContent() {
@@ -226,6 +303,13 @@ public class LockScreenManager {
         int week = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         String weekString = PandoraUtils.getWeekString(HDApplication.getInstannce(), week);
         mDate.setText("" + month + "月" + "" + day + "日 " + weekString);
+    }
+
+    private String getCurrentDate() {
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        return "" + year + "" + month + "" + day;
     }
 
     private void combineIcon(boolean combine) {
@@ -359,8 +443,12 @@ public class LockScreenManager {
 
     private void verifyGustureLock(List<Cell> pattern) {
         if (checkPattern(pattern)) {
+            MobclickAgent.onEvent(HDApplication.getInstannce(),
+                    UmengCustomEvent.EVENT_GUESTURE_UNLOCK_SUCCESS_TIMES);
             unLock();
         } else {
+            MobclickAgent.onEvent(HDApplication.getInstannce(),
+                    UmengCustomEvent.EVENT_GUESTURE_UNLOCK_FAIL_TIMES);
             mGusturePrompt.setText(HDApplication.getInstannce().getResources()
                     .getString(R.string.gusture_verify_fail));
             mLockPatternView.setDisplayMode(DisplayMode.Wrong);
@@ -385,7 +473,7 @@ public class LockScreenManager {
             } else {
                 combineIcon(false);
             }
-            if (mGuideTimes < 3) {
+            if (mTextGuideTimes < 3) {
                 if (slideOffset < 1 && slideOffset > 0) {
                     if (null != mLockPrompt) {
                         mLockPrompt.setText(HDApplication.getInstannce().getResources()
@@ -398,6 +486,8 @@ public class LockScreenManager {
         @Override
         public void onPanelCollapsed(View panel) {
             Log.e("zy", "onPanelCollapsed");
+            MobclickAgent
+                    .onEvent(HDApplication.getInstannce(), UmengCustomEvent.EVENT_UNLOCK_TIMES);// 统计未固定，直接解锁次数
             if (!showGestureView()) {
                 unLock();
             }
@@ -428,8 +518,9 @@ public class LockScreenManager {
         @Override
         public void onPanelFixed(View panel) {
             Log.e("zy", "onPanelFixed");
+            MobclickAgent.onEvent(HDApplication.getInstannce(), UmengCustomEvent.EVENT_FIXED_TIMES);// 统计固定的次数
             mVibrator.vibrate(50);
-            if (mGuideTimes < 3) {
+            if (mTextGuideTimes < 3) {
                 if (null != mLockPrompt) {
                     mLockPrompt.setText(HDApplication.getInstannce().getResources()
                             .getString(R.string.lock_guide_prompt_two));
@@ -439,11 +530,14 @@ public class LockScreenManager {
 
         @Override
         public void onPanelClickedDuringFixed() {
+            MobclickAgent.onEvent(HDApplication.getInstannce(),
+                    UmengCustomEvent.EVENT_FIXED_UNLOCK_TIMES);// 统计固定之后解锁次数
+            statisticalLockTime();
             if (!showGestureView()) {
                 unLock();
             }
-            if (mGuideTimes < 3) {
-                mPandoraConfig.saveGuideTimes(mGuideTimes + 1);
+            if (mTextGuideTimes < 3) {
+                mPandoraConfig.saveGuideTimes(mTextGuideTimes + 1);
             }
         }
 
@@ -459,4 +553,16 @@ public class LockScreenManager {
         public void onPanelHiddenEnd() {
         };
     };
+
+    /**
+     * 统计拉开锁屏到解锁的时间，及当前内容的dataType信息； 只计算开锁到固定解锁的时间
+     */
+    private void statisticalLockTime() {
+        int duration = (int) (System.currentTimeMillis() - mLockTime);
+        String dataType = mPandoraBox.getData().getFrom();
+        Map<String, String> map_value = new HashMap<String, String>();
+        map_value.put("dataType", dataType);
+        MobclickAgent.onEventValue(HDApplication.getInstannce(), UmengCustomEvent.EVENT_LOCK_TIME,
+                map_value, duration);
+    }
 }

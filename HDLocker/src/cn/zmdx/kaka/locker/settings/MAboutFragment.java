@@ -42,12 +42,12 @@ public class MAboutFragment extends Fragment {
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("MainScreen"); // 统计页面
+        MobclickAgent.onPageStart("MAboutFragment"); // 统计页面
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("MainScreen");
+        MobclickAgent.onPageEnd("MAboutFragment");
     }
 
     @Override

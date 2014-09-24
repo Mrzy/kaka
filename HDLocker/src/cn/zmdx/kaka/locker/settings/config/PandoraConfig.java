@@ -95,4 +95,34 @@ public class PandoraConfig {
     public int getGuideTimesInt() {
         return mSp.getInt(GUIDE_TIMES, 0);
     }
+
+    public void saveEventGuestureLockTime(String time) {
+        Editor editor = mSp.edit();
+        editor.putString(UmengCustomEvent.EVENT_GUESTURE_LOCK, time);
+        editor.commit();
+    }
+
+    public String getEventGuestureLockTimeString() {
+        return mSp.getString(UmengCustomEvent.EVENT_GUESTURE_LOCK, "");
+    }
+
+    public void saveEventUseThemeTime(String time) {
+        Editor editor = mSp.edit();
+        editor.putString(UmengCustomEvent.EVENT_USE_THEME_TIMES, time);
+        editor.commit();
+    }
+
+    public String getEventUseThemeTimeString() {
+        return mSp.getString(UmengCustomEvent.EVENT_USE_THEME_TIMES, "");
+    }
+
+    public void saveEventEnterLockTime(String time) {
+        Editor editor = mSp.edit();
+        editor.putString(UmengCustomEvent.EVENT_ENTER_LOCK_TIME, time);
+        editor.commit();
+    }
+
+    public String getEventEnterLockTimeString() {
+        return mSp.getString(UmengCustomEvent.EVENT_ENTER_LOCK_TIME, "");
+    }
 }

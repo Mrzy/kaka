@@ -111,13 +111,13 @@ public class InitSettingActivity extends Activity implements OnClickListener {
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("SplashScreen"); // 统计页面
+        MobclickAgent.onPageStart("InitSettingActivity"); // 统计页面
         MobclickAgent.onResume(this); // 统计时长
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("SplashScreen"); // 保证 onPageEnd 在onPause
+        MobclickAgent.onPageEnd("InitSettingActivity"); // 保证 onPageEnd 在onPause
                                                  // 之前调用,因为 onPause 中会保存信息
         MobclickAgent.onPause(this);
     }
