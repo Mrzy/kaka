@@ -76,6 +76,8 @@ public class SingleImageBox implements IPandoraBox {
                 mIsHide = !mIsHide;
             }
         });
+
+        mDescView.setText(mData.getmDesc());
         return true;
     }
 }
