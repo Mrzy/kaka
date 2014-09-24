@@ -51,6 +51,8 @@ import com.nineoldandroids.view.ViewHelper;
 
 public class LockScreenManager {
 
+    protected static final int MAX_TIMES_SHOW_GUIDE = 3;
+
     private SlidingUpPanelLayout mSliderView;
 
     private View mEntireView, mKeyholeView, mKeyView;
@@ -260,7 +262,8 @@ public class LockScreenManager {
         if (!mIsLocked)
             return;
 
-        mWinManager.removeView(mEntireView);
+        mWinManager.removeViewImmediate(mEntireView);
+        mEntireView = null;
         mIsShowGesture = false;
         mIsLocked = false;
         syncDataIfNeeded();
@@ -273,7 +276,7 @@ public class LockScreenManager {
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_NEWS);
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_TEXT_DATA);
         if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG)) {
-            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 10000);
+            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 5000);
         }
         if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE)) {
             pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE, 10000);
@@ -385,7 +388,7 @@ public class LockScreenManager {
             } else {
                 combineIcon(false);
             }
-            if (mGuideTimes < 3) {
+            if (mGuideTimes < MAX_TIMES_SHOW_GUIDE) {
                 if (slideOffset < 1 && slideOffset > 0) {
                     if (null != mLockPrompt) {
                         mLockPrompt.setText(HDApplication.getInstannce().getResources()
@@ -429,7 +432,7 @@ public class LockScreenManager {
         public void onPanelFixed(View panel) {
             Log.e("zy", "onPanelFixed");
             mVibrator.vibrate(50);
-            if (mGuideTimes < 3) {
+            if (mGuideTimes < MAX_TIMES_SHOW_GUIDE) {
                 if (null != mLockPrompt) {
                     mLockPrompt.setText(HDApplication.getInstannce().getResources()
                             .getString(R.string.lock_guide_prompt_two));
@@ -442,7 +445,7 @@ public class LockScreenManager {
             if (!showGestureView()) {
                 unLock();
             }
-            if (mGuideTimes < 3) {
+            if (mGuideTimes < MAX_TIMES_SHOW_GUIDE) {
                 mPandoraConfig.saveGuideTimes(mGuideTimes + 1);
             }
         }

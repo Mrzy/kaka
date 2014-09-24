@@ -77,7 +77,7 @@ public class SingleImageBox implements IPandoraBox {
             }
         });
 
-        mDescView.setText(mData.getmDesc());
+        mDescView.setText(mData.getmContent());
         return true;
     }
 }

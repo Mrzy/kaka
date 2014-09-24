@@ -13,7 +13,6 @@
         android:layout_height="match_parent"
         android:gravity="bottom"
         sothree:dragView="@+id/lock_key"
-        sothree:foregroundDrawable="@drawable/locker_foreground"
         sothree:panelHeight="130dp"
         sothree:shadowHeight="8dp"
         sothree:topSeekoutHeight="60dp" >

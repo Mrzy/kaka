@@ -322,19 +322,16 @@ public class SlidingUpPanelLayout extends ViewGroup {
         @Override
         public void onPanelClickedDuringFixed() {
             // TODO Auto-generated method stub
-
         }
 
         @Override
         public void onPanelStartDown(View view) {
             // TODO Auto-generated method stub
-
         }
 
         @Override
         public void onPanelHiddenEnd() {
             // TODO Auto-generated method stub
-
         }
     }
 
@@ -496,6 +493,10 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 mTopView.getMeasuredHeight());
         Bitmap bottomBmp = Bitmap.createBitmap(srcBmp, 0, mTopView.getMeasuredHeight(),
                 srcBmp.getWidth(), mSlideableView.getMeasuredHeight());
+        if (!srcBmp.isRecycled()) {
+            srcBmp.recycle();
+            srcBmp = null;
+        }
         mTopPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), topBmp);
         mBottomPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), bottomBmp);
         mIsForeBackgroundCutOff = true;
@@ -952,15 +953,6 @@ public class SlidingUpPanelLayout extends ViewGroup {
         return mDragHelper.shouldInterceptTouchEvent(ev);
     }
 
-    private static void printStackTrace() {
-        StackTraceElement[] stackElements = new Throwable().getStackTrace();
-        if (stackElements != null) {
-            for (int i = 0; i < stackElements.length; i++) {
-                System.out.println("" + stackElements[i]);
-            }
-        }
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (!isSlidingEnabled()) {
@@ -1025,11 +1017,6 @@ public class SlidingUpPanelLayout extends ViewGroup {
         // top position
         return (mIsSlidingUp ? (float) (topBoundCollapsed - topPosition) / mSlideRange
                 : (float) (topPosition - topBoundCollapsed) / mSlideRange);
-    }
-
-    private float computeTopPanelOffset(int bottomPosition) {
-        final int bottomBoundCollapsed = computeTopPanelBottomPosition(0);
-        return (float) (bottomBoundCollapsed - bottomPosition) / mSlideRange;
     }
 
     /**
@@ -1217,10 +1204,6 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 dispatchOnPanelFixed(mSlideableView);
             }
         }
-    }
-
-    public void recovery() {
-        // TODO
     }
 
     @Override
