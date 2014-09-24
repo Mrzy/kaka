@@ -4,9 +4,6 @@ package cn.zmdx.kaka.locker.guide;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.adapter.ViewPagerAdapter;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -16,6 +13,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.adapter.ViewPagerAdapter;
+
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 引导界面
@@ -109,4 +110,16 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
         setCurrentDot(arg0);
     }
 
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("SplashScreen"); // 统计页面
+        MobclickAgent.onResume(this); // 统计时长
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("SplashScreen"); // 保证 onPageEnd 在onPause
+                                                 // 之前调用,因为 onPause 中会保存信息
+        MobclickAgent.onPause(this);
+    }
 }

@@ -13,6 +13,8 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 
+import com.umeng.analytics.MobclickAgent;
+
 public class InitSettingActivity extends Activity implements OnClickListener {
 
     private String mMIUIVersion;
@@ -47,7 +49,8 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         int resId = ThemeManager.getThemeById(mThemeId).getmBackgroundResId();
         findViewById(R.id.init_setting_background).setBackgroundResource(resId);
         if (isMIUI) {
-            findViewById(R.id.init_setting_MIUI_allow_floating_window_guide).setVisibility(View.VISIBLE);
+            findViewById(R.id.init_setting_MIUI_allow_floating_window_guide).setVisibility(
+                    View.VISIBLE);
             findViewById(R.id.init_setting_MIUI_trust_guide).setVisibility(View.VISIBLE);
         }
         mCloseSystemLockBtn = (Button) findViewById(R.id.init_setting_close_systemlocker_to_set);
@@ -104,5 +107,18 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         finish();
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                 R.anim.umeng_fb_slide_out_from_right);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("SplashScreen"); // 统计页面
+        MobclickAgent.onResume(this); // 统计时长
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("SplashScreen"); // 保证 onPageEnd 在onPause
+                                                 // 之前调用,因为 onPause 中会保存信息
+        MobclickAgent.onPause(this);
     }
 }

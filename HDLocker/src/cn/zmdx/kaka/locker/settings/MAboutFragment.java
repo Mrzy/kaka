@@ -12,6 +12,8 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 
+import com.umeng.analytics.MobclickAgent;
+
 public class MAboutFragment extends Fragment {
     private View mRootView;
 
@@ -36,6 +38,16 @@ public class MAboutFragment extends Fragment {
         mVersion = (TextView) mRootView.findViewById(R.id.setting_about_version);
         String version = PandoraUtils.getVersionCode(getActivity());
         mVersion.setText(version);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("MainScreen"); // 统计页面
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("MainScreen");
     }
 
     @Override

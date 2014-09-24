@@ -26,6 +26,8 @@ import cn.zmdx.kaka.locker.widget.LockPatternView.Cell;
 import cn.zmdx.kaka.locker.widget.LockPatternView.DisplayMode;
 import cn.zmdx.kaka.locker.widget.LockPatternView.OnPatternListener;
 
+import com.umeng.analytics.MobclickAgent;
+
 public class LockPatternActivity extends Activity implements OnClickListener, OnPatternListener {
 
     private Context mContext;
@@ -318,4 +320,16 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
                 R.anim.umeng_fb_slide_out_from_right);
     }
 
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("SplashScreen"); // 统计页面
+        MobclickAgent.onResume(this); // 统计时长
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("SplashScreen"); // 保证 onPageEnd 在onPause
+                                                 // 之前调用,因为 onPause 中会保存信息
+        MobclickAgent.onPause(this);
+    }
 }

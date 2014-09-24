@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 
+import com.umeng.analytics.MobclickAgent;
+
 public class InitPromptActivity extends Activity {
 
     private LinearLayout mCloseSystemLockerView;
@@ -77,6 +79,18 @@ public class InitPromptActivity extends Activity {
         finish();
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                 R.anim.umeng_fb_slide_out_from_right);
+    }
 
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("SplashScreen"); // 统计页面
+        MobclickAgent.onResume(this); // 统计时长
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("SplashScreen"); // 保证 onPageEnd 在onPause之前调用,因为
+                                                 // onPause 中会保存信息
+        MobclickAgent.onPause(this);
     }
 }
