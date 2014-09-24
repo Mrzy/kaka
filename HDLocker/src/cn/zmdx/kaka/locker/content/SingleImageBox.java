@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.content;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,10 +24,13 @@ public class SingleImageBox implements IPandoraBox {
 
     private boolean mIsRendered = false;
 
+    private boolean mIsHide = false;
+
     public SingleImageBox(Context context, PandoraData data) {
         mData = data;
         mContext = context;
-        mEntireView = (ViewGroup)LayoutInflater.from(context).inflate(R.layout.pandora_box_single_image, null);
+        mEntireView = (ViewGroup) LayoutInflater.from(context).inflate(
+                R.layout.pandora_box_single_image, null);
         mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
         mDescView = (TextView) mEntireView.findViewById(R.id.desc);
     }
@@ -60,8 +64,18 @@ public class SingleImageBox implements IPandoraBox {
             return false;
         }
         mSingleImgView.setImageBitmap(mData.getmImage());
+        mSingleImgView.setOnClickListener(new OnClickListener() {
 
-        mDescView.setText(mData.getmDesc());
+            @Override
+            public void onClick(View v) {
+                if (mIsHide) {
+                    mDescView.setVisibility(View.VISIBLE);
+                } else {
+                    mDescView.setVisibility(View.GONE);
+                }
+                mIsHide = !mIsHide;
+            }
+        });
         return true;
     }
 }
