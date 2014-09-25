@@ -19,3 +19,10 @@
 #   public *;
 #}
 -keep public class cn.zmdx.kaka.locker.utils.HDBLOG
+-keepclassmembers class * {
+   public <init>(org.json.JSONObject);
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}

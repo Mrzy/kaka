@@ -493,13 +493,19 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 mTopView.getMeasuredHeight());
         Bitmap bottomBmp = Bitmap.createBitmap(srcBmp, 0, mTopView.getMeasuredHeight(),
                 srcBmp.getWidth(), mSlideableView.getMeasuredHeight());
-        if (!srcBmp.isRecycled()) {
+        if (srcBmp != null && srcBmp.isRecycled()) {
             srcBmp.recycle();
             srcBmp = null;
         }
         mTopPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), topBmp);
         mBottomPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), bottomBmp);
         mIsForeBackgroundCutOff = true;
+    }
+
+    public void recycle() {
+        mTopPanelBgDrawable = null;
+        mBottomPanelBgDrawable = null;
+        mForegroundDrawable = null;
     }
 
     public boolean isSlidingEnabled() {

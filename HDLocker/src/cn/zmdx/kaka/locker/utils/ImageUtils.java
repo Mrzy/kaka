@@ -134,6 +134,7 @@ public class ImageUtils {
 
         if (recycle && src != target) {
             src.recycle();
+            src = null;
         }
 
         return target;

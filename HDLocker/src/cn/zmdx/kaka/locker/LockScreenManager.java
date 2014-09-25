@@ -262,6 +262,7 @@ public class LockScreenManager {
             return;
 
         mWinManager.removeViewImmediate(mEntireView);
+        mSliderView.recycle();
         mEntireView = null;
         mIsShowGesture = false;
         mIsLocked = false;
