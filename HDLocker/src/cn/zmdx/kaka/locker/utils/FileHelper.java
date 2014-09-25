@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import cn.zmdx.kaka.locker.BuildConfig;
+
 
 public class FileHelper {
     private static final String TAG = "FileHelper";
@@ -56,7 +58,9 @@ public class FileHelper {
                 file.delete();
             }
         } else {
-            HDBLOG.logE("Cannot delete " + file.getAbsolutePath() + ", which not found");
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logE("Cannot delete " + file.getAbsolutePath() + ", which not found");
+            }
         }
     }
 
