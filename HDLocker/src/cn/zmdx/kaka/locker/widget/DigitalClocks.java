@@ -3,6 +3,10 @@ package cn.zmdx.kaka.locker.widget;
 
 import java.util.Calendar;
 
+import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.R;
+
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
@@ -15,25 +19,15 @@ import android.util.AttributeSet;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.DigitalClock;
-import cn.zmdx.kaka.locker.R;
+import android.widget.TextView;
 
-@SuppressWarnings("deprecation")
-public class MyDigitalClock extends DigitalClock {
-
-    public MyDigitalClock(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initClock(attrs);
-    }
-
+public class DigitalClocks extends TextView {
     // FIXME: implement separate views for hours/minutes/seconds, so
     // proportional fonts don't shake rendering
 
     Calendar mCalendar;
 
-    private final static String m12 = "h:mm aa";
-
-    private final static String m24 = "k:mm";
-
+    @SuppressWarnings("FieldCanBeLocal")
     // We must keep a reference to this observer
     private FormatChangeObserver mFormatChangeObserver;
 
@@ -43,26 +37,41 @@ public class MyDigitalClock extends DigitalClock {
 
     private boolean mTickerStopped = false;
 
-    private String mFormat;
+    String mFormat;
 
     private int m24HourMode;
 
+    private boolean mAttached;
+
+    private final static String m12 = "h:mm aa";
+
+    private final static String m24 = "k:mm";
+
+    public DigitalClocks(Context context) {
+        super(context);
+        // initClock();
+    }
+
+    public DigitalClocks(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initClock(attrs);
+    }
+
     private void initClock(AttributeSet attrs) {
-        Typeface face = Typeface
-                .createFromAsset(getContext().getAssets(), "fonts/Roboto-Thin.ttf");
-        setTypeface(face);
         if (mCalendar == null) {
             mCalendar = Calendar.getInstance();
         }
-
+        Typeface face = Typeface.createFromAsset(HDApplication.getInstannce().getAssets(),
+                "fonts/Roboto-Thin.ttf");
+        setTypeface(face);
         mFormatChangeObserver = new FormatChangeObserver();
         getContext().getContentResolver().registerContentObserver(Settings.System.CONTENT_URI,
                 true, mFormatChangeObserver);
         if (attrs != null && getContext() != null) {
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs,
-                    R.styleable.MyDigialClock);
+                    R.styleable.DigialClocks);
             if (typedArray != null) {
-                m24HourMode = typedArray.getInteger(R.styleable.MyDigialClock_format, 24);
+                m24HourMode = typedArray.getInteger(R.styleable.DigialClocks_format, 24);
                 typedArray.recycle();
             }
         }
@@ -71,6 +80,9 @@ public class MyDigitalClock extends DigitalClock {
 
     @Override
     protected void onAttachedToWindow() {
+        if (!mAttached) {
+            mAttached = true;
+        }
         mTickerStopped = false;
         super.onAttachedToWindow();
         mHandler = new Handler();
@@ -97,14 +109,19 @@ public class MyDigitalClock extends DigitalClock {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mTickerStopped = true;
+        if (mAttached) {
+            unregisterObserver();
+
+            getHandler().removeCallbacks(mTicker);
+
+            mAttached = false;
+        }
     }
 
-    // /**
-    // * Pulls 12/24 mode from system settings
-    // */
-    // private boolean get24HourMode() {
-    // return android.text.format.DateFormat.is24HourFormat(getContext());
-    // }
+    private void unregisterObserver() {
+        final ContentResolver resolver = getContext().getContentResolver();
+        resolver.unregisterContentObserver(mFormatChangeObserver);
+    }
 
     private boolean get24HourMode() {
         return m24HourMode == 12 ? true : false;
@@ -142,5 +159,4 @@ public class MyDigitalClock extends DigitalClock {
         // noinspection deprecation
         info.setClassName(DigitalClock.class.getName());
     }
-
 }

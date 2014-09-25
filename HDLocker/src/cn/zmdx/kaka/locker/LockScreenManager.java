@@ -90,6 +90,8 @@ public class LockScreenManager {
 
     private AnimatorSet mAnimatorSet;
 
+    private ObjectAnimator mObjectAnimator;
+
     private int mGuideTimes;
 
     private LockScreenManager() {
@@ -187,11 +189,11 @@ public class LockScreenManager {
         mGusturePrompt = (TextView) mEntireView.findViewById(R.id.gusture_prompt);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(mLockPrompt, "alpha", 1, 0.2f, 1);
-        objectAnimator.setDuration(2000);
-        objectAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        objectAnimator.setRepeatCount(-1);
-        objectAnimator.start();
+        mObjectAnimator = ObjectAnimator.ofFloat(mLockPrompt, "alpha", 1, 0.2f, 1);
+        mObjectAnimator.setDuration(2000);
+        mObjectAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        mObjectAnimator.setRepeatCount(-1);
+        mObjectAnimator.start();
 
         mLockArrow = (ImageView) mEntireView.findViewById(R.id.lock_arrow1);
         int lenght = (int) HDApplication.getInstannce().getResources()
@@ -260,6 +262,11 @@ public class LockScreenManager {
     public void unLock() {
         if (!mIsLocked)
             return;
+        mObjectAnimator.cancel();
+        mObjectAnimator = null;
+        mAnimatorSet.end();
+        mAnimatorSet.cancel();
+        mAnimatorSet = null;
 
         mWinManager.removeViewImmediate(mEntireView);
         mSliderView.recycle();

@@ -35,7 +35,7 @@
         <attr name="sliderCloseDrawable" format="reference|color" />
         <attr name="withTextInterval" format="dimension" />
     </declare-styleable>
-    <declare-styleable name="MyDigialClock">
+    <declare-styleable name="DigialClocks">
         <attr name="format" format="integer" />
     </declare-styleable>
 
