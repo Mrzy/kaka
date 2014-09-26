@@ -172,7 +172,7 @@ public class LockScreenManager {
     private boolean mIsUseCurrentBox = false;
 
     private void refreshContent() {
-        if (!mIsUseCurrentBox) {
+        if (!mIsUseCurrentBox || (mPandoraBox != null && mPandoraBox.getCategory() == IPandoraBox.CATEGORY_DEFAULT)) {
             mPandoraBox = PandoraBoxManager.newInstance(HDApplication.getInstannce())
                     .getNextPandoraBox();
         }
