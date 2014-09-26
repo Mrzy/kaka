@@ -161,7 +161,7 @@ public class UmengCustomEventManager {
      * 统计拉开锁屏到解锁的时间，及当前内容的dataType信息； 只计算开锁到固定解锁的时间
      */
     public static void statisticalLockTime(IPandoraBox mPandoraBox, int duration) {
-        String dataType = mPandoraBox.getData().getFrom();
+        String dataType = String.valueOf(mPandoraBox.getData().getDataType());
         Map<String, String> map_value = new HashMap<String, String>();
         map_value.put("dataType", dataType);
         MobclickAgent.onEventValue(HDApplication.getInstannce(),
