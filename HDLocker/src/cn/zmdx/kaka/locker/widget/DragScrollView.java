@@ -53,7 +53,6 @@ public class DragScrollView extends ScrollView {
                 break;
             case MotionEvent.ACTION_UP:
                 if (isNeedAnimation()) {
-                    // Log.v("mlguitar", "will up and animation");
                     animation();
                 }
                 break;
