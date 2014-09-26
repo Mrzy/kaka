@@ -72,7 +72,7 @@ public class PandoraService extends Service {
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("当前电话处于闲置状态CALL_STATE_IDLE");
                         }
-//                        LockScreenManager.getInstance().lock();
+                        // LockScreenManager.getInstance().lock();
                         break;
                     case TelephonyManager.CALL_STATE_RINGING: // 当前电话处于零响状态
                         if (BuildConfig.DEBUG) {
