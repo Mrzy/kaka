@@ -20,7 +20,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import cn.zmdx.kaka.locker.R;
 
@@ -95,14 +94,12 @@ public class PandoraUtils {
             line = input.readLine();
             input.close();
         } catch (IOException ex) {
-            Log.e("syc", "Unable to read sysprop " + "ro.miui.ui.version.name", ex);
             return null;
         } finally {
             if (input != null) {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    Log.e("syc", "Exception while closing InputStream", e);
                 }
             }
         }

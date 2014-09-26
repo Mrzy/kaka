@@ -73,6 +73,10 @@ public class PandoraConfig {
     public int getCurrentThemeId() {
         return mSp.getInt(THEME_ID, ThemeManager.THEME_ID_BLUE);
     }
+    
+    public int getCurrentThemeIdForStatistical() {
+        return mSp.getInt(THEME_ID, -1);
+    }
 
     public void saveThemeId(int themeId) {
         Editor editor = mSp.edit();
@@ -100,33 +104,33 @@ public class PandoraConfig {
         return mSp.getInt(GUIDE_TIMES, 0);
     }
 
-    public void saveEventGuestureLockTime(String time) {
+    public void saveEventGuestureLockEnabledDaily(String time) {
         Editor editor = mSp.edit();
         editor.putString(UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY, time);
         editor.commit();
     }
-
-    public String getEventGuestureLockTimeString() {
+    
+    public String getEventGuestureLockEnabledDailyString() {
         return mSp.getString(UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY, "");
     }
 
-    public void saveEventUseThemeTime(String time) {
+    public void saveEventCurrentThemeDaily(String time) {
         Editor editor = mSp.edit();
         editor.putString(UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, time);
         editor.commit();
     }
-
-    public String getEventUseThemeTimeString() {
+    
+    public String getEventCurrentThemeDailyString() {
         return mSp.getString(UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, "");
     }
 
-    public void saveEventEnterLockTime(String time) {
+    public void saveEventActiveDaily(String time) {
         Editor editor = mSp.edit();
         editor.putString(UmengCustomEventManager.EVENT_ACTIVE_DAILY, time);
         editor.commit();
     }
 
-    public String getEventEnterLockTimeString() {
+    public String getEventActiveDailyString() {
         return mSp.getString(UmengCustomEventManager.EVENT_ACTIVE_DAILY, "");
     }
 

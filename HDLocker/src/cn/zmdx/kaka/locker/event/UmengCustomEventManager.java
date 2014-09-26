@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.event;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.util.Log;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.IPandoraBox;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -29,21 +30,27 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_ACTIVE_DAILY = "activeDaily"; // 进入锁屏页，上报一次事件，作为统计活跃，每日一次；
 
-    public static final String EVENT_UNLOCK_DURATION = "unlockDuration";// 计算拉开锁屏到解锁的时间，及当前内容的id,dataType，website信息；
+    public static final String EVENT_TYPE_PLAIN_TEXT_JOKE = "plainTextJoke"; // dataType只计算开锁到固定解锁的时间
 
-    // 只计算开锁到固定解锁的时间
+    public static final String EVENT_TYPE_MIX_NEWS = "mixNews"; // dataType只计算开锁到固定解锁的时间
+
+    public static final String EVENT_TYPE_MIX_JOKE = "mixJoke"; // dataType只计算开锁到固定解锁的时间
+
+    public static final String EVENT_TYPE_MIX_BAIDU = "mixBaidu"; // dataType只计算开锁到固定解锁的时间
+
+    public static final String EVENT_TYPE_DEFAULT = "default"; // dataType只计算开锁到固定解锁的时间
 
     public static final String EVENT_PANDORA_SWITCH_OPEN_TIMES = "pandoraSwitchOpen"; // 打开/关闭锁屏开关，上报对应事件；
 
     public static final String EVENT_PANDORA_SWITCH_CLOSE_TIMES = "pandoraSwitchClose"; // 打开/关闭锁屏开关，上报对应事件；
 
-    public static final String EVENT_WALLPAPER_BLUE_TIMES = "blueWallpaper"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
+    public static final String EVENT_WALLPAPER_BLUE_TIMES = "wallpaperBlue"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
-    public static final String EVENT_WALLPAPER_PINK_TIMES = "pinkWallpaper";// 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
+    public static final String EVENT_WALLPAPER_TIFFANY_TIMES = "wallpaperTiffany";// 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
-    public static final String EVENT_WALLPAPER_JEAN_TIMES = "jeanWallpaper"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
+    public static final String EVENT_WALLPAPER_JEAN_TIMES = "wallpaperJean"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
-    public static final String EVENT_WALLPAPER_WOOD_GRAIN_TIMES = "woodGrainWallpaper"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
+    public static final String EVENT_WALLPAPER_WOOD_GRAIN_TIMES = "wallpaperWoodGrain"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
     public static final String EVENT_GUIDE_PAGE_DURATION = "guidePageDuration"; // 计算引导页的总展示时间；
 
@@ -54,12 +61,12 @@ public class UmengCustomEventManager {
      * @param currentDate
      */
     public static void statisticalGuestureLockTime(PandoraConfig pandoraConfig, String currentDate) {
-        String saveDate = pandoraConfig.getEventGuestureLockTimeString();
+        String saveDate = pandoraConfig.getEventGuestureLockEnabledDailyString();
         if (!currentDate.equals(saveDate)) {
             if (pandoraConfig.isPandolaLockerOn()) {
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
                         UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY);
-                pandoraConfig.saveEventGuestureLockTime(currentDate);
+                pandoraConfig.saveEventGuestureLockEnabledDaily(currentDate);
             }
         }
     }
@@ -71,16 +78,16 @@ public class UmengCustomEventManager {
      * @param currentDate
      */
     public static void statisticalUseTheme(PandoraConfig pandoraConfig, String currentDate) {
-        String saveDate = pandoraConfig.getEventUseThemeTimeString();
+        String saveDate = pandoraConfig.getEventCurrentThemeDailyString();
         if (!currentDate.equals(saveDate)) {
-            int themeId = pandoraConfig.getCurrentThemeId();
+            int themeId = pandoraConfig.getCurrentThemeIdForStatistical();
             String themeName = "";
             switch (themeId) {
                 case ThemeManager.THEME_ID_BLUE:
                     themeName = "blue";
                     break;
                 case ThemeManager.THEME_ID_TIFFANY:
-                    themeName = "pink";
+                    themeName = "tiffany";
                     break;
                 case ThemeManager.THEME_ID_JEAN:
                     themeName = "jean";
@@ -92,12 +99,13 @@ public class UmengCustomEventManager {
                 default:
                     break;
             }
-            Map<String, String> map_value = new HashMap<String, String>();
-            map_value.put("themeName", themeName);
-            MobclickAgent.onEventValue(HDApplication.getInstannce(),
-                    UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, map_value, 0);
-
-            pandoraConfig.saveEventEnterLockTime(currentDate);
+            if (themeId != -1) {
+                Map<String, String> map_value = new HashMap<String, String>();
+                map_value.put("themeName", themeName);
+                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                        UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, map_value);
+                pandoraConfig.saveEventCurrentThemeDaily(currentDate);
+            }
         }
     }
 
@@ -108,11 +116,11 @@ public class UmengCustomEventManager {
      * @param currentDate
      */
     public static void statisticalEntryLockTimes(PandoraConfig pandoraConfig, String currentDate) {
-        String saveDate = pandoraConfig.getEventEnterLockTimeString();
+        String saveDate = pandoraConfig.getEventActiveDailyString();
         if (!currentDate.equals(saveDate)) {
             MobclickAgent.onEvent(HDApplication.getInstannce(),
                     UmengCustomEventManager.EVENT_ACTIVE_DAILY);
-            pandoraConfig.saveEventEnterLockTime(currentDate);
+            pandoraConfig.saveEventActiveDaily(currentDate);
         }
 
     }
@@ -165,10 +173,30 @@ public class UmengCustomEventManager {
             return;
         }
         String dataType = String.valueOf(mPandoraBox.getData().getDataType());
+        Log.d("syc", "dataType="+dataType);
         Map<String, String> map_value = new HashMap<String, String>();
-        map_value.put("dataType", dataType);
-        MobclickAgent.onEventValue(HDApplication.getInstannce(),
-                UmengCustomEventManager.EVENT_UNLOCK_DURATION, map_value, duration);
+        if (dataType.equals("TYPE_MIX_JOKE")) {
+            map_value.put("dataType", dataType);
+            MobclickAgent.onEventValue(HDApplication.getInstannce(),
+                    UmengCustomEventManager.EVENT_TYPE_MIX_JOKE, map_value, duration);
+        } else if (dataType.equals("TYPE_MIX_NEWS")) {
+            map_value.put("dataType", dataType);
+            MobclickAgent.onEventValue(HDApplication.getInstannce(),
+                    UmengCustomEventManager.EVENT_TYPE_MIX_NEWS, map_value, duration);
+        } else if (dataType.equals("TYPE_PLAIN_TEXT_JOKE")) {
+            map_value.put("dataType", dataType);
+            MobclickAgent.onEventValue(HDApplication.getInstannce(),
+                    UmengCustomEventManager.EVENT_TYPE_PLAIN_TEXT_JOKE, map_value, duration);
+        } else if (dataType.equals("TYPE_MIX_BAIDU")) {
+            map_value.put("dataType", dataType);
+            MobclickAgent.onEventValue(HDApplication.getInstannce(),
+                    UmengCustomEventManager.EVENT_TYPE_MIX_BAIDU, map_value, duration);
+        } else {
+            map_value.put("dataType", dataType);
+            MobclickAgent.onEventValue(HDApplication.getInstannce(),
+                    UmengCustomEventManager.EVENT_TYPE_DEFAULT, map_value, duration);
+        }
+
     }
 
     /**
@@ -191,7 +219,7 @@ public class UmengCustomEventManager {
                 break;
             case ThemeManager.THEME_ID_TIFFANY:
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
-                        UmengCustomEventManager.EVENT_WALLPAPER_PINK_TIMES);
+                        UmengCustomEventManager.EVENT_WALLPAPER_TIFFANY_TIMES);
                 break;
             case ThemeManager.THEME_ID_JEAN:
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
@@ -199,7 +227,7 @@ public class UmengCustomEventManager {
                 break;
             case ThemeManager.THEME_ID_WOOD_GRAIN:
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
-                        UmengCustomEventManager.EVENT_WALLPAPER_WOOD_GRAIN_TIMES);
+                        EVENT_WALLPAPER_WOOD_GRAIN_TIMES);
                 break;
 
             default:

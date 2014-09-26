@@ -525,8 +525,6 @@ public class LockPatternView extends View {
                 viewWidth = Math.min(viewWidth, viewHeight);
                 break;
         }
-        // Log.v(TAG, "LockPatternView dimensions: " + viewWidth + "x" +
-        // viewHeight);
         setMeasuredDimension(viewWidth, viewHeight);
     }
 
@@ -1037,7 +1035,6 @@ public class LockPatternView extends View {
 //        final int offsetX = ((int) mSquareWidth - mBitmapWidth) / 2;
 //        final int offsetY = ((int) mSquareHeight - mBitmapHeight) / 2;
 //
-//        Log.v("--->>", offsetX + " " + offsetY + " offset");
 
         // compute transform to place arrow bitmaps at correct angle inside
         // circle.

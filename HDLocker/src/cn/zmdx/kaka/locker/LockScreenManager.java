@@ -430,7 +430,6 @@ public class LockScreenManager {
 
         @Override
         public void onPanelCollapsed(View panel) {
-            Log.e("zy", "onPanelCollapsed");
             UmengCustomEventManager.statisticalUnLockTimes();
             if (!showGestureView()) {
                 unLock();
@@ -440,7 +439,6 @@ public class LockScreenManager {
 
         @Override
         public void onPanelExpanded(View panel) {
-            Log.e("zy", "onPanelExpanded");
             if (null != mLockPrompt) {
                 mLockPrompt.setText("");
             }
@@ -462,7 +460,6 @@ public class LockScreenManager {
 
         @Override
         public void onPanelFixed(View panel) {
-            Log.e("zy", "onPanelFixed");
             UmengCustomEventManager.statisticalFixedTimes();
             mVibrator.vibrate(50);
             if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
@@ -488,7 +485,6 @@ public class LockScreenManager {
         }
 
         public void onPanelStartDown(View view) {
-            Log.e("zy", "onPanelStartDown");
             visibleKeyhole();
             if (null != mLockArrow) {
                 mAnimatorSet.end();
