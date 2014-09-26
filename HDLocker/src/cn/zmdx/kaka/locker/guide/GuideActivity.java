@@ -123,7 +123,8 @@ public class GuideActivity extends Activity implements OnPageChangeListener {
                     @Override
                     public void onClick(View v) {
                         // 设置已经引导
-                        UmengCustomEventManager.statisticalGuideTime(mGuideTime);
+                        int duration = (int) (System.currentTimeMillis() - mGuideTime);
+                        UmengCustomEventManager.statisticalGuideTime(duration);
                         setGuided();
                         goHome();
                         PandoraConfig.newInstance(mActivity).savePandolaLockerState(true);

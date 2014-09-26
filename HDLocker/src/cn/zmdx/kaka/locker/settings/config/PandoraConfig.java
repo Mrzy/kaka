@@ -99,31 +99,31 @@ public class PandoraConfig {
 
     public void saveEventGuestureLockTime(String time) {
         Editor editor = mSp.edit();
-        editor.putString(UmengCustomEventManager.EVENT_GUESTURE_LOCK, time);
+        editor.putString(UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY, time);
         editor.commit();
     }
 
     public String getEventGuestureLockTimeString() {
-        return mSp.getString(UmengCustomEventManager.EVENT_GUESTURE_LOCK, "");
+        return mSp.getString(UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY, "");
     }
 
     public void saveEventUseThemeTime(String time) {
         Editor editor = mSp.edit();
-        editor.putString(UmengCustomEventManager.EVENT_USE_THEME_TIMES, time);
+        editor.putString(UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, time);
         editor.commit();
     }
 
     public String getEventUseThemeTimeString() {
-        return mSp.getString(UmengCustomEventManager.EVENT_USE_THEME_TIMES, "");
+        return mSp.getString(UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, "");
     }
 
     public void saveEventEnterLockTime(String time) {
         Editor editor = mSp.edit();
-        editor.putString(UmengCustomEventManager.EVENT_ENTER_LOCK_TIME, time);
+        editor.putString(UmengCustomEventManager.EVENT_ACTIVE_DAILY, time);
         editor.commit();
     }
 
     public String getEventEnterLockTimeString() {
-        return mSp.getString(UmengCustomEventManager.EVENT_ENTER_LOCK_TIME, "");
+        return mSp.getString(UmengCustomEventManager.EVENT_ACTIVE_DAILY, "");
     }
 }

@@ -15,47 +15,40 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_FIXED_TIMES = "fixedTimes";// 拉开锁屏固定住，计数一次；
 
-    public static final String EVENT_FIXED_UNLOCK_TIMES = "fixedUnLockTimes";// 固定后，点击解锁计数一次；
+    public static final String EVENT_CLICK_WHEN_FIXED = "clickWhenFixed";// 固定后，点击解锁计数一次；
 
-    public static final String EVENT_UNLOCK_TIMES = "unLockTimes";// 未固定，直接解锁，计数一次；
+    public static final String EVENT_DIRECT_UNLOCK = "directUnlock";// 未固定，直接解锁，计数一次；
 
-    public static final String EVENT_GUESTURE_LOCK = "guestureLock";// 若用户开启了手势锁，每日上报一次；
+    public static final String EVENT_GUESTURE_LOCK_ENABLED_DAILY = "guestureLockEnabledDaily";// 若用户开启了手势锁，每日上报一次；
 
     public static final String EVENT_GUESTURE_UNLOCK_SUCCESS_TIMES = "guestureUnLockSuccessTimes";// 手势锁成功解锁的次数；
 
     public static final String EVENT_GUESTURE_UNLOCK_FAIL_TIMES = "guestureUnLockFailTimes";// 手势锁成功解锁的次数；
 
-    public static final String EVENT_USE_THEME_TIMES = "userThemeTimes";// 每日上报一次使用的主题事件
+    public static final String EVENT_CURRENT_THEME_DAILY = "currentThemeDaily";// 每日上报一次使用的主题事件
 
-    public static final String EVENT_USE_BLUE_THEME_TIMES = "userBlueThemeTimes"; // 每日上报一次使用的主题事件；蓝色
+    public static final String EVENT_ACTIVE_DAILY = "activeDaily"; // 进入锁屏页，上报一次事件，作为统计活跃，每日一次；
 
-    public static final String EVENT_USE_PINK_THEME_TIMES = "userPinkThemeTimes"; // 每日上报一次使用的主题事件；粉色
+    public static final String EVENT_UNLOCK_DURATION = "unlockDuration";// 计算拉开锁屏到解锁的时间，及当前内容的id,dataType，website信息；
 
-    public static final String EVENT_USE_JEAN_THEME_TIMES = "userJeanThemeTimes"; // 每日上报一次使用的主题事件；牛仔
-
-    public static final String EVENT_USE_WOOD_GRAIN_THEME_TIMES = "userWoodGrainThemeTimes"; // 每日上报一次使用的主题事件；木纹
-
-    public static final String EVENT_ENTER_LOCK_TIME = "enterLock"; // 进入锁屏页，上报一次事件，作为统计活跃，每日一次；
-
-    public static final String EVENT_LOCK_TIME = "lockTime";// 计算拉开锁屏到解锁的时间，及当前内容的id,dataType，website信息；
-                                                            // 只计算开锁到固定解锁的时间
+    // 只计算开锁到固定解锁的时间
 
     public static final String EVENT_PANDORA_SWITCH_OPEN_TIMES = "pandoraSwitchOpen"; // 打开/关闭锁屏开关，上报对应事件；
 
     public static final String EVENT_PANDORA_SWITCH_CLOSE_TIMES = "pandoraSwitchClose"; // 打开/关闭锁屏开关，上报对应事件；
 
-    public static final String EVENT_WALLPAPER_BLUE_TIMES = "blue"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
+    public static final String EVENT_WALLPAPER_BLUE_TIMES = "blueWallpaper"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
-    public static final String EVENT_WALLPAPER_PINK_TIMES = "pink";// 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
+    public static final String EVENT_WALLPAPER_PINK_TIMES = "pinkWallpaper";// 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
-    public static final String EVENT_WALLPAPER_JEAN_TIMES = "jean"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
+    public static final String EVENT_WALLPAPER_JEAN_TIMES = "jeanWallpaper"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
-    public static final String EVENT_WALLPAPER_WOOD_GRAIN_TIMES = "woodGrain"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
+    public static final String EVENT_WALLPAPER_WOOD_GRAIN_TIMES = "woodGrainWallpaper"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
-    public static final String EVENT_GUIDE_TIME = "guideTime"; // 计算引导页的总展示时间；
+    public static final String EVENT_GUIDE_PAGE_DURATION = "guidePageDuration"; // 计算引导页的总展示时间；
 
     /**
-     * 统计是否开启锁屏
+     * 统计 若用户开启了手势锁，每日上报一次
      * 
      * @param pandoraConfig
      * @param currentDate
@@ -63,14 +56,16 @@ public class UmengCustomEventManager {
     public static void statisticalGuestureLockTime(PandoraConfig pandoraConfig, String currentDate) {
         String saveDate = pandoraConfig.getEventGuestureLockTimeString();
         if (!currentDate.equals(saveDate)) {
-            MobclickAgent.onEvent(HDApplication.getInstannce(),
-                    UmengCustomEventManager.EVENT_GUESTURE_LOCK);
-            pandoraConfig.saveEventGuestureLockTime(currentDate);
+            if (pandoraConfig.isPandolaLockerOn()) {
+                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                        UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY);
+                pandoraConfig.saveEventGuestureLockTime(currentDate);
+            }
         }
     }
 
     /**
-     * 统计当前使用的主题
+     * 统计当前使用的主题,每日上报一次
      * 
      * @param pandoraConfig
      * @param currentDate
@@ -79,35 +74,35 @@ public class UmengCustomEventManager {
         String saveDate = pandoraConfig.getEventUseThemeTimeString();
         if (!currentDate.equals(saveDate)) {
             int themeId = pandoraConfig.getCurrentThemeId();
+            String themeName = "";
             switch (themeId) {
                 case ThemeManager.THEME_ID_BLUE:
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_USE_BLUE_THEME_TIMES);
+                    themeName = "blue";
                     break;
                 case ThemeManager.THEME_ID_PINK:
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_USE_PINK_THEME_TIMES);
+                    themeName = "pink";
                     break;
                 case ThemeManager.THEME_ID_JEAN:
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_USE_JEAN_THEME_TIMES);
+                    themeName = "jean";
                     break;
                 case ThemeManager.THEME_ID_WOOD_GRAIN:
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_USE_WOOD_GRAIN_THEME_TIMES);
+                    themeName = "woodGrain";
                     break;
 
                 default:
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_USE_BLUE_THEME_TIMES);
                     break;
             }
+            Map<String, String> map_value = new HashMap<String, String>();
+            map_value.put("themeName", themeName);
+            MobclickAgent.onEventValue(HDApplication.getInstannce(),
+                    UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, map_value, 0);
+
             pandoraConfig.saveEventEnterLockTime(currentDate);
         }
     }
 
     /**
-     * 统计进入锁屏页次数
+     * 统计 进入锁屏页，上报一次事件，作为统计活跃，每日一次；
      * 
      * @param pandoraConfig
      * @param currentDate
@@ -116,7 +111,7 @@ public class UmengCustomEventManager {
         String saveDate = pandoraConfig.getEventEnterLockTimeString();
         if (!currentDate.equals(saveDate)) {
             MobclickAgent.onEvent(HDApplication.getInstannce(),
-                    UmengCustomEventManager.EVENT_ENTER_LOCK_TIME);
+                    UmengCustomEventManager.EVENT_ACTIVE_DAILY);
             pandoraConfig.saveEventEnterLockTime(currentDate);
         }
 
@@ -143,7 +138,7 @@ public class UmengCustomEventManager {
      */
     public static void statisticalUnLockTimes() {
         MobclickAgent.onEvent(HDApplication.getInstannce(),
-                UmengCustomEventManager.EVENT_UNLOCK_TIMES);
+                UmengCustomEventManager.EVENT_DIRECT_UNLOCK);
     }
 
     /**
@@ -159,29 +154,27 @@ public class UmengCustomEventManager {
      */
     public static void statisticalFixedUnLockTimes() {
         MobclickAgent.onEvent(HDApplication.getInstannce(),
-                UmengCustomEventManager.EVENT_FIXED_UNLOCK_TIMES);
+                UmengCustomEventManager.EVENT_CLICK_WHEN_FIXED);
     }
 
     /**
      * 统计拉开锁屏到解锁的时间，及当前内容的dataType信息； 只计算开锁到固定解锁的时间
      */
-    public static void statisticalLockTime(IPandoraBox mPandoraBox, long mLockTime) {
-        int duration = (int) (System.currentTimeMillis() - mLockTime);
+    public static void statisticalLockTime(IPandoraBox mPandoraBox, int duration) {
         String dataType = mPandoraBox.getData().getFrom();
         Map<String, String> map_value = new HashMap<String, String>();
         map_value.put("dataType", dataType);
         MobclickAgent.onEventValue(HDApplication.getInstannce(),
-                UmengCustomEventManager.EVENT_LOCK_TIME, map_value, duration);
+                UmengCustomEventManager.EVENT_UNLOCK_DURATION, map_value, duration);
     }
 
     /**
      * 计算引导页的总展示时间
      */
-    public static void statisticalGuideTime(long mGuideTime) {
-        int duration = (int) (System.currentTimeMillis() - mGuideTime);
+    public static void statisticalGuideTime(int duration) {
         Map<String, String> map_value = new HashMap<String, String>();
         MobclickAgent.onEventValue(HDApplication.getInstannce(),
-                UmengCustomEventManager.EVENT_GUIDE_TIME, map_value, duration);
+                UmengCustomEventManager.EVENT_GUIDE_PAGE_DURATION, map_value, duration);
     }
 
     /**

@@ -459,7 +459,8 @@ public class LockScreenManager {
         @Override
         public void onPanelClickedDuringFixed() {
             UmengCustomEventManager.statisticalFixedUnLockTimes();
-            UmengCustomEventManager.statisticalLockTime(mPandoraBox, mLockTime);
+            int duration = (int) (System.currentTimeMillis() - mLockTime);
+            UmengCustomEventManager.statisticalLockTime(mPandoraBox, duration);
             if (!showGestureView()) {
                 unLock();
             }

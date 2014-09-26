@@ -294,6 +294,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     }
 
     private void showGustureView(final int type) {
+        mLockerTypeSButton.setEnabled(false);
         View decorView = getActivity().getWindow().getDecorView();
         Bitmap blurBitmap = PandoraUtils.fastBlur(decorView);
         Intent in = new Intent();
@@ -310,6 +311,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        mLockerTypeSButton.setEnabled(true);
         switch (resultCode) {
             case GUSTURE_REQUEST_CODE_FAIL:
                 int type = data.getExtras().getInt("type");

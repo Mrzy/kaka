@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -25,7 +26,7 @@ public class InitSettingActivity extends Activity implements OnClickListener {
 
     private Button mTrustBtn;
 
-    private Button mCompleteBtn;
+    private TextView mCompleteBtn;
 
     private PandoraConfig mPandoraConfig;
 
@@ -59,7 +60,7 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         mFolatfingWindowBtn.setOnClickListener(this);
         mTrustBtn = (Button) findViewById(R.id.init_setting_MIUI_trust_to_set);
         mTrustBtn.setOnClickListener(this);
-        mCompleteBtn = (Button) findViewById(R.id.init_setting_miui_complete);
+        mCompleteBtn = (TextView) findViewById(R.id.init_setting_miui_complete);
         mCompleteBtn.setOnClickListener(this);
 
     }
@@ -118,7 +119,7 @@ public class InitSettingActivity extends Activity implements OnClickListener {
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("InitSettingActivity"); // 保证 onPageEnd 在onPause
-                                                 // 之前调用,因为 onPause 中会保存信息
+        // 之前调用,因为 onPause 中会保存信息
         MobclickAgent.onPause(this);
     }
 }
