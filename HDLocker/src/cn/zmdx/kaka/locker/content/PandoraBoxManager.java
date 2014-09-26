@@ -233,6 +233,7 @@ public class PandoraBoxManager {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("文本长度超过220字，忽略，继续查询下一条...");
             }
+            ServerDataModel.getInstance().deleteById(bd.getId());
             return getPlainTextJoke();
         }
 
