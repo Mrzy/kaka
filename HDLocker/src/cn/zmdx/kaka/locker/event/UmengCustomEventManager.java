@@ -79,7 +79,7 @@ public class UmengCustomEventManager {
                 case ThemeManager.THEME_ID_BLUE:
                     themeName = "blue";
                     break;
-                case ThemeManager.THEME_ID_PINK:
+                case ThemeManager.THEME_ID_TIFFANY:
                     themeName = "pink";
                     break;
                 case ThemeManager.THEME_ID_JEAN:
@@ -186,7 +186,7 @@ public class UmengCustomEventManager {
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
                         UmengCustomEventManager.EVENT_WALLPAPER_BLUE_TIMES);
                 break;
-            case ThemeManager.THEME_ID_PINK:
+            case ThemeManager.THEME_ID_TIFFANY:
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
                         UmengCustomEventManager.EVENT_WALLPAPER_PINK_TIMES);
                 break;

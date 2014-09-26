@@ -57,7 +57,6 @@ public class MainSettingsActivity extends FragmentActivity {
         init();
         super.onCreate(savedInstanceState);
         MobclickAgent.openActivityDurationTrack(false);
-        UmengUpdateAgent.update(this);
         UmengUpdateAgent.silentUpdate(this);
         setContentView(R.layout.main_setting_activity);
         getWindow().getAttributes().flags = LayoutParams.FLAG_LAYOUT_IN_SCREEN;

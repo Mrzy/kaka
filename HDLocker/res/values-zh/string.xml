@@ -58,4 +58,8 @@
     <string name="lock_guide_prompt_one">底部停留锁定屏幕</string>
     <string name="lock_guide_prompt_two">轻触解锁</string>
 
+    <string name="update_prompt_no_update">当前已经是最新版本！</string>
+    <string name="update_prompt_no_wify">为了节省您的流量，请在wifi环境下操作！</string>
+    <string name="update_prompt_no_internet">网络连接超时，请稍候再试！</string>
+    
 </resources>

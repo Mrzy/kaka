@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
-import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
 
 public abstract class BaseSettingsFragment extends Fragment {
 
@@ -29,7 +31,40 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
 
     protected void checkNewVersion() {
+        isUpdate();
+    }
+
+    private void isUpdate() {
         UmengUpdateAgent.forceUpdate(mContext);
+        UmengUpdateAgent.setUpdateAutoPopup(false);
+        UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+            @Override
+            public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
+                switch (updateStatus) {
+                    case 0: // has update
+                        UmengUpdateAgent.showUpdateDialog(mContext, updateInfo);
+                        break;
+                    case 1: // has no update
+                        Toast.makeText(
+                                mContext,
+                                mContext.getResources().getString(R.string.update_prompt_no_update),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case 2: // none wifi
+                        Toast.makeText(mContext,
+                                mContext.getResources().getString(R.string.update_prompt_no_wify),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case 3: // time out
+                        Toast.makeText(
+                                mContext,
+                                mContext.getResources().getString(
+                                        R.string.update_prompt_no_internet), Toast.LENGTH_LONG)
+                                .show();
+                        break;
+                }
+            }
+        });
     }
 
     protected void startFeedback() {
