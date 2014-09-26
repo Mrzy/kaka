@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.os.Message;
-import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.database.MySqlitDatabase;
@@ -37,10 +36,10 @@ public class ServerImageDataManager {
     }
 
     /**
-     * 
      * @param limit
-     * @param dataType S_DATATYPE_JOKE， S_DATATYPE_FILM， S_DATATYPE_NEWS， S_DATATYPE_GAME， S_DATATYPE_ALL
-     * @param webSite 
+     * @param dataType S_DATATYPE_JOKE， S_DATATYPE_FILM， S_DATATYPE_NEWS，
+     *            S_DATATYPE_GAME， S_DATATYPE_ALL
+     * @param webSite
      */
     public void pullServerImageData(int limit, String dataType, String webSite) {
         JsonObjectRequest request = null;
@@ -79,18 +78,14 @@ public class ServerImageDataManager {
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("download image finished,path=" + response);
                 }
-                if (ServerImageDataModel.getInstance().markAlreadyDownload(bd.mId)) {
-                    Log.e("zy","markAlreadyDownload,id:" + bd.mId);
-                } else {
-                    Log.e("zy", "markAlreadyDownload failed");
-                }
+                ServerImageDataModel.getInstance().markAlreadyDownload(bd.mId);
             }
 
         }, new ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                    // invalidate url
-                    DiskImageHelper.remove(bd.mImageUrl);
+                // invalidate url
+                DiskImageHelper.remove(bd.mImageUrl);
             }
         });
         RequestManager.getRequestQueue().add(request);

@@ -35,6 +35,9 @@ public class PandoraConfig {
 
     private static final String GUIDE_TIMES = "guideTimes";
 
+    //最后一次拉取百度图片的时间
+    private static final String KEY_LAST_PULL_BAIDU_TIME = "lastPullBaiduTime";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -125,5 +128,15 @@ public class PandoraConfig {
 
     public String getEventEnterLockTimeString() {
         return mSp.getString(UmengCustomEventManager.EVENT_ACTIVE_DAILY, "");
+    }
+
+    public long getLastPullBaiduTime() {
+        return mSp.getLong(KEY_LAST_PULL_BAIDU_TIME, 0);
+    }
+
+    public void saveLastPullBaiduTime(long time) {
+        Editor editor = mSp.edit();
+        editor.putLong(KEY_LAST_PULL_BAIDU_TIME, time);
+        editor.commit();
     }
 }

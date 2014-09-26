@@ -42,4 +42,6 @@ public class PandoraPolicy {
 
     public static final long MIN_INTERVAL_SAME_BOX = 1000;// 1 min
 
+    public static final long PULL_BAIDU_INTERVAL_TIME = 2 * 24 * 60 * 60 * 1000; //2 days
+
 }

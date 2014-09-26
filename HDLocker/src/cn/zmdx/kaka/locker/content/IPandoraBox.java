@@ -33,7 +33,7 @@ public interface IPandoraBox {
 
         private Bitmap mImage;
 
-        private int mDataType;
+        private String mDataType;
 
         private String mImageUrl;
 
@@ -47,11 +47,11 @@ public interface IPandoraBox {
             this.mId = mId;
         }
 
-        public int getDataType() {
+        public String getDataType() {
             return mDataType;
         }
 
-        public void setDataType(int dataType) {
+        public void setDataType(String dataType) {
             this.mDataType = dataType;
         }
 

@@ -112,7 +112,9 @@ public class ServerDataModel {
                 TableStructure.SERVER_ID, TableStructure.SERVER_COLLECT_WEBSITE,
                 TableStructure.SERVER_CONTENT, TableStructure.SERVER_DATA_TYPE,
                 TableStructure.SERVER_TITLE
-        }, TableStructure.SERVER_COLLECT_WEBSITE + "=?", new String[]{website}, null, null, null, "1");
+        }, TableStructure.SERVER_COLLECT_WEBSITE + "=?", new String[] {
+            website
+        }, null, null, null, "1");
         while (cursor.moveToNext()) {
             sd = new ServerData();
             sd.setId(cursor.getInt(0));
@@ -122,6 +124,32 @@ public class ServerDataModel {
             sd.setTitle(cursor.getString(4));
         }
         cursor.close();
+        return sd;
+    }
+
+    public ServerData queryByDataType(String type) {
+        ServerData sd = null;
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER, new String[] {
+                TableStructure.SERVER_ID, TableStructure.SERVER_COLLECT_WEBSITE,
+                TableStructure.SERVER_CONTENT, TableStructure.SERVER_DATA_TYPE,
+                TableStructure.SERVER_TITLE
+        }, TableStructure.SERVER_DATA_TYPE + "=?", new String[] {
+            type
+        }, null, null, null, "1");
+        try {
+            while (cursor.moveToNext()) {
+                sd = new ServerData();
+                sd.setId(cursor.getInt(0));
+                sd.setCollectWebsite(cursor.getString(1));
+                sd.setContent(cursor.getString(2));
+                sd.setDataType(cursor.getString(3));
+                sd.setTitle(cursor.getString(4));
+            }
+        } catch (Exception e) {
+        } finally {
+            cursor.close();
+        }
         return sd;
     }
 }

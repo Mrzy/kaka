@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.BaiduDataManager.BaiduData;
 import cn.zmdx.kaka.locker.content.ServerDataManager.ServerData;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
@@ -15,6 +16,7 @@ import cn.zmdx.kaka.locker.database.BaiduDataModel;
 import cn.zmdx.kaka.locker.database.ServerDataModel;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -41,8 +43,11 @@ public class PandoraBoxDispatcher extends Handler {
 
     private static PandoraBoxDispatcher INSTANCE;
 
+    private PandoraConfig mConfig;
+    
     private PandoraBoxDispatcher(Looper looper) {
         super(looper);
+        mConfig = PandoraConfig.newInstance(HDApplication.getInstannce());
     }
 
     public static synchronized PandoraBoxDispatcher getInstance() {
@@ -67,7 +72,17 @@ public class PandoraBoxDispatcher extends Handler {
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("收到抓取百度数据的消息");
                 }
-                processPullBaiduData();
+                if (checkPullable()) {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("满足拉取百度图片的条件，开始拉取...");
+                    }
+                    processPullBaiduData();
+                    mConfig.saveLastPullBaiduTime(System.currentTimeMillis());
+                } else {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("不满足拉取百度图片的条件，停止拉取...");
+                    }
+                }
                 break;
             case MSG_PULL_SERVER_TEXT_DATA:
                 if (BuildConfig.DEBUG) {
@@ -118,6 +133,15 @@ public class PandoraBoxDispatcher extends Handler {
         }
 
         super.handleMessage(msg);
+    }
+
+    /**
+     * 检查是否满足拉取百度图片的条件
+     * @return
+     */
+    private boolean checkPullable() {
+        final long lastPullTime = mConfig.getLastPullBaiduTime();
+        return System.currentTimeMillis() - lastPullTime > PandoraPolicy.PULL_BAIDU_INTERVAL_TIME;
     }
 
     private void loadPandoraServerImage() {

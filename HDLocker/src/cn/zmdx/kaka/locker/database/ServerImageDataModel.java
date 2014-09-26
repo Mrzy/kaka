@@ -175,6 +175,7 @@ public class ServerImageDataModel {
                 data.setUrl(cursor.getString(1));
                 data.setImageUrl(cursor.getString(2));
                 data.setTitle(cursor.getString(3));
+                data.setDataType(datatypeNews);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -17,7 +17,6 @@ import cn.zmdx.kaka.locker.database.BaiduDataModel;
 import cn.zmdx.kaka.locker.database.ServerDataModel;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.database.TableStructure;
-import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class PandoraBoxManager {
@@ -26,22 +25,17 @@ public class PandoraBoxManager {
 
     private Context mContext;
 
-    private static final int TYPE_PLAIN_TEXT_CAODAN = 1;
+    private static final int TYPE_PLAIN_TEXT_JOKE = 1;
 
     private static final int TYPE_MIX_NEWS = 2;
 
-    private static final int TYPE_MIX_QIUBAI = 3;
-
-    private static final int TYPE_PLAIN_TEXT_XIAOHUA = 4;
+    private static final int TYPE_MIX_JOKE = 3;
 
     private static final int TYPE_MIX_BAIDU = 5;
 
     private final int[] DISPLAY_TYPE = {
-            TYPE_PLAIN_TEXT_CAODAN, TYPE_MIX_NEWS, TYPE_MIX_QIUBAI, TYPE_PLAIN_TEXT_XIAOHUA,
-            TYPE_MIX_BAIDU
+            TYPE_PLAIN_TEXT_JOKE, TYPE_MIX_NEWS, TYPE_MIX_JOKE, TYPE_MIX_BAIDU
     };
-
-    private static long mPreDisplayTime;
 
     private IPandoraBox mPreDisplayBox;
 
@@ -56,7 +50,7 @@ public class PandoraBoxManager {
         return mPbManager;
     }
 
-    private void releaseResource(IPandoraBox box) {
+    private void releasePreResource(IPandoraBox box) {
         if (box == null) {
             return;
         }
@@ -92,71 +86,50 @@ public class PandoraBoxManager {
     }
 
     public IPandoraBox getNextPandoraBox() {
-        final long curTime = System.currentTimeMillis();
-        if (curTime - mPreDisplayTime < PandoraPolicy.MIN_INTERVAL_SAME_BOX) {
-            return mPreDisplayBox == null ? getDefaultData() : mPreDisplayBox;
-        }
         int random = new Random().nextInt(10) % DISPLAY_TYPE.length;
         int type = DISPLAY_TYPE[random];
-        if (type == TYPE_PLAIN_TEXT_CAODAN) {
-            IPandoraBox box = getPlainTextBox(type, ServerDataMapping.S_WEBSITE_CAODANWANG);
+        if (type == TYPE_PLAIN_TEXT_JOKE) {
+            releasePreResource(mPreDisplayBox);
+            IPandoraBox box = getPlainTextJoke();
             if (box == null) {
                 return getDefaultData();
             } else {
-                releaseResource(mPreDisplayBox);
-                mPreDisplayTime = System.currentTimeMillis();
                 mPreDisplayBox = box;
                 if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("随机到草蛋网笑话一则");
-                }
-                return box;
-            }
-        } else if (type == TYPE_PLAIN_TEXT_XIAOHUA) {
-            IPandoraBox box = getPlainTextBox(type, ServerDataMapping.S_WEBSITE_HAOXIAOHUA);
-            if (box == null) {
-                return getDefaultData();
-            } else {
-                releaseResource(mPreDisplayBox);
-                mPreDisplayTime = System.currentTimeMillis();
-                mPreDisplayBox = box;
-                if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("随机到好笑话网笑话一则");
+                    HDBLOG.logD("随机到文本笑话一则");
                 }
                 return box;
             }
         } else if (type == TYPE_MIX_NEWS) {
-            IPandoraBox box = getMixNewsBox(type);
+            releasePreResource(mPreDisplayBox);
+            IPandoraBox box = getMixNewsBox();
             if (box == null) {
                 return getDefaultData();
             } else {
-                releaseResource(mPreDisplayBox);
-                mPreDisplayTime = System.currentTimeMillis();
                 mPreDisplayBox = box;
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("随机到新闻一条");
                 }
                 return box;
             }
-        } else if (type == TYPE_MIX_QIUBAI) {
-            IPandoraBox box = getMixQiubaiBox(type);
+        } else if (type == TYPE_MIX_JOKE) {
+            releasePreResource(mPreDisplayBox);
+            IPandoraBox box = getMixJoke();
             if (box == null) {
                 return getDefaultData();
             } else {
-                releaseResource(mPreDisplayBox);
-                mPreDisplayTime = System.currentTimeMillis();
                 mPreDisplayBox = box;
                 if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("随机到糗百一条");
+                    HDBLOG.logD("随机到图文笑话一条");
                 }
                 return box;
             }
         } else if (type == TYPE_MIX_BAIDU) {
-            IPandoraBox box = getMixImgTextBox(type);
+            releasePreResource(mPreDisplayBox);
+            IPandoraBox box = getMixFromBaidu();
             if (box == null) {
                 return getDefaultData();
             } else {
-                releaseResource(mPreDisplayBox);
-                mPreDisplayTime = System.currentTimeMillis();
                 mPreDisplayBox = box;
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("随机到百度图片一则");
@@ -168,9 +141,9 @@ public class PandoraBoxManager {
         return getDefaultData();
     }
 
-    private IPandoraBox getMixQiubaiBox(int type) {
-        final ServerImageData bd = ServerImageDataModel.getInstance().queryByWebsite(
-                ServerDataMapping.S_WEBSITE_QIUBAI);
+    private IPandoraBox getMixJoke() {
+        final ServerImageData bd = ServerImageDataModel.getInstance().queryByDataType(
+                ServerDataMapping.S_DATATYPE_JOKE);
         if (bd == null) {
             return null;
         }
@@ -185,7 +158,7 @@ public class PandoraBoxManager {
         try {
             if (w / h > 2.5 || h / w > 2.5 || w > 1500 || h > 2000) {
                 ServerImageDataModel.getInstance().deleteById(bd.getId());
-                return getMixImgTextBox(type);
+                return getMixJoke();
             } else {
                 bmp = DiskImageHelper.getBitmapByUrl(bd.getUrl(), null);
             }
@@ -202,14 +175,14 @@ public class PandoraBoxManager {
         pd.setFromTable(TableStructure.TABLE_NAME_SERVER_IMAGE);
         pd.setmTitle(bd.getTitle());
         pd.setmContent(bd.getTitle());
-        pd.setDataType(type);
+        pd.setDataType("TYPE_MIX_JOKE");
         pd.setmImageUrl(bd.getUrl());
         pd.setmImage(bmp);
         IPandoraBox box = new SingleImageBox(mContext, pd);
         return box;
     }
 
-    private IPandoraBox getMixNewsBox(int type) {
+    private IPandoraBox getMixNewsBox() {
         final ServerImageData bd = ServerImageDataModel.getInstance().queryByDataType(
                 ServerDataMapping.S_DATATYPE_NEWS);
         if (bd == null) {
@@ -226,7 +199,7 @@ public class PandoraBoxManager {
         try {
             if (w / h > 2.5 || h / w > 2.5 || w > 1500 || h > 2000) {
                 ServerImageDataModel.getInstance().deleteById(bd.getId());
-                return getMixImgTextBox(type);
+                return getMixNewsBox();
             } else {
                 bmp = DiskImageHelper.getBitmapByUrl(bd.getUrl(), null);
             }
@@ -243,21 +216,24 @@ public class PandoraBoxManager {
         pd.setFromTable(TableStructure.TABLE_NAME_SERVER_IMAGE);
         pd.setmTitle(bd.getTitle());
         pd.setmContent(bd.getTitle());
-        pd.setDataType(type);
+        pd.setDataType("TYPE_MIX_NEWS");
         pd.setmImageUrl(bd.getUrl());
         pd.setmImage(bmp);
         IPandoraBox box = new SingleImageBox(mContext, pd);
         return box;
     }
 
-    public IPandoraBox getPlainTextBox(int type, String website) {
-        final ServerData bd = ServerDataModel.getInstance().queryByWebsite(website);
+    public IPandoraBox getPlainTextJoke() {
+        final ServerData bd = ServerDataModel.getInstance().queryByDataType(ServerDataMapping.S_DATATYPE_JOKE);
         if (bd == null) {
             return null;
         }
-        //若文本笑话长度超过220字，则忽略本条继续查询下一条
+        // 若文本笑话长度超过220字，则忽略本条继续查询下一条
         if (bd.getContent() != null && bd.getContent().length() > 220) {
-            return getPlainTextBox(type, website);
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("文本长度超过220字，忽略，继续查询下一条...");
+            }
+            return getPlainTextJoke();
         }
 
         final PandoraData pd = new PandoraData();
@@ -265,12 +241,12 @@ public class PandoraBoxManager {
         pd.setmContent(bd.getContent());
         pd.setFromTable(TableStructure.TABLE_NAME_SERVER);
         pd.setmTitle(bd.getTitle());
-        pd.setDataType(type);
+        pd.setDataType("TYPE_PLAIN_TEXT_JOKE");
         IPandoraBox box = new PlainTextBox(mContext, pd);
         return box;
     }
 
-    public IPandoraBox getMixImgTextBox(int type) {
+    public IPandoraBox getMixFromBaidu() {
         final List<BaiduData> list = BaiduDataModel.getInstance().queryWithImgByTag1(
                 BaiduTagMapping.S_TAG1_GAOXIAO, 1);
         if (list.size() <= 0) {
@@ -287,7 +263,7 @@ public class PandoraBoxManager {
         try {
             if (w / h > 2.5 || h / w > 2.5 || w > 1500 || h > 2000) {
                 BaiduDataModel.getInstance().deleteById(bd.getId());
-                return getMixImgTextBox(type);
+                return getMixFromBaidu();
             } else {
                 bmp = DiskImageHelper.getBitmapByUrl(bd.mImageUrl, null);
             }
@@ -307,6 +283,7 @@ public class PandoraBoxManager {
         pd.setmId(bd.getId());
         pd.setmImageUrl(bd.getImageUrl());
         pd.setmContent(bd.getDescribe());
+        pd.setDataType("TYPE_MIX_BAIDU");
         IPandoraBox box = new SingleImageBox(mContext, pd);
         return box;
     }
@@ -318,6 +295,7 @@ public class PandoraBoxManager {
         PandoraData pd = new PandoraData();
         pd.setmImage(BitmapFactory.decodeResource(mContext.getResources(),
                 R.drawable.pandora_box_default));
+        pd.setDataType("DEFAULT_PAGE");
         return new DefaultBox(mContext);
     }
 }
