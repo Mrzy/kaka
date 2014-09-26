@@ -71,7 +71,7 @@ public class SingleImageBox implements IPandoraBox {
                 if (mIsHide) {
                     mDescView.setVisibility(View.VISIBLE);
                 } else {
-                    mDescView.setVisibility(View.GONE);
+                    mDescView.setVisibility(View.INVISIBLE);
                 }
                 mIsHide = !mIsHide;
             }
