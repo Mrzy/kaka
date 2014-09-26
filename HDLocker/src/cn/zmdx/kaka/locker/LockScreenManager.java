@@ -169,14 +169,18 @@ public class LockScreenManager {
         mWinManager.addView(mEntireView, params);
     }
 
+    private boolean mIsUseCurrentBox = false;
+
     private void refreshContent() {
-        mPandoraBox = PandoraBoxManager.newInstance(HDApplication.getInstannce())
-                .getNextPandoraBox();
+        if (!mIsUseCurrentBox) {
+            mPandoraBox = PandoraBoxManager.newInstance(HDApplication.getInstannce())
+                    .getNextPandoraBox();
+        }
+
         View contentView = mPandoraBox.getRenderedView();
         if (contentView == null) {
             return;
         }
-        mBoxView.removeView(contentView);
         ViewParent parent = contentView.getParent();
         if (parent != null) {
             ((ViewGroup) parent).removeView(contentView);
@@ -387,6 +391,7 @@ public class LockScreenManager {
         if (checkPattern(pattern)) {
             UmengCustomEventManager.statisticalGuestureUnLockSuccess();
             unLock();
+            mIsUseCurrentBox = false;
         } else {
             UmengCustomEventManager.statisticalGuestureUnLockFail();
             mGusturePrompt.setText(HDApplication.getInstannce().getResources()
@@ -429,6 +434,7 @@ public class LockScreenManager {
             UmengCustomEventManager.statisticalUnLockTimes();
             if (!showGestureView()) {
                 unLock();
+                mIsUseCurrentBox = true;
             }
         }
 
@@ -474,6 +480,7 @@ public class LockScreenManager {
             UmengCustomEventManager.statisticalLockTime(mPandoraBox, duration);
             if (!showGestureView()) {
                 unLock();
+                mIsUseCurrentBox = false;
             }
             if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
                 mPandoraConfig.saveGuideTimes(mTextGuideTimes + 1);
