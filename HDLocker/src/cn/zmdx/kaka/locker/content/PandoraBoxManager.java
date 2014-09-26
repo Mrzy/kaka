@@ -255,6 +255,10 @@ public class PandoraBoxManager {
         if (bd == null) {
             return null;
         }
+        //若文本笑话长度超过220字，则忽略本条继续查询下一条
+        if (bd.getContent() != null && bd.getContent().length() > 220) {
+            return getPlainTextBox(type, website);
+        }
 
         final PandoraData pd = new PandoraData();
         pd.setmId(bd.getId());
