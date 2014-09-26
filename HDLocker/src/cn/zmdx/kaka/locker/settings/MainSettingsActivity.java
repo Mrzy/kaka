@@ -85,15 +85,16 @@ public class MainSettingsActivity extends FragmentActivity {
         startActivity(intent);
     }
 
-    @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
+        MobclickAgent.onPageStart("MainSettingsActivity"); // 统计页面
+        MobclickAgent.onResume(this); // 统计时长
     }
 
-    @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
+        MobclickAgent.onPageEnd("MainSettingsActivity"); // 保证 onPageEnd 在onPause
+                                                 // 之前调用,因为 onPause 中会保存信息
         MobclickAgent.onPause(this);
     }
 

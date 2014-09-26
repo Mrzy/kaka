@@ -79,13 +79,4 @@ public abstract class BaseSettingsFragment extends Fragment {
         return mPandoraConfig.getCurrentThemeId();
     }
 
-    public void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart("MainScreen");
-    }
-
-    public void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd("MainScreen");
-    }
 }

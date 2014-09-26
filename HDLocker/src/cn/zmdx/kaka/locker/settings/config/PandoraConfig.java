@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.settings.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 
 public class PandoraConfig {
@@ -94,5 +95,35 @@ public class PandoraConfig {
 
     public int getGuideTimesInt() {
         return mSp.getInt(GUIDE_TIMES, 0);
+    }
+
+    public void saveEventGuestureLockTime(String time) {
+        Editor editor = mSp.edit();
+        editor.putString(UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY, time);
+        editor.commit();
+    }
+
+    public String getEventGuestureLockTimeString() {
+        return mSp.getString(UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY, "");
+    }
+
+    public void saveEventUseThemeTime(String time) {
+        Editor editor = mSp.edit();
+        editor.putString(UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, time);
+        editor.commit();
+    }
+
+    public String getEventUseThemeTimeString() {
+        return mSp.getString(UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, "");
+    }
+
+    public void saveEventEnterLockTime(String time) {
+        Editor editor = mSp.edit();
+        editor.putString(UmengCustomEventManager.EVENT_ACTIVE_DAILY, time);
+        editor.commit();
+    }
+
+    public String getEventEnterLockTimeString() {
+        return mSp.getString(UmengCustomEventManager.EVENT_ACTIVE_DAILY, "");
     }
 }

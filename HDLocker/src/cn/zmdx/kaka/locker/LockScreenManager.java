@@ -27,6 +27,7 @@ import cn.zmdx.kaka.locker.animation.AnimationFactory.FlipDirection;
 import cn.zmdx.kaka.locker.content.IPandoraBox;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -92,7 +93,9 @@ public class LockScreenManager {
 
     private ObjectAnimator mObjectAnimator;
 
-    private int mGuideTimes;
+    private int mTextGuideTimes;
+
+    private long mLockTime;
 
     private LockScreenManager() {
         mWinManager = (WindowManager) HDApplication.getInstannce().getSystemService(
@@ -124,12 +127,18 @@ public class LockScreenManager {
     public void lock() {
         if (mIsLocked)
             return;
-        boolean isLockerOn = PandoraConfig.newInstance(HDApplication.getInstannce())
-                .isPandolaLockerOn();
+        PandoraConfig pandoraConfig = PandoraConfig.newInstance(HDApplication.getInstannce());
+        boolean isLockerOn = pandoraConfig.isPandolaLockerOn();
         if (!isLockerOn) {
             return;
         }
-        mGuideTimes = mPandoraConfig.getGuideTimesInt();
+        mLockTime = System.currentTimeMillis();
+        String currentDate = getCurrentDate();
+        UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
+        UmengCustomEventManager.statisticalUseTheme(pandoraConfig, currentDate);
+        UmengCustomEventManager.statisticalEntryLockTimes(pandoraConfig, currentDate);
+
+        mTextGuideTimes = pandoraConfig.getGuideTimesInt();
         mIsLocked = true;
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
 
@@ -229,6 +238,13 @@ public class LockScreenManager {
         int week = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         String weekString = PandoraUtils.getWeekString(HDApplication.getInstannce(), week);
         mDate.setText("" + month + "月" + "" + day + "日 " + weekString);
+    }
+
+    private String getCurrentDate() {
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        return "" + year + "" + month + "" + day;
     }
 
     private void combineIcon(boolean combine) {
@@ -369,8 +385,10 @@ public class LockScreenManager {
 
     private void verifyGustureLock(List<Cell> pattern) {
         if (checkPattern(pattern)) {
+            UmengCustomEventManager.statisticalGuestureUnLockSuccess();
             unLock();
         } else {
+            UmengCustomEventManager.statisticalGuestureUnLockFail();
             mGusturePrompt.setText(HDApplication.getInstannce().getResources()
                     .getString(R.string.gusture_verify_fail));
             mLockPatternView.setDisplayMode(DisplayMode.Wrong);
@@ -395,7 +413,7 @@ public class LockScreenManager {
             } else {
                 combineIcon(false);
             }
-            if (mGuideTimes < MAX_TIMES_SHOW_GUIDE) {
+            if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
                 if (slideOffset < 1 && slideOffset > 0) {
                     if (null != mLockPrompt) {
                         mLockPrompt.setText(HDApplication.getInstannce().getResources()
@@ -408,6 +426,7 @@ public class LockScreenManager {
         @Override
         public void onPanelCollapsed(View panel) {
             Log.e("zy", "onPanelCollapsed");
+            UmengCustomEventManager.statisticalUnLockTimes();
             if (!showGestureView()) {
                 unLock();
             }
@@ -438,8 +457,9 @@ public class LockScreenManager {
         @Override
         public void onPanelFixed(View panel) {
             Log.e("zy", "onPanelFixed");
+            UmengCustomEventManager.statisticalFixedTimes();
             mVibrator.vibrate(50);
-            if (mGuideTimes < MAX_TIMES_SHOW_GUIDE) {
+            if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
                 if (null != mLockPrompt) {
                     mLockPrompt.setText(HDApplication.getInstannce().getResources()
                             .getString(R.string.lock_guide_prompt_two));
@@ -449,11 +469,14 @@ public class LockScreenManager {
 
         @Override
         public void onPanelClickedDuringFixed() {
+            UmengCustomEventManager.statisticalFixedUnLockTimes();
+            int duration = (int) (System.currentTimeMillis() - mLockTime);
+            UmengCustomEventManager.statisticalLockTime(mPandoraBox, duration);
             if (!showGestureView()) {
                 unLock();
             }
-            if (mGuideTimes < MAX_TIMES_SHOW_GUIDE) {
-                mPandoraConfig.saveGuideTimes(mGuideTimes + 1);
+            if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
+                mPandoraConfig.saveGuideTimes(mTextGuideTimes + 1);
             }
         }
 
@@ -469,4 +492,5 @@ public class LockScreenManager {
         public void onPanelHiddenEnd() {
         };
     };
+
 }

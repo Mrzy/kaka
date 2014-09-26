@@ -1,9 +1,9 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,7 +28,7 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.animation.ViewAnimation;
-import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -36,6 +36,8 @@ import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
+
+import com.umeng.analytics.MobclickAgent;
 
 public class MainSettingsFragment extends BaseSettingsFragment implements OnCheckedChangeListener,
         OnClickListener {
@@ -201,6 +203,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 }
                 int themeId = mThumbIdArray.get(position);
                 setSettingBackground(themeId);
+                UmengCustomEventManager.statisticalSelectTheme(themeId);
 
                 if (mHandler.hasMessages(MSG_SAVE_WALLPAPER)) {
                     mHandler.removeMessages(MSG_SAVE_WALLPAPER);
@@ -213,18 +216,27 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         }
     };
 
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
+    private MyHandler mHandler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        WeakReference<MainSettingsFragment> mFragment;
+
+        public MyHandler(MainSettingsFragment fragment) {
+            mFragment = new WeakReference<MainSettingsFragment>(fragment);
+        }
+
+        @Override
         public void handleMessage(Message msg) {
+            MainSettingsFragment fragment = mFragment.get();
             switch (msg.what) {
                 case MSG_SAVE_WALLPAPER:
                     int themeId = msg.arg1;
-                    saveThemeId(themeId);
+                    fragment.saveThemeId(themeId);
                     break;
             }
             super.handleMessage(msg);
         }
-    };
+    }
 
     private void initSwitchButtonState() {
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
@@ -253,10 +265,12 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             case R.id.setting_pandoralocker_password:
                 if (isChecked) {
                     if (mIsCurrentlyPressed) {
+                        UmengCustomEventManager.statisticalPandoraSwitchOpenTimes();
                         showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_OPEN);
                     }
                 } else {
                     if (mIsCurrentlyPressed) {
+                        UmengCustomEventManager.statisticalPandoraSwitchCloseTimes();
                         showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_CLOSE);
                     }
                 }
@@ -271,8 +285,16 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     public void onResume() {
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
         super.onResume();
+        MobclickAgent.onPageStart("MainSettingsFragment"); // 统计页面
     }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("MainSettingsFragment");
+    }
+
     private void showGustureView(final int type) {
+        mLockerTypeSButton.setEnabled(false);
         View decorView = getActivity().getWindow().getDecorView();
         Bitmap blurBitmap = PandoraUtils.fastBlur(decorView);
         Intent in = new Intent();
@@ -289,6 +311,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        mLockerTypeSButton.setEnabled(true);
         switch (resultCode) {
             case GUSTURE_REQUEST_CODE_FAIL:
                 int type = data.getExtras().getInt("type");
