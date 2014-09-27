@@ -21,9 +21,11 @@ public class DefaultBox implements IPandoraBox {
 
     private TextView mTextView2;
 
+    private PandoraData mData;
 
-    public DefaultBox(Context context) {
+    public DefaultBox(Context context, PandoraData data) {
         mContext = context;
+        mData = data;
         mLayoutView = (ViewGroup) LayoutInflater.from(context).inflate(
                 R.layout.pandora_box_nodata_show, null);
         mImageView = (ImageView) mLayoutView.findViewById(R.id.pandora_box_nodata_show_imageview);
@@ -38,8 +40,7 @@ public class DefaultBox implements IPandoraBox {
 
     @Override
     public PandoraData getData() {
-        // TODO Auto-generated method stub
-        return null;
+        return mData;
     }
 
     @Override
@@ -50,8 +51,6 @@ public class DefaultBox implements IPandoraBox {
 
     @Override
     public View getRenderedView() {
-       
-        
         return mLayoutView;
     }
     

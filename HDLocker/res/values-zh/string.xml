@@ -14,7 +14,6 @@
     <string name="setting_about_pandora">潘多拉锁屏</string>
     <string name="contentDescription"></string>
     <string name="setting_about_text">下拉有料</string>
-    <string name="setting_version_number">1.0.0</string>
     <string name="setting_about_email">pandora@hdlocker.com</string>
     <string name="setting_about_cooperation">商务合作：13910064771</string>
 
@@ -46,7 +45,6 @@
     <string name="init_setting_MIUI_trust_prompt_one">请开启『我信任该程序』开关</string>
     <string name="init_setting_MIUI_trust_prompt_two">再开启『自动启动』开关</string>
     <string name="app_name">潘多拉锁屏</string>
-    
     <string name="lock_week_monday">周一</string>
     <string name="lock_week_tuesday">周二</string>
     <string name="lock_week_wednesday">周三</string>
@@ -54,12 +52,10 @@
     <string name="lock_week_friday">周五</string>
     <string name="lock_week_saturday">周六</string>
     <string name="lock_week_sunday">周日</string>
-    
     <string name="lock_guide_prompt_one">底部停留锁定屏幕</string>
     <string name="lock_guide_prompt_two">轻触解锁</string>
-
     <string name="update_prompt_no_update">当前已经是最新版本！</string>
     <string name="update_prompt_no_wify">为了节省您的流量，请在wifi环境下操作！</string>
     <string name="update_prompt_no_internet">网络连接超时，请稍候再试！</string>
-    
+
 </resources>

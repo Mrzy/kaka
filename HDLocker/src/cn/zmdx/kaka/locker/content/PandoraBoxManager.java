@@ -297,6 +297,6 @@ public class PandoraBoxManager {
         pd.setmImage(BitmapFactory.decodeResource(mContext.getResources(),
                 R.drawable.pandora_box_default));
         pd.setDataType("DEFAULT_PAGE");
-        return new DefaultBox(mContext);
+        return new DefaultBox(mContext, pd);
     }
 }

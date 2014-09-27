@@ -10,5 +10,61 @@
     <string name="lockscreen_access_pattern_cell_added">Cell added</string>
     <!-- Accessibility description sent when user completes drawing a pattern. [CHAR LIMIT=NONE] -->
     <string name="lockscreen_access_pattern_detected">Pattern completed</string>
+    <string name="determine">确定</string>
+
+    <!-- setting -->
+    <string name="setting_open_pandoralocker">启用锁屏</string>
+    <string name="setting_lock_type">开启锁屏密码</string>
+    <string name="setting_background">锁屏壁纸</string>
+    <string name="init_setting_close_systemlocker">关闭系统锁屏</string>
+    <string name="init_setting_close_systemlocker_detail">解决潘多拉锁屏和系统锁屏冲突的问题</string>
+    <string name="setting_feedback">意见反馈</string>
+    <string name="setting_check_new_version">检查新版本</string>
+    <string name="setting_about_us">关于潘多拉</string>
+    <string name="setting_about_pandora">潘多拉锁屏</string>
+    <string name="contentDescription"></string>
+    <string name="setting_about_text">下拉有料</string>
+    <string name="setting_about_email">pandora@hdlocker.com</string>
+    <string name="setting_about_cooperation">商务合作：13910064771</string>
+
+    <!-- gusture -->
+    <string name="gustrue_prompt">绘制解锁图案，请至少连接四个点</string>
+    <string name="gusture_complete">完成后请松开手指</string>
+    <string name="gusture_limit_prompt">至少需连接四个点，请重试</string>
+    <string name="gusture_new_pattern">您的新解锁图案</string>
+    <string name="gusture_error">请重试</string>
+    <string name="gusture_save_prompt">已经记录在案</string>
+    <string name="gusture_confirmation_prompt">再次绘制图案进行确定</string>
+    <string name="gusture_redraw">重绘</string>
+    <string name="gusture_close_prompt">确认已保存的图案</string>
+    <string name="gusture_verify_fail">验证失败，请重试!</string>
+
+    <!-- init setting -->
+    <string name="init_setting_title">初始设置</string>
+    <string name="init_setting_MIUI_allow_floating_window">允许显示悬浮窗</string>
+    <string name="init_setting_MIUI_allow_floating_window_detail">保证潘多拉锁屏可以正常运行</string>
+    <string name="init_setting_MIUI_trust">信任程序和允许自动启动</string>
+    <string name="init_setting_MIUI_trust_detail">保证潘多拉锁屏可以获取必须的权限</string>
+    <string name="init_setting_to_set">前往设置</string>
+    <string name="init_setting_complete_to_set">完成</string>
+    <string name="init_setting_close_systemlocker_prompt">请选择『无』模式</string>
+    <string name="init_setting_MIUI_close_systemlocker_prompt_miui_one">请先开启『开发者选项』开关</string>
+    <string name="init_setting_MIUI_close_systemlocker_prompt_miui_two">再开启『直接进入系统』开关</string>
+    <string name="init_setting_MIUI_close_systemlocker_prompt_miui_three">*如果您已经开启屏幕密码，需要先关闭系统屏幕密码</string>
+    <string name="init_setting_MIUI_allow_floating_window_prompt">请开启『显示悬浮窗』开关</string>
+    <string name="init_setting_MIUI_trust_prompt_one">请开启『我信任该程序』开关</string>
+    <string name="init_setting_MIUI_trust_prompt_two">再开启『自动启动』开关</string>
+    <string name="lock_week_monday">周一</string>
+    <string name="lock_week_tuesday">周二</string>
+    <string name="lock_week_wednesday">周三</string>
+    <string name="lock_week_thursday ">周四</string>
+    <string name="lock_week_friday">周五</string>
+    <string name="lock_week_saturday">周六</string>
+    <string name="lock_week_sunday">周日</string>
+    <string name="lock_guide_prompt_one">底部停留锁定屏幕</string>
+    <string name="lock_guide_prompt_two">轻触解锁</string>
+    <string name="update_prompt_no_update">当前已经是最新版本！</string>
+    <string name="update_prompt_no_wify">为了节省您的流量，请在wifi环境下操作！</string>
+    <string name="update_prompt_no_internet">网络连接超时，请稍候再试！</string>
 
 </resources>

@@ -173,7 +173,6 @@ public class UmengCustomEventManager {
             return;
         }
         String dataType = String.valueOf(mPandoraBox.getData().getDataType());
-        Log.d("syc", "dataType="+dataType);
         Map<String, String> map_value = new HashMap<String, String>();
         if (dataType.equals("TYPE_MIX_JOKE")) {
             map_value.put("dataType", dataType);
