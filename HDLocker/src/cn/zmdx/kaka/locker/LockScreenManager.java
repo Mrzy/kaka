@@ -27,6 +27,7 @@ import cn.zmdx.kaka.locker.content.IPandoraBox;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -126,8 +127,9 @@ public class LockScreenManager {
     }
 
     public void lock() {
-        if (mIsLocked)
+        if (mIsLocked || PandoraService.isRinging())
             return;
+
         PandoraConfig pandoraConfig = PandoraConfig.newInstance(HDApplication.getInstannce());
         boolean isLockerOn = pandoraConfig.isPandolaLockerOn();
         if (!isLockerOn) {

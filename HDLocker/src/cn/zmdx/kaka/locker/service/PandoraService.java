@@ -63,6 +63,7 @@ public class PandoraService extends Service {
         unregisterReceiver(mReceiver);
     }
 
+    private static boolean mIsRinging = false;
     private class MyPhoneListener extends PhoneStateListener {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
@@ -72,18 +73,21 @@ public class PandoraService extends Service {
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("当前电话处于闲置状态CALL_STATE_IDLE");
                         }
+                        mIsRinging = false;
                         // LockScreenManager.getInstance().lock();
                         break;
                     case TelephonyManager.CALL_STATE_RINGING: // 当前电话处于零响状态
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("CALL_STATE_RINGING电话号码为 " + incomingNumber);
                         }
+                        mIsRinging = true;
                         LockScreenManager.getInstance().unLock();
                         break;
                     case TelephonyManager.CALL_STATE_OFFHOOK: // 当前电话处于接听状态
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("当前电话处于通话状态CALL_STATE_OFFHOOK ");
                         }
+                        mIsRinging = true;
                         break;
                 }
             } catch (Exception e) {
@@ -93,6 +97,9 @@ public class PandoraService extends Service {
         }
     }
 
+    public static boolean isRinging() {
+        return mIsRinging;
+    }
     public final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
