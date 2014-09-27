@@ -35,8 +35,10 @@ public class PandoraConfig {
 
     private static final String GUIDE_TIMES = "guideTimes";
 
-    //最后一次拉取百度图片的时间
+    // 最后一次拉取百度图片的时间
     private static final String KEY_LAST_PULL_BAIDU_TIME = "lastPullBaiduTime";
+
+    private static final String KEY_NEW_VERSION_CHECKED = "key_new_version_checked";
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -73,7 +75,7 @@ public class PandoraConfig {
     public int getCurrentThemeId() {
         return mSp.getInt(THEME_ID, ThemeManager.THEME_ID_BLUE);
     }
-    
+
     public int getCurrentThemeIdForStatistical() {
         return mSp.getInt(THEME_ID, -1);
     }
@@ -109,7 +111,7 @@ public class PandoraConfig {
         editor.putString(UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY, time);
         editor.commit();
     }
-    
+
     public String getEventGuestureLockEnabledDailyString() {
         return mSp.getString(UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY, "");
     }
@@ -119,7 +121,7 @@ public class PandoraConfig {
         editor.putString(UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, time);
         editor.commit();
     }
-    
+
     public String getEventCurrentThemeDailyString() {
         return mSp.getString(UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, "");
     }
@@ -141,6 +143,16 @@ public class PandoraConfig {
     public void saveLastPullBaiduTime(long time) {
         Editor editor = mSp.edit();
         editor.putLong(KEY_LAST_PULL_BAIDU_TIME, time);
+        editor.commit();
+    }
+
+    public String getFlagCheckNewVersion() {
+        return mSp.getString(KEY_NEW_VERSION_CHECKED, "");
+    }
+
+    public void setFlagCheckNewVersionTime(String today) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_NEW_VERSION_CHECKED, today);
         editor.commit();
     }
 }

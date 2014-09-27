@@ -134,8 +134,7 @@ public class LockScreenManager {
             return;
         }
 
-        UmengUpdateAgent.setUpdateUIStyle(UpdateStatus.STYLE_NOTIFICATION);
-        UmengUpdateAgent.update(HDApplication.getInstannce());
+        checkNewVersion();
 
         mLockTime = System.currentTimeMillis();
         String currentDate = getCurrentDate();
@@ -172,6 +171,18 @@ public class LockScreenManager {
         refreshContent();
         setDate();
         mWinManager.addView(mEntireView, params);
+    }
+
+    private void checkNewVersion() {
+        PandoraConfig config = PandoraConfig.newInstance(HDApplication.getInstannce());
+        String lastCheckTime = config.getFlagCheckNewVersion();
+        String today = getCurrentDate();
+        if (lastCheckTime.equals(today)) {
+            return;
+        }
+        UmengUpdateAgent.setUpdateUIStyle(UpdateStatus.STYLE_NOTIFICATION);
+        UmengUpdateAgent.update(HDApplication.getInstannce());
+        config.setFlagCheckNewVersionTime(today);
     }
 
     private boolean mIsUseCurrentBox = false;
