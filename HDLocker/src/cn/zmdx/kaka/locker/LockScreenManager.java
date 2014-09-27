@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +47,8 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UpdateStatus;
 
 public class LockScreenManager {
 
@@ -132,6 +133,10 @@ public class LockScreenManager {
         if (!isLockerOn) {
             return;
         }
+
+        UmengUpdateAgent.setUpdateUIStyle(UpdateStatus.STYLE_NOTIFICATION);
+        UmengUpdateAgent.update(HDApplication.getInstannce());
+
         mLockTime = System.currentTimeMillis();
         String currentDate = getCurrentDate();
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
@@ -172,7 +177,8 @@ public class LockScreenManager {
     private boolean mIsUseCurrentBox = false;
 
     private void refreshContent() {
-        if (!mIsUseCurrentBox || (mPandoraBox != null && mPandoraBox.getCategory() == IPandoraBox.CATEGORY_DEFAULT)) {
+        if (!mIsUseCurrentBox
+                || (mPandoraBox != null && mPandoraBox.getCategory() == IPandoraBox.CATEGORY_DEFAULT)) {
             mPandoraBox = PandoraBoxManager.newInstance(HDApplication.getInstannce())
                     .getNextPandoraBox();
         }

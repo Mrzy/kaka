@@ -247,10 +247,8 @@ public class PandoraBoxDispatcher extends Handler {
 
         int totalCount = ServerDataModel.getInstance().queryTotalCount();
         if (totalCount < PandoraPolicy.MIN_COUNT_LOCAL_DB) {
-            ServerDataManager.getInstance().pullServerData(40, ServerDataMapping.S_DATATYPE_ALL,
-                    ServerDataMapping.S_WEBSITE_CAODANWANG);
             ServerDataManager.getInstance().pullServerData(40, ServerDataMapping.S_DATATYPE_JOKE,
-                    ServerDataMapping.S_WEBSITE_HAOXIAOHUA);
+                    ServerDataMapping.S_WEBSITE_ALL);
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("满足拉取文本数据条件，开始拉取ServerData");
             }
