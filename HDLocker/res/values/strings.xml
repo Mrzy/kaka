@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">PandoraLocker</string>
+    <string name="app_name">潘多拉锁屏</string>
 
     <!-- Accessibility description sent when user starts drawing a lock pattern. [CHAR LIMIT=NONE] -->
     <string name="lockscreen_access_pattern_start">Pattern started</string>
