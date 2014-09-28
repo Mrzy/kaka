@@ -35,7 +35,7 @@ public class PandoraBoxManager {
     private static final int TYPE_MIX_BAIDU = 5;
 
     private final int[] DISPLAY_TYPE = {
-            TYPE_PLAIN_TEXT_JOKE, TYPE_MIX_NEWS, TYPE_MIX_JOKE, TYPE_MIX_BAIDU
+            TYPE_PLAIN_TEXT_JOKE, TYPE_MIX_NEWS, TYPE_MIX_JOKE, TYPE_MIX_BAIDU, TYPE_MIX_NEWS, TYPE_MIX_NEWS, TYPE_MIX_NEWS
     };
 
     private IPandoraBox mPreDisplayBox;

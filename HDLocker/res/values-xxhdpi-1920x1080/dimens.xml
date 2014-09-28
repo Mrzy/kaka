@@ -66,5 +66,6 @@
     <dimen name="locker_key_prompt_padding_top">35dp</dimen>
     <dimen name="locker_key_prompt_padding_right">10dp</dimen>
     <dimen name="locker_arrow_move_lenght">16dp</dimen>
-    <dimen name="panelHeight">130dp</dimen>
+    <dimen name="panelHeight">160dp</dimen>
+    
 </resources>

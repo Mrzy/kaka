@@ -3,6 +3,7 @@ package cn.zmdx.kaka.locker.content;
 
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.IPandoraBox.PandoraData;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,10 @@ public class DefaultBox implements IPandoraBox {
                 R.layout.pandora_box_nodata_show, null);
         mImageView = (ImageView) mLayoutView.findViewById(R.id.pandora_box_nodata_show_imageview);
         mTextView1 = (TextView) mLayoutView.findViewById(R.id.pandora_box_nodata_show_textview);
-        mTextView2 = (TextView) mLayoutView.findViewById(R.id.pandora_box_nodata_show_textview1);
+        mTextView2 = (TextView) mLayoutView.findViewById(R.id.pandora_box_nodata_show_tip);
+        if (!HDBNetworkState.isNetworkAvailable()) {
+            mTextView2.setText(mContext.getText(R.string.pandora_box_no_net_tip));
+        }
     }
 
     @Override

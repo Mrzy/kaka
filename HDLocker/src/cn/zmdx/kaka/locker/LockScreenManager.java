@@ -33,6 +33,7 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.locker.widget.LockPatternView;
 import cn.zmdx.kaka.locker.widget.LockPatternView.Cell;
@@ -138,7 +139,6 @@ public class LockScreenManager {
 
         checkNewVersion();
 
-        mLockTime = System.currentTimeMillis();
         String currentDate = getCurrentDate();
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
         UmengCustomEventManager.statisticalUseTheme(pandoraConfig, currentDate);
@@ -452,7 +452,15 @@ public class LockScreenManager {
             UmengCustomEventManager.statisticalUnLockTimes();
             if (!showGestureView()) {
                 unLock();
-                mIsUseCurrentBox = true;
+                //如果从开始下拉到直接解锁所经历的总时间小于1秒，则不更新数据
+                if (System.currentTimeMillis() - mLockTime < 800) {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("操作时间小于1秒，不更新pandoraBox,mLockTime:" + mLockTime);
+                    }
+                    mIsUseCurrentBox = true;
+                } else {
+                    mIsUseCurrentBox = false;
+                }
             }
         }
 
@@ -479,6 +487,9 @@ public class LockScreenManager {
 
         @Override
         public void onPanelFixed(View panel) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("onPanelFixed");
+            }
             UmengCustomEventManager.statisticalFixedTimes();
             mVibrator.vibrate(50);
             if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
@@ -504,7 +515,11 @@ public class LockScreenManager {
         }
 
         public void onPanelStartDown(View view) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("onPanelStartDown");
+            }
             visibleKeyhole();
+            mLockTime = System.currentTimeMillis();
             if (null != mLockArrow) {
                 mAnimatorSet.end();
                 mLockArrow.setVisibility(View.GONE);

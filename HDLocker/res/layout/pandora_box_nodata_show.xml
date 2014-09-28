@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/pandora_box_nodata_show"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:background="@android:color/transparent">
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent" >
 
     <ImageView
         android:id="@+id/pandora_box_nodata_show_imageview"
@@ -15,17 +15,18 @@
 
     <TextView
         android:id="@+id/pandora_box_nodata_show_textview"
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_us_textview_height"
-        android:gravity="center_horizontal"
         android:layout_below="@+id/pandora_box_nodata_show_imageview"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal"
         android:text="@string/setting_about_pandora"
         android:textColor="@android:color/white"
-        android:textSize="24sp" />
+        android:textSize="18sp" />
 
-    <TextView
+    <!--
+         <TextView
         android:id="@+id/pandora_box_nodata_show_textview1"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/setting_about_us_textview_height"
@@ -34,5 +35,16 @@
         android:text="@string/setting_about_text"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
+    -->
+
+    <TextView
+        android:id="@+id/pandora_box_nodata_show_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pandora_box_nodata_show_textview"
+        android:gravity="center_horizontal"
+        android:text="@string/pandora_box_default_tip"
+        android:textColor="#ffffff"
+        android:textSize="12sp" />
 
 </RelativeLayout>

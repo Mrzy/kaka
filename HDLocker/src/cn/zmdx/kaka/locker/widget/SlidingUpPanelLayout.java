@@ -1209,6 +1209,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 mIsFixed = true;
                 dispatchOnPanelFixed(mSlideableView);
             }
+        } else if (mSlideOffset != 0 && mIsFixed) {
+            mIsFixed = false;
         }
     }
 

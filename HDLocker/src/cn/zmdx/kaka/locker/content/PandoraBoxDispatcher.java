@@ -44,7 +44,7 @@ public class PandoraBoxDispatcher extends Handler {
     private static PandoraBoxDispatcher INSTANCE;
 
     private PandoraConfig mConfig;
-    
+
     private PandoraBoxDispatcher(Looper looper) {
         super(looper);
         mConfig = PandoraConfig.newInstance(HDApplication.getInstannce());
@@ -137,6 +137,7 @@ public class PandoraBoxDispatcher extends Handler {
 
     /**
      * 检查是否满足拉取百度图片的条件
+     * 
      * @return
      */
     private boolean checkBaiduDataPullable() {
@@ -152,7 +153,8 @@ public class PandoraBoxDispatcher extends Handler {
                     HDBLOG.logD("图片的本地磁盘存储的数量为0，清空数据库中的已下载标记，并开启下载图片程序");
                 }
                 ServerImageDataModel.getInstance().markAllNonDownload();
-                downloadServerImages(ServerDataMapping.S_DATATYPE_JOKE, ServerDataMapping.S_DATATYPE_NEWS);
+                downloadServerImages(ServerDataMapping.S_DATATYPE_JOKE,
+                        ServerDataMapping.S_DATATYPE_NEWS);
                 return;
             }
 
@@ -162,7 +164,8 @@ public class PandoraBoxDispatcher extends Handler {
                     HDBLOG.logD("ServerImage数据库中标记为已下载的数据总数:" + hasImageCount + "已小于阀值:"
                             + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",立即开启下载图片程序");
                 }
-                downloadServerImages(ServerDataMapping.S_DATATYPE_JOKE, ServerDataMapping.S_DATATYPE_NEWS);
+                downloadServerImages(ServerDataMapping.S_DATATYPE_JOKE,
+                        ServerDataMapping.S_DATATYPE_NEWS);
             } else {
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("ServerImage数据库中标记为已下载的数据总数为:" + hasImageCount + "大于最小阀值"
@@ -172,21 +175,22 @@ public class PandoraBoxDispatcher extends Handler {
         }
     }
 
-    private void downloadServerImages(String...dataType) {
-     // 根据不同网络情况查询出不同数量的数据，准备下载其图片
+    private void downloadServerImages(String... dataType) {
+        // 根据不同网络情况查询出不同数量的数据，准备下载其图片
         // 规则说明：若wifi,则每个频道取5条数据，共5*5=25条数据；若非wifi，则每个频道取1条，共1 * 5 = 5条数据
         int count = HDBNetworkState.isWifiNetwork() ? PandoraPolicy.COUNT_DOWNLOAD_IMAGE_WIFI
                 : PandoraPolicy.COUNT_DOWNLOAD_IMAGE_NON_WIFI;
         List<ServerImageData> list = new ArrayList<ServerImageData>();
         int length = dataType.length;
-        for (int i = 0;i<length; i++) {
+        for (int i = 0; i < length; i++) {
             String type = dataType[i];
-            List<ServerImageData> tmpList = ServerImageDataModel.getInstance().queryWithoutImgByDataType(count, type);
+            List<ServerImageData> tmpList = ServerImageDataModel.getInstance()
+                    .queryWithoutImgByDataType(count, type);
             list.addAll(tmpList);
         }
         ServerImageDataManager.getInstance().batchDownloadServerImage(list);
     }
-    
+
     private void loadBaiduImage() {
         if (HDBNetworkState.isNetworkAvailable()) {
             // 如果磁盘缓存区图片数为0，则更新数据库中的是否下载字段为否
@@ -268,14 +272,16 @@ public class PandoraBoxDispatcher extends Handler {
         }
         int totalCount = ServerImageDataModel.getInstance().queryCountByType(dataType);
         if (totalCount < PandoraPolicy.MIN_COUNT_PANDORA_IMAGE) {
-            ServerImageDataManager.getInstance().pullServerImageData(40, dataType,
+            ServerImageDataManager.getInstance().pullServerImageData(60, dataType,
                     ServerDataMapping.S_WEBSITE_ALL);
             if (BuildConfig.DEBUG) {
-                HDBLOG.logD("满足拉取pandora图片数据条件，开始拉取ServerImageData,当前数据类型为：" + dataType + ",本地数量为:" + totalCount);
+                HDBLOG.logD("满足拉取pandora图片数据条件，开始拉取ServerImageData,当前数据类型为：" + dataType + ",本地数量为:"
+                        + totalCount);
             }
         } else {
             if (BuildConfig.DEBUG) {
-                HDBLOG.logD("不满足拉取pandora图片数据条件，无需拉取ServerImageData,当前数据类型为：" + dataType + ",本地数量为:" + totalCount);
+                HDBLOG.logD("不满足拉取pandora图片数据条件，无需拉取ServerImageData,当前数据类型为：" + dataType
+                        + ",本地数量为:" + totalCount);
             }
         }
     }
