@@ -1,7 +1,12 @@
 
 package cn.zmdx.kaka.locker.policy;
 
+import java.util.Locale;
+
+import android.text.TextUtils;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.content.BaiduTagMapping;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class PandoraPolicy {
 
@@ -34,14 +39,35 @@ public class PandoraPolicy {
     public static final int[] BAIDU_IMAGE_MODULE = {
         BaiduTagMapping.INT_TAG1_GAOXIAO
     };
-//     public static final int[] BAIDU_IMAGE_MODULE = {
-//     BaiduTagMapping.INT_TAG1_BIZHI, BaiduTagMapping.INT_TAG1_GAOXIAO,
-//     BaiduTagMapping.INT_TAG1_MEINV, BaiduTagMapping.INT_TAG1_MINGXING,
-//     BaiduTagMapping.INT_TAG1_SHEYING
-//     };
+
+    // public static final int[] BAIDU_IMAGE_MODULE = {
+    // BaiduTagMapping.INT_TAG1_BIZHI, BaiduTagMapping.INT_TAG1_GAOXIAO,
+    // BaiduTagMapping.INT_TAG1_MEINV, BaiduTagMapping.INT_TAG1_MINGXING,
+    // BaiduTagMapping.INT_TAG1_SHEYING
+    // };
 
     public static final long MIN_INTERVAL_SAME_BOX = 1000;// 1 min
 
-    public static final long PULL_BAIDU_INTERVAL_TIME = 2 * 24 * 60 * 60 * 1000; //2 days
+    public static final long PULL_BAIDU_INTERVAL_TIME = 2 * 24 * 60 * 60 * 1000; // 2
+                                                                                 // days
 
+    public static boolean verifyImageLegal(String url, int w, int h) {
+        try {
+            if (w / h > 2.5 || h / w > 2.5 || w > 1500 || h > 2000) {
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("图片宽高比不符合显示条件，w:" + w + ",h:" + h);
+                }
+                return false;
+            }
+            if (TextUtils.isEmpty(url) || url.trim().toUpperCase(Locale.getDefault()).endsWith(".GIF")) {
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("图片url为null或者以.gif结尾，不符合展示条件，忽略");
+                }
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 }

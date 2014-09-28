@@ -239,7 +239,7 @@ public class BaiduDataManager {
                 String thumb_large_url = jsonObject.optString("thumb_large_url");
                 int thumb_large_width = jsonObject.optInt("thumb_large_width");
                 int thumb_large_height = jsonObject.optInt("thumb_large_height");
-                if (!TextUtils.isEmpty(image_url)) {
+                if (!TextUtils.isEmpty(image_url) && PandoraPolicy.verifyImageLegal(image_url, image_width, image_height)) {
                     BaiduData bd = new BaiduData();
                     bd.setTag1(tag1);
                     bd.setTag2(tag2);

@@ -17,6 +17,7 @@ import cn.zmdx.kaka.locker.database.BaiduDataModel;
 import cn.zmdx.kaka.locker.database.ServerDataModel;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.database.TableStructure;
+import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class PandoraBoxManager {
@@ -86,7 +87,7 @@ public class PandoraBoxManager {
     }
 
     public IPandoraBox getNextPandoraBox() {
-        int random = new Random().nextInt(10) % DISPLAY_TYPE.length;
+        int random = new Random().nextInt(DISPLAY_TYPE.length) % DISPLAY_TYPE.length;
         int type = DISPLAY_TYPE[random];
         if (type == TYPE_PLAIN_TEXT_JOKE) {
             releasePreResource(mPreDisplayBox);
@@ -156,8 +157,9 @@ public class PandoraBoxManager {
         int w = newOpts.outWidth;
         int h = newOpts.outHeight;
         try {
-            if (w / h > 2.5 || h / w > 2.5 || w > 1500 || h > 2000) {
+            if (!PandoraPolicy.verifyImageLegal(bd.getUrl(), w, h)) {
                 ServerImageDataModel.getInstance().deleteById(bd.getId());
+                DiskImageHelper.remove(bd.getUrl());
                 return getMixJoke();
             } else {
                 bmp = DiskImageHelper.getBitmapByUrl(bd.getUrl(), null);
@@ -197,8 +199,9 @@ public class PandoraBoxManager {
         int w = newOpts.outWidth;
         int h = newOpts.outHeight;
         try {
-            if (w / h > 2.5 || h / w > 2.5 || w > 1500 || h > 2000) {
+            if (!PandoraPolicy.verifyImageLegal(bd.getUrl(), w, h)) {
                 ServerImageDataModel.getInstance().deleteById(bd.getId());
+                DiskImageHelper.remove(bd.getUrl());
                 return getMixNewsBox();
             } else {
                 bmp = DiskImageHelper.getBitmapByUrl(bd.getUrl(), null);
@@ -262,8 +265,9 @@ public class PandoraBoxManager {
         int w = newOpts.outWidth;
         int h = newOpts.outHeight;
         try {
-            if (w / h > 2.5 || h / w > 2.5 || w > 1500 || h > 2000) {
+            if (!PandoraPolicy.verifyImageLegal(bd.getImageUrl(), w, h)) {
                 BaiduDataModel.getInstance().deleteById(bd.getId());
+                DiskImageHelper.remove(bd.getImageUrl());
                 return getMixFromBaidu();
             } else {
                 bmp = DiskImageHelper.getBitmapByUrl(bd.mImageUrl, null);

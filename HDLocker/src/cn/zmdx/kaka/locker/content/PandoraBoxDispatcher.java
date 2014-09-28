@@ -72,7 +72,7 @@ public class PandoraBoxDispatcher extends Handler {
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("收到抓取百度数据的消息");
                 }
-                if (checkPullable()) {
+                if (checkBaiduDataPullable()) {
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("满足拉取百度图片的条件，开始拉取...");
                     }
@@ -139,7 +139,7 @@ public class PandoraBoxDispatcher extends Handler {
      * 检查是否满足拉取百度图片的条件
      * @return
      */
-    private boolean checkPullable() {
+    private boolean checkBaiduDataPullable() {
         final long lastPullTime = mConfig.getLastPullBaiduTime();
         return System.currentTimeMillis() - lastPullTime > PandoraPolicy.PULL_BAIDU_INTERVAL_TIME;
     }
@@ -268,7 +268,7 @@ public class PandoraBoxDispatcher extends Handler {
         }
         int totalCount = ServerImageDataModel.getInstance().queryCountByType(dataType);
         if (totalCount < PandoraPolicy.MIN_COUNT_PANDORA_IMAGE) {
-            ServerImageDataManager.getInstance().pullServerImageData(20, dataType,
+            ServerImageDataManager.getInstance().pullServerImageData(40, dataType,
                     ServerDataMapping.S_WEBSITE_ALL);
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("满足拉取pandora图片数据条件，开始拉取ServerImageData,当前数据类型为：" + dataType + ",本地数量为:" + totalCount);
