@@ -400,7 +400,7 @@ public class SwitchButton extends CompoundButton {
             if (getWidth() > 0 && switchScroller != null) { // 如果已经绘制完成
                 switchScroller.startScroll(checked);
             } else {
-                setSlideX(isChecked() ? tempMinSlideX : tempMaxSlideX); // 直接修改X轴坐标，因为尚未绘制完成的时候，动画执行效果不理想，所以直接修改坐标，而不执行动画
+                setSlideX(isChecked() ? tempMaxSlideX : tempMinSlideX); // 直接修改X轴坐标，因为尚未绘制完成的时候，动画执行效果不理想，所以直接修改坐标，而不执行动画
             }
         }
     }
@@ -456,7 +456,7 @@ public class SwitchButton extends CompoundButton {
 
         this.tempMinSlideX = (-1 * (stateDrawable.getIntrinsicWidth() - frameBitmap
                 .getIntrinsicWidth())); // 初始化X轴最小值
-        setSlideX(isChecked() ? tempMinSlideX : tempMaxSlideX); // 根据选中状态初始化默认坐标
+        setSlideX(isChecked() ? tempMaxSlideX : tempMinSlideX); // 根据选中状态初始化默认坐标
 
         requestLayout();
     }
@@ -557,7 +557,7 @@ public class SwitchButton extends CompoundButton {
          * @param checked 是否选中
          */
         public void startScroll(boolean checked) {
-            scroller.startScroll(tempSlideX, 0, (checked ? tempMinSlideX : tempMaxSlideX)
+            scroller.startScroll(tempSlideX, 0, (checked ? tempMaxSlideX : tempMinSlideX)
                     - tempSlideX, 0, duration);
             post(this);
         }
