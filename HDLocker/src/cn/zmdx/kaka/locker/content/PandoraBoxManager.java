@@ -35,7 +35,7 @@ public class PandoraBoxManager {
     private static final int TYPE_MIX_BAIDU = 5;
 
     private final int[] DISPLAY_TYPE = {
-            TYPE_PLAIN_TEXT_JOKE, TYPE_MIX_NEWS, TYPE_MIX_JOKE, TYPE_MIX_BAIDU, TYPE_MIX_NEWS, TYPE_MIX_NEWS, TYPE_MIX_NEWS
+            TYPE_PLAIN_TEXT_JOKE, TYPE_MIX_NEWS, TYPE_MIX_JOKE, TYPE_MIX_BAIDU, TYPE_MIX_NEWS, TYPE_MIX_NEWS
     };
 
     private IPandoraBox mPreDisplayBox;
@@ -90,6 +90,9 @@ public class PandoraBoxManager {
         int random = new Random().nextInt(DISPLAY_TYPE.length) % DISPLAY_TYPE.length;
         int type = DISPLAY_TYPE[random];
         if (type == TYPE_PLAIN_TEXT_JOKE) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("random type:TYPE_PLAIN_TEXT_JOKE");
+            }
             releasePreResource(mPreDisplayBox);
             IPandoraBox box = getPlainTextJoke();
             if (box == null) {
@@ -102,6 +105,9 @@ public class PandoraBoxManager {
                 return box;
             }
         } else if (type == TYPE_MIX_NEWS) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("random type:TYPE_MIX_NEWS");
+            }
             releasePreResource(mPreDisplayBox);
             IPandoraBox box = getMixNewsBox();
             if (box == null) {
@@ -114,6 +120,9 @@ public class PandoraBoxManager {
                 return box;
             }
         } else if (type == TYPE_MIX_JOKE) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("random type:TYPE_MIX_JOKE");
+            }
             releasePreResource(mPreDisplayBox);
             IPandoraBox box = getMixJoke();
             if (box == null) {
@@ -126,6 +135,9 @@ public class PandoraBoxManager {
                 return box;
             }
         } else if (type == TYPE_MIX_BAIDU) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("random type:TYPE_MIX_BAIDU");
+            }
             releasePreResource(mPreDisplayBox);
             IPandoraBox box = getMixFromBaidu();
             if (box == null) {

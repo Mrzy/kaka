@@ -112,17 +112,18 @@ public class ServerImageDataModel {
      * 
      * @return
      */
-    public synchronized int queryCountHasImage() {
+    public synchronized int queryCountHasImage(String dataType) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         int count = 0;
-        Cursor cursor = sqliteDatabase.rawQuery("select count(*) from "
-                + TableStructure.TABLE_NAME_SERVER_IMAGE + " where "
-                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + " = "
-                + MySqlitDatabase.DOWNLOAD_TRUE, null);
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+            TableStructure.SERVER_IMAGE_ID
+        }, TableStructure.SERVER_IMAGE_DATA_TYPE + "=? and "
+                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
+                dataType, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
+        }, null, null, null, null);
+
         try {
-            while (cursor.moveToNext()) {
-                count = cursor.getInt(0);
-            }
+            count = cursor.getCount();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
