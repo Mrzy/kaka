@@ -173,6 +173,7 @@ public class LockScreenManager {
         refreshContent();
         setDate();
         mWinManager.addView(mEntireView, params);
+        syncDataIfNeeded();
     }
 
     private void checkNewVersion() {
@@ -312,7 +313,7 @@ public class LockScreenManager {
         mEntireView = null;
         mIsShowGesture = false;
         mIsLocked = false;
-        syncDataIfNeeded();
+//        syncDataIfNeeded();
     }
 
     private void syncDataIfNeeded() {
@@ -322,10 +323,13 @@ public class LockScreenManager {
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_NEWS);
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_TEXT_DATA);
         if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG)) {
-            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 5000);
+            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 4000);
         }
-        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE)) {
-            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE, 10000);
+        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE)) {
+            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE, 5000);
+        }
+        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS)) {
+            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS, 6000);
         }
     }
 
@@ -452,7 +456,7 @@ public class LockScreenManager {
             UmengCustomEventManager.statisticalUnLockTimes();
             if (!showGestureView()) {
                 unLock();
-                //如果从开始下拉到直接解锁所经历的总时间小于1秒，则不更新数据
+                // 如果从开始下拉到直接解锁所经历的总时间小于1秒，则不更新数据
                 if (System.currentTimeMillis() - mLockTime < 800) {
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("操作时间小于1秒，不更新pandoraBox,mLockTime:" + mLockTime);

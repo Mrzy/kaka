@@ -35,11 +35,12 @@ public class PandoraBoxDispatcher extends Handler {
 
     public static final int MSG_PULL_SERVER_TEXT_DATA = 5;
 
-    public static final int MSG_PULL_SERVER_IMAGE_JOKE = 6;
+    public static final int MSG_PULL_SERVER_IMAGE_JOKE = 6;//拉取搞笑图片的json数据(不包含图片下载)
 
-    public static final int MSG_LOAD_SERVER_IMAGE = 7;
+    public static final int MSG_LOAD_SERVER_IMAGE_NEWS = 7;//下载新闻图片的消息
+    public static final int MSG_LOAD_SERVER_IMAGE_JOKE = 9;//下载搞笑图片的消息
 
-    public static final int MSG_PULL_SERVER_IMAGE_NEWS = 8;
+    public static final int MSG_PULL_SERVER_IMAGE_NEWS = 8;//拉取新闻图片的json数据(不包含图片下载)
 
     private static PandoraBoxDispatcher INSTANCE;
 
@@ -108,11 +109,17 @@ public class PandoraBoxDispatcher extends Handler {
                 }
                 loadBaiduImage();
                 break;
-            case MSG_LOAD_SERVER_IMAGE:
+            case MSG_LOAD_SERVER_IMAGE_NEWS:
                 if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("收到下载阿里云图片的消息");
+                    HDBLOG.logD("收到下载阿里云新闻图片的消息");
                 }
-                loadPandoraServerImage();
+                loadPandoraServerImage(ServerDataMapping.S_DATATYPE_NEWS);
+                break;
+            case MSG_LOAD_SERVER_IMAGE_JOKE:
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("收到下载阿里云搞笑图片的消息");
+                }
+                loadPandoraServerImage(ServerDataMapping.S_DATATYPE_JOKE);
                 break;
             case MSG_SERVER_DATA_ARRIVED:
                 if (BuildConfig.DEBUG) {
@@ -145,7 +152,7 @@ public class PandoraBoxDispatcher extends Handler {
         return System.currentTimeMillis() - lastPullTime > PandoraPolicy.PULL_BAIDU_INTERVAL_TIME;
     }
 
-    private void loadPandoraServerImage() {
+    private void loadPandoraServerImage(String dataType) {
         if (HDBNetworkState.isNetworkAvailable()) {
             // 如果磁盘缓存区图片数为0，则更新数据库中的是否下载字段为否
             if (DiskImageHelper.getFileCountOnDisk() <= 1) {
@@ -153,41 +160,35 @@ public class PandoraBoxDispatcher extends Handler {
                     HDBLOG.logD("图片的本地磁盘存储的数量为0，清空数据库中的已下载标记，并开启下载图片程序");
                 }
                 ServerImageDataModel.getInstance().markAllNonDownload();
-                downloadServerImages(ServerDataMapping.S_DATATYPE_JOKE,
-                        ServerDataMapping.S_DATATYPE_NEWS);
+                downloadServerImages(dataType);
                 return;
             }
 
-            int hasImageCount = ServerImageDataModel.getInstance().queryCountHasImage();
+            int hasImageCount = ServerImageDataModel.getInstance().queryCountHasImage(dataType);
             if (hasImageCount < PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE) {
                 if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("ServerImage数据库中标记为已下载的数据总数:" + hasImageCount + "已小于阀值:"
+                    HDBLOG.logD("ServerImage数据库中标记为已下载的" +dataType+ "数据总数:" + hasImageCount + "已小于阀值:"
                             + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",立即开启下载图片程序");
                 }
-                downloadServerImages(ServerDataMapping.S_DATATYPE_JOKE,
-                        ServerDataMapping.S_DATATYPE_NEWS);
+                downloadServerImages(dataType);
             } else {
                 if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("ServerImage数据库中标记为已下载的数据总数为:" + hasImageCount + "大于最小阀值"
+                    HDBLOG.logD("ServerImage数据库中标记为已下载的" +dataType+ "数据总数为:" + hasImageCount + "大于最小阀值"
                             + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",无需启动下载图片程序");
                 }
             }
         }
     }
 
-    private void downloadServerImages(String... dataType) {
+    private void downloadServerImages(String dataType) {
         // 根据不同网络情况查询出不同数量的数据，准备下载其图片
         // 规则说明：若wifi,则每个频道取5条数据，共5*5=25条数据；若非wifi，则每个频道取1条，共1 * 5 = 5条数据
         int count = HDBNetworkState.isWifiNetwork() ? PandoraPolicy.COUNT_DOWNLOAD_IMAGE_WIFI
                 : PandoraPolicy.COUNT_DOWNLOAD_IMAGE_NON_WIFI;
         List<ServerImageData> list = new ArrayList<ServerImageData>();
-        int length = dataType.length;
-        for (int i = 0; i < length; i++) {
-            String type = dataType[i];
             List<ServerImageData> tmpList = ServerImageDataModel.getInstance()
-                    .queryWithoutImgByDataType(count, type);
+                    .queryWithoutImgByDataType(count, dataType);
             list.addAll(tmpList);
-        }
         ServerImageDataManager.getInstance().batchDownloadServerImage(list);
     }
 
