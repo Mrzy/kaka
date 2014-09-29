@@ -17,6 +17,7 @@ import android.graphics.drawable.DrawableContainer;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -24,6 +25,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CompoundButton;
 import android.widget.Scroller;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 /**
  * 开关按钮
@@ -400,7 +402,7 @@ public class SwitchButton extends CompoundButton {
             if (getWidth() > 0 && switchScroller != null) { // 如果已经绘制完成
                 switchScroller.startScroll(checked);
             } else {
-                setSlideX(isChecked() ? tempMinSlideX : tempMaxSlideX); // 直接修改X轴坐标，因为尚未绘制完成的时候，动画执行效果不理想，所以直接修改坐标，而不执行动画
+                setSlideX(isChecked() ? tempMaxSlideX : tempMinSlideX); // 直接修改X轴坐标，因为尚未绘制完成的时候，动画执行效果不理想，所以直接修改坐标，而不执行动画
             }
         }
     }
@@ -456,8 +458,8 @@ public class SwitchButton extends CompoundButton {
 
         this.tempMinSlideX = (-1 * (stateDrawable.getIntrinsicWidth() - frameBitmap
                 .getIntrinsicWidth())); // 初始化X轴最小值
-        setSlideX(isChecked() ? tempMinSlideX : tempMaxSlideX); // 根据选中状态初始化默认坐标
-
+        setSlideX(isChecked() ? tempMaxSlideX : tempMinSlideX); // 根据选中状态初始化默认坐标
+        
         requestLayout();
     }
 
@@ -523,6 +525,7 @@ public class SwitchButton extends CompoundButton {
             newSlideX = tempMaxSlideX;
         // 计算本次距离增量
         int addDistance = newSlideX - tempSlideX;
+        HDBLOG.logD("isChecked()="+isChecked()+"newSlideX="+newSlideX+"  tempSlideX="+tempSlideX);
         this.tempSlideX = newSlideX;
         return addDistance;
     }
@@ -557,7 +560,7 @@ public class SwitchButton extends CompoundButton {
          * @param checked 是否选中
          */
         public void startScroll(boolean checked) {
-            scroller.startScroll(tempSlideX, 0, (checked ? tempMinSlideX : tempMaxSlideX)
+            scroller.startScroll(tempSlideX, 0, (checked ? tempMaxSlideX : tempMinSlideX)
                     - tempSlideX, 0, duration);
             post(this);
         }
