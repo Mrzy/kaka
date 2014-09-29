@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.zmdx.kaka.locker"
-    android:versionCode="5"
-    android:versionName="v1.0.0" >
+    android:versionCode="6"
+    android:versionName="v1.0.1" >
 
     <uses-sdk
         android:minSdkVersion="14"
