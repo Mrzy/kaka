@@ -65,7 +65,7 @@ public class SingleImageBox implements IPandoraBox {
         }
         mSingleImgView.setImageBitmap(mData.getmImage());
         mSingleImgView.setOnClickListener(new OnClickListener() {
-
+ 
             @Override
             public void onClick(View v) {
                 if (mIsHide) {
