@@ -4,7 +4,9 @@ package cn.zmdx.kaka.locker.content;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 
 public class GifBox implements IPandoraBox {
@@ -14,12 +16,17 @@ public class GifBox implements IPandoraBox {
 
     private ImageView mImageView;
 
+    private TextView mTextView;
+
     private boolean mIsRendered = false;
+
+    private boolean mIsHide = false;
 
     public GifBox(Context context, PandoraData data) {
         mData = data;
         mEntireView = LayoutInflater.from(context).inflate(R.layout.pandora_box_gif_image, null);
         mImageView = (ImageView) mEntireView.findViewById(R.id.gif_image);
+        mTextView = (TextView) mEntireView.findViewById(R.id.gif_desc);
     }
 
     @Override
@@ -53,6 +60,19 @@ public class GifBox implements IPandoraBox {
             return false;
         }
         mImageView.setImageBitmap(mData.getmImage());
+        mTextView.setText(mData.getmContent());
+        mImageView.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (mIsHide) {
+                    mTextView.setVisibility(View.VISIBLE);
+                } else {
+                    mTextView.setVisibility(View.INVISIBLE);
+                }
+                mIsHide = !mIsHide;
+            }
+        });
         mIsRendered = true;
         return true;
 
