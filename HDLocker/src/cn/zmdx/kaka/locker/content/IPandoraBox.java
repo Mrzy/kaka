@@ -16,6 +16,8 @@ public interface IPandoraBox {
 
     public static final int CATEGORY_DEFAULT = 4;
 
+    public static final int CATEGORY_GIF = 5;
+
     public int getCategory();
 
     public PandoraData getData();
