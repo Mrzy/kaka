@@ -195,6 +195,7 @@ public class LockScreenManager {
                 || (mPandoraBox != null && mPandoraBox.getCategory() == IPandoraBox.CATEGORY_DEFAULT)) {
             mPandoraBox = PandoraBoxManager.newInstance(HDApplication.getInstannce())
                     .getNextPandoraBox();
+
         }
 
         View contentView = mPandoraBox.getRenderedView();
@@ -313,7 +314,7 @@ public class LockScreenManager {
         mEntireView = null;
         mIsShowGesture = false;
         mIsLocked = false;
-//        syncDataIfNeeded();
+        // syncDataIfNeeded();
     }
 
     private void syncDataIfNeeded() {
@@ -322,6 +323,7 @@ public class LockScreenManager {
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_JOKE);
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_NEWS);
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_TEXT_DATA);
+        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_GIF);
         if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG)) {
             pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 4000);
         }
@@ -331,6 +333,10 @@ public class LockScreenManager {
         if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS)) {
             pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS, 6000);
         }
+        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF)) {
+            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF, 7000);
+        }
+
     }
 
     public boolean isLocked() {

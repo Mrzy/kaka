@@ -1,11 +1,15 @@
 
 package cn.zmdx.kaka.locker.content;
 
+import java.io.File;
+import java.io.IOException;
+
+import pl.droidsonroids.gif.GifImageView;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 
@@ -14,7 +18,7 @@ public class GifBox implements IPandoraBox {
 
     private PandoraData mData;
 
-    private ImageView mImageView;
+    private GifImageView mImageView;
 
     private TextView mTextView;
 
@@ -25,7 +29,7 @@ public class GifBox implements IPandoraBox {
     public GifBox(Context context, PandoraData data) {
         mData = data;
         mEntireView = LayoutInflater.from(context).inflate(R.layout.pandora_box_gif_image, null);
-        mImageView = (ImageView) mEntireView.findViewById(R.id.gif_image);
+        mImageView = (GifImageView) mEntireView.findViewById(R.id.gif_image);
         mTextView = (TextView) mEntireView.findViewById(R.id.gif_desc);
     }
 
@@ -59,7 +63,17 @@ public class GifBox implements IPandoraBox {
         if (mData == null || mData.getmImage() == null) {
             return false;
         }
-        mImageView.setImageBitmap(mData.getmImage());
+        File file = DiskImageHelper.getFileByUrl(mData.getmImageUrl());
+        try {
+            mImageView.setBackgroundDrawable(true, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        if (TextUtils.isEmpty(mData.getmContent())) {
+            mTextView.setVisibility(View.GONE);
+            return true;
+        }
         mTextView.setText(mData.getmContent());
         mImageView.setOnClickListener(new OnClickListener() {
 

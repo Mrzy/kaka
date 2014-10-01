@@ -1,19 +1,25 @@
+
 package pl.droidsonroids.gif;
 
+import java.io.File;
+import java.io.IOException;
+
+import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
+
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import java.io.IOException;
-
 /**
- * An {@link ImageView} which tries treating background and src as {@link GifDrawable}
- *
+ * An {@link ImageView} which tries treating background and src as
+ * {@link GifDrawable}
+ * 
  * @author koral--
  */
 public class GifImageView extends ImageView {
@@ -21,7 +27,7 @@ public class GifImageView extends ImageView {
 
     /**
      * A corresponding superclass constructor wrapper.
-     *
+     * 
      * @param context
      * @see ImageView#ImageView(Context)
      */
@@ -30,9 +36,9 @@ public class GifImageView extends ImageView {
     }
 
     /**
-     * Like equivalent from superclass but also try to interpret src and background
-     * attributes as {@link GifDrawable}.
-     *
+     * Like equivalent from superclass but also try to interpret src and
+     * background attributes as {@link GifDrawable}.
+     * 
      * @param context
      * @param attrs
      * @see ImageView#ImageView(Context, AttributeSet)
@@ -43,9 +49,9 @@ public class GifImageView extends ImageView {
     }
 
     /**
-     * Like equivalent from superclass but also try to interpret src and background
-     * attributes as GIFs.
-     *
+     * Like equivalent from superclass but also try to interpret src and
+     * background attributes as GIFs.
+     * 
      * @param context
      * @param attrs
      * @param defStyle
@@ -80,7 +86,25 @@ public class GifImageView extends ImageView {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @SuppressWarnings("deprecation")
-        //new method not available on older API levels
+    public void setBackgroundDrawable(boolean src, File drawableFile) throws IOException {
+        if (drawableFile == null || drawableFile.isDirectory()) {
+            if (BuildConfig.DEBUG) {
+                throw new NullPointerException("drawableFile must available");
+            }
+            return;
+        }
+        GifDrawable d = new GifDrawable(drawableFile);
+        if (src) {
+            setImageDrawable(d);
+        } else if (Build.VERSION.SDK_INT >= 16) {
+            setBackground(d);
+        } else
+            setBackgroundDrawable(d);
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @SuppressWarnings("deprecation")
+    // new method not available on older API levels
     void setResource(boolean isSrc, int resId, Resources res) {
         try {
             GifDrawable d = new GifDrawable(res, resId);
@@ -92,7 +116,7 @@ public class GifImageView extends ImageView {
                 setBackgroundDrawable(d);
             return;
         } catch (Exception ignored) {
-            //ignored
+            // ignored
         }
         if (isSrc)
             super.setImageResource(resId);
@@ -101,11 +125,13 @@ public class GifImageView extends ImageView {
     }
 
     /**
-     * Sets the content of this GifImageView to the specified Uri.
-     * If uri destination is not a GIF then {@link android.widget.ImageView#setImageURI(android.net.Uri)}
-     * is called as fallback.
-     * For supported URI schemes see: {@link android.content.ContentResolver#openAssetFileDescriptor(android.net.Uri, String)}.
-     *
+     * Sets the content of this GifImageView to the specified Uri. If uri
+     * destination is not a GIF then
+     * {@link android.widget.ImageView#setImageURI(android.net.Uri)} is called
+     * as fallback. For supported URI schemes see:
+     * {@link android.content.ContentResolver#openAssetFileDescriptor(android.net.Uri, String)}
+     * .
+     * 
      * @param uri The Uri of an image
      */
     @Override
@@ -115,7 +141,7 @@ public class GifImageView extends ImageView {
                 setImageDrawable(new GifDrawable(getContext().getContentResolver(), uri));
                 return;
             } catch (IOException ignored) {
-                //ignored
+                // ignored
             }
         super.setImageURI(uri);
     }

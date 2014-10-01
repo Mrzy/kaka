@@ -34,8 +34,11 @@ public class PandoraBoxManager {
 
     private static final int TYPE_MIX_BAIDU = 5;
 
+    private static final int TYPE_GIF = 6;
+
     private final int[] DISPLAY_TYPE = {
-            TYPE_PLAIN_TEXT_JOKE, TYPE_MIX_NEWS, TYPE_MIX_JOKE, TYPE_MIX_BAIDU, TYPE_MIX_NEWS, TYPE_MIX_NEWS
+            TYPE_PLAIN_TEXT_JOKE, TYPE_MIX_NEWS, TYPE_MIX_JOKE, TYPE_MIX_BAIDU, TYPE_MIX_NEWS,
+            TYPE_GIF
     };
 
     private IPandoraBox mPreDisplayBox;
@@ -149,9 +152,50 @@ public class PandoraBoxManager {
                 }
                 return box;
             }
+        } else if (type == TYPE_GIF) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("random type: TYPE_GIF");
+            }
+            releasePreResource(mPreDisplayBox);
+            IPandoraBox box = getGifBox();
+            if (box == null) {
+                return getDefaultData();
+            } else {
+                mPreDisplayBox = box;
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("随机到GIF图片一则");
+                }
+                return box;
+            }
         }
 
         return getDefaultData();
+    }
+
+    private IPandoraBox getGifBox() {
+        final ServerImageData bd = ServerImageDataModel.getInstance().queryByDataType(
+                ServerDataMapping.S_DATATYPE_GIF);
+        if (bd == null) {
+            return null;
+        }
+
+        final String url = bd.getUrl();
+        final Bitmap bmp = DiskImageHelper.getBitmapByUrl(url, null);
+        if (bmp == null) {
+            ServerImageDataModel.getInstance().deleteById(bd.getId());
+            return null;
+        }
+
+        final PandoraData pd = new PandoraData();
+        pd.setmId(bd.getId());
+        pd.setFromTable(TableStructure.TABLE_NAME_SERVER_IMAGE);
+        pd.setmTitle(bd.getTitle());
+        pd.setmContent(bd.getTitle());
+        pd.setDataType("TYPE_GIF");
+        pd.setmImageUrl(bd.getUrl());
+        pd.setmImage(bmp);
+        IPandoraBox box = new GifBox(mContext, pd);
+        return box;
     }
 
     private IPandoraBox getMixJoke() {
@@ -239,7 +283,8 @@ public class PandoraBoxManager {
     }
 
     public IPandoraBox getPlainTextJoke() {
-        final ServerData bd = ServerDataModel.getInstance().queryByDataType(ServerDataMapping.S_DATATYPE_JOKE);
+        final ServerData bd = ServerDataModel.getInstance().queryByDataType(
+                ServerDataMapping.S_DATATYPE_JOKE);
         if (bd == null) {
             return null;
         }

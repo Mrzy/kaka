@@ -42,6 +42,10 @@ public class PandoraBoxDispatcher extends Handler {
 
     public static final int MSG_PULL_SERVER_IMAGE_NEWS = 8;//拉取新闻图片的json数据(不包含图片下载)
 
+    public static final int MSG_PULL_SERVER_GIF = 10;
+
+    public static final int MSG_LOAD_SERVER_GIF =11;
+
     private static PandoraBoxDispatcher INSTANCE;
 
     private PandoraConfig mConfig;
@@ -103,6 +107,12 @@ public class PandoraBoxDispatcher extends Handler {
                 }
                 processPullServerImageData(ServerDataMapping.S_DATATYPE_NEWS);
                 break;
+            case MSG_PULL_SERVER_GIF:
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("收到拉取PANDORA GIF图片数据的消息");
+                }
+                processPullServerImageData(ServerDataMapping.S_DATATYPE_GIF);
+                break;
             case MSG_LOAD_BAIDU_IMG:
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("收到下载百度图片的消息");
@@ -120,6 +130,12 @@ public class PandoraBoxDispatcher extends Handler {
                     HDBLOG.logD("收到下载阿里云搞笑图片的消息");
                 }
                 loadPandoraServerImage(ServerDataMapping.S_DATATYPE_JOKE);
+                break;
+            case MSG_LOAD_SERVER_GIF:
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("收到下载阿里云GIF图片的消息");
+                }
+                loadPandoraServerImage(ServerDataMapping.S_DATATYPE_GIF);
                 break;
             case MSG_SERVER_DATA_ARRIVED:
                 if (BuildConfig.DEBUG) {
