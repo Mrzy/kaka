@@ -35,16 +35,17 @@ public class PandoraBoxDispatcher extends Handler {
 
     public static final int MSG_PULL_SERVER_TEXT_DATA = 5;
 
-    public static final int MSG_PULL_SERVER_IMAGE_JOKE = 6;//拉取搞笑图片的json数据(不包含图片下载)
+    public static final int MSG_PULL_SERVER_IMAGE_JOKE = 6;// 拉取搞笑图片的json数据(不包含图片下载)
 
-    public static final int MSG_LOAD_SERVER_IMAGE_NEWS = 7;//下载新闻图片的消息
-    public static final int MSG_LOAD_SERVER_IMAGE_JOKE = 9;//下载搞笑图片的消息
+    public static final int MSG_LOAD_SERVER_IMAGE_NEWS = 7;// 下载新闻图片的消息
 
-    public static final int MSG_PULL_SERVER_IMAGE_NEWS = 8;//拉取新闻图片的json数据(不包含图片下载)
+    public static final int MSG_LOAD_SERVER_IMAGE_JOKE = 9;// 下载搞笑图片的消息
+
+    public static final int MSG_PULL_SERVER_IMAGE_NEWS = 8;// 拉取新闻图片的json数据(不包含图片下载)
 
     public static final int MSG_PULL_SERVER_GIF = 10;
 
-    public static final int MSG_LOAD_SERVER_GIF =11;
+    public static final int MSG_LOAD_SERVER_GIF = 11;
 
     private static PandoraBoxDispatcher INSTANCE;
 
@@ -183,14 +184,14 @@ public class PandoraBoxDispatcher extends Handler {
             int hasImageCount = ServerImageDataModel.getInstance().queryCountHasImage(dataType);
             if (hasImageCount < PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE) {
                 if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("ServerImage数据库中标记为已下载的" +dataType+ "数据总数:" + hasImageCount + "已小于阀值:"
-                            + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",立即开启下载图片程序");
+                    HDBLOG.logD("ServerImage数据库中标记为已下载的" + dataType + "数据总数:" + hasImageCount
+                            + "已小于阀值:" + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",立即开启下载图片程序");
                 }
                 downloadServerImages(dataType);
             } else {
                 if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("ServerImage数据库中标记为已下载的" +dataType+ "数据总数为:" + hasImageCount + "大于最小阀值"
-                            + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",无需启动下载图片程序");
+                    HDBLOG.logD("ServerImage数据库中标记为已下载的" + dataType + "数据总数为:" + hasImageCount
+                            + "大于最小阀值" + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",无需启动下载图片程序");
                 }
             }
         }
@@ -202,9 +203,9 @@ public class PandoraBoxDispatcher extends Handler {
         int count = HDBNetworkState.isWifiNetwork() ? PandoraPolicy.COUNT_DOWNLOAD_IMAGE_WIFI
                 : PandoraPolicy.COUNT_DOWNLOAD_IMAGE_NON_WIFI;
         List<ServerImageData> list = new ArrayList<ServerImageData>();
-            List<ServerImageData> tmpList = ServerImageDataModel.getInstance()
-                    .queryWithoutImgByDataType(count, dataType);
-            list.addAll(tmpList);
+        List<ServerImageData> tmpList = ServerImageDataModel.getInstance()
+                .queryWithoutImgByDataType(count, dataType);
+        list.addAll(tmpList);
         ServerImageDataManager.getInstance().batchDownloadServerImage(list);
     }
 

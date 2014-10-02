@@ -8,6 +8,7 @@ import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.view.Gravity;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 import cn.zmdx.kaka.locker.animation.AnimationFactory;
 import cn.zmdx.kaka.locker.animation.AnimationFactory.FlipDirection;
+import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.content.IPandoraBox;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
@@ -84,7 +86,7 @@ public class LockScreenManager {
 
     private Vibrator mVibrator;
 
-    private TextView mDate;
+    private TextView mDate, mBatteryTipView;
 
     private KeyguardLock mKeyguard;
 
@@ -173,6 +175,8 @@ public class LockScreenManager {
         refreshContent();
         setDate();
         mWinManager.addView(mEntireView, params);
+
+        onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
         syncDataIfNeeded();
     }
 
@@ -216,6 +220,7 @@ public class LockScreenManager {
     private void initLockScreenViews() {
         mEntireView = LayoutInflater.from(HDApplication.getInstannce()).inflate(
                 R.layout.pandora_lockscreen, null);
+        mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
         mViewFlipper = (ViewFlipper) mEntireView.findViewById(R.id.viewFlipper);
         mLockPatternView = (LockPatternView) mEntireView.findViewById(R.id.gusture);
@@ -539,5 +544,32 @@ public class LockScreenManager {
         public void onPanelHiddenEnd() {
         };
     };
+
+    public void onBatteryStatusChanged(int mStatus) {
+        if (isLocked() && mBatteryTipView != null) {
+            final PandoraBatteryManager pbm = PandoraBatteryManager.getInstance();
+            switch (mStatus) {
+                case BatteryManager.BATTERY_STATUS_CHARGING:
+                    final int maxScale = pbm.getMaxScale();
+                    final int curScale = pbm.getCurLevel();
+                    final float rate = (float) curScale / (float) maxScale;
+                    int percent = (int) (rate * 100.0);
+                    mBatteryTipView.setVisibility(View.VISIBLE);
+                    mBatteryTipView.setText("正在充电" + percent + "%");
+                    break;
+                case BatteryManager.BATTERY_STATUS_DISCHARGING:
+                    mBatteryTipView.setVisibility(View.INVISIBLE);
+                    break;
+                case BatteryManager.BATTERY_STATUS_FULL:
+                    mBatteryTipView.setVisibility(View.VISIBLE);
+                    mBatteryTipView.setText("电量已满");
+                    break;
+                case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
+                    mBatteryTipView.setVisibility(View.INVISIBLE);
+                default:
+                    break;
+            }
+        }
+    }
 
 }

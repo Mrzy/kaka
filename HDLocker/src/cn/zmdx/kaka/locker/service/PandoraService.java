@@ -11,6 +11,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
+import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class PandoraService extends Service {
@@ -57,13 +58,16 @@ public class PandoraService extends Service {
         filter.addAction(ALARM_ALERT_ACTION);
         // filter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(mReceiver, filter);
+        PandoraBatteryManager.getInstance().registerListener();
     }
 
     private void unRegisterBroadcastReceiver() {
         unregisterReceiver(mReceiver);
+        PandoraBatteryManager.getInstance().unRegisterListener();
     }
 
     private static boolean mIsRinging = false;
+
     private class MyPhoneListener extends PhoneStateListener {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
@@ -100,6 +104,7 @@ public class PandoraService extends Service {
     public static boolean isRinging() {
         return mIsRinging;
     }
+
     public final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
@@ -110,9 +115,10 @@ public class PandoraService extends Service {
             }
             if (action.equals(ALARM_ALERT_ACTION)) {
                 LockScreenManager.getInstance().unLock();
-            } else {
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 LockScreenManager.getInstance().lock();
             }
         }
     };
+
 }
