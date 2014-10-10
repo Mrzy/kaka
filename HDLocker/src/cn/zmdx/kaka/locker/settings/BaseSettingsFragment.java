@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -114,4 +115,20 @@ public abstract class BaseSettingsFragment extends Fragment {
         return mPandoraConfig.getCurrentThemeId();
     }
 
+    protected void gotoWallpaper() {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), WallPaperActivity.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+
+    }
+
+    protected boolean isHaveCustomWallpaper() {
+        return !TextUtils.isEmpty(mPandoraConfig.getCustomWallpaper());
+    }
+
+    protected String getCustomWallpaper() {
+        return mPandoraConfig.getCustomWallpaper();
+    }
 }

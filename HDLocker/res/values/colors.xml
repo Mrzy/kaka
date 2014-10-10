@@ -12,4 +12,9 @@
     <color name="setting_about_pandora_color">#2f3035</color>
     <color name="setting_about_pandora_down">#626a6e</color>
     <color name="init_setting_small_textview_color">#60ffffff</color>
+    
+    <color name="pandora_wallpaper_dialog_item_press">#666666</color>
+    <color name="pandora_wallpaper_dialog_item_normal">#191919</color>
+    
+    <color name="black_translucent">#50000000</color>
 </resources>

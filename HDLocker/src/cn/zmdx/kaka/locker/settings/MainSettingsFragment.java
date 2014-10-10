@@ -3,10 +3,12 @@ package cn.zmdx.kaka.locker.settings;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +33,7 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.animation.ViewAnimation;
+import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -108,6 +111,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.pandora_setting, container, false);
         initView();
+        initBackground();
         initSwitchButtonState();
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
@@ -152,6 +156,23 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mPicScrollView = (HorizontalScrollView) mRootView.findViewById(R.id.setting_bg_hs);
 
         bindPicData();
+    }
+
+    private void initBackground() {
+        if (isHaveCustomWallpaper()) {
+            String customWallpaperFileName = getCustomWallpaper();
+            Bitmap bitmap = PandoraUtils.getBitmap(CustomWallpaperManager.WALLPAPER_SDCARD_LOCATION+customWallpaperFileName+".jpg");
+            BitmapDrawable drawable=new BitmapDrawable(getActivity().getResources(), bitmap);
+            if (null == bitmap) {
+                setSettingBackground(ThemeManager.THEME_ID_BLUE);
+            }else{
+                //TODO
+                mSettingBackground.setBackground(drawable);
+            }
+        }else{
+            int themeId = getCurrentThemeId();
+            setSettingBackground(themeId);
+        }
     }
 
     private void bindPicData() {
@@ -349,20 +370,23 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 checkNewVersion();
                 break;
             case R.id.setting_change_background:
-                mIsWallpaperShow = !mIsWallpaperShow;
-                int height = (int) getActivity().getResources().getDimension(
-                        R.dimen.setting_wallpaper_bg_height);
-                if (mIsWallpaperShow) {
-                    ViewAnimation viewAnimation = new ViewAnimation(mPicScrollView, height,
-                            mIsWallpaperShow);
-                    viewAnimation.setDuration(VIEW_ANIMATION_DURATION);
-                    mPicScrollView.startAnimation(viewAnimation);
-                } else {
-                    ViewAnimation viewAnimation = new ViewAnimation(mPicScrollView, height,
-                            mIsWallpaperShow);
-                    viewAnimation.setDuration(VIEW_ANIMATION_DURATION);
-                    mPicScrollView.startAnimation(viewAnimation);
-                }
+                gotoWallpaper();
+                // mIsWallpaperShow = !mIsWallpaperShow;
+                // int height = (int) getActivity().getResources().getDimension(
+                // R.dimen.setting_wallpaper_bg_height);
+                // if (mIsWallpaperShow) {
+                // ViewAnimation viewAnimation = new
+                // ViewAnimation(mPicScrollView, height,
+                // mIsWallpaperShow);
+                // viewAnimation.setDuration(VIEW_ANIMATION_DURATION);
+                // mPicScrollView.startAnimation(viewAnimation);
+                // } else {
+                // ViewAnimation viewAnimation = new
+                // ViewAnimation(mPicScrollView, height,
+                // mIsWallpaperShow);
+                // viewAnimation.setDuration(VIEW_ANIMATION_DURATION);
+                // mPicScrollView.startAnimation(viewAnimation);
+                // }
                 break;
             case R.id.setting_icon:
                 if (mSettingForeView.isPanelExpanded()) {
