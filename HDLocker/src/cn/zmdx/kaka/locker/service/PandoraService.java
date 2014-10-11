@@ -20,6 +20,9 @@ public class PandoraService extends Service {
 
     @Override
     public void onCreate() {
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("PandoraService is startup");
+        }
         registerBroadcastReceiver();
         TelephonyManager manager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
         manager.listen(new MyPhoneListener(), PhoneStateListener.LISTEN_CALL_STATE);
@@ -46,9 +49,9 @@ public class PandoraService extends Service {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("PandoraService onDestroy()");
         }
+        super.onDestroy();
         unRegisterBroadcastReceiver();
         startService(new Intent(this, PandoraService.class));
-        super.onDestroy();
     }
 
     private void registerBroadcastReceiver() {

@@ -24,7 +24,7 @@ public class PandoraPolicy {
 
     public static final int COUNT_DOWNLOAD_IMAGE_WIFI = 15;
 
-    public static final int COUNT_DOWNLOAD_IMAGE_NON_WIFI = 1;
+    public static final int COUNT_DOWNLOAD_IMAGE_NON_WIFI = 0;
 
     /**
      * 请求百度图片时，每页的数据条数

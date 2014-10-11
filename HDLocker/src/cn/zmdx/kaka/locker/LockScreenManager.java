@@ -4,12 +4,12 @@ package cn.zmdx.kaka.locker;
 import java.util.Calendar;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.BatteryManager;
-import android.os.Build;
 import android.os.Vibrator;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -54,6 +54,7 @@ import com.nineoldandroids.view.ViewHelper;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
 
+@SuppressWarnings("deprecation")
 public class LockScreenManager {
 
     protected static final int MAX_TIMES_SHOW_GUIDE = 3;
@@ -92,7 +93,7 @@ public class LockScreenManager {
 
     private TextView mLockPrompt;
 
-    private ImageView mLockArrow;
+    private ImageView mLockArrow, mShareBtn;
 
     private AnimatorSet mAnimatorSet;
 
@@ -154,10 +155,6 @@ public class LockScreenManager {
         params.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | LayoutParams.FLAG_HARDWARE_ACCELERATED;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            params.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS
-                    | LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
-        }
 
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
 
@@ -168,7 +165,7 @@ public class LockScreenManager {
         params.windowAnimations = R.style.anim_locker_window;
         params.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
         params.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-        params.gravity = Gravity.TOP | Gravity.LEFT;
+        params.gravity = Gravity.TOP | Gravity.START;
 
         initLockScreenViews();
 
@@ -214,9 +211,10 @@ public class LockScreenManager {
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
         contentView.requestLayout();
-        mBoxView.addView(contentView, lp);
+        mBoxView.addView(contentView, 0, lp);
     }
 
+    @SuppressLint("InflateParams")
     private void initLockScreenViews() {
         mEntireView = LayoutInflater.from(HDApplication.getInstannce()).inflate(
                 R.layout.pandora_lockscreen, null);
@@ -228,6 +226,9 @@ public class LockScreenManager {
         mGusturePrompt = (TextView) mEntireView.findViewById(R.id.gusture_prompt);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
+        mShareBtn = (ImageView) mEntireView.findViewById(R.id.shareBtn);
+        mShareBtn.setOnClickListener(mClickListener);
+
         mObjectAnimator = ObjectAnimator.ofFloat(mLockPrompt, "alpha", 1, 0.2f, 1);
         mObjectAnimator.setDuration(2000);
         mObjectAnimator.setRepeatMode(ValueAnimator.REVERSE);
@@ -442,6 +443,16 @@ public class LockScreenManager {
         }
         return false;
     }
+
+    private View.OnClickListener mClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            if (v == mShareBtn) {
+                // TODO
+            }
+        }
+    };
 
     private PanelSlideListener mSlideListener = new SimplePanelSlideListener() {
 
