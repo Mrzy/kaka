@@ -2,13 +2,16 @@
 package cn.zmdx.kaka.locker;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.os.BatteryManager;
 import android.os.Vibrator;
 import android.view.Gravity;
@@ -37,6 +40,9 @@ import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
+import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
+import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
+import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
 import cn.zmdx.kaka.locker.widget.LockPatternView;
 import cn.zmdx.kaka.locker.widget.LockPatternView.Cell;
 import cn.zmdx.kaka.locker.widget.LockPatternView.DisplayMode;
@@ -87,7 +93,7 @@ public class LockScreenManager {
 
     private Vibrator mVibrator;
 
-    private TextView mDate, mBatteryTipView;
+    private TextView mDate, mBatteryTipView, mWeatherSummary;
 
     private KeyguardLock mKeyguard;
 
@@ -169,12 +175,32 @@ public class LockScreenManager {
 
         initLockScreenViews();
 
+        processWeatherInfo();
+
         refreshContent();
         setDate();
         mWinManager.addView(mEntireView, params);
 
         onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
         syncDataIfNeeded();
+    }
+
+    private void processWeatherInfo() {
+        PandoraWeatherManager.getInstance().getCurrentWeather(new IWeatherCallback() {
+
+            @Override
+            public void onSuccess(PandoraWeather pw) {
+                int temp = pw.getTemp();
+                String summary = pw.getSummary();
+                mDate.append(" " + temp + "ºC");
+                mWeatherSummary.setText(summary);
+            }
+
+            @Override
+            public void onFailed() {
+                mWeatherSummary.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void checkNewVersion() {
@@ -228,6 +254,7 @@ public class LockScreenManager {
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
         mShareBtn = (ImageView) mEntireView.findViewById(R.id.shareBtn);
         mShareBtn.setOnClickListener(mClickListener);
+        mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
 
         mObjectAnimator = ObjectAnimator.ofFloat(mLockPrompt, "alpha", 1, 0.2f, 1);
         mObjectAnimator.setDuration(2000);
@@ -559,6 +586,7 @@ public class LockScreenManager {
     public void onBatteryStatusChanged(int mStatus) {
         if (isLocked() && mBatteryTipView != null) {
             final PandoraBatteryManager pbm = PandoraBatteryManager.getInstance();
+            final Resources resource = HDApplication.getInstannce().getResources();
             switch (mStatus) {
                 case BatteryManager.BATTERY_STATUS_CHARGING:
                     final int maxScale = pbm.getMaxScale();
@@ -566,17 +594,18 @@ public class LockScreenManager {
                     final float rate = (float) curScale / (float) maxScale;
                     int percent = (int) (rate * 100.0);
                     mBatteryTipView.setVisibility(View.VISIBLE);
-                    mBatteryTipView.setText("正在充电" + percent + "%");
+                    mBatteryTipView.setText(resource
+                            .getString(R.string.pandora_box_battery_charging) + percent + "%");
                     break;
                 case BatteryManager.BATTERY_STATUS_DISCHARGING:
-                    mBatteryTipView.setVisibility(View.INVISIBLE);
+                    mBatteryTipView.setVisibility(View.GONE);
                     break;
                 case BatteryManager.BATTERY_STATUS_FULL:
                     mBatteryTipView.setVisibility(View.VISIBLE);
-                    mBatteryTipView.setText("电量已满");
+                    mBatteryTipView.setText(resource.getString(R.string.pandora_box_battery_full));
                     break;
                 case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
-                    mBatteryTipView.setVisibility(View.INVISIBLE);
+                    mBatteryTipView.setVisibility(View.GONE);
                 default:
                     break;
             }

@@ -52,7 +52,7 @@ public class PandoraWeatherManager {
         if (!HDBNetworkState.isNetworkAvailable()) {
             return;
         }
-        String lonlat = getLocation();
+        final String lonlat = getLocation();
         if (TextUtils.isEmpty(lonlat)) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("未获得位置信息，中断请求天气数据");
@@ -64,8 +64,10 @@ public class PandoraWeatherManager {
 
             @Override
             public void onResponse(JSONObject response) {
+                HDBLOG.logD("weather url:" + getUrl(lonlat));
                 if (response == null) {
                     callback.onFailed();
+                    return;
                 }
                 String status = response.optString("status");
                 if (!TextUtils.isEmpty(status) && status.equals("ok")) {
@@ -79,6 +81,9 @@ public class PandoraWeatherManager {
                         HDBLOG.logD("caiyun weather data returned:" + pw.toString());
                     }
                 } else {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("获取天气数据失败, status code:" + status);
+                    }
                     callback.onFailed();
                 }
             }
@@ -97,7 +102,6 @@ public class PandoraWeatherManager {
     }
 
     private String getLocation() {
-        final long startTime = System.currentTimeMillis();
         final LocationManager locationManager = (LocationManager) HDApplication.getInstannce()
                 .getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -112,9 +116,9 @@ public class PandoraWeatherManager {
         format.setMaximumFractionDigits(4);
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("latitude " + latitude + "  longitude:" + longitude + " altitude:"
-                    + altitude + ", duraion:" + (System.currentTimeMillis() - startTime));
+                    + altitude);
         }
-        return format.format(latitude) + "," + format.format(longitude);
+        return format.format(longitude) + "," + format.format(latitude);
     }
 
     private String getUrl(String lonlat) {

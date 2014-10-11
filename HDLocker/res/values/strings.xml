@@ -68,5 +68,7 @@
     <string name="update_prompt_no_internet">网络连接超时，请稍候再试！</string>
     <string name="pandora_box_default_tip">猛料准备中，换个姿势再拉一次...</string>
     <string name="pandora_box_no_net_tip">网络未连接，猛料拉不出</string>
+    <string name="pandora_box_battery_charging">正在充电</string>
+    <string name="pandora_box_battery_full">电量已满</string>
 
 </resources>

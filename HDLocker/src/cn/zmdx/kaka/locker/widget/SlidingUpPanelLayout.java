@@ -493,7 +493,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 mTopView.getMeasuredHeight());
         Bitmap bottomBmp = Bitmap.createBitmap(srcBmp, 0, mTopView.getMeasuredHeight(),
                 srcBmp.getWidth(), mSlideableView.getMeasuredHeight());
-        if (srcBmp != null && srcBmp.isRecycled()) {
+        if (srcBmp != null && !srcBmp.isRecycled()) {
             srcBmp.recycle();
             srcBmp = null;
         }
