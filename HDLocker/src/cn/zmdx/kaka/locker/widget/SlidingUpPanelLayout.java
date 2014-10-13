@@ -821,7 +821,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
         setMeasuredDimension(widthSize, heightSize);
 
-        cutOffForegroundDrawable();
+        
     }
 
     @Override
@@ -1306,6 +1306,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
     @Override
     public void draw(Canvas c) {
+        cutOffForegroundDrawable();
         super.draw(c);
 
         if (!isSlidingEnabled()) {
@@ -1316,7 +1317,6 @@ public class SlidingUpPanelLayout extends ViewGroup {
         if (mSlideState == SlideState.EXPANDED) {
             return;
         }
-
         drawTopPanelShadow(c);
         drawBottomPanelShadow(c);
     }

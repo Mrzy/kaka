@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -114,4 +115,20 @@ public abstract class BaseSettingsFragment extends Fragment {
         return mPandoraConfig.getCurrentThemeId();
     }
 
+    protected void gotoWallpaper() {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), WallPaperActivity.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+
+    }
+
+    protected boolean isHaveCustomWallpaper() {
+        return PandoraUtils.isHaveCustomWallpaper(getActivity());
+    }
+
+    protected String getCustomWallpaperFileName() {
+        return mPandoraConfig.getCustomWallpaperFileName();
+    }
 }

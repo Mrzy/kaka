@@ -40,6 +40,8 @@ public class PandoraConfig {
 
     private static final String KEY_NEW_VERSION_CHECKED = "key_new_version_checked";
 
+    private static final String KEY_CUSTOM_WALLPAPER = "keyCustomWallpaper";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -154,5 +156,15 @@ public class PandoraConfig {
         Editor editor = mSp.edit();
         editor.putString(KEY_NEW_VERSION_CHECKED, today);
         editor.commit();
+    }
+
+    public void saveCustomWallpaperFileName(String fileName) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_CUSTOM_WALLPAPER, fileName);
+        editor.commit();
+    }
+
+    public String getCustomWallpaperFileName() {
+        return mSp.getString(KEY_CUSTOM_WALLPAPER, "");
     }
 }

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pandora_wallpaper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/setting_background_blue"
+    android:baselineAligned="true"
+    android:clickable="true"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#60000000"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/pandora_wallpaper_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/init_setting_title_layout_margin_top" >
+
+            <TextView
+                style="@style/init_setting_big_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/init_setting_title_textview_margin_bottom"
+                android:layout_marginLeft="@dimen/init_setting_title_textview_margin_top"
+                android:gravity="center_vertical"
+                android:text="@string/pandora_wallpaper_title" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/init_setting_title_line_height"
+                android:contentDescription="@string/contentDescription"
+                android:scaleType="fitXY"
+                android:src="@drawable/setting_miui_line" />
+        </LinearLayout>
+
+        <cn.zmdx.kaka.locker.widget.DragScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible" >
+
+                    <TextView
+                        style="@style/init_setting_big_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/init_setting_title_textview_margin_top"
+                        android:gravity="center_vertical"
+                        android:paddingTop="@dimen/init_setting_title_layout_margin_top"
+                        android:text="@string/pandora_wallpaper_custom" />
+
+                    <LinearLayout
+                        android:id="@+id/parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:orientation="horizontal" >
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/init_setting_big_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/init_setting_title_textview_margin_top"
+                        android:gravity="center_vertical"
+                        android:paddingTop="@dimen/init_setting_title_layout_margin_top"
+                        android:text="@string/pandora_wallpaper_advice" />
+
+                    <LinearLayout
+                        android:id="@+id/advice_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:orientation="horizontal" >
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </cn.zmdx.kaka.locker.widget.DragScrollView>
+    </LinearLayout>
+
+</LinearLayout>
