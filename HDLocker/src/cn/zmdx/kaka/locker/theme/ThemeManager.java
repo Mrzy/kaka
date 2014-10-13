@@ -9,6 +9,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 public class ThemeManager {
+    public static final int THEME_ID_CUSTOM = -1; // default
 
     public static final int THEME_ID_BLUE = 1; // default
 

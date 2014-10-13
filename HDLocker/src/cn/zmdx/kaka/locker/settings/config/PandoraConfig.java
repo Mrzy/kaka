@@ -158,13 +158,13 @@ public class PandoraConfig {
         editor.commit();
     }
 
-    public void saveCustomWallpaper(String fileName) {
+    public void saveCustomWallpaperFileName(String fileName) {
         Editor editor = mSp.edit();
         editor.putString(KEY_CUSTOM_WALLPAPER, fileName);
         editor.commit();
     }
 
-    public String getCustomWallpaper() {
+    public String getCustomWallpaperFileName() {
         return mSp.getString(KEY_CUSTOM_WALLPAPER, "");
     }
 }

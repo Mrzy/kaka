@@ -6,8 +6,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -40,7 +37,7 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
 
     private int mLockPatternType = 1;
 
-    private LinearLayout mDialogBackground;
+//    private LinearLayout mDialogBackground;
 
     private TextView mGusturePrompt;
 
@@ -66,25 +63,25 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
 
     private int mErrorTimes = 0;
 
-    private Bitmap mBitmapDrawable;
+//    private Bitmap mBitmapDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
         setContentView(R.layout.gusture_view);
-        mBitmapDrawable = getIntent().getBundleExtra("bundle").getParcelable("bitmap");
+//        mBitmapDrawable = getIntent().getBundleExtra("bundle").getParcelable("bitmap");
         mLockPatternType = getIntent().getBundleExtra("bundle").getInt("type");
         getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         mPandoraConfig = PandoraConfig.newInstance(mContext);
         initView();
     }
 
-    @SuppressWarnings("deprecation")
+//    @SuppressWarnings("deprecation")
     private void initView() {
-        mDialogBackground = (LinearLayout) findViewById(R.id.gusture_dialog_background);
-        mDialogBackground
-                .setBackgroundDrawable(new BitmapDrawable(getResources(), mBitmapDrawable));
+//        mDialogBackground = (LinearLayout) findViewById(R.id.gusture_dialog_background);
+//        mDialogBackground
+//                .setBackgroundDrawable(new BitmapDrawable(getResources(), mBitmapDrawable));
         mGusturePrompt = (TextView) findViewById(R.id.gusture_prompt);
         mResetBtn = (Button) findViewById(R.id.gusture_reset);
         mResetBtn.setOnClickListener(this);

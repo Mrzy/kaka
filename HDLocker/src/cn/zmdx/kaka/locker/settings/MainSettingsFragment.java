@@ -1,39 +1,22 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-import java.util.UUID;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.SparseArray;
-import android.util.SparseIntArray;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.animation.ViewAnimation;
-import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -65,23 +48,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private SwitchButton mLockerTypeSButton;
 
-    private HorizontalScrollView mPicScrollView;
-
-    private LinearLayout mPicView;
-
     private ImageView mSettingIcon;
 
     private View mSettingBackground;
 
     private SparseArray<ImageView> mBorderArray = new SparseArray<ImageView>();
-
-    private SparseIntArray mThumbIdArray = new SparseIntArray();
-
-    private boolean mIsWallpaperShow = false;
-
-    private static final int MSG_SAVE_WALLPAPER = 11;
-
-    private static final int MSG_SAVE_WALLPAPER_DELAY = 100;
 
     private boolean mIsCurrentlyPressed = false;
 
@@ -92,8 +63,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     public static final int GUSTURE_REQUEST_CODE_SUCCESS = 37;
 
     public static final int GUSTURE_REQUEST_CODE_FAIL = 38;
-
-    private static final int VIEW_ANIMATION_DURATION = 200;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +80,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.pandora_setting, container, false);
         initView();
-        initBackground();
         initSwitchButtonState();
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
@@ -152,112 +120,25 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mChangeBackground = (TextView) mRootView.findViewById(R.id.setting_change_background);
         mChangeBackground.setOnClickListener(this);
 
-        mPicView = (LinearLayout) mRootView.findViewById(R.id.setting_bg_image);
-        mPicScrollView = (HorizontalScrollView) mRootView.findViewById(R.id.setting_bg_hs);
-
-        bindPicData();
     }
 
     private void initBackground() {
-        if (isHaveCustomWallpaper()) {
-            String customWallpaperFileName = getCustomWallpaper();
-            Bitmap bitmap = PandoraUtils.getBitmap(CustomWallpaperManager.WALLPAPER_SDCARD_LOCATION+customWallpaperFileName+".jpg");
-            BitmapDrawable drawable=new BitmapDrawable(getActivity().getResources(), bitmap);
-            if (null == bitmap) {
-                setSettingBackground(ThemeManager.THEME_ID_BLUE);
-            }else{
-                //TODO
-                mSettingBackground.setBackground(drawable);
-            }
-        }else{
-            int themeId = getCurrentThemeId();
-            setSettingBackground(themeId);
-        }
-    }
-
-    private void bindPicData() {
-        if (mPicView != null) {
-            List<Theme> mThemeList = ThemeManager.getAllTheme();
-            for (int i = 0; i < mThemeList.size(); i++) {
-                RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
-                        HDApplication.getInstannce())
-                        .inflate(R.layout.setting_wallpaper_item, null);
-                ImageView mWallpaperIv = (ImageView) mWallpaperRl
-                        .findViewById(R.id.setting_wallpaper_image);
-                mWallpaperIv.setScaleType(ScaleType.FIT_XY);
-                mWallpaperIv.setImageResource(mThemeList.get(i).getmThumbnailResId());
-                ImageView mWallpaperBorder = (ImageView) mWallpaperRl
-                        .findViewById(R.id.setting_wallpaper_image_border);
-                int themeId = mThemeList.get(i).getmThemeId();
-                mThumbIdArray.put(i, themeId);
-                mBorderArray.put(i, mWallpaperBorder);
-                mWallpaperIv.setTag(i);
-                mWallpaperIv.setOnClickListener(mPicClickListener);
-                mPicView.addView(mWallpaperRl);
-            }
-            checkCurrentThemeId();
-        }
-    }
-
-    private void checkCurrentThemeId() {
-        int themeId = getCurrentThemeId();
-        for (int i = 0; i < mThumbIdArray.size(); i++) {
-            if (themeId == mThumbIdArray.get(i)) {
-                if (null != mBorderArray) {
-                    mBorderArray.get(i).setVisibility(View.VISIBLE);
+        if (null != PandoraUtils.sCropBitmap) {
+            BitmapDrawable drawable = new BitmapDrawable(getResources(), PandoraUtils.sCropBitmap);
+            mSettingForeView.setForegroundDrawable(drawable);
+        } else {
+            if (isHaveCustomWallpaper()) {
+                BitmapDrawable drawable = PandoraUtils.getCustomWallpaper(getActivity());
+                if (null == drawable) {
+                    setSettingBackground(ThemeManager.THEME_ID_BLUE);
+                } else {
+                    // TODO
+                    mSettingForeView.setForegroundDrawable(drawable);
                 }
-            }
-        }
-        setSettingBackground(themeId);
-    }
-
-    private View.OnClickListener mPicClickListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View view) {
-            if (null != view) {
-                int position = (Integer) view.getTag();
-                for (int pos = 0; pos < mBorderArray.size(); pos++) {
-                    if (pos == position) {
-                        mBorderArray.get(pos).setVisibility(View.VISIBLE);
-                    } else {
-                        mBorderArray.get(pos).setVisibility(View.GONE);
-                    }
-                }
-                int themeId = mThumbIdArray.get(position);
+            } else {
+                int themeId = getCurrentThemeId();
                 setSettingBackground(themeId);
-                UmengCustomEventManager.statisticalSelectTheme(themeId);
-
-                if (mHandler.hasMessages(MSG_SAVE_WALLPAPER)) {
-                    mHandler.removeMessages(MSG_SAVE_WALLPAPER);
-                }
-                Message message = Message.obtain();
-                message.what = MSG_SAVE_WALLPAPER;
-                message.arg1 = themeId;
-                mHandler.sendMessageDelayed(message, MSG_SAVE_WALLPAPER_DELAY);
             }
-        }
-    };
-
-    private MyHandler mHandler = new MyHandler(this);
-
-    private static class MyHandler extends Handler {
-        WeakReference<MainSettingsFragment> mFragment;
-
-        public MyHandler(MainSettingsFragment fragment) {
-            mFragment = new WeakReference<MainSettingsFragment>(fragment);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            MainSettingsFragment fragment = mFragment.get();
-            switch (msg.what) {
-                case MSG_SAVE_WALLPAPER:
-                    int themeId = msg.arg1;
-                    fragment.saveThemeId(themeId);
-                    break;
-            }
-            super.handleMessage(msg);
         }
     }
 
@@ -309,6 +190,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
         super.onResume();
         MobclickAgent.onPageStart("MainSettingsFragment"); // 统计页面
+        initBackground();
     }
 
     public void onPause() {
@@ -318,13 +200,13 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private void showGustureView(final int type) {
         mLockerTypeSButton.setEnabled(false);
-        View decorView = getActivity().getWindow().getDecorView();
-        Bitmap blurBitmap = PandoraUtils.fastBlur(decorView);
+        // View decorView = getActivity().getWindow().getDecorView();
+        // Bitmap blurBitmap = PandoraUtils.fastBlur(decorView);
         Intent in = new Intent();
         in.setClass(getActivity(), LockPatternActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
-        bundle.putParcelable("bitmap", blurBitmap);
+        // bundle.putParcelable("bitmap", blurBitmap);
         in.putExtra("bundle", bundle);
         startActivityForResult(in, GUSTURE_REQUEST_CODE_SUCCESS);
         getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
@@ -409,6 +291,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         if (null != mBorderArray) {
             mBorderArray.clear();
         }
+        PandoraUtils.sCropBitmap = null;
+        PandoraUtils.sCropThumbBitmap = null;
         super.onDestroyView();
     }
 }

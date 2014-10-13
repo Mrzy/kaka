@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Environment;
-import android.util.Log;
 
 public class CustomWallpaperManager {
     public static String WALLPAPER_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
@@ -64,7 +63,6 @@ public class CustomWallpaperManager {
             CustomWallpaper customWallpaper = new CustomWallpaper();
             customWallpaper.setFilePath(files[i].getPath());
             customWallpaper.setFileName(files[i].getName());
-            Log.d("syc", "filepath=" + files[i].getPath() + " filename=" + files[i].getName());
             list.add(customWallpaper);
         }
         return list;
@@ -78,14 +76,17 @@ public class CustomWallpaperManager {
             if (isHaveFileWithFileName(WALLPAPER_SDCARD_LOCATION, files[i].getName())) {
                 CustomWallpaper customWallpaper = new CustomWallpaper();
                 customWallpaper.setFilePath(files[i].getPath());
-                customWallpaper.setFileName(files[i].getName());
-                Log.d("syc",
-                        "Thumb filepath=" + files[i].getPath() + " filename=" + files[i].getName());
+                customWallpaper.setFileName(files[i].getName().substring(0,
+                        files[i].getName().indexOf(".")));
                 list.add(customWallpaper);
             }
         }
         return list;
 
+    }
+
+    public static String getCustomWallpaperFilePath(String fileName) {
+        return WALLPAPER_SDCARD_LOCATION + fileName + ".jpg";
     }
 
     public static final class CustomWallpaper {

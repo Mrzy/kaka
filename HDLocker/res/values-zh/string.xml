@@ -62,6 +62,7 @@
     
     <string name="pandora_wallpaper_title">锁屏壁纸</string>
     <string name="pandora_wallpaper_custom">自定义壁纸</string>
+    <string name="pandora_wallpaper_advice">推荐壁纸</string>
     <string name="pandora_wallpaper_show_image_title">图片</string>
     
     <string name="pandora_wallpaper_dialog_camera">拍照</string>

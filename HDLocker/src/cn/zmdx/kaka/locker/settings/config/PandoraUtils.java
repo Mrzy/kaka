@@ -27,12 +27,16 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.View;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.FileHelper;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class PandoraUtils {
@@ -299,6 +303,19 @@ public class PandoraUtils {
         return ImageUtils.scaleTo(cropBitmap, thumbWidth, thumbHeight, false);
     }
 
+//    public static int getWallpaperHeight(Context context, int width) {
+//        float screenHeight = Integer.parseInt(BaseInfoHelper.getHeight(context));
+//        float screenWidth = Integer.parseInt(BaseInfoHelper.getWidth(context));
+//        return (int) ((screenHeight / screenWidth) * width);
+//    }
+
+//    public static int getWallpapaerWidth(Context context) {
+//        float screenWidth = Integer.parseInt(BaseInfoHelper.getWidth(context));
+//        // int margin = (int)
+//        // context.getResources().getDimension(R.dimen.pandora_wallpaper_margin);
+//        return (int) (screenWidth / 3);
+//    }
+
     public static void saveBitmap(Bitmap bitmap, String path, String fileName) {
         try {
             File dirFile = new File(path);
@@ -320,7 +337,23 @@ public class PandoraUtils {
         }
     }
 
+    public static BitmapDrawable getCustomWallpaper(Context context) {
+        String fileName = PandoraConfig.newInstance(context).getCustomWallpaperFileName();
+        Bitmap bitmap = PandoraUtils.getBitmap(CustomWallpaperManager
+                .getCustomWallpaperFilePath(fileName));
+        BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
+        return drawable;
+    }
+
     public static Bitmap getBitmap(String path) {
         return ImageUtils.getBitmapFromFile(path);
+    }
+
+    public static boolean isHaveCustomWallpaper(Context context) {
+        return !TextUtils.isEmpty(PandoraConfig.newInstance(context).getCustomWallpaperFileName());
+    }
+
+    public static void deleteFile(String dirName, String fileName) {
+        FileHelper.deleteFile(dirName, fileName + ".jpg");
     }
 }

@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -125,10 +125,10 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
 
     protected boolean isHaveCustomWallpaper() {
-        return !TextUtils.isEmpty(mPandoraConfig.getCustomWallpaper());
+        return PandoraUtils.isHaveCustomWallpaper(getActivity());
     }
 
-    protected String getCustomWallpaper() {
-        return mPandoraConfig.getCustomWallpaper();
+    protected String getCustomWallpaperFileName() {
+        return mPandoraConfig.getCustomWallpaperFileName();
     }
 }

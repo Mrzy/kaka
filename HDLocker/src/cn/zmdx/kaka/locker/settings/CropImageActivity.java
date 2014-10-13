@@ -74,32 +74,12 @@ public class CropImageActivity extends Activity {
         }
         mAspectRatioX = getIntent().getExtras().getInt(KEY_BUNDLE_ASPECTRATIO_X);
         mAspectRatioY = getIntent().getExtras().getInt(KEY_BUNDLE_ASPECTRATIO_Y);
-        // try {
-        // mCropBitmap = PandoraUtils.zoomBitmap(this, getIntent().getData());
-        // int width = mCropBitmap.getWidth();
-        // int height = mCropBitmap.getHeight();
-        // if (width >= height) {
-        // mAspectRatioX = 100;
-        // mAspectRatioY = (mAspectRatioX * mCropBitmap.getHeight()) /
-        // mCropBitmap.getWidth();
-        // }
-        // if (height >= width) {
-        // mAspectRatioY = 100;
-        // mAspectRatioX = (mAspectRatioY * mCropBitmap.getWidth()) /
-        // mCropBitmap.getHeight();
-        // }
-        // } catch (FileNotFoundException e) {
-        // e.printStackTrace();
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // }
         initView();
     }
 
     private void initView() {
         mCropImageView = (CropImageView) findViewById(R.id.pandora_crop_image);
         mCropImageView.setFixedAspectRatio(true);
-        // mCropImageView.setImageScaleType(ScaleType.FIT_XY);
         mCropImageView.setImageBitmap(mCropBitmap);
         mCropImageView.setAspectRatio(mAspectRatioX, mAspectRatioY);
 
