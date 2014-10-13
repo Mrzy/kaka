@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     sothree:dragView="@+id/lock_btn"
-    sothree:panelHeight="80dp"
+    sothree:panelHeight="0dp"
     sothree:shadowHeight="8dp"
-    sothree:topSeekoutHeight="80dp" >
+    sothree:topSeekoutHeight="0dp" >
 
     <include layout="@layout/setting_activity" />
 

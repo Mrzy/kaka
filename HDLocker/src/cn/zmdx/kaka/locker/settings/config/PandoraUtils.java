@@ -35,6 +35,8 @@ import android.text.TextUtils;
 import android.view.View;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.FileHelper;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
@@ -303,19 +305,6 @@ public class PandoraUtils {
         return ImageUtils.scaleTo(cropBitmap, thumbWidth, thumbHeight, false);
     }
 
-//    public static int getWallpaperHeight(Context context, int width) {
-//        float screenHeight = Integer.parseInt(BaseInfoHelper.getHeight(context));
-//        float screenWidth = Integer.parseInt(BaseInfoHelper.getWidth(context));
-//        return (int) ((screenHeight / screenWidth) * width);
-//    }
-
-//    public static int getWallpapaerWidth(Context context) {
-//        float screenWidth = Integer.parseInt(BaseInfoHelper.getWidth(context));
-//        // int margin = (int)
-//        // context.getResources().getDimension(R.dimen.pandora_wallpaper_margin);
-//        return (int) (screenWidth / 3);
-//    }
-
     public static void saveBitmap(Bitmap bitmap, String path, String fileName) {
         try {
             File dirFile = new File(path);
@@ -341,6 +330,9 @@ public class PandoraUtils {
         String fileName = PandoraConfig.newInstance(context).getCustomWallpaperFileName();
         Bitmap bitmap = PandoraUtils.getBitmap(CustomWallpaperManager
                 .getCustomWallpaperFilePath(fileName));
+        if (null == bitmap) {
+            return null;
+        }
         BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
         return drawable;
     }
@@ -355,5 +347,27 @@ public class PandoraUtils {
 
     public static void deleteFile(String dirName, String fileName) {
         FileHelper.deleteFile(dirName, fileName + ".jpg");
+    }
+
+    /**
+     * @param context
+     * @return Theme 需要判断customBitmap是否为null,若为空则设置默认蓝色主题
+     */
+    public static Theme getCustomTheme(Context context) {
+        String fileName = PandoraConfig.newInstance(context).getCustomWallpaperFileName();
+        Bitmap bitmap = PandoraUtils.getBitmap(CustomWallpaperManager
+                .getCustomWallpaperFilePath(fileName));
+        Theme theme = new Theme();
+        theme.setCustomWallpaper(true);
+        theme.setmCustomBitmap(bitmap);
+        theme.setmBackgroundResId(R.drawable.setting_background_blue);
+        theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
+        theme.setmSettingsIconResId(R.drawable.ic_setting_common);
+        theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
+        theme.setmDragViewIconResId(R.drawable.ic_key_blue);
+        theme.setmHoleIconResId(R.drawable.ic_hole_blue);
+        theme.setmKeyholeIconResId(R.drawable.ic_key_hole_blue);
+        theme.setmThemeId(ThemeManager.THEME_ID_CUSTOM);
+        return theme;
     }
 }

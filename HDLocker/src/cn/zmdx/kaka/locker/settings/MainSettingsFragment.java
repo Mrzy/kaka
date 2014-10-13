@@ -4,9 +4,9 @@ package cn.zmdx.kaka.locker.settings;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,8 +51,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     private ImageView mSettingIcon;
 
     private View mSettingBackground;
-
-    private SparseArray<ImageView> mBorderArray = new SparseArray<ImageView>();
 
     private boolean mIsCurrentlyPressed = false;
 
@@ -125,19 +123,19 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     private void initBackground() {
         if (null != PandoraUtils.sCropBitmap) {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), PandoraUtils.sCropBitmap);
-            mSettingForeView.setForegroundDrawable(drawable);
+            setSettingBackground(ThemeManager.THEME_ID_CUSTOM, drawable);
         } else {
             if (isHaveCustomWallpaper()) {
                 BitmapDrawable drawable = PandoraUtils.getCustomWallpaper(getActivity());
                 if (null == drawable) {
-                    setSettingBackground(ThemeManager.THEME_ID_BLUE);
+                    setSettingBackground(ThemeManager.THEME_ID_BLUE, null);
                 } else {
                     // TODO
-                    mSettingForeView.setForegroundDrawable(drawable);
+                    setSettingBackground(ThemeManager.THEME_ID_CUSTOM, drawable);
                 }
             } else {
                 int themeId = getCurrentThemeId();
-                setSettingBackground(themeId);
+                setSettingBackground(themeId, null);
             }
         }
     }
@@ -148,12 +146,19 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mIsCurrentlyPressed = true;
     }
 
-    protected void setSettingBackground(int themeId) {
-        Theme theme = ThemeManager.getThemeById(themeId);
-        mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
-        mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
-                theme.getmForegroundResId()));
-        mSettingIcon.setBackgroundResource(theme.getmSettingsIconResId());
+    protected void setSettingBackground(int themeId, Drawable drawable) {
+        if (null == drawable) {
+            Theme theme = ThemeManager.getThemeById(themeId);
+            mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
+            mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
+                    theme.getmForegroundResId()));
+            mSettingIcon.setBackgroundResource(theme.getmSettingsIconResId());
+        } else {
+            mSettingBackground.setBackground(drawable);
+            mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
+                    R.drawable.setting_background_blue_fore));
+            mSettingIcon.setBackgroundResource(R.drawable.ic_setting_common);
+        }
     }
 
     @Override
@@ -288,9 +293,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     @Override
     public void onDestroyView() {
-        if (null != mBorderArray) {
-            mBorderArray.clear();
-        }
         PandoraUtils.sCropBitmap = null;
         PandoraUtils.sCropThumbBitmap = null;
         super.onDestroyView();
