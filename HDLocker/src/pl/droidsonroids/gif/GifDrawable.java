@@ -81,7 +81,7 @@ public class GifDrawable extends Drawable implements Animatable, MediaPlayerCont
     private static native long getAllocationByteCount(int gifFileInPtr);
 
     private volatile int mGifInfoPtr;
-    private volatile boolean mIsRunning = true;
+    private volatile boolean mIsRunning = false;
 
     private final int[] mMetaData = new int[5];//[w,h,imageCount,errorCode,post invalidation time]
     private final long mInputSourceLength;

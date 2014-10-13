@@ -4,17 +4,15 @@ package pl.droidsonroids.gif;
 import java.io.File;
 import java.io.IOException;
 
-import cn.zmdx.kaka.locker.BuildConfig;
-import cn.zmdx.kaka.locker.utils.HDBLOG;
-
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import cn.zmdx.kaka.locker.BuildConfig;
 
 /**
  * An {@link ImageView} which tries treating background and src as
@@ -24,6 +22,8 @@ import android.widget.ImageView;
  */
 public class GifImageView extends ImageView {
     static final String ANDROID_NS = "http://schemas.android.com/apk/res/android";
+
+    private GifDrawable mDrawable = null;
 
     /**
      * A corresponding superclass constructor wrapper.
@@ -93,13 +93,13 @@ public class GifImageView extends ImageView {
             }
             return;
         }
-        GifDrawable d = new GifDrawable(drawableFile);
+        mDrawable = new GifDrawable(drawableFile);
         if (src) {
-            setImageDrawable(d);
+            setImageDrawable(mDrawable);
         } else if (Build.VERSION.SDK_INT >= 16) {
-            setBackground(d);
+            setBackground(mDrawable);
         } else
-            setBackgroundDrawable(d);
+            setBackgroundDrawable(mDrawable);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -107,13 +107,13 @@ public class GifImageView extends ImageView {
     // new method not available on older API levels
     void setResource(boolean isSrc, int resId, Resources res) {
         try {
-            GifDrawable d = new GifDrawable(res, resId);
+            mDrawable = new GifDrawable(res, resId);
             if (isSrc)
-                setImageDrawable(d);
+                setImageDrawable(mDrawable);
             else if (Build.VERSION.SDK_INT >= 16)
-                setBackground(d);
+                setBackground(mDrawable);
             else
-                setBackgroundDrawable(d);
+                setBackgroundDrawable(mDrawable);
             return;
         } catch (Exception ignored) {
             // ignored
@@ -144,5 +144,15 @@ public class GifImageView extends ImageView {
                 // ignored
             }
         super.setImageURI(uri);
+    }
+
+    public void startGif() {
+        if (mDrawable != null)
+            mDrawable.start();
+    }
+
+    public void stopGif() {
+        if (mDrawable != null)
+            mDrawable.stop();
     }
 }

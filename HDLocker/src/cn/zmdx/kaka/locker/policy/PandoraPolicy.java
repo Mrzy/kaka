@@ -51,6 +51,8 @@ public class PandoraPolicy {
     public static final long PULL_BAIDU_INTERVAL_TIME = 2 * 24 * 60 * 60 * 1000; // 2
                                                                                  // days
 
+    public static final long MIN_CHECK_WEATHER_DURAION = 1 * 60 * 1000;
+
     public static boolean verifyImageLegal(String url, int w, int h) {
         try {
             if (w / h > 2.5 || h / w > 2.5 || w > 1500 || h > 2000) {

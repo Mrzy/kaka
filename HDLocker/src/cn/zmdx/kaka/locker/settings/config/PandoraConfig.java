@@ -42,6 +42,10 @@ public class PandoraConfig {
 
     private static final String KEY_CUSTOM_WALLPAPER = "keyCustomWallpaper";
 
+    private static final String KEY_LAST_CHECK_WEATHER = "keyLastCheckWeather";
+
+    private static final String KEY_LAST_WEATHER_INFO = "keyLastWeatherInfo";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -166,5 +170,25 @@ public class PandoraConfig {
 
     public String getCustomWallpaperFileName() {
         return mSp.getString(KEY_CUSTOM_WALLPAPER, "");
+    }
+
+    public long getLastCheckWeatherTime() {
+        return mSp.getLong(KEY_LAST_CHECK_WEATHER, 0);
+    }
+
+    public void saveLastCheckWeatherTime(long time) {
+        Editor editor = mSp.edit();
+        editor.putLong(KEY_LAST_CHECK_WEATHER, time);
+        editor.commit();
+    }
+
+    public void saveLastWeatherInfo(String info) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_LAST_WEATHER_INFO, info);
+        editor.commit();
+    }
+
+    public String getLastWeatherInfo() {
+        return mSp.getString(KEY_LAST_WEATHER_INFO, null);
     }
 }

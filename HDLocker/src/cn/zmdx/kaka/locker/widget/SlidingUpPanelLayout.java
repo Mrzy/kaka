@@ -489,16 +489,29 @@ public class SlidingUpPanelLayout extends ViewGroup {
         int height = Integer.parseInt(BaseInfoHelper.getHeight(getContext()));
         Bitmap srcBmp = ImageUtils.drawable2Bitmap(mForegroundDrawable);
         srcBmp = ImageUtils.scaleTo(srcBmp, width, height, true);
-        Bitmap topBmp = Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(),
-                mTopView.getMeasuredHeight());
-        Bitmap bottomBmp = Bitmap.createBitmap(srcBmp, 0, mTopView.getMeasuredHeight(),
-                srcBmp.getWidth(), mSlideableView.getMeasuredHeight());
+        Bitmap topBmp = null;
+        Bitmap bottomBmp = null;
+        try {
+            topBmp = Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(),
+                    mTopView.getMeasuredHeight());
+            bottomBmp = Bitmap.createBitmap(srcBmp, 0, mTopView.getMeasuredHeight(),
+                    srcBmp.getWidth(), mSlideableView.getMeasuredHeight());
+        } catch (Exception e) {
+            topBmp = null;
+            bottomBmp = null;
+        }
         if (srcBmp != null && !srcBmp.isRecycled()) {
             srcBmp.recycle();
             srcBmp = null;
         }
-        mTopPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), topBmp);
-        mBottomPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), bottomBmp);
+        if (topBmp == null || bottomBmp == null) {
+            mTopPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), topBmp);
+            mBottomPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), bottomBmp);
+        } else {
+            mTopPanelBgDrawable = mContext.getResources().getDrawable(R.drawable.top_panel_default);
+            mBottomPanelBgDrawable = mContext.getResources().getDrawable(R.drawable.bottom_panel_default);
+        }
+
         mIsForeBackgroundCutOff = true;
     }
 
@@ -821,7 +834,6 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
         setMeasuredDimension(widthSize, heightSize);
 
-        
     }
 
     @Override

@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class GifBox implements IPandoraBox {
     private View mEntireView;
@@ -87,9 +89,22 @@ public class GifBox implements IPandoraBox {
                 mIsHide = !mIsHide;
             }
         });
+        mImageView.stopGif();
         mIsRendered = true;
         return true;
-
     }
 
+    public void startGif() {
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("开始播放gif动画");
+        }
+        mImageView.startGif();
+    }
+
+    public void stopGif() {
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("停止播放gif动画");
+        }
+        mImageView.stopGif();
+    }
 }

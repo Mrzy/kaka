@@ -59,7 +59,7 @@ public class PandoraService extends Service {
         filter.setPriority(1000);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(ALARM_ALERT_ACTION);
-        // filter.addAction(Intent.ACTION_SCREEN_ON);
+         filter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(mReceiver, filter);
         PandoraBatteryManager.getInstance().registerListener();
     }
@@ -120,6 +120,8 @@ public class PandoraService extends Service {
                 LockScreenManager.getInstance().unLock();
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 LockScreenManager.getInstance().lock();
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                LockScreenManager.getInstance().onScreenOn();
             }
         }
     };

@@ -107,6 +107,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:textColor="@color/white"
+                        android:visibility="gone"
                         android:textSize="15sp" />
                 </LinearLayout>
 
