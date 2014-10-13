@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.theme;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Bitmap;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -174,6 +175,10 @@ public class ThemeManager {
          */
         private int mKeyholeIconResId;
 
+        private boolean isCustomWallpaper = false;
+
+        private Bitmap mCustomBitmap;
+
         public int getmThumbnailResId() {
             return mThumbnailResId;
         }
@@ -236,6 +241,22 @@ public class ThemeManager {
 
         public void setmKeyholeIconResId(int mKeyholeIconResId) {
             this.mKeyholeIconResId = mKeyholeIconResId;
+        }
+
+        public boolean isCustomWallpaper() {
+            return isCustomWallpaper;
+        }
+
+        public void setCustomWallpaper(boolean isCustomWallpaper) {
+            this.isCustomWallpaper = isCustomWallpaper;
+        }
+
+        public Bitmap getmCustomBitmap() {
+            return mCustomBitmap;
+        }
+
+        public void setmCustomBitmap(Bitmap mCustomBitmap) {
+            this.mCustomBitmap = mCustomBitmap;
         }
 
     }

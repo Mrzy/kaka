@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.SparseArray;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,8 +51,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     private ImageView mSettingIcon;
 
     private View mSettingBackground;
-
-    private SparseArray<ImageView> mBorderArray = new SparseArray<ImageView>();
 
     private boolean mIsCurrentlyPressed = false;
 
@@ -126,7 +124,9 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         if (null != PandoraUtils.sCropBitmap) {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), PandoraUtils.sCropBitmap);
             mSettingForeView.setForegroundDrawable(drawable);
+            mSettingIcon.setBackgroundResource(R.drawable.ic_setting_common);
         } else {
+            Log.d("syc", "isHaveCustomWallpaper()="+isHaveCustomWallpaper());
             if (isHaveCustomWallpaper()) {
                 BitmapDrawable drawable = PandoraUtils.getCustomWallpaper(getActivity());
                 if (null == drawable) {
@@ -134,6 +134,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 } else {
                     // TODO
                     mSettingForeView.setForegroundDrawable(drawable);
+                    mSettingIcon.setBackgroundResource(R.drawable.ic_setting_common);
                 }
             } else {
                 int themeId = getCurrentThemeId();
@@ -288,9 +289,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     @Override
     public void onDestroyView() {
-        if (null != mBorderArray) {
-            mBorderArray.clear();
-        }
         PandoraUtils.sCropBitmap = null;
         PandoraUtils.sCropThumbBitmap = null;
         super.onDestroyView();

@@ -18,7 +18,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -46,6 +45,8 @@ public class WallPaperActivity extends Activity {
     public static final int REQUEST_CODE_CROP_IMAGE = 0;
 
     private static final int REQUEST_CODE_GALLERY = 1;
+
+    private PandoraConfig mPandoraConfig;
 
     private View mRootView;
 
@@ -78,9 +79,11 @@ public class WallPaperActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_wallpaper);
+        mPandoraConfig = PandoraConfig.newInstance(this);
         initView();
-        initCustomWallpaper();
-        initAdviceWallpaper();
+        initWallpaper();
+        // initCustomWallpaper();
+        // initAdviceWallpaper();
     }
 
     private void initView() {
@@ -124,11 +127,21 @@ public class WallPaperActivity extends Activity {
         adviceParent.setClipChildren(false);
     }
 
+    private void initWallpaper() {
+        int themeId = mPandoraConfig.getCurrentThemeId();
+        if (themeId == -1) {
+            setCustomBackground();
+        } else {
+            setSettingBackground(themeId);
+        }
+        initCustomWallpaper();
+        initAdviceWallpaper();
+    }
+
     private void initCustomWallpaper() {
-        initCustomBackground();
         if (CustomWallpaperManager.isHaveCustomThumbWallpaper()) {
             List<CustomWallpaper> wallpaperList = CustomWallpaperManager.getCustomThumbWallpaper();
-            addCustomWallpaper(wallpaperList, null, null);
+            addCustomWallpaperItem(wallpaperList, null, null);
         }
 
     }
@@ -157,17 +170,19 @@ public class WallPaperActivity extends Activity {
             int height = (int) getResources().getDimension(R.dimen.pandora_wallpaper_height);
             params.width = width;
             params.height = height;
-            
+
             LayoutParams layoutParams = mWallpaperRl.getLayoutParams();
-            int layoutWidth = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_width);
-            int layoutHeight = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_height);
+            int layoutWidth = (int) getResources().getDimension(
+                    R.dimen.pandora_wallpaper_layout_width);
+            int layoutHeight = (int) getResources().getDimension(
+                    R.dimen.pandora_wallpaper_layout_height);
             layoutParams.width = layoutWidth;
             layoutParams.height = layoutHeight;
-            setAdviceWallpaper();
         }
+        setCurrentAdviceWallpaper();
     }
 
-    private void setAdviceWallpaper() {
+    private void setCurrentAdviceWallpaper() {
         int themeId = PandoraConfig.newInstance(this).getCurrentThemeId();
         for (int i = 0; i < mAdviceThumbIdArray.size(); i++) {
             if (themeId == mAdviceThumbIdArray.get(i)) {
@@ -175,9 +190,6 @@ public class WallPaperActivity extends Activity {
                     mAdviceBorderArray.get(i).setVisibility(View.VISIBLE);
                 }
             }
-        }
-        if (themeId != -1) {
-            setSettingBackground(themeId);
         }
     }
 
@@ -216,13 +228,16 @@ public class WallPaperActivity extends Activity {
         }
     };
 
-    private void initCustomBackground() {
+    private void setCustomBackground() {
         String fileName = PandoraConfig.newInstance(this).getCustomWallpaperFileName();
-        Log.d("syc", "fileName=" + fileName);
         String path = CustomWallpaperManager.getCustomWallpaperFilePath(fileName);
         Bitmap bitmap = PandoraUtils.getBitmap(path);
-        BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-        mRootView.setBackground(drawable);
+        if (null == bitmap) {
+            mRootView.setBackground(getResources().getDrawable(R.drawable.setting_background_blue));
+        } else {
+            BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+            mRootView.setBackground(drawable);
+        }
     }
 
     private void initAddCustomButton() {
@@ -257,7 +272,7 @@ public class WallPaperActivity extends Activity {
         switch (requestCode) {
             case REQUEST_CODE_CROP_IMAGE:
                 String fileName = PandoraUtils.getRandomString();
-                addCustomWallpaper(null, PandoraUtils.sCropThumbBitmap, fileName);
+                addCustomWallpaperItem(null, PandoraUtils.sCropThumbBitmap, fileName);
                 setBackground(PandoraUtils.sCropBitmap, -1);
                 saveWallpaperFile(fileName);
                 break;
@@ -324,7 +339,7 @@ public class WallPaperActivity extends Activity {
                 R.anim.umeng_fb_slide_out_from_left);
     }
 
-    private void addCustomWallpaper(List<CustomWallpaper> wallpaperList, Bitmap bitmap,
+    private void addCustomWallpaperItem(List<CustomWallpaper> wallpaperList, Bitmap bitmap,
             String fileName) {
         if (null == wallpaperList) {
             initThumbWallpaperLayout(bitmap, mThumbNameArray.size(), fileName);
@@ -389,6 +404,7 @@ public class WallPaperActivity extends Activity {
                 case MSG_SAVE_ADVICE_WALLPAPER:
                     int themeId = msg.arg1;
                     ((WallPaperActivity) activity).saveAdviceThemeId(themeId);
+                    ((WallPaperActivity) activity).saveCustomWallpaperFileName("");
                     break;
 
             }
@@ -465,13 +481,14 @@ public class WallPaperActivity extends Activity {
         int height = (int) getResources().getDimension(R.dimen.pandora_wallpaper_height);
         params.width = width;
         params.height = height;
-        
+
         LayoutParams layoutParams = mWallpaperRl.getLayoutParams();
         int layoutWidth = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_width);
-        int layoutHeight = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_height);
+        int layoutHeight = (int) getResources().getDimension(
+                R.dimen.pandora_wallpaper_layout_height);
         layoutParams.width = layoutWidth;
         layoutParams.height = layoutHeight;
-        
+
     }
 
     private void initTransition() {
@@ -535,5 +552,16 @@ public class WallPaperActivity extends Activity {
             }
         });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (null != mBorderArray) {
+            mBorderArray = null;
+        }
+        if (null != mAdviceBorderArray) {
+            mAdviceBorderArray = null;
+        }
+        super.onDestroy();
     }
 }
