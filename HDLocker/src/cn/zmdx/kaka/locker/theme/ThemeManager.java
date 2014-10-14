@@ -4,10 +4,15 @@ package cn.zmdx.kaka.locker.theme;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class ThemeManager {
     public static final int THEME_ID_CUSTOM = -1; // default
@@ -22,11 +27,55 @@ public class ThemeManager {
 
     public static Theme getCurrentTheme() {
         int themeId = PandoraConfig.newInstance(HDApplication.getInstannce()).getCurrentThemeId();
-        return getThemeById(themeId);
+        if (themeId == THEME_ID_CUSTOM) {
+            return getCustomTheme(HDApplication.getInstannce());
+        } else {
+            return getThemeById(themeId);
+        }
     }
 
-    public void saveTheme(int themeId) {
+    public static int getCurrentThemeIdForStatistical() {
+        return PandoraConfig.newInstance(HDApplication.getInstannce())
+                .getCurrentThemeIdForStatistical();
+    }
+
+    public static void saveTheme(int themeId) {
         PandoraConfig.newInstance(HDApplication.getInstannce()).saveThemeId(themeId);
+    }
+
+    /**
+     * @param context
+     * @return
+     */
+    private static Theme getCustomTheme(Context context) {
+        String fileName = PandoraConfig.newInstance(context).getCustomWallpaperFileName();
+        Bitmap bitmap = PandoraUtils.getBitmap(CustomWallpaperManager
+                .getCustomWallpaperFilePath(fileName));
+        Theme theme = new Theme();
+        if (null == bitmap) {
+            theme.setCustomWallpaper(false);
+            theme.setmCustomBitmap(null);
+            theme.setmBackgroundResId(R.drawable.setting_background_blue);
+            theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
+            theme.setmSettingsIconResId(R.drawable.ic_setting_common);
+            theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
+            theme.setmDragViewIconResId(R.drawable.ic_key_blue);
+            theme.setmHoleIconResId(R.drawable.ic_hole_blue);
+            theme.setmKeyholeIconResId(R.drawable.ic_key_hole_blue);
+            theme.setmThemeId(THEME_ID_BLUE);
+        } else {
+            theme.setCustomWallpaper(true);
+            theme.setmCustomBitmap(ImageUtils.bitmap2Drawable(context, bitmap));
+            theme.setmBackgroundResId(R.drawable.setting_background_blue);
+            theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
+            theme.setmSettingsIconResId(R.drawable.ic_setting_common);
+            theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
+            theme.setmDragViewIconResId(R.drawable.ic_key_blue);
+            theme.setmHoleIconResId(R.drawable.ic_hole_blue);
+            theme.setmKeyholeIconResId(R.drawable.ic_key_hole_blue);
+            theme.setmThemeId(ThemeManager.THEME_ID_CUSTOM);
+        }
+        return theme;
     }
 
     public static Theme getThemeById(int themeId) {
@@ -177,7 +226,7 @@ public class ThemeManager {
 
         private boolean isCustomWallpaper = false;
 
-        private Bitmap mCustomBitmap;
+        private BitmapDrawable mCustomBitmap;
 
         public int getmThumbnailResId() {
             return mThumbnailResId;
@@ -251,11 +300,11 @@ public class ThemeManager {
             this.isCustomWallpaper = isCustomWallpaper;
         }
 
-        public Bitmap getmCustomBitmap() {
+        public BitmapDrawable getmCustomBitmap() {
             return mCustomBitmap;
         }
 
-        public void setmCustomBitmap(Bitmap mCustomBitmap) {
+        public void setmCustomBitmap(BitmapDrawable mCustomBitmap) {
             this.mCustomBitmap = mCustomBitmap;
         }
 

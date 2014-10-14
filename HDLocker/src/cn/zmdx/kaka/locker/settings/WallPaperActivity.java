@@ -398,12 +398,11 @@ public class WallPaperActivity extends Activity {
                 case MSG_SAVE_WALLPAPER:
                     String fileName = (String) msg.obj;
                     ((WallPaperActivity) activity).saveCustomWallpaperFileName(fileName);
-                    ((WallPaperActivity) activity)
-                            .saveCustomWallpaperThemeId(ThemeManager.THEME_ID_CUSTOM);
+                    ((WallPaperActivity) activity).saveThemeId(ThemeManager.THEME_ID_CUSTOM);
                     break;
                 case MSG_SAVE_ADVICE_WALLPAPER:
                     int themeId = msg.arg1;
-                    ((WallPaperActivity) activity).saveAdviceThemeId(themeId);
+                    ((WallPaperActivity) activity).saveThemeId(themeId);
                     ((WallPaperActivity) activity).saveCustomWallpaperFileName("");
                     break;
 
@@ -412,16 +411,12 @@ public class WallPaperActivity extends Activity {
         }
     }
 
-    private void saveAdviceThemeId(int themeId) {
-        PandoraConfig.newInstance(this).saveThemeId(themeId);
-    }
-
     private void saveCustomWallpaperFileName(String fileName) {
         PandoraConfig.newInstance(this).saveCustomWallpaperFileName(fileName);
     }
 
-    public void saveCustomWallpaperThemeId(int themeId) {
-        PandoraConfig.newInstance(this).saveThemeId(themeId);
+    public void saveThemeId(int themeId) {
+        ThemeManager.saveTheme(themeId);
     }
 
     private void initThumbWallpaperLayout(final Bitmap bitmap, final int key, final String fileName) {

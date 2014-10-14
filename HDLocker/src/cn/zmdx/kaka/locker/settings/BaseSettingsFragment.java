@@ -9,6 +9,7 @@ import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
 
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -108,11 +109,11 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
 
     protected void saveThemeId(int themeId) {
-        mPandoraConfig.saveThemeId(themeId);
+        ThemeManager.saveTheme(themeId);
     }
 
     protected int getCurrentThemeId() {
-        return mPandoraConfig.getCurrentThemeId();
+        return ThemeManager.getCurrentTheme().getmThemeId();
     }
 
     protected void gotoWallpaper() {
