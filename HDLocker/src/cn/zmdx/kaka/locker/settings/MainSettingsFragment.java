@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -78,6 +79,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.pandora_setting, container, false);
         initView();
+        initTitleHeight();
         initSwitchButtonState();
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
@@ -120,6 +122,11 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     }
 
+    private void initTitleHeight(){
+        int statusBarHeight = PandoraUtils.getStatusBarHeight(getActivity());
+        LinearLayout titleLayout = (LinearLayout) mRootView.findViewById(R.id.pandora_setting_title);
+        titleLayout.setPadding(0, statusBarHeight, 0, 0);
+    }
     private void initBackground() {
         if (null != PandoraUtils.sCropBitmap) {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), PandoraUtils.sCropBitmap);

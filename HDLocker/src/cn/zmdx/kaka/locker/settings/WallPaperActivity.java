@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import cn.zmdx.kaka.locker.HDApplication;
@@ -420,6 +421,11 @@ public class WallPaperActivity extends Activity {
     }
 
     private void initThumbWallpaperLayout(final Bitmap bitmap, final int key, final String fileName) {
+        if (container.getChildCount() >= 6) {
+            // TODO toast
+            Toast.makeText(this, "壁纸数目已经到达上限，请删除部分不需要的壁纸!", Toast.LENGTH_LONG).show();
+            return;
+        }
         final RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
                 HDApplication.getInstannce()).inflate(R.layout.pandora_wallpaper_item, null);
         int margin = (int) getResources().getDimension(R.dimen.pandora_wallpaper_margin);
