@@ -423,7 +423,7 @@ public class WallPaperActivity extends Activity {
     private void initThumbWallpaperLayout(final Bitmap bitmap, final int key, final String fileName) {
         if (container.getChildCount() >= 6) {
             // TODO toast
-            Toast.makeText(this, "太多，这不行", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "壁纸数目已经到达上限，请删除部分不需要的壁纸!", Toast.LENGTH_LONG).show();
             return;
         }
         final RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
