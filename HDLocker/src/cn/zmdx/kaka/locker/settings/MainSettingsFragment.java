@@ -123,20 +123,10 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     private void initBackground() {
         if (null != PandoraUtils.sCropBitmap) {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), PandoraUtils.sCropBitmap);
-            setSettingBackground(ThemeManager.THEME_ID_CUSTOM, drawable);
+            setSettingBackground(null, drawable);
         } else {
-            if (isHaveCustomWallpaper()) {
-                BitmapDrawable drawable = PandoraUtils.getCustomWallpaper(getActivity());
-                if (null == drawable) {
-                    setSettingBackground(ThemeManager.THEME_ID_BLUE, null);
-                } else {
-                    // TODO
-                    setSettingBackground(ThemeManager.THEME_ID_CUSTOM, drawable);
-                }
-            } else {
-                int themeId = getCurrentThemeId();
-                setSettingBackground(themeId, null);
-            }
+            Theme theme = ThemeManager.getCurrentTheme();
+            setSettingBackground(theme, null);
         }
     }
 
@@ -146,10 +136,13 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mIsCurrentlyPressed = true;
     }
 
-    protected void setSettingBackground(int themeId, Drawable drawable) {
+    protected void setSettingBackground(Theme theme, Drawable drawable) {
         if (null == drawable) {
-            Theme theme = ThemeManager.getThemeById(themeId);
-            mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
+            if (theme.isCustomWallpaper()) {
+                mSettingBackground.setBackground(theme.getmCustomBitmap());
+            } else {
+                mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
+            }
             mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
                     theme.getmForegroundResId()));
             mSettingIcon.setBackgroundResource(theme.getmSettingsIconResId());
