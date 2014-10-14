@@ -1,5 +1,5 @@
 
-package cn.zmdx.kaka.locker.content;
+package cn.zmdx.kaka.locker.content.box;
 
 import cn.zmdx.kaka.locker.R;
 import android.content.Context;

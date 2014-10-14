@@ -28,10 +28,10 @@ import android.widget.ViewFlipper;
 import cn.zmdx.kaka.locker.animation.AnimationFactory;
 import cn.zmdx.kaka.locker.animation.AnimationFactory.FlipDirection;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
-import cn.zmdx.kaka.locker.content.GifBox;
-import cn.zmdx.kaka.locker.content.IPandoraBox;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.content.box.GifBox;
+import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.service.PandoraService;
@@ -41,6 +41,7 @@ import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
@@ -246,6 +247,7 @@ public class LockScreenManager {
                 final String summary = pw.getSummary();
                 mPandoraConfig.saveLastWeatherInfo(temp + "#" + summary);
                 updateWeatherInfo(pw);
+                mPandoraConfig.saveLastCheckWeatherTime(System.currentTimeMillis());
             }
 
             @Override
@@ -253,7 +255,7 @@ public class LockScreenManager {
                 updateWeatherInfo(null);
             }
         });
-        mPandoraConfig.saveLastCheckWeatherTime(System.currentTimeMillis());
+
     }
 
     private void updateWeatherInfo(PandoraWeather pw) {
@@ -265,7 +267,11 @@ public class LockScreenManager {
         } else {
             int temp = pw.getTemp();
             String summary = pw.getSummary();
-            mDate.append(" " + temp + "ºC");
+            if (mDate != null) {
+                if (mDate.getText() != null && !mDate.getText().toString().endsWith("ºC")) {
+                    mDate.append(" " + temp + "ºC");
+                }
+            }
             if (mWeatherSummary == null) {
                 return;
             }
@@ -396,10 +402,14 @@ public class LockScreenManager {
 
     private void setDrawable() {
         mCurTheme = ThemeManager.getCurrentTheme();
-        mViewFlipper.setBackgroundResource(mCurTheme.getmBackgroundResId());
-        mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
-        mKeyView.setBackgroundResource(mCurTheme.getmDragViewIconResId());
-        mKeyholeView.setBackgroundResource(mCurTheme.getmHoleIconResId());
+        if (mCurTheme.isCustomWallpaper()) {
+            mSliderView.setForegroundDrawable(mCurTheme.getmCustomBitmap());
+        } else {
+            mViewFlipper.setBackgroundResource(mCurTheme.getmBackgroundResId());
+            mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
+            mKeyView.setBackgroundResource(mCurTheme.getmDragViewIconResId());
+            mKeyholeView.setBackgroundResource(mCurTheme.getmHoleIconResId());
+        }
     }
 
     public void unLock() {

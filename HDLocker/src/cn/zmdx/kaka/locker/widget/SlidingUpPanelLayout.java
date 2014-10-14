@@ -505,11 +505,11 @@ public class SlidingUpPanelLayout extends ViewGroup {
             srcBmp = null;
         }
         if (topBmp == null || bottomBmp == null) {
+            mTopPanelBgDrawable = mContext.getResources().getDrawable(R.drawable.bottom_panel_default);
+            mBottomPanelBgDrawable = mContext.getResources().getDrawable(R.drawable.top_panel_default);
+        } else {
             mTopPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), topBmp);
             mBottomPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), bottomBmp);
-        } else {
-            mTopPanelBgDrawable = mContext.getResources().getDrawable(R.drawable.top_panel_default);
-            mBottomPanelBgDrawable = mContext.getResources().getDrawable(R.drawable.bottom_panel_default);
         }
 
         mIsForeBackgroundCutOff = true;

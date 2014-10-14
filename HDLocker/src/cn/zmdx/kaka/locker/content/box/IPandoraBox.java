@@ -1,5 +1,5 @@
 
-package cn.zmdx.kaka.locker.content;
+package cn.zmdx.kaka.locker.content.box;
 
 import android.graphics.Bitmap;
 import android.view.View;
@@ -17,6 +17,8 @@ public interface IPandoraBox {
     public static final int CATEGORY_DEFAULT = 4;
 
     public static final int CATEGORY_GIF = 5;
+
+    public static final int CATEGORY_SCROLL_CONTENT = 6;
 
     public int getCategory();
 

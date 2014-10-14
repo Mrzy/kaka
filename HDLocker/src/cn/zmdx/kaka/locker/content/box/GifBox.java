@@ -1,5 +1,5 @@
 
-package cn.zmdx.kaka.locker.content;
+package cn.zmdx.kaka.locker.content.box;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class GifBox implements IPandoraBox {

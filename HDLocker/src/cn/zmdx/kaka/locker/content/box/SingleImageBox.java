@@ -1,5 +1,5 @@
 
-package cn.zmdx.kaka.locker.content;
+package cn.zmdx.kaka.locker.content.box;
 
 import android.content.Context;
 import android.view.LayoutInflater;

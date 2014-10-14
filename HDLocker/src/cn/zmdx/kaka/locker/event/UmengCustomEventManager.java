@@ -6,7 +6,7 @@ import java.util.Map;
 
 import android.util.Log;
 import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.content.IPandoraBox;
+import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 

@@ -1,8 +1,7 @@
 
-package cn.zmdx.kaka.locker.content;
+package cn.zmdx.kaka.locker.content.box;
 
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.content.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import android.content.Context;
 import android.view.LayoutInflater;
