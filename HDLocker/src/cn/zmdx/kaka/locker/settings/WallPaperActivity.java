@@ -4,8 +4,6 @@ package cn.zmdx.kaka.locker.settings;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import com.umeng.analytics.MobclickAgent;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.Keyframe;
@@ -41,6 +39,8 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+
+import com.umeng.analytics.MobclickAgent;
 
 public class WallPaperActivity extends Activity {
 
@@ -259,6 +259,12 @@ public class WallPaperActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+                if (container.getChildCount() >= 6) {
+                    // TODO toast
+                    Toast.makeText(WallPaperActivity.this, "壁纸数目已经到达上限，请删除部分不需要的壁纸!",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
                 showSelectDialog();
             }
         });
@@ -338,11 +344,7 @@ public class WallPaperActivity extends Activity {
         int mAspectRatioX = 0;
         int mAspectRatioY = 0;
         int width = Integer.parseInt(BaseInfoHelper.getWidth(this));
-        int height = Integer.parseInt(BaseInfoHelper.getHeight(this));
-        // int width = (int)
-        // getResources().getDimension(R.dimen.pandora_wallpaper_width);
-        // int height = (int)
-        // getResources().getDimension(R.dimen.pandora_wallpaper_height);
+        int height = PandoraUtils.getRealScreenHeight(this);
         if (width >= height) {
             mAspectRatioX = 100;
             mAspectRatioY = (mAspectRatioX * height) / width;
@@ -441,11 +443,6 @@ public class WallPaperActivity extends Activity {
     }
 
     private void initThumbWallpaperLayout(final Bitmap bitmap, final int key, final String fileName) {
-        if (container.getChildCount() >= 6) {
-            // TODO toast
-            Toast.makeText(this, "壁纸数目已经到达上限，请删除部分不需要的壁纸!", Toast.LENGTH_LONG).show();
-            return;
-        }
         final RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
                 HDApplication.getInstannce()).inflate(R.layout.pandora_wallpaper_item, null);
         RelativeLayout mWallpaperIvRl = (RelativeLayout) mWallpaperRl

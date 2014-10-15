@@ -24,6 +24,7 @@ import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -209,10 +210,8 @@ public class CropImageView extends FrameLayout {
                 desiredWidth = mBitmap.getWidth();
                 desiredHeight = mBitmap.getHeight();
             }
-
             int width = getOnMeasureSpec(widthMode, widthSize, desiredWidth);
             int height = getOnMeasureSpec(heightMode, heightSize, desiredHeight);
-
             mLayoutWidth = width;
             mLayoutHeight = height;
 
@@ -222,7 +221,6 @@ public class CropImageView extends FrameLayout {
 
             // MUST CALL THIS
             setMeasuredDimension(mLayoutWidth, mLayoutHeight);
-
         } else {
 
             mCropOverlayView.setBitmapRect(EMPTY_RECT);
@@ -517,7 +515,7 @@ public class CropImageView extends FrameLayout {
         return spec;
     }
 
-//    public void setImageScaleType(ScaleType scaleType) {
-//        mImageView.setScaleType(scaleType);
-//    }
+    // public void setImageScaleType(ScaleType scaleType) {
+    // mImageView.setScaleType(scaleType);
+    // }
 }
