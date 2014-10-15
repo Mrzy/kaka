@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -92,6 +93,8 @@ public class LockScreenManager {
     private Vibrator mVibrator;
 
     private TextView mDate, mBatteryTipView, mWeatherSummary;
+
+    private View mDigitalClockView;
 
     private KeyguardLock mKeyguard;
 
@@ -258,7 +261,7 @@ public class LockScreenManager {
             return;
         }
         if (pw == null) {
-            mWeatherSummary.setVisibility(View.GONE);
+            mWeatherSummary.setVisibility(View.INVISIBLE);
         } else {
             int temp = pw.getTemp();
             String summary = pw.getSummary();
@@ -322,10 +325,14 @@ public class LockScreenManager {
         mLockPatternView.setOnPatternListener(mPatternListener);
         mGusturePrompt = (TextView) mEntireView.findViewById(R.id.gusture_prompt);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
+//        mDate.setAlpha(0);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
         mShareBtn = (ImageView) mEntireView.findViewById(R.id.shareBtn);
         mShareBtn.setOnClickListener(mClickListener);
         mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
+//        mWeatherSummary.setAlpha(0);
+        mDigitalClockView = mEntireView.findViewById(R.id.digitalClock);
+//        mDigitalClockView.setAlpha(0);
 
         mObjectAnimator = ObjectAnimator.ofFloat(mLockPrompt, "alpha", 1, 0.2f, 1);
         mObjectAnimator.setDuration(2000);
@@ -489,11 +496,11 @@ public class LockScreenManager {
         @Override
         public void onClick(View v) {
             if (v == mShareBtn) {
-                //发送广播通知fakeActivity处理分享事件
+                // 发送广播通知fakeActivity处理分享事件
                 Intent intent = new Intent();
                 intent.setAction(FakeActivity.ACTION_PANDORA_SHARE);
                 intent.setPackage(mContext.getPackageName());
-//                intent.putExtra("platform", 1);
+                // intent.putExtra("platform", 1);
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
                 unLock(false);
             }
@@ -641,7 +648,48 @@ public class LockScreenManager {
         }
     }
 
+    public void onScreenOff() {
+        invisiableViews(mDate, mWeatherSummary, mDigitalClockView);
+    }
+
     public void onScreenOn() {
         processWeatherInfo();
+        processAnimations();
+    }
+
+    private void invisiableViews(View...views) {
+        for (View view : views) {
+            view.setAlpha(0);
+        }
+    }
+
+    private void processAnimations() {
+        ObjectAnimator digitalAlpha = ObjectAnimator.ofFloat(mDigitalClockView, "alpha", 0, 1);
+        ObjectAnimator digitalTrans = ObjectAnimator.ofFloat(mDigitalClockView, "translationY",
+                -400, 0);
+        AnimatorSet digitalSet = new AnimatorSet();
+        digitalSet.setStartDelay(100);
+        digitalSet.playTogether(digitalAlpha, digitalTrans);
+
+        ObjectAnimator dateAlpha = ObjectAnimator.ofFloat(mDate, "alpha", 0, 1);
+        ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mDate, "translationY", -400, 0);
+        AnimatorSet dateSet = new AnimatorSet();
+        dateSet.setStartDelay(200);
+        dateSet.playTogether(dateAlpha, dateTrans);
+
+        ObjectAnimator wsAlpha = ObjectAnimator.ofFloat(mWeatherSummary, "alpha", 0, 1);
+        ObjectAnimator wsTrans = ObjectAnimator.ofFloat(mWeatherSummary, "translationY", -400, 0);
+        AnimatorSet wsSet = new AnimatorSet();
+        wsSet.setStartDelay(300);
+        wsSet.playTogether(wsAlpha, wsTrans);
+
+        AnimatorSet finalSet = new AnimatorSet();
+        finalSet.playTogether(digitalSet, dateSet, wsSet);
+        finalSet.setDuration(1000);
+        finalSet.setStartDelay(100);
+        finalSet.setInterpolator(new OvershootInterpolator());
+//        finalSet.setInterpolator(new DecelerateInterpolator());
+//        finalSet.setInterpolator(new BounceInterpolator());
+        finalSet.start();
     }
 }

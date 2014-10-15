@@ -120,6 +120,7 @@ public class PandoraService extends Service {
                 LockScreenManager.getInstance().unLock();
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 LockScreenManager.getInstance().lock();
+                LockScreenManager.getInstance().onScreenOff();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 LockScreenManager.getInstance().onScreenOn();
             }
