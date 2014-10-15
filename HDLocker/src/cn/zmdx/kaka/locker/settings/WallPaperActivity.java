@@ -265,6 +265,7 @@ public class WallPaperActivity extends Activity {
                             Toast.LENGTH_LONG).show();
                     return;
                 }
+                UmengCustomEventManager.statisticalClickCustomButtonTimes();
                 showSelectDialog();
             }
         });
@@ -461,7 +462,6 @@ public class WallPaperActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                UmengCustomEventManager.statisticalSelectTheme(ThemeManager.THEME_ID_CUSTOM);
                 Bitmap bacground = PandoraUtils.getBitmap(CustomWallpaperManager
                         .getCustomWallpaperFilePath(fileName));
                 PandoraUtils.sCropBitmap = bacground;

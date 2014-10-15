@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
@@ -96,6 +97,7 @@ public class CropImageActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+                UmengCustomEventManager.statisticalSuccessSetCustomTimes();
                 PandoraUtils.sCropBitmap = mCropImageView.getCroppedImage();
                 PandoraUtils.sCropThumbBitmap = PandoraUtils.zoomThumbBitmap(
                         CropImageActivity.this, PandoraUtils.sCropBitmap);
