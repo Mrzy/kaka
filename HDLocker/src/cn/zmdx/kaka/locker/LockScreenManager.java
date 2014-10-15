@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
@@ -12,11 +13,14 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.BatteryManager;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
@@ -24,6 +28,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 import cn.zmdx.kaka.locker.animation.AnimationFactory;
 import cn.zmdx.kaka.locker.animation.AnimationFactory.FlipDirection;
@@ -60,6 +65,15 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.bean.SocializeEntity;
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.sso.RenrenSsoHandler;
+import com.umeng.socialize.sso.SinaSsoHandler;
+import com.umeng.socialize.sso.TencentWBSsoHandler;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
 
@@ -108,6 +122,21 @@ public class LockScreenManager {
 
     private ObjectAnimator mObjectAnimator;
 
+    // ------
+    // sdk controller
+    private UMSocialService mController;
+
+    // 要分享的文字内容
+    private String mShareContent = "";
+
+    private final SHARE_MEDIA mTestMedia = SHARE_MEDIA.SINA;
+
+    // 要分享的图片
+    private UMImage mUMImgBitmap = null;
+
+    private final String TAG = "TestData";
+
+    // ======
     private int mTextGuideTimes;
 
     private long mLockTime;
@@ -188,7 +217,6 @@ public class LockScreenManager {
         params.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
         params.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         params.gravity = Gravity.TOP | Gravity.START;
-
         initLockScreenViews();
 
         refreshContent();
@@ -555,7 +583,19 @@ public class LockScreenManager {
         @Override
         public void onClick(View v) {
             if (v == mShareBtn) {
-                // TODO
+                // 分享
+                mController.directShare(HDApplication.getInstannce(), SHARE_MEDIA.SINA,
+                        new SnsPostListener() {
+
+                            @Override
+                            public void onStart() {
+                            }
+
+                            @Override
+                            public void onComplete(SHARE_MEDIA platform, int eCode,
+                                    SocializeEntity entity) {
+                            }
+                        });
             }
         }
     };
@@ -574,6 +614,7 @@ public class LockScreenManager {
         }
     }
 
+    // ++++++++++++++++
     private PanelSlideListener mSlideListener = new SimplePanelSlideListener() {
 
         @Override

@@ -34,6 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
+                    android:clickable="true"
                     android:src="@drawable/share_drawable" />
             </RelativeLayout>
 

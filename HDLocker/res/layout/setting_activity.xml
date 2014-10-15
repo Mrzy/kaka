@@ -10,6 +10,7 @@
     android:fillViewport="true"
     android:orientation="vertical"
     android:overScrollMode="always"
+
     android:scrollbars="none" >
 
     <LinearLayout
@@ -221,6 +222,26 @@
                 android:clickable="false"
                 android:gravity="center_vertical"
                 android:text="@string/setting_about_us" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/flipper_box"
+           android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_item_height"
+            android:background="@drawable/setting_item_selector"
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/setting_padding_left"
+            android:paddingRight="@dimen/setting_padding_right" >
+
+            <ImageView
+                android:id="@+id/shareBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:gravity="center_vertical"
+                android:src="@drawable/share_drawable" />
         </LinearLayout>
     </LinearLayout>
 

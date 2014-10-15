@@ -2,11 +2,13 @@
 package cn.zmdx.kaka.locker.settings;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,10 +30,21 @@ import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.bean.SocializeEntity;
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
+import com.umeng.socialize.sso.QZoneSsoHandler;
+import com.umeng.socialize.sso.RenrenSsoHandler;
+import com.umeng.socialize.sso.SinaSsoHandler;
+import com.umeng.socialize.sso.UMSsoHandler;
 
 public class MainSettingsFragment extends BaseSettingsFragment implements OnCheckedChangeListener,
         OnClickListener {
     private View mRootView;
+
+    private Context mContext;
 
     private SlidingUpPanelLayout mSettingForeView;
 
@@ -50,6 +63,10 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     private SwitchButton mLockerTypeSButton;
 
     private ImageView mSettingIcon;
+
+    private ImageView mShareimage;
+
+    private UMSocialService mController;
 
     private View mSettingBackground;
 
@@ -80,6 +97,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mRootView = inflater.inflate(R.layout.pandora_setting, container, false);
         initView();
         initTitleHeight();
+        initConfig();
         initSwitchButtonState();
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
@@ -91,6 +109,20 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         return mRootView;
     }
 
+    /**
+     * @功能描述 : 初始化与SDK相关的成员变量
+     */
+    private void initConfig() {
+        mController = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
+        mController.getConfig().enableSIMCheck(false);
+
+        // 要分享的文字内容
+        mController.setShareContent("潘多拉锁屏----下拉有料。www.hdlocker.com");
+        // 添加新浪和QQ空间的SSO授权支持
+        mController.getConfig().setSsoHandler(new SinaSsoHandler());
+        // mController.setShareMedia(mUMImgBitmap);
+    }
+
     private void initView() {
         mInitSetting = (LinearLayout) mRootView.findViewById(R.id.setting_init);
         mInitSetting.setOnClickListener(this);
@@ -98,8 +130,10 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mSettingForeView = (SlidingUpPanelLayout) mRootView.findViewById(R.id.setting_fore_view);
         mSettingIcon = (ImageView) mRootView.findViewById(R.id.setting_icon);
         mSettingBackground = mRootView.findViewById(R.id.setting_background);
-
         mSettingIcon.setOnClickListener(this);
+
+        mShareimage = (ImageView) mRootView.findViewById(R.id.shareBtn);
+        mShareimage.setOnClickListener(this);
 
         mPandoraLockerSButton = (SwitchButton) mRootView
                 .findViewById(R.id.setting_pandoralocker_switch_button);
@@ -122,11 +156,13 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     }
 
-    private void initTitleHeight(){
+    private void initTitleHeight() {
         int statusBarHeight = PandoraUtils.getStatusBarHeight(getActivity());
-        LinearLayout titleLayout = (LinearLayout) mRootView.findViewById(R.id.pandora_setting_title);
+        LinearLayout titleLayout = (LinearLayout) mRootView
+                .findViewById(R.id.pandora_setting_title);
         titleLayout.setPadding(0, statusBarHeight, 0, 0);
     }
+
     private void initBackground() {
         if (null != PandoraUtils.sCropBitmap) {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), PandoraUtils.sCropBitmap);
@@ -255,6 +291,23 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 break;
             case R.id.setting_checkout_new_version_prompt:
                 checkNewVersion();
+                break;
+            case R.id.shareBtn:
+                // if (view == mShareimage) {
+                // 分享
+                mController.directShare(getActivity(), SHARE_MEDIA.SINA, new SnsPostListener() {
+
+                    @Override
+                    public void onStart() {
+                        Log.d("zlf", "分享onStart");
+                    }
+
+                    @Override
+                    public void onComplete(SHARE_MEDIA platform, int eCode, SocializeEntity entity) {
+                        Log.d("zlf", "分享onComplete");
+                    }
+                });
+                // }
                 break;
             case R.id.setting_change_background:
                 gotoWallpaper();
