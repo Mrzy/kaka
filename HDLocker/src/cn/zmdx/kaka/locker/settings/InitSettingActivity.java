@@ -9,13 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -23,13 +22,13 @@ public class InitSettingActivity extends Activity implements OnClickListener {
 
     private String mMIUIVersion;
 
-    private Button mCloseSystemLockBtn;
+    private TypefaceTextView mCloseSystemLockBtn;
 
-    private Button mFolatfingWindowBtn;
+    private TypefaceTextView mFolatfingWindowBtn;
 
-    private Button mTrustBtn;
+    private TypefaceTextView mTrustBtn;
 
-    private TextView mCompleteBtn;
+    private TypefaceTextView mCompleteBtn;
 
     private PandoraConfig mPandoraConfig;
 
@@ -56,13 +55,13 @@ public class InitSettingActivity extends Activity implements OnClickListener {
                     View.VISIBLE);
             findViewById(R.id.init_setting_MIUI_trust_guide).setVisibility(View.VISIBLE);
         }
-        mCloseSystemLockBtn = (Button) findViewById(R.id.init_setting_close_systemlocker_to_set);
+        mCloseSystemLockBtn = (TypefaceTextView) findViewById(R.id.init_setting_close_systemlocker_to_set);
         mCloseSystemLockBtn.setOnClickListener(this);
-        mFolatfingWindowBtn = (Button) findViewById(R.id.init_setting_MIUI_allow_floating_window_to_set);
+        mFolatfingWindowBtn = (TypefaceTextView) findViewById(R.id.init_setting_MIUI_allow_floating_window_to_set);
         mFolatfingWindowBtn.setOnClickListener(this);
-        mTrustBtn = (Button) findViewById(R.id.init_setting_MIUI_trust_to_set);
+        mTrustBtn = (TypefaceTextView) findViewById(R.id.init_setting_MIUI_trust_to_set);
         mTrustBtn.setOnClickListener(this);
-        mCompleteBtn = (TextView) findViewById(R.id.init_setting_miui_complete);
+        mCompleteBtn = (TypefaceTextView) findViewById(R.id.init_setting_miui_complete);
         mCompleteBtn.setOnClickListener(this);
 
     }
