@@ -3,6 +3,8 @@ package cn.zmdx.kaka.locker.settings;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,6 +12,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -44,11 +47,10 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         mThemeId = mPandoraConfig.getCurrentThemeId();
         setContentView(R.layout.init_setting_fragment);
         initView();
+        initWallpaper();
     }
 
     private void initView() {
-        int resId = ThemeManager.getThemeById(mThemeId).getmBackgroundResId();
-        findViewById(R.id.init_setting_background).setBackgroundResource(resId);
         if (isMIUI) {
             findViewById(R.id.init_setting_MIUI_allow_floating_window_guide).setVisibility(
                     View.VISIBLE);
@@ -62,6 +64,28 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         mTrustBtn.setOnClickListener(this);
         mCompleteBtn = (TextView) findViewById(R.id.init_setting_miui_complete);
         mCompleteBtn.setOnClickListener(this);
+
+    }
+
+    @SuppressWarnings("deprecation")
+    private void initWallpaper() {
+        View view = findViewById(R.id.init_setting_background);
+        int themeId = mPandoraConfig.getCurrentThemeId();
+        if (themeId == -1) {
+            String fileName = PandoraConfig.newInstance(this).getCustomWallpaperFileName();
+            String path = CustomWallpaperManager.getCustomWallpaperFilePath(fileName);
+            Bitmap bitmap = PandoraUtils.getBitmap(path);
+            if (null == bitmap) {
+                view.setBackgroundDrawable(getResources().getDrawable(
+                        R.drawable.setting_background_blue));
+            } else {
+                BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+                view.setBackgroundDrawable(drawable);
+            }
+        } else {
+            int resId = ThemeManager.getThemeById(mThemeId).getmBackgroundResId();
+            view.setBackgroundResource(resId);
+        }
 
     }
 
