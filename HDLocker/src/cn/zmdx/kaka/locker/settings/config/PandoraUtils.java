@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -31,6 +32,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -41,6 +44,10 @@ public class PandoraUtils {
     private PandoraUtils() {
 
     }
+
+    private static final int DEFAULT_WIDTH = 1080;
+
+    private static final int DEFAULT_BITMAP_WIDTH = 3000;
 
     private static final String MUIU_V5 = "V5";
 
@@ -173,6 +180,42 @@ public class PandoraUtils {
         return versionName;
     }
 
+    public static int getRealScreenHeight(Activity activity) {
+        int realScreenHeight = 0;
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        DisplayMetrics dm = new DisplayMetrics();
+        display.getMetrics(dm);
+        Class<?> c;
+        try {
+            c = Class.forName("android.view.Display");
+            Method method = c.getMethod("getRealMetrics", DisplayMetrics.class);
+            method.invoke(display, dm);
+            realScreenHeight = dm.heightPixels;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return realScreenHeight;
+    }
+
+    public static int getVirtualKeyHeight(Activity activity) {
+        int screenHeight = 0;
+        int realScreenHeight = 0;
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        DisplayMetrics dm = new DisplayMetrics();
+        display.getMetrics(dm);
+        screenHeight = dm.heightPixels;
+        Class<?> c;
+        try {
+            c = Class.forName("android.view.Display");
+            Method method = c.getMethod("getRealMetrics", DisplayMetrics.class);
+            method.invoke(display, dm);
+            realScreenHeight = dm.heightPixels;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return realScreenHeight - screenHeight;
+    }
+
     public static int getStatusBarHeight(Context context) {
         Class<?> c = null;
         Object obj = null;
@@ -237,22 +280,25 @@ public class PandoraUtils {
         activity.startActivityForResult(intent, requestCode);
     }
 
-    public static Bitmap zoomBitmap(Context mContext, Uri uri) throws FileNotFoundException {
-        InputStream inputStream = mContext.getContentResolver().openInputStream(uri);
+    public static Bitmap zoomBitmap(Activity activity, Uri uri) throws FileNotFoundException {
+        InputStream inputStream = activity.getContentResolver().openInputStream(uri);
         BitmapFactory.Options opts = new Options();
         opts.inJustDecodeBounds = true;// 设置为true时，BitmapFactory只会解析要加载的图片的边框的信息，但是不会为该图片分配内存
         BitmapFactory.decodeStream(inputStream, new Rect(), opts);
-        int screenHeight = Integer.parseInt(BaseInfoHelper.getHeight(mContext));
-        int screenWidth = Integer.parseInt(BaseInfoHelper.getWidth(mContext));
-
+        int screenHeight = PandoraUtils.getRealScreenHeight(activity);
+        int screenWidth = Integer.parseInt(BaseInfoHelper.getWidth(activity));
         BitmapFactory.Options realOpts = new Options();
-        realOpts.inSampleSize = computeSampleSize(opts, Math.min(screenWidth, screenHeight),
-                screenWidth * screenHeight);
+        if (screenWidth == DEFAULT_WIDTH || opts.outWidth > DEFAULT_BITMAP_WIDTH) {
+            realOpts.inSampleSize = 3;
+        } else {
+            realOpts.inSampleSize = computeSampleSize(opts, Math.min(screenWidth, screenHeight),
+                    screenWidth * screenHeight);
+        }
         realOpts.inJustDecodeBounds = false;
         realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
         realOpts.inPurgeable = true;
         realOpts.inInputShareable = true;
-        InputStream realInputStream = mContext.getContentResolver().openInputStream(uri);
+        InputStream realInputStream = activity.getContentResolver().openInputStream(uri);
         Bitmap bitmap = BitmapFactory.decodeStream(realInputStream, new Rect(), realOpts);
         return bitmap;
 
