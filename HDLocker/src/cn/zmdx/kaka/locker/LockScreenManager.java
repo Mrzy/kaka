@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -39,9 +38,7 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
-import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
@@ -54,12 +51,9 @@ import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
 
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.Animator.AnimatorListener;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.view.ViewHelper;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
 
@@ -70,11 +64,11 @@ public class LockScreenManager {
 
     private SlidingUpPanelLayout mSliderView;
 
-    private View mEntireView, mKeyholeView, mKeyView;
+    private View mEntireView;
 
     private ViewFlipper mViewFlipper;
 
-    private ViewGroup mBoxView, mKeyholeLayout;
+    private ViewGroup mBoxView;
 
     private static LockScreenManager INSTANCE = null;
 
@@ -86,7 +80,7 @@ public class LockScreenManager {
 
     private IPandoraBox mPandoraBox = null;
 
-    private int mKeyholeMarginTop = -1;
+//    private int mKeyholeMarginTop = -1;
 
     private Theme mCurTheme;
 
@@ -354,14 +348,7 @@ public class LockScreenManager {
         mAnimatorSet.start();
 
         mSliderView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.locker_view);
-        mKeyView = mEntireView.findViewById(R.id.lock_key);
         mSliderView.setPanelSlideListener(mSlideListener);
-        mKeyholeView = (ImageView) mEntireView.findViewById(R.id.keyhole);
-        mKeyholeLayout = (ViewGroup) mEntireView.findViewById(R.id.keyholeLayout);
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mKeyholeLayout.getLayoutParams();
-        calKeyholeMarginTop();
-        lp.setMargins(0, mKeyholeMarginTop, 0, 0);
-        mKeyholeLayout.setLayoutParams(lp);
         setDrawable();
     }
 
@@ -380,26 +367,6 @@ public class LockScreenManager {
         return "" + year + "" + month + "" + day;
     }
 
-    private void combineIcon(boolean combine) {
-        if (combine) {
-            mKeyView.setBackgroundResource(mCurTheme.getmKeyholeIconResId());
-            mKeyholeView.setVisibility(View.INVISIBLE);
-        } else {
-            mKeyView.setBackgroundResource(mCurTheme.getmDragViewIconResId());
-            mKeyholeView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void calKeyholeMarginTop() {
-        if (mKeyholeMarginTop != -1) {
-            return;
-        }
-        String screenHeight = BaseInfoHelper.getHeight(mContext);
-        int padding = mContext.getResources().getDimensionPixelOffset(
-                R.dimen.locker_key_padding_top);
-        mKeyholeMarginTop = Integer.parseInt(screenHeight) - mSliderView.getPanelHeight() + padding;
-    }
-
     private void setDrawable() {
         mCurTheme = ThemeManager.getCurrentTheme();
         if (mCurTheme.isCustomWallpaper()) {
@@ -407,8 +374,6 @@ public class LockScreenManager {
         } else {
             mViewFlipper.setBackgroundResource(mCurTheme.getmBackgroundResId());
             mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
-            mKeyView.setBackgroundResource(mCurTheme.getmDragViewIconResId());
-            mKeyholeView.setBackgroundResource(mCurTheme.getmHoleIconResId());
         }
     }
 
@@ -427,7 +392,6 @@ public class LockScreenManager {
         mEntireView = null;
         mIsShowGesture = false;
         mIsLocked = false;
-        // syncDataIfNeeded();
     }
 
     private void syncDataIfNeeded() {
@@ -454,42 +418,6 @@ public class LockScreenManager {
 
     public boolean isLocked() {
         return mIsLocked;
-    }
-
-    private void visibleKeyhole() {
-        ViewHelper.setAlpha(mKeyholeView, 0);
-        mKeyholeView.setVisibility(View.VISIBLE);
-
-        ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(mKeyholeView, "alpha", 0, 1);
-        fadeAnimator.setDuration(400);
-        fadeAnimator.addListener(new AnimatorListener() {
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-                mSliderView.setEnabled(false);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mSliderView.setEnabled(true);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                mSliderView.setEnabled(true);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-
-        });
-        fadeAnimator.start();
-    }
-
-    private void invisibleKeyhole() {
-        mKeyholeView.setVisibility(View.INVISIBLE);
     }
 
     private boolean mIsShowGesture = false;
@@ -578,11 +506,6 @@ public class LockScreenManager {
 
         @Override
         public void onPanelSlide(View panel, float slideOffset) {
-            if (slideOffset <= 0.01) {
-                combineIcon(true);
-            } else {
-                combineIcon(false);
-            }
             if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
                 if (slideOffset < 1 && slideOffset > 0) {
                     if (null != mLockPrompt) {
@@ -619,7 +542,6 @@ public class LockScreenManager {
                 mAnimatorSet.start();
                 mLockArrow.setVisibility(View.VISIBLE);
             }
-            invisibleKeyhole();
             if (mIsShowGesture) {
                 mViewFlipper.showPrevious();
                 mIsShowGesture = false;
@@ -665,7 +587,6 @@ public class LockScreenManager {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("onPanelStartDown");
             }
-            visibleKeyhole();
             mLockTime = System.currentTimeMillis();
             if (null != mLockArrow) {
                 mAnimatorSet.end();

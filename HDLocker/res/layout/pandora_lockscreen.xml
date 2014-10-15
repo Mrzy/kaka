@@ -34,7 +34,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/share_drawable" />
+                    android:src="@drawable/share_drawable"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -64,62 +65,61 @@
             </RelativeLayout>
         </ViewFlipper>
 
-        <RelativeLayout
-            android:id="@+id/lock_top"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#cccccc" >
+            android:background="@drawable/gradual_shadow_bg"
+            android:orientation="vertical" >
 
             <LinearLayout
+                android:id="@+id/lock_top"
+                android:paddingTop="55dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center_horizontal"
-                android:orientation="vertical" >
+                android:layout_height="match_parent"
+                android:background="@drawable/gradual_shadow_bg"
+                android:orientation="vertical"
+                android:paddingLeft="10dp" >
+
+                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    android:id="@+id/weather_summary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:paddingLeft="5dp"
+                    android:layout_marginRight="20dp"
+                    android:visibility="gone" />
+
+                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    android:layout_marginTop="8dp"
+                    android:id="@+id/lock_date"
+                    android:paddingLeft="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:textColor="#C9C9C9"
+                    android:textSize="13sp" />
 
                 <cn.zmdx.kaka.locker.widget.DigitalClocks
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"
+                    android:layout_marginTop="-10dp"
                     android:textSize="75sp"
                     clock:format="24" />
 
-                <TextView
-                    android:id="@+id/lock_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <LinearLayout
-                    android:id="@+id/weather_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/weather_summary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:textColor="@color/white"
-                        android:visibility="gone"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <TextView
+                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    android:paddingLeft="5dp"
                     android:id="@+id/batteryTip"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="13sp" />
             </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/lock_bottom"
@@ -139,34 +139,13 @@
                 android:textSize="15sp" />
 
             <ImageView
-                android:id="@+id/lock_key"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/locker_key_padding_top" />
-
-            <ImageView
                 android:id="@+id/lock_arrow1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/lock_key"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/lock_arrow" />
         </RelativeLayout>
     </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
-
-    <RelativeLayout
-        android:id="@+id/keyholeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <ImageView
-            android:id="@+id/keyhole"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible" />
-    </RelativeLayout>
 
 </FrameLayout>
