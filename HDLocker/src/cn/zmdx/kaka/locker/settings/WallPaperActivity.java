@@ -4,6 +4,8 @@ package cn.zmdx.kaka.locker.settings;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.Keyframe;
@@ -462,6 +464,7 @@ public class WallPaperActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+                UmengCustomEventManager.statisticalSelectTheme(ThemeManager.THEME_ID_CUSTOM);
                 Bitmap bacground = PandoraUtils.getBitmap(CustomWallpaperManager
                         .getCustomWallpaperFilePath(fileName));
                 PandoraUtils.sCropBitmap = bacground;
@@ -592,5 +595,19 @@ public class WallPaperActivity extends Activity {
         finish();
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                 R.anim.umeng_fb_slide_out_from_right);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("WallPaperActivity"); // 统计页面
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("WallPaperActivity");
+        MobclickAgent.onPause(this);
     }
 }

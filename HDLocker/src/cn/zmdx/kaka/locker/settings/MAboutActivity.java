@@ -30,12 +30,14 @@ public class MAboutActivity extends Activity {
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("MAboutFragment"); // 统计页面
+        MobclickAgent.onPageStart("MAboutActivity"); // 统计页面
+        MobclickAgent.onResume(this); // 统计时长
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("MAboutFragment");
+        MobclickAgent.onPageEnd("MAboutActivity");
+        MobclickAgent.onPause(this);
     }
 
     @Override

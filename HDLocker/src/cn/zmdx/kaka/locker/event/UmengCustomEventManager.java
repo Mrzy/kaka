@@ -4,7 +4,6 @@ package cn.zmdx.kaka.locker.event;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.util.Log;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;

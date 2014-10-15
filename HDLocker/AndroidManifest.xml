@@ -40,15 +40,18 @@
         </activity>
         <activity
             android:name=".settings.LockPatternActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/gusture_dialog" >
         </activity>
         <activity
             android:name=".guide.GuideActivity"
+            android:exported="false"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".settings.InitSettingActivity"
+            android:exported="false"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -58,14 +61,17 @@
         </activity>
         <activity
             android:name=".settings.WallPaperActivity"
+            android:exported="false"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".settings.CropImageActivity"
+            android:exported="false"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".settings.MAboutActivity"
+            android:exported="false"
             android:screenOrientation="portrait" >
         </activity>
         <activity
