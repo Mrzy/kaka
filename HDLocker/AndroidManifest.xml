@@ -65,6 +65,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".settings.MAboutActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".FakeActivity"
             android:exported="false"
             android:launchMode="singleInstance"

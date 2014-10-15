@@ -5,6 +5,31 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
+    <RelativeLayout
+        android:id="@+id/pandora_wallpaper_item_iamge_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" >
+
+        <ImageView
+            android:id="@+id/pandora_wallpaper_item_iamge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/contentDescription"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/pandora_wallpaper_item_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+           android:layout_marginBottom="10dp"
+            android:contentDescription="@string/contentDescription"
+            android:scaleType="fitXY"
+            android:src="@drawable/pandora_wallpaper_delete" />
+    </RelativeLayout>
+
     <ImageView
         android:id="@+id/pandora_wallpaper_item_select"
         android:layout_width="20dp"
@@ -12,27 +37,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@string/contentDescription"
-        android:scaleType="fitXY"
         android:src="@drawable/pandora_wallpaper_select"
         android:visibility="invisible" />
-
-    <ImageView
-        android:id="@+id/pandora_wallpaper_item_iamge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:contentDescription="@string/contentDescription"
-        android:scaleType="fitXY" />
-
-    <ImageView
-        android:id="@+id/pandora_wallpaper_item_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="2dp"
-        android:contentDescription="@string/contentDescription"
-        android:scaleType="fitXY"
-        android:src="@drawable/pandora_wallpaper_delete" />
 
 </RelativeLayout>

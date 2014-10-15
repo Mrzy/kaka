@@ -70,7 +70,7 @@
     
     <dimen name="pandora_wallpaper_layout_width">111dp</dimen>
     <dimen name="pandora_wallpaper_layout_height">159dp</dimen> 
-    <dimen name="pandora_wallpaper_width">101dp</dimen>
-    <dimen name="pandora_wallpaper_height">149dp</dimen> 
-    <dimen name="pandora_wallpaper_margin">10dp</dimen>
+    <dimen name="pandora_wallpaper_width">96dp</dimen>
+    <dimen name="pandora_wallpaper_height">144dp</dimen> 
+    <dimen name="pandora_wallpaper_height_poor_half">7.5dp</dimen> 
 </resources>

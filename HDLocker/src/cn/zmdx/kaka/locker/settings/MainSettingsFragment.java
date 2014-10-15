@@ -205,17 +205,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private void showGustureView(final int type) {
         mLockerTypeSButton.setEnabled(false);
-        // View decorView = getActivity().getWindow().getDecorView();
-        // Bitmap blurBitmap = PandoraUtils.fastBlur(decorView);
-        Intent in = new Intent();
-        in.setClass(getActivity(), LockPatternActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", type);
-        // bundle.putParcelable("bitmap", blurBitmap);
-        in.putExtra("bundle", bundle);
-        startActivityForResult(in, GUSTURE_REQUEST_CODE_SUCCESS);
-        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                R.anim.umeng_fb_slide_out_from_left);
+        gotoGustureActivity(type);
+        
     }
 
     @Override
