@@ -19,8 +19,6 @@ public class ThemeManager {
 
     public static final int THEME_ID_BLUE = 1; // default
 
-    public static final int THEME_ID_TIFFANY = 2;
-
     public static final int THEME_ID_JEAN = 3;
 
     public static final int THEME_ID_WOOD_GRAIN = 4;
@@ -91,16 +89,6 @@ public class ThemeManager {
                 theme.setmKeyholeIconResId(R.drawable.ic_key_hole_blue);
                 theme.setmThemeId(THEME_ID_BLUE);
                 break;
-            case THEME_ID_TIFFANY:
-                theme.setmBackgroundResId(R.drawable.setting_background_tiffany);
-                theme.setmForegroundResId(R.drawable.setting_background_tiffany_fore);
-                theme.setmSettingsIconResId(R.drawable.ic_setting_tiffany);
-                theme.setmThumbnailResId(R.drawable.setting_wallpaper_tiffany);
-                theme.setmDragViewIconResId(R.drawable.ic_key_tiffany);
-                theme.setmHoleIconResId(R.drawable.ic_hole_tiffany);
-                theme.setmKeyholeIconResId(R.drawable.ic_key_hole_tiffany);
-                theme.setmThemeId(THEME_ID_TIFFANY);
-                break;
             case THEME_ID_JEAN:
                 theme.setmBackgroundResId(R.drawable.setting_background_jean);
                 theme.setmForegroundResId(R.drawable.setting_background_jean_fore);
@@ -146,17 +134,6 @@ public class ThemeManager {
         theme.setmHoleIconResId(R.drawable.ic_hole_blue);
         theme.setmKeyholeIconResId(R.drawable.ic_key_hole_blue);
         theme.setmThemeId(THEME_ID_BLUE);
-        list.add(theme);
-
-        theme = new Theme();
-        theme.setmBackgroundResId(R.drawable.setting_background_tiffany);
-        theme.setmForegroundResId(R.drawable.setting_background_tiffany_fore);
-        theme.setmSettingsIconResId(R.drawable.ic_setting_tiffany);
-        theme.setmThumbnailResId(R.drawable.setting_wallpaper_tiffany);
-        theme.setmDragViewIconResId(R.drawable.ic_key_tiffany);
-        theme.setmHoleIconResId(R.drawable.ic_hole_tiffany);
-        theme.setmKeyholeIconResId(R.drawable.ic_key_hole_tiffany);
-        theme.setmThemeId(THEME_ID_TIFFANY);
         list.add(theme);
 
         theme = new Theme();

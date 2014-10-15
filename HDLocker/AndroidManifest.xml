@@ -67,6 +67,7 @@
         <activity
             android:name=".settings.CropImageActivity"
             android:exported="false"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:screenOrientation="portrait" >
         </activity>
         <activity

@@ -46,6 +46,8 @@ public class PandoraConfig {
 
     private static final String KEY_LAST_WEATHER_INFO = "keyLastWeatherInfo";
 
+    public static final int DEFAULT_NO_THRME_INT = -999;
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -83,7 +85,7 @@ public class PandoraConfig {
     }
 
     public int getCurrentThemeIdForStatistical() {
-        return mSp.getInt(THEME_ID, -1);
+        return mSp.getInt(THEME_ID, DEFAULT_NO_THRME_INT);
     }
 
     public void saveThemeId(int themeId) {

@@ -53,6 +53,10 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_GUIDE_PAGE_DURATION = "guidePageDuration"; // 计算引导页的总展示时间；
 
+    public static final String EVENT_SET_CUSTOM_WALLPAPER_TIMES = "setCustomWallpaper"; // 点击自定义主题壁纸时上报一次事件；
+
+    public static final String EVENT_SET_CUSTOM_WALLPAPER_SUCCESS_TIMES = "setCustomWallpaperSuccess"; // 成功设置自定义主题壁纸时上报一次事件；
+
     /**
      * 统计 若用户开启了手势锁，每日上报一次
      * 
@@ -85,20 +89,20 @@ public class UmengCustomEventManager {
                 case ThemeManager.THEME_ID_BLUE:
                     themeName = "blue";
                     break;
-                case ThemeManager.THEME_ID_TIFFANY:
-                    themeName = "tiffany";
-                    break;
                 case ThemeManager.THEME_ID_JEAN:
                     themeName = "jean";
                     break;
                 case ThemeManager.THEME_ID_WOOD_GRAIN:
                     themeName = "woodGrain";
                     break;
+                case ThemeManager.THEME_ID_CUSTOM:
+                    themeName = "custom";
+                    break;
 
                 default:
                     break;
             }
-            if (themeId != -1) {
+            if (themeId != PandoraConfig.DEFAULT_NO_THRME_INT) {
                 Map<String, String> map_value = new HashMap<String, String>();
                 map_value.put("themeName", themeName);
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
@@ -215,10 +219,6 @@ public class UmengCustomEventManager {
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
                         UmengCustomEventManager.EVENT_WALLPAPER_BLUE_TIMES);
                 break;
-            case ThemeManager.THEME_ID_TIFFANY:
-                MobclickAgent.onEvent(HDApplication.getInstannce(),
-                        UmengCustomEventManager.EVENT_WALLPAPER_TIFFANY_TIMES);
-                break;
             case ThemeManager.THEME_ID_JEAN:
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
                         UmengCustomEventManager.EVENT_WALLPAPER_JEAN_TIMES);
@@ -233,6 +233,26 @@ public class UmengCustomEventManager {
                         UmengCustomEventManager.EVENT_WALLPAPER_BLUE_TIMES);
                 break;
         }
+    }
+
+    /**
+     * 统计点击自定义壁纸按钮的次数
+     * 
+     * @param themeId
+     */
+    public static void statisticalClickCustomButtonTimes() {
+        MobclickAgent.onEvent(HDApplication.getInstannce(),
+                UmengCustomEventManager.EVENT_SET_CUSTOM_WALLPAPER_TIMES);
+    }
+
+    /**
+     * 统计成功设置自定义壁纸的次数
+     * 
+     * @param themeId
+     */
+    public static void statisticalSuccessSetCustomTimes() {
+        MobclickAgent.onEvent(HDApplication.getInstannce(),
+                UmengCustomEventManager.EVENT_SET_CUSTOM_WALLPAPER_SUCCESS_TIMES);
     }
 
     /**

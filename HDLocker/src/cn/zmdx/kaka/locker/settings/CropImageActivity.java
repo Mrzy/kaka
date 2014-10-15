@@ -8,9 +8,11 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.Window;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.edmodo.cropper.CropImageView;
 
@@ -33,13 +35,11 @@ public class CropImageActivity extends Activity {
 
     private int mAspectRatioY = DEFAULT_ASPECT_RATIO_VALUES;
 
-    private Button mRotate;
+    private TypefaceTextView mRotate;
 
-    private Button mOK;
+    private TypefaceTextView mOK;
 
-    private Button mCancle;
-
-    private boolean isRotate = false;
+    private TypefaceTextView mCancle;
 
     public static final String KEY_BUNDLE_BITMAP = "cropBitmap";
 
@@ -65,6 +65,7 @@ public class CropImageActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_crop_image);
         try {
@@ -83,25 +84,20 @@ public class CropImageActivity extends Activity {
         mCropImageView.setImageBitmap(mCropBitmap);
         mCropImageView.setAspectRatio(mAspectRatioX, mAspectRatioY);
 
-        mRotate = (Button) findViewById(R.id.pandora_rotate_btn);
+        mRotate = (TypefaceTextView) findViewById(R.id.pandora_rotate_btn);
         mRotate.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                isRotate = !isRotate;
-                if (isRotate) {
-                    mCropImageView.setAspectRatio(mAspectRatioY, mAspectRatioX);
-                } else {
-                    mCropImageView.setAspectRatio(mAspectRatioX, mAspectRatioY);
-                }
                 mCropImageView.rotateImage(ROTATE_NINETY_DEGREES);
             }
         });
-        mOK = (Button) findViewById(R.id.pandora_crop_sure);
+        mOK = (TypefaceTextView) findViewById(R.id.pandora_crop_sure);
         mOK.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                UmengCustomEventManager.statisticalSuccessSetCustomTimes();
                 PandoraUtils.sCropBitmap = mCropImageView.getCroppedImage();
                 PandoraUtils.sCropThumbBitmap = PandoraUtils.zoomThumbBitmap(
                         CropImageActivity.this, PandoraUtils.sCropBitmap);
@@ -109,7 +105,7 @@ public class CropImageActivity extends Activity {
                 onBackPressed();
             }
         });
-        mCancle = (Button) findViewById(R.id.pandora_crop_cancle);
+        mCancle = (TypefaceTextView) findViewById(R.id.pandora_crop_cancle);
         mCancle.setOnClickListener(new OnClickListener() {
 
             @Override
