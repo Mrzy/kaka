@@ -4,6 +4,8 @@ package cn.zmdx.kaka.locker.settings;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.Keyframe;
@@ -27,9 +29,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.Toast;
-import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
@@ -152,8 +153,8 @@ public class WallPaperActivity extends Activity {
         for (int i = 0; i < mThemeList.size(); i++) {
             final RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
                     HDApplication.getInstannce()).inflate(R.layout.pandora_wallpaper_item, null);
-            int margin = (int) getResources().getDimension(R.dimen.pandora_wallpaper_margin);
-            mWallpaperRl.setPadding(margin, margin, margin, margin);
+            RelativeLayout mWallpaperIvRl = (RelativeLayout) mWallpaperRl
+                    .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
             ImageView mWallpaperIv = (ImageView) mWallpaperRl
                     .findViewById(R.id.pandora_wallpaper_item_iamge);
             ImageView mWallpaperSelect = (ImageView) mWallpaperRl
@@ -164,13 +165,15 @@ public class WallPaperActivity extends Activity {
             mAdviceBorderArray.put(i, mWallpaperSelect);
             mWallpaperIv.setTag(i);
             mWallpaperIv.setImageResource(mThemeList.get(i).getmThumbnailResId());
+            mWallpaperIv.setBackgroundResource(R.drawable.setting_wallpaper_border);
             mWallpaperIv.setOnClickListener(mPicClickListener);
             mAdviceContainer.addView(mWallpaperRl, mAdviceContainer.getChildCount());
-            LayoutParams params = mWallpaperIv.getLayoutParams();
+            LayoutParams params = mWallpaperIvRl.getLayoutParams();
             int width = (int) getResources().getDimension(R.dimen.pandora_wallpaper_width);
             int height = (int) getResources().getDimension(R.dimen.pandora_wallpaper_height);
             params.width = width;
             params.height = height;
+            mWallpaperIvRl.setLayoutParams(params);
 
             LayoutParams layoutParams = mWallpaperRl.getLayoutParams();
             int layoutWidth = (int) getResources().getDimension(
@@ -242,22 +245,39 @@ public class WallPaperActivity extends Activity {
     }
 
     private void initAddCustomButton() {
-        ImageView mAddCustom = new ImageView(this);
-        mAddCustom.setScaleType(ScaleType.FIT_XY);
-        int margin = (int) getResources().getDimension(R.dimen.pandora_wallpaper_margin);
-        mAddCustom.setPadding(margin, margin, margin, margin);
-        mAddCustom.setImageDrawable(getResources().getDrawable(R.drawable.pandora_wallpaper_add));
-        mAddCustom.setOnClickListener(new View.OnClickListener() {
+        final RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
+                HDApplication.getInstannce()).inflate(R.layout.pandora_wallpaper_item, null);
+        RelativeLayout mWallpaperIvRl = (RelativeLayout) mWallpaperRl
+                .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
+        ImageView mWallpaperIv = (ImageView) mWallpaperRl
+                .findViewById(R.id.pandora_wallpaper_item_iamge);
+        mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_select).setVisibility(View.GONE);
+        mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_delete).setVisibility(View.GONE);
+        mWallpaperIv.setImageDrawable(getResources().getDrawable(R.drawable.pandora_wallpaper_add));
+        mWallpaperIv.setBackgroundResource(R.drawable.setting_wallpaper_border);
+        mWallpaperIv.setOnClickListener(new OnClickListener() {
+
+            @Override
             public void onClick(View v) {
                 showSelectDialog();
             }
         });
-        container.addView(mAddCustom);
+        container.addView(mWallpaperRl, Math.min(1, container.getChildCount()));
+        LayoutParams params = mWallpaperIvRl.getLayoutParams();
         int width = (int) getResources().getDimension(R.dimen.pandora_wallpaper_width);
         int height = (int) getResources().getDimension(R.dimen.pandora_wallpaper_height);
-        LayoutParams params = mAddCustom.getLayoutParams();
         params.width = width;
         params.height = height;
+        mWallpaperIvRl.setLayoutParams(params);
+
+        LayoutParams layoutParams = mWallpaperRl.getLayoutParams();
+        int layoutWidth = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_width);
+        int layoutHeight = (int) getResources().getDimension(
+                R.dimen.pandora_wallpaper_layout_height);
+        layoutParams.width = layoutWidth;
+        layoutParams.height = layoutHeight;
+        mWallpaperRl.setLayoutParams(layoutParams);
+
     }
 
     private void showSelectDialog() {
@@ -367,7 +387,7 @@ public class WallPaperActivity extends Activity {
                 }
             } else {
                 if (null != mBorderArray) {
-                    mBorderArray.get(mBorderArray.keyAt(i)).setVisibility(View.INVISIBLE);
+                    mBorderArray.get(mBorderArray.keyAt(i)).setVisibility(View.GONE);
                 }
             }
         }
@@ -428,8 +448,8 @@ public class WallPaperActivity extends Activity {
         }
         final RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
                 HDApplication.getInstannce()).inflate(R.layout.pandora_wallpaper_item, null);
-        int margin = (int) getResources().getDimension(R.dimen.pandora_wallpaper_margin);
-        mWallpaperRl.setPadding(margin, margin, margin, margin);
+        RelativeLayout mWallpaperIvRl = (RelativeLayout) mWallpaperRl
+                .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
         ImageView mWallpaperIv = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_iamge);
         ImageView mWallpaperSelect = (ImageView) mWallpaperRl
@@ -439,10 +459,12 @@ public class WallPaperActivity extends Activity {
         mThumbNameArray.put(key, fileName);
         mBorderArray.put(key, mWallpaperSelect);
         mWallpaperIv.setImageBitmap(bitmap);
+        mWallpaperIv.setBackgroundResource(R.drawable.setting_wallpaper_border);
         mWallpaperIv.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                UmengCustomEventManager.statisticalSelectTheme(ThemeManager.THEME_ID_CUSTOM);
                 Bitmap bacground = PandoraUtils.getBitmap(CustomWallpaperManager
                         .getCustomWallpaperFilePath(fileName));
                 PandoraUtils.sCropBitmap = bacground;
@@ -477,11 +499,12 @@ public class WallPaperActivity extends Activity {
             }
         });
         container.addView(mWallpaperRl, Math.min(1, container.getChildCount()));
-        LayoutParams params = mWallpaperIv.getLayoutParams();
+        LayoutParams params = mWallpaperIvRl.getLayoutParams();
         int width = (int) getResources().getDimension(R.dimen.pandora_wallpaper_width);
         int height = (int) getResources().getDimension(R.dimen.pandora_wallpaper_height);
         params.width = width;
         params.height = height;
+        mWallpaperIvRl.setLayoutParams(params);
 
         LayoutParams layoutParams = mWallpaperRl.getLayoutParams();
         int layoutWidth = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_width);
@@ -489,6 +512,7 @@ public class WallPaperActivity extends Activity {
                 R.dimen.pandora_wallpaper_layout_height);
         layoutParams.width = layoutWidth;
         layoutParams.height = layoutHeight;
+        mWallpaperRl.setLayoutParams(layoutParams);
 
     }
 
@@ -564,5 +588,26 @@ public class WallPaperActivity extends Activity {
             mAdviceBorderArray = null;
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                R.anim.umeng_fb_slide_out_from_right);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("WallPaperActivity"); // 统计页面
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("WallPaperActivity");
+        MobclickAgent.onPause(this);
     }
 }

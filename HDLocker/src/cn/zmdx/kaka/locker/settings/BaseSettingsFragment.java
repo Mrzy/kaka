@@ -22,14 +22,11 @@ public abstract class BaseSettingsFragment extends Fragment {
 
     private Context mContext;
 
-    private MAboutFragment mAboutFragment;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         mPandoraConfig = PandoraConfig.newInstance(mContext);
-        mAboutFragment = new MAboutFragment();
     }
 
     protected void checkNewVersion() {
@@ -87,13 +84,22 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
 
     protected void gotoAbout() {
-        getFragmentManager()
-                .beginTransaction()
-                .addToBackStack(null)
-                .setCustomAnimations(R.anim.umeng_fb_slide_in_from_right,
-                        R.anim.umeng_fb_slide_out_from_left, R.anim.umeng_fb_slide_in_from_left,
-                        R.anim.umeng_fb_slide_out_from_right).add(R.id.content, mAboutFragment)
-                .commit();
+        Intent in = new Intent();
+        in.setClass(getActivity(), MAboutActivity.class);
+        startActivity(in);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+    }
+
+    protected void gotoGustureActivity(int type) {
+        Intent in = new Intent();
+        in.setClass(getActivity(), LockPatternActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", type);
+        in.putExtra("bundle", bundle);
+        startActivityForResult(in, MainSettingsFragment.GUSTURE_REQUEST_CODE_SUCCESS);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
     }
 
     protected void gotoInit() {

@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -122,11 +121,13 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     }
 
-    private void initTitleHeight(){
+    private void initTitleHeight() {
         int statusBarHeight = PandoraUtils.getStatusBarHeight(getActivity());
-        LinearLayout titleLayout = (LinearLayout) mRootView.findViewById(R.id.pandora_setting_title);
+        LinearLayout titleLayout = (LinearLayout) mRootView
+                .findViewById(R.id.pandora_setting_title);
         titleLayout.setPadding(0, statusBarHeight, 0, 0);
     }
+
     private void initBackground() {
         if (null != PandoraUtils.sCropBitmap) {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), PandoraUtils.sCropBitmap);
@@ -205,17 +206,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private void showGustureView(final int type) {
         mLockerTypeSButton.setEnabled(false);
-        // View decorView = getActivity().getWindow().getDecorView();
-        // Bitmap blurBitmap = PandoraUtils.fastBlur(decorView);
-        Intent in = new Intent();
-        in.setClass(getActivity(), LockPatternActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", type);
-        // bundle.putParcelable("bitmap", blurBitmap);
-        in.putExtra("bundle", bundle);
-        startActivityForResult(in, GUSTURE_REQUEST_CODE_SUCCESS);
-        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                R.anim.umeng_fb_slide_out_from_left);
+        gotoGustureActivity(type);
+
     }
 
     @Override
