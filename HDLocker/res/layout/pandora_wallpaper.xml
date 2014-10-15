@@ -24,7 +24,7 @@
             android:orientation="vertical"
             android:paddingTop="@dimen/init_setting_title_layout_margin_top" >
 
-            <TextView
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 style="@style/init_setting_big_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             android:orientation="vertical"
             android:visibility="visible" >
 
-            <TextView
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 style="@style/init_setting_big_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <TextView
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 style="@style/init_setting_big_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

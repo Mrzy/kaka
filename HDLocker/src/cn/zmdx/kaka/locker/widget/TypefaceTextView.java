@@ -2,10 +2,10 @@
 package cn.zmdx.kaka.locker.widget;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
+import cn.zmdx.kaka.locker.font.FontManager;
 
 public class TypefaceTextView extends TextView {
 
@@ -23,8 +23,7 @@ public class TypefaceTextView extends TextView {
     }
 
     private void setTypeFace() {
-        AssetManager mgr = getResources().getAssets();
-        Typeface tf = Typeface.createFromAsset(mgr, "fonts/ltxh_GBK_Mobil.TTF");
+        Typeface tf = FontManager.getChineseTypeface(getContext());
         setTypeface(tf);
     }
 }

@@ -15,7 +15,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -38,7 +37,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private LinearLayout mConcernTeam;
 
-    private TextView mChangeBackground;
+    private LinearLayout mChangeBackground;
 
     private LinearLayout mFeedback;
 
@@ -116,7 +115,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
         mConcernTeam = (LinearLayout) mRootView.findViewById(R.id.setting_concern_team);
         mConcernTeam.setOnClickListener(this);
-        mChangeBackground = (TextView) mRootView.findViewById(R.id.setting_change_background);
+        mChangeBackground = (LinearLayout) mRootView.findViewById(R.id.setting_change_background);
         mChangeBackground.setOnClickListener(this);
 
     }

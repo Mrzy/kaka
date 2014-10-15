@@ -4,15 +4,15 @@ package cn.zmdx.kaka.locker.settings;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
-import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
 public class MAboutActivity extends Activity {
 
-    private TextView mVersion;
+    private TypefaceTextView mVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class MAboutActivity extends Activity {
     }
 
     private void initView() {
-        mVersion = (TextView) findViewById(R.id.setting_about_version);
+        mVersion = (TypefaceTextView) findViewById(R.id.setting_about_version);
         String version = PandoraUtils.getVersionCode(this);
         mVersion.setText(version);
     }
