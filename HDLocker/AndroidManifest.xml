@@ -80,7 +80,7 @@
             android:exported="false"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent" />
 
         <service android:name=".service.PandoraService" />
         <!-- umeng -->

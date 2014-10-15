@@ -13,6 +13,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.BatteryManager;
 import android.os.Vibrator;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -80,7 +81,7 @@ public class LockScreenManager {
 
     private IPandoraBox mPandoraBox = null;
 
-//    private int mKeyholeMarginTop = -1;
+    // private int mKeyholeMarginTop = -1;
 
     private Theme mCurTheme;
 
@@ -378,9 +379,14 @@ public class LockScreenManager {
     }
 
     public void unLock() {
+        unLock(true);
+    }
+
+    private void unLock(boolean isCloseFakeActivity) {
         if (!mIsLocked)
             return;
-        notifyUnLocked();
+        if (isCloseFakeActivity)
+            notifyUnLocked();
         mObjectAnimator.cancel();
         mObjectAnimator = null;
         mAnimatorSet.end();
@@ -483,7 +489,13 @@ public class LockScreenManager {
         @Override
         public void onClick(View v) {
             if (v == mShareBtn) {
-                // TODO
+                //发送广播通知fakeActivity处理分享事件
+                Intent intent = new Intent();
+                intent.setAction(FakeActivity.ACTION_PANDORA_SHARE);
+                intent.setPackage(mContext.getPackageName());
+//                intent.putExtra("platform", 1);
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+                unLock(false);
             }
         }
     };
