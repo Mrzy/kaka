@@ -4,8 +4,6 @@ package cn.zmdx.kaka.locker.settings;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import com.umeng.analytics.MobclickAgent;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.Keyframe;
@@ -13,7 +11,6 @@ import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -43,6 +40,8 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+
+import com.umeng.analytics.MobclickAgent;
 
 public class WallPaperActivity extends Activity {
 

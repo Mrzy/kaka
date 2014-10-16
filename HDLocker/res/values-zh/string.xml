@@ -69,7 +69,9 @@
 
     <string name="pandora_wallpaper_dialog_camera">拍照</string>
     <string name="pandora_wallpaper_dialog_gallery">相册</string>
+    
     <string name="pandora_setting_title">潘多拉锁屏</string>
+    <string name="init_setting_title_detail">初始设置详细说明</string>
     
     <string name="pandora_wallpaper_dialog_title">确认删除此张壁纸？</string>
     <string name="pandora_wallpaper_dialog_cancle">取消</string>
