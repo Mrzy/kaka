@@ -93,14 +93,8 @@ public class PandoraUtils {
     }
 
     public static boolean isMIUI(Context context) {
-        boolean result = false;
-        Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
-        intent.setClassName("com.android.settings",
-                "com.miui.securitycenter.permission.AppPermissionsEditor");
-        if (isIntentAvailable(context, intent)) {
-            result = true;
-        }
-        return result;
+        String manufacturer = android.os.Build.MANUFACTURER;
+        return "Xiaomi".equals(manufacturer);
     }
 
     private static boolean isIntentAvailable(Context context, Intent intent) {

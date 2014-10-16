@@ -16,6 +16,7 @@ import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
 
 import com.android.volley.Response.ErrorListener;
@@ -48,6 +49,16 @@ public class PandoraWeatherManager {
     }
 
     public void getCurrentWeather(final IWeatherCallback callback) {
+        HDBThreadUtils.runOnWorker(new Runnable() {
+
+            @Override
+            public void run() {
+                internalGetCurrentWeather(callback);
+            }
+        });
+    }
+
+    private void internalGetCurrentWeather(final IWeatherCallback callback) {
         if (callback == null) {
             throw new IllegalArgumentException("the callback must not be null");
         }
@@ -105,15 +116,14 @@ public class PandoraWeatherManager {
     }
 
     /**
-     * 返回的字符串格式为：[经度],[纬度]
-     * 精确到小数点后4位
+     * 返回的字符串格式为：[经度],[纬度] 精确到小数点后4位
      */
     private String getLocation() {
         final LocationManager locationManager = (LocationManager) HDApplication.getInstannce()
                 .getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = locationManager.getAllProviders();
         Location location = null;
-        for (int i=0;i<providers.size();i++) {
+        for (int i = 0; i < providers.size(); i++) {
             location = locationManager.getLastKnownLocation(providers.get(i));
             if (location != null) {
                 break;
