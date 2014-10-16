@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.view.animation.OvershootInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -685,10 +685,10 @@ public class LockScreenManager {
 
         AnimatorSet finalSet = new AnimatorSet();
         finalSet.playTogether(digitalSet, dateSet, wsSet);
-        finalSet.setDuration(1000);
-        finalSet.setStartDelay(100);
-        finalSet.setInterpolator(new OvershootInterpolator());
-//        finalSet.setInterpolator(new DecelerateInterpolator());
+        finalSet.setDuration(700);
+        finalSet.setStartDelay(20);
+//        finalSet.setInterpolator(new OvershootInterpolator());
+        finalSet.setInterpolator(new DecelerateInterpolator());
 //        finalSet.setInterpolator(new BounceInterpolator());
         finalSet.start();
     }
