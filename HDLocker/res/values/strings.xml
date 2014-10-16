@@ -70,5 +70,6 @@
     <string name="pandora_box_no_net_tip">网络未连接，猛料拉不出</string>
     <string name="pandora_box_battery_charging">正在充电</string>
     <string name="pandora_box_battery_full">电量已满</string>
+    <string name="init_setting_title_detail">初始设置详细说明</string>
 
 </resources>

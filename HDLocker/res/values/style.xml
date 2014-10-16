@@ -35,7 +35,7 @@
 
     <style name="init_setting_big_textview">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">21sp</item>
     </style>
 
     <style name="init_setting_small_textview">

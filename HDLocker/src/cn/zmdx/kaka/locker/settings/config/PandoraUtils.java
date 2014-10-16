@@ -288,7 +288,7 @@ public class PandoraUtils {
         int screenHeight = PandoraUtils.getRealScreenHeight(activity);
         int screenWidth = Integer.parseInt(BaseInfoHelper.getWidth(activity));
         BitmapFactory.Options realOpts = new Options();
-        if (screenWidth == DEFAULT_WIDTH || opts.outWidth > DEFAULT_BITMAP_WIDTH) {
+        if (screenWidth == DEFAULT_WIDTH && opts.outWidth > DEFAULT_BITMAP_WIDTH) {
             realOpts.inSampleSize = 3;
         } else {
             realOpts.inSampleSize = computeSampleSize(opts, Math.min(screenWidth, screenHeight),
