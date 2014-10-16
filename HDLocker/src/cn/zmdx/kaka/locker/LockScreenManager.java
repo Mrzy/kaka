@@ -325,14 +325,14 @@ public class LockScreenManager {
         mLockPatternView.setOnPatternListener(mPatternListener);
         mGusturePrompt = (TextView) mEntireView.findViewById(R.id.gusture_prompt);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
-//        mDate.setAlpha(0);
+        // mDate.setAlpha(0);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
         mShareBtn = (ImageView) mEntireView.findViewById(R.id.shareBtn);
         mShareBtn.setOnClickListener(mClickListener);
         mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
-//        mWeatherSummary.setAlpha(0);
+        // mWeatherSummary.setAlpha(0);
         mDigitalClockView = mEntireView.findViewById(R.id.digitalClock);
-//        mDigitalClockView.setAlpha(0);
+        // mDigitalClockView.setAlpha(0);
 
         mObjectAnimator = ObjectAnimator.ofFloat(mLockPrompt, "alpha", 1, 0.2f, 1);
         mObjectAnimator.setDuration(2000);
@@ -653,13 +653,16 @@ public class LockScreenManager {
     }
 
     public void onScreenOn() {
-        processWeatherInfo();
-        processAnimations();
+        if (mIsLocked) {
+            processWeatherInfo();
+            processAnimations();
+        }
     }
 
-    private void invisiableViews(View...views) {
+    private void invisiableViews(View... views) {
         for (View view : views) {
-            view.setAlpha(0);
+            if (view != null)
+                view.setAlpha(0);
         }
     }
 
@@ -687,9 +690,9 @@ public class LockScreenManager {
         finalSet.playTogether(digitalSet, dateSet, wsSet);
         finalSet.setDuration(700);
         finalSet.setStartDelay(20);
-//        finalSet.setInterpolator(new OvershootInterpolator());
+        // finalSet.setInterpolator(new OvershootInterpolator());
         finalSet.setInterpolator(new DecelerateInterpolator());
-//        finalSet.setInterpolator(new BounceInterpolator());
+        // finalSet.setInterpolator(new BounceInterpolator());
         finalSet.start();
     }
 }

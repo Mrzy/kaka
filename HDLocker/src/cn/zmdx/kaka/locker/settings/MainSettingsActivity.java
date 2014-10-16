@@ -13,6 +13,7 @@ import android.view.WindowManager.LayoutParams;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.guide.GuideActivity;
 import cn.zmdx.kaka.locker.service.PandoraService;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -65,10 +66,9 @@ public class MainSettingsActivity extends FragmentActivity {
     private void init() {
         // 读取SharedPreferences中需要的数据
         // 使用SharedPreferences来记录程序的使用次数
-        SharedPreferences preferences = getSharedPreferences(SHAREDPREFERENCES_NAME, MODE_PRIVATE);
 
         // 取得相应的值，如果没有该值，说明还未写入，用true作为默认值
-        isFirstIn = preferences.getBoolean("isFirstIn", true);
+        isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
 
         // 判断程序与第几次运行，如果是第一次运行则跳转到引导界面，否则跳转到主界面
         if (isFirstIn) {

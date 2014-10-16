@@ -48,6 +48,8 @@ public class PandoraConfig {
 
     public static final int DEFAULT_NO_THRME_INT = -999;
 
+    private static final String KEY_HAS_GUIDED = "keyHasGuided";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -192,5 +194,16 @@ public class PandoraConfig {
 
     public String getLastWeatherInfo() {
         return mSp.getString(KEY_LAST_WEATHER_INFO, null);
+    }
+
+    public void saveHasGuided() {
+        Editor editor = mSp.edit();
+        // 存入数据
+        editor.putBoolean(KEY_HAS_GUIDED, true);
+        // 提交修改
+        editor.commit();
+    }
+    public boolean isHasGuided() {
+        return mSp.getBoolean(KEY_HAS_GUIDED, false);
     }
 }
