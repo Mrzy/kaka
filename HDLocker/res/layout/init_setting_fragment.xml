@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/init_setting_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,12 +14,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#60000000"
+        android:background="@color/setting_black_translucent"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
+            android:layout_marginRight="@dimen/setting_title_textview_margin_left"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -31,11 +33,10 @@
                     style="@style/init_setting_big_textview"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/init_setting_title_textview_margin_bottom"
-                    android:layout_marginLeft="@dimen/init_setting_title_textview_margin_top"
+                    android:layout_marginBottom="@dimen/setting_title_textview_margin_bottom"
+                    android:layout_marginTop="@dimen/setting_title_textview_margin_top"
                     android:layout_weight="1"
                     android:gravity="left"
-                    android:paddingTop="@dimen/init_setting_title_layout_margin_top"
                     android:text="@string/init_setting_title" />
 
                 <cn.zmdx.kaka.locker.widget.TypefaceTextView
@@ -43,14 +44,16 @@
                     style="@style/init_setting_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/init_setting_title_textview_margin_top"
+                    android:layout_marginRight="@dimen/init_setting_complete_button_margin_right"
+                    android:layout_marginTop="@dimen/setting_title_textview_margin_top"
                     android:background="@drawable/setting_item_selector"
                     android:clickable="true"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="@dimen/init_setting_title_textview_margin_top"
-                    android:paddingRight="@dimen/init_setting_title_textview_margin_top"
-                    android:paddingTop="5dp"
+                    android:gravity="center"
+                    android:padding="@dimen/init_setting_complete_button_margin_right"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="@dimen/init_setting_complete_button_margin_right"
+                    android:paddingRight="@dimen/init_setting_complete_button_margin_right"
+                    android:paddingTop="@dimen/init_setting_complete_button_margin_right"
                     android:text="@string/init_setting_complete_to_set" />
             </LinearLayout>
 
@@ -62,102 +65,117 @@
                 android:src="@drawable/setting_miui_line" />
         </LinearLayout>
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/init_setting_item_margin_left"
-            android:layout_marginRight="@dimen/init_setting_item_margin_right"
-            android:layout_marginTop="@dimen/init_setting_item_margin_top"
-            android:orientation="vertical" >
-
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                style="@style/init_setting_big_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_close_systemlocker" />
-
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                style="@style/init_setting_small_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_close_systemlocker_detail" />
-
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                android:id="@+id/init_setting_close_systemlocker_to_set"
-                style="@style/init_setting_button"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/init_setting_button_height"
-                android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                android:background="@drawable/init_setting_button_selector"
-                android:gravity="center"
-                android:text="@string/init_setting_to_set" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/init_setting_MIUI_allow_floating_window_guide"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/init_setting_item_margin_left"
-            android:layout_marginRight="@dimen/init_setting_item_margin_right"
-            android:layout_marginTop="@dimen/init_setting_item_margin_top"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
             android:orientation="vertical"
-            android:visibility="gone" >
+            android:overScrollMode="always"
+            android:scrollbars="none" >
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                style="@style/init_setting_big_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_MIUI_allow_floating_window" />
-
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                style="@style/init_setting_small_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_MIUI_allow_floating_window_detail" />
-
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                android:id="@+id/init_setting_MIUI_allow_floating_window_to_set"
-                style="@style/init_setting_button"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/init_setting_button_height"
-                android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                android:background="@drawable/init_setting_button_selector"
-                android:gravity="center"
-                android:text="@string/init_setting_to_set" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/init_setting_MIUI_trust_guide"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/init_setting_item_margin_left"
-            android:layout_marginRight="@dimen/init_setting_item_margin_right"
-            android:layout_marginTop="@dimen/init_setting_item_margin_top"
-            android:orientation="vertical"
-            android:visibility="gone" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
+                    android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+                    android:layout_marginTop="@dimen/init_setting_item_margin_top"
+                    android:orientation="vertical" >
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                style="@style/init_setting_big_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_MIUI_trust" />
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/init_setting_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_close_systemlocker" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                style="@style/init_setting_small_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/init_setting_MIUI_trust_detail" />
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/init_setting_small_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_close_systemlocker_detail" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                android:id="@+id/init_setting_MIUI_trust_to_set"
-                style="@style/init_setting_button"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/init_setting_button_height"
-                android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                android:background="@drawable/init_setting_button_selector"
-                android:gravity="center"
-                android:text="@string/init_setting_to_set" />
-        </LinearLayout>
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/init_setting_close_systemlocker_to_set"
+                        style="@style/init_setting_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/init_setting_button_height"
+                        android:layout_marginTop="@dimen/init_setting_button_margin_top"
+                        android:background="@drawable/init_setting_button_selector"
+                        android:gravity="center"
+                        android:text="@string/init_setting_to_set" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/init_setting_MIUI_allow_floating_window_guide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
+                    android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+                    android:layout_marginTop="@dimen/init_setting_item_margin_top"
+                    android:orientation="vertical"
+                    android:visibility="gone" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/init_setting_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_MIUI_allow_floating_window" />
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/init_setting_small_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_MIUI_allow_floating_window_detail" />
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/init_setting_MIUI_allow_floating_window_to_set"
+                        style="@style/init_setting_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/init_setting_button_height"
+                        android:layout_marginTop="@dimen/init_setting_button_margin_top"
+                        android:background="@drawable/init_setting_button_selector"
+                        android:gravity="center"
+                        android:text="@string/init_setting_to_set" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/init_setting_MIUI_trust_guide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
+                    android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+                    android:layout_marginTop="@dimen/init_setting_item_margin_top"
+                    android:orientation="vertical"
+                    android:visibility="gone" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/init_setting_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_MIUI_trust" />
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/init_setting_small_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_MIUI_trust_detail" />
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/init_setting_MIUI_trust_to_set"
+                        style="@style/init_setting_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/init_setting_button_height"
+                        android:layout_marginTop="@dimen/init_setting_button_margin_top"
+                        android:background="@drawable/init_setting_button_selector"
+                        android:gravity="center"
+                        android:text="@string/init_setting_to_set" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
-</ScrollView>
+</LinearLayout>

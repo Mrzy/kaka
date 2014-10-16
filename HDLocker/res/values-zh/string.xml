@@ -64,10 +64,16 @@
 
     <string name="pandora_wallpaper_title">锁屏壁纸</string>
     <string name="pandora_wallpaper_custom">自定义壁纸</string>
-    <string name="pandora_wallpaper_advice">推荐壁纸</string>
+    <string name="pandora_wallpaper_advice">默认壁纸</string>
     <string name="pandora_wallpaper_show_image_title">图片</string>
 
     <string name="pandora_wallpaper_dialog_camera">拍照</string>
     <string name="pandora_wallpaper_dialog_gallery">相册</string>
-    <string name="pandora_setting_title">设置</string>
+    
+    <string name="pandora_setting_title">潘多拉锁屏</string>
+    <string name="init_setting_title_detail">初始设置详细说明</string>
+    
+    <string name="pandora_wallpaper_dialog_title">确认删除此张壁纸？</string>
+    <string name="pandora_wallpaper_dialog_cancle">取消</string>
+    <string name="pandora_wallpaper_dialog_sure">确认</string>
 </resources>

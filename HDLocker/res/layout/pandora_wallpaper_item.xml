@@ -24,13 +24,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-           android:layout_marginBottom="10dp"
+            android:layout_marginBottom="10dp"
             android:contentDescription="@string/contentDescription"
             android:scaleType="fitXY"
             android:src="@drawable/pandora_wallpaper_delete" />
     </RelativeLayout>
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/pandora_wallpaper_item_select"
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -38,6 +38,6 @@
         android:layout_alignParentTop="true"
         android:contentDescription="@string/contentDescription"
         android:src="@drawable/pandora_wallpaper_select"
-        android:visibility="invisible" />
+        android:visibility="invisible" /> -->
 
 </RelativeLayout>

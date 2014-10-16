@@ -32,7 +32,6 @@
         <attr name="stateDrawable" format="reference|color" />
         <attr name="stateMaskDrawable" format="reference|color" />
         <attr name="sliderDrawable" format="reference|color" />
-        <attr name="sliderCloseDrawable" format="reference|color" />
         <attr name="withTextInterval" format="dimension" />
     </declare-styleable>
     <declare-styleable name="DigialClocks">
