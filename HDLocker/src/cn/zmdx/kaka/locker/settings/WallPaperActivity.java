@@ -332,8 +332,7 @@ public class WallPaperActivity extends Activity {
                         CustomWallpaperManager.WALLPAPER_SDCARD_LOCATION, fileName);
                 PandoraUtils.saveBitmap(PandoraUtils.sCropThumbBitmap,
                         CustomWallpaperManager.WALLPAPER_THUMB_SDCARD_LOCATION, fileName);
-                PandoraConfig.newInstance(WallPaperActivity.this).saveCustomWallpaperFileName(
-                        fileName);
+                saveWallpaperSP(fileName);
             }
         }).start();
     }
