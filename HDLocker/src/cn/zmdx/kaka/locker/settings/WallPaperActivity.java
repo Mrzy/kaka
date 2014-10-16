@@ -493,27 +493,27 @@ public class WallPaperActivity extends Activity {
         });
         mWallpaperDel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showDelDialog();
-//                container.removeView(mWallpaperRl);
-//                mThumbNameArray.remove(key);
-//                mBorderArray.remove(key);
-//                if (fileName.equals(PandoraConfig.newInstance(WallPaperActivity.this)
-//                        .getCustomWallpaperFileName())) {
-//                    PandoraConfig.newInstance(WallPaperActivity.this).saveCustomWallpaperFileName(
-//                            "");
-//                    Theme theme = ThemeManager.getThemeById(ThemeManager.THEME_ID_BLUE);
-//                    setBackground(null, theme.getmBackgroundResId());
-//                }
-//                new Thread(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        PandoraUtils.deleteFile(CustomWallpaperManager.WALLPAPER_SDCARD_LOCATION,
-//                                fileName);
-//                        PandoraUtils.deleteFile(
-//                                CustomWallpaperManager.WALLPAPER_THUMB_SDCARD_LOCATION, fileName);
-//                    }
-//                }).start();
+//                showDelDialog();
+                container.removeView(mWallpaperRl);
+                mThumbNameArray.remove(key);
+                mBorderArray.remove(key);
+                if (fileName.equals(PandoraConfig.newInstance(WallPaperActivity.this)
+                        .getCustomWallpaperFileName())) {
+                    PandoraConfig.newInstance(WallPaperActivity.this).saveCustomWallpaperFileName(
+                            "");
+                    Theme theme = ThemeManager.getThemeById(ThemeManager.THEME_ID_BLUE);
+                    setBackground(null, theme.getmBackgroundResId());
+                }
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        PandoraUtils.deleteFile(CustomWallpaperManager.WALLPAPER_SDCARD_LOCATION,
+                                fileName);
+                        PandoraUtils.deleteFile(
+                                CustomWallpaperManager.WALLPAPER_THUMB_SDCARD_LOCATION, fileName);
+                    }
+                }).start();
             }
         });
         container.addView(mWallpaperRl, Math.min(1, container.getChildCount()));
