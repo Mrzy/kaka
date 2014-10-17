@@ -29,6 +29,7 @@ import android.widget.ViewFlipper;
 import cn.zmdx.kaka.locker.animation.AnimationFactory;
 import cn.zmdx.kaka.locker.animation.AnimationFactory.FlipDirection;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
+import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.GifBox;
@@ -38,6 +39,7 @@ import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -500,7 +502,11 @@ public class LockScreenManager {
                 Intent intent = new Intent();
                 intent.setAction(FakeActivity.ACTION_PANDORA_SHARE);
                 intent.setPackage(mContext.getPackageName());
-                // intent.putExtra("platform", 1);
+
+                intent.putExtra("platform", PandoraShareManager.Sina);
+                String imageUrl = mPandoraBox.getData().getmImageUrl();
+                String path = DiskImageHelper.getFileByUrl(imageUrl).getAbsolutePath();
+                intent.putExtra("imagePath", path);
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
                 unLock(false);
             }
