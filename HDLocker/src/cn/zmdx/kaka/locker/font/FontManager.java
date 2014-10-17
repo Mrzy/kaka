@@ -6,7 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Typeface;
 
 public class FontManager {
-    public static Typeface sTypeface = null;
+    private static Typeface sTypeface = null;
 
     public static Typeface getChineseTypeface(Context context) {
         AssetManager mgr = context.getResources().getAssets();

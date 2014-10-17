@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -22,11 +23,11 @@ public class InitSettingActivity extends Activity implements OnClickListener {
 
     private String mMIUIVersion;
 
-    private TypefaceTextView mCloseSystemLockBtn;
+    private Button mCloseSystemLockBtn;
 
-    private TypefaceTextView mFolatfingWindowBtn;
+    private Button mFolatfingWindowBtn;
 
-    private TypefaceTextView mTrustBtn;
+    private Button mTrustBtn;
 
     private TypefaceTextView mCompleteBtn;
 
@@ -55,11 +56,11 @@ public class InitSettingActivity extends Activity implements OnClickListener {
                     View.VISIBLE);
             findViewById(R.id.init_setting_MIUI_trust_guide).setVisibility(View.VISIBLE);
         }
-        mCloseSystemLockBtn = (TypefaceTextView) findViewById(R.id.init_setting_close_systemlocker_to_set);
+        mCloseSystemLockBtn = (Button) findViewById(R.id.init_setting_close_systemlocker_to_set);
         mCloseSystemLockBtn.setOnClickListener(this);
-        mFolatfingWindowBtn = (TypefaceTextView) findViewById(R.id.init_setting_MIUI_allow_floating_window_to_set);
+        mFolatfingWindowBtn = (Button) findViewById(R.id.init_setting_MIUI_allow_floating_window_to_set);
         mFolatfingWindowBtn.setOnClickListener(this);
-        mTrustBtn = (TypefaceTextView) findViewById(R.id.init_setting_MIUI_trust_to_set);
+        mTrustBtn = (Button) findViewById(R.id.init_setting_MIUI_trust_to_set);
         mTrustBtn.setOnClickListener(this);
         mCompleteBtn = (TypefaceTextView) findViewById(R.id.init_setting_miui_complete);
         mCompleteBtn.setOnClickListener(this);
@@ -104,17 +105,17 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         switch (view.getId()) {
             case R.id.init_setting_close_systemlocker_to_set:
                 PandoraUtils.closeSystemLocker(InitSettingActivity.this, isMIUI);
-                mCloseSystemLockBtn.setBackgroundResource(R.drawable.setting_miui_button_complete);
+                mCloseSystemLockBtn.setBackgroundResource(R.drawable.base_button_pressed);
                 showPromptActicity(isMIUI, InitPromptActivity.PROMPT_CLOSE_SYSTEM_LOCKER);
                 break;
             case R.id.init_setting_MIUI_allow_floating_window_to_set:
                 PandoraUtils.setAllowFolatWindow(InitSettingActivity.this, mMIUIVersion);
-                mFolatfingWindowBtn.setBackgroundResource(R.drawable.setting_miui_button_complete);
+                mFolatfingWindowBtn.setBackgroundResource(R.drawable.base_button_pressed);
                 showPromptActicity(isMIUI, InitPromptActivity.PROMPT_ALLOW_FLOAT_WINDOW);
                 break;
             case R.id.init_setting_MIUI_trust_to_set:
                 PandoraUtils.setTrust(InitSettingActivity.this, mMIUIVersion);
-                mTrustBtn.setBackgroundResource(R.drawable.setting_miui_button_complete);
+                mTrustBtn.setBackgroundResource(R.drawable.base_button_pressed);
                 showPromptActicity(isMIUI, InitPromptActivity.PROMPT_TRRST);
                 break;
             case R.id.init_setting_miui_complete:

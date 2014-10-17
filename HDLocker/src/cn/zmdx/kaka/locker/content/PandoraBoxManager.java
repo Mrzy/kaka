@@ -100,7 +100,7 @@ public class PandoraBoxManager {
     public IPandoraBox getNextPandoraBox() {
         int random = new Random().nextInt(DISPLAY_TYPE.length) % DISPLAY_TYPE.length;
         int type = DISPLAY_TYPE[random];
-        type = TYPE_HTML;
+        type = TYPE_PLAIN_TEXT_JOKE;
         if (type == TYPE_PLAIN_TEXT_JOKE) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("random type:TYPE_PLAIN_TEXT_JOKE");

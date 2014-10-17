@@ -35,7 +35,7 @@
                 android:layout_height="@dimen/setting_title_line_height"
                 android:contentDescription="@string/contentDescription"
                 android:scaleType="fitXY"
-                android:src="@drawable/setting_miui_line" />
+                android:src="@color/setting_divider_line" />
         </LinearLayout>
 
         <ScrollView
@@ -84,7 +84,7 @@
                         android:layout_marginTop="@dimen/pandora_wallpaper_default_line_margin_top"
                         android:contentDescription="@string/contentDescription"
                         android:scaleType="fitXY"
-                        android:src="@drawable/setting_miui_line" />
+                        android:src="@color/setting_divider_line" />
                 </LinearLayout>
 
                 <LinearLayout

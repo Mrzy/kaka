@@ -1,4 +1,4 @@
-package pl.droidsonroids.gif;
+package cn.zmdx.kaka.locker.gif;
 
 import java.util.Locale;
 

@@ -1,4 +1,4 @@
-package pl.droidsonroids.gif;
+package cn.zmdx.kaka.locker.gif;
 
 import android.content.ContentResolver;
 import android.content.res.AssetFileDescriptor;
@@ -15,7 +15,7 @@ import java.nio.ByteBuffer;
 import java.util.Locale;
 
 /**
- * Lightweight version of {@link pl.droidsonroids.gif.GifDrawable} used to retrieve metadata of GIF only,
+ * Lightweight version of {@link cn.zmdx.kaka.locker.gif.GifDrawable} used to retrieve metadata of GIF only,
  * without having to allocate the memory for its pixels.
  */
 public class GifAnimationMetaData implements Serializable

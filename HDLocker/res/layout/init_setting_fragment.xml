@@ -41,6 +41,7 @@
 
                 <cn.zmdx.kaka.locker.widget.TypefaceTextView
                     android:id="@+id/init_setting_miui_complete"
+                    android:textColor="@color/white"
                     style="@style/init_setting_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -57,12 +58,11 @@
                     android:text="@string/init_setting_complete_to_set" />
             </LinearLayout>
 
-            <ImageView
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/init_setting_title_line_height"
                 android:contentDescription="@string/contentDescription"
-                android:scaleType="fitXY"
-                android:src="@drawable/setting_miui_line" />
+                android:background="@color/setting_divider_line" />
         </LinearLayout>
 
         <ScrollView
@@ -98,13 +98,12 @@
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_close_systemlocker_detail" />
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.widget.BaseButton
                         android:id="@+id/init_setting_close_systemlocker_to_set"
                         style="@style/init_setting_button"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/init_setting_button_height"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                        android:background="@drawable/init_setting_button_selector"
                         android:gravity="center"
                         android:text="@string/init_setting_to_set" />
                 </LinearLayout>
@@ -131,13 +130,12 @@
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_MIUI_allow_floating_window_detail" />
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.widget.BaseButton
                         android:id="@+id/init_setting_MIUI_allow_floating_window_to_set"
                         style="@style/init_setting_button"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/init_setting_button_height"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                        android:background="@drawable/init_setting_button_selector"
                         android:gravity="center"
                         android:text="@string/init_setting_to_set" />
                 </LinearLayout>
@@ -164,13 +162,12 @@
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_MIUI_trust_detail" />
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.widget.BaseButton
                         android:id="@+id/init_setting_MIUI_trust_to_set"
                         style="@style/init_setting_button"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/init_setting_button_height"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                        android:background="@drawable/init_setting_button_selector"
                         android:gravity="center"
                         android:text="@string/init_setting_to_set" />
                 </LinearLayout>

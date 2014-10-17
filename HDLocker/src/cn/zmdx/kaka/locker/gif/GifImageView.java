@@ -1,5 +1,5 @@
 
-package pl.droidsonroids.gif;
+package cn.zmdx.kaka.locker.gif;
 
 import java.io.File;
 import java.io.IOException;

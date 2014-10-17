@@ -8,7 +8,7 @@
         android:id="@+id/pandora_wallpaper_dialog_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@drawable/setting_miui_line"
+        android:divider="@color/setting_divider_line"
         android:drawSelectorOnTop="false"
         android:fadingEdge="none"
         android:focusable="true"

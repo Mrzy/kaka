@@ -28,7 +28,7 @@
             android:layout_height="@dimen/init_setting_title_line_height"
             android:contentDescription="@string/contentDescription"
             android:scaleType="fitXY"
-            android:src="@drawable/setting_miui_line" />
+            android:src="@color/setting_divider_line" />
     </LinearLayout>
 
     <GridView

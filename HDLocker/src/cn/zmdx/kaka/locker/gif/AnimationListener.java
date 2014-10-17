@@ -1,4 +1,4 @@
-package pl.droidsonroids.gif;
+package cn.zmdx.kaka.locker.gif;
 
 /**
  * Interface which can be used to run some code when particular animation event occurs.

@@ -25,8 +25,6 @@ public class MainSettingsActivity extends FragmentActivity {
 
     private static final int GO_GUIDE = 1001;
 
-    private static final String SHAREDPREFERENCES_NAME = "first_pref";
-
     private MyHandler mHandler = new MyHandler(this);
 
     private static class MyHandler extends Handler {

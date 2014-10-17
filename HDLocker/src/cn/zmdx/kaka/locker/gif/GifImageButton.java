@@ -1,4 +1,4 @@
-package pl.droidsonroids.gif;
+package cn.zmdx.kaka.locker.gif;
 
 import android.annotation.TargetApi;
 import android.content.Context;

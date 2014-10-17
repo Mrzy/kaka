@@ -37,7 +37,6 @@ public class HtmlBox implements IPandoraBox {
 
     @Override
     public View getContainer() {
-
         return mWebView;
     }
 

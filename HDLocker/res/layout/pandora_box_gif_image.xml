@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:padding="25dp" >
 
-    <pl.droidsonroids.gif.GifImageView
+    <cn.zmdx.kaka.locker.gif.GifImageView
         android:id="@+id/gif_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
