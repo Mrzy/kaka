@@ -38,6 +38,11 @@
     <string name="gusture_redraw">重绘</string>
     <string name="gusture_close_prompt">确认已保存的图案</string>
     <string name="gusture_verify_fail">验证失败，请重试!</string>
+    
+    <!-- guide -->
+    <string name="guide_button_text">前往初始设置</string>
+    <string name="guide_title_text">潘多拉锁屏</string>
+    <string name="guide_explore_title_text">带你探索未知的世界</string>
 
     <!-- init setting -->
     <string name="init_setting_title">初始设置</string>

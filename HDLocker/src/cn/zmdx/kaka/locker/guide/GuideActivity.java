@@ -1,8 +1,10 @@
 
 package cn.zmdx.kaka.locker.guide;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import cn.zmdx.kaka.locker.R;
 
 public class GuideActivity extends BaseGuideActivity {
 
@@ -10,15 +12,13 @@ public class GuideActivity extends BaseGuideActivity {
 
     @Override
     protected View getContentView() {
-        //TODO
-        btn = new Button(this);
-        btn.setText("前往初始设置");
-        return btn;
+        View view = LayoutInflater.from(this).inflate(R.layout.pandora_guide, null);
+        btn = (Button) view.findViewById(R.id.go_setting);
+        return view;
     }
 
     @Override
     protected Button getNextButton() {
-        //TODO
         return btn;
     }
 
