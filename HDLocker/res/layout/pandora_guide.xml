@@ -37,21 +37,18 @@
             android:layout_below="@id/appName"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="@string/guide_explore_title_text"
+            android:text="@string/setting_about_text"
             android:textColor="#ffffff"
             android:textSize="14dp" />
 
-        <Button
+        <cn.zmdx.kaka.locker.widget.BaseButton
             android:id="@+id/go_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/explore_text"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="68dp"
-            android:background="@color/white"
-            android:text="@string/guide_button_text"
-            android:textColor="@color/guide_button_text_color"
-            android:textSize="@dimen/guide_explore_text_size" />
+            android:text="@string/guide_button_text" />
     </RelativeLayout>
 
 </RelativeLayout>
