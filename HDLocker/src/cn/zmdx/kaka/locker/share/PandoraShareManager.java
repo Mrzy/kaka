@@ -1,10 +1,6 @@
 
 package cn.zmdx.kaka.locker.share;
 
-import com.umeng.socialize.media.QZoneShareContent;
-import com.umeng.socialize.media.RenrenShareContent;
-import com.umeng.socialize.media.SinaShareContent;
-
 public class PandoraShareManager {
     public static final int Sina = 1;
 
@@ -14,10 +10,9 @@ public class PandoraShareManager {
 
     public static final int Weixin = 4;
 
-    public static final QZoneShareContent qzone = new QZoneShareContent();
+    public static final String ShareContent = "潘多拉锁屏----下拉有料";
 
-    public static final RenrenShareContent renren = new RenrenShareContent();
+    public static final String TargetUrl = "www.baidu.com";
 
-    public static final SinaShareContent sina = new SinaShareContent();
-
+    public static final String Title = "潘多拉锁屏";
 }

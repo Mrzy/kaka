@@ -503,7 +503,7 @@ public class LockScreenManager {
                 intent.setAction(FakeActivity.ACTION_PANDORA_SHARE);
                 intent.setPackage(mContext.getPackageName());
 
-                intent.putExtra("platform", PandoraShareManager.Sina);
+                intent.putExtra("platform", PandoraShareManager.Renren);
                 String imageUrl = mPandoraBox.getData().getmImageUrl();
                 String path = DiskImageHelper.getFileByUrl(imageUrl).getAbsolutePath();
                 intent.putExtra("imagePath", path);

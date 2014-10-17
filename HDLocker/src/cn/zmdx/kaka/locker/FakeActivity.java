@@ -11,8 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import cn.zmdx.kaka.locker.LockScreenManager.ILockScreenListener;
 import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -23,6 +21,9 @@ import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
+import com.umeng.socialize.media.QZoneShareContent;
+import com.umeng.socialize.media.RenrenShareContent;
+import com.umeng.socialize.media.SinaShareContent;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
 import com.umeng.socialize.sso.RenrenSsoHandler;
@@ -42,13 +43,6 @@ public class FakeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= 19) {
-            Window window = getWindow();
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         super.onCreate(savedInstanceState);
 
         initConfig();
@@ -122,12 +116,12 @@ public class FakeActivity extends Activity {
     }
 
     private void sinaShare(String imagePath) {
-
-        PandoraShareManager.sina.setShareContent("潘多拉锁屏----下拉有料");
-        PandoraShareManager.sina.setTargetUrl("www.baidu.com");
-        PandoraShareManager.sina.setTitle("潘多拉锁屏");
-        PandoraShareManager.sina.setShareImage(new UMImage(this, imagePath));
-        mSinaShare.setShareMedia(PandoraShareManager.sina);
+        SinaShareContent sina = new SinaShareContent();
+        sina.setShareContent(PandoraShareManager.ShareContent);
+        sina.setTargetUrl(PandoraShareManager.TargetUrl);
+        sina.setTitle(PandoraShareManager.Title);
+        sina.setShareImage(new UMImage(this, imagePath));
+        mSinaShare.setShareMedia(sina);
         mSinaShare.setShareMedia(new UMImage(FakeActivity.this, R.drawable.ic_launcher));
         mSinaShare.getConfig().setSsoHandler(new SinaSsoHandler());
         mSinaShare.directShare(FakeActivity.this, SHARE_MEDIA.SINA, new SnsPostListener() {
@@ -143,11 +137,12 @@ public class FakeActivity extends Activity {
     }
 
     private void renrenShare(String imagePath) {
-        PandoraShareManager.renren.setShareContent("潘多拉锁屏----下拉有料");
-        PandoraShareManager.renren.setTargetUrl("www.baidu.com");
-        PandoraShareManager.renren.setTitle("潘多拉锁屏");
-        PandoraShareManager.renren.setShareImage(new UMImage(this, imagePath));
-        mRenrenShare.setShareMedia(PandoraShareManager.renren);
+        RenrenShareContent renren = new RenrenShareContent();
+        renren.setShareContent(PandoraShareManager.ShareContent);
+        renren.setTargetUrl(PandoraShareManager.TargetUrl);
+        renren.setTitle(PandoraShareManager.Title);
+        renren.setShareImage(new UMImage(this, imagePath));
+        mRenrenShare.setShareMedia(renren);
         mRenrenShare.getConfig().setSsoHandler(
                 new RenrenSsoHandler(FakeActivity.this, "272417",
                         "f56d084e27f14efda76788f31045a542", "27e373b49cad4fd6b4f78bdae9129758"));
@@ -164,16 +159,16 @@ public class FakeActivity extends Activity {
     }
 
     private void qzoneShare(String imagePath) {
-
+        QZoneShareContent qzone = new QZoneShareContent();
         // 设置分享文字
-        PandoraShareManager.qzone.setShareContent("潘多拉锁屏--下拉有料");
+        qzone.setShareContent(PandoraShareManager.ShareContent);
         // 设置点击消息的跳转URL
-        PandoraShareManager.qzone.setTargetUrl("http://www.baidu.com");
+        qzone.setTargetUrl(PandoraShareManager.TargetUrl);
         // 设置分享内容的标题
-        PandoraShareManager.qzone.setTitle("潘多拉锁屏");
+        qzone.setTitle(PandoraShareManager.Title);
         // 设置分享图片
-        PandoraShareManager.qzone.setShareImage(new UMImage(this, imagePath));
-        mQZoneShare.setShareMedia(PandoraShareManager.qzone);
+        qzone.setShareImage(new UMImage(this, imagePath));
+        mQZoneShare.setShareMedia(qzone);
         mQZoneShare.getConfig().setSsoHandler(
                 new QZoneSsoHandler(FakeActivity.this, "1103193086", "XOgkKrK9tZOcawOF"));
         mQZoneShare.directShare(FakeActivity.this, SHARE_MEDIA.QZONE, new SnsPostListener() {
