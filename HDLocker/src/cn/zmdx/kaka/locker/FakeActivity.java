@@ -11,6 +11,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import cn.zmdx.kaka.locker.LockScreenManager.ILockScreenListener;
 import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -33,21 +35,18 @@ public class FakeActivity extends Activity {
 
     public static final String ACTION_PANDORA_SHARE = "actionPandoraShare";
 
-    private UMSocialService mSinaShare;
-
-    private UMSocialService mRenrenShare;
-
-    private UMSocialService mQZoneShare;
-
-    private UMSocialService mWeixinShare;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initConfig();
+        if (Build.VERSION.SDK_INT >= 19) {
+            Window window = getWindow();
+            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
         LockScreenManager.getInstance().setOnLockScreenListener(new ILockScreenListener() {
-
             @Override
             public void onLock() {
 
@@ -107,24 +106,17 @@ public class FakeActivity extends Activity {
         return;
     }
 
-    private void initConfig() {
-
-        mSinaShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        mRenrenShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        mQZoneShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        mWeixinShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-    }
-
     private void sinaShare(String imagePath) {
+        UMSocialService sinaShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
         SinaShareContent sina = new SinaShareContent();
         sina.setShareContent(PandoraShareManager.ShareContent);
         sina.setTargetUrl(PandoraShareManager.TargetUrl);
         sina.setTitle(PandoraShareManager.Title);
         sina.setShareImage(new UMImage(this, imagePath));
-        mSinaShare.setShareMedia(sina);
-        mSinaShare.setShareMedia(new UMImage(FakeActivity.this, R.drawable.ic_launcher));
-        mSinaShare.getConfig().setSsoHandler(new SinaSsoHandler());
-        mSinaShare.directShare(FakeActivity.this, SHARE_MEDIA.SINA, new SnsPostListener() {
+        sinaShare.setShareMedia(sina);
+        sinaShare.setShareMedia(new UMImage(FakeActivity.this, R.drawable.ic_launcher));
+        sinaShare.getConfig().setSsoHandler(new SinaSsoHandler());
+        sinaShare.directShare(FakeActivity.this, SHARE_MEDIA.SINA, new SnsPostListener() {
             @Override
             public void onStart() {
             }
@@ -137,16 +129,17 @@ public class FakeActivity extends Activity {
     }
 
     private void renrenShare(String imagePath) {
+        UMSocialService renrenShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
         RenrenShareContent renren = new RenrenShareContent();
         renren.setShareContent(PandoraShareManager.ShareContent);
         renren.setTargetUrl(PandoraShareManager.TargetUrl);
         renren.setTitle(PandoraShareManager.Title);
         renren.setShareImage(new UMImage(this, imagePath));
-        mRenrenShare.setShareMedia(renren);
-        mRenrenShare.getConfig().setSsoHandler(
+        renrenShare.setShareMedia(renren);
+        renrenShare.getConfig().setSsoHandler(
                 new RenrenSsoHandler(FakeActivity.this, "272417",
                         "f56d084e27f14efda76788f31045a542", "27e373b49cad4fd6b4f78bdae9129758"));
-        mRenrenShare.directShare(FakeActivity.this, SHARE_MEDIA.RENREN, new SnsPostListener() {
+        renrenShare.directShare(FakeActivity.this, SHARE_MEDIA.RENREN, new SnsPostListener() {
             @Override
             public void onStart() {
             }
@@ -159,6 +152,7 @@ public class FakeActivity extends Activity {
     }
 
     private void qzoneShare(String imagePath) {
+        UMSocialService qzoneShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
         QZoneShareContent qzone = new QZoneShareContent();
         // 设置分享文字
         qzone.setShareContent(PandoraShareManager.ShareContent);
@@ -168,10 +162,10 @@ public class FakeActivity extends Activity {
         qzone.setTitle(PandoraShareManager.Title);
         // 设置分享图片
         qzone.setShareImage(new UMImage(this, imagePath));
-        mQZoneShare.setShareMedia(qzone);
-        mQZoneShare.getConfig().setSsoHandler(
+        qzoneShare.setShareMedia(qzone);
+        qzoneShare.getConfig().setSsoHandler(
                 new QZoneSsoHandler(FakeActivity.this, "1103193086", "XOgkKrK9tZOcawOF"));
-        mQZoneShare.directShare(FakeActivity.this, SHARE_MEDIA.QZONE, new SnsPostListener() {
+        qzoneShare.directShare(FakeActivity.this, SHARE_MEDIA.QZONE, new SnsPostListener() {
             @Override
             public void onStart() {
             }
