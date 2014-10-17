@@ -88,7 +88,7 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="10dp"
                     android:textColor="@color/white"
-                    android:textSize="20dp"
+                    android:textSize="19dp"
                     android:visibility="invisible" />
 
                 <cn.zmdx.kaka.locker.widget.TypefaceTextView
@@ -105,7 +105,7 @@
                     android:id="@+id/digitalClock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-10dp"
+                    android:layout_marginTop="-13dp"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"
                     android:textSize="75sp"

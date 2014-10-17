@@ -14,6 +14,7 @@ import cn.zmdx.kaka.locker.content.ServerDataManager.ServerData;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.GifBox;
+import cn.zmdx.kaka.locker.content.box.HtmlBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.content.box.PlainTextBox;
 import cn.zmdx.kaka.locker.content.box.SingleImageBox;
@@ -41,9 +42,11 @@ public class PandoraBoxManager {
 
     private static final int TYPE_GIF = 6;
 
+    private static final int TYPE_HTML = 7;
+
     private final int[] DISPLAY_TYPE = {
             TYPE_PLAIN_TEXT_JOKE, TYPE_MIX_NEWS, TYPE_MIX_JOKE, TYPE_MIX_BAIDU, TYPE_MIX_NEWS,
-            TYPE_GIF
+            TYPE_GIF, TYPE_HTML
     };
 
     private IPandoraBox mPreDisplayBox;
@@ -97,6 +100,7 @@ public class PandoraBoxManager {
     public IPandoraBox getNextPandoraBox() {
         int random = new Random().nextInt(DISPLAY_TYPE.length) % DISPLAY_TYPE.length;
         int type = DISPLAY_TYPE[random];
+        type = TYPE_HTML;
         if (type == TYPE_PLAIN_TEXT_JOKE) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("random type:TYPE_PLAIN_TEXT_JOKE");
@@ -172,9 +176,34 @@ public class PandoraBoxManager {
                 }
                 return box;
             }
+        } else if (type == TYPE_HTML) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("random type: TYPE_HTML");
+            }
+            releasePreResource(mPreDisplayBox);
+            IPandoraBox box = getHtmlBox();
+            if (box == null) {
+                return getDefaultData();
+            } else {
+                mPreDisplayBox = box;
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("随机到HTML一则");
+                }
+                return box;
+            }
         }
 
         return getDefaultData();
+    }
+
+    private IPandoraBox getHtmlBox() {
+        final PandoraData pd = new PandoraData();
+//        pd.setmContentUrl("http://m.toutiao.com");
+//        pd.setmContentUrl("http://info.3g.qq.com/g/s?sid=AaJe3Hr7LpIjQLuGrgdSzPB8&aid=template&tid=ent_h&iarea=84&i_f=170");
+        pd.setmContentUrl("http://3g.163.com/touch/photo");
+//        pd.setmContentUrl("http://www.baidu.com");
+        IPandoraBox box = new HtmlBox(pd);
+        return box;
     }
 
     private IPandoraBox getGifBox() {

@@ -54,7 +54,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private boolean mIsCurrentlyPressed = false;
 
-    private static final int TIME_COLLAPSE_PANEL_DELAY = 500;
+    private static final int TIME_COLLAPSE_PANEL_DELAY = 1500;
 
     private static final int TIME_COLLAPSE_PANEL_DURATION = 1000;
 
@@ -96,6 +96,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
         mSettingForeView = (SlidingUpPanelLayout) mRootView.findViewById(R.id.setting_fore_view);
         mSettingIcon = (ImageView) mRootView.findViewById(R.id.setting_icon);
+        mSettingIcon.setVisibility(View.GONE);
         mSettingBackground = mRootView.findViewById(R.id.setting_background);
 
         mSettingIcon.setOnClickListener(this);
@@ -147,15 +148,16 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     protected void setSettingBackground(Theme theme, Drawable drawable) {
         if (null == drawable) {
             if (theme.isCustomWallpaper()) {
-                mSettingBackground.setBackground(theme.getmCustomBitmap());
+                mSettingBackground.setBackgroundDrawable(theme.getmCustomBitmap());
             } else {
                 mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
             }
-            mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
-                    theme.getmForegroundResId()));
+            mSettingForeView.setForegroundResource(R.drawable.splash_bg);
+//            mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
+//                    theme.getmForegroundResId()));
             mSettingIcon.setBackgroundResource(theme.getmSettingsIconResId());
         } else {
-            mSettingBackground.setBackground(drawable);
+            mSettingBackground.setBackgroundDrawable(drawable);
             mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
                     R.drawable.setting_background_blue_fore));
             mSettingIcon.setBackgroundResource(R.drawable.ic_setting_common);

@@ -43,6 +43,32 @@ public interface IPandoraBox {
 
         private String mTableName;
 
+        private String mContentUrl;
+
+        public String getmDataType() {
+            return mDataType;
+        }
+
+        public void setmDataType(String mDataType) {
+            this.mDataType = mDataType;
+        }
+
+        public String getmTableName() {
+            return mTableName;
+        }
+
+        public void setmTableName(String mTableName) {
+            this.mTableName = mTableName;
+        }
+
+        public String getmContentUrl() {
+            return mContentUrl;
+        }
+
+        public void setmContentUrl(String mContentUrl) {
+            this.mContentUrl = mContentUrl;
+        }
+
         public int getmId() {
             return mId;
         }
