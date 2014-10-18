@@ -1,6 +1,7 @@
 
 package cn.zmdx.kaka.locker;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -18,26 +19,12 @@ import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.bean.SocializeEntity;
-import com.umeng.socialize.controller.UMServiceFactory;
-import com.umeng.socialize.controller.UMSocialService;
-import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
-import com.umeng.socialize.media.QZoneShareContent;
-import com.umeng.socialize.media.RenrenShareContent;
-import com.umeng.socialize.media.SinaShareContent;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.sso.QZoneSsoHandler;
-import com.umeng.socialize.sso.RenrenSsoHandler;
-import com.umeng.socialize.sso.SinaSsoHandler;
-import com.umeng.socialize.weixin.controller.UMWXHandler;
-import com.umeng.socialize.weixin.media.CircleShareContent;
-import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 public class FakeActivity extends Activity {
 
     public static final String ACTION_PANDORA_SHARE = "actionPandoraShare";
 
+    @SuppressLint("InlinedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,141 +90,6 @@ public class FakeActivity extends Activity {
         return;
     }
 
-    private void sinaShare(String imagePath) {
-        UMSocialService sinaShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        SinaShareContent sina = new SinaShareContent();
-        sina.setShareContent(PandoraShareManager.ShareContent);
-        sina.setTargetUrl(PandoraShareManager.TargetUrl);
-        sina.setTitle(PandoraShareManager.Title);
-        sina.setShareImage(new UMImage(this, imagePath));
-        sinaShare.setShareMedia(sina);
-        sinaShare.getConfig().setSsoHandler(new SinaSsoHandler());
-        sinaShare.postShare(FakeActivity.this, SHARE_MEDIA.SINA, new SnsPostListener() {
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
-                FakeActivity.this.finish();
-            }
-        });
-    }
-
-    private void renrenShare(String imagePath) {
-        UMSocialService renrenShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        RenrenShareContent renren = new RenrenShareContent();
-        renren.setShareContent(PandoraShareManager.ShareContent);
-        renren.setTargetUrl(PandoraShareManager.TargetUrl);
-        renren.setTitle(PandoraShareManager.Title);
-        renren.setShareImage(new UMImage(this, imagePath));
-        renrenShare.setShareMedia(renren);
-        renrenShare.getConfig().setSsoHandler(
-                new RenrenSsoHandler(FakeActivity.this, "272417",
-                        "f56d084e27f14efda76788f31045a542", "27e373b49cad4fd6b4f78bdae9129758"));
-        renrenShare.postShare(FakeActivity.this, SHARE_MEDIA.RENREN, new SnsPostListener() {
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
-                FakeActivity.this.finish();
-            }
-        });
-    }
-
-    private void qzoneShare(String imagePath) {
-        UMSocialService qzoneShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        QZoneShareContent qzone = new QZoneShareContent();
-        // 设置分享文字
-        qzone.setShareContent(PandoraShareManager.ShareContent);
-        // 设置点击消息的跳转URL
-        qzone.setTargetUrl(PandoraShareManager.TargetUrl);
-        // 设置分享内容的标题
-        qzone.setTitle(PandoraShareManager.Title);
-        // 设置分享图片
-        qzone.setShareImage(new UMImage(this, imagePath));
-        qzoneShare.setShareMedia(qzone);
-        qzoneShare.getConfig().setSsoHandler(
-                new QZoneSsoHandler(FakeActivity.this, "1103193086", "XOgkKrK9tZOcawOF"));
-        qzoneShare.postShare(FakeActivity.this, SHARE_MEDIA.QZONE, new SnsPostListener() {
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
-                FakeActivity.this.finish();
-            }
-        });
-    }
-
-    private void weixinCircleShare(String imagePath) {
-        UMSocialService weixinCircleShare = UMServiceFactory
-                .getUMSocialService("cn.zmdx.kaka.locker");
-        String appID = "wx5fa094ca2b1994ba";
-        String appSecret = "5f6abd06e3804079eb95ce0de0464161";
-        // 添加微信朋友圈
-        UMWXHandler wxCircleHandler = new UMWXHandler(FakeActivity.this, appID, appSecret);
-        wxCircleHandler.setToCircle(true);
-        wxCircleHandler.addToSocialSDK();
-        // 设置微信朋友圈分享内容
-        CircleShareContent circleMedia = new CircleShareContent();
-        circleMedia.setShareContent(PandoraShareManager.ShareContent);
-        // 设置朋友圈title
-        circleMedia.setTitle(PandoraShareManager.Title);
-        circleMedia.setTargetUrl(PandoraShareManager.TargetUrl);
-        circleMedia.setShareImage(new UMImage(this, imagePath));
-        weixinCircleShare.setShareMedia(circleMedia);
-        weixinCircleShare.postShare(FakeActivity.this, SHARE_MEDIA.WEIXIN_CIRCLE,
-                new SnsPostListener() {
-
-                    @Override
-                    public void onStart() {
-
-                    }
-
-                    @Override
-                    public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
-
-                    }
-                });
-    }
-
-    private void weixinShare(String imagePath) {
-        UMSocialService weixinShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        // 微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
-        String appID = "wx5fa094ca2b1994ba";
-        String appSecret = "5f6abd06e3804079eb95ce0de0464161";
-        // 添加微信平台
-        UMWXHandler wxHandler = new UMWXHandler(FakeActivity.this, appID, appSecret);
-        wxHandler.addToSocialSDK();
-
-        // 设置微信好友分享内容
-        WeiXinShareContent weixinContent = new WeiXinShareContent();
-        // 设置分享文字
-        weixinContent.setShareContent(PandoraShareManager.ShareContent);
-        // 设置title
-        weixinContent.setTitle(PandoraShareManager.Title);
-        // 设置分享内容跳转URL
-        weixinContent.setTargetUrl(PandoraShareManager.TargetUrl);
-        // 设置分享图片
-        weixinContent.setShareImage(new UMImage(this, imagePath));
-        weixinShare.setShareMedia(weixinContent);
-
-        weixinShare.postShare(FakeActivity.this, SHARE_MEDIA.WEIXIN, new SnsPostListener() {
-
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
-            }
-        });
-    }
-
     private final BroadcastReceiver mShareReceiver = new BroadcastReceiver() {
 
         @Override
@@ -252,21 +104,20 @@ public class FakeActivity extends Activity {
                     return;
                 }
                 switch (platform) {
-                // TODO 调用各对应平台分享接口
                     case PandoraShareManager.Sina:
-                        sinaShare(imagePath);
+                        PandoraShareManager.sinaShare(FakeActivity.this, imagePath);
                         break;
                     case PandoraShareManager.Renren:
-                        renrenShare(imagePath);
+                        PandoraShareManager.renrenShare(FakeActivity.this, imagePath);
                         break;
                     case PandoraShareManager.Tencent:
-                        qzoneShare(imagePath);
+                        PandoraShareManager.qzoneShare(FakeActivity.this, imagePath);
                         break;
                     case PandoraShareManager.Weixin:
-                        weixinShare(imagePath);
+                        PandoraShareManager.weixinShare(FakeActivity.this, imagePath);
                         break;
                     case PandoraShareManager.WeixinCircle:
-                        weixinCircleShare(imagePath);
+                        PandoraShareManager.weixinCircleShare(FakeActivity.this, imagePath);
                         break;
                     default:
                 }
