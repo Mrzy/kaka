@@ -18,6 +18,6 @@
     <color name="pandora_wallpaper_dialog_item_normal">#191919</color>
     
     <color name="black_translucent">#50000000</color>
-    <color name="setting_black_translucent">#b5000000</color>
+    <color name="setting_black_translucent">#c5000000</color>
     <color name="setting_divider_line">#65ffffff</color>
 </resources>

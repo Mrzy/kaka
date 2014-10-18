@@ -35,6 +35,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
+import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.FileHelper;
@@ -80,15 +81,19 @@ public class PandoraUtils {
     }
 
     public static void closeSystemLocker(Context context, boolean isMIUI) {
-        if (isMIUI) {
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
-            context.startActivity(intent);
-        } else {
-            Intent intent = new Intent("/");
-            ComponentName cm = new ComponentName("com.android.settings",
-                    "com.android.settings.ChooseLockGeneric");
-            intent.setComponent(cm);
-            context.startActivity(intent);
+        try {
+            if (isMIUI) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+                context.startActivity(intent);
+            } else {
+                Intent intent = new Intent("/");
+                ComponentName cm = new ComponentName("com.android.settings",
+                        "com.android.settings.ChooseLockGeneric");
+                intent.setComponent(cm);
+                context.startActivity(intent);
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, R.string.error, Toast.LENGTH_SHORT).show();
         }
     }
 

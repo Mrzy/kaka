@@ -43,7 +43,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/setting_about_pandora_margin"
             android:gravity="center_horizontal"
-            android:text="@string/setting_about_pandora"
+            android:text="@string/app_name"
             android:textColor="@color/setting_about_pandora_color"
             android:textSize="19sp"
             android:typeface="sans" />

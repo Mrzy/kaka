@@ -49,7 +49,7 @@
             android:layout_below="@id/appName"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="6dp"
-            android:text="下拉有料"
+            android:text="@string/setting_about_text"
             android:textColor="#ffffff"
             android:textSize="14dp" />
     </RelativeLayout>

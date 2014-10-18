@@ -1,7 +1,5 @@
 <resources>
 
-    <string name="app_name">PandoraLocker</string>
-
     <!-- Accessibility description sent when user starts drawing a lock pattern. [CHAR LIMIT=NONE] -->
     <string name="lockscreen_access_pattern_start">Pattern started</string>
     <!-- Accessibility description sent when the pattern times out and is cleared. [CHAR LIMIT=NONE] -->
@@ -91,5 +89,6 @@
     <string name="pandora_wallpaper_dialog_title">确认删除此张壁纸？</string>
     <string name="pandora_wallpaper_dialog_cancle">取消</string>
     <string name="pandora_wallpaper_dialog_sure">确认</string>
+    <string name="error">出现异常，给您带来的不便，敬请谅解，我们会尽快解决</string>
 
 </resources>

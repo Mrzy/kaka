@@ -11,11 +11,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.graphics.PixelFormat;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,7 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
@@ -115,6 +117,8 @@ public class LockScreenManager {
 
     private Context mContext;
 
+    WindowManager.LayoutParams mWinParams;
+
     private ILockScreenListener mLockListener = null;
 
     public interface ILockScreenListener {
@@ -172,35 +176,46 @@ public class LockScreenManager {
 
         mTextGuideTimes = pandoraConfig.getGuideTimesInt();
         mIsLocked = true;
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        mWinParams = new WindowManager.LayoutParams();
 
-        params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        params.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
+        mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
-                | LayoutParams.FLAG_HARDWARE_ACCELERATED;
+                | LayoutParams.FLAG_HARDWARE_ACCELERATED
+                | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        if (Build.VERSION.SDK_INT >= 19) {
+            mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS;
+            mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+        }
+        mWinParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        final Display display = mWinManager.getDefaultDisplay();
+        mWinParams.height = BaseInfoHelper.getRealHeight(display);
 
-        params.x = 0;
-        params.y = 0;
+        mWinParams.x = 0;
+        mWinParams.y = 0;
         // params.format=PixelFormat.RGBA_8888;
-        params.windowAnimations = R.style.anim_locker_window;
-        params.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
-        params.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-        params.gravity = Gravity.TOP | Gravity.START;
+        mWinParams.windowAnimations = R.style.anim_locker_window;
+        mWinParams.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
+        mWinParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        mWinParams.gravity = Gravity.TOP | Gravity.START;
 
         initLockScreenViews();
 
         refreshContent();
         setDate();
         startFakeActivity();
-        mWinManager.addView(mEntireView, params);
+        mWinManager.addView(mEntireView, mWinParams);
 
         notifyLocked();
         onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
         syncDataIfNeeded();
+    }
+
+    private void openPageOnLockScreen() {
+        mWinParams.windowAnimations = R.style.anim_slide_locker_window;
+        mWinManager.updateViewLayout(mEntireView, mWinParams);
     }
 
     private void notifyLocked() {
@@ -502,6 +517,7 @@ public class LockScreenManager {
         public void onClick(View v) {
             if (v == mShareBtn) {
                 // 发送广播通知fakeActivity处理分享事件
+                // openPageOnLockScreen();
                 Intent intent = new Intent();
                 intent.setAction(FakeActivity.ACTION_PANDORA_SHARE);
                 intent.setPackage(mContext.getPackageName());

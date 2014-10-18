@@ -7,12 +7,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -33,6 +36,30 @@ public class BaseInfoHelper {
 
     public static String getPkgName(Context context) {
         return context.getApplicationContext().getPackageName();
+    }
+
+    private static int mRealScreenHeight = -1;
+
+    @SuppressLint("NewApi")
+    public static int getRealHeight(Display display) {
+        if (mRealScreenHeight != -1) {
+            return mRealScreenHeight;
+        }
+        Point size = new Point();
+        int result = 0;
+        if (Build.VERSION.SDK_INT >= 17) {
+            display.getRealSize(size);
+            result = size.y;
+        } else {
+            try {
+                Method getRawH = Display.class.getMethod("getRawHeight");
+                result = (Integer) getRawH.invoke(display);
+            } catch (Exception e) {
+                display.getSize(size);
+                result = size.y;
+            }
+        }
+        return result;
     }
 
     public static String getWifiMac(Context context) {

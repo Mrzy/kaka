@@ -27,7 +27,7 @@ public class CustomWallpaperManager {
         try {
             File file = new File(path);
             File[] files = file.listFiles();
-            if (files.length != 0) {
+            if (files != null && files.length != 0) {
                 isHave = true;
             }
         } catch (Exception e) {
@@ -42,7 +42,7 @@ public class CustomWallpaperManager {
         try {
             File file = new File(path);
             File[] files = file.listFiles();
-            if (files.length != 0) {
+            if (files != null && files.length != 0) {
                 for (int i = 0; i < files.length; i++) {
                     if (files[i].getName().equals(name)) {
                         isHave = true;
