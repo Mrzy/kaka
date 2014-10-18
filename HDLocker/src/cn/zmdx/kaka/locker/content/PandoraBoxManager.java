@@ -100,7 +100,7 @@ public class PandoraBoxManager {
     public IPandoraBox getNextPandoraBox() {
         int random = new Random().nextInt(DISPLAY_TYPE.length) % DISPLAY_TYPE.length;
         int type = DISPLAY_TYPE[random];
-        type = TYPE_PLAIN_TEXT_JOKE;
+        type = TYPE_MIX_JOKE;
         if (type == TYPE_PLAIN_TEXT_JOKE) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("random type:TYPE_PLAIN_TEXT_JOKE");
@@ -198,10 +198,10 @@ public class PandoraBoxManager {
 
     private IPandoraBox getHtmlBox() {
         final PandoraData pd = new PandoraData();
-//        pd.setmContentUrl("http://m.toutiao.com");
-//        pd.setmContentUrl("http://info.3g.qq.com/g/s?sid=AaJe3Hr7LpIjQLuGrgdSzPB8&aid=template&tid=ent_h&iarea=84&i_f=170");
+        // pd.setmContentUrl("http://m.toutiao.com");
+        // pd.setmContentUrl("http://info.3g.qq.com/g/s?sid=AaJe3Hr7LpIjQLuGrgdSzPB8&aid=template&tid=ent_h&iarea=84&i_f=170");
         pd.setmContentUrl("http://3g.163.com/touch/photo");
-//        pd.setmContentUrl("http://www.baidu.com");
+        // pd.setmContentUrl("http://www.baidu.com");
         IPandoraBox box = new HtmlBox(pd);
         return box;
     }

@@ -185,7 +185,7 @@ public class LockScreenManager {
 
         params.x = 0;
         params.y = 0;
-//        params.format=PixelFormat.RGBA_8888;
+        // params.format=PixelFormat.RGBA_8888;
         params.windowAnimations = R.style.anim_locker_window;
         params.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
         params.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
@@ -413,14 +413,15 @@ public class LockScreenManager {
 
     private void syncDataIfNeeded() {
         PandoraBoxDispatcher pd = PandoraBoxDispatcher.getInstance();
-//        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
+        // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_JOKE);
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_NEWS);
-//        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_TEXT_DATA);
+        // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_TEXT_DATA);
         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_GIF);
-//        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG)) {
-//            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG, 4000);
-//        }
+        // if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG)) {
+        // pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG,
+        // 4000);
+        // }
         if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE)) {
             pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE, 5000);
         }
@@ -505,7 +506,7 @@ public class LockScreenManager {
                 intent.setAction(FakeActivity.ACTION_PANDORA_SHARE);
                 intent.setPackage(mContext.getPackageName());
 
-                intent.putExtra("platform", PandoraShareManager.Renren);
+                intent.putExtra("platform", PandoraShareManager.WeixinCircle);
                 String imageUrl = mPandoraBox.getData().getmImageUrl();
                 String path = DiskImageHelper.getFileByUrl(imageUrl).getAbsolutePath();
                 intent.putExtra("imagePath", path);
