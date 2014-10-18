@@ -30,6 +30,9 @@ import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
 import com.umeng.socialize.sso.RenrenSsoHandler;
 import com.umeng.socialize.sso.SinaSsoHandler;
+import com.umeng.socialize.weixin.controller.UMWXHandler;
+import com.umeng.socialize.weixin.media.CircleShareContent;
+import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 public class FakeActivity extends Activity {
 
@@ -114,9 +117,8 @@ public class FakeActivity extends Activity {
         sina.setTitle(PandoraShareManager.Title);
         sina.setShareImage(new UMImage(this, imagePath));
         sinaShare.setShareMedia(sina);
-        sinaShare.setShareMedia(new UMImage(FakeActivity.this, R.drawable.ic_launcher));
         sinaShare.getConfig().setSsoHandler(new SinaSsoHandler());
-        sinaShare.directShare(FakeActivity.this, SHARE_MEDIA.SINA, new SnsPostListener() {
+        sinaShare.postShare(FakeActivity.this, SHARE_MEDIA.SINA, new SnsPostListener() {
             @Override
             public void onStart() {
             }
@@ -139,7 +141,7 @@ public class FakeActivity extends Activity {
         renrenShare.getConfig().setSsoHandler(
                 new RenrenSsoHandler(FakeActivity.this, "272417",
                         "f56d084e27f14efda76788f31045a542", "27e373b49cad4fd6b4f78bdae9129758"));
-        renrenShare.directShare(FakeActivity.this, SHARE_MEDIA.RENREN, new SnsPostListener() {
+        renrenShare.postShare(FakeActivity.this, SHARE_MEDIA.RENREN, new SnsPostListener() {
             @Override
             public void onStart() {
             }
@@ -165,7 +167,7 @@ public class FakeActivity extends Activity {
         qzoneShare.setShareMedia(qzone);
         qzoneShare.getConfig().setSsoHandler(
                 new QZoneSsoHandler(FakeActivity.this, "1103193086", "XOgkKrK9tZOcawOF"));
-        qzoneShare.directShare(FakeActivity.this, SHARE_MEDIA.QZONE, new SnsPostListener() {
+        qzoneShare.postShare(FakeActivity.this, SHARE_MEDIA.QZONE, new SnsPostListener() {
             @Override
             public void onStart() {
             }
@@ -177,13 +179,100 @@ public class FakeActivity extends Activity {
         });
     }
 
+    private void weixinCircleShare(String imagePath) {
+        UMSocialService weixinCircleShare = UMServiceFactory
+                .getUMSocialService("cn.zmdx.kaka.locker");
+        String appID = "wx5fa094ca2b1994ba";
+        String appSecret = "5f6abd06e3804079eb95ce0de0464161";
+        // 添加微信朋友圈
+        UMWXHandler wxCircleHandler = new UMWXHandler(FakeActivity.this, appID, appSecret);
+        wxCircleHandler.setToCircle(true);
+        wxCircleHandler.addToSocialSDK();
+        // 设置微信朋友圈分享内容
+        CircleShareContent circleMedia = new CircleShareContent();
+        circleMedia.setShareContent(PandoraShareManager.ShareContent);
+        // 设置朋友圈title
+        circleMedia.setTitle(PandoraShareManager.Title);
+        circleMedia.setTargetUrl(PandoraShareManager.TargetUrl);
+        circleMedia.setShareImage(new UMImage(this, imagePath));
+        weixinCircleShare.setShareMedia(circleMedia);
+        weixinCircleShare.postShare(FakeActivity.this, SHARE_MEDIA.WEIXIN_CIRCLE,
+                new SnsPostListener() {
+
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
+
+                    }
+                });
+    }
+
+    private void weixinShare(String imagePath) {
+        UMSocialService weixinShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
+        // 微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
+        String appID = "wx5fa094ca2b1994ba";
+        String appSecret = "5f6abd06e3804079eb95ce0de0464161";
+        // 添加微信平台
+        UMWXHandler wxHandler = new UMWXHandler(FakeActivity.this, appID, appSecret);
+        wxHandler.addToSocialSDK();
+
+        // 设置微信好友分享内容
+        WeiXinShareContent weixinContent = new WeiXinShareContent();
+        // 设置分享文字
+        weixinContent.setShareContent(PandoraShareManager.ShareContent);
+        // 设置title
+        weixinContent.setTitle(PandoraShareManager.Title);
+        // 设置分享内容跳转URL
+        weixinContent.setTargetUrl(PandoraShareManager.TargetUrl);
+        // 设置分享图片
+        weixinContent.setShareImage(new UMImage(this, imagePath));
+        weixinShare.setShareMedia(weixinContent);
+
+        weixinShare.postShare(FakeActivity.this, SHARE_MEDIA.WEIXIN, new SnsPostListener() {
+
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
+            }
+        });
+    }
+
     // private void weixinShare(String imagePath) {
-    // mWeixinShare.setShareContent("潘多拉锁屏----下拉有料。www.hdlocker.com");
-    // mWeixinShare.setShareImage(new UMImage(this, imagePath));
-    // mWeixinShare.getConfig().setSsoHandler(
-    // new RenrenSsoHandler(FakeActivity.this, "272417",
-    // "f56d084e27f14efda76788f31045a542", "27e373b49cad4fd6b4f78bdae9129758"));
-    // mWeixinShare.directShare(FakeActivity.this, SHARE_MEDIA.RENREN, new
+    // // wx967daebe835fbeac是你在微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
+    // String appID = "wx5fa094ca2b1994ba";
+    // String appSecret = "5f6abd06e3804079eb95ce0de0464161";
+    // // 添加微信平台
+    // UMWXHandler wxHandler = new UMWXHandler(FakeActivity.this,
+    // "wx5fa094ca2b1994ba",
+    // "5f6abd06e3804079eb95ce0de0464161");
+    // wxHandler.addToSocialSDK();
+    // // 添加微信朋友圈
+    // UMWXHandler wxCircleHandler = new UMWXHandler(FakeActivity.this,
+    // "wx5fa094ca2b1994ba",
+    // "5f6abd06e3804079eb95ce0de0464161");
+    // wxCircleHandler.setToCircle(true);
+    // wxCircleHandler.addToSocialSDK();
+    // UMSocialService weixinShare =
+    // UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
+    // WeiXinShareContent weixin = new WeiXinShareContent();
+    // weixin.setShareContent(PandoraShareManager.ShareContent);
+    // weixin.setTargetUrl(PandoraShareManager.TargetUrl);
+    // weixin.setTitle(PandoraShareManager.Title);
+    // weixin.setShareImage(new UMImage(this, imagePath));
+    // weixinShare.setShareMedia(weixin);
+    // // //设置微信朋友圈分享内容
+    // // CircleShareContent circleMedia = new CircleShareContent();
+    // // circleMedia.setShareImage(new UMImage(this, imagePath));
+    // // circleMedia.setTargetUrl("你的URL链接");
+    // // weixinShare.setShareMedia(circleMedia);
+    // weixinShare.postShare(FakeActivity.this, SHARE_MEDIA.WEIXIN, new
     // SnsPostListener() {
     // @Override
     // public void onStart() {
@@ -222,7 +311,10 @@ public class FakeActivity extends Activity {
                         qzoneShare(imagePath);
                         break;
                     case PandoraShareManager.Weixin:
-
+                        weixinShare(imagePath);
+                        break;
+                    case PandoraShareManager.WeixinCircle:
+                        weixinCircleShare(imagePath);
                         break;
                     default:
                 }

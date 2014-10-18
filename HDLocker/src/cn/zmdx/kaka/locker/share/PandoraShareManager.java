@@ -10,6 +10,8 @@ public class PandoraShareManager {
 
     public static final int Weixin = 4;
 
+    public static final int WeixinCircle = 5;
+
     public static final String ShareContent = "潘多拉锁屏----下拉有料";
 
     public static final String TargetUrl = "www.baidu.com";
