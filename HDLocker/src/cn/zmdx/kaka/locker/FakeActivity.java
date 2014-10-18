@@ -244,48 +244,6 @@ public class FakeActivity extends Activity {
         });
     }
 
-    // private void weixinShare(String imagePath) {
-    // // wx967daebe835fbeac是你在微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
-    // String appID = "wx5fa094ca2b1994ba";
-    // String appSecret = "5f6abd06e3804079eb95ce0de0464161";
-    // // 添加微信平台
-    // UMWXHandler wxHandler = new UMWXHandler(FakeActivity.this,
-    // "wx5fa094ca2b1994ba",
-    // "5f6abd06e3804079eb95ce0de0464161");
-    // wxHandler.addToSocialSDK();
-    // // 添加微信朋友圈
-    // UMWXHandler wxCircleHandler = new UMWXHandler(FakeActivity.this,
-    // "wx5fa094ca2b1994ba",
-    // "5f6abd06e3804079eb95ce0de0464161");
-    // wxCircleHandler.setToCircle(true);
-    // wxCircleHandler.addToSocialSDK();
-    // UMSocialService weixinShare =
-    // UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-    // WeiXinShareContent weixin = new WeiXinShareContent();
-    // weixin.setShareContent(PandoraShareManager.ShareContent);
-    // weixin.setTargetUrl(PandoraShareManager.TargetUrl);
-    // weixin.setTitle(PandoraShareManager.Title);
-    // weixin.setShareImage(new UMImage(this, imagePath));
-    // weixinShare.setShareMedia(weixin);
-    // // //设置微信朋友圈分享内容
-    // // CircleShareContent circleMedia = new CircleShareContent();
-    // // circleMedia.setShareImage(new UMImage(this, imagePath));
-    // // circleMedia.setTargetUrl("你的URL链接");
-    // // weixinShare.setShareMedia(circleMedia);
-    // weixinShare.postShare(FakeActivity.this, SHARE_MEDIA.WEIXIN, new
-    // SnsPostListener() {
-    // @Override
-    // public void onStart() {
-    // }
-    //
-    // @Override
-    // public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2)
-    // {
-    // FakeActivity.this.finish();
-    // }
-    // });
-    // }
-
     private final BroadcastReceiver mShareReceiver = new BroadcastReceiver() {
 
         @Override
