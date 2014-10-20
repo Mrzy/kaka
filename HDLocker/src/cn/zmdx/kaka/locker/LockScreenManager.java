@@ -181,8 +181,7 @@ public class LockScreenManager {
         mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
-                | LayoutParams.FLAG_HARDWARE_ACCELERATED
-                | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+                | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 
         if (Build.VERSION.SDK_INT >= 19) {
             mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS;
