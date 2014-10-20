@@ -108,7 +108,8 @@ public class FakeActivity extends Activity {
                         PandoraShareManager.sinaShare(FakeActivity.this, imagePath);
                         break;
                     case PandoraShareManager.Renren:
-                        PandoraShareManager.renrenShare(FakeActivity.this, imagePath);
+                        // PandoraShareManager.renrenShare(FakeActivity.this,
+                        // imagePath);
                         break;
                     case PandoraShareManager.Tencent:
                         PandoraShareManager.qzoneShare(FakeActivity.this, imagePath);

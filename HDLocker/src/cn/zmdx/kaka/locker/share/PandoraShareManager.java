@@ -13,7 +13,6 @@ import com.umeng.socialize.media.RenrenShareContent;
 import com.umeng.socialize.media.SinaShareContent;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
-import com.umeng.socialize.sso.RenrenSsoHandler;
 import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
@@ -46,29 +45,6 @@ public class PandoraShareManager {
         sinaShare.setShareMedia(sina);
         sinaShare.getConfig().setSsoHandler(new SinaSsoHandler());
         sinaShare.postShare(activity, SHARE_MEDIA.SINA, new SnsPostListener() {
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
-                activity.finish();
-            }
-        });
-    }
-
-    public static void renrenShare(final Activity activity, String imagePath) {
-        UMSocialService renrenShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        RenrenShareContent renren = new RenrenShareContent();
-        renren.setShareContent(PandoraShareManager.ShareContent);
-        renren.setTargetUrl(PandoraShareManager.TargetUrl);
-        renren.setTitle(PandoraShareManager.Title);
-        renren.setShareImage(new UMImage(activity, imagePath));
-        renrenShare.setShareMedia(renren);
-        renrenShare.getConfig().setSsoHandler(
-                new RenrenSsoHandler(activity, "272417",
-                        "f56d084e27f14efda76788f31045a542", "27e373b49cad4fd6b4f78bdae9129758"));
-        renrenShare.postShare(activity, SHARE_MEDIA.RENREN, new SnsPostListener() {
             @Override
             public void onStart() {
             }
@@ -123,19 +99,18 @@ public class PandoraShareManager {
         circleMedia.setTargetUrl(PandoraShareManager.TargetUrl);
         circleMedia.setShareImage(new UMImage(activity, imagePath));
         weixinCircleShare.setShareMedia(circleMedia);
-        weixinCircleShare.postShare(activity, SHARE_MEDIA.WEIXIN_CIRCLE,
-                new SnsPostListener() {
+        weixinCircleShare.postShare(activity, SHARE_MEDIA.WEIXIN_CIRCLE, new SnsPostListener() {
 
-                    @Override
-                    public void onStart() {
+            @Override
+            public void onStart() {
 
-                    }
+            }
 
-                    @Override
-                    public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
+            @Override
+            public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
 
-                    }
-                });
+            }
+        });
     }
 
     public static void weixinShare(final Activity activity, String imagePath) {
