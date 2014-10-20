@@ -105,7 +105,7 @@ public class LockScreenManager {
 
     private TextView mLockPrompt;
 
-    private ImageView mLockArrow, mShareBtn;
+    private ImageView mLockArrow;
 
     private AnimatorSet mAnimatorSet;
 
@@ -212,8 +212,8 @@ public class LockScreenManager {
         syncDataIfNeeded();
     }
 
-    private void openPageOnLockScreen() {
-        mWinParams.windowAnimations = R.style.anim_slide_locker_window;
+    public void setWindowAnimations(int anim) {
+        mWinParams.windowAnimations = anim;
         mWinManager.updateViewLayout(mEntireView, mWinParams);
     }
 
@@ -345,8 +345,6 @@ public class LockScreenManager {
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
         // mDate.setAlpha(0);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
-        mShareBtn = (ImageView) mEntireView.findViewById(R.id.shareBtn);
-        mShareBtn.setOnClickListener(mClickListener);
         mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
         // mWeatherSummary.setAlpha(0);
         mDigitalClockView = mEntireView.findViewById(R.id.digitalClock);
@@ -407,7 +405,7 @@ public class LockScreenManager {
         unLock(true);
     }
 
-    private void unLock(boolean isCloseFakeActivity) {
+    public void unLock(boolean isCloseFakeActivity) {
         if (!mIsLocked)
             return;
         if (isCloseFakeActivity)
@@ -509,27 +507,6 @@ public class LockScreenManager {
         }
         return false;
     }
-
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            if (v == mShareBtn) {
-                // 发送广播通知fakeActivity处理分享事件
-                // openPageOnLockScreen();
-                Intent intent = new Intent();
-                intent.setAction(FakeActivity.ACTION_PANDORA_SHARE);
-                intent.setPackage(mContext.getPackageName());
-
-                intent.putExtra("platform", PandoraShareManager.WeixinCircle);
-                String imageUrl = mPandoraBox.getData().getmImageUrl();
-                String path = DiskImageHelper.getFileByUrl(imageUrl).getAbsolutePath();
-                intent.putExtra("imagePath", path);
-                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-                unLock(false);
-            }
-        }
-    };
 
     private void startGifAnimationIfNeeded() {
         if (mPandoraBox.getCategory() == IPandoraBox.CATEGORY_GIF) {

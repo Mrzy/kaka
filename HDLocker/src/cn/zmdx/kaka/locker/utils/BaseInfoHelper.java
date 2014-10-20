@@ -62,6 +62,29 @@ public class BaseInfoHelper {
         return result;
     }
 
+    @SuppressLint("NewApi")
+    public static int getRealHeight(Context context) {
+        if (mRealScreenHeight != -1) {
+            return mRealScreenHeight;
+        }
+        final Display display = getDisplay(context);
+        Point size = new Point();
+        int result = 0;
+        if (Build.VERSION.SDK_INT >= 17) {
+            display.getRealSize(size);
+            result = size.y;
+        } else {
+            try {
+                Method getRawH = Display.class.getMethod("getRawHeight");
+                result = (Integer) getRawH.invoke(display);
+            } catch (Exception e) {
+                display.getSize(size);
+                result = size.y;
+            }
+        }
+        return result;
+    }
+
     public static String getWifiMac(Context context) {
         try {
             String ret = null;
@@ -215,6 +238,19 @@ public class BaseInfoHelper {
         } catch (Exception e) {
             if (LOGE_ENABLED)
                 Log.e(TAG, "Failed to getMetrics!", e);
+        }
+        return null;
+    }
+
+    @SuppressLint("NewApi") 
+    private static Display getDisplay(Context context) {
+        try {
+            Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE))
+                    .getDefaultDisplay();
+            return display;
+        } catch (Exception e) {
+            if (LOGE_ENABLED)
+                Log.e(TAG, "Failed to getDisplay!", e);
         }
         return null;
     }

@@ -8,7 +8,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class HtmlBox implements IPandoraBox {
+public class HtmlBox extends BaseBox {
 
     private Context mContext;
 

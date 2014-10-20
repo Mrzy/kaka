@@ -486,7 +486,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
         if (mIsForeBackgroundCutOff)
             return;
         int width = Integer.parseInt(BaseInfoHelper.getWidth(getContext()));
-        int height = Integer.parseInt(BaseInfoHelper.getHeight(getContext()));
+        int height = BaseInfoHelper.getRealHeight(getContext());
+//        int height = Integer.parseInt(BaseInfoHelper.getHeight(getContext()));
         Bitmap srcBmp = ImageUtils.drawable2Bitmap(mForegroundDrawable);
         srcBmp = ImageUtils.scaleTo(srcBmp, width, height, true);
         Bitmap topBmp = null;

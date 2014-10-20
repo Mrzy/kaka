@@ -4,13 +4,12 @@ package cn.zmdx.kaka.locker.content.box;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 
-public class SingleImageBox implements IPandoraBox {
+public class SingleImageBox extends BaseBox {
 
     private Context mContext;
 
@@ -26,6 +25,8 @@ public class SingleImageBox implements IPandoraBox {
 
     private boolean mIsHide = false;
 
+    private ViewGroup mShareLayout;
+
     public SingleImageBox(Context context, PandoraData data) {
         mData = data;
         mContext = context;
@@ -33,6 +34,9 @@ public class SingleImageBox implements IPandoraBox {
                 R.layout.pandora_box_single_image, null);
         mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
         mDescView = (TextView) mEntireView.findViewById(R.id.desc);
+        mShareLayout = (ViewGroup) mEntireView.findViewById(R.id.shareLayout);
+        enableShare();
+        mEntireView.addView(createShareView());
     }
 
     @Override
@@ -64,18 +68,18 @@ public class SingleImageBox implements IPandoraBox {
             return false;
         }
         mSingleImgView.setImageBitmap(mData.getmImage());
-        mSingleImgView.setOnClickListener(new OnClickListener() {
- 
-            @Override
-            public void onClick(View v) {
-                if (mIsHide) {
-                    mDescView.setVisibility(View.VISIBLE);
-                } else {
-                    mDescView.setVisibility(View.INVISIBLE);
-                }
-                mIsHide = !mIsHide;
-            }
-        });
+//        mSingleImgView.setOnClickListener(new OnClickListener() {
+// 
+//            @Override
+//            public void onClick(View v) {
+//                if (mIsHide) {
+//                    mDescView.setVisibility(View.VISIBLE);
+//                } else {
+//                    mDescView.setVisibility(View.INVISIBLE);
+//                }
+//                mIsHide = !mIsHide;
+//            }
+//        });
 
         mDescView.setText(mData.getmContent());
         return true;

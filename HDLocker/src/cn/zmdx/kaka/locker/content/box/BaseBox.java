@@ -2,13 +2,20 @@
 package cn.zmdx.kaka.locker.content.box;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import cn.zmdx.kaka.locker.FakeActivity;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.DiskImageHelper;
+import cn.zmdx.kaka.locker.share.PandoraShareManager;
 
-public abstract class BaseBox {
+public abstract class BaseBox implements IPandoraBox{
 
     private boolean isShare = true;
 
@@ -18,7 +25,7 @@ public abstract class BaseBox {
 
     private View mPlatformLayout;
 
-    private Button mPQzone;
+    private ImageView mPQzone;
 
     private Context mContext;
 
@@ -45,9 +52,8 @@ public abstract class BaseBox {
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.pandora_box_share_layout, null);
         mShareBtn = (Button) mRootView.findViewById(R.id.shareBtn);
         mPlatformLayout = mRootView.findViewById(R.id.platforms_layout);
-        mPQzone = (Button) mRootView.findViewById(R.id.platforms_qzone);
+        mPQzone = (ImageView) mRootView.findViewById(R.id.platforms_qzone);
         mShareBtn.setOnClickListener(mShareBtnListener);
-        
         return mRootView;
     }
 
@@ -62,8 +68,22 @@ public abstract class BaseBox {
                     mPlatformLayout.setVisibility(View.VISIBLE);
                 }
             } else if (v == mPQzone) {
-                
+                share(PandoraShareManager.Tencent);
             }
         }
     };
+
+    private void share(int platform) {
+        Intent intent = new Intent();
+        intent.setAction(FakeActivity.ACTION_PANDORA_SHARE);
+        intent.setPackage(mContext.getPackageName());
+
+        intent.putExtra("platform", platform);
+        String imageUrl = getData().getmImageUrl();
+        String path = DiskImageHelper.getFileByUrl(imageUrl).getAbsolutePath();
+        intent.putExtra("imagePath", path);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+        LockScreenManager.getInstance().setWindowAnimations(android.R.anim.slide_in_left);
+        LockScreenManager.getInstance().unLock(false);
+    }
 }
