@@ -54,13 +54,14 @@ public abstract class BaseBox implements IPandoraBox{
         mPlatformLayout = mRootView.findViewById(R.id.platforms_layout);
         mPQzone = (ImageView) mRootView.findViewById(R.id.platforms_qzone);
         mShareBtn.setOnClickListener(mShareBtnListener);
+        mPQzone.setOnClickListener(mShareBtnListener);
         return mRootView;
     }
 
     private View.OnClickListener mShareBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (v == mPlatformLayout) {
+            if (v == mShareBtn) {
                 int visibility = mPlatformLayout.getVisibility();
                 if (visibility == View.VISIBLE) {
                     mPlatformLayout.setVisibility(View.INVISIBLE);

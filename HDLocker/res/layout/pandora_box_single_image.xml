@@ -2,43 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="25dp" >
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp" >
 
-    <RelativeLayout
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/desc"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:padding="4dp" >
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
 
-        <ImageView
-            android:id="@+id/single_img"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#000000"
-            android:scaleType="fitCenter" />
+    <ImageView
+        android:layout_marginTop="10dp"
+        android:id="@+id/single_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/desc"
+        android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="#77000000"
-            android:gravity="center_horizontal"
-            android:paddingBottom="4dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:paddingTop="4dp"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
-
-        <LinearLayout
-            android:id="@+id/shareLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:orientation="vertical" >
-        </LinearLayout>
-    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/shareLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical" >
+    </LinearLayout>
 
 </RelativeLayout>

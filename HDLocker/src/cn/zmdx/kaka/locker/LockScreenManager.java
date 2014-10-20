@@ -14,7 +14,6 @@ import android.content.res.Resources;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
@@ -31,7 +30,6 @@ import android.widget.ViewFlipper;
 import cn.zmdx.kaka.locker.animation.AnimationFactory;
 import cn.zmdx.kaka.locker.animation.AnimationFactory.FlipDirection;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
-import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.GifBox;
@@ -41,7 +39,6 @@ import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -410,17 +407,21 @@ public class LockScreenManager {
             return;
         if (isCloseFakeActivity)
             notifyUnLocked();
-        mObjectAnimator.cancel();
-        mObjectAnimator = null;
-        mAnimatorSet.end();
-        mAnimatorSet.cancel();
-        mAnimatorSet = null;
+        cancelAnimatorIfNeeded();
 
         mWinManager.removeViewImmediate(mEntireView);
         mSliderView.recycle();
         mEntireView = null;
         mIsShowGesture = false;
         mIsLocked = false;
+    }
+
+    private void cancelAnimatorIfNeeded() {
+        mObjectAnimator.cancel();
+        mObjectAnimator = null;
+        mAnimatorSet.end();
+        mAnimatorSet.cancel();
+        mAnimatorSet = null;
     }
 
     private void syncDataIfNeeded() {

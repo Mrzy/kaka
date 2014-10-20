@@ -242,7 +242,7 @@ public class BaseInfoHelper {
         return null;
     }
 
-    @SuppressLint("NewApi") 
+    @SuppressLint("NewApi")
     private static Display getDisplay(Context context) {
         try {
             Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE))
@@ -267,16 +267,23 @@ public class BaseInfoHelper {
         return "";
     }
 
-    public static String getWidth(Context context) {
+    private static int sScreenHeight = 0;
+
+    public static int getWidth(Context context) {
+        if (sScreenHeight != 0) {
+            return sScreenHeight;
+        }
         try {
             DisplayMetrics metrics = getMetrics(context);
-            if (metrics != null)
-                return String.valueOf(metrics.widthPixels);
+            if (metrics != null) {
+                sScreenHeight = metrics.widthPixels;
+            }
+            return sScreenHeight;
         } catch (Exception e) {
             if (LOGE_ENABLED)
                 Log.e(TAG, "Failed to get width info!", e);
         }
-        return "";
+        return sScreenHeight;
     }
 
     @Deprecated

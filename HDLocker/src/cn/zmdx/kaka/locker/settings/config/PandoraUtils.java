@@ -285,7 +285,7 @@ public class PandoraUtils {
         opts.inJustDecodeBounds = true;// 设置为true时，BitmapFactory只会解析要加载的图片的边框的信息，但是不会为该图片分配内存
         BitmapFactory.decodeStream(inputStream, new Rect(), opts);
         int screenHeight = PandoraUtils.getRealScreenHeight(activity);
-        int screenWidth = Integer.parseInt(BaseInfoHelper.getWidth(activity));
+        int screenWidth = BaseInfoHelper.getWidth(activity);
         BitmapFactory.Options realOpts = new Options();
         if (screenWidth == DEFAULT_WIDTH && opts.outWidth > DEFAULT_BITMAP_WIDTH) {
             realOpts.inSampleSize = 3;

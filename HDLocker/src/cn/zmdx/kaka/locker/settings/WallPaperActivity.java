@@ -239,10 +239,10 @@ public class WallPaperActivity extends Activity {
         String path = CustomWallpaperManager.getCustomWallpaperFilePath(fileName);
         Bitmap bitmap = PandoraUtils.getBitmap(path);
         if (null == bitmap) {
-            mRootView.setBackground(getResources().getDrawable(R.drawable.setting_background_blue));
+            mRootView.setBackgroundDrawable(getResources().getDrawable(R.drawable.setting_background_blue));
         } else {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-            mRootView.setBackground(drawable);
+            mRootView.setBackgroundDrawable(drawable);
         }
     }
 
@@ -311,10 +311,10 @@ public class WallPaperActivity extends Activity {
 
     private void setBackground(Bitmap bitmap, int resId) {
         if (null == bitmap) {
-            mRootView.setBackground(getResources().getDrawable(resId));
+            mRootView.setBackgroundDrawable(getResources().getDrawable(resId));
         } else {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-            mRootView.setBackground(drawable);
+            mRootView.setBackgroundDrawable(drawable);
         }
     }
 
@@ -338,7 +338,7 @@ public class WallPaperActivity extends Activity {
         intent.setData(uri);
         int mAspectRatioX = 0;
         int mAspectRatioY = 0;
-        int width = Integer.parseInt(BaseInfoHelper.getWidth(this));
+        int width = BaseInfoHelper.getWidth(this);
         int height = Integer.parseInt(BaseInfoHelper.getHeight(this));
         // int width = (int)
         // getResources().getDimension(R.dimen.pandora_wallpaper_width);
