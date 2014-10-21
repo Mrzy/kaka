@@ -141,8 +141,10 @@ public class WallPaperActivity extends Activity {
         } else {
             setSettingBackground(themeId);
         }
-        initAdviceWallpaper();
+        
         initCustomWallpaper();
+        initAdviceWallpaper();
+        
     }
 
     private void initCustomWallpaper() {
@@ -256,7 +258,7 @@ public class WallPaperActivity extends Activity {
         // mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_select).setVisibility(View.GONE);
         mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_delete).setVisibility(View.GONE);
         mWallpaperIv.setImageDrawable(getResources().getDrawable(R.drawable.pandora_wallpaper_add));
-        mWallpaperIv.setBackgroundResource(R.drawable.setting_wallpaper_border_default);
+        mWallpaperIv.setBackgroundResource(R.drawable.setting_wallpaper_add_button_selector);
         mWallpaperIv.setOnClickListener(new OnClickListener() {
 
             @Override
