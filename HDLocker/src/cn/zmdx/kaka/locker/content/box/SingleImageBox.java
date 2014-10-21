@@ -108,7 +108,7 @@ public class SingleImageBox extends BaseBox {
         // }
         // });
 
-        mDescView.setText(mData.getmContent());
+        mDescView.setText(mData.getmTitle());
         return true;
     }
 }

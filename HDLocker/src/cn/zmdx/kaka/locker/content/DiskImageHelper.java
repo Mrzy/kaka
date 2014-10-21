@@ -90,4 +90,11 @@ public class DiskImageHelper {
     public static String getHash(String url) {
         return HDBHashUtils.getStringMD5(url);
     }
+
+    public static void clear() {
+        File[] files = mStorageDir.listFiles();
+        for (File f : files) {
+            f.delete();
+        }
+    }
 }

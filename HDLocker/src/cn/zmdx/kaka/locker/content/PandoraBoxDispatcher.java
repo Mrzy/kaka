@@ -188,6 +188,7 @@ public class PandoraBoxDispatcher extends Handler {
                     return;
                 }
                 ServerImageDataModel.getInstance().deleteAll();
+                DiskImageHelper.clear();
                 ServerImageData.saveToDatabase(oriDataList);
                 mConfig.saveLastPullOriginalDataTime(BaseInfoHelper.getCurrentDate());
                 break;

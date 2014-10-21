@@ -78,9 +78,10 @@
         <activity
             android:name=".FakeActivity"
             android:exported="false"
+            android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".settings.IndividualizationActivity"
             android:exported="false"
