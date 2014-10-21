@@ -43,11 +43,8 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.umeng.analytics.MobclickAgent;
 
+@SuppressWarnings("deprecation")
 public class WallPaperActivity extends Activity {
-
-    public static final int REQUEST_CODE_CROP_IMAGE = 0;
-
-    private static final int REQUEST_CODE_GALLERY = 1;
 
     private PandoraConfig mPandoraConfig;
 
@@ -141,10 +138,10 @@ public class WallPaperActivity extends Activity {
         } else {
             setSettingBackground(themeId);
         }
-        
+
         initCustomWallpaper();
         initAdviceWallpaper();
-        
+
     }
 
     private void initCustomWallpaper() {
@@ -241,7 +238,8 @@ public class WallPaperActivity extends Activity {
         String path = CustomWallpaperManager.getCustomWallpaperFilePath(fileName);
         Bitmap bitmap = PandoraUtils.getBitmap(path);
         if (null == bitmap) {
-            mRootView.setBackgroundDrawable(getResources().getDrawable(R.drawable.setting_background_blue));
+            mRootView.setBackgroundDrawable(getResources().getDrawable(
+                    R.drawable.setting_background_blue));
         } else {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
             mRootView.setBackgroundDrawable(drawable);
@@ -285,7 +283,7 @@ public class WallPaperActivity extends Activity {
     }
 
     private void showSelectDialog() {
-        PandoraUtils.gotoGalleryActivity(WallPaperActivity.this, REQUEST_CODE_GALLERY);
+        PandoraUtils.gotoGalleryActivity(WallPaperActivity.this, PandoraUtils.REQUEST_CODE_GALLERY);
     }
 
     @Override
@@ -295,13 +293,13 @@ public class WallPaperActivity extends Activity {
             return;
         }
         switch (requestCode) {
-            case REQUEST_CODE_CROP_IMAGE:
+            case PandoraUtils.REQUEST_CODE_CROP_IMAGE:
                 String fileName = PandoraUtils.getRandomString();
                 addCustomWallpaperItem(null, PandoraUtils.sCropThumbBitmap, fileName);
                 setBackground(PandoraUtils.sCropBitmap, -1);
                 saveWallpaperFile(fileName);
                 break;
-            case REQUEST_CODE_GALLERY: {
+            case PandoraUtils.REQUEST_CODE_GALLERY: {
                 gotoCropActivity(data.getData());
                 break;
             }
@@ -357,8 +355,9 @@ public class WallPaperActivity extends Activity {
         Bundle bundle = new Bundle();
         bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_X, mAspectRatioX);
         bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_Y, mAspectRatioY);
+        bundle.putBoolean(CropImageActivity.KEY_BUNDLE_IS_WALLPAPER, true);
         intent.putExtras(bundle);
-        startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
+        startActivityForResult(intent, PandoraUtils.REQUEST_CODE_CROP_IMAGE);
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                 R.anim.umeng_fb_slide_out_from_left);
     }
@@ -494,7 +493,7 @@ public class WallPaperActivity extends Activity {
         });
         mWallpaperDel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                showDelDialog();
+                // showDelDialog();
                 container.removeView(mWallpaperRl);
                 mThumbNameArray.remove(key);
                 mBorderArray.remove(key);
@@ -536,10 +535,10 @@ public class WallPaperActivity extends Activity {
     }
 
     protected void showDelDialog() {
-        Dialog dialog = new Dialog(this,android.R.style.Theme_Dialog);
+        Dialog dialog = new Dialog(this, android.R.style.Theme_Dialog);
         dialog.setContentView(R.layout.wallpaper_del_dialog);
         dialog.show();
-        
+
     }
 
     private void initTransition() {

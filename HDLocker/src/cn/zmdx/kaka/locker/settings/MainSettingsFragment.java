@@ -39,6 +39,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private LinearLayout mChangeBackground;
 
+    private LinearLayout mSettingIndividualization;
+
     private LinearLayout mFeedback;
 
     private LinearLayout mCheckNewVersion;
@@ -108,6 +110,10 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mSettingBackground = mRootView.findViewById(R.id.setting_background);
 
         mSettingIcon.setOnClickListener(this);
+
+        mSettingIndividualization = (LinearLayout) mRootView
+                .findViewById(R.id.setting_individualization);
+        mSettingIndividualization.setOnClickListener(this);
 
         mPandoraLockerSButton = (SwitchButton) mRootView
                 .findViewById(R.id.setting_pandoralocker_switch_button);
@@ -289,6 +295,9 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             case R.id.setting_init:
                 gotoInit();
                 break;
+            case R.id.setting_individualization:
+                gotoIndividualization();
+                break;
             default:
                 break;
         }
@@ -298,6 +307,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     public void onDestroyView() {
         PandoraUtils.sCropBitmap = null;
         PandoraUtils.sCropThumbBitmap = null;
+        PandoraUtils.sLockDefaultThumbBitmap = null;
         super.onDestroyView();
     }
 }

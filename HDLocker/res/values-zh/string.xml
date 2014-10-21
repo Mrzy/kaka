@@ -78,4 +78,8 @@
     <string name="pandora_wallpaper_dialog_sure">确认</string>
     <string name="error">出现异常，给您带来的不便，敬请谅解，我们会尽快解决</string>
     <string name="pandora_guide_start">开始体验</string>
+    
+    <string name="setting_individualization">个性化设置</string>
+    <string name="individualization_notice_switch_button">显示通知栏</string>
+    <string name="individualization_locker_default_image">设置锁屏页面默认图片</string>
 </resources>

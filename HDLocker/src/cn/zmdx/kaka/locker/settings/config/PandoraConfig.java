@@ -50,6 +50,10 @@ public class PandoraConfig {
 
     private static final String KEY_HAS_GUIDED = "keyHasGuided";
 
+    private static final String KEY_NEED_NOTICE = "keyNeedNotice";
+
+    private static final String KEY_LOCK_DEFAULT_ = "keyLockDefault";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -203,7 +207,28 @@ public class PandoraConfig {
         // 提交修改
         editor.commit();
     }
+
     public boolean isHasGuided() {
         return mSp.getBoolean(KEY_HAS_GUIDED, false);
+    }
+
+    public void saveNeedNotice(boolean isNeed) {
+        Editor editor = mSp.edit();
+        editor.putBoolean(KEY_NEED_NOTICE, isNeed);
+        editor.commit();
+    }
+
+    public boolean isNeedNotice() {
+        return mSp.getBoolean(KEY_NEED_NOTICE, true);
+    }
+
+    public void saveLockDefaultFileName(String fileName) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_LOCK_DEFAULT_, fileName);
+        editor.commit();
+    }
+
+    public String getLockDefaultFileName() {
+        return mSp.getString(KEY_LOCK_DEFAULT_, "");
     }
 }

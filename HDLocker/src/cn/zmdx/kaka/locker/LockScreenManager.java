@@ -668,12 +668,21 @@ public class LockScreenManager {
         }
     }
 
+    private float mBoxRate = -1;
+
     public float getBoxWidthHeightRate() {
-       float rate = mSliderView.getContentViewWidthHeightRate();
-       if (rate == 0) {
-           rate = 1.0f;
-       }
-       return rate;
+        if (mBoxRate != -1) {
+            return mBoxRate;
+        }
+        if (mSliderView == null) {
+            return 1.0f;
+        }
+        float rate = mSliderView.getContentViewWidthHeightRate();
+        if (rate == 0) {
+            rate = 1.0f;
+        }
+        mBoxRate = rate;
+        return mBoxRate;
     }
 
     private void processAnimations() {

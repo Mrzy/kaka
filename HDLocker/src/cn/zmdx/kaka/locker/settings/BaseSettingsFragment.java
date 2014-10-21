@@ -110,6 +110,14 @@ public abstract class BaseSettingsFragment extends Fragment {
                 R.anim.umeng_fb_slide_out_from_left);
     }
 
+    protected void gotoIndividualization() {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), IndividualizationActivity.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+    }
+
     protected int getUnLockType() {
         return mPandoraConfig.getUnLockType();
     }
