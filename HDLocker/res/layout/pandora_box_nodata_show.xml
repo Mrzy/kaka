@@ -13,7 +13,7 @@
         android:layout_marginTop="@dimen/pandora_box_nodata_show_image_width"
         android:background="@drawable/ic_launcher" />
 
-    <TextView
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/pandora_box_nodata_show_textview"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_us_textview_height"
@@ -37,7 +37,7 @@
         android:textSize="18sp" />
     -->
 
-    <TextView
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/pandora_box_nodata_show_tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

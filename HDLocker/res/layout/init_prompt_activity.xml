@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:visibility="gone" >
 
-        <TextView
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -29,7 +29,7 @@
         android:orientation="vertical"
         android:visibility="gone" >
 
-        <TextView
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -38,7 +38,7 @@
             android:textColor="@color/white"
             android:textSize="18sp" />
 
-        <TextView
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -48,7 +48,7 @@
             android:textColor="@color/white"
             android:textSize="18sp" />
 
-        <TextView
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -72,7 +72,7 @@
             android:contentDescription="@string/contentDescription"
             android:src="@drawable/init_setting_prompt_float_window" />
 
-        <TextView
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -96,7 +96,7 @@
             android:contentDescription="@string/contentDescription"
             android:src="@drawable/init_setting_prompt_trust" />
 
-        <TextView
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -106,7 +106,7 @@
             android:textColor="@color/white"
             android:textSize="18sp" />
 
-        <TextView
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
