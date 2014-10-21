@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -491,5 +492,16 @@ public class BaseInfoHelper {
             }
             return null;
         }
+    }
+
+    /**
+     * 
+     * @return year + month + day
+     */
+    public static String getCurrentDate() {
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        return "" + year + "" + month + "" + day;
     }
 }

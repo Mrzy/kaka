@@ -8,9 +8,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class ServerImageDataModel {
     private MySqlitDatabase mMySqlitDatabase;
@@ -46,14 +49,19 @@ public class ServerImageDataModel {
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_TWO, bd.getCloudId());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_THREE, bd.getTitle());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_FOUR, bd.getUrl());
-                sqLiteStatement.bindString(MySqlitDatabase.INDEX_FIVE, bd.getImageUrl());
+                sqLiteStatement.bindString(MySqlitDatabase.INDEX_FIVE, bd.getImageDesc());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_SIX, bd.getDataType());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_SEVEN, bd.getTop());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_EIGHT, bd.getSetp());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_NINE, bd.getCollectTime());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_TEN, bd.getReleaseTime());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_ELEVEN, bd.getCollectWebsite());
-                sqLiteStatement.bindLong(MySqlitDatabase.INDEX_TWELVE, bd.isImageDownloaded());
+                if (bd.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML)) {// 如果类型为html，没有图片，默认情况下，是否已下载图片字段为true
+                    sqLiteStatement.bindLong(MySqlitDatabase.INDEX_TWELVE,
+                            MySqlitDatabase.DOWNLOAD_TRUE);
+                } else {
+                    sqLiteStatement.bindLong(MySqlitDatabase.INDEX_TWELVE, bd.isImageDownloaded());
+                }
                 sqLiteStatement.executeInsert();
             }
             mysql.setTransactionSuccessful();
@@ -157,13 +165,19 @@ public class ServerImageDataModel {
         return count != 0;
     }
 
+    /**
+     * 如果没有数据，返回null
+     * 
+     * @param datatypeNews
+     * @return
+     */
     public ServerImageData queryByDataType(String datatypeNews) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         ServerImageData data = null;
 
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
-                TableStructure.SERVER_IMAGE_IMAGE_URL, TableStructure.SERVER_IMAGE_TITLE
+                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE
         }, TableStructure.SERVER_IMAGE_DATA_TYPE + "=? and "
                 + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
                 datatypeNews, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
@@ -174,7 +188,7 @@ public class ServerImageDataModel {
                 data = new ServerImageData();
                 data.setId(cursor.getInt(0));
                 data.setUrl(cursor.getString(1));
-                data.setImageUrl(cursor.getString(2));
+                data.setImageDesc(cursor.getString(2));
                 data.setTitle(cursor.getString(3));
                 data.setDataType(datatypeNews);
             }
@@ -192,7 +206,7 @@ public class ServerImageDataModel {
 
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
-                TableStructure.SERVER_IMAGE_IMAGE_URL, TableStructure.SERVER_IMAGE_TITLE
+                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE
         }, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE + "=? and "
                 + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
                 websiteQiubai, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
@@ -203,7 +217,7 @@ public class ServerImageDataModel {
                 data = new ServerImageData();
                 data.setId(cursor.getInt(0));
                 data.setUrl(cursor.getString(1));
-                data.setImageUrl(cursor.getString(2));
+                data.setImageDesc(cursor.getString(2));
                 data.setTitle(cursor.getString(3));
             }
         } catch (Exception e) {
@@ -219,7 +233,7 @@ public class ServerImageDataModel {
         List<ServerImageData> result = new ArrayList<ServerImageData>();
 
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
-                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_IMAGE_URL,
+                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_DESC,
                 TableStructure.SERVER_IMAGE_TITLE, TableStructure.SERVER_IMAGE_URL,
 
         }, TableStructure.SERVER_IMAGE_DATA_TYPE + "=? and "
@@ -231,7 +245,7 @@ public class ServerImageDataModel {
             while (cursor.moveToNext()) {
                 ServerImageData data = new ServerImageData();
                 data.setId(cursor.getInt(0));
-                data.setImageUrl(cursor.getString(1));
+                data.setImageDesc(cursor.getString(1));
                 data.setTitle(cursor.getString(2));
                 data.setUrl(cursor.getString(3));
                 result.add(data);
@@ -242,5 +256,71 @@ public class ServerImageDataModel {
             cursor.close();
         }
         return result;
+    }
+
+    public void deleteAll() {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
+        int result = sqliteDatabase.delete(TableStructure.TABLE_NAME_SERVER_IMAGE, null, null);
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("删除serverImageData表中的数据条数为：" + result);
+        }
+    }
+
+    public ServerImageData queryOneByRandom() {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        ServerImageData data = null;
+
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
+                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
+                TableStructure.SERVER_IMAGE_DATA_TYPE
+        }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
+            String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
+        }, null, null, null, "1");
+
+        try {
+            while (cursor.moveToNext()) {
+                data = new ServerImageData();
+                data.setId(cursor.getInt(0));
+                data.setUrl(cursor.getString(1));
+                data.setImageDesc(cursor.getString(2));
+                data.setTitle(cursor.getString(3));
+                data.setDataType(cursor.getString(4));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return data;
+    }
+
+    public ServerImageData queryOneWithImage() {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        ServerImageData data = null;
+
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
+                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
+                TableStructure.SERVER_IMAGE_DATA_TYPE
+        }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and " + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=?", new String[] {
+            String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerDataMapping.S_DATATYPE_HTML
+        }, null, null, null, "1");
+
+        try {
+            while (cursor.moveToNext()) {
+                data = new ServerImageData();
+                data.setId(cursor.getInt(0));
+                data.setUrl(cursor.getString(1));
+                data.setImageDesc(cursor.getString(2));
+                data.setTitle(cursor.getString(3));
+                data.setDataType(cursor.getString(4));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return data;
     }
 }

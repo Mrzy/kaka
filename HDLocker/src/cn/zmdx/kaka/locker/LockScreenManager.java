@@ -166,7 +166,7 @@ public class LockScreenManager {
 
         checkNewVersion();
 
-        String currentDate = getCurrentDate();
+        String currentDate = BaseInfoHelper.getCurrentDate();
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
         UmengCustomEventManager.statisticalUseTheme(pandoraConfig, currentDate);
         UmengCustomEventManager.statisticalEntryLockTimes(pandoraConfig, currentDate);
@@ -297,7 +297,7 @@ public class LockScreenManager {
     private void checkNewVersion() {
         PandoraConfig config = PandoraConfig.newInstance(mContext);
         String lastCheckTime = config.getFlagCheckNewVersion();
-        String today = getCurrentDate();
+        String today = BaseInfoHelper.getCurrentDate();
         if (lastCheckTime.equals(today)) {
             return;
         }
@@ -326,7 +326,6 @@ public class LockScreenManager {
         ViewGroup.LayoutParams lp = mBoxView.getLayoutParams();
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        contentView.requestLayout();
         mBoxView.addView(contentView, 0, lp);
     }
 
@@ -379,13 +378,6 @@ public class LockScreenManager {
         int week = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         String weekString = PandoraUtils.getWeekString(mContext, week);
         mDate.setText("" + month + "月" + "" + day + "日 " + weekString);
-    }
-
-    private String getCurrentDate() {
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        return "" + year + "" + month + "" + day;
     }
 
     private void setDrawable() {

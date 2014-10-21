@@ -27,28 +27,30 @@ public class PandoraConfig {
 
     public static final String DATABASE_NAME = "PandoraLocker.db";
 
-    private static final String UNLOCK_TYPE = "unlocktype";
+    private static final String UNLOCK_TYPE = "a";
 
-    private static final String LOCKPATTERN = "lockPattern";
+    private static final String LOCKPATTERN = "b";
 
-    private static final String THEME_ID = "theme_id";
+    private static final String THEME_ID = "c";
 
-    private static final String GUIDE_TIMES = "guideTimes";
+    private static final String GUIDE_TIMES = "d";
 
     // 最后一次拉取百度图片的时间
-    private static final String KEY_LAST_PULL_BAIDU_TIME = "lastPullBaiduTime";
+    private static final String KEY_LAST_PULL_BAIDU_TIME = "e";
 
-    private static final String KEY_NEW_VERSION_CHECKED = "key_new_version_checked";
+    private static final String KEY_NEW_VERSION_CHECKED = "f";
 
-    private static final String KEY_CUSTOM_WALLPAPER = "keyCustomWallpaper";
+    private static final String KEY_CUSTOM_WALLPAPER = "g";
 
-    private static final String KEY_LAST_CHECK_WEATHER = "keyLastCheckWeather";
+    private static final String KEY_LAST_CHECK_WEATHER = "h";
 
-    private static final String KEY_LAST_WEATHER_INFO = "keyLastWeatherInfo";
+    private static final String KEY_LAST_WEATHER_INFO = "i";
 
     public static final int DEFAULT_NO_THRME_INT = -999;
 
-    private static final String KEY_HAS_GUIDED = "keyHasGuided";
+    private static final String KEY_HAS_GUIDED = "j";
+
+    private static final String KEY_LAST_TIME_PULL_ORIGINAL_DATA = "k";
 
     private static final String KEY_NEED_NOTICE = "keyNeedNotice";
 
@@ -230,5 +232,15 @@ public class PandoraConfig {
 
     public String getLockDefaultFileName() {
         return mSp.getString(KEY_LOCK_DEFAULT_, "");
+    }
+
+    public String getLastTimePullOriginalData() {
+        return mSp.getString(KEY_LAST_TIME_PULL_ORIGINAL_DATA, "");
+    }
+
+    public void saveLastPullOriginalDataTime(String date) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_LAST_TIME_PULL_ORIGINAL_DATA, date);
+        editor.commit();
     }
 }

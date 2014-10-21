@@ -17,6 +17,7 @@ import cn.zmdx.kaka.locker.database.ServerDataModel;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -47,6 +48,10 @@ public class PandoraBoxDispatcher extends Handler {
 
     public static final int MSG_LOAD_SERVER_GIF = 11;
 
+    public static final int MSG_LOAD_ORIGINAL_DATA = 12;
+
+    public static final int MSG_ORIGINAL_DATA_ARRIVED = 13;
+
     private static PandoraBoxDispatcher INSTANCE;
 
     private PandoraConfig mConfig;
@@ -66,6 +71,25 @@ public class PandoraBoxDispatcher extends Handler {
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {
+            case MSG_LOAD_ORIGINAL_DATA:
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("收到拉取原始数据消息");
+                }
+                if (!HDBNetworkState.isNetworkAvailable()) {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("无网络，中断拉取原始数据");
+                    }
+                    return;
+                }
+                if (!checkOriginalDataPullable()) {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("今日已经拉取过原始数据，中断拉取");
+                    }
+                    return;
+                }
+                processPullOriginalData();
+
+                break;
             case MSG_BAIDU_DATA_ARRIVED:
                 @SuppressWarnings("unchecked")
                 final List<BaiduData> bdList = (List<BaiduData>) msg.obj;
@@ -154,9 +178,28 @@ public class PandoraBoxDispatcher extends Handler {
                 }
                 ServerImageData.saveToDatabase(sidList);
                 break;
+            case MSG_ORIGINAL_DATA_ARRIVED:
+                @SuppressWarnings("unchecked")
+                final List<ServerImageData> oriDataList = (List<ServerImageData>) msg.obj;
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("原始数据已经下载完成，开始入库，条数:" + oriDataList.size());
+                }
+                if (oriDataList.size() <= 0) {
+                    return;
+                }
+                ServerImageDataModel.getInstance().deleteAll();
+                ServerImageData.saveToDatabase(oriDataList);
+                mConfig.saveLastPullOriginalDataTime(BaseInfoHelper.getCurrentDate());
+                break;
         }
 
         super.handleMessage(msg);
+    }
+
+    private boolean checkOriginalDataPullable() {
+        String date = mConfig.getLastTimePullOriginalData();
+        String currentDate = BaseInfoHelper.getCurrentDate();
+        return !date.equals(currentDate);
     }
 
     /**
@@ -235,6 +278,10 @@ public class PandoraBoxDispatcher extends Handler {
                 }
             }
         }
+    }
+
+    private void processPullOriginalData() {
+        ServerImageDataManager.getInstance().pullTodayData();
     }
 
     private void processPullBaiduData() {

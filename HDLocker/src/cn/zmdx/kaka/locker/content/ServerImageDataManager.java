@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.os.Message;
+import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.database.MySqlitDatabase;
@@ -37,8 +38,7 @@ public class ServerImageDataManager {
 
     /**
      * @param limit
-     * @param dataType S_DATATYPE_JOKE， S_DATATYPE_FILM， S_DATATYPE_NEWS，
-     *            S_DATATYPE_GAME， S_DATATYPE_ALL
+     * @param dataType
      * @param webSite
      */
     public void pullServerImageData(int limit, String dataType, String webSite) {
@@ -68,7 +68,6 @@ public class ServerImageDataManager {
                     }
                 });
         RequestManager.getRequestQueue().add(request);
-
     }
 
     public void downloadImage(final ServerImageData bd) {
@@ -85,7 +84,7 @@ public class ServerImageDataManager {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // invalidate url
-                DiskImageHelper.remove(bd.mImageUrl);
+                DiskImageHelper.remove(bd.mUrl);
             }
         });
         RequestManager.getRequestQueue().add(request);
@@ -103,13 +102,48 @@ public class ServerImageDataManager {
     }
 
     /**
+     * 拉取今日数据，不加参数，数据数量和类型有服务端决定
+     */
+    public void pullTodayData() {
+        JsonObjectRequest request = null;
+        request = new JsonObjectRequest(getUrl(-1, null, null), null,
+                new Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        final List<ServerImageData> sdList = ServerImageData.parseJson(response);
+                        if (sdList.size() <= 0) {
+                            return;
+                        }
+                        Message msg = Message.obtain();
+                        msg.what = PandoraBoxDispatcher.MSG_ORIGINAL_DATA_ARRIVED;
+                        msg.obj = sdList;
+                        PandoraBoxDispatcher.getInstance().sendMessage(msg);
+                    }
+
+                }, new ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (BuildConfig.DEBUG) {
+                            error.printStackTrace();
+                        }
+                    }
+                });
+        RequestManager.getRequestQueue().add(request);
+    }
+
+    /**
      * 
      */
     public String getUrl(int limit, String dataType, String webSite) {
         StringBuilder sb = new StringBuilder(getBaseUrl());
-        sb.append("limit=" + limit);
-        sb.append("&dataType=" + dataType);
-        sb.append("&webSite=" + webSite);
+        if (limit != -1)
+            sb.append("limit=" + limit);
+        if (dataType != null)
+            sb.append("&dataType=" + dataType);
+        if (webSite != null)
+            sb.append("&webSite=" + webSite);
         return sb.toString();
     }
 
@@ -131,7 +165,7 @@ public class ServerImageDataManager {
         /**
          * 图片的自己服务器地址
          */
-        private String mImageUrl;
+        private String mImageDesc;
 
         public int mIsImageDownloaded;
 
@@ -143,12 +177,12 @@ public class ServerImageDataManager {
             this.mUrl = mUrl;
         }
 
-        public String getImageUrl() {
-            return mImageUrl;
+        public String getImageDesc() {
+            return mImageDesc;
         }
 
-        public void setImageUrl(String mImageUrl) {
-            this.mImageUrl = mImageUrl;
+        public void setImageDesc(String mImageDesc) {
+            this.mImageDesc = mImageDesc;
         }
 
         public int isImageDownloaded() {
@@ -171,8 +205,13 @@ public class ServerImageDataManager {
                     String url = jsonObject.optString("url");
                     String imgUrl = jsonObject.optString("imgUrl");
                     serverImageData.setUrl(url);
-                    serverImageData.setImageUrl(imgUrl);
-                    serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_FALSE);
+                    serverImageData.setImageDesc(imgUrl);
+                    String dataType = serverImageData.getDataType();
+                    if (!TextUtils.isEmpty(dataType) && dataType.equals(ServerDataMapping.S_DATATYPE_HTML)) {
+                        serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_TRUE);
+                    } else {
+                        serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_FALSE);
+                    }
                     sdList.add(serverImageData);
                 }
             }
@@ -184,5 +223,4 @@ public class ServerImageDataManager {
         }
 
     }
-
 }
