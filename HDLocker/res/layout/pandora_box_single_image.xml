@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
+    android:orientation="vertical"
     android:paddingTop="10dp" >
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
@@ -13,21 +13,31 @@
         android:textColor="#ffffff"
         android:textSize="18sp" />
 
-    <ImageView
-        android:layout_marginTop="10dp"
-        android:id="@+id/single_img"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/desc"
-        android:scaleType="centerCrop" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp" >
 
-    <LinearLayout
-        android:id="@+id/shareLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:orientation="vertical" >
-    </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp" >
 
-</RelativeLayout>
+            <ImageView
+                android:id="@+id/single_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:id="@+id/shareLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -136,7 +136,7 @@
                 android:layout_marginBottom="30dp"
                 android:gravity="center_horizontal"
                 android:paddingLeft="5dp"
-                android:textColor="#C9C9C9"
+                android:textColor="#FAFAFA"
                 android:textSize="13sp" />
         </RelativeLayout>
     </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>

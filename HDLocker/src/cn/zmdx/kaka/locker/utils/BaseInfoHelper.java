@@ -68,21 +68,7 @@ public class BaseInfoHelper {
             return mRealScreenHeight;
         }
         final Display display = getDisplay(context);
-        Point size = new Point();
-        int result = 0;
-        if (Build.VERSION.SDK_INT >= 17) {
-            display.getRealSize(size);
-            result = size.y;
-        } else {
-            try {
-                Method getRawH = Display.class.getMethod("getRawHeight");
-                result = (Integer) getRawH.invoke(display);
-            } catch (Exception e) {
-                display.getSize(size);
-                result = size.y;
-            }
-        }
-        return result;
+        return getRealHeight(display);
     }
 
     public static String getWifiMac(Context context) {
