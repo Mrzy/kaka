@@ -76,4 +76,6 @@
     <string name="pandora_wallpaper_dialog_title">确认删除此张壁纸？</string>
     <string name="pandora_wallpaper_dialog_cancle">取消</string>
     <string name="pandora_wallpaper_dialog_sure">确认</string>
+    <string name="error">出现异常，给您带来的不便，敬请谅解，我们会尽快解决</string>
+    <string name="pandora_guide_start">开始体验</string>
 </resources>

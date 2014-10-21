@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.InitSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -17,15 +19,21 @@ import com.umeng.analytics.MobclickAgent;
  */
 public abstract class BaseGuideActivity extends Activity {
 
+    private boolean isMeizu = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        isMeizu = PandoraUtils.isMeizu(this);
         View contentView = getContentView();
         Button nextButton = getNextButton();
         if (contentView == null || nextButton == null) {
             throw new IllegalStateException(
                     "You must implement abstract method getContentView() and getNextButton()");
+        }
+        if (isMeizu) {
+            nextButton.setText(getResources().getString(R.string.pandora_guide_start));
         }
         setContentView(contentView);
 
@@ -34,7 +42,12 @@ public abstract class BaseGuideActivity extends Activity {
             @Override
             public void onClick(View v) {
                 setGuided();
-                goHome();
+                if (!isMeizu) {
+                    goHome();
+                }else{
+                    finish();
+                    onFinish();
+                }
                 PandoraConfig.newInstance(BaseGuideActivity.this).savePandolaLockerState(true);
             }
         });

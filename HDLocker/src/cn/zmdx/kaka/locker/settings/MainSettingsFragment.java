@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
@@ -62,6 +61,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     public static final int GUSTURE_REQUEST_CODE_FAIL = 38;
 
+    private boolean isMeizu = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +78,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     ViewGroup container, @Nullable
     Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.pandora_setting, container, false);
+        isMeizu = PandoraUtils.isMeizu(getActivity());
         initView();
         initTitleHeight();
         initSwitchButtonState();
@@ -93,6 +95,12 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     private void initView() {
         mInitSetting = (LinearLayout) mRootView.findViewById(R.id.setting_init);
         mInitSetting.setOnClickListener(this);
+        if (isMeizu) {
+            enablePandoraLocker();
+            mInitSetting.setVisibility(View.GONE);
+        } else {
+            mInitSetting.setVisibility(View.VISIBLE);
+        }
 
         mSettingForeView = (SlidingUpPanelLayout) mRootView.findViewById(R.id.setting_fore_view);
         mSettingIcon = (ImageView) mRootView.findViewById(R.id.setting_icon);
@@ -145,6 +153,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mIsCurrentlyPressed = true;
     }
 
+    @SuppressWarnings("deprecation")
     protected void setSettingBackground(Theme theme, Drawable drawable) {
         if (null == drawable) {
             if (theme.isCustomWallpaper()) {
@@ -153,8 +162,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
             }
             mSettingForeView.setForegroundResource(R.drawable.splash_bg);
-//            mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
-//                    theme.getmForegroundResId()));
+            // mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
+            // theme.getmForegroundResId()));
             mSettingIcon.setBackgroundResource(theme.getmSettingsIconResId());
         } else {
             mSettingBackground.setBackgroundDrawable(drawable);

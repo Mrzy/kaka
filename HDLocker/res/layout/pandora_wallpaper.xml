@@ -65,10 +65,10 @@
                         android:layout_marginRight="@dimen/setting_title_textview_margin_left"
                         android:layout_marginTop="@dimen/pandora_wallpaper_textview_margin_top"
                         android:gravity="center_vertical"
-                        android:text="@string/pandora_wallpaper_advice" />
+                        android:text="@string/pandora_wallpaper_custom" />
 
                     <LinearLayout
-                        android:id="@+id/advice_parent"
+                        android:id="@+id/parent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="13dp"
@@ -101,10 +101,10 @@
                         android:layout_marginRight="@dimen/setting_title_textview_margin_left"
                         android:layout_marginTop="@dimen/pandora_wallpaper_textview_margin_top"
                         android:gravity="center_vertical"
-                        android:text="@string/pandora_wallpaper_custom" />
+                        android:text="@string/pandora_wallpaper_advice" />
 
                     <LinearLayout
-                        android:id="@+id/parent"
+                        android:id="@+id/advice_parent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="13dp"

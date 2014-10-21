@@ -101,6 +101,11 @@ public class PandoraUtils {
         String manufacturer = android.os.Build.MANUFACTURER;
         return "Xiaomi".equals(manufacturer);
     }
+    
+    public static boolean isMeizu(Context context) {
+        String manufacturer = android.os.Build.MANUFACTURER;
+        return "Meizu".equals(manufacturer);
+    }
 
     private static boolean isIntentAvailable(Context context, Intent intent) {
         PackageManager packageManager = context.getPackageManager();
@@ -177,23 +182,6 @@ public class PandoraUtils {
         }
 
         return versionName;
-    }
-
-    public static int getRealScreenHeight(Activity activity) {
-        int realScreenHeight = 0;
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        DisplayMetrics dm = new DisplayMetrics();
-        display.getMetrics(dm);
-        Class<?> c;
-        try {
-            c = Class.forName("android.view.Display");
-            Method method = c.getMethod("getRealMetrics", DisplayMetrics.class);
-            method.invoke(display, dm);
-            realScreenHeight = dm.heightPixels;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return realScreenHeight;
     }
 
     public static int getVirtualKeyHeight(Activity activity) {
@@ -284,7 +272,7 @@ public class PandoraUtils {
         BitmapFactory.Options opts = new Options();
         opts.inJustDecodeBounds = true;// 设置为true时，BitmapFactory只会解析要加载的图片的边框的信息，但是不会为该图片分配内存
         BitmapFactory.decodeStream(inputStream, new Rect(), opts);
-        int screenHeight = PandoraUtils.getRealScreenHeight(activity);
+        int screenHeight = BaseInfoHelper.getRealHeight(activity);
         int screenWidth = BaseInfoHelper.getWidth(activity);
         BitmapFactory.Options realOpts = new Options();
         if (screenWidth == DEFAULT_WIDTH && opts.outWidth > DEFAULT_BITMAP_WIDTH) {
