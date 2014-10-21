@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <RelativeLayout
-         style="@style/umeng_socialize_list_item" >
+    <RelativeLayout style="@style/umeng_socialize_list_item" >
 
         <ImageView
             android:id="@+id/umeng_socialize_full_alert_dialog_item_icon"
@@ -13,8 +12,7 @@
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="25dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/umeng_socialize_tx_on" />
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/umeng_socialize_full_alert_dialog_item_text"
@@ -39,5 +37,6 @@
 
     <View
         android:id="@+id/umeng_socialize_full_alert_dialog_divider"
-        style="@style/umeng_socialize_divider"/>
+        style="@style/umeng_socialize_divider" />
+
 </LinearLayout>

@@ -33,7 +33,7 @@
     <dimen name="setting_about_pandora_imageview_width">121dp</dimen>
     <dimen name="setting_about_pandora_imageview_height">90dp</dimen>
     <dimen name="setting_about_us_textview_height">40dp</dimen>
-    <dimen name="setting_about_us_textview_margin_top">10dp</dimen>
+    <dimen name="setting_about_us_textview_margin_top">25dp</dimen>
     <dimen name="setting_about_pandora_height">84dp</dimen>
     <dimen name="setting_about_pandora_text_height">195dp</dimen>
     <dimen name="setting_about_pandora_margin">4dp</dimen>

@@ -2,28 +2,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
     <LinearLayout
         android:id="@+id/platforms_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:visibility="invisible" >
 
         <ImageView
             android:id="@+id/platforms_qzone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:background="@drawable/umeng_socialize_qzone_on" />
+
+        <ImageView
+            android:id="@+id/platforms_sina"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/umeng_socialize_sina_on" />
+
+        <ImageView
+            android:id="@+id/platforms_wechat"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/umeng_socialize_wechat" />
+
+        <ImageView
+            android:id="@+id/platforms_wxcircle"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/umeng_socialize_wxcircle" />
     </LinearLayout>
 
     <Button
         android:id="@+id/shareBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/umeng_socialize_action_share_normal"
         android:clickable="true"
-        android:focusable="false"
-        android:text="share" />
+        android:focusable="false" />
 
 </LinearLayout>
