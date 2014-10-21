@@ -3,6 +3,7 @@ package cn.zmdx.kaka.locker.content.box;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class SingleImageBox extends BaseBox {
         try {
             float rate = (float) screenWidth / (float) bmpWidth;
             lp.height = (int) (rate * bmpHeight);
-        } catch(Exception e) {
+        } catch (Exception e) {
             lp.height = LayoutParams.MATCH_PARENT;
         }
         iv.setScaleType(ScaleType.FIT_XY);
