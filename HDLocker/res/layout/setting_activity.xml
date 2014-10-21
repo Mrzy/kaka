@@ -135,6 +135,26 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/setting_individualization"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_item_height"
+                    android:layout_marginTop="11dp"
+                    android:background="@drawable/setting_item_selector"
+                    android:clickable="true"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/setting_title_textview_margin_left"
+                    android:paddingRight="@dimen/setting_title_textview_margin_left" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/setting_textview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:gravity="center_vertical"
+                        android:text="@string/setting_individualization" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/setting_init"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/setting_item_height"

@@ -47,6 +47,10 @@ public class CropImageActivity extends Activity {
 
     public static final String KEY_BUNDLE_ASPECTRATIO_Y = "aspectRatioY";
 
+    public static final String KEY_BUNDLE_IS_WALLPAPER = "isWallpaper";
+
+    private boolean isWallpaper = true;
+
     // Saves the state upon rotating the screen/restarting the activity
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
@@ -75,6 +79,7 @@ public class CropImageActivity extends Activity {
         }
         mAspectRatioX = getIntent().getExtras().getInt(KEY_BUNDLE_ASPECTRATIO_X);
         mAspectRatioY = getIntent().getExtras().getInt(KEY_BUNDLE_ASPECTRATIO_Y);
+        isWallpaper = getIntent().getExtras().getBoolean(KEY_BUNDLE_IS_WALLPAPER);
         initView();
     }
 
@@ -97,10 +102,15 @@ public class CropImageActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                UmengCustomEventManager.statisticalSuccessSetCustomTimes();
-                PandoraUtils.sCropBitmap = mCropImageView.getCroppedImage();
-                PandoraUtils.sCropThumbBitmap = PandoraUtils.zoomThumbBitmap(
-                        CropImageActivity.this, PandoraUtils.sCropBitmap);
+                if (isWallpaper) {
+                    UmengCustomEventManager.statisticalSuccessSetCustomTimes();
+                    PandoraUtils.sCropBitmap = mCropImageView.getCroppedImage();
+                    PandoraUtils.sCropThumbBitmap = PandoraUtils.zoomThumbBitmap(
+                            CropImageActivity.this, PandoraUtils.sCropBitmap, true);
+                } else {
+                    PandoraUtils.sLockDefaultThumbBitmap = PandoraUtils.zoomThumbBitmap(
+                            CropImageActivity.this, mCropImageView.getCroppedImage(), false);
+                }
                 setResult(Activity.RESULT_OK);
                 onBackPressed();
             }

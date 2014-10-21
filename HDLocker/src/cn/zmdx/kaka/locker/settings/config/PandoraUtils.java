@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -36,7 +37,9 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
+import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.FileHelper;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
@@ -57,6 +60,12 @@ public class PandoraUtils {
     public static Bitmap sCropBitmap;
 
     public static Bitmap sCropThumbBitmap;
+
+    public static Bitmap sLockDefaultThumbBitmap;
+
+    public static final int REQUEST_CODE_CROP_IMAGE = 0;
+
+    public static final int REQUEST_CODE_GALLERY = 1;
 
     public static Bitmap fastBlur(View decorView) {
         decorView.setDrawingCacheEnabled(true);
@@ -101,12 +110,13 @@ public class PandoraUtils {
         String manufacturer = android.os.Build.MANUFACTURER;
         return "Xiaomi".equals(manufacturer);
     }
-    
+
     public static boolean isMeizu(Context context) {
         String manufacturer = android.os.Build.MANUFACTURER;
         return "Meizu".equals(manufacturer);
     }
 
+    @SuppressWarnings("unused")
     private static boolean isIntentAvailable(Context context, Intent intent) {
         PackageManager packageManager = context.getPackageManager();
         List<ResolveInfo> list = packageManager.queryIntentActivities(intent,
@@ -327,10 +337,17 @@ public class PandoraUtils {
         }
     }
 
-    public static Bitmap zoomThumbBitmap(Context context, Bitmap cropBitmap) {
-        int thumbWidth = (int) context.getResources().getDimension(R.dimen.pandora_wallpaper_width);
-        int thumbHeight = (int) context.getResources().getDimension(
-                R.dimen.pandora_wallpaper_height);
+    public static Bitmap zoomThumbBitmap(Context context, Bitmap cropBitmap, boolean isWallpaper) {
+        int thumbWidth = 0;
+        int thumbHeight = 0;
+        if (isWallpaper) {
+            thumbWidth = (int) context.getResources().getDimension(R.dimen.pandora_wallpaper_width);
+            thumbHeight = (int) context.getResources().getDimension(
+                    R.dimen.pandora_wallpaper_height);
+        } else {
+            thumbHeight = (int) context.getResources().getDimension(R.dimen.setting_item_height);
+            thumbWidth = (int) ((LockScreenManager.getInstance().getBoxWidthHeightRate()) * thumbHeight);
+        }
         return ImageUtils.scaleTo(cropBitmap, thumbWidth, thumbHeight, false);
     }
 
@@ -367,4 +384,18 @@ public class PandoraUtils {
         FileHelper.deleteFile(dirName, fileName + ".jpg");
     }
 
+    public static void deleteFile(File file) {
+        FileHelper.deleteFile(file);
+    }
+
+    public static BitmapDrawable getLockDefaultBitmap(Context context) {
+        String fileName = PandoraConfig.newInstance(context).getLockDefaultFileName();
+        String path = IndividualizationActivity.LOCK_DEFAULT_SDCARD_LOCATION + fileName + ".jpg";
+        Bitmap bitmap = PandoraUtils.getBitmap(path);
+        BitmapDrawable drawable = null;
+        if (null != bitmap) {
+            drawable = new BitmapDrawable(context.getResources(), bitmap);
+        }
+        return drawable;
+    }
 }

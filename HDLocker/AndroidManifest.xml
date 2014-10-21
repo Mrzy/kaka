@@ -81,6 +81,11 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name=".settings.IndividualizationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <service android:name=".service.PandoraService" />
         <!-- umeng -->
