@@ -13,7 +13,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:scaleType="fitXY"
-        android:src="@drawable/umeng_socialize_tx_on" />
+        />
 
     <TextView
         android:id="@+id/umeng_socialize_full_alert_dialog_item_text"

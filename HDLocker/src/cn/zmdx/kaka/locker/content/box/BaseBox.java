@@ -15,7 +15,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.share.PandoraShareManager;
 
-public abstract class BaseBox implements IPandoraBox{
+public abstract class BaseBox implements IPandoraBox {
 
     private boolean isShare = true;
 
@@ -26,6 +26,12 @@ public abstract class BaseBox implements IPandoraBox{
     private View mPlatformLayout;
 
     private ImageView mPQzone;
+
+    private ImageView mPSina;
+
+    private ImageView mPWechat;
+
+    private ImageView mPWxcircle;
 
     private Context mContext;
 
@@ -53,14 +59,23 @@ public abstract class BaseBox implements IPandoraBox{
         mShareBtn = (Button) mRootView.findViewById(R.id.shareBtn);
         mPlatformLayout = mRootView.findViewById(R.id.platforms_layout);
         mPQzone = (ImageView) mRootView.findViewById(R.id.platforms_qzone);
+        mPSina = (ImageView) mRootView.findViewById(R.id.platforms_sina);
+        mPWechat = (ImageView) mRootView.findViewById(R.id.platforms_wechat);
+        mPWxcircle = (ImageView) mRootView.findViewById(R.id.platforms_wxcircle);
         mShareBtn.setOnClickListener(mShareBtnListener);
         mPQzone.setOnClickListener(mShareBtnListener);
+        mPSina.setOnClickListener(mShareBtnListener);
+        mPWechat.setOnClickListener(mShareBtnListener);
+        mPWxcircle.setOnClickListener(mShareBtnListener);
         return mRootView;
     }
 
     private View.OnClickListener mShareBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (getCategory() == IPandoraBox.CATEGORY_HTML) {
+                
+            }
             if (v == mShareBtn) {
                 int visibility = mPlatformLayout.getVisibility();
                 if (visibility == View.VISIBLE) {
@@ -70,6 +85,12 @@ public abstract class BaseBox implements IPandoraBox{
                 }
             } else if (v == mPQzone) {
                 share(PandoraShareManager.Tencent);
+            } else if (v == mPSina) {
+                share(PandoraShareManager.Sina);
+            } else if (v == mPWechat) {
+                share(PandoraShareManager.Weixin);
+            } else if (v == mPWxcircle) {
+                share(PandoraShareManager.WeixinCircle);
             }
         }
     };
@@ -83,6 +104,7 @@ public abstract class BaseBox implements IPandoraBox{
         String imageUrl = getData().getmImageUrl();
         String path = DiskImageHelper.getFileByUrl(imageUrl).getAbsolutePath();
         intent.putExtra("imagePath", path);
+        intent.putExtra("imagetitle", getData().getmTitle());
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         LockScreenManager.getInstance().setWindowAnimations(android.R.anim.slide_in_left);
         LockScreenManager.getInstance().unLock(false);

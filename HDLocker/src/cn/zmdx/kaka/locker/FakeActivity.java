@@ -97,6 +97,7 @@ public class FakeActivity extends Activity {
             if (intent.getAction().equals(ACTION_PANDORA_SHARE)) {
                 int platform = intent.getIntExtra("platform", -1);
                 String imagePath = intent.getStringExtra("imagePath");
+                String imageTitle = intent.getStringExtra("imageTitle");
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("收到分享事件，platform=" + platform);
                 }
