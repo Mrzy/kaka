@@ -487,7 +487,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
             return;
         int width = BaseInfoHelper.getWidth(getContext());
         int height = BaseInfoHelper.getRealHeight(getContext());
-//        int height = Integer.parseInt(BaseInfoHelper.getHeight(getContext()));
+        // int height =
+        // Integer.parseInt(BaseInfoHelper.getHeight(getContext()));
         Bitmap srcBmp = ImageUtils.drawable2Bitmap(mForegroundDrawable);
         srcBmp = ImageUtils.scaleTo(srcBmp, width, height, true);
         Bitmap topBmp = null;
@@ -507,7 +508,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
         }
         if (topBmp == null || bottomBmp == null) {
             mTopPanelBgDrawable = mContext.getResources().getDrawable(R.drawable.top_panel_default);
-            mBottomPanelBgDrawable = mContext.getResources().getDrawable(R.drawable.bottom_panel_default);
+            mBottomPanelBgDrawable = mContext.getResources().getDrawable(
+                    R.drawable.bottom_panel_default);
         } else {
             mTopPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), topBmp);
             mBottomPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), bottomBmp);
@@ -541,6 +543,22 @@ public class SlidingUpPanelLayout extends ViewGroup {
      */
     public int getPanelHeight() {
         return mPanelHeight;
+    }
+
+    public int getContentHeight() {
+        return mMainView.getMeasuredHeight();
+    }
+
+    public int getContentWidth() {
+        return mMainView.getMeasuredWidth();
+    }
+
+    public float getContentViewWidthHeightRate() {
+        try {
+            return (float) getContentWidth() / (float) getContentHeight();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     /**

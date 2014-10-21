@@ -668,6 +668,14 @@ public class LockScreenManager {
         }
     }
 
+    public float getBoxWidthHeightRate() {
+       float rate = mSliderView.getContentViewWidthHeightRate();
+       if (rate == 0) {
+           rate = 1.0f;
+       }
+       return rate;
+    }
+
     private void processAnimations() {
         ObjectAnimator digitalAlpha = ObjectAnimator.ofFloat(mDigitalClockView, "alpha", 0, 1);
         ObjectAnimator digitalTrans = ObjectAnimator.ofFloat(mDigitalClockView, "translationY",
