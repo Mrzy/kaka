@@ -164,12 +164,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/setting_init_tv"
-                            android:layout_marginTop="3dp"
                             android:clickable="false"
                             android:gravity="center_vertical"
                             android:text="@string/init_setting_title_detail"
                             android:textColor="@color/init_setting_small_textview_color"
-                            android:textSize="11sp" />
+                            android:textSize="11sp"
+                            android:visibility="gone" />
                     </RelativeLayout>
                 </LinearLayout>
 
