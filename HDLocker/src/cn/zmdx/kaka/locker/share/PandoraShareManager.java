@@ -2,10 +2,6 @@
 package cn.zmdx.kaka.locker.share;
 
 import android.app.Activity;
-import android.graphics.BitmapFactory;
-
-import cn.zmdx.kaka.locker.FakeActivity;
-import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
@@ -13,11 +9,9 @@ import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
 import com.umeng.socialize.media.QZoneShareContent;
-import com.umeng.socialize.media.RenrenShareContent;
 import com.umeng.socialize.media.SinaShareContent;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
-import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
@@ -39,11 +33,9 @@ public class PandoraShareManager {
 
     public static final String Title = "潘多拉锁屏";
 
-    public static final boolean CATEGORY_HTML = true;
-
-    public static void sinaShare(final Activity activity, String imagePath) {
+    public static void sinaShare(final Activity activity, String imagePath, boolean isHtml) {
         UMSocialService sinaShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        if (CATEGORY_HTML) {
+        if (isHtml) {
             SinaShareContent sina = new SinaShareContent();
             // 设置分享文字
             sina.setShareContent(PandoraShareManager.ShareContent);
@@ -69,9 +61,9 @@ public class PandoraShareManager {
         });
     }
 
-    public static void qzoneShare(final Activity activity, String imagePath) {
+    public static void qzoneShare(final Activity activity, String imagePath, boolean isHtml) {
         UMSocialService qzoneShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        if (CATEGORY_HTML) {
+        if (isHtml) {
             QZoneShareContent qzone = new QZoneShareContent();
             // 设置分享文字
             qzone.setShareContent(PandoraShareManager.ShareContent);
@@ -99,7 +91,7 @@ public class PandoraShareManager {
         });
     }
 
-    public static void weixinCircleShare(final Activity activity, String imagePath) {
+    public static void weixinCircleShare(final Activity activity, String imagePath, boolean isHtml) {
         UMSocialService weixinCircleShare = UMServiceFactory
                 .getUMSocialService("cn.zmdx.kaka.locker");
         String appID = "wx5fa094ca2b1994ba";
@@ -108,7 +100,7 @@ public class PandoraShareManager {
         UMWXHandler wxCircleHandler = new UMWXHandler(activity, appID, appSecret);
         wxCircleHandler.setToCircle(true);
         wxCircleHandler.addToSocialSDK();
-        if (CATEGORY_HTML) {
+        if (isHtml) {
             // 设置微信朋友圈分享内容
             CircleShareContent circleMedia = new CircleShareContent();
             circleMedia.setShareImage(new UMImage(activity, imagePath));
@@ -131,7 +123,7 @@ public class PandoraShareManager {
         });
     }
 
-    public static void weixinShare(final Activity activity, String imagePath) {
+    public static void weixinShare(final Activity activity, String imagePath, boolean isHtml) {
         UMSocialService weixinShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
         // 微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
         String appID = "wx5fa094ca2b1994ba";
@@ -139,7 +131,7 @@ public class PandoraShareManager {
         // 添加微信平台
         UMWXHandler wxHandler = new UMWXHandler(activity, appID, appSecret);
         wxHandler.addToSocialSDK();
-        if (CATEGORY_HTML) {
+        if (isHtml) {
             // 设置微信好友分享内容
             WeiXinShareContent weixinContent = new WeiXinShareContent();
             // 设置title

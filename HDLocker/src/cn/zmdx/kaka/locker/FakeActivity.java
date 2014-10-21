@@ -98,6 +98,7 @@ public class FakeActivity extends Activity {
                 int platform = intent.getIntExtra("platform", -1);
                 String imagePath = intent.getStringExtra("imagePath");
                 String imageTitle = intent.getStringExtra("imageTitle");
+                boolean isHtml = intent.getBooleanExtra("isHtml",true);
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("收到分享事件，platform=" + platform);
                 }
@@ -106,20 +107,20 @@ public class FakeActivity extends Activity {
                 }
                 switch (platform) {
                     case PandoraShareManager.Sina:
-                        PandoraShareManager.sinaShare(FakeActivity.this, imagePath);
+                        PandoraShareManager.sinaShare(FakeActivity.this, imagePath, isHtml);
                         break;
                     case PandoraShareManager.Renren:
                         // PandoraShareManager.renrenShare(FakeActivity.this,
                         // imagePath);
                         break;
                     case PandoraShareManager.Tencent:
-                        PandoraShareManager.qzoneShare(FakeActivity.this, imagePath);
+                        PandoraShareManager.qzoneShare(FakeActivity.this, imagePath, isHtml);
                         break;
                     case PandoraShareManager.Weixin:
-                        PandoraShareManager.weixinShare(FakeActivity.this, imagePath);
+                        PandoraShareManager.weixinShare(FakeActivity.this, imagePath, isHtml);
                         break;
                     case PandoraShareManager.WeixinCircle:
-                        PandoraShareManager.weixinCircleShare(FakeActivity.this, imagePath);
+                        PandoraShareManager.weixinCircleShare(FakeActivity.this, imagePath, isHtml);
                         break;
                     default:
                 }

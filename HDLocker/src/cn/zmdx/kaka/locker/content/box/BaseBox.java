@@ -73,9 +73,6 @@ public abstract class BaseBox implements IPandoraBox {
     private View.OnClickListener mShareBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (getCategory() == IPandoraBox.CATEGORY_HTML) {
-                
-            }
             if (v == mShareBtn) {
                 int visibility = mPlatformLayout.getVisibility();
                 if (visibility == View.VISIBLE) {
@@ -105,6 +102,7 @@ public abstract class BaseBox implements IPandoraBox {
         String path = DiskImageHelper.getFileByUrl(imageUrl).getAbsolutePath();
         intent.putExtra("imagePath", path);
         intent.putExtra("imagetitle", getData().getmTitle());
+        intent.putExtra("isHtml", getCategory() == IPandoraBox.CATEGORY_HTML);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         LockScreenManager.getInstance().setWindowAnimations(android.R.anim.slide_in_left);
         LockScreenManager.getInstance().unLock(false);
