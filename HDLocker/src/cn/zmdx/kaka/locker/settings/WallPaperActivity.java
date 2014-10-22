@@ -261,6 +261,12 @@ public class WallPaperActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+                if (container.getChildCount() >= 6) {
+                    // TODO toast
+                    Toast.makeText(WallPaperActivity.this, "壁纸数目已经到达上限，请删除部分不需要的壁纸!",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
                 showSelectDialog();
             }
         });
