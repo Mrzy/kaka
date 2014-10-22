@@ -34,6 +34,7 @@ import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.GifBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
+import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.service.PandoraService;
@@ -180,6 +181,9 @@ public class LockScreenManager {
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 
+        if (!PandoraConfig.newInstance(mContext).isNeedNotice()) {
+            mWinParams.flags |= LayoutParams.FLAG_FULLSCREEN;
+        }
         if (Build.VERSION.SDK_INT >= 19) {
             mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS;
             mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
@@ -416,26 +420,35 @@ public class LockScreenManager {
         mAnimatorSet = null;
     }
 
+    private long mLastSyncDataTime = 0;
+
     private void syncDataIfNeeded() {
-        PandoraBoxDispatcher pd = PandoraBoxDispatcher.getInstance();
+        long curTime = System.currentTimeMillis();
+        if (curTime - mLastSyncDataTime > PandoraPolicy.MIN_DURATION_SYNC_DATA_TIME) {
+            PandoraBoxDispatcher pd = PandoraBoxDispatcher.getInstance();
+            pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
+            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 5);
+            mLastSyncDataTime = curTime;
+        }
+        
         // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
-        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_JOKE);
-        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_NEWS);
+//         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_JOKE);
+//         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_NEWS);
         // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_TEXT_DATA);
-        pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_GIF);
+//         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_GIF);
         // if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG)) {
         // pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG,
         // 4000);
         // }
-        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE)) {
-            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE, 5000);
-        }
-        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS)) {
-            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS, 6000);
-        }
-        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF)) {
-            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF, 7000);
-        }
+//        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE)) {
+//            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE, 5000);
+//        }
+//        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS)) {
+//            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS, 6000);
+//        }
+//        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF)) {
+//            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF, 7000);
+//        }
 
     }
 

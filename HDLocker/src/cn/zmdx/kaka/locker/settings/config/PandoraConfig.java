@@ -50,11 +50,13 @@ public class PandoraConfig {
 
     private static final String KEY_HAS_GUIDED = "j";
 
-    private static final String KEY_LAST_TIME_PULL_ORIGINAL_DATA = "k";
+    private static final String KEY_TODAY_PULL_ORIGINAL_DATA = "k";
 
     private static final String KEY_NEED_NOTICE = "keyNeedNotice";
 
     private static final String KEY_LOCK_DEFAULT_ = "keyLockDefault";
+
+    private static final String KEY_LAST_TIME_PULL_ORIGINAL_DATA = "l";
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -234,13 +236,22 @@ public class PandoraConfig {
         return mSp.getString(KEY_LOCK_DEFAULT_, "");
     }
 
-    public String getLastTimePullOriginalData() {
-        return mSp.getString(KEY_LAST_TIME_PULL_ORIGINAL_DATA, "");
+    public String getTodayPullOriginalData() {
+        return mSp.getString(KEY_TODAY_PULL_ORIGINAL_DATA, "");
     }
 
-    public void saveLastPullOriginalDataTime(String date) {
+    public void saveTodayPullOriginalDataTime(String date) {
         Editor editor = mSp.edit();
-        editor.putString(KEY_LAST_TIME_PULL_ORIGINAL_DATA, date);
+        editor.putString(KEY_TODAY_PULL_ORIGINAL_DATA, date);
+        editor.commit();
+    }
+
+    public long getLastTimePullOriginalData() {
+        return mSp.getLong(KEY_LAST_TIME_PULL_ORIGINAL_DATA, 0);
+    }
+    public void saveLastPullOriginalDataTime(long time) {
+        Editor editor = mSp.edit();
+        editor.putLong(KEY_LAST_TIME_PULL_ORIGINAL_DATA, time);
         editor.commit();
     }
 }

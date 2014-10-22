@@ -8,6 +8,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.text.TextUtils;
+import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
@@ -117,18 +119,31 @@ public class ServerImageDataModel {
 
     /**
      * 查询已下载图片的数据条数
-     * 
+     * 如果参数为null，则查询除了html类型的所有类型数据已下载图片的数量
      * @return
      */
     public synchronized int queryCountHasImage(String dataType) {
+        String selection = null;
+        String[] selectionArgu = null;
+        if (!TextUtils.isEmpty(dataType)) {
+            selection = TableStructure.SERVER_IMAGE_DATA_TYPE + "=? and "
+                    + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?";
+            selectionArgu = new String[] {
+                    dataType, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
+            };
+        } else {
+            
+            selection = TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
+                    + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?";
+            selectionArgu = new String[] {
+                    ServerDataMapping.S_DATATYPE_HTML, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
+            };
+        }
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         int count = 0;
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
             TableStructure.SERVER_IMAGE_ID
-        }, TableStructure.SERVER_IMAGE_DATA_TYPE + "=? and "
-                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
-                dataType, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
-        }, null, null, null, null);
+        }, selection, selectionArgu, null, null, null, null);
 
         try {
             count = cursor.getCount();
@@ -228,7 +243,7 @@ public class ServerImageDataModel {
         return data;
     }
 
-    public List<ServerImageData> queryWithoutImgByDataType(int count, String type) {
+    public List<ServerImageData> queryWithoutImg(int count) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         List<ServerImageData> result = new ArrayList<ServerImageData>();
 
@@ -236,9 +251,9 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_DESC,
                 TableStructure.SERVER_IMAGE_TITLE, TableStructure.SERVER_IMAGE_URL,
 
-        }, TableStructure.SERVER_IMAGE_DATA_TYPE + "=? and "
+        }, TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
                 + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "= ?", new String[] {
-                type, String.valueOf(MySqlitDatabase.DOWNLOAD_FALSE)
+                ServerDataMapping.S_DATATYPE_HTML, String.valueOf(MySqlitDatabase.DOWNLOAD_FALSE)
         }, null, null, null, String.valueOf(count));
 
         try {
@@ -303,8 +318,9 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
                 TableStructure.SERVER_IMAGE_DATA_TYPE
-        }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and " + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=?", new String[] {
-            String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerDataMapping.S_DATATYPE_HTML
+        }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
+                + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=?", new String[] {
+                String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerDataMapping.S_DATATYPE_HTML
         }, null, null, null, "1");
 
         try {
@@ -322,5 +338,22 @@ public class ServerImageDataModel {
             cursor.close();
         }
         return data;
+    }
+
+    public long queryLastModifiedOfToday() {
+        long lastTime = 0;
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+            "MAX(" + TableStructure.SERVER_IMAGE_COLLECT_TIME + ")"
+        }, null, null, null, null, null);
+        try {
+            while (cursor.moveToNext()) {
+                lastTime = cursor.getLong(0);
+            }
+        } catch (Exception e) {
+        } finally {
+            cursor.close();
+        }
+        return lastTime;
     }
 }

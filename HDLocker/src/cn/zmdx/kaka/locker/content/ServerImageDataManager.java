@@ -104,33 +104,38 @@ public class ServerImageDataManager {
     /**
      * 拉取今日数据，不加参数，数据数量和类型有服务端决定
      */
-    public void pullTodayData() {
+    public void pullTodayData(long lastModified) {
         JsonObjectRequest request = null;
-        request = new JsonObjectRequest(getUrl(-1, null, null), null,
-                new Listener<JSONObject>() {
+        request = new JsonObjectRequest(getUrl(lastModified), null, new Listener<JSONObject>() {
 
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        final List<ServerImageData> sdList = ServerImageData.parseJson(response);
-                        if (sdList.size() <= 0) {
-                            return;
-                        }
-                        Message msg = Message.obtain();
-                        msg.what = PandoraBoxDispatcher.MSG_ORIGINAL_DATA_ARRIVED;
-                        msg.obj = sdList;
-                        PandoraBoxDispatcher.getInstance().sendMessage(msg);
-                    }
+            @Override
+            public void onResponse(JSONObject response) {
+                final List<ServerImageData> sdList = ServerImageData.parseJson(response);
+                if (sdList.size() <= 0) {
+                    return;
+                }
+                Message msg = Message.obtain();
+                msg.what = PandoraBoxDispatcher.MSG_ORIGINAL_DATA_ARRIVED;
+                msg.obj = sdList;
+                PandoraBoxDispatcher.getInstance().sendMessage(msg);
+            }
 
-                }, new ErrorListener() {
+        }, new ErrorListener() {
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (BuildConfig.DEBUG) {
-                            error.printStackTrace();
-                        }
-                    }
-                });
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (BuildConfig.DEBUG) {
+                    error.printStackTrace();
+                }
+            }
+        });
         RequestManager.getRequestQueue().add(request);
+    }
+
+    public String getUrl(long lastModified) {
+        StringBuilder sb = new StringBuilder(getBaseUrl());
+        sb.append("lastModified=" + lastModified);
+        return sb.toString();
     }
 
     /**
@@ -138,12 +143,8 @@ public class ServerImageDataManager {
      */
     public String getUrl(int limit, String dataType, String webSite) {
         StringBuilder sb = new StringBuilder(getBaseUrl());
-        if (limit != -1)
-            sb.append("limit=" + limit);
         if (dataType != null)
-            sb.append("&dataType=" + dataType);
-        if (webSite != null)
-            sb.append("&webSite=" + webSite);
+            sb.append("dataType=" + dataType);
         return sb.toString();
     }
 
@@ -207,7 +208,8 @@ public class ServerImageDataManager {
                     serverImageData.setUrl(url);
                     serverImageData.setImageDesc(imgUrl);
                     String dataType = serverImageData.getDataType();
-                    if (!TextUtils.isEmpty(dataType) && dataType.equals(ServerDataMapping.S_DATATYPE_HTML)) {
+                    if (!TextUtils.isEmpty(dataType)
+                            && dataType.equals(ServerDataMapping.S_DATATYPE_HTML)) {
                         serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_TRUE);
                     } else {
                         serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_FALSE);

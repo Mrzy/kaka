@@ -53,6 +53,10 @@ public class PandoraPolicy {
 
     public static final long MIN_CHECK_WEATHER_DURAION = 1 * 60 * 1000;
 
+    public static final int MIN_DURATION_SYNC_DATA_TIME = 60 * 1000;
+
+    public static final long MIN_PULL_ORIGINAL_TIME = 5 * 60 * 60 * 1000;
+
     public static boolean verifyImageLegal(String url, int w, int h) {
         try {
             if (w / h > 2.5 || h / w > 2.5 || w > 1500 || h > 2000) {
