@@ -4,7 +4,6 @@ package cn.zmdx.kaka.locker.settings;
 import java.lang.ref.WeakReference;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;

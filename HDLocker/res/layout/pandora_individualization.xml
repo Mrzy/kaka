@@ -4,7 +4,6 @@
     android:id="@+id/individualization_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/setting_background_blue"
     android:baselineAligned="true"
     android:clickable="false" >
 
@@ -86,7 +85,6 @@
                     android:id="@+id/individualization_locker_default_image"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/setting_item_height"
-                    android:layout_marginTop="11dp"
                     android:background="@drawable/setting_item_selector"
                     android:clickable="true"
                     android:orientation="horizontal"

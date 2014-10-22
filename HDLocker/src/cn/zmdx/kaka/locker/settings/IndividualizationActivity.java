@@ -70,9 +70,8 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         mLockerDefaultImageThumb = (ImageView) findViewById(R.id.individualization_locker_default_thumb_image);
 
         LayoutParams params = mLockerDefaultImageThumb.getLayoutParams();
-        float rate = LockScreenManager.getInstance().getBoxWidthHeightRate();
         int height = (int) getResources().getDimension(R.dimen.setting_item_height);
-        int width = (int) (rate * height);
+        int width = (int) getResources().getDimension(R.dimen.setting_item_height);
         params.width = width;
         params.height = height;
         mLockerDefaultImageThumb.setLayoutParams(params);
