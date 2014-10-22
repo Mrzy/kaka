@@ -53,9 +53,9 @@ public class PandoraUtils {
 
     private static final int DEFAULT_BITMAP_WIDTH = 3000;
 
-    private static final String MUIU_V5 = "V5";
+    public static final String MUIU_V5 = "V5";
 
-    private static final String MUIU_6 = "6";
+    public static final String MUIU_V6 = "V6";
 
     public static Bitmap sCropBitmap;
 
@@ -150,7 +150,12 @@ public class PandoraUtils {
             Uri packageURI = Uri.parse("package:" + "cn.zmdx.kaka.locker");
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
             mContent.startActivity(intent);
-        } else if (version.equals(MUIU_6)) {
+        } else if (version.equals(MUIU_V6)) {
+            Intent i = new Intent("miui.intent.action.APP_PERM_EDITOR");
+            i.setClassName("com.miui.securitycenter",
+                    "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
+            i.putExtra("extra_pkgname", mContent.getPackageName());
+            mContent.startActivity(i);
 
         }
     }
@@ -170,8 +175,10 @@ public class PandoraUtils {
             } catch (NameNotFoundException e1) {
                 e1.printStackTrace();
             }
-        } else if (version.equals(MUIU_6)) {
-
+        } else if (version.equals(MUIU_V6)) {
+            Intent i = new Intent();
+            i.setClassName("com.miui.securitycenter", "com.miui.securitycenter.MainActivity");
+            mContent.startActivity(i);
         }
 
     }

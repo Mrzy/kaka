@@ -57,7 +57,7 @@
         <activity
             android:name=".settings.InitPromptActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/gusture_dialog" >
+            android:theme="@style/init_prompt_style" >
         </activity>
         <activity
             android:name=".settings.WallPaperActivity"
