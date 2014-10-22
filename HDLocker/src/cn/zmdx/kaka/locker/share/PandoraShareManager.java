@@ -63,20 +63,20 @@ public class PandoraShareManager {
 
     public static void qzoneShare(final Activity activity, String imagePath) {
         UMSocialService qzoneShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        //if (isHtml) {
-            QZoneShareContent qzone = new QZoneShareContent();
-            // 设置分享文字
-            qzone.setShareContent(PandoraShareManager.ShareContent);
-            // 设置点击消息的跳转URL
-            qzone.setTargetUrl(PandoraShareManager.TargetUrl);
-            // 设置分享内容的标题
-            qzone.setTitle(PandoraShareManager.Title);
-            // 设置分享图片
-            qzone.setShareImage(new UMImage(activity, imagePath));
-            qzoneShare.setShareMedia(qzone);
-        //} else {
-        //   qzoneShare.setShareMedia(new UMImage(activity, imagePath));
-        //}
+        // if (isHtml) {
+        QZoneShareContent qzone = new QZoneShareContent();
+        // 设置分享文字
+        qzone.setShareContent(PandoraShareManager.ShareContent);
+        // 设置点击消息的跳转URL
+        qzone.setTargetUrl(PandoraShareManager.TargetUrl);
+        // 设置分享内容的标题
+        qzone.setTitle(PandoraShareManager.Title);
+        // 设置分享图片
+        qzone.setShareImage(new UMImage(activity, imagePath));
+        qzoneShare.setShareMedia(qzone);
+        // } else {
+        // qzoneShare.setShareMedia(new UMImage(activity, imagePath));
+        // }
         qzoneShare.getConfig().setSsoHandler(
                 new QZoneSsoHandler(activity, "1103193086", "XOgkKrK9tZOcawOF"));
         qzoneShare.postShare(activity, SHARE_MEDIA.QZONE, new SnsPostListener() {
