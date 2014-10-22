@@ -4,7 +4,6 @@
     android:id="@+id/setting_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/setting_background_blue"
     android:baselineAligned="true"
     android:clickable="false" >
 
