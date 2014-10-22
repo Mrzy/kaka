@@ -114,7 +114,7 @@ public class FakeActivity extends Activity {
                         // imagePath);
                         break;
                     case PandoraShareManager.Tencent:
-                        PandoraShareManager.qzoneShare(FakeActivity.this, imagePath, isHtml);
+                        PandoraShareManager.qzoneShare(FakeActivity.this, imagePath);
                         break;
                     case PandoraShareManager.Weixin:
                         PandoraShareManager.weixinShare(FakeActivity.this, imagePath, isHtml);
