@@ -27,7 +27,7 @@ public class PandoraShareManager {
 
     public static final int WeixinCircle = 5;
 
-    public static final String ShareContent = "潘多拉锁屏----下拉有料";
+    public static final String ShareContent = "潘多拉锁屏  http://android.myapp.com/myapp/detail.htm?apkName=cn.zmdx.kaka.locker";
 
     public static final String TargetUrl = "http://android.myapp.com/myapp/detail.htm?apkName=cn.zmdx.kaka.locker";
 
@@ -35,8 +35,8 @@ public class PandoraShareManager {
 
     public static void sinaShare(final Activity activity, String imagePath, boolean isHtml) {
         UMSocialService sinaShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
+        SinaShareContent sina = new SinaShareContent();
         if (isHtml) {
-            SinaShareContent sina = new SinaShareContent();
             // 设置分享文字
             sina.setShareContent(PandoraShareManager.ShareContent);
             // 设置点击消息的跳转URL
@@ -47,7 +47,15 @@ public class PandoraShareManager {
             sina.setShareImage(new UMImage(activity, imagePath));
             sinaShare.setShareMedia(sina);
         } else {
-            sinaShare.setShareMedia(new UMImage(activity, imagePath));
+            // 设置分享文字
+            sina.setShareContent(PandoraShareManager.ShareContent);
+            // 设置点击消息的跳转URL
+            sina.setTargetUrl(PandoraShareManager.TargetUrl);
+            // 设置分享内容的标题
+            sina.setTitle(PandoraShareManager.Title);
+            // 设置分享图片
+            sina.setShareImage(new UMImage(activity, imagePath));
+            sinaShare.setShareMedia(sina);
         }
         sinaShare.postShare(activity, SHARE_MEDIA.SINA, new SnsPostListener() {
             @Override
