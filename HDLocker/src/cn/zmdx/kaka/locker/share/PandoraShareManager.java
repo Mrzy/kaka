@@ -27,32 +27,32 @@ public class PandoraShareManager {
 
     public static final int WeixinCircle = 5;
 
-    public static final String ShareContent = "潘多拉锁屏  http://android.myapp.com/myapp/detail.htm?apkName=cn.zmdx.kaka.locker";
+    public static final String shareContent = "潘多拉锁屏  http://www.wandoujia.com/apps/cn.zmdx.kaka.locker";
 
-    public static final String TargetUrl = "http://android.myapp.com/myapp/detail.htm?apkName=cn.zmdx.kaka.locker";
+    public static final String targetUrl = "http://www.wandoujia.com/apps/cn.zmdx.kaka.locker";
 
-    public static final String Title = "潘多拉锁屏";
+    public static final String title = "潘多拉锁屏";
 
     public static void sinaShare(final Activity activity, String imagePath, boolean isHtml) {
         UMSocialService sinaShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
         SinaShareContent sina = new SinaShareContent();
         if (isHtml) {
             // 设置分享文字
-            sina.setShareContent(PandoraShareManager.ShareContent);
+            sina.setShareContent(PandoraShareManager.shareContent);
             // 设置点击消息的跳转URL
-            sina.setTargetUrl(PandoraShareManager.TargetUrl);
+            sina.setTargetUrl(PandoraShareManager.targetUrl);
             // 设置分享内容的标题
-            sina.setTitle(PandoraShareManager.Title);
+            sina.setTitle(PandoraShareManager.title);
             // 设置分享图片
             sina.setShareImage(new UMImage(activity, imagePath));
             sinaShare.setShareMedia(sina);
         } else {
             // 设置分享文字
-            sina.setShareContent(PandoraShareManager.ShareContent);
+            sina.setShareContent(PandoraShareManager.shareContent);
             // 设置点击消息的跳转URL
-            sina.setTargetUrl(PandoraShareManager.TargetUrl);
+            sina.setTargetUrl(PandoraShareManager.targetUrl);
             // 设置分享内容的标题
-            sina.setTitle(PandoraShareManager.Title);
+            sina.setTitle(PandoraShareManager.title);
             // 设置分享图片
             sina.setShareImage(new UMImage(activity, imagePath));
             sinaShare.setShareMedia(sina);
@@ -74,11 +74,11 @@ public class PandoraShareManager {
         // if (isHtml) {
         QZoneShareContent qzone = new QZoneShareContent();
         // 设置分享文字
-        qzone.setShareContent(PandoraShareManager.ShareContent);
+        qzone.setShareContent(PandoraShareManager.shareContent);
         // 设置点击消息的跳转URL
-        qzone.setTargetUrl(PandoraShareManager.TargetUrl);
+        qzone.setTargetUrl(PandoraShareManager.targetUrl);
         // 设置分享内容的标题
-        qzone.setTitle(PandoraShareManager.Title);
+        qzone.setTitle(PandoraShareManager.title);
         // 设置分享图片
         qzone.setShareImage(new UMImage(activity, imagePath));
         qzoneShare.setShareMedia(qzone);
@@ -112,8 +112,8 @@ public class PandoraShareManager {
             // 设置微信朋友圈分享内容
             CircleShareContent circleMedia = new CircleShareContent();
             circleMedia.setShareImage(new UMImage(activity, imagePath));
-            circleMedia.setTargetUrl(PandoraShareManager.TargetUrl);
-            circleMedia.setTitle(PandoraShareManager.Title);
+            circleMedia.setTargetUrl(PandoraShareManager.targetUrl);
+            circleMedia.setTitle(PandoraShareManager.title);
             weixinCircleShare.setShareMedia(circleMedia);
         } else {
             weixinCircleShare.setShareMedia(new UMImage(activity, imagePath));
@@ -143,9 +143,9 @@ public class PandoraShareManager {
             // 设置微信好友分享内容
             WeiXinShareContent weixinContent = new WeiXinShareContent();
             // 设置title
-            weixinContent.setTitle(PandoraShareManager.Title);
+            weixinContent.setTitle(PandoraShareManager.title);
             // 设置分享内容跳转URL
-            weixinContent.setTargetUrl(PandoraShareManager.TargetUrl);
+            weixinContent.setTargetUrl(PandoraShareManager.targetUrl);
             // 设置分享图片
             weixinContent.setShareImage(new UMImage(activity, imagePath));
             weixinShare.setShareMedia(weixinContent);
