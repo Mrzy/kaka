@@ -34,7 +34,6 @@ import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.GifBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
-import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.service.PandoraService;

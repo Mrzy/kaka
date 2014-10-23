@@ -29,6 +29,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Surface;
 import android.view.WindowManager;
 
 public class BaseInfoHelper {
@@ -41,23 +42,30 @@ public class BaseInfoHelper {
 
     private static int mRealScreenHeight = -1;
 
+    /**
+     * 获得设备在竖屏时的物理高度（包括虚拟按键，通知栏的高度)
+     * @param display
+     * @return
+     */
     @SuppressLint("NewApi")
     public static int getRealHeight(Display display) {
         if (mRealScreenHeight != -1) {
             return mRealScreenHeight;
         }
+        int orientation = display.getRotation();
+        boolean landscape = orientation == Surface.ROTATION_270 || orientation == Surface.ROTATION_90;
         Point size = new Point();
         int result = 0;
         if (Build.VERSION.SDK_INT >= 17) {
             display.getRealSize(size);
-            result = size.y;
+            result = landscape ? size.x : size.y;
         } else {
             try {
-                Method getRawH = Display.class.getMethod("getRawHeight");
+                Method getRawH = landscape ? Display.class.getMethod("getRawWidth") : Display.class.getMethod("getRawHeight");
                 result = (Integer) getRawH.invoke(display);
             } catch (Exception e) {
                 display.getSize(size);
-                result = size.y;
+                result = landscape ? size.x : size.y;
             }
         }
         return result;
