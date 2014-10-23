@@ -104,8 +104,9 @@
                         android:id="@+id/individualization_locker_default_thumb_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp"
+                        android:layout_marginRight="11dp"
                         android:scaleType="fitXY"
+                        android:layout_gravity="center_vertical"
                         android:src="@drawable/pandora_box_default" />
                 </LinearLayout>
             </LinearLayout>
