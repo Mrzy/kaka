@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import cn.zmdx.kaka.locker.LockScreenManager.ILockScreenListener;
+import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -47,6 +48,17 @@ public class FakeActivity extends Activity {
             public void onUnLock() {
                 finish();
                 overridePendingTransition(0, 0);
+            }
+
+            @Override
+            public void onInitDefaultImage() {
+                Intent intent = new Intent();
+                intent.setClass(FakeActivity.this, IndividualizationActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                        R.anim.umeng_fb_slide_out_from_left);
+                finish();
             }
         });
         IntentFilter filter = new IntentFilter();

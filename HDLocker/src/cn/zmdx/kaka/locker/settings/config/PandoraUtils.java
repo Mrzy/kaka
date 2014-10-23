@@ -352,8 +352,9 @@ public class PandoraUtils {
             thumbHeight = (int) context.getResources().getDimension(
                     R.dimen.pandora_wallpaper_height);
         } else {
-            thumbHeight = (int) context.getResources().getDimension(R.dimen.setting_item_height);
-            thumbWidth = (int) ((LockScreenManager.getInstance().getBoxWidthHeightRate()) * thumbHeight);
+            thumbWidth = BaseInfoHelper.getWidth(context);
+            thumbHeight = (int) (thumbWidth / (LockScreenManager.getInstance()
+                    .getBoxWidthHeightRate()));
         }
         return ImageUtils.scaleTo(cropBitmap, thumbWidth, thumbHeight, false);
     }
