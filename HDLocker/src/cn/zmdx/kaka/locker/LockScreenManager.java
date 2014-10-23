@@ -405,7 +405,7 @@ public class LockScreenManager {
             notifyUnLocked();
         cancelAnimatorIfNeeded();
 
-        mWinManager.removeViewImmediate(mEntireView);
+        mWinManager.removeView(mEntireView);
         mSliderView.recycle();
         mEntireView = null;
         mIsShowGesture = false;
@@ -430,7 +430,6 @@ public class LockScreenManager {
             pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 5);
             mLastSyncDataTime = curTime;
         }
-        
         // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
 //         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_JOKE);
 //         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_NEWS);
@@ -623,6 +622,14 @@ public class LockScreenManager {
         };
 
         public void onPanelHiddenEnd() {
+        };
+
+        public boolean onPanelFastDown(float y) {
+            if (y > PandoraPolicy.DEFAULT_MAX_YVEL) {//向下滑的速度达到一定值时，直接解锁
+                mSliderView.collapsePanel();
+                return true;
+            }
+            return false;
         };
     };
 

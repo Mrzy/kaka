@@ -16,6 +16,7 @@ import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -287,6 +288,16 @@ public class SlidingUpPanelLayout extends ViewGroup {
         public void onPanelStartDown(View view);
 
         public void onPanelHiddenEnd();
+
+        /**
+         * view在y方向fling会回调该方法
+         * 
+         * @param yvel y轴方向滑动的速度值
+         * @return
+         */
+        public boolean onPanelFastDown(float yvel);
+
+        public void onPanelStartDown(float y);
     }
 
     /**
@@ -331,6 +342,17 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
         @Override
         public void onPanelHiddenEnd() {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public boolean onPanelFastDown(float y) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public void onPanelStartDown(float yvel) {
             // TODO Auto-generated method stub
         }
     }
@@ -1514,6 +1536,11 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 mIsFixed = false;
             }
 
+            if (mPanelSlideListener != null) {
+                if (mPanelSlideListener.onPanelFastDown(yvel)) {
+                    return;
+                }
+            }
             if (mSlideOffset != 0) {
                 int target = computePanelTopPosition(1.0f);
                 mDragHelper.settleCapturedViewAt(releasedChild.getLeft(), target);
