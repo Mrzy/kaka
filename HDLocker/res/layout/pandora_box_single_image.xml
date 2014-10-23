@@ -2,21 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="10dp" >
-
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-        android:id="@+id/desc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textColor="#ffffff"
-        android:textSize="18sp" />
+    android:orientation="vertical" >
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp" >
+        android:layout_height="match_parent" >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -33,10 +23,28 @@
                 android:id="@+id/shareLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
                 android:orientation="vertical" >
             </LinearLayout>
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/single_img"
+                android:gravity="center_horizontal"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/image_news_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc"
+                android:gravity="center_horizontal"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
         </RelativeLayout>
     </ScrollView>
 

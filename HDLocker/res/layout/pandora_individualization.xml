@@ -105,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="11dp"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/pandora_box_default" />
                 </LinearLayout>

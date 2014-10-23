@@ -25,6 +25,7 @@ public class SingleImageBox extends BaseBox {
     private ImageView mSingleImgView;
 
     private TextView mDescView;
+    private TextView mImageNewsContent;
 
     private boolean mIsRendered = false;
 
@@ -40,6 +41,7 @@ public class SingleImageBox extends BaseBox {
         mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
         setImageViewSize(mSingleImgView);
         mDescView = (TextView) mEntireView.findViewById(R.id.desc);
+        mImageNewsContent = (TextView) mEntireView.findViewById(R.id.image_news_content);
         mShareLayout = (ViewGroup) mEntireView.findViewById(R.id.shareLayout);
         enableShare();
         mShareLayout.addView(createShareView());
@@ -94,6 +96,7 @@ public class SingleImageBox extends BaseBox {
         if (mData == null || mData.getmImage() == null) {
             return false;
         }
+        mImageNewsContent.setText(mData.getmContent());
         mSingleImgView.setImageBitmap(mData.getmImage());
         // mSingleImgView.setOnClickListener(new OnClickListener() {
         //
@@ -107,7 +110,6 @@ public class SingleImageBox extends BaseBox {
         // mIsHide = !mIsHide;
         // }
         // });
-
         mDescView.setText(mData.getmTitle());
         return true;
     }

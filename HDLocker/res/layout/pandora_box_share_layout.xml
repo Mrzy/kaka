@@ -8,6 +8,7 @@
         android:id="@+id/platforms_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#a0000000"
         android:orientation="horizontal"
         android:visibility="invisible" >
 
