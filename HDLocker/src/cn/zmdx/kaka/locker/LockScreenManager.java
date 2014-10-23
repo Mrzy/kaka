@@ -123,6 +123,8 @@ public class LockScreenManager {
         void onLock();
 
         void onUnLock();
+        
+        void onInitDefaultImage();
     }
 
     public void setOnLockScreenListener(ILockScreenListener listener) {
@@ -394,6 +396,10 @@ public class LockScreenManager {
         }
     }
 
+    public void onInitDefaultImage(){
+        mLockListener.onInitDefaultImage();
+    }
+    
     public void unLock() {
         unLock(true);
     }

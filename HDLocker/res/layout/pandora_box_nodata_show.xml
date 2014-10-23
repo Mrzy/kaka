@@ -5,27 +5,33 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent" >
 
-    <ImageView
-        android:id="@+id/pandora_box_nodata_show_imageview"
-        android:layout_width="@dimen/pandora_box_nodata_show_image_width"
-        android:layout_height="@dimen/pandora_box_nodata_show_image_height"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/pandora_box_nodata_show_image_width"
-        android:background="@drawable/ic_launcher" />
-
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-        android:id="@+id/pandora_box_nodata_show_textview"
+    <RelativeLayout
+        android:id="@+id/pandora_box_nodata_default"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_us_textview_height"
-        android:layout_below="@+id/pandora_box_nodata_show_imageview"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:gravity="center_horizontal"
-        android:text="@string/setting_about_pandora"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:layout_height="match_parent" >
 
-    <!--
+        <ImageView
+            android:id="@+id/pandora_box_nodata_show_imageview"
+            android:layout_width="@dimen/pandora_box_nodata_show_image_width"
+            android:layout_height="@dimen/pandora_box_nodata_show_image_height"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/pandora_box_nodata_show_image_width"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_launcher" />
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:id="@+id/pandora_box_nodata_show_textview"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_about_us_textview_height"
+            android:layout_below="@+id/pandora_box_nodata_show_imageview"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:text="@string/setting_about_pandora"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <!--
          <TextView
         android:id="@+id/pandora_box_nodata_show_textview1"
         android:layout_width="wrap_content"
@@ -35,16 +41,42 @@
         android:text="@string/setting_about_text"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
-    -->
+        -->
 
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-        android:id="@+id/pandora_box_nodata_show_tip"
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:id="@+id/pandora_box_nodata_show_tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pandora_box_nodata_show_textview"
+            android:gravity="center_horizontal"
+            android:text="@string/pandora_box_default_tip"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
+
+        <cn.zmdx.kaka.locker.widget.BaseButton
+            android:id="@+id/pandora_box_set_default_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pandora_box_nodata_show_tip"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:gravity="center"
+            android:text="@string/pandora_box_guide_set_default_image"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/pandora_box_nodata_custom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pandora_box_nodata_show_textview"
-        android:gravity="center_horizontal"
-        android:text="@string/pandora_box_default_tip"
-        android:textColor="#ffffff"
-        android:textSize="12sp" />
+        android:layout_height="match_parent"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/pandora_box_nodata_custom_show_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+    </RelativeLayout>
 
 </RelativeLayout>
