@@ -76,5 +76,7 @@
     <dimen name="pandora_wallpaper_default_line_margin_top">21dp</dimen>
     <dimen name="init_setting_complete_button_margin_right">10dp</dimen>
     <dimen name="guide_explore_text_size">14dp</dimen>
+    
+    <dimen name="individualization_image_height">46dp</dimen>
 
 </resources>
