@@ -127,6 +127,7 @@ public class PandoraShareManager {
             @Override
             public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
 
+                activity.finish();
             }
         });
     }
@@ -159,6 +160,7 @@ public class PandoraShareManager {
 
             @Override
             public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
+                activity.finish();
             }
         });
     }
