@@ -37,6 +37,10 @@ public class DefaultBox implements IPandoraBox {
 
     private ImageView mCustomImageView;
 
+    private ImageView mCustomSetImageView;
+
+    private boolean isCustomSetViewShow = false;
+
     public DefaultBox(Context context, PandoraData data) {
         mContext = context;
         mData = data;
@@ -54,17 +58,14 @@ public class DefaultBox implements IPandoraBox {
 
         mCustomImageView = (ImageView) mLayoutView
                 .findViewById(R.id.pandora_box_nodata_custom_show_imageview);
+        mCustomImageView.setOnClickListener(clickListener);
 
         mDefaultButton = (BaseButton) mLayoutView.findViewById(R.id.pandora_box_set_default_image);
-        mDefaultButton.setOnClickListener(new OnClickListener() {
+        mDefaultButton.setOnClickListener(clickListener);
 
-            @Override
-            public void onClick(View v) {
-                LockScreenManager.getInstance().unLock();
-                LockScreenManager.getInstance().onInitDefaultImage();
-            }
-        });
-
+        mCustomSetImageView = (ImageView) mLayoutView
+                .findViewById(R.id.pandora_box_custom_set_default_image);
+        mCustomSetImageView.setOnClickListener(clickListener);
         initDefaultImage(context);
     }
 
@@ -79,6 +80,25 @@ public class DefaultBox implements IPandoraBox {
             mCustomRl.setVisibility(View.GONE);
         }
     }
+
+    private OnClickListener clickListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            if (view.getId() == R.id.pandora_box_nodata_custom_show_imageview) {
+                isCustomSetViewShow = !isCustomSetViewShow;
+                if (isCustomSetViewShow) {
+                    mCustomSetImageView.setVisibility(View.VISIBLE);
+                } else {
+                    mCustomSetImageView.setVisibility(View.GONE);
+                }
+            } else {
+                LockScreenManager.getInstance().unLock();
+                LockScreenManager.getInstance().onInitDefaultImage();
+            }
+
+        }
+    };
 
     @Override
     public int getCategory() {
