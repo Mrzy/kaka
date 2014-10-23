@@ -40,7 +40,6 @@ public class FakeActivity extends Activity {
         LockScreenManager.getInstance().setOnLockScreenListener(new ILockScreenListener() {
             @Override
             public void onLock() {
-
             }
 
             @Override
