@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.content;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
@@ -112,6 +113,7 @@ public class PandoraBoxManager {
 
     private IPandoraBox getHtmlBox(ServerImageData bd) {
         final PandoraData pd = new PandoraData();
+        pd.setmId(bd.getId());
         pd.setmContentUrl(bd.getUrl());
         pd.setFromTable(TableStructure.TABLE_NAME_SERVER_IMAGE);
         pd.setDataType(ServerDataMapping.S_DATATYPE_HTML);

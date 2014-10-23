@@ -45,5 +45,4 @@ public class HtmlBox extends BaseBox {
         mWebView.loadUrl(mData.getmContentUrl());
         return mWebView;
     }
-
 }

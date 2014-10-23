@@ -1,4 +1,4 @@
-package cn.zmdx.kaka.locker.gif;
+package pl.droidsonroids.gif;
 
 import android.content.ContentResolver;
 import android.content.res.AssetFileDescriptor;

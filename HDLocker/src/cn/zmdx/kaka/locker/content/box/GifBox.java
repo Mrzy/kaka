@@ -4,6 +4,8 @@ package cn.zmdx.kaka.locker.content.box;
 import java.io.File;
 import java.io.IOException;
 
+import pl.droidsonroids.gif.GifImageView;
+
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,7 +15,6 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
-import cn.zmdx.kaka.locker.gif.GifImageView;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class GifBox implements IPandoraBox {
@@ -77,7 +78,7 @@ public class GifBox implements IPandoraBox {
             mTextView.setVisibility(View.GONE);
             return true;
         }
-        mTextView.setText(mData.getmContent());
+        mTextView.setText(mData.getmTitle());
         mImageView.setOnClickListener(new OnClickListener() {
 
             @Override
