@@ -30,14 +30,15 @@
             android:src="@drawable/pandora_wallpaper_delete" />
     </RelativeLayout>
 
-    <!-- <ImageView
+    <ImageView
         android:id="@+id/pandora_wallpaper_item_select"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp"
         android:contentDescription="@string/contentDescription"
         android:src="@drawable/pandora_wallpaper_select"
-        android:visibility="invisible" /> -->
+        android:visibility="invisible" />
 
 </RelativeLayout>
