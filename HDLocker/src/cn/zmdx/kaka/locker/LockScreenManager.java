@@ -281,7 +281,14 @@ public class LockScreenManager {
             return;
         }
         if (pw == null) {
-            mWeatherSummary.setVisibility(View.INVISIBLE);
+            String welcomeString = PandoraConfig.newInstance(mContext).getWelcomeString();
+            if(!TextUtils.isEmpty(welcomeString)){
+                mWeatherSummary.setText(welcomeString);
+                mWeatherSummary.setVisibility(View.VISIBLE);
+            }else{
+                mWeatherSummary.setText("");
+                mWeatherSummary.setVisibility(View.INVISIBLE);
+            }
         } else {
             int temp = pw.getTemp();
             String summary = pw.getSummary();

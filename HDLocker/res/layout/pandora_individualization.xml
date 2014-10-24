@@ -91,23 +91,68 @@
                     android:paddingLeft="@dimen/setting_title_textview_margin_left"
                     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        style="@style/setting_textview"
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:clickable="false"
                         android:gravity="center_vertical"
-                        android:text="@string/individualization_locker_default_image" />
+                        android:orientation="vertical" >
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            style="@style/setting_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:gravity="center_vertical"
+                            android:text="@string/individualization_locker_default_image" />
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            style="@style/init_setting_small_textview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:clickable="false"
+                            android:gravity="center_vertical"
+                            android:text="@string/pandora_box_guide_set_default_image_detail" />
+                    </LinearLayout>
 
                     <ImageView
                         android:id="@+id/individualization_locker_default_thumb_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginRight="11dp"
                         android:scaleType="centerCrop"
-                        android:layout_gravity="center_vertical"
                         android:src="@drawable/pandora_box_default" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/individualization_welcome_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_item_height"
+                    android:background="@drawable/setting_item_selector"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/setting_title_textview_margin_left"
+                    android:paddingRight="@dimen/setting_title_textview_margin_left" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/setting_textview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:gravity="center_vertical"
+                        android:text="@string/individualization_welcome_text" />
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/init_setting_small_textview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:clickable="false"
+                        android:gravity="center_vertical"
+                        android:text="@string/individualization_welcome_text_detail" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

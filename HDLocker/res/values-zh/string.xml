@@ -74,8 +74,8 @@
     <string name="init_setting_title_detail">初始设置详细说明</string>
     
     <string name="pandora_wallpaper_dialog_title">确认删除此张壁纸？</string>
-    <string name="pandora_wallpaper_dialog_cancle">取消</string>
-    <string name="pandora_wallpaper_dialog_sure">确认</string>
+    <string name="pandora_dialog_cancle">取消</string>
+    <string name="pandora_dialog_sure">确认</string>
     <string name="error">出现异常，给您带来的不便，敬请谅解，我们会尽快解决</string>
     <string name="pandora_guide_start">开始体验</string>
     
@@ -90,4 +90,8 @@
     <string name="init_setting_V6_trust_prompt_three">3.开启『潘多拉锁屏』开关</string>
     
     <string name="pandora_box_guide_set_default_image">个性化设置默认图</string>
+    <string name="individualization_welcome_text">设置欢迎语</string>
+    <string name="individualization_welcome_text_detail">锁屏页面，当天气信息无法获取时显示此欢迎语</string>
+    <string name="pandora_box_guide_set_default_image_detail">锁屏页面，当没有信息时显示此默认图</string>
+    <string name="individualization_welcome_text_hint">请输入欢迎语!</string>
 </resources>

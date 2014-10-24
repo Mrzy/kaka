@@ -537,7 +537,7 @@ public class WallPaperActivity extends Activity {
 
     protected void showDelDialog() {
         Dialog dialog = new Dialog(this, android.R.style.Theme_Dialog);
-        dialog.setContentView(R.layout.wallpaper_del_dialog);
+        dialog.setContentView(R.layout.pandora_dialog);
         dialog.show();
 
     }

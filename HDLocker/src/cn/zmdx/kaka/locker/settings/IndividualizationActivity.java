@@ -5,6 +5,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -28,7 +30,9 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
+import cn.zmdx.kaka.locker.widget.BaseEditText;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
+import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -42,6 +46,8 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     private LinearLayout mLockerDefaultImage;
 
     private ImageView mLockerDefaultImageThumb;
+
+    private LinearLayout mWelcomeText;
 
     public static String LOCK_DEFAULT_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
             .getPath() + "/Pandora/lockDefault/";
@@ -76,6 +82,8 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         params.height = height;
         mLockerDefaultImageThumb.setLayoutParams(params);
 
+        mWelcomeText = (LinearLayout) findViewById(R.id.individualization_welcome_text);
+        mWelcomeText.setOnClickListener(this);
     }
 
     private void initBackground() {
@@ -134,6 +142,48 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     }
 
+    private void showInputDialog() {
+        final Dialog dialog = new Dialog(this, R.style.pandora_dialog_style);
+        dialog.getWindow().setContentView(R.layout.pandora_dialog);
+        dialog.show();
+        dialog.setCancelable(false);
+
+        TypefaceTextView mTitle = (TypefaceTextView) dialog.findViewById(R.id.pandora_dialog_title);
+        mTitle.setText(getResources().getString(R.string.individualization_welcome_text));
+        dialog.findViewById(R.id.pandora_dialog_individualization).setVisibility(View.VISIBLE);
+        final BaseEditText mEditText = (BaseEditText) dialog
+                .findViewById(R.id.pandora_dialog_individualization_edit_text);
+
+        String welcomeString = PandoraConfig.newInstance(IndividualizationActivity.this)
+                .getWelcomeString();
+        if (!TextUtils.isEmpty(welcomeString)) {
+            mEditText.setText(welcomeString);
+            mEditText.setSelection(welcomeString.length());
+        }
+
+        TypefaceTextView mCancle = (TypefaceTextView) dialog
+                .findViewById(R.id.pandora_dialog_individualization_button_cancle);
+        mCancle.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        TypefaceTextView mSure = (TypefaceTextView) dialog
+                .findViewById(R.id.pandora_dialog_individualization_button_sure);
+        mSure.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String welcomeString = mEditText.getText().toString();
+                saveWelcomeString(welcomeString);
+                dialog.dismiss();
+            }
+        });
+
+    }
+
     private void closeNoticeBar() {
         PandoraConfig.newInstance(this).saveNeedNotice(false);
     }
@@ -146,6 +196,10 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         return PandoraConfig.newInstance(this).isNeedNotice();
     }
 
+    private void saveWelcomeString(String welcomeString) {
+        PandoraConfig.newInstance(this).saveWelcomeString(welcomeString);
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -154,6 +208,9 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                         PandoraUtils.REQUEST_CODE_GALLERY);
                 break;
 
+            case R.id.individualization_welcome_text:
+                showInputDialog();
+                break;
             default:
                 break;
         }
