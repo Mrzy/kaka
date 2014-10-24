@@ -281,22 +281,15 @@ public class LockScreenManager {
     }
 
     private void updateWeatherInfo(PandoraWeather pw) {
-        Log.d("syc",
-                "Calendar.getInstance().get(Calendar.HOUR)="
-                        + Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
         if (mWeatherSummary == null) {
             return;
         }
-        pw = null;
         if (pw == null) {
             String welcomeString = PandoraConfig.newInstance(mContext).getWelcomeString();
-            Log.d("syc", "welcomeString=" + welcomeString);
             if (!TextUtils.isEmpty(welcomeString)) {
-                Log.d("syc", "welcomeString=1" );
                 mWeatherSummary.setText(welcomeString);
                 mWeatherSummary.setVisibility(View.VISIBLE);
             } else {
-                Log.d("syc", "welcomeString=2" );
                 String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
                         .getInstance().get(Calendar.HOUR_OF_DAY));
                 mWeatherSummary.setText(promptString);
