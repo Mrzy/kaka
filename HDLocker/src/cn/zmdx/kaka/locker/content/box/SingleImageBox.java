@@ -3,7 +3,6 @@ package cn.zmdx.kaka.locker.content.box;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ public class SingleImageBox extends BaseBox {
     private ImageView mSingleImgView;
 
     private TextView mDescView;
+
     private TextView mImageNewsContent;
 
     private boolean mIsRendered = false;
@@ -41,6 +41,7 @@ public class SingleImageBox extends BaseBox {
         mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
         setImageViewSize(mSingleImgView);
         mDescView = (TextView) mEntireView.findViewById(R.id.desc);
+        // mEntireView.findViewById(R.id.image_news_content);
         mImageNewsContent = (TextView) mEntireView.findViewById(R.id.image_news_content);
         mShareLayout = (ViewGroup) mEntireView.findViewById(R.id.shareLayout);
         enableShare();
@@ -111,6 +112,8 @@ public class SingleImageBox extends BaseBox {
         // }
         // });
         mDescView.setText(mData.getmTitle());
+
         return true;
     }
+
 }
