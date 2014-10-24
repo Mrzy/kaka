@@ -58,6 +58,8 @@ public class PandoraConfig {
 
     private static final String KEY_LAST_TIME_PULL_ORIGINAL_DATA = "l";
 
+    private static final String KEY_LOCK_WELCOME_STRING = "keyLockWelcomeString";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -249,9 +251,21 @@ public class PandoraConfig {
     public long getLastTimePullOriginalData() {
         return mSp.getLong(KEY_LAST_TIME_PULL_ORIGINAL_DATA, 0);
     }
+
     public void saveLastPullOriginalDataTime(long time) {
         Editor editor = mSp.edit();
         editor.putLong(KEY_LAST_TIME_PULL_ORIGINAL_DATA, time);
         editor.commit();
     }
+
+    public String getWelcomeString() {
+        return mSp.getString(KEY_LOCK_WELCOME_STRING, "");
+    }
+
+    public void saveWelcomeString(String welcomeString) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_LOCK_WELCOME_STRING, welcomeString);
+        editor.commit();
+    }
+
 }

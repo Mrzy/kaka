@@ -70,7 +70,7 @@
     <dimen name="setting_title_textview_margin_top">25dp</dimen>
     <dimen name="setting_title_textview_margin_left">13.5dp</dimen>
     <dimen name="setting_title_line_height">1px</dimen>
-    <dimen name="setting_item_height">52dp</dimen>
+    <dimen name="setting_item_height">60dp</dimen>
     <dimen name="pandora_wallpaper_textview_margin_top">23dp</dimen>
     <dimen name="pandora_wallpaper_textview_margin_bottom">17dp</dimen>
     <dimen name="pandora_wallpaper_default_line_margin_top">21dp</dimen>

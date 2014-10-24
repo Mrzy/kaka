@@ -64,4 +64,9 @@
         <item name="android:textSize">17sp</item>
     </style>
 
+    <style name="pandora_dialog_style" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground"> @android:color/transparent </item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
 </resources>
