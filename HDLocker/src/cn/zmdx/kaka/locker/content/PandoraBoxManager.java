@@ -105,6 +105,7 @@ public class PandoraBoxManager {
         } else if (ServerDataMapping.S_DATATYPE_NEWS.equals(dataType)) {
             box = getNewsBox(bd);
         } else {
+            ServerImageDataModel.getInstance().deleteById(bd.getId());
             return null;
         }
         return box;
