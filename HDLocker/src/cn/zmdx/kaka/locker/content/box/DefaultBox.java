@@ -93,10 +93,15 @@ public class DefaultBox implements IPandoraBox {
                     mCustomSetImageView.setVisibility(View.GONE);
                 }
             } else {
-                LockScreenManager.getInstance().unLock();
-                LockScreenManager.getInstance().onInitDefaultImage();
-            }
+                LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
 
+                    @Override
+                    public void run() {
+                        LockScreenManager.getInstance().onInitDefaultImage();
+                    }
+                });
+                LockScreenManager.getInstance().unLock();
+            }
         }
     };
 

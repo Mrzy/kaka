@@ -252,7 +252,7 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_TITLE, TableStructure.SERVER_IMAGE_URL,
 
         }, TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
-                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "= ?", new String[] {
+                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
                 ServerDataMapping.S_DATATYPE_HTML, String.valueOf(MySqlitDatabase.DOWNLOAD_FALSE)
         }, null, null, null, String.valueOf(count));
 

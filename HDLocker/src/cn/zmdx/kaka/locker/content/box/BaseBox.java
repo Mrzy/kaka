@@ -92,19 +92,24 @@ public abstract class BaseBox implements IPandoraBox {
         }
     };
 
-    private void share(int platform) {
-        Intent intent = new Intent();
-        intent.setAction(FakeActivity.ACTION_PANDORA_SHARE);
-        intent.setPackage(mContext.getPackageName());
-
-        intent.putExtra("platform", platform);
-        String imageUrl = getData().getmImageUrl();
-        String path = DiskImageHelper.getFileByUrl(imageUrl).getAbsolutePath();
-        intent.putExtra("imagePath", path);
-        intent.putExtra("imagetitle", getData().getmTitle());
-        intent.putExtra("isHtml", getCategory() == IPandoraBox.CATEGORY_HTML);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    private void share(final int platform) {
         LockScreenManager.getInstance().setWindowAnimations(android.R.anim.slide_in_left);
+        LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent();
+                intent.setAction(FakeActivity.ACTION_PANDORA_SHARE);
+                intent.setPackage(mContext.getPackageName());
+
+                intent.putExtra("platform", platform);
+                String imageUrl = getData().getmImageUrl();
+                String path = DiskImageHelper.getFileByUrl(imageUrl).getAbsolutePath();
+                intent.putExtra("imagePath", path);
+                intent.putExtra("imagetitle", getData().getmTitle());
+                intent.putExtra("isHtml", getCategory() == IPandoraBox.CATEGORY_HTML);
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+            }
+        });
         LockScreenManager.getInstance().unLock(false);
     }
 }

@@ -43,6 +43,7 @@ import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
@@ -122,7 +123,7 @@ public class LockScreenManager {
         void onLock();
 
         void onUnLock();
-        
+
         void onInitDefaultImage();
     }
 
@@ -282,10 +283,10 @@ public class LockScreenManager {
         }
         if (pw == null) {
             String welcomeString = PandoraConfig.newInstance(mContext).getWelcomeString();
-            if(!TextUtils.isEmpty(welcomeString)){
+            if (!TextUtils.isEmpty(welcomeString)) {
                 mWeatherSummary.setText(welcomeString);
                 mWeatherSummary.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 mWeatherSummary.setText("");
                 mWeatherSummary.setVisibility(View.INVISIBLE);
             }
@@ -402,15 +403,46 @@ public class LockScreenManager {
         }
     }
 
-    public void onInitDefaultImage(){
+    public void onInitDefaultImage() {
         mLockListener.onInitDefaultImage();
     }
-    
-    public void unLock() {
-        unLock(true);
+
+    /**
+     * 设置当调用unlock解锁后要执行的动作，解锁后，自动置为null
+     * 
+     * @param runnable
+     */
+    public void setRunnableAfterUnLock(Runnable runnable) {
+        mUnLockRunnable = runnable;
     }
 
+    /**
+     * 调用会解锁，如果开启安全锁，会跳转到安全锁界面；如果希望在解锁后执行其它动作，请在调用unLock()
+     * 之前使用setRunnaleAfterUnLock()方法设置
+     * 默认会关闭背后的假Activity，如果不希望关闭这个Activity，可以使用unLock(boolean
+     * isCloseFakeActivity)方法
+     */
+    public void unLock() {
+        if (!showGestureView()) {
+            internalUnLock();
+        }
+    }
+
+    /**
+     * 解锁
+     * @param isCloseFakeActivity 解锁同时，是否关闭背后的假activity,默认为true
+     */
     public void unLock(boolean isCloseFakeActivity) {
+        if (!showGestureView()) {
+            internalUnLock(isCloseFakeActivity);
+        }
+    }
+
+    private void internalUnLock() {
+        internalUnLock(true);
+    }
+
+    private void internalUnLock(boolean isCloseFakeActivity) {
         if (!mIsLocked)
             return;
         if (isCloseFakeActivity)
@@ -422,6 +454,11 @@ public class LockScreenManager {
         mEntireView = null;
         mIsShowGesture = false;
         mIsLocked = false;
+
+        if (mUnLockRunnable != null) {
+            HDBThreadUtils.runOnUi(mUnLockRunnable);
+            mUnLockRunnable = null;
+        }
     }
 
     private void cancelAnimatorIfNeeded() {
@@ -439,27 +476,32 @@ public class LockScreenManager {
         if (curTime - mLastSyncDataTime > PandoraPolicy.MIN_DURATION_SYNC_DATA_TIME) {
             PandoraBoxDispatcher pd = PandoraBoxDispatcher.getInstance();
             pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
-            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 5);
+            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 4000);
             mLastSyncDataTime = curTime;
         }
         // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
-//         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_JOKE);
-//         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_NEWS);
+        // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_JOKE);
+        // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_NEWS);
         // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_TEXT_DATA);
-//         pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_GIF);
+        // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_GIF);
         // if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG)) {
         // pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG,
         // 4000);
         // }
-//        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE)) {
-//            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE, 5000);
-//        }
-//        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS)) {
-//            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS, 6000);
-//        }
-//        if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF)) {
-//            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF, 7000);
-//        }
+        // if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE))
+        // {
+        // pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE,
+        // 5000);
+        // }
+        // if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS))
+        // {
+        // pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS,
+        // 6000);
+        // }
+        // if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF)) {
+        // pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF,
+        // 7000);
+        // }
 
     }
 
@@ -468,6 +510,8 @@ public class LockScreenManager {
     }
 
     private boolean mIsShowGesture = false;
+
+    private Runnable mUnLockRunnable = null;
 
     private boolean showGestureView() {
         int unlockType = PandoraConfig.newInstance(mContext).getUnLockType();
@@ -507,7 +551,8 @@ public class LockScreenManager {
     private void verifyGustureLock(List<Cell> pattern) {
         if (checkPattern(pattern)) {
             UmengCustomEventManager.statisticalGuestureUnLockSuccess();
-            unLock();
+            internalUnLock();
+
             mIsUseCurrentBox = false;
         } else {
             UmengCustomEventManager.statisticalGuestureUnLockFail();
@@ -557,7 +602,7 @@ public class LockScreenManager {
         public void onPanelCollapsed(View panel) {
             UmengCustomEventManager.statisticalUnLockTimes();
             if (!showGestureView()) {
-                unLock();
+                internalUnLock();
                 // 如果从开始下拉到直接解锁所经历的总时间小于1秒，则不更新数据
                 if (System.currentTimeMillis() - mLockTime < 800) {
                     if (BuildConfig.DEBUG) {
@@ -612,7 +657,7 @@ public class LockScreenManager {
             int duration = (int) (System.currentTimeMillis() - mLockTime);
             UmengCustomEventManager.statisticalLockTime(mPandoraBox, duration);
             if (!showGestureView()) {
-                unLock();
+                internalUnLock();
                 mIsUseCurrentBox = false;
             }
             if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
@@ -637,7 +682,7 @@ public class LockScreenManager {
         };
 
         public boolean onPanelFastDown(float y) {
-            if (y > PandoraPolicy.DEFAULT_MAX_YVEL) {//向下滑的速度达到一定值时，直接解锁
+            if (y > PandoraPolicy.DEFAULT_MAX_YVEL) {// 向下滑的速度达到一定值时，直接解锁
                 mSliderView.collapsePanel();
                 return true;
             }
