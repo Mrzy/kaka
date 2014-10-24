@@ -107,4 +107,11 @@
     <string name="individualization_welcome_text_detail">锁屏页面，当天气信息无法获取时显示此欢迎语</string>
     <string name="pandora_box_guide_set_default_image_detail">锁屏页面，当没有信息时显示此默认图</string>
     <string name="individualization_welcome_text_hint">请输入欢迎语!</string>
+    
+    <string name="individualization_welcome_text_default_morning">最近天气冷暖不均，要多穿点衣服哦</string>
+    <string name="individualization_welcome_text_default_morning_work">开开窗，看看外面的世界多美好啊</string>
+    <string name="individualization_welcome_text_default_afternoon">午睡一会，下午有精神哦！</string>
+    <string name="individualization_welcome_text_default_afternoon_work">让你不午睡，困了吧？该！</string>
+    <string name="individualization_welcome_text_default_evening">该吃晚饭了，饭后出去活动一下吧</string>
+    <string name="individualization_welcome_text_default_evening_work">夜空的星在点亮，绽放出梦的光芒</string>
 </resources>

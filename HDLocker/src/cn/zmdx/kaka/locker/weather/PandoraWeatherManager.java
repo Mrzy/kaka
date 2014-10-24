@@ -64,6 +64,7 @@ public class PandoraWeatherManager {
         }
 
         if (!HDBNetworkState.isNetworkAvailable()) {
+            callback.onFailed();
             return;
         }
         final String lonlat = getLocation();
@@ -71,6 +72,7 @@ public class PandoraWeatherManager {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("未获得位置信息，中断请求天气数据");
             }
+            callback.onFailed();
             return;
         }
         JsonObjectRequest request = null;
