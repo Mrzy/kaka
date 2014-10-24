@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -152,6 +153,13 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         dialog.findViewById(R.id.pandora_dialog_individualization).setVisibility(View.VISIBLE);
         final BaseEditText mEditText = (BaseEditText) dialog
                 .findViewById(R.id.pandora_dialog_individualization_edit_text);
+
+        String welcomeString = PandoraConfig.newInstance(IndividualizationActivity.this)
+                .getWelcomeString();
+        if (!TextUtils.isEmpty(welcomeString)) {
+            mEditText.setText(welcomeString);
+            mEditText.setSelection(welcomeString.length());
+        }
 
         TypefaceTextView mCancle = (TypefaceTextView) dialog
                 .findViewById(R.id.pandora_dialog_individualization_button_cancle);
