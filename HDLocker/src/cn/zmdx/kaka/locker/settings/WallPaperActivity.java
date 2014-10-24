@@ -104,10 +104,8 @@ public class WallPaperActivity extends Activity {
     private void initContainer() {
         container = new FixedGridLayout(this);
         container.setClipChildren(false);
-        // int width = PandoraUtils.getWallpapaerWidth(this);
         int width = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_width);
         int height = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_height);
-        // int height = PandoraUtils.getWallpaperHeight(this, width);
         ((FixedGridLayout) container).setCellHeight(height);
         ((FixedGridLayout) container).setCellWidth(width);
         ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
@@ -118,12 +116,9 @@ public class WallPaperActivity extends Activity {
     private void initAdviceContainer() {
         mAdviceContainer = new FixedGridLayout(this);
         mAdviceContainer.setClipChildren(false);
-        // int adviceWidth = PandoraUtils.getWallpapaerWidth(this);
         int adviceWidth = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_width);
         int adviceHeight = (int) getResources().getDimension(
                 R.dimen.pandora_wallpaper_layout_height);
-        // int adviceHeight = PandoraUtils.getWallpaperHeight(this,
-        // adviceWidth);
         ((FixedGridLayout) mAdviceContainer).setCellHeight(adviceHeight);
         ((FixedGridLayout) mAdviceContainer).setCellWidth(adviceWidth);
         ViewGroup adviceParent = (ViewGroup) findViewById(R.id.advice_parent);
@@ -161,12 +156,12 @@ public class WallPaperActivity extends Activity {
                     .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
             ImageView mWallpaperIv = (ImageView) mWallpaperRl
                     .findViewById(R.id.pandora_wallpaper_item_iamge);
-            // ImageView mWallpaperSelect = (ImageView) mWallpaperRl
-            // .findViewById(R.id.pandora_wallpaper_item_select);
+            ImageView mWallpaperSelect = (ImageView) mWallpaperRl
+                    .findViewById(R.id.pandora_wallpaper_item_select);
             mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_delete).setVisibility(View.GONE);
             int themeId = mThemeList.get(i).getmThemeId();
             mAdviceThumbIdArray.put(i, themeId);
-            mAdviceBorderArray.put(i, mWallpaperIv);
+            mAdviceBorderArray.put(i, mWallpaperSelect);
             mWallpaperIv.setTag(i);
             mWallpaperIv.setImageResource(mThemeList.get(i).getmThumbnailResId());
             mWallpaperIv.setBackgroundResource(R.drawable.setting_wallpaper_border_default);
@@ -253,7 +248,7 @@ public class WallPaperActivity extends Activity {
                 .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
         ImageView mWallpaperIv = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_iamge);
-        // mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_select).setVisibility(View.GONE);
+         mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_select).setVisibility(View.GONE);
         mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_delete).setVisibility(View.GONE);
         mWallpaperIv.setImageDrawable(getResources().getDrawable(R.drawable.pandora_wallpaper_add));
         mWallpaperIv.setBackgroundResource(R.drawable.setting_wallpaper_add_button_selector);
@@ -346,10 +341,6 @@ public class WallPaperActivity extends Activity {
         int mAspectRatioY = 0;
         int width = BaseInfoHelper.getWidth(this);
         int height = Integer.parseInt(BaseInfoHelper.getHeight(this));
-        // int width = (int)
-        // getResources().getDimension(R.dimen.pandora_wallpaper_width);
-        // int height = (int)
-        // getResources().getDimension(R.dimen.pandora_wallpaper_height);
         if (width >= height) {
             mAspectRatioX = 100;
             mAspectRatioY = (mAspectRatioX * height) / width;
@@ -391,13 +382,15 @@ public class WallPaperActivity extends Activity {
         for (int i = 0; i < mThumbNameArray.size(); i++) {
             if (fileName.equals(mThumbNameArray.get(mThumbNameArray.keyAt(i)))) {
                 if (null != mBorderArray) {
-                    mBorderArray.get(mBorderArray.keyAt(i)).setBackgroundResource(
-                            R.drawable.setting_wallpaper_border);
+//                    mBorderArray.get(mBorderArray.keyAt(i)).setBackgroundResource(
+//                            R.drawable.setting_wallpaper_border);
+                    mBorderArray.get(mBorderArray.keyAt(i)).setVisibility(View.VISIBLE);
                 }
             } else {
                 if (null != mBorderArray) {
-                    mBorderArray.get(mBorderArray.keyAt(i)).setBackgroundResource(
-                            R.drawable.setting_wallpaper_border_default);
+//                    mBorderArray.get(mBorderArray.keyAt(i)).setBackgroundResource(
+//                            R.drawable.setting_wallpaper_border_default);
+                    mBorderArray.get(mBorderArray.keyAt(i)).setVisibility(View.GONE);
                 }
             }
         }
@@ -406,11 +399,13 @@ public class WallPaperActivity extends Activity {
     private void checkCurrentAdviceWallpaper(int position) {
         for (int pos = 0; pos < mAdviceThumbIdArray.size(); pos++) {
             if (pos == position) {
-                mAdviceBorderArray.get(pos).setBackgroundResource(
-                        R.drawable.setting_wallpaper_border);
+//                mAdviceBorderArray.get(pos).setBackgroundResource(
+//                        R.drawable.setting_wallpaper_border);
+                mAdviceBorderArray.get(pos).setVisibility(View.VISIBLE);
             } else {
-                mAdviceBorderArray.get(pos).setBackgroundResource(
-                        R.drawable.setting_wallpaper_border_default);
+//                mAdviceBorderArray.get(pos).setBackgroundResource(
+//                        R.drawable.setting_wallpaper_border_default);
+                mAdviceBorderArray.get(pos).setVisibility(View.GONE);
             }
         }
     }
@@ -474,12 +469,12 @@ public class WallPaperActivity extends Activity {
                 .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
         ImageView mWallpaperIv = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_iamge);
-        // ImageView mWallpaperSelect = (ImageView) mWallpaperRl
-        // .findViewById(R.id.pandora_wallpaper_item_select);
+        ImageView mWallpaperSelect = (ImageView) mWallpaperRl
+                .findViewById(R.id.pandora_wallpaper_item_select);
         final ImageView mWallpaperDel = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_delete);
         mThumbNameArray.put(key, fileName);
-        mBorderArray.put(key, mWallpaperIv);
+        mBorderArray.put(key, mWallpaperSelect);
         mWallpaperIv.setImageBitmap(bitmap);
         mWallpaperIv.setBackgroundResource(R.drawable.setting_wallpaper_border_default);
         mWallpaperIv.setOnClickListener(new OnClickListener() {
