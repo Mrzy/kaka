@@ -41,7 +41,7 @@
         android:id="@+id/shareBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/umeng_socialize_action_share_normal"
+        android:background="@drawable/pandora_share_image"
         android:clickable="true"
         android:focusable="false" />
 

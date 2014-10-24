@@ -11,6 +11,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/white"
             android:paddingBottom="10dp" >
 
             <ImageView
@@ -34,17 +35,20 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/single_img"
                 android:gravity="center_horizontal"
-                android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:textColor="#272727"
+                android:textSize="25sp" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:id="@+id/image_news_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/desc"
-                android:gravity="center_horizontal"
-                android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:gravity="center_vertical"
+                android:paddingLeft="13dp"
+                android:paddingRight="13dp"
+                android:paddingTop="5dp"
+                android:textColor="#272727"
+                android:textSize="15sp" />
         </RelativeLayout>
     </ScrollView>
 
