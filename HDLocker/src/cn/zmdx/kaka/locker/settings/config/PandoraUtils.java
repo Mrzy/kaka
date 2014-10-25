@@ -67,15 +67,15 @@ public class PandoraUtils {
 
     public static final int REQUEST_CODE_GALLERY = 1;
 
-    public static final int TIME_MORNING = 8;
+    public static final int TIME_MORNING = 9;
 
-    public static final int TIME_MORNING_WORK = 11;
+    public static final int TIME_MORNING_WORK = 12;
 
-    public static final int TIME_AFTERNOON = 13;
+    public static final int TIME_AFTERNOON = 14;
 
-    public static final int TIME_AFTERNOON_WORK = 17;
+    public static final int TIME_AFTERNOON_WORK = 18;
 
-    public static final int TIME_EVENING = 19;
+    public static final int TIME_EVENING = 20;
 
     public static final int TIME_EVENING_WORK = 0;
 
@@ -420,11 +420,11 @@ public class PandoraUtils {
         }
         return drawable;
     }
-
+    
     private static int getTimeQuantum(int currentHour) {
-        if (currentHour <= TIME_MORNING && currentHour > TIME_MORNING) {
+        if (currentHour < TIME_MORNING && currentHour >= TIME_MORNING) {
             return TIME_MORNING;
-        } else if (currentHour < TIME_MORNING_WORK && currentHour > TIME_MORNING) {
+        } else if (currentHour < TIME_MORNING_WORK && currentHour >= TIME_MORNING) {
             return TIME_MORNING_WORK;
         } else if (currentHour < TIME_AFTERNOON && currentHour >= TIME_MORNING_WORK) {
             return TIME_AFTERNOON;
