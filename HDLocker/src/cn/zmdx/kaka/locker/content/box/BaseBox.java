@@ -21,7 +21,7 @@ public abstract class BaseBox implements IPandoraBox {
 
     private View mRootView;
 
-    private Button mShareBtn;
+    private ImageView mShareBtn;
 
     private View mPlatformLayout;
 
@@ -56,7 +56,7 @@ public abstract class BaseBox implements IPandoraBox {
             return mRootView;
         }
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.pandora_box_share_layout, null);
-        mShareBtn = (Button) mRootView.findViewById(R.id.shareBtn);
+        mShareBtn = (ImageView) mRootView.findViewById(R.id.shareBtn);
         mPlatformLayout = mRootView.findViewById(R.id.platforms_layout);
         mPQzone = (ImageView) mRootView.findViewById(R.id.platforms_qzone);
         mPSina = (ImageView) mRootView.findViewById(R.id.platforms_sina);

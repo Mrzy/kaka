@@ -12,6 +12,6 @@
     <dimen name="setting_about_pandora_height">50dp</dimen>
     <dimen name="pandora_box_nodata_show_image_width">75dp</dimen>
     <dimen name="pandora_box_nodata_show_image_height">75dp</dimen>
-    <dimen name="panelHeight">190dp</dimen>
+    <dimen name="panelHeight">120dp</dimen>
 
 </resources>
