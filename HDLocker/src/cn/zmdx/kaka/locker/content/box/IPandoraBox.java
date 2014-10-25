@@ -44,7 +44,7 @@ public interface IPandoraBox {
         private String mTableName;
 
         private String mContentUrl;
-        
+
         private String mFromWebSite;
 
         public String getmDataType() {
@@ -134,7 +134,6 @@ public interface IPandoraBox {
         public void setmFromWebSite(String mFromWebSite) {
             this.mFromWebSite = mFromWebSite;
         }
-        
-        
+
     }
 }

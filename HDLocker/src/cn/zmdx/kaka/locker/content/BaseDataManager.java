@@ -3,6 +3,8 @@ package cn.zmdx.kaka.locker.content;
 
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 
 public class BaseDataManager {
@@ -119,6 +121,7 @@ public class BaseDataManager {
         mCollectTime = jsonObject.optString("collect_time");
         mReleaseTime = jsonObject.optString("release_time");
         mCollectWebsite = jsonObject.optString("collect_website");
+        Log.d("zlf", "mCollectWebsite" + mCollectWebsite);
         mDataType = jsonObject.optString("data_type");
     }
 

@@ -33,6 +33,8 @@ public class SingleImageBox extends BaseBox {
 
     private ViewGroup mShareLayout;
 
+    private TextView mFromPlatformText;
+
     public SingleImageBox(Context context, PandoraData data) {
         mData = data;
         mContext = context;
@@ -41,9 +43,10 @@ public class SingleImageBox extends BaseBox {
         mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
         setImageViewSize(mSingleImgView);
         mDescView = (TextView) mEntireView.findViewById(R.id.desc);
-        // mEntireView.findViewById(R.id.image_news_content);
+        mDescView.getPaint().setFakeBoldText(true);
+        mFromPlatformText = (TextView) mEntireView.findViewById(R.id.from_platform_text);
         mImageNewsContent = (TextView) mEntireView.findViewById(R.id.image_news_content);
-        mShareLayout = (ViewGroup) mEntireView.findViewById(R.id.shareLayout);
+        mShareLayout = (ViewGroup) mEntireView.findViewById(R.id.share_from_platform);
         enableShare();
         mShareLayout.addView(createShareView());
     }
@@ -97,6 +100,7 @@ public class SingleImageBox extends BaseBox {
         if (mData == null || mData.getmImage() == null) {
             return false;
         }
+        mFromPlatformText.setText(mData.getmFromWebSite());
         mImageNewsContent.setText(mData.getmContent());
         mSingleImgView.setImageBitmap(mData.getmImage());
         // mSingleImgView.setOnClickListener(new OnClickListener() {

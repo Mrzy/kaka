@@ -61,34 +61,27 @@
     <string name="pandora_box_no_net_tip">网络未连接，猛料拉不出</string>
     <string name="pandora_box_battery_charging">正在充电</string>
     <string name="pandora_box_battery_full">电量已满</string>
-
     <string name="pandora_wallpaper_title">锁屏壁纸</string>
     <string name="pandora_wallpaper_custom">自定义壁纸</string>
     <string name="pandora_wallpaper_advice">默认壁纸</string>
     <string name="pandora_wallpaper_show_image_title">图片</string>
-
     <string name="pandora_wallpaper_dialog_camera">拍照</string>
     <string name="pandora_wallpaper_dialog_gallery">相册</string>
-    
     <string name="pandora_setting_title">潘多拉锁屏</string>
     <string name="init_setting_title_detail">初始设置详细说明</string>
-    
     <string name="pandora_wallpaper_dialog_title">确认删除此张壁纸？</string>
     <string name="pandora_dialog_cancle">取消</string>
     <string name="pandora_dialog_sure">确认</string>
     <string name="error">出现异常，给您带来的不便，敬请谅解，我们会尽快解决</string>
     <string name="pandora_guide_start">开始体验</string>
-    
     <string name="setting_individualization">个性化设置</string>
     <string name="individualization_notice_switch_button">显示通知栏</string>
     <string name="individualization_locker_default_image">设置锁屏页面默认图片</string>
-    
     <string name="init_setting_V6_close_systemlocker_prompt">请按照以下方式关闭系统锁屏</string>
     <string name="init_setting_V6_allow_floating_window_prompt">开启显示悬浮窗</string>
     <string name="init_setting_V6_trust_prompt_one">1.进入『授权管理』</string>
     <string name="init_setting_V6_trust_prompt_two">2.进入『自启动管理』</string>
     <string name="init_setting_V6_trust_prompt_three">3.开启『潘多拉锁屏』开关</string>
-    
     <string name="pandora_box_guide_set_default_image">个性化设置默认图</string>
     <string name="individualization_welcome_text">设置欢迎语</string>
     <string name="individualization_welcome_text_detail">锁屏页面，当天气信息无法获取时显示此欢迎语</string>
@@ -101,5 +94,6 @@
     <string name="individualization_welcome_text_default_afternoon_work">让你不午睡，困了吧？该！</string>
     <string name="individualization_welcome_text_default_evening">该吃晚饭了，饭后出去活动一下吧</string>
     <string name="individualization_welcome_text_default_evening_work">夜空的星在点亮，绽放出梦的光芒</string>
+    <string name="share_image_news_from">来自：</string>
 
 </resources>
