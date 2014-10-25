@@ -44,6 +44,7 @@ public class BaseInfoHelper {
 
     /**
      * 获得设备在竖屏时的物理高度（包括虚拟按键，通知栏的高度)
+     * 
      * @param display
      * @return
      */
@@ -53,7 +54,8 @@ public class BaseInfoHelper {
             return mRealScreenHeight;
         }
         int orientation = display.getRotation();
-        boolean landscape = orientation == Surface.ROTATION_270 || orientation == Surface.ROTATION_90;
+        boolean landscape = orientation == Surface.ROTATION_270
+                || orientation == Surface.ROTATION_90;
         Point size = new Point();
         int result = 0;
         if (Build.VERSION.SDK_INT >= 17) {
@@ -61,7 +63,8 @@ public class BaseInfoHelper {
             result = landscape ? size.x : size.y;
         } else {
             try {
-                Method getRawH = landscape ? Display.class.getMethod("getRawWidth") : Display.class.getMethod("getRawHeight");
+                Method getRawH = landscape ? Display.class.getMethod("getRawWidth") : Display.class
+                        .getMethod("getRawHeight");
                 result = (Integer) getRawH.invoke(display);
             } catch (Exception e) {
                 display.getSize(size);
@@ -69,6 +72,23 @@ public class BaseInfoHelper {
             }
         }
         return result;
+    }
+
+    public static float mDensity = -1;
+
+    public static float getDensity(Context ctx) {
+        if (mDensity != -1) {
+            return mDensity;
+        }
+
+        DisplayMetrics metrics = new DisplayMetrics();
+
+        WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+
+        wm.getDefaultDisplay().getMetrics(metrics);
+
+        mDensity = metrics.density;
+        return mDensity;
     }
 
     @SuppressLint("NewApi")
@@ -503,7 +523,6 @@ public class BaseInfoHelper {
     }
 
     /**
-     * 
      * @return year + month + day
      */
     public static String getCurrentDate() {

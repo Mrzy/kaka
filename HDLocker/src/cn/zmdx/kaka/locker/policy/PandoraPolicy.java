@@ -5,7 +5,9 @@ import java.util.Locale;
 
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.BaiduTagMapping;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class PandoraPolicy {
@@ -60,7 +62,7 @@ public class PandoraPolicy {
     /**
      * 锁屏页下滑速率，值越下，越灵敏，即越容易下滑解锁
      */
-    public static final float DEFAULT_MAX_YVEL = 6000.0f;
+    public static final float DEFAULT_MAX_YVEL = 2000.0f * BaseInfoHelper.getDensity(HDApplication.getInstannce());
 
     public static boolean verifyImageLegal(String url, int w, int h) {
         try {

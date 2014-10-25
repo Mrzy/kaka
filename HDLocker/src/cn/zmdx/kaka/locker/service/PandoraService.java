@@ -80,15 +80,17 @@ public class PandoraService extends Service {
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("当前电话处于闲置状态CALL_STATE_IDLE");
                         }
-                        mIsRinging = false;
-                        // LockScreenManager.getInstance().lock();
+                        if (mIsRinging) {
+                            mIsRinging = false;
+                            LockScreenManager.getInstance().lock();
+                        }
                         break;
                     case TelephonyManager.CALL_STATE_RINGING: // 当前电话处于零响状态
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("CALL_STATE_RINGING电话号码为 " + incomingNumber);
                         }
                         mIsRinging = true;
-                        LockScreenManager.getInstance().unLock();
+                        LockScreenManager.getInstance().unLock(true, true);
                         break;
                     case TelephonyManager.CALL_STATE_OFFHOOK: // 当前电话处于接听状态
                         if (BuildConfig.DEBUG) {

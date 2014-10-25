@@ -110,6 +110,6 @@ public abstract class BaseBox implements IPandoraBox {
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
             }
         });
-        LockScreenManager.getInstance().unLock(false);
+        LockScreenManager.getInstance().unLock(false, false);
     }
 }

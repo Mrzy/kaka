@@ -445,8 +445,13 @@ public class LockScreenManager {
      * 解锁
      * 
      * @param isCloseFakeActivity 解锁同时，是否关闭背后的假activity,默认为true
+     * @param forceClose 如果为true，则忽略密码锁，直接解锁，比如来电话时
      */
-    public void unLock(boolean isCloseFakeActivity) {
+    public void unLock(boolean isCloseFakeActivity, boolean forceClose) {
+        if (forceClose) {
+            internalUnLock(true);
+            return;
+        }
         if (!showGestureView()) {
             internalUnLock(isCloseFakeActivity);
         }
