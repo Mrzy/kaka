@@ -7,6 +7,7 @@ import java.util.Map;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 
 import com.umeng.analytics.MobclickAgent;
@@ -45,17 +46,42 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_WALLPAPER_BLUE_TIMES = "wallpaperBlue"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
-    public static final String EVENT_WALLPAPER_TIFFANY_TIMES = "wallpaperTiffany";// 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
+//    public static final String EVENT_WALLPAPER_TIFFANY_TIMES = "wallpaperTiffany";// 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
     public static final String EVENT_WALLPAPER_JEAN_TIMES = "wallpaperJean"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
-    public static final String EVENT_WALLPAPER_WOOD_GRAIN_TIMES = "wallpaperWoodGrain"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
+    public static final String EVENT_WALLPAPER_ROAD_TIMES = "wallpaperRoad"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
     public static final String EVENT_GUIDE_PAGE_DURATION = "guidePageDuration"; // 计算引导页的总展示时间；
 
     public static final String EVENT_SET_CUSTOM_WALLPAPER_TIMES = "setCustomWallpaper"; // 点击自定义主题壁纸时上报一次事件；
 
     public static final String EVENT_SET_CUSTOM_WALLPAPER_SUCCESS_TIMES = "setCustomWallpaperSuccess"; // 成功设置自定义主题壁纸时上报一次事件；
+
+    // share
+    public static final String EVENT_SHARE_WXCIRCLE_SECCESS = "shareWXCircleSuccess";
+
+    public static final String EVENT_SHARE_WXCIRCLE_FAIL = "shareWXCircleFail";
+
+    public static final String EVENT_SHARE_WECHAT_SECCESS = "shareWechatSuccess";
+
+    public static final String EVENT_SHARE_WECHAT_FAIL = "shareWechatFail";
+
+    public static final String EVENT_SHARE_QZONE_SECCESS = "shareQzoneSuccess";
+
+    public static final String EVENT_SHARE_QZONE_FAIL = "shareQzoneFail";
+
+    public static final String EVENT_SHARE_SINA_SECCESS = "shareSinaSuccess";
+
+    public static final String EVENT_SHARE_SINA_FAIL = "shareSinaFail";
+
+    public static final String EVENT_SET_DEFAULT_IMAGE_SUCCESS = "shareSetDefaultImageSuccess";
+
+    public static final String EVENT_SET_DEFAULT_IMAGE = "shareSetDefaultImage";
+
+    public static final String EVENT_SET_WELCOME_SUCCESS = "shareSetWelcomeSuccess";
+
+    public static final String EVENT_SET_WELCOME = "shareSetWelcome";
 
     /**
      * 统计 若用户开启了手势锁，每日上报一次
@@ -93,7 +119,7 @@ public class UmengCustomEventManager {
                     themeName = "jean";
                     break;
                 case ThemeManager.THEME_ID_ROAD:
-                    themeName = "woodGrain";
+                    themeName = "road";
                     break;
                 case ThemeManager.THEME_ID_CUSTOM:
                     themeName = "custom";
@@ -225,7 +251,7 @@ public class UmengCustomEventManager {
                 break;
             case ThemeManager.THEME_ID_ROAD:
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
-                        EVENT_WALLPAPER_WOOD_GRAIN_TIMES);
+                        EVENT_WALLPAPER_ROAD_TIMES);
                 break;
 
             default:
@@ -270,4 +296,77 @@ public class UmengCustomEventManager {
         MobclickAgent.onEvent(HDApplication.getInstannce(),
                 UmengCustomEventManager.EVENT_PANDORA_SWITCH_CLOSE_TIMES);
     }
+
+    /**
+     * 统计分享事件
+     * 
+     * @param shareType 分享的平台
+     * @param state 成功或者失败
+     */
+    public static void statisticalShareBehavior(int shareType, boolean state) {
+        switch (shareType) {
+            case PandoraShareManager.WeixinCircle:
+                if (state) {
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEventManager.EVENT_SHARE_WXCIRCLE_SECCESS);
+                } else {
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEventManager.EVENT_SHARE_WXCIRCLE_FAIL);
+                }
+                break;
+            case PandoraShareManager.Weixin:
+                if (state) {
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEventManager.EVENT_SHARE_WECHAT_SECCESS);
+                } else {
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEventManager.EVENT_SHARE_WECHAT_FAIL);
+                }
+                break;
+            case PandoraShareManager.Tencent:
+                if (state) {
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEventManager.EVENT_SHARE_QZONE_SECCESS);
+                } else {
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEventManager.EVENT_SHARE_QZONE_FAIL);
+                }
+                break;
+            case PandoraShareManager.Sina:
+                if (state) {
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEventManager.EVENT_SHARE_SINA_SECCESS);
+                } else {
+                    MobclickAgent.onEvent(HDApplication.getInstannce(),
+                            UmengCustomEventManager.EVENT_SHARE_SINA_FAIL);
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public static void statisticalSetDefaultImage(boolean state) {
+        if (state) {
+            MobclickAgent.onEvent(HDApplication.getInstannce(),
+                    UmengCustomEventManager.EVENT_SET_DEFAULT_IMAGE_SUCCESS);
+        } else {
+            MobclickAgent.onEvent(HDApplication.getInstannce(),
+                    UmengCustomEventManager.EVENT_SET_DEFAULT_IMAGE);
+        }
+    }
+
+    public static void statisticalSetWelcomeString(String welcomeString, boolean state) {
+        if (state) {
+            Map<String, String> map_value = new HashMap<String, String>();
+            map_value.put("welcomeString", welcomeString);
+            MobclickAgent.onEvent(HDApplication.getInstannce(),
+                    UmengCustomEventManager.EVENT_SET_WELCOME_SUCCESS, map_value);
+        } else {
+            MobclickAgent.onEvent(HDApplication.getInstannce(),
+                    UmengCustomEventManager.EVENT_SET_WELCOME);
+        }
+    }
+
 }

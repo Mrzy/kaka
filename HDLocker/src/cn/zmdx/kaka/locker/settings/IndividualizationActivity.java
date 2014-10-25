@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -177,6 +178,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
             @Override
             public void onClick(View v) {
                 String welcomeString = mEditText.getText().toString();
+                UmengCustomEventManager.statisticalSetWelcomeString(welcomeString, true);
                 saveWelcomeString(welcomeString);
                 dialog.dismiss();
             }
@@ -206,10 +208,12 @@ public class IndividualizationActivity extends Activity implements OnClickListen
             case R.id.individualization_locker_default_image:
                 PandoraUtils.gotoGalleryActivity(IndividualizationActivity.this,
                         PandoraUtils.REQUEST_CODE_GALLERY);
+                UmengCustomEventManager.statisticalSetDefaultImage(false);
                 break;
 
             case R.id.individualization_welcome_text:
                 showInputDialog();
+                UmengCustomEventManager.statisticalSetWelcomeString("", false);
                 break;
             default:
                 break;

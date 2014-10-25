@@ -263,6 +263,7 @@ public class WallPaperActivity extends Activity {
                             Toast.LENGTH_LONG).show();
                     return;
                 }
+                UmengCustomEventManager.statisticalClickCustomButtonTimes();
                 showSelectDialog();
             }
         });
