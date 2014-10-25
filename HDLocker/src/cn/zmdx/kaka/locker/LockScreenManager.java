@@ -496,7 +496,8 @@ public class LockScreenManager {
 
     private void syncDataIfNeeded() {
         long curTime = System.currentTimeMillis();
-        if (curTime - mLastSyncDataTime > PandoraPolicy.MIN_DURATION_SYNC_DATA_TIME) {
+        long delta = curTime - mLastSyncDataTime;
+        if (delta > PandoraPolicy.MIN_DURATION_SYNC_DATA_TIME) {
             PandoraBoxDispatcher pd = PandoraBoxDispatcher.getInstance();
             pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
             pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 4000);

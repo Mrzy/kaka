@@ -94,26 +94,7 @@ public class ServerImageDataModel {
         return count;
     }
 
-    public synchronized int queryCountByType(String dataType) {
-        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
-        int count = 0;
-        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
-            "count(*)"
-        }, TableStructure.SERVER_IMAGE_DATA_TYPE + "=?", new String[] {
-            dataType
-        }, null, null, null);
-        try {
-            while (cursor.moveToNext()) {
-                count = cursor.getInt(0);
-            }
-        } catch (Exception e) {
-        } finally {
-            cursor.close();
-        }
-        return count;
-    }
-
-    public void markAllNonDownload() {
+    public void markAllNonDownloadExceptHtml() {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED, MySqlitDatabase.DOWNLOAD_FALSE);
@@ -124,26 +105,27 @@ public class ServerImageDataModel {
     }
 
     /**
-     * 查询已下载图片的数据条数 如果参数为null，则查询除了html类型的所有类型数据已下载图片的数量
+     * 查询已下载图片的数据条数 如果参数为null，则查询除了html类型的所有类型数据已下载图片并且未读的数量
      * 
      * @return
      */
-    public synchronized int queryCountHasImage(String dataType) {
+    public synchronized int queryCountHasImageAndUnRead(String dataType) {
         String selection = null;
         String[] selectionArgu = null;
         if (!TextUtils.isEmpty(dataType)) {
             selection = TableStructure.SERVER_IMAGE_DATA_TYPE + "=? and "
-                    + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?";
+                    + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and " + TableStructure.SERVER_IMAGE_SETP + "=?";
             selectionArgu = new String[] {
-                    dataType, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
+                    dataType, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
             };
         } else {
 
             selection = TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
-                    + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?";
+                    + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
+                    + TableStructure.SERVER_IMAGE_SETP + "=?";
             selectionArgu = new String[] {
                     ServerDataMapping.S_DATATYPE_HTML,
-                    String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
+                    String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
             };
         }
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
@@ -198,73 +180,6 @@ public class ServerImageDataModel {
         return result != 0;
     }
 
-    /**
-     * 如果没有数据，返回null
-     * 
-     * @param datatypeNews
-     * @return
-     */
-    public ServerImageData queryByDataType(String datatypeNews) {
-        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
-        ServerImageData data = null;
-
-        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
-                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
-                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
-                TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
-        }, TableStructure.SERVER_IMAGE_DATA_TYPE + "=? and "
-                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
-                datatypeNews, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
-        }, null, null, null, "1");
-
-        try {
-            while (cursor.moveToNext()) {
-                data = new ServerImageData();
-                data.setId(cursor.getInt(0));
-                data.setUrl(cursor.getString(1));
-                data.setImageDesc(cursor.getString(2));
-                data.setTitle(cursor.getString(3));
-                data.setDataType(datatypeNews);
-                data.setCollectWebsite(cursor.getString(4));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            cursor.close();
-        }
-        return data;
-    }
-
-    public ServerImageData queryByWebsite(String websiteQiubai) {
-        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
-        ServerImageData data = null;
-
-        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
-                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
-                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
-                TableStructure.SERVER_COLLECT_WEBSITE
-        }, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE + "=? and "
-                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
-                websiteQiubai, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
-        }, null, null, null, "1");
-
-        try {
-            while (cursor.moveToNext()) {
-                data = new ServerImageData();
-                data.setId(cursor.getInt(0));
-                data.setUrl(cursor.getString(1));
-                data.setImageDesc(cursor.getString(2));
-                data.setTitle(cursor.getString(3));
-                data.setCollectWebsite(cursor.getString(4));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            cursor.close();
-        }
-        return data;
-    }
-
     public List<ServerImageData> queryWithoutImg(int count) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         List<ServerImageData> result = new ArrayList<ServerImageData>();
@@ -316,7 +231,7 @@ public class ServerImageDataModel {
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
                 + TableStructure.SERVER_IMAGE_SETP + "=?", new String[] {
                 String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
-        }, null, null, null, "1");
+        }, null, null, "RANDOM()", "1");
 
         try {
             while (cursor.moveToNext()) {

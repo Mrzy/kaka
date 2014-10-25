@@ -6,7 +6,6 @@ import java.util.Locale;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.content.BaiduTagMapping;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
@@ -37,10 +36,6 @@ public class PandoraPolicy {
      * 请求百度图片数据的总页数
      */
     public static final int REQUEST_PAGE_COUNT_DEFAULT = 10;
-
-    public static final int[] BAIDU_IMAGE_MODULE = {
-        BaiduTagMapping.INT_TAG1_GAOXIAO
-    };
 
     // public static final int[] BAIDU_IMAGE_MODULE = {
     // BaiduTagMapping.INT_TAG1_BIZHI, BaiduTagMapping.INT_TAG1_GAOXIAO,

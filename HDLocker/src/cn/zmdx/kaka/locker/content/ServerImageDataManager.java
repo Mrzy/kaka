@@ -36,40 +36,6 @@ public class ServerImageDataManager {
         return INSTANCE;
     }
 
-    /**
-     * @param limit
-     * @param dataType
-     * @param webSite
-     */
-    public void pullServerImageData(int limit, String dataType, String webSite) {
-        JsonObjectRequest request = null;
-        request = new JsonObjectRequest(getUrl(limit, dataType, webSite), null,
-                new Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        final List<ServerImageData> sdList = ServerImageData.parseJson(response);
-                        if (sdList.size() <= 0) {
-                            return;
-                        }
-                        Message msg = Message.obtain();
-                        msg.what = PandoraBoxDispatcher.MSG_SERVER_IMAGE_DATA_ARRIVED;
-                        msg.obj = sdList;
-                        PandoraBoxDispatcher.getInstance().sendMessage(msg);
-                    }
-
-                }, new ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (BuildConfig.DEBUG) {
-                            error.printStackTrace();
-                        }
-                    }
-                });
-        RequestManager.getRequestQueue().add(request);
-    }
-
     public void downloadImage(final ServerImageData bd) {
         Request<String> request = new DownloadRequest(bd.mUrl, new Listener<String>() {
             @Override
