@@ -190,8 +190,9 @@ public class WallPaperActivity extends Activity {
         for (int i = 0; i < mAdviceThumbIdArray.size(); i++) {
             if (themeId == mAdviceThumbIdArray.get(i)) {
                 if (null != mAdviceBorderArray) {
-                    mAdviceBorderArray.get(i).setBackgroundResource(
-                            R.drawable.setting_wallpaper_border);
+//                    mAdviceBorderArray.get(i).setBackgroundResource(
+//                            R.drawable.setting_wallpaper_border);
+                    mAdviceBorderArray.get(i).setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -234,7 +235,7 @@ public class WallPaperActivity extends Activity {
         Bitmap bitmap = PandoraUtils.getBitmap(path);
         if (null == bitmap) {
             mRootView.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.setting_background_blue));
+                    R.drawable.setting_background_blue_fore));
         } else {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
             mRootView.setBackgroundDrawable(drawable);
@@ -248,7 +249,7 @@ public class WallPaperActivity extends Activity {
                 .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
         ImageView mWallpaperIv = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_iamge);
-         mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_select).setVisibility(View.GONE);
+        mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_select).setVisibility(View.GONE);
         mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_delete).setVisibility(View.GONE);
         mWallpaperIv.setImageDrawable(getResources().getDrawable(R.drawable.pandora_wallpaper_add));
         mWallpaperIv.setBackgroundResource(R.drawable.setting_wallpaper_add_button_selector);

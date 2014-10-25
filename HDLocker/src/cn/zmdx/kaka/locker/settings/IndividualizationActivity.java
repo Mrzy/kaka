@@ -103,7 +103,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         Bitmap bitmap = PandoraUtils.getBitmap(path);
         if (null == bitmap) {
             mRootView.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.setting_background_blue));
+                    R.drawable.setting_background_blue_fore));
         } else {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
             mRootView.setBackgroundDrawable(drawable);

@@ -101,5 +101,7 @@
     <string name="individualization_welcome_text_default_afternoon_work">让你不午睡，困了吧？该！</string>
     <string name="individualization_welcome_text_default_evening">该吃晚饭了，饭后出去活动一下吧</string>
     <string name="individualization_welcome_text_default_evening_work">夜空的星在点亮，绽放出梦的光芒</string>
+    
+    <string name="pandora_crop_image_rotate">旋转</string>
 
 </resources>
