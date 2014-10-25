@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.text.TextUtils;
-import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
@@ -118,7 +117,7 @@ public class ServerImageDataModel {
     }
 
     /**
-     * 查询已下载图片的数据条数
+     * 查询已下载图片的数据条数 
      * 如果参数为null，则查询除了html类型的所有类型数据已下载图片的数量
      * @return
      */
@@ -132,11 +131,12 @@ public class ServerImageDataModel {
                     dataType, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
             };
         } else {
-            
+
             selection = TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
                     + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?";
             selectionArgu = new String[] {
-                    ServerDataMapping.S_DATATYPE_HTML, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
+                    ServerDataMapping.S_DATATYPE_HTML,
+                    String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
             };
         }
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
@@ -192,7 +192,8 @@ public class ServerImageDataModel {
 
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
-                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE
+                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
+                TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
         }, TableStructure.SERVER_IMAGE_DATA_TYPE + "=? and "
                 + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
                 datatypeNews, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
@@ -206,6 +207,7 @@ public class ServerImageDataModel {
                 data.setImageDesc(cursor.getString(2));
                 data.setTitle(cursor.getString(3));
                 data.setDataType(datatypeNews);
+                data.setCollectWebsite(cursor.getString(4));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -221,7 +223,8 @@ public class ServerImageDataModel {
 
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
-                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE
+                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
+                TableStructure.SERVER_COLLECT_WEBSITE
         }, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE + "=? and "
                 + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
                 websiteQiubai, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
@@ -234,6 +237,7 @@ public class ServerImageDataModel {
                 data.setUrl(cursor.getString(1));
                 data.setImageDesc(cursor.getString(2));
                 data.setTitle(cursor.getString(3));
+                data.setCollectWebsite(cursor.getString(4));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -250,6 +254,7 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_DESC,
                 TableStructure.SERVER_IMAGE_TITLE, TableStructure.SERVER_IMAGE_URL,
+                TableStructure.SERVER_COLLECT_WEBSITE
 
         }, TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
                 + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
@@ -263,6 +268,7 @@ public class ServerImageDataModel {
                 data.setImageDesc(cursor.getString(1));
                 data.setTitle(cursor.getString(2));
                 data.setUrl(cursor.getString(3));
+                data.setCollectWebsite(cursor.getString(4));
                 result.add(data);
             }
         } catch (Exception e) {
@@ -288,7 +294,7 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
-                TableStructure.SERVER_IMAGE_DATA_TYPE
+                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
             String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
         }, null, null, null, "1");
@@ -301,6 +307,7 @@ public class ServerImageDataModel {
                 data.setImageDesc(cursor.getString(2));
                 data.setTitle(cursor.getString(3));
                 data.setDataType(cursor.getString(4));
+                data.setCollectWebsite(cursor.getString(5));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -317,7 +324,7 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
-                TableStructure.SERVER_IMAGE_DATA_TYPE
+                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_COLLECT_WEBSITE
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
                 + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=?", new String[] {
                 String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerDataMapping.S_DATATYPE_HTML
@@ -331,6 +338,7 @@ public class ServerImageDataModel {
                 data.setImageDesc(cursor.getString(2));
                 data.setTitle(cursor.getString(3));
                 data.setDataType(cursor.getString(4));
+                data.setCollectWebsite(cursor.getString(5));
             }
         } catch (Exception e) {
             e.printStackTrace();

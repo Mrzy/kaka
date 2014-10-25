@@ -117,6 +117,7 @@ public class PandoraBoxManager {
         pd.setmContentUrl(bd.getUrl());
         pd.setFromTable(TableStructure.TABLE_NAME_SERVER_IMAGE);
         pd.setDataType(ServerDataMapping.S_DATATYPE_HTML);
+        pd.setmFromWebSite(bd.getCollectWebsite());
         final IPandoraBox box = new HtmlBox(pd);
         return box;
     }
@@ -137,6 +138,7 @@ public class PandoraBoxManager {
         pd.setmImageUrl(bd.getUrl());
         pd.setmImage(bmp);
         pd.setmContent(bd.getImageDesc());
+        pd.setmFromWebSite(bd.getCollectWebsite());
         IPandoraBox box = new GifBox(mContext, pd);
         return box;
     }
@@ -161,6 +163,7 @@ public class PandoraBoxManager {
         pd.setmImageUrl(bd.getUrl());
         pd.setmImage(bmp);
         pd.setmContent(bd.getImageDesc());
+        pd.setmFromWebSite(bd.getCollectWebsite());
         IPandoraBox box = new SingleImageBox(mContext, pd);
         return box;
     }
@@ -185,6 +188,7 @@ public class PandoraBoxManager {
         pd.setmImageUrl(bd.getUrl());
         pd.setmImage(bmp);
         pd.setmContent(bd.getImageDesc());
+        pd.setmFromWebSite(bd.getCollectWebsite());
         IPandoraBox box = new SingleImageBox(mContext, pd);
         return box;
     }
