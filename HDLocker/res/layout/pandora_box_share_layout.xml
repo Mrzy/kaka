@@ -56,16 +56,14 @@
         android:layout_gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <Button
+        <ImageView
             android:id="@+id/shareBtn"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="10dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/pandora_share_image"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical" />
+           />
     </LinearLayout>
 
 </LinearLayout>
