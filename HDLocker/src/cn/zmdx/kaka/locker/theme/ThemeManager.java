@@ -21,7 +21,7 @@ public class ThemeManager {
 
     public static final int THEME_ID_JEAN = 3;
 
-    public static final int THEME_ID_WOOD_GRAIN = 4;
+    public static final int THEME_ID_ROAD = 4;
 
     public static Theme getCurrentTheme() {
         int themeId = PandoraConfig.newInstance(HDApplication.getInstannce()).getCurrentThemeId();
@@ -53,7 +53,7 @@ public class ThemeManager {
         if (null == bitmap) {
             theme.setCustomWallpaper(false);
             theme.setmCustomBitmap(null);
-            theme.setmBackgroundResId(R.drawable.setting_background_blue);
+            theme.setmBackgroundResId(R.drawable.setting_background_blue_fore);
             theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
             theme.setmSettingsIconResId(R.drawable.ic_setting_common);
             theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
@@ -61,7 +61,7 @@ public class ThemeManager {
         } else {
             theme.setCustomWallpaper(true);
             theme.setmCustomBitmap(ImageUtils.bitmap2Drawable(context, bitmap));
-            theme.setmBackgroundResId(R.drawable.setting_background_blue);
+            theme.setmBackgroundResId(R.drawable.setting_background_blue_fore);
             theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
             theme.setmSettingsIconResId(R.drawable.ic_setting_common);
             theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
@@ -74,28 +74,28 @@ public class ThemeManager {
         Theme theme = new Theme();
         switch (themeId) {
             case THEME_ID_BLUE:
-                theme.setmBackgroundResId(R.drawable.setting_background_blue);
+                theme.setmBackgroundResId(R.drawable.setting_background_blue_fore);
                 theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
                 theme.setmSettingsIconResId(R.drawable.ic_setting_common);
                 theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
                 theme.setmThemeId(THEME_ID_BLUE);
                 break;
             case THEME_ID_JEAN:
-                theme.setmBackgroundResId(R.drawable.setting_background_jean);
+                theme.setmBackgroundResId(R.drawable.setting_background_jean_fore);
                 theme.setmForegroundResId(R.drawable.setting_background_jean_fore);
                 theme.setmSettingsIconResId(R.drawable.ic_setting_common);
                 theme.setmThumbnailResId(R.drawable.setting_wallpaper_jean);
                 theme.setmThemeId(THEME_ID_JEAN);
                 break;
-            case THEME_ID_WOOD_GRAIN:
-                theme.setmBackgroundResId(R.drawable.setting_background_wood_grain);
-                theme.setmForegroundResId(R.drawable.setting_background_wood_grain_fore);
+            case THEME_ID_ROAD:
+                theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
+                theme.setmForegroundResId(R.drawable.setting_background_road_fore);
                 theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-                theme.setmThumbnailResId(R.drawable.setting_wallpaper_wood_grain);
-                theme.setmThemeId(THEME_ID_WOOD_GRAIN);
+                theme.setmThumbnailResId(R.drawable.setting_wallpaper_road);
+                theme.setmThemeId(THEME_ID_ROAD);
                 break;
             default:
-                theme.setmBackgroundResId(R.drawable.setting_background_blue);
+                theme.setmBackgroundResId(R.drawable.setting_background_blue_fore);
                 theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
                 theme.setmSettingsIconResId(R.drawable.ic_setting_common);
                 theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
@@ -108,7 +108,7 @@ public class ThemeManager {
     public static List<Theme> getAllTheme() {
         List<Theme> list = new ArrayList<Theme>();
         Theme theme = new Theme();
-        theme.setmBackgroundResId(R.drawable.setting_background_blue);
+        theme.setmBackgroundResId(R.drawable.setting_background_blue_fore);
         theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
         theme.setmSettingsIconResId(R.drawable.ic_setting_common);
         theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
@@ -116,7 +116,7 @@ public class ThemeManager {
         list.add(theme);
 
         theme = new Theme();
-        theme.setmBackgroundResId(R.drawable.setting_background_jean);
+        theme.setmBackgroundResId(R.drawable.setting_background_jean_fore);
         theme.setmForegroundResId(R.drawable.setting_background_jean_fore);
         theme.setmSettingsIconResId(R.drawable.ic_setting_common);
         theme.setmThumbnailResId(R.drawable.setting_wallpaper_jean);
@@ -124,11 +124,11 @@ public class ThemeManager {
         list.add(theme);
 
         theme = new Theme();
-        theme.setmBackgroundResId(R.drawable.setting_background_wood_grain);
-        theme.setmForegroundResId(R.drawable.setting_background_wood_grain_fore);
+        theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
+        theme.setmForegroundResId(R.drawable.setting_background_road_fore);
         theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-        theme.setmThumbnailResId(R.drawable.setting_wallpaper_wood_grain);
-        theme.setmThemeId(THEME_ID_WOOD_GRAIN);
+        theme.setmThumbnailResId(R.drawable.setting_wallpaper_road);
+        theme.setmThemeId(THEME_ID_ROAD);
         list.add(theme);
         return list;
     }
@@ -162,17 +162,17 @@ public class ThemeManager {
         /**
          * 锁屏页钥匙图 resource id
          */
-//        private int mDragViewIconResId;
+        // private int mDragViewIconResId;
 
         /**
          * 锁屏页孔图resource id
          */
-//        private int mHoleIconResId;
+        // private int mHoleIconResId;
 
         /**
          * 锁屏页钥匙插入孔图resource id
          */
-//        private int mKeyholeIconResId;
+        // private int mKeyholeIconResId;
 
         private boolean isCustomWallpaper = false;
 

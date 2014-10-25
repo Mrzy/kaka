@@ -90,7 +90,7 @@ public class InitSettingActivity extends Activity implements OnClickListener {
             Bitmap bitmap = PandoraUtils.getBitmap(path);
             if (null == bitmap) {
                 view.setBackgroundDrawable(getResources().getDrawable(
-                        R.drawable.setting_background_blue));
+                        R.drawable.setting_background_blue_fore));
             } else {
                 BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
                 view.setBackgroundDrawable(drawable);

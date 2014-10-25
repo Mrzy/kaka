@@ -92,7 +92,7 @@ public class UmengCustomEventManager {
                 case ThemeManager.THEME_ID_JEAN:
                     themeName = "jean";
                     break;
-                case ThemeManager.THEME_ID_WOOD_GRAIN:
+                case ThemeManager.THEME_ID_ROAD:
                     themeName = "woodGrain";
                     break;
                 case ThemeManager.THEME_ID_CUSTOM:
@@ -223,7 +223,7 @@ public class UmengCustomEventManager {
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
                         UmengCustomEventManager.EVENT_WALLPAPER_JEAN_TIMES);
                 break;
-            case ThemeManager.THEME_ID_WOOD_GRAIN:
+            case ThemeManager.THEME_ID_ROAD:
                 MobclickAgent.onEvent(HDApplication.getInstannce(),
                         EVENT_WALLPAPER_WOOD_GRAIN_TIMES);
                 break;
