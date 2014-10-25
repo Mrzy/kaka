@@ -26,4 +26,9 @@ public class GuideActivity extends BaseGuideActivity {
     protected void onFinish() {
 
     }
+
+    @Override
+    public void onBackPressed() {
+        return;
+    }
 }
