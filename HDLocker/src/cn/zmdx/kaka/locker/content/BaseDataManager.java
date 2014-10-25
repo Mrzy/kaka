@@ -121,7 +121,6 @@ public class BaseDataManager {
         mCollectTime = jsonObject.optString("collect_time");
         mReleaseTime = jsonObject.optString("release_time");
         mCollectWebsite = jsonObject.optString("collect_website");
-        Log.d("zlf", "mCollectWebsite" + mCollectWebsite);
         mDataType = jsonObject.optString("data_type");
     }
 
