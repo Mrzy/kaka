@@ -1,48 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="horizontal" >
 
     <LinearLayout
         android:id="@+id/platforms_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#a0000000"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:visibility="invisible" >
 
         <ImageView
             android:id="@+id/platforms_qzone"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/umeng_socialize_qzone_on" />
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/wxcircle" />
 
         <ImageView
             android:id="@+id/platforms_sina"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/umeng_socialize_sina_on" />
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/wechat" />
 
         <ImageView
             android:id="@+id/platforms_wechat"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/umeng_socialize_wechat" />
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/qzone" />
 
         <ImageView
             android:id="@+id/platforms_wxcircle"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/umeng_socialize_wxcircle" />
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/sina" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/shareBtn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/pandora_share_image"
-        android:clickable="true"
-        android:focusable="false" />
+    <LinearLayout
+        android:id="@+id/shareBtn_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/shareBtn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/pandora_share_image"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical" />
+    </LinearLayout>
 
 </LinearLayout>

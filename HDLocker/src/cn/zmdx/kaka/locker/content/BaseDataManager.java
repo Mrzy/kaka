@@ -3,6 +3,8 @@ package cn.zmdx.kaka.locker.content;
 
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 
 public class BaseDataManager {
