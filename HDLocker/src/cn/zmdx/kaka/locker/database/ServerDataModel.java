@@ -47,7 +47,7 @@ public class ServerDataModel {
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_FIVE, bd.getDataType());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_SIX, bd.getCollectWebsite());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_SEVEN, bd.getTop());
-                sqLiteStatement.bindString(MySqlitDatabase.INDEX_EIGHT, bd.getSetp());
+                sqLiteStatement.bindString(MySqlitDatabase.INDEX_EIGHT, bd.getRead());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_NINE, bd.getCollectTime());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_TEN, bd.getReleaseTime());
                 sqLiteStatement.executeInsert();
@@ -58,7 +58,6 @@ public class ServerDataModel {
         } finally {
             mysql.endTransaction();
         }
-
     }
 
     public synchronized ServerData queryByRandom() {

@@ -85,7 +85,7 @@ public class PandoraBoxDispatcher extends Handler {
                 }
                 if (!checkOriginalDataPullable()) {
                     if (BuildConfig.DEBUG) {
-                        HDBLOG.logD("今日已经拉取过原始数据，中断拉取");
+                        HDBLOG.logD("拉取原始数据条件不满足，中断拉取");
                     }
                     return;
                 }
@@ -155,19 +155,19 @@ public class PandoraBoxDispatcher extends Handler {
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("收到下载阿里云新闻图片的消息");
                 }
-//                loadPandoraServerImage(ServerDataMapping.S_DATATYPE_NEWS);
+                // loadPandoraServerImage(ServerDataMapping.S_DATATYPE_NEWS);
                 break;
             case MSG_LOAD_SERVER_IMAGE_JOKE:
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("收到下载阿里云搞笑图片的消息");
                 }
-//                loadPandoraServerImage(ServerDataMapping.S_DATATYPE_JOKE);
+                // loadPandoraServerImage(ServerDataMapping.S_DATATYPE_JOKE);
                 break;
             case MSG_LOAD_SERVER_GIF:
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("收到下载阿里云GIF图片的消息");
                 }
-//                loadPandoraServerImage(ServerDataMapping.S_DATATYPE_GIF);
+                // loadPandoraServerImage(ServerDataMapping.S_DATATYPE_GIF);
                 break;
             case MSG_SERVER_DATA_ARRIVED:
                 if (BuildConfig.DEBUG) {
@@ -191,11 +191,21 @@ public class PandoraBoxDispatcher extends Handler {
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("原始数据已经下载完成，开始入库，条数:" + oriDataList.size());
                 }
+                //标记最后一次拉取原始数据的时间
+                mConfig.saveLastPullOriginalDataTime(System.currentTimeMillis());
+
+                //如果这是今天第一次拉取，则删除当前库中的旧数据
+                if (checkFirstPullToday()) {
+                    ServerImageDataModel.getInstance().deleteAll();
+                    DiskImageHelper.clear();
+                }
+                //标记今天已经拉取过原始数据
+                mConfig.saveTodayPullOriginalDataTime(BaseInfoHelper.getCurrentDate());
+
                 if (oriDataList.size() <= 0) {
                     return;
                 }
-                ServerImageDataModel.getInstance().deleteAll();
-                DiskImageHelper.clear();
+                //将今天的数据保存到本地数据库
                 ServerImageData.saveToDatabase(oriDataList);
                 break;
         }
@@ -239,14 +249,14 @@ public class PandoraBoxDispatcher extends Handler {
             int hasImageCount = ServerImageDataModel.getInstance().queryCountHasImage(null);
             if (hasImageCount < PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE) {
                 if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("ServerImage数据库中标记为已下载的数据总数:" + hasImageCount
-                            + "已小于阀值:" + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",立即开启下载图片程序");
+                    HDBLOG.logD("ServerImage数据库中标记为已下载的数据总数:" + hasImageCount + "已小于阀值:"
+                            + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",立即开启下载图片程序");
                 }
                 downloadServerImages();
             } else {
                 if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("ServerImage数据库中标记为已下载的数据总数为:" + hasImageCount
-                            + "大于最小阀值" + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",无需启动下载图片程序");
+                    HDBLOG.logD("ServerImage数据库中标记为已下载的数据总数为:" + hasImageCount + "大于最小阀值"
+                            + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",无需启动下载图片程序");
                 }
             }
         }
@@ -258,8 +268,7 @@ public class PandoraBoxDispatcher extends Handler {
         int count = HDBNetworkState.isWifiNetwork() ? PandoraPolicy.COUNT_DOWNLOAD_IMAGE_WIFI
                 : PandoraPolicy.COUNT_DOWNLOAD_IMAGE_NON_WIFI;
         List<ServerImageData> list = new ArrayList<ServerImageData>();
-        List<ServerImageData> tmpList = ServerImageDataModel.getInstance()
-                .queryWithoutImg(count);
+        List<ServerImageData> tmpList = ServerImageDataModel.getInstance().queryWithoutImg(count);
         list.addAll(tmpList);
         ServerImageDataManager.getInstance().batchDownloadServerImage(list);
     }
@@ -299,8 +308,6 @@ public class PandoraBoxDispatcher extends Handler {
             lastModified = ServerImageDataModel.getInstance().queryLastModifiedOfToday();
         }
         ServerImageDataManager.getInstance().pullTodayData(lastModified);
-        mConfig.saveTodayPullOriginalDataTime(BaseInfoHelper.getCurrentDate());
-        mConfig.saveLastPullOriginalDataTime(System.currentTimeMillis());
     }
 
     private void processPullBaiduData() {

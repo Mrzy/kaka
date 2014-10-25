@@ -17,6 +17,10 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class ServerImageDataModel {
+    public static final String READ = "read";
+
+    public static final String UN_READ = "unread";
+
     private MySqlitDatabase mMySqlitDatabase;
 
     private static ServerImageDataModel sServerImageDataModel = null;
@@ -53,7 +57,7 @@ public class ServerImageDataModel {
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_FIVE, bd.getImageDesc());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_SIX, bd.getDataType());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_SEVEN, bd.getTop());
-                sqLiteStatement.bindString(MySqlitDatabase.INDEX_EIGHT, bd.getSetp());
+                sqLiteStatement.bindString(MySqlitDatabase.INDEX_EIGHT, bd.getRead());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_NINE, bd.getCollectTime());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_TEN, bd.getReleaseTime());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_ELEVEN, bd.getCollectWebsite());
@@ -117,8 +121,13 @@ public class ServerImageDataModel {
     }
 
     /**
+<<<<<<< Updated upstream
      * 查询已下载图片的数据条数 
      * 如果参数为null，则查询除了html类型的所有类型数据已下载图片的数量
+=======
+     * 查询已下载图片的数据条数 如果参数为null，则查询除了html类型的所有类型数据已下载图片的数量
+     * 
+>>>>>>> Stashed changes
      * @return
      */
     public synchronized int queryCountHasImage(String dataType) {
@@ -178,6 +187,17 @@ public class ServerImageDataModel {
                     String.valueOf(id)
                 });
         return count != 0;
+    }
+
+    public synchronized boolean markRead(int id, boolean isRead) {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(TableStructure.SERVER_IMAGE_SETP, isRead ? READ : UN_READ);
+        int result = sqliteDatabase.update(TableStructure.TABLE_NAME_SERVER_IMAGE, cv,
+                TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
+                    String.valueOf(id)
+                });
+        return result != 0;
     }
 
     /**
@@ -295,8 +315,8 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
                 TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
-        }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
-            String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE)
+        }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and " + TableStructure.SERVER_IMAGE_SETP + "=?", new String[] {
+            String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
         }, null, null, null, "1");
 
         try {
@@ -326,8 +346,8 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
                 TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_COLLECT_WEBSITE
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
-                + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=?", new String[] {
-                String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerDataMapping.S_DATATYPE_HTML
+                + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and " + TableStructure.SERVER_IMAGE_SETP + "=?", new String[] {
+                String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerDataMapping.S_DATATYPE_HTML, ServerImageDataModel.UN_READ
         }, null, null, null, "1");
 
         try {

@@ -48,8 +48,9 @@ public class PandoraBoxManager {
             if (fromTable == null) {
                 return;
             } else if (fromTable.equals(TableStructure.TABLE_NAME_SERVER_IMAGE)) {
-                ServerImageDataModel.getInstance().deleteById(data.getmId());
-                DiskImageHelper.remove(data.getmImageUrl());
+//                ServerImageDataModel.getInstance().deleteById(data.getmId());
+                ServerImageDataModel.getInstance().markRead(data.getmId(), true);
+//                DiskImageHelper.remove(data.getmImageUrl());
                 recycleBitmap(data.getmImage());
                 mPreDisplayBox = null;
             }
@@ -104,7 +105,7 @@ public class PandoraBoxManager {
             box = getJokeBox(bd);
         } else if (ServerDataMapping.S_DATATYPE_NEWS.equals(dataType)) {
             box = getNewsBox(bd);
-        } else {
+        } else {//对于不识别的类型数据，删除此数据
             ServerImageDataModel.getInstance().deleteById(bd.getId());
             return null;
         }
@@ -126,7 +127,8 @@ public class PandoraBoxManager {
         final String url = bd.getUrl();
         final Bitmap bmp = DiskImageHelper.getBitmapByUrl(url, null);
         if (bmp == null) {
-            ServerImageDataModel.getInstance().deleteById(bd.getId());
+            ServerImageDataModel.getInstance().markRead(bd.getId(), true);
+//            ServerImageDataModel.getInstance().deleteById(bd.getId());
             return null;
         }
 
@@ -152,7 +154,8 @@ public class PandoraBoxManager {
         }
 
         if (bmp == null) {
-            ServerImageDataModel.getInstance().deleteById(bd.getId());
+            ServerImageDataModel.getInstance().markRead(bd.getId(), true);
+//            ServerImageDataModel.getInstance().deleteById(bd.getId());
             return null;
         }
         final PandoraData pd = new PandoraData();
@@ -177,7 +180,8 @@ public class PandoraBoxManager {
         }
 
         if (bmp == null) {
-            ServerImageDataModel.getInstance().deleteById(bd.getId());
+            ServerImageDataModel.getInstance().markRead(bd.getId(), true);
+//            ServerImageDataModel.getInstance().deleteById(bd.getId());
             return null;
         }
         final PandoraData pd = new PandoraData();

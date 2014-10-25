@@ -3,6 +3,8 @@ package cn.zmdx.kaka.locker.content;
 
 import org.json.JSONObject;
 
+import cn.zmdx.kaka.locker.database.ServerImageDataModel;
+
 public class BaseDataManager {
 
     public int mId;
@@ -17,10 +19,10 @@ public class BaseDataManager {
     public String mTop;
 
     /**
-     * 踩的数量
+     * 是否已读标记
      */
 
-    public String mSetp;
+    public String mRead;
 
     /**
      * 采集日期
@@ -68,12 +70,12 @@ public class BaseDataManager {
         this.mTop = mTop;
     }
 
-    public String getSetp() {
-        return mSetp;
+    public String getRead() {
+        return mRead;
     }
 
-    public void setSetp(String mSetp) {
-        this.mSetp = mSetp;
+    public void setRead(String read) {
+        this.mRead = read;
     }
 
     public String getCollectTime() {
@@ -112,7 +114,8 @@ public class BaseDataManager {
         this.mCloudId = jsonObject.optString("id");
         mTitle = jsonObject.optString("title");
         mTop = jsonObject.optString("top");
-        mSetp = jsonObject.optString("step");
+//        mSetp = jsonObject.optString("step");
+        mRead = ServerImageDataModel.UN_READ;//默认为未读
         mCollectTime = jsonObject.optString("collect_time");
         mReleaseTime = jsonObject.optString("release_time");
         mCollectWebsite = jsonObject.optString("collect_website");
