@@ -170,6 +170,7 @@ public class LockScreenManager {
             return;
         }
 
+        mIsLocked = true;
         checkNewVersion();
 
         String currentDate = BaseInfoHelper.getCurrentDate();
@@ -178,7 +179,6 @@ public class LockScreenManager {
         UmengCustomEventManager.statisticalEntryLockTimes(pandoraConfig, currentDate);
 
         mTextGuideTimes = pandoraConfig.getGuideTimesInt();
-        mIsLocked = true;
         mWinParams = new WindowManager.LayoutParams();
 
         mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
@@ -210,8 +210,8 @@ public class LockScreenManager {
 
         refreshContent();
         setDate();
-        startFakeActivity();
         mWinManager.addView(mEntireView, mWinParams);
+        startFakeActivity();
 
         notifyLocked();
         onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
@@ -411,7 +411,7 @@ public class LockScreenManager {
         if (mCurTheme.isCustomWallpaper()) {
             mSliderView.setForegroundDrawable(mCurTheme.getmCustomBitmap());
         } else {
-//            mViewFlipper.setBackgroundResource(mCurTheme.getmBackgroundResId());
+            // mViewFlipper.setBackgroundResource(mCurTheme.getmBackgroundResId());
             mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
         }
     }
@@ -468,7 +468,11 @@ public class LockScreenManager {
             notifyUnLocked();
         cancelAnimatorIfNeeded();
 
-        mWinManager.removeView(mEntireView);
+        if (mUnLockRunnable != null) {
+            mWinManager.removeView(mEntireView);
+        } else {
+            mWinManager.removeViewImmediate(mEntireView);
+        }
         mSliderView.recycle();
         mEntireView = null;
         mIsShowGesture = false;
@@ -778,19 +782,18 @@ public class LockScreenManager {
         ObjectAnimator digitalTrans = ObjectAnimator.ofFloat(mDigitalClockView, "translationY",
                 -400, 0);
         AnimatorSet digitalSet = new AnimatorSet();
-        digitalSet.setStartDelay(100);
         digitalSet.playTogether(digitalAlpha, digitalTrans);
 
         ObjectAnimator dateAlpha = ObjectAnimator.ofFloat(mDate, "alpha", 0, 1);
         ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mDate, "translationY", -400, 0);
         AnimatorSet dateSet = new AnimatorSet();
-        dateSet.setStartDelay(200);
+        dateSet.setStartDelay(100);
         dateSet.playTogether(dateAlpha, dateTrans);
 
         ObjectAnimator wsAlpha = ObjectAnimator.ofFloat(mWeatherSummary, "alpha", 0, 1);
         ObjectAnimator wsTrans = ObjectAnimator.ofFloat(mWeatherSummary, "translationY", -400, 0);
         AnimatorSet wsSet = new AnimatorSet();
-        wsSet.setStartDelay(300);
+        wsSet.setStartDelay(200);
         wsSet.playTogether(wsAlpha, wsTrans);
 
         AnimatorSet finalSet = new AnimatorSet();

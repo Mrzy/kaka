@@ -19,6 +19,7 @@ import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -72,8 +73,9 @@ public class FakeActivity extends Activity {
         int systemUI = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         if (!PandoraConfig.newInstance(this).isNeedNotice()) {
-//            systemUI |= View.SYSTEM_UI_FLAG_FULLSCREEN;
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            // systemUI |= View.SYSTEM_UI_FLAG_FULLSCREEN;
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         if (Build.VERSION.SDK_INT >= 19) {
             systemUI |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
@@ -136,6 +138,13 @@ public class FakeActivity extends Activity {
                         break;
                     default:
                 }
+                HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        FakeActivity.this.finish();
+                    }
+                }, 1500);
             }
         }
     };

@@ -202,6 +202,7 @@ public class PandoraBoxManager {
             HDBLOG.logD("获得默认页面");
         }
         PandoraData pd = new PandoraData();
+//        pd.setmId(-1);
         pd.setmImage(BitmapFactory.decodeResource(mContext.getResources(),
                 R.drawable.pandora_box_default));
         pd.setDataType("DEFAULT_PAGE");

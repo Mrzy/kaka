@@ -117,17 +117,15 @@ public class ServerImageDataModel {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED, MySqlitDatabase.DOWNLOAD_FALSE);
-        sqliteDatabase.update(TableStructure.TABLE_NAME_SERVER_IMAGE, values, null, null);
+        sqliteDatabase.update(TableStructure.TABLE_NAME_SERVER_IMAGE, values,
+                TableStructure.SERVER_IMAGE_DATA_TYPE + "!=?", new String[] {
+                    ServerDataMapping.S_DATATYPE_HTML
+                });
     }
 
     /**
-<<<<<<< Updated upstream
-     * 查询已下载图片的数据条数 
-     * 如果参数为null，则查询除了html类型的所有类型数据已下载图片的数量
-=======
      * 查询已下载图片的数据条数 如果参数为null，则查询除了html类型的所有类型数据已下载图片的数量
      * 
->>>>>>> Stashed changes
      * @return
      */
     public synchronized int queryCountHasImage(String dataType) {
@@ -315,8 +313,9 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
                 TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
-        }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and " + TableStructure.SERVER_IMAGE_SETP + "=?", new String[] {
-            String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
+        }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
+                + TableStructure.SERVER_IMAGE_SETP + "=?", new String[] {
+                String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
         }, null, null, null, "1");
 
         try {
@@ -346,8 +345,10 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
                 TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_COLLECT_WEBSITE
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
-                + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and " + TableStructure.SERVER_IMAGE_SETP + "=?", new String[] {
-                String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerDataMapping.S_DATATYPE_HTML, ServerImageDataModel.UN_READ
+                + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
+                + TableStructure.SERVER_IMAGE_SETP + "=?", new String[] {
+                String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerDataMapping.S_DATATYPE_HTML,
+                ServerImageDataModel.UN_READ
         }, null, null, null, "1");
 
         try {

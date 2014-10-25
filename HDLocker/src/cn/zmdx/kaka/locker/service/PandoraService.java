@@ -119,7 +119,7 @@ public class PandoraService extends Service {
                 HDBLOG.logD("receive broadcast,action=" + action);
             }
             if (action.equals(ALARM_ALERT_ACTION)) {
-                LockScreenManager.getInstance().unLock();
+                LockScreenManager.getInstance().unLock(true, true);
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 LockScreenManager.getInstance().lock();
                 LockScreenManager.getInstance().onScreenOff();
