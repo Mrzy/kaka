@@ -12,7 +12,7 @@
         android:visibility="invisible" >
 
         <ImageView
-            android:id="@+id/platforms_qzone"
+            android:id="@+id/platforms_wxcircle"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_gravity="center_vertical"
@@ -21,7 +21,7 @@
             android:background="@drawable/wxcircle" />
 
         <ImageView
-            android:id="@+id/platforms_sina"
+            android:id="@+id/platforms_wechat"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_gravity="center_vertical"
@@ -30,7 +30,7 @@
             android:background="@drawable/wechat" />
 
         <ImageView
-            android:id="@+id/platforms_wechat"
+            android:id="@+id/platforms_qzone"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_gravity="center_vertical"
@@ -39,7 +39,7 @@
             android:background="@drawable/qzone" />
 
         <ImageView
-            android:id="@+id/platforms_wxcircle"
+            android:id="@+id/platforms_sina"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_gravity="center_vertical"
