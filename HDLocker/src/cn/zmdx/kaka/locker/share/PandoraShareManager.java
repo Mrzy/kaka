@@ -3,6 +3,8 @@ package cn.zmdx.kaka.locker.share;
 
 import android.app.Activity;
 
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
@@ -63,8 +65,12 @@ public class PandoraShareManager {
             }
 
             @Override
-            public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
-
+            public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
+                if (eCode == 200) {
+                    UmengCustomEventManager.statisticalShareBehavior(Sina, true);
+                } else {
+                    UmengCustomEventManager.statisticalShareBehavior(Sina, false);
+                }
                 activity.finish();
             }
         });
@@ -94,7 +100,12 @@ public class PandoraShareManager {
             }
 
             @Override
-            public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
+            public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
+                if (eCode == 200) {
+                    UmengCustomEventManager.statisticalShareBehavior(Tencent, true);
+                } else {
+                    UmengCustomEventManager.statisticalShareBehavior(Tencent, false);
+                }
                 activity.finish();
             }
         });
@@ -126,7 +137,12 @@ public class PandoraShareManager {
             }
 
             @Override
-            public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
+            public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
+                if (eCode == 200) {
+                    UmengCustomEventManager.statisticalShareBehavior(WeixinCircle, true);
+                } else {
+                    UmengCustomEventManager.statisticalShareBehavior(WeixinCircle, false);
+                }
                 activity.finish();
             }
         });
@@ -159,7 +175,12 @@ public class PandoraShareManager {
             }
 
             @Override
-            public void onComplete(SHARE_MEDIA arg0, int arg1, SocializeEntity arg2) {
+            public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
+                if (eCode == 200) {
+                    UmengCustomEventManager.statisticalShareBehavior(Weixin, true);
+                } else {
+                    UmengCustomEventManager.statisticalShareBehavior(Weixin, false);
+                }
                 activity.finish();
             }
         });
