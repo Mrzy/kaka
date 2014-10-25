@@ -17,6 +17,7 @@
 
         <ViewFlipper
             android:id="@+id/viewFlipper"
+            android:background="@drawable/pandora_locker_content_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
@@ -24,14 +25,14 @@
                 android:id="@+id/flipper_box"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#121212" >
+                >
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/flipper_gesture"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/transparent"
+                android:background="@drawable/gesture_bg"
                 android:gravity="center"
                 android:padding="@dimen/lockscreen_gusture_padding_top" >
 

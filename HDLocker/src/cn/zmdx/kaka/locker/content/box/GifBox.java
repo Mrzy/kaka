@@ -74,7 +74,7 @@ public class GifBox implements IPandoraBox {
             e.printStackTrace();
             return false;
         }
-        if (TextUtils.isEmpty(mData.getmContent())) {
+        if (TextUtils.isEmpty(mData.getmTitle())) {
             mTextView.setVisibility(View.GONE);
             return true;
         }

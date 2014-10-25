@@ -411,7 +411,7 @@ public class LockScreenManager {
         if (mCurTheme.isCustomWallpaper()) {
             mSliderView.setForegroundDrawable(mCurTheme.getmCustomBitmap());
         } else {
-            mViewFlipper.setBackgroundResource(mCurTheme.getmBackgroundResId());
+//            mViewFlipper.setBackgroundResource(mCurTheme.getmBackgroundResId());
             mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
         }
     }
