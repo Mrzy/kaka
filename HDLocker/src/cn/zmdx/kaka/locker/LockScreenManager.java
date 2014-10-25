@@ -15,6 +15,7 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -255,6 +256,8 @@ public class LockScreenManager {
                 } catch (Exception e) {
                     updateWeatherInfo(null);
                 }
+            } else {
+                updateWeatherInfo(null);
             }
             return;
         }
@@ -277,33 +280,41 @@ public class LockScreenManager {
 
     }
 
-    private void updateWeatherInfo(PandoraWeather pw) {
-        if (mWeatherSummary == null) {
-            return;
-        }
-        if (pw == null) {
-            String welcomeString = PandoraConfig.newInstance(mContext).getWelcomeString();
-            if (!TextUtils.isEmpty(welcomeString)) {
-                mWeatherSummary.setText(welcomeString);
-                mWeatherSummary.setVisibility(View.VISIBLE);
-            } else {
-                mWeatherSummary.setText("");
-                mWeatherSummary.setVisibility(View.INVISIBLE);
-            }
-        } else {
-            int temp = pw.getTemp();
-            String summary = pw.getSummary();
-            if (mDate != null) {
-                if (mDate.getText() != null && !mDate.getText().toString().endsWith("ºC")) {
-                    mDate.append(" " + temp + "ºC");
+    private void updateWeatherInfo(final PandoraWeather pw) {
+        HDBThreadUtils.runOnUi(new Runnable() {
+
+            @Override
+            public void run() {
+                if (mWeatherSummary == null) {
+                    return;
+                }
+                if (pw == null) {
+                    String welcomeString = PandoraConfig.newInstance(mContext).getWelcomeString();
+                    if (!TextUtils.isEmpty(welcomeString)) {
+                        mWeatherSummary.setText(welcomeString);
+                        mWeatherSummary.setVisibility(View.VISIBLE);
+                    } else {
+                        String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
+                                .getInstance().get(Calendar.HOUR_OF_DAY));
+                        mWeatherSummary.setText(promptString);
+                        mWeatherSummary.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    int temp = pw.getTemp();
+                    String summary = pw.getSummary();
+                    if (mDate != null) {
+                        if (mDate.getText() != null && !mDate.getText().toString().endsWith("ºC")) {
+                            mDate.append(" " + temp + "ºC");
+                        }
+                    }
+                    if (mWeatherSummary == null) {
+                        return;
+                    }
+                    mWeatherSummary.setVisibility(View.VISIBLE);
+                    mWeatherSummary.setText(summary);
                 }
             }
-            if (mWeatherSummary == null) {
-                return;
-            }
-            mWeatherSummary.setVisibility(View.VISIBLE);
-            mWeatherSummary.setText(summary);
-        }
+        });
 
     }
 
@@ -430,6 +441,7 @@ public class LockScreenManager {
 
     /**
      * 解锁
+     * 
      * @param isCloseFakeActivity 解锁同时，是否关闭背后的假activity,默认为true
      */
     public void unLock(boolean isCloseFakeActivity) {
