@@ -2,6 +2,7 @@
 package cn.zmdx.kaka.locker.content.box;
 
 import cn.zmdx.kaka.locker.HDApplication;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -16,6 +17,7 @@ public class HtmlBox extends BaseBox {
 
     private WebView mWebView;
 
+    @SuppressLint("SetJavaScriptEnabled") 
     public HtmlBox(PandoraData data) {
         mData = data;
         mContext = HDApplication.getInstannce();

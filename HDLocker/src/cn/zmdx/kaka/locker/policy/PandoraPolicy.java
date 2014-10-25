@@ -57,7 +57,10 @@ public class PandoraPolicy {
 
     public static final long MIN_PULL_ORIGINAL_TIME = 3 * 60 * 60 * 1000;
 
-    public static final float DEFAULT_MAX_YVEL = 8000.0f;
+    /**
+     * 锁屏页下滑速率，值越下，越灵敏，即越容易下滑解锁
+     */
+    public static final float DEFAULT_MAX_YVEL = 6000.0f;
 
     public static boolean verifyImageLegal(String url, int w, int h) {
         try {
