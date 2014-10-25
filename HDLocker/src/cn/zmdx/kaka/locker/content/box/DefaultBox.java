@@ -41,6 +41,8 @@ public class DefaultBox implements IPandoraBox {
 
     private boolean isCustomSetViewShow = false;
 
+    private TextView mTextView3;
+
     public DefaultBox(Context context, PandoraData data) {
         mContext = context;
         mData = data;
@@ -49,8 +51,12 @@ public class DefaultBox implements IPandoraBox {
         mImageView = (ImageView) mLayoutView.findViewById(R.id.pandora_box_nodata_show_imageview);
         mTextView1 = (TextView) mLayoutView.findViewById(R.id.pandora_box_nodata_show_textview);
         mTextView2 = (TextView) mLayoutView.findViewById(R.id.pandora_box_nodata_show_tip);
+        mTextView3 = (TextView) mLayoutView.findViewById(R.id.pandora_box_no_net_prompt);
         if (!HDBNetworkState.isNetworkAvailable()) {
-            mTextView2.setText(mContext.getText(R.string.pandora_box_no_net_tip));
+            mTextView3.setVisibility(View.VISIBLE);
+            mTextView3.setText(mContext.getText(R.string.pandora_box_no_net_tip));
+        } else {
+            mTextView3.setVisibility(View.INVISIBLE);
         }
         mDefaultRl = (RelativeLayout) mLayoutView.findViewById(R.id.pandora_box_nodata_default);
 

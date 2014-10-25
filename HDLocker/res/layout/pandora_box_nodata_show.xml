@@ -3,12 +3,22 @@
     android:id="@+id/pandora_box_nodata_show"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent" >
+    android:background="@drawable/pandora_locker_content_background" >
 
     <RelativeLayout
         android:id="@+id/pandora_box_nodata_default"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:id="@+id/pandora_box_no_net_prompt"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_about_us_textview_height"
+            android:background="@color/pandora_box_no_net_prompt"
+            android:gravity="center"
+            android:textColor="@color/pandora_box_text_color"
+            android:textSize="12sp"
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/pandora_box_nodata_show_imageview"
@@ -22,14 +32,26 @@
         <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:id="@+id/pandora_box_nodata_show_textview"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/setting_about_us_textview_height"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/pandora_box_nodata_show_imageview"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
-            android:text="@string/setting_about_pandora"
-            android:textColor="@android:color/white"
+            android:text="@string/app_name"
+            android:textColor="@color/pandora_box_text_color"
             android:textSize="18sp" />
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:id="@+id/pandora_box_nodata_detail_show_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pandora_box_nodata_show_textview"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:text="@string/setting_about_text"
+            android:textColor="@color/pandora_box_text_color"
+            android:textSize="13sp" />
 
         <!--
          <TextView
@@ -43,26 +65,27 @@
         android:textSize="18sp" />
         -->
 
+        <cn.zmdx.kaka.locker.widget.BaseButton
+            android:id="@+id/pandora_box_set_default_image"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/pandora_box_nodata_detail_show_textview"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:gravity="center"
+            android:text="@string/pandora_box_guide_set_default_image"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+
         <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:id="@+id/pandora_box_nodata_show_tip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/pandora_box_nodata_show_textview"
+            android:layout_below="@id/pandora_box_set_default_image"
+            android:layout_marginTop="15dp"
             android:gravity="center_horizontal"
             android:text="@string/pandora_box_default_tip"
-            android:textColor="#ffffff"
-            android:textSize="12sp" />
-
-        <cn.zmdx.kaka.locker.widget.BaseButton
-            android:id="@+id/pandora_box_set_default_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/pandora_box_nodata_show_tip"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
-            android:gravity="center"
-            android:text="@string/pandora_box_guide_set_default_image"
-            android:textColor="#ffffff"
+            android:textColor="@color/pandora_box_text_color"
             android:textSize="12sp" />
     </RelativeLayout>
 

@@ -57,7 +57,7 @@
     <string name="update_prompt_no_update">当前已经是最新版本！</string>
     <string name="update_prompt_no_wify">为了节省您的流量，请在wifi环境下操作！</string>
     <string name="update_prompt_no_internet">网络连接超时，请稍候再试！</string>
-    <string name="pandora_box_default_tip">猛料准备中，换个姿势再拉一次...</string>
+    <string name="pandora_box_default_tip">当没有猛料时，您可以自定义属于你自己的猛料</string>
     <string name="pandora_box_no_net_tip">网络未连接，猛料拉不出</string>
     <string name="pandora_box_battery_charging">正在充电</string>
     <string name="pandora_box_battery_full">电量已满</string>
@@ -82,7 +82,7 @@
     <string name="init_setting_V6_trust_prompt_one">1.进入『授权管理』</string>
     <string name="init_setting_V6_trust_prompt_two">2.进入『自启动管理』</string>
     <string name="init_setting_V6_trust_prompt_three">3.开启『潘多拉锁屏』开关</string>
-    <string name="pandora_box_guide_set_default_image">个性化设置默认图</string>
+    <string name="pandora_box_guide_set_default_image">立即设置</string>
     <string name="individualization_welcome_text">设置欢迎语</string>
     <string name="individualization_welcome_text_detail">锁屏页面，当天气信息无法获取时显示此欢迎语</string>
     <string name="pandora_box_guide_set_default_image_detail">锁屏页面，当没有信息时显示此默认图</string>

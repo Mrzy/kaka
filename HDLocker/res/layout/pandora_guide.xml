@@ -38,11 +38,11 @@
 
     <cn.zmdx.kaka.locker.widget.BaseButton
         android:id="@+id/go_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_below="@id/explore_text"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="90dp"
         android:text="@string/guide_button_text" />
 
 </RelativeLayout>
