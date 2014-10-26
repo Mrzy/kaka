@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/init_setting_prompt_background"
+    android:baselineAligned="true"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/setting_title_textview_margin_left"
+    android:paddingRight="@dimen/setting_title_textview_margin_left" >
+
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/pandora_dialog_title"
+        style="@style/init_setting_big_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/black" />
+
+    <LinearLayout
+        android:id="@+id/pandora_dialog_individualization"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/setting_title_textview_margin_left"
+        android:paddingRight="@dimen/setting_title_textview_margin_left"
+        android:visibility="gone" >
+
+        <!-- style="@style/pandora_dialog_edit_text_style" -->
+
+        <cn.zmdx.kaka.locker.widget.BaseEditText
+            android:id="@+id/pandora_dialog_individualization_edit_text"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:gravity="bottom"
+            android:paddingLeft="5dp"
+            android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
+            android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+            android:hint="@string/individualization_welcome_text_hint"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:maxLength="@integer/individualization_welcome_edittext_text_count"
+            android:textColor="#555555" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/setting_title_textview_margin_left"
+            android:paddingRight="@dimen/setting_title_textview_margin_left" >
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/pandora_dialog_individualization_button_cancle"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/base_button_selector"
+                android:gravity="center"
+                android:text="@string/pandora_dialog_cancle"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/pandora_dialog_individualization_button_sure"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/base_button_selector"
+                android:gravity="center"
+                android:text="@string/pandora_dialog_sure"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

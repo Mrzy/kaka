@@ -11,6 +11,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
+import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class PandoraService extends Service {
@@ -19,6 +20,9 @@ public class PandoraService extends Service {
 
     @Override
     public void onCreate() {
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("PandoraService is startup");
+        }
         registerBroadcastReceiver();
         TelephonyManager manager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
         manager.listen(new MyPhoneListener(), PhoneStateListener.LISTEN_CALL_STATE);
@@ -45,9 +49,9 @@ public class PandoraService extends Service {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("PandoraService onDestroy()");
         }
+        super.onDestroy();
         unRegisterBroadcastReceiver();
         startService(new Intent(this, PandoraService.class));
-        super.onDestroy();
     }
 
     private void registerBroadcastReceiver() {
@@ -55,15 +59,18 @@ public class PandoraService extends Service {
         filter.setPriority(1000);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(ALARM_ALERT_ACTION);
-        // filter.addAction(Intent.ACTION_SCREEN_ON);
+         filter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(mReceiver, filter);
+        PandoraBatteryManager.getInstance().registerListener();
     }
 
     private void unRegisterBroadcastReceiver() {
         unregisterReceiver(mReceiver);
+        PandoraBatteryManager.getInstance().unRegisterListener();
     }
 
     private static boolean mIsRinging = false;
+
     private class MyPhoneListener extends PhoneStateListener {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
@@ -73,15 +80,17 @@ public class PandoraService extends Service {
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("当前电话处于闲置状态CALL_STATE_IDLE");
                         }
-                        mIsRinging = false;
-                        // LockScreenManager.getInstance().lock();
+                        if (mIsRinging) {
+                            mIsRinging = false;
+                            LockScreenManager.getInstance().lock();
+                        }
                         break;
                     case TelephonyManager.CALL_STATE_RINGING: // 当前电话处于零响状态
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("CALL_STATE_RINGING电话号码为 " + incomingNumber);
                         }
                         mIsRinging = true;
-                        LockScreenManager.getInstance().unLock();
+                        LockScreenManager.getInstance().unLock(true, true);
                         break;
                     case TelephonyManager.CALL_STATE_OFFHOOK: // 当前电话处于接听状态
                         if (BuildConfig.DEBUG) {
@@ -100,6 +109,7 @@ public class PandoraService extends Service {
     public static boolean isRinging() {
         return mIsRinging;
     }
+
     public final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
@@ -109,9 +119,12 @@ public class PandoraService extends Service {
                 HDBLOG.logD("receive broadcast,action=" + action);
             }
             if (action.equals(ALARM_ALERT_ACTION)) {
-                LockScreenManager.getInstance().unLock();
-            } else {
+                LockScreenManager.getInstance().unLock(true, true);
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 LockScreenManager.getInstance().lock();
+                LockScreenManager.getInstance().onScreenOff();
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                LockScreenManager.getInstance().onScreenOn();
             }
         }
     };

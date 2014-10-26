@@ -16,6 +16,7 @@ import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -287,6 +288,16 @@ public class SlidingUpPanelLayout extends ViewGroup {
         public void onPanelStartDown(View view);
 
         public void onPanelHiddenEnd();
+
+        /**
+         * view在y方向fling会回调该方法
+         * 
+         * @param yvel y轴方向滑动的速度值
+         * @return
+         */
+        public boolean onPanelFastDown(float yvel);
+
+        public void onPanelStartDown(float y);
     }
 
     /**
@@ -331,6 +342,17 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
         @Override
         public void onPanelHiddenEnd() {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public boolean onPanelFastDown(float y) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public void onPanelStartDown(float yvel) {
             // TODO Auto-generated method stub
         }
     }
@@ -485,20 +507,36 @@ public class SlidingUpPanelLayout extends ViewGroup {
     private void cutOffForegroundDrawable() {
         if (mIsForeBackgroundCutOff)
             return;
-        int width = Integer.parseInt(BaseInfoHelper.getWidth(getContext()));
-        int height = Integer.parseInt(BaseInfoHelper.getHeight(getContext()));
+        int width = BaseInfoHelper.getWidth(getContext());
+        int height = BaseInfoHelper.getRealHeight(getContext());
+        // int height =
+        // Integer.parseInt(BaseInfoHelper.getHeight(getContext()));
         Bitmap srcBmp = ImageUtils.drawable2Bitmap(mForegroundDrawable);
         srcBmp = ImageUtils.scaleTo(srcBmp, width, height, true);
-        Bitmap topBmp = Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(),
-                mTopView.getMeasuredHeight());
-        Bitmap bottomBmp = Bitmap.createBitmap(srcBmp, 0, mTopView.getMeasuredHeight(),
-                srcBmp.getWidth(), mSlideableView.getMeasuredHeight());
-        if (srcBmp != null && srcBmp.isRecycled()) {
+        Bitmap topBmp = null;
+        Bitmap bottomBmp = null;
+        try {
+            topBmp = Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(),
+                    mTopView.getMeasuredHeight());
+            bottomBmp = Bitmap.createBitmap(srcBmp, 0, mTopView.getMeasuredHeight(),
+                    srcBmp.getWidth(), mSlideableView.getMeasuredHeight());
+        } catch (Exception e) {
+            topBmp = null;
+            bottomBmp = null;
+        }
+        if (srcBmp != null && !srcBmp.isRecycled()) {
             srcBmp.recycle();
             srcBmp = null;
         }
-        mTopPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), topBmp);
-        mBottomPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), bottomBmp);
+        if (topBmp == null || bottomBmp == null) {
+            mTopPanelBgDrawable = mContext.getResources().getDrawable(R.drawable.top_panel_default);
+            mBottomPanelBgDrawable = mContext.getResources().getDrawable(
+                    R.drawable.bottom_panel_default);
+        } else {
+            mTopPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), topBmp);
+            mBottomPanelBgDrawable = ImageUtils.bitmap2Drawable(getContext(), bottomBmp);
+        }
+
         mIsForeBackgroundCutOff = true;
     }
 
@@ -527,6 +565,22 @@ public class SlidingUpPanelLayout extends ViewGroup {
      */
     public int getPanelHeight() {
         return mPanelHeight;
+    }
+
+    public int getContentHeight() {
+        return mMainView.getMeasuredHeight();
+    }
+
+    public int getContentWidth() {
+        return mMainView.getMeasuredWidth();
+    }
+
+    public float getContentViewWidthHeightRate() {
+        try {
+            return (float) getContentWidth() / (float) getContentHeight();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     /**
@@ -821,7 +875,6 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
         setMeasuredDimension(widthSize, heightSize);
 
-        cutOffForegroundDrawable();
     }
 
     @Override
@@ -1306,6 +1359,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
     @Override
     public void draw(Canvas c) {
+        cutOffForegroundDrawable();
         super.draw(c);
 
         if (!isSlidingEnabled()) {
@@ -1316,7 +1370,6 @@ public class SlidingUpPanelLayout extends ViewGroup {
         if (mSlideState == SlideState.EXPANDED) {
             return;
         }
-
         drawTopPanelShadow(c);
         drawBottomPanelShadow(c);
     }
@@ -1483,6 +1536,11 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 mIsFixed = false;
             }
 
+            if (mPanelSlideListener != null) {
+                if (mPanelSlideListener.onPanelFastDown(yvel)) {
+                    return;
+                }
+            }
             if (mSlideOffset != 0) {
                 int target = computePanelTopPosition(1.0f);
                 mDragHelper.settleCapturedViewAt(releasedChild.getLeft(), target);

@@ -6,16 +6,12 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -25,6 +21,7 @@ import cn.zmdx.kaka.locker.widget.LockPatternView;
 import cn.zmdx.kaka.locker.widget.LockPatternView.Cell;
 import cn.zmdx.kaka.locker.widget.LockPatternView.DisplayMode;
 import cn.zmdx.kaka.locker.widget.LockPatternView.OnPatternListener;
+import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -40,13 +37,11 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
 
     private int mLockPatternType = 1;
 
-    private LinearLayout mDialogBackground;
-
     private TextView mGusturePrompt;
 
-    private Button mResetBtn;
+    private TypefaceTextView mResetBtn;
 
-    private Button mDetermineBtn;
+    private TypefaceTextView mDetermineBtn;
 
     private LockPatternView mLockPatternView;
 
@@ -66,29 +61,22 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
 
     private int mErrorTimes = 0;
 
-    private Bitmap mBitmapDrawable;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
         setContentView(R.layout.gusture_view);
-        mBitmapDrawable = getIntent().getBundleExtra("bundle").getParcelable("bitmap");
         mLockPatternType = getIntent().getBundleExtra("bundle").getInt("type");
         getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         mPandoraConfig = PandoraConfig.newInstance(mContext);
         initView();
     }
 
-    @SuppressWarnings("deprecation")
     private void initView() {
-        mDialogBackground = (LinearLayout) findViewById(R.id.gusture_dialog_background);
-        mDialogBackground
-                .setBackgroundDrawable(new BitmapDrawable(getResources(), mBitmapDrawable));
         mGusturePrompt = (TextView) findViewById(R.id.gusture_prompt);
-        mResetBtn = (Button) findViewById(R.id.gusture_reset);
+        mResetBtn = (TypefaceTextView) findViewById(R.id.gusture_reset);
         mResetBtn.setOnClickListener(this);
-        mDetermineBtn = (Button) findViewById(R.id.gusture_sure);
+        mDetermineBtn = (TypefaceTextView) findViewById(R.id.gusture_sure);
         mDetermineBtn.setOnClickListener(this);
         mLockPatternView = (LockPatternView) findViewById(R.id.gusture);
         mLockPatternView.setOnPatternListener(this);
@@ -329,7 +317,7 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("LockPatternActivity"); // 保证 onPageEnd 在onPause
-                                                 // 之前调用,因为 onPause 中会保存信息
+        // 之前调用,因为 onPause 中会保存信息
         MobclickAgent.onPause(this);
     }
 }

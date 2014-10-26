@@ -1,24 +1,29 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import java.lang.ref.WeakReference;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
 public class InitSettingActivity extends Activity implements OnClickListener {
-
-    private String mMIUIVersion;
 
     private Button mCloseSystemLockBtn;
 
@@ -26,13 +31,23 @@ public class InitSettingActivity extends Activity implements OnClickListener {
 
     private Button mTrustBtn;
 
-    private TextView mCompleteBtn;
+    private TypefaceTextView mCompleteBtn;
 
     private PandoraConfig mPandoraConfig;
 
     private int mThemeId;
 
-    private boolean isMIUI = false;
+    private static boolean isMIUI = false;
+
+    private static String mMIUIVersion;
+
+    private static final int MSG_CLOSE_SYSTEM_LOCKER = 0;
+
+    private static final int MSG_ALLOW_FOLAT_WINDOW = 1;
+
+    private static final int MSG_TRUST = 2;
+
+    private static final int MSG_SETTING_DELAY = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,31 +59,54 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         mThemeId = mPandoraConfig.getCurrentThemeId();
         setContentView(R.layout.init_setting_fragment);
         initView();
+        initWallpaper();
     }
 
     private void initView() {
-        int resId = ThemeManager.getThemeById(mThemeId).getmBackgroundResId();
-        findViewById(R.id.init_setting_background).setBackgroundResource(resId);
         if (isMIUI) {
             findViewById(R.id.init_setting_MIUI_allow_floating_window_guide).setVisibility(
                     View.VISIBLE);
             findViewById(R.id.init_setting_MIUI_trust_guide).setVisibility(View.VISIBLE);
         }
+
         mCloseSystemLockBtn = (Button) findViewById(R.id.init_setting_close_systemlocker_to_set);
         mCloseSystemLockBtn.setOnClickListener(this);
         mFolatfingWindowBtn = (Button) findViewById(R.id.init_setting_MIUI_allow_floating_window_to_set);
         mFolatfingWindowBtn.setOnClickListener(this);
         mTrustBtn = (Button) findViewById(R.id.init_setting_MIUI_trust_to_set);
         mTrustBtn.setOnClickListener(this);
-        mCompleteBtn = (TextView) findViewById(R.id.init_setting_miui_complete);
+        mCompleteBtn = (TypefaceTextView) findViewById(R.id.init_setting_miui_complete);
         mCompleteBtn.setOnClickListener(this);
 
     }
 
-    private void showPromptActicity(boolean isMIUI, int type) {
+    @SuppressWarnings("deprecation")
+    private void initWallpaper() {
+        View view = findViewById(R.id.init_setting_background);
+        int themeId = mPandoraConfig.getCurrentThemeId();
+        if (themeId == -1) {
+            String fileName = PandoraConfig.newInstance(this).getCustomWallpaperFileName();
+            String path = CustomWallpaperManager.getCustomWallpaperFilePath(fileName);
+            Bitmap bitmap = PandoraUtils.getBitmap(path);
+            if (null == bitmap) {
+                view.setBackgroundDrawable(getResources().getDrawable(
+                        R.drawable.setting_background_blue_fore));
+            } else {
+                BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+                view.setBackgroundDrawable(drawable);
+            }
+        } else {
+            int resId = ThemeManager.getThemeById(mThemeId).getmBackgroundResId();
+            view.setBackgroundResource(resId);
+        }
+
+    }
+
+    private void showPromptActicity(boolean isMIUI, String mMIUIVersion, int type) {
         Intent in = new Intent();
         in.setClass(this, InitPromptActivity.class);
         in.putExtra("isMIUI", isMIUI);
+        in.putExtra("mMIUIVersion", mMIUIVersion);
         in.putExtra("type", type);
         startActivity(in);
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
@@ -81,18 +119,36 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         switch (view.getId()) {
             case R.id.init_setting_close_systemlocker_to_set:
                 PandoraUtils.closeSystemLocker(InitSettingActivity.this, isMIUI);
-                mCloseSystemLockBtn.setBackgroundResource(R.drawable.setting_miui_button_complete);
-                showPromptActicity(isMIUI, InitPromptActivity.PROMPT_CLOSE_SYSTEM_LOCKER);
+                mCloseSystemLockBtn.setBackgroundResource(R.drawable.base_button_pressed);
+
+                if (mHandler.hasMessages(MSG_CLOSE_SYSTEM_LOCKER)) {
+                    mHandler.removeMessages(MSG_CLOSE_SYSTEM_LOCKER);
+                }
+                Message closeSystemLocker = Message.obtain();
+                closeSystemLocker.what = MSG_CLOSE_SYSTEM_LOCKER;
+                mHandler.sendMessageDelayed(closeSystemLocker, MSG_SETTING_DELAY);
                 break;
             case R.id.init_setting_MIUI_allow_floating_window_to_set:
                 PandoraUtils.setAllowFolatWindow(InitSettingActivity.this, mMIUIVersion);
-                mFolatfingWindowBtn.setBackgroundResource(R.drawable.setting_miui_button_complete);
-                showPromptActicity(isMIUI, InitPromptActivity.PROMPT_ALLOW_FLOAT_WINDOW);
+                mFolatfingWindowBtn.setBackgroundResource(R.drawable.base_button_pressed);
+
+                if (mHandler.hasMessages(MSG_ALLOW_FOLAT_WINDOW)) {
+                    mHandler.removeMessages(MSG_ALLOW_FOLAT_WINDOW);
+                }
+                Message allowFloatWindow = Message.obtain();
+                allowFloatWindow.what = MSG_ALLOW_FOLAT_WINDOW;
+                mHandler.sendMessageDelayed(allowFloatWindow, MSG_SETTING_DELAY);
+
                 break;
             case R.id.init_setting_MIUI_trust_to_set:
                 PandoraUtils.setTrust(InitSettingActivity.this, mMIUIVersion);
-                mTrustBtn.setBackgroundResource(R.drawable.setting_miui_button_complete);
-                showPromptActicity(isMIUI, InitPromptActivity.PROMPT_TRRST);
+                mTrustBtn.setBackgroundResource(R.drawable.base_button_pressed);
+                if (mHandler.hasMessages(MSG_TRUST)) {
+                    mHandler.removeMessages(MSG_TRUST);
+                }
+                Message setTrust = Message.obtain();
+                setTrust.what = MSG_TRUST;
+                mHandler.sendMessageDelayed(setTrust, MSG_SETTING_DELAY);
                 break;
             case R.id.init_setting_miui_complete:
                 onBackPressed();
@@ -100,6 +156,37 @@ public class InitSettingActivity extends Activity implements OnClickListener {
 
             default:
                 break;
+        }
+    }
+
+    private MyHandler mHandler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        WeakReference<Activity> mActicity;
+
+        public MyHandler(Activity activity) {
+            mActicity = new WeakReference<Activity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Activity activity = mActicity.get();
+            switch (msg.what) {
+                case MSG_CLOSE_SYSTEM_LOCKER:
+                    ((InitSettingActivity) activity).showPromptActicity(isMIUI, mMIUIVersion,
+                            InitPromptActivity.PROMPT_CLOSE_SYSTEM_LOCKER);
+                    break;
+                case MSG_ALLOW_FOLAT_WINDOW:
+                    ((InitSettingActivity) activity).showPromptActicity(isMIUI, mMIUIVersion,
+                            InitPromptActivity.PROMPT_ALLOW_FLOAT_WINDOW);
+                    break;
+                case MSG_TRUST:
+                    ((InitSettingActivity) activity).showPromptActicity(isMIUI, mMIUIVersion,
+                            InitPromptActivity.PROMPT_TRRST);
+                    break;
+
+            }
+            super.handleMessage(msg);
         }
     }
 

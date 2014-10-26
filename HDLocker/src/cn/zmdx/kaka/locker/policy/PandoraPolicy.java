@@ -5,7 +5,8 @@ import java.util.Locale;
 
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
-import cn.zmdx.kaka.locker.content.BaiduTagMapping;
+import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class PandoraPolicy {
@@ -24,7 +25,7 @@ public class PandoraPolicy {
 
     public static final int COUNT_DOWNLOAD_IMAGE_WIFI = 15;
 
-    public static final int COUNT_DOWNLOAD_IMAGE_NON_WIFI = 1;
+    public static final int COUNT_DOWNLOAD_IMAGE_NON_WIFI = 0;
 
     /**
      * 请求百度图片时，每页的数据条数
@@ -36,10 +37,6 @@ public class PandoraPolicy {
      */
     public static final int REQUEST_PAGE_COUNT_DEFAULT = 10;
 
-    public static final int[] BAIDU_IMAGE_MODULE = {
-        BaiduTagMapping.INT_TAG1_GAOXIAO
-    };
-
     // public static final int[] BAIDU_IMAGE_MODULE = {
     // BaiduTagMapping.INT_TAG1_BIZHI, BaiduTagMapping.INT_TAG1_GAOXIAO,
     // BaiduTagMapping.INT_TAG1_MEINV, BaiduTagMapping.INT_TAG1_MINGXING,
@@ -50,6 +47,17 @@ public class PandoraPolicy {
 
     public static final long PULL_BAIDU_INTERVAL_TIME = 2 * 24 * 60 * 60 * 1000; // 2
                                                                                  // days
+
+    public static final long MIN_CHECK_WEATHER_DURAION = 1 * 60 * 1000;
+
+    public static final int MIN_DURATION_SYNC_DATA_TIME = 60 * 1000;
+
+    public static final long MIN_PULL_ORIGINAL_TIME = 3 * 60 * 60 * 1000;
+
+    /**
+     * 锁屏页下滑速率，值越下，越灵敏，即越容易下滑解锁
+     */
+    public static final float DEFAULT_MAX_YVEL = 2000.0f * BaseInfoHelper.getDensity(HDApplication.getInstannce());
 
     public static boolean verifyImageLegal(String url, int w, int h) {
         try {

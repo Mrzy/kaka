@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/gusture_view_padding_top" >
 
-    <TextView
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/gusture_prompt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         android:layout_marginTop="@dimen/gusture_view_button_margin_top"
         android:orientation="horizontal" >
 
-        <Button
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:id="@+id/gusture_reset"
             style="@android:style/ButtonBar"
             android:layout_width="0dp"
@@ -44,7 +44,7 @@
             android:textSize="16sp"
             android:visibility="invisible" />
 
-        <Button
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:id="@+id/gusture_sure"
             style="@android:style/ButtonBar"
             android:layout_width="0dp"

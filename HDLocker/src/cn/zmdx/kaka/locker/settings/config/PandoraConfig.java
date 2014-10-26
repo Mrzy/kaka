@@ -27,18 +27,38 @@ public class PandoraConfig {
 
     public static final String DATABASE_NAME = "PandoraLocker.db";
 
-    private static final String UNLOCK_TYPE = "unlocktype";
+    private static final String UNLOCK_TYPE = "a";
 
-    private static final String LOCKPATTERN = "lockPattern";
+    private static final String LOCKPATTERN = "b";
 
-    private static final String THEME_ID = "theme_id";
+    private static final String THEME_ID = "c";
 
-    private static final String GUIDE_TIMES = "guideTimes";
+    private static final String GUIDE_TIMES = "d";
 
     // 最后一次拉取百度图片的时间
-    private static final String KEY_LAST_PULL_BAIDU_TIME = "lastPullBaiduTime";
+    private static final String KEY_LAST_PULL_BAIDU_TIME = "e";
 
-    private static final String KEY_NEW_VERSION_CHECKED = "key_new_version_checked";
+    private static final String KEY_NEW_VERSION_CHECKED = "f";
+
+    private static final String KEY_CUSTOM_WALLPAPER = "g";
+
+    private static final String KEY_LAST_CHECK_WEATHER = "h";
+
+    private static final String KEY_LAST_WEATHER_INFO = "i";
+
+    public static final int DEFAULT_NO_THRME_INT = -999;
+
+    private static final String KEY_HAS_GUIDED = "j";
+
+    private static final String KEY_TODAY_PULL_ORIGINAL_DATA = "k";
+
+    private static final String KEY_NEED_NOTICE = "keyNeedNotice";
+
+    private static final String KEY_LOCK_DEFAULT_ = "keyLockDefault";
+
+    private static final String KEY_LAST_TIME_PULL_ORIGINAL_DATA = "l";
+
+    private static final String KEY_LOCK_WELCOME_STRING = "keyLockWelcomeString";
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -77,7 +97,7 @@ public class PandoraConfig {
     }
 
     public int getCurrentThemeIdForStatistical() {
-        return mSp.getInt(THEME_ID, -1);
+        return mSp.getInt(THEME_ID, DEFAULT_NO_THRME_INT);
     }
 
     public void saveThemeId(int themeId) {
@@ -155,4 +175,97 @@ public class PandoraConfig {
         editor.putString(KEY_NEW_VERSION_CHECKED, today);
         editor.commit();
     }
+
+    public void saveCustomWallpaperFileName(String fileName) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_CUSTOM_WALLPAPER, fileName);
+        editor.commit();
+    }
+
+    public String getCustomWallpaperFileName() {
+        return mSp.getString(KEY_CUSTOM_WALLPAPER, "");
+    }
+
+    public long getLastCheckWeatherTime() {
+        return mSp.getLong(KEY_LAST_CHECK_WEATHER, 0);
+    }
+
+    public void saveLastCheckWeatherTime(long time) {
+        Editor editor = mSp.edit();
+        editor.putLong(KEY_LAST_CHECK_WEATHER, time);
+        editor.commit();
+    }
+
+    public void saveLastWeatherInfo(String info) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_LAST_WEATHER_INFO, info);
+        editor.commit();
+    }
+
+    public String getLastWeatherInfo() {
+        return mSp.getString(KEY_LAST_WEATHER_INFO, null);
+    }
+
+    public void saveHasGuided() {
+        Editor editor = mSp.edit();
+        // 存入数据
+        editor.putBoolean(KEY_HAS_GUIDED, true);
+        // 提交修改
+        editor.commit();
+    }
+
+    public boolean isHasGuided() {
+        return mSp.getBoolean(KEY_HAS_GUIDED, false);
+    }
+
+    public void saveNeedNotice(boolean isNeed) {
+        Editor editor = mSp.edit();
+        editor.putBoolean(KEY_NEED_NOTICE, isNeed);
+        editor.commit();
+    }
+
+    public boolean isNeedNotice() {
+        return mSp.getBoolean(KEY_NEED_NOTICE, true);
+    }
+
+    public void saveLockDefaultFileName(String fileName) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_LOCK_DEFAULT_, fileName);
+        editor.commit();
+    }
+
+    public String getLockDefaultFileName() {
+        return mSp.getString(KEY_LOCK_DEFAULT_, "");
+    }
+
+    public String getTodayPullOriginalData() {
+        return mSp.getString(KEY_TODAY_PULL_ORIGINAL_DATA, "");
+    }
+
+    public void saveTodayPullOriginalDataTime(String date) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_TODAY_PULL_ORIGINAL_DATA, date);
+        editor.commit();
+    }
+
+    public long getLastTimePullOriginalData() {
+        return mSp.getLong(KEY_LAST_TIME_PULL_ORIGINAL_DATA, 0);
+    }
+
+    public void saveLastPullOriginalDataTime(long time) {
+        Editor editor = mSp.edit();
+        editor.putLong(KEY_LAST_TIME_PULL_ORIGINAL_DATA, time);
+        editor.commit();
+    }
+
+    public String getWelcomeString() {
+        return mSp.getString(KEY_LOCK_WELCOME_STRING, "");
+    }
+
+    public void saveWelcomeString(String welcomeString) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_LOCK_WELCOME_STRING, welcomeString);
+        editor.commit();
+    }
+
 }

@@ -1,35 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="25dp" >
+    android:background="@drawable/pandora_locker_content_background"
+    android:orientation="vertical" >
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:padding="4dp" >
+        android:layout_height="match_parent" >
 
-        <ImageView
-            android:id="@+id/single_img"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#000000"
-            android:scaleType="fitCenter" />
-
-        <TextView
-            android:id="@+id/desc"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="#77000000"
-            android:gravity="center_horizontal"
-            android:paddingBottom="4dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:paddingTop="4dp"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp" />
-    </RelativeLayout>
+            android:paddingBottom="5dp" >
 
-</RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/pandora_locker_title"
+                android:layout_width="match_parent"
+                android:layout_height="49dp" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="11dp"
+                    android:orientation="horizontal" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/from_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/share_image_news_from"
+                        android:textColor="#3f3f3f"
+                        android:textSize="15sp" />
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/from_platform_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="搜狐新闻"
+                        android:textColor="#565656"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/share_from_platform"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/single_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/pandora_locker_title"
+                android:scaleType="centerCrop" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/image_news_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="6dp"
+                android:paddingLeft="18dp"
+                android:paddingRight="13dp"
+                android:paddingTop="10dp"
+                android:textColor="#272727"
+                android:textSize="17sp" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/single_img"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="#272727"
+                android:textSize="23sp" />
+        </RelativeLayout>
+    </ScrollView>
+
+</LinearLayout>

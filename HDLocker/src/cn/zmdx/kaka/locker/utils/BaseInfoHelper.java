@@ -7,12 +7,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -25,6 +29,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Surface;
 import android.view.WindowManager;
 
 public class BaseInfoHelper {
@@ -33,6 +38,66 @@ public class BaseInfoHelper {
 
     public static String getPkgName(Context context) {
         return context.getApplicationContext().getPackageName();
+    }
+
+    private static int mRealScreenHeight = -1;
+
+    /**
+     * 获得设备在竖屏时的物理高度（包括虚拟按键，通知栏的高度)
+     * 
+     * @param display
+     * @return
+     */
+    @SuppressLint("NewApi")
+    public static int getRealHeight(Display display) {
+        if (mRealScreenHeight != -1) {
+            return mRealScreenHeight;
+        }
+        int orientation = display.getRotation();
+        boolean landscape = orientation == Surface.ROTATION_270
+                || orientation == Surface.ROTATION_90;
+        Point size = new Point();
+        int result = 0;
+        if (Build.VERSION.SDK_INT >= 17) {
+            display.getRealSize(size);
+            result = landscape ? size.x : size.y;
+        } else {
+            try {
+                Method getRawH = landscape ? Display.class.getMethod("getRawWidth") : Display.class
+                        .getMethod("getRawHeight");
+                result = (Integer) getRawH.invoke(display);
+            } catch (Exception e) {
+                display.getSize(size);
+                result = landscape ? size.x : size.y;
+            }
+        }
+        return result;
+    }
+
+    public static float mDensity = -1;
+
+    public static float getDensity(Context ctx) {
+        if (mDensity != -1) {
+            return mDensity;
+        }
+
+        DisplayMetrics metrics = new DisplayMetrics();
+
+        WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+
+        wm.getDefaultDisplay().getMetrics(metrics);
+
+        mDensity = metrics.density;
+        return mDensity;
+    }
+
+    @SuppressLint("NewApi")
+    public static int getRealHeight(Context context) {
+        if (mRealScreenHeight != -1) {
+            return mRealScreenHeight;
+        }
+        final Display display = getDisplay(context);
+        return getRealHeight(display);
     }
 
     public static String getWifiMac(Context context) {
@@ -192,6 +257,19 @@ public class BaseInfoHelper {
         return null;
     }
 
+    @SuppressLint("NewApi")
+    private static Display getDisplay(Context context) {
+        try {
+            Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE))
+                    .getDefaultDisplay();
+            return display;
+        } catch (Exception e) {
+            if (LOGE_ENABLED)
+                Log.e(TAG, "Failed to getDisplay!", e);
+        }
+        return null;
+    }
+
     public static String getHeight(Context context) {
         try {
             DisplayMetrics metrics = getMetrics(context);
@@ -204,16 +282,23 @@ public class BaseInfoHelper {
         return "";
     }
 
-    public static String getWidth(Context context) {
+    private static int sScreenHeight = 0;
+
+    public static int getWidth(Context context) {
+        if (sScreenHeight != 0) {
+            return sScreenHeight;
+        }
         try {
             DisplayMetrics metrics = getMetrics(context);
-            if (metrics != null)
-                return String.valueOf(metrics.widthPixels);
+            if (metrics != null) {
+                sScreenHeight = metrics.widthPixels;
+            }
+            return sScreenHeight;
         } catch (Exception e) {
             if (LOGE_ENABLED)
                 Log.e(TAG, "Failed to get width info!", e);
         }
-        return "";
+        return sScreenHeight;
     }
 
     @Deprecated
@@ -435,5 +520,15 @@ public class BaseInfoHelper {
             }
             return null;
         }
+    }
+
+    /**
+     * @return year + month + day
+     */
+    public static String getCurrentDate() {
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        return "" + year + "" + month + "" + day;
     }
 }

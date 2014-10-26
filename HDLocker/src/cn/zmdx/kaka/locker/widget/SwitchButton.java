@@ -71,7 +71,7 @@ public class SwitchButton extends CompoundButton {
 
     private Drawable sliderDrawable; // 滑块图片
 
-    private Drawable sliderCloseDrawable; // 滑块图片
+    // private Drawable sliderCloseDrawable; // 滑块图片
 
     private SwitchScroller switchScroller; // 切换滚动器，用于实现平滑滚动效果
 
@@ -113,8 +113,7 @@ public class SwitchButton extends CompoundButton {
                 setDrawables(typedArray.getDrawable(R.styleable.SwitchButton_frameDrawable),
                         typedArray.getDrawable(R.styleable.SwitchButton_stateDrawable),
                         typedArray.getDrawable(R.styleable.SwitchButton_stateMaskDrawable),
-                        typedArray.getDrawable(R.styleable.SwitchButton_sliderDrawable),
-                        typedArray.getDrawable(R.styleable.SwitchButton_sliderCloseDrawable));
+                        typedArray.getDrawable(R.styleable.SwitchButton_sliderDrawable));
                 typedArray.recycle();
             }
         }
@@ -244,19 +243,9 @@ public class SwitchButton extends CompoundButton {
 
         // 绘制发光滑块层
         if (sliderDrawable != null) {
-            if (isChecked()) {
-                Bitmap sliderBitmap = getBitmapFromDrawable(sliderDrawable);
-                if (sliderBitmap != null && !sliderBitmap.isRecycled()) {
-                    canvas.drawBitmap(sliderBitmap, tempSlideX, 0, paint);
-                }
-            }
-        }
-        if (sliderCloseDrawable != null) {
-            if (!isChecked()) {
-                Bitmap sliderBitmap = getBitmapFromDrawable(sliderCloseDrawable);
-                if (sliderBitmap != null && !sliderBitmap.isRecycled()) {
-                    canvas.drawBitmap(sliderBitmap, tempSlideX, 0, paint);
-                }
+            Bitmap sliderBitmap = getBitmapFromDrawable(sliderDrawable);
+            if (sliderBitmap != null && !sliderBitmap.isRecycled()) {
+                canvas.drawBitmap(sliderBitmap, tempSlideX, 0, paint);
             }
         }
 
@@ -361,16 +350,16 @@ public class SwitchButton extends CompoundButton {
             stateMaskDrawable.setState(drawableState); // 更新状态遮罩图片的状态
         if (sliderDrawable != null)
             sliderDrawable.setState(drawableState); // 更新滑块图片的状态
-        if (sliderCloseDrawable != null) {
-            sliderCloseDrawable.setState(drawableState);
-        }
+        // if (sliderCloseDrawable != null) {
+        // sliderCloseDrawable.setState(drawableState);
+        // }
         invalidate();
     }
 
     @Override
     protected boolean verifyDrawable(Drawable who) {
         return super.verifyDrawable(who) || who == frameDrawable || who == stateDrawable
-                || who == stateMaskDrawable || who == sliderDrawable || who == sliderCloseDrawable;
+                || who == stateMaskDrawable || who == sliderDrawable;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -386,9 +375,9 @@ public class SwitchButton extends CompoundButton {
                 stateMaskDrawable.jumpToCurrentState();
             if (sliderDrawable != null)
                 sliderDrawable.jumpToCurrentState();
-            if (sliderCloseDrawable != null) {
-                sliderCloseDrawable.jumpToCurrentState();
-            }
+            // if (sliderCloseDrawable != null) {
+            // sliderCloseDrawable.jumpToCurrentState();
+            // }
         }
     }
 
@@ -400,7 +389,7 @@ public class SwitchButton extends CompoundButton {
             if (getWidth() > 0 && switchScroller != null) { // 如果已经绘制完成
                 switchScroller.startScroll(checked);
             } else {
-                setSlideX(isChecked() ? tempMinSlideX : tempMaxSlideX); // 直接修改X轴坐标，因为尚未绘制完成的时候，动画执行效果不理想，所以直接修改坐标，而不执行动画
+                setSlideX(isChecked() ? tempMaxSlideX : tempMinSlideX); // 直接修改X轴坐标，因为尚未绘制完成的时候，动画执行效果不理想，所以直接修改坐标，而不执行动画
             }
         }
     }
@@ -426,9 +415,9 @@ public class SwitchButton extends CompoundButton {
      * @param sliderCloseDrawable
      */
     public void setDrawables(Drawable frameBitmap, Drawable stateDrawable,
-            Drawable stateMaskDrawable, Drawable sliderDrawable, Drawable sliderCloseDrawable) {
+            Drawable stateMaskDrawable, Drawable sliderDrawable) {
         if (frameBitmap == null || stateDrawable == null || stateMaskDrawable == null
-                || sliderDrawable == null || sliderCloseDrawable == null) {
+                || sliderDrawable == null) {
             throw new IllegalArgumentException("ALL NULL");
         }
 
@@ -436,7 +425,7 @@ public class SwitchButton extends CompoundButton {
         this.stateDrawable = stateDrawable;
         this.stateMaskDrawable = stateMaskDrawable;
         this.sliderDrawable = sliderDrawable;
-        this.sliderCloseDrawable = sliderCloseDrawable;
+        // this.sliderCloseDrawable = sliderCloseDrawable;
 
         this.frameDrawable.setBounds(0, 0, this.frameDrawable.getIntrinsicWidth(),
                 this.frameDrawable.getIntrinsicHeight());
@@ -450,13 +439,14 @@ public class SwitchButton extends CompoundButton {
         this.sliderDrawable.setBounds(0, 0, this.sliderDrawable.getIntrinsicWidth(),
                 this.sliderDrawable.getIntrinsicHeight());
         this.sliderDrawable.setCallback(this);
-        this.sliderCloseDrawable.setBounds(0, 0, this.sliderCloseDrawable.getIntrinsicWidth(),
-                this.sliderCloseDrawable.getIntrinsicHeight());
-        this.sliderCloseDrawable.setCallback(this);
+        // this.sliderCloseDrawable.setBounds(0, 0,
+        // this.sliderCloseDrawable.getIntrinsicWidth(),
+        // this.sliderCloseDrawable.getIntrinsicHeight());
+        // this.sliderCloseDrawable.setCallback(this);
 
         this.tempMinSlideX = (-1 * (stateDrawable.getIntrinsicWidth() - frameBitmap
                 .getIntrinsicWidth())); // 初始化X轴最小值
-        setSlideX(isChecked() ? tempMinSlideX : tempMaxSlideX); // 根据选中状态初始化默认坐标
+        setSlideX(isChecked() ? tempMaxSlideX : tempMinSlideX); // 根据选中状态初始化默认坐标
 
         requestLayout();
     }
@@ -470,13 +460,12 @@ public class SwitchButton extends CompoundButton {
      * @param sliderDrawableResId 滑块图片ID
      */
     public void setDrawableResIds(int frameDrawableResId, int stateDrawableResId,
-            int stateMaskDrawableResId, int sliderDrawableResId, int sliderCloseDrawableResId) {
+            int stateMaskDrawableResId, int sliderDrawableResId) {
         if (getResources() != null) {
             setDrawables(getResources().getDrawable(frameDrawableResId), getResources()
                     .getDrawable(stateDrawableResId),
                     getResources().getDrawable(stateMaskDrawableResId),
-                    getResources().getDrawable(sliderDrawableResId),
-                    getResources().getDrawable(sliderCloseDrawableResId));
+                    getResources().getDrawable(sliderDrawableResId));
         }
     }
 
@@ -557,7 +546,7 @@ public class SwitchButton extends CompoundButton {
          * @param checked 是否选中
          */
         public void startScroll(boolean checked) {
-            scroller.startScroll(tempSlideX, 0, (checked ? tempMinSlideX : tempMaxSlideX)
+            scroller.startScroll(tempSlideX, 0, (checked ? tempMaxSlideX : tempMinSlideX)
                     - tempSlideX, 0, duration);
             post(this);
         }

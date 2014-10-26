@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    sothree:dragView="@+id/lock_btn"
-    sothree:panelHeight="80dp"
+    sothree:dragView="@+id/fakeDragView"
+    sothree:panelHeight="0dp"
     sothree:shadowHeight="8dp"
-    sothree:topSeekoutHeight="80dp" >
+    sothree:topSeekoutHeight="0dp" >
 
     <include layout="@layout/setting_activity" />
 
@@ -17,6 +17,41 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#cccccc" >
+
+        <View
+            android:id="@+id/fakeDragView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            />
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="65dp"
+            android:layout_height="95dp"
+            android:layout_centerInParent="true"
+            android:paddingTop="30dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_launcher" />
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:id="@+id/appName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/icon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="@string/app_name"
+            android:textColor="#ffffff"
+            android:textSize="25dp" />
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/appName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="6dp"
+            android:text="@string/setting_about_text"
+            android:textColor="#ffffff"
+            android:textSize="14dp" />
     </RelativeLayout>
 
     <RelativeLayout

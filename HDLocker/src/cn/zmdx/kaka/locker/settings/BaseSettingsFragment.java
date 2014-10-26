@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
 
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -20,14 +22,11 @@ public abstract class BaseSettingsFragment extends Fragment {
 
     private Context mContext;
 
-    private MAboutFragment mAboutFragment;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         mPandoraConfig = PandoraConfig.newInstance(mContext);
-        mAboutFragment = new MAboutFragment();
     }
 
     protected void checkNewVersion() {
@@ -85,13 +84,22 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
 
     protected void gotoAbout() {
-        getFragmentManager()
-                .beginTransaction()
-                .addToBackStack(null)
-                .setCustomAnimations(R.anim.umeng_fb_slide_in_from_right,
-                        R.anim.umeng_fb_slide_out_from_left, R.anim.umeng_fb_slide_in_from_left,
-                        R.anim.umeng_fb_slide_out_from_right).add(R.id.content, mAboutFragment)
-                .commit();
+        Intent in = new Intent();
+        in.setClass(getActivity(), MAboutActivity.class);
+        startActivity(in);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+    }
+
+    protected void gotoGustureActivity(int type) {
+        Intent in = new Intent();
+        in.setClass(getActivity(), LockPatternActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", type);
+        in.putExtra("bundle", bundle);
+        startActivityForResult(in, MainSettingsFragment.GUSTURE_REQUEST_CODE_SUCCESS);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
     }
 
     protected void gotoInit() {
@@ -102,16 +110,40 @@ public abstract class BaseSettingsFragment extends Fragment {
                 R.anim.umeng_fb_slide_out_from_left);
     }
 
+    protected void gotoIndividualization() {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), IndividualizationActivity.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+    }
+
     protected int getUnLockType() {
         return mPandoraConfig.getUnLockType();
     }
 
     protected void saveThemeId(int themeId) {
-        mPandoraConfig.saveThemeId(themeId);
+        ThemeManager.saveTheme(themeId);
     }
 
     protected int getCurrentThemeId() {
-        return mPandoraConfig.getCurrentThemeId();
+        return ThemeManager.getCurrentTheme().getmThemeId();
     }
 
+    protected void gotoWallpaper() {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), WallPaperActivity.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+
+    }
+
+    protected boolean isHaveCustomWallpaper() {
+        return PandoraUtils.isHaveCustomWallpaper(getActivity());
+    }
+
+    protected String getCustomWallpaperFileName() {
+        return mPandoraConfig.getCustomWallpaperFileName();
+    }
 }

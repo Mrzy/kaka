@@ -268,6 +268,7 @@ public class LockPatternView extends View {
 
         final String aspect = a.getString(R.styleable.LockPatternView_aspect);
 
+        a.recycle();
         if ("square".equals(aspect)) {
             mAspect = ASPECT_SQUARE;
         } else if ("lock_width".equals(aspect)) {

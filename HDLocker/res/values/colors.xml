@@ -10,6 +10,14 @@
     <color name="setting_background">#ffffff</color>
     <color name="setting_about_us_text_color">#ffffff</color>
     <color name="setting_about_pandora_color">#2f3035</color>
-    <color name="setting_about_pandora_down">#626a6e</color>
     <color name="init_setting_small_textview_color">#60ffffff</color>
+    
+    <color name="pandora_wallpaper_dialog_item_press">#666666</color>
+    <color name="pandora_wallpaper_dialog_item_normal">#191919</color>
+    
+    <color name="setting_black_translucent">#c5000000</color>
+    <color name="setting_divider_line">#65ffffff</color>
+    <color name="pandora_box_no_net_prompt">#fff3bb</color>
+    <color name="pandora_box_text_color">#272727</color>
+    
 </resources>
