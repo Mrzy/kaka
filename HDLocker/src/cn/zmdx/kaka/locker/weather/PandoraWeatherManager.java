@@ -80,7 +80,6 @@ public class PandoraWeatherManager {
 
             @Override
             public void onResponse(JSONObject response) {
-                HDBLOG.logD("weather url:" + getUrl(lonlat));
                 if (response == null) {
                     callback.onFailed();
                     return;
