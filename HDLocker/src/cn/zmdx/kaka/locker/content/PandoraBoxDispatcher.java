@@ -80,6 +80,9 @@ public class PandoraBoxDispatcher extends Handler {
 
                 //如果这是今天第一次拉取，则删除当前库中的旧数据
                 if (checkFirstPullToday()) {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("今天第一次拉取到原始数据，删除以前的旧数据及sd卡上的图片缓存");
+                    }
                     ServerImageDataModel.getInstance().deleteAll();
                     DiskImageHelper.clear();
                 }

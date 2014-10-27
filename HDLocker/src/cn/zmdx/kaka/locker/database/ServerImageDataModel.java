@@ -264,7 +264,7 @@ public class ServerImageDataModel {
                 + TableStructure.SERVER_IMAGE_SETP + "=?", new String[] {
                 String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerDataMapping.S_DATATYPE_HTML,
                 ServerImageDataModel.UN_READ
-        }, null, null, null, "1");
+        }, null, null, "RANDOM()", "1");
 
         try {
             while (cursor.moveToNext()) {
