@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import cn.zmdx.kaka.locker.FakeActivity;
 import cn.zmdx.kaka.locker.HDApplication;
@@ -59,12 +58,10 @@ public abstract class BaseBox implements IPandoraBox {
         mShareBtn = (ImageView) mRootView.findViewById(R.id.shareBtn);
         mPlatformLayout = mRootView.findViewById(R.id.platforms_layout);
         mPQzone = (ImageView) mRootView.findViewById(R.id.platforms_qzone);
-        mPSina = (ImageView) mRootView.findViewById(R.id.platforms_sina);
         mPWechat = (ImageView) mRootView.findViewById(R.id.platforms_wechat);
         mPWxcircle = (ImageView) mRootView.findViewById(R.id.platforms_wxcircle);
         mShareBtn.setOnClickListener(mShareBtnListener);
         mPQzone.setOnClickListener(mShareBtnListener);
-        mPSina.setOnClickListener(mShareBtnListener);
         mPWechat.setOnClickListener(mShareBtnListener);
         mPWxcircle.setOnClickListener(mShareBtnListener);
         return mRootView;
@@ -82,8 +79,6 @@ public abstract class BaseBox implements IPandoraBox {
                 }
             } else if (v == mPQzone) {
                 share(PandoraShareManager.Tencent);
-            } else if (v == mPSina) {
-                share(PandoraShareManager.Sina);
             } else if (v == mPWechat) {
                 share(PandoraShareManager.Weixin);
             } else if (v == mPWxcircle) {

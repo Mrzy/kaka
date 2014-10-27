@@ -37,15 +37,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/qzone" />
-
-        <ImageView
-            android:id="@+id/platforms_sina"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/sina" />
     </LinearLayout>
 
     <LinearLayout
