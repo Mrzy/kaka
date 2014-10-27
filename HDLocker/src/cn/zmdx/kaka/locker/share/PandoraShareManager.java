@@ -2,24 +2,24 @@
 package cn.zmdx.kaka.locker.share;
 
 import android.app.Activity;
-
+import android.os.Bundle;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
-import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
+import com.umeng.socialize.controller.listener.SocializeListeners.UMAuthListener;
+import com.umeng.socialize.exception.SocializeException;
 import com.umeng.socialize.media.QZoneShareContent;
-import com.umeng.socialize.media.SinaShareContent;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
+import com.umeng.socialize.utils.OauthHelper;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 public class PandoraShareManager {
-    public static final int Sina = 1;
 
     public static final int Renren = 2;
 
@@ -35,49 +35,8 @@ public class PandoraShareManager {
 
     public static final String title = "潘多拉锁屏";
 
-    public static void sinaShare(final Activity activity, String imagePath, boolean isHtml) {
-        UMSocialService sinaShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
-        SinaShareContent sina = new SinaShareContent();
-        if (isHtml) {
-            // 设置分享文字
-            sina.setShareContent(PandoraShareManager.shareContent);
-            // 设置点击消息的跳转URL
-            sina.setTargetUrl(PandoraShareManager.targetUrl);
-            // 设置分享内容的标题
-            sina.setTitle(PandoraShareManager.title);
-            // 设置分享图片
-            sina.setShareImage(new UMImage(activity, imagePath));
-            sinaShare.setShareMedia(sina);
-        } else {
-            // 设置分享文字
-            sina.setShareContent(PandoraShareManager.shareContent);
-            // 设置点击消息的跳转URL
-            sina.setTargetUrl(PandoraShareManager.targetUrl);
-            // 设置分享内容的标题
-            sina.setTitle(PandoraShareManager.title);
-            // 设置分享图片
-            sina.setShareImage(new UMImage(activity, imagePath));
-            sinaShare.setShareMedia(sina);
-        }
-        sinaShare.postShare(activity, SHARE_MEDIA.SINA, new SnsPostListener() {
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
-                if (eCode == 200) {
-                    UmengCustomEventManager.statisticalShareBehavior(Sina, true);
-                } else {
-                    UmengCustomEventManager.statisticalShareBehavior(Sina, false);
-                }
-                activity.finish();
-            }
-        });
-    }
-
-    public static void qzoneShare(final Activity activity, String imagePath) {
-        UMSocialService qzoneShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
+    public static void qzoneShare(final UMSocialService qzoneShare, final Activity activity,
+            String imagePath) {
         // if (isHtml) {
         QZoneShareContent qzone = new QZoneShareContent();
         // 设置分享文字
@@ -94,26 +53,64 @@ public class PandoraShareManager {
         // }
         qzoneShare.getConfig().setSsoHandler(
                 new QZoneSsoHandler(activity, "1103193086", "XOgkKrK9tZOcawOF"));
-        qzoneShare.postShare(activity, SHARE_MEDIA.QZONE, new SnsPostListener() {
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
-                if (eCode == 200) {
-                    UmengCustomEventManager.statisticalShareBehavior(Tencent, true);
-                } else {
-                    UmengCustomEventManager.statisticalShareBehavior(Tencent, false);
+        if (OauthHelper.isAuthenticated(activity, SHARE_MEDIA.QZONE)) {
+            qzoneShare.postShare(activity, SHARE_MEDIA.QZONE, new SnsPostListener() {
+                @Override
+                public void onStart() {
                 }
-                activity.finish();
-            }
-        });
+
+                @Override
+                public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
+                    if (eCode == 200) {
+                        UmengCustomEventManager.statisticalShareBehavior(Tencent, true);
+                    } else {
+                        UmengCustomEventManager.statisticalShareBehavior(Tencent, false);
+                    }
+                    activity.finish();
+                }
+            });
+        } else {
+            qzoneShare.doOauthVerify(activity, SHARE_MEDIA.QZONE, new UMAuthListener() {
+
+                @Override
+                public void onStart(SHARE_MEDIA arg0) {
+
+                }
+
+                @Override
+                public void onError(SocializeException arg0, SHARE_MEDIA arg1) {
+                    activity.finish();
+                }
+
+                @Override
+                public void onComplete(Bundle arg0, SHARE_MEDIA arg1) {
+                    qzoneShare.postShare(activity, SHARE_MEDIA.QZONE, new SnsPostListener() {
+                        @Override
+                        public void onStart() {
+                        }
+
+                        @Override
+                        public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
+                            if (eCode == 200) {
+                                UmengCustomEventManager.statisticalShareBehavior(Tencent, true);
+                            } else {
+                                UmengCustomEventManager.statisticalShareBehavior(Tencent, false);
+                            }
+                            activity.finish();
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancel(SHARE_MEDIA arg0) {
+                    activity.finish();
+                }
+            });
+        }
     }
 
-    public static void weixinCircleShare(final Activity activity, String imagePath, boolean isHtml) {
-        UMSocialService weixinCircleShare = UMServiceFactory
-                .getUMSocialService("cn.zmdx.kaka.locker");
+    public static void weixinCircleShare(final UMSocialService weixinCircleShare,
+            final Activity activity, String imagePath, boolean isHtml) {
         String appID = "wx5fa094ca2b1994ba";
         String appSecret = "5f6abd06e3804079eb95ce0de0464161";
         // 添加微信朋友圈
@@ -130,26 +127,71 @@ public class PandoraShareManager {
         } else {
             weixinCircleShare.setShareMedia(new UMImage(activity, imagePath));
         }
-        weixinCircleShare.postShare(activity, SHARE_MEDIA.WEIXIN_CIRCLE, new SnsPostListener() {
-            @Override
-            public void onStart() {
+        if (OauthHelper.isAuthenticated(activity, SHARE_MEDIA.WEIXIN_CIRCLE)) {
+            weixinCircleShare.postShare(activity, SHARE_MEDIA.WEIXIN_CIRCLE, new SnsPostListener() {
+                @Override
+                public void onStart() {
 
-            }
-
-            @Override
-            public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
-                if (eCode == 200) {
-                    UmengCustomEventManager.statisticalShareBehavior(WeixinCircle, true);
-                } else {
-                    UmengCustomEventManager.statisticalShareBehavior(WeixinCircle, false);
                 }
-                activity.finish();
-            }
-        });
+
+                @Override
+                public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
+                    if (eCode == 200) {
+                        UmengCustomEventManager.statisticalShareBehavior(WeixinCircle, true);
+                    } else {
+                        UmengCustomEventManager.statisticalShareBehavior(WeixinCircle, false);
+                    }
+                    activity.finish();
+                }
+            });
+        } else {
+            weixinCircleShare.doOauthVerify(activity, SHARE_MEDIA.WEIXIN_CIRCLE,
+                    new UMAuthListener() {
+
+                        @Override
+                        public void onStart(SHARE_MEDIA arg0) {
+
+                        }
+
+                        @Override
+                        public void onError(SocializeException arg0, SHARE_MEDIA arg1) {
+                            activity.finish();
+                        }
+
+                        @Override
+                        public void onComplete(Bundle arg0, SHARE_MEDIA arg1) {
+                            weixinCircleShare.postShare(activity, SHARE_MEDIA.WEIXIN_CIRCLE,
+                                    new SnsPostListener() {
+                                        @Override
+                                        public void onStart() {
+                                        }
+
+                                        @Override
+                                        public void onComplete(SHARE_MEDIA arg0, int eCode,
+                                                SocializeEntity arg2) {
+                                            if (eCode == 200) {
+                                                UmengCustomEventManager.statisticalShareBehavior(
+                                                        Tencent, true);
+                                            } else {
+                                                UmengCustomEventManager.statisticalShareBehavior(
+                                                        Tencent, false);
+                                            }
+                                            activity.finish();
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onCancel(SHARE_MEDIA arg0) {
+                            activity.finish();
+                        }
+                    });
+        }
+
     }
 
-    public static void weixinShare(final Activity activity, String imagePath, boolean isHtml) {
-        UMSocialService weixinShare = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
+    public static void weixinShare(final UMSocialService weixinShare, final Activity activity,
+            String imagePath, boolean isHtml) {
         // 微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
         String appID = "wx5fa094ca2b1994ba";
         String appSecret = "5f6abd06e3804079eb95ce0de0464161";
@@ -169,20 +211,65 @@ public class PandoraShareManager {
         } else {
             weixinShare.setShareMedia(new UMImage(activity, imagePath));
         }
-        weixinShare.postShare(activity, SHARE_MEDIA.WEIXIN, new SnsPostListener() {
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
-                if (eCode == 200) {
-                    UmengCustomEventManager.statisticalShareBehavior(Weixin, true);
-                } else {
-                    UmengCustomEventManager.statisticalShareBehavior(Weixin, false);
+        if (OauthHelper.isAuthenticated(activity, SHARE_MEDIA.WEIXIN_CIRCLE)) {
+            weixinShare.postShare(activity, SHARE_MEDIA.WEIXIN_CIRCLE, new SnsPostListener() {
+                @Override
+                public void onStart() {
                 }
-                activity.finish();
-            }
-        });
+
+                @Override
+                public void onComplete(SHARE_MEDIA arg0, int eCode, SocializeEntity arg2) {
+                    if (eCode == 200) {
+                        UmengCustomEventManager.statisticalShareBehavior(Weixin, true);
+                    } else {
+                        UmengCustomEventManager.statisticalShareBehavior(Weixin, false);
+                    }
+                    activity.finish();
+                }
+            });
+        } else {
+            weixinShare.doOauthVerify(activity, SHARE_MEDIA.WEIXIN_CIRCLE,
+                    new UMAuthListener() {
+
+                        @Override
+                        public void onStart(SHARE_MEDIA arg0) {
+
+                        }
+
+                        @Override
+                        public void onError(SocializeException arg0, SHARE_MEDIA arg1) {
+                            activity.finish();
+                        }
+
+                        @Override
+                        public void onComplete(Bundle arg0, SHARE_MEDIA arg1) {
+                            weixinShare.postShare(activity, SHARE_MEDIA.WEIXIN_CIRCLE,
+                                    new SnsPostListener() {
+                                        @Override
+                                        public void onStart() {
+                                        }
+
+                                        @Override
+                                        public void onComplete(SHARE_MEDIA arg0, int eCode,
+                                                SocializeEntity arg2) {
+                                            if (eCode == 200) {
+                                                UmengCustomEventManager.statisticalShareBehavior(
+                                                        Tencent, true);
+                                            } else {
+                                                UmengCustomEventManager.statisticalShareBehavior(
+                                                        Tencent, false);
+                                            }
+                                            activity.finish();
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onCancel(SHARE_MEDIA arg0) {
+                            activity.finish();
+                        }
+                    });
+        }
     }
+
 }

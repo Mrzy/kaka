@@ -19,19 +19,23 @@ import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
-import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.sso.UMSsoHandler;
 
 public class FakeActivity extends Activity {
 
     public static final String ACTION_PANDORA_SHARE = "actionPandoraShare";
 
+    public UMSocialService mController;
+
     @SuppressLint("InlinedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mController = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
         if (Build.VERSION.SDK_INT >= 19) {
             Window window = getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
@@ -66,6 +70,16 @@ public class FakeActivity extends Activity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mShareReceiver, filter);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /** 使用SSO授权必须添加如下代码 */
+        UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode);
+        if (ssoHandler != null) {
+            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onResume() {
@@ -83,6 +97,7 @@ public class FakeActivity extends Activity {
         getWindow().getDecorView().setSystemUiVisibility(systemUI);
         MobclickAgent.onPageStart("FakeActivity"); // 统计页面
         MobclickAgent.onResume(this); // 统计时长
+
     }
 
     @Override
@@ -120,31 +135,30 @@ public class FakeActivity extends Activity {
                     return;
                 }
                 switch (platform) {
-                    case PandoraShareManager.Sina:
-                        PandoraShareManager.sinaShare(FakeActivity.this, imagePath, isHtml);
-                        break;
                     case PandoraShareManager.Renren:
                         // PandoraShareManager.renrenShare(FakeActivity.this,
                         // imagePath);
                         break;
                     case PandoraShareManager.Tencent:
-                        PandoraShareManager.qzoneShare(FakeActivity.this, imagePath);
+                        PandoraShareManager.qzoneShare(mController, FakeActivity.this, imagePath);
                         break;
                     case PandoraShareManager.Weixin:
-                        PandoraShareManager.weixinShare(FakeActivity.this, imagePath, isHtml);
+                        PandoraShareManager.weixinShare(mController, FakeActivity.this, imagePath,
+                                isHtml);
                         break;
                     case PandoraShareManager.WeixinCircle:
-                        PandoraShareManager.weixinCircleShare(FakeActivity.this, imagePath, isHtml);
+                        PandoraShareManager.weixinCircleShare(mController, FakeActivity.this,
+                                imagePath, isHtml);
                         break;
                     default:
                 }
-                HDBThreadUtils.postOnUiDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        FakeActivity.this.finish();
-                    }
-                }, 1500);
+                // HDBThreadUtils.postOnUiDelayed(new Runnable() {
+                //
+                // @Override
+                // public void run() {
+                // FakeActivity.this.finish();
+                // }
+                // }, 1500);
             }
         }
     };
