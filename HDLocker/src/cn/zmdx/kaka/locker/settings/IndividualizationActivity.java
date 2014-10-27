@@ -323,6 +323,9 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     @Override
     public void onBackPressed() {
+        Intent in=new Intent();
+        in.setClass(IndividualizationActivity.this, MainSettingsActivity.class);
+        startActivity(in);
         finish();
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                 R.anim.umeng_fb_slide_out_from_right);
