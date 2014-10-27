@@ -46,7 +46,8 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_WALLPAPER_BLUE_TIMES = "wallpaperBlue"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
-//    public static final String EVENT_WALLPAPER_TIFFANY_TIMES = "wallpaperTiffany";// 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
+    // public static final String EVENT_WALLPAPER_TIFFANY_TIMES =
+    // "wallpaperTiffany";// 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
     public static final String EVENT_WALLPAPER_JEAN_TIMES = "wallpaperJean"; // 点击某个主题壁纸时上报一次事件，包括当前选中的壁纸信息；
 
@@ -70,10 +71,6 @@ public class UmengCustomEventManager {
     public static final String EVENT_SHARE_QZONE_SECCESS = "shareQzoneSuccess";
 
     public static final String EVENT_SHARE_QZONE_FAIL = "shareQzoneFail";
-
-    public static final String EVENT_SHARE_SINA_SECCESS = "shareSinaSuccess";
-
-    public static final String EVENT_SHARE_SINA_FAIL = "shareSinaFail";
 
     public static final String EVENT_SET_DEFAULT_IMAGE_SUCCESS = "shareSetDefaultImageSuccess";
 
@@ -250,8 +247,7 @@ public class UmengCustomEventManager {
                         UmengCustomEventManager.EVENT_WALLPAPER_JEAN_TIMES);
                 break;
             case ThemeManager.THEME_ID_ROAD:
-                MobclickAgent.onEvent(HDApplication.getInstannce(),
-                        EVENT_WALLPAPER_ROAD_TIMES);
+                MobclickAgent.onEvent(HDApplication.getInstannce(), EVENT_WALLPAPER_ROAD_TIMES);
                 break;
 
             default:
@@ -330,15 +326,6 @@ public class UmengCustomEventManager {
                 } else {
                     MobclickAgent.onEvent(HDApplication.getInstannce(),
                             UmengCustomEventManager.EVENT_SHARE_QZONE_FAIL);
-                }
-                break;
-            case PandoraShareManager.Sina:
-                if (state) {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_SINA_SECCESS);
-                } else {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_SINA_FAIL);
                 }
                 break;
 

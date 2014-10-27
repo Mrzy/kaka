@@ -16,7 +16,6 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -372,26 +371,7 @@ public class LockScreenManager {
         mDigitalClockView = mEntireView.findViewById(R.id.digitalClock);
         // mDigitalClockView.setAlpha(0);
 
-        mObjectAnimator = ObjectAnimator.ofFloat(mLockPrompt, "alpha", 1, 0.2f, 1);
-        mObjectAnimator.setDuration(2000);
-        mObjectAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        mObjectAnimator.setRepeatCount(-1);
-        mObjectAnimator.start();
-
         mLockArrow = (ImageView) mEntireView.findViewById(R.id.lock_arrow1);
-        int lenght = (int) mContext.getResources().getDimension(R.dimen.locker_arrow_move_lenght);
-        ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(mLockArrow, "alpha", 0, 1, 0);
-        objectAnimatorAlpha.setDuration(2000);
-        objectAnimatorAlpha.setRepeatMode(ValueAnimator.RESTART);
-        objectAnimatorAlpha.setRepeatCount(-1);
-        ObjectAnimator objectAnimatorTranslate = ObjectAnimator.ofFloat(mLockArrow, "translationY",
-                0, lenght);
-        objectAnimatorTranslate.setDuration(2000);
-        objectAnimatorTranslate.setRepeatMode(ValueAnimator.RESTART);
-        objectAnimatorTranslate.setRepeatCount(-1);
-        mAnimatorSet = new AnimatorSet();
-        mAnimatorSet.playTogether(objectAnimatorTranslate, objectAnimatorAlpha);
-        mAnimatorSet.start();
 
         mSliderView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
@@ -417,7 +397,9 @@ public class LockScreenManager {
     }
 
     public void onInitDefaultImage() {
-        mLockListener.onInitDefaultImage();
+        if (mLockListener != null) {
+            mLockListener.onInitDefaultImage();
+        }
     }
 
     /**
@@ -485,11 +467,15 @@ public class LockScreenManager {
     }
 
     private void cancelAnimatorIfNeeded() {
-        mObjectAnimator.cancel();
-        mObjectAnimator = null;
-        mAnimatorSet.end();
-        mAnimatorSet.cancel();
-        mAnimatorSet = null;
+        if (null != mObjectAnimator) {
+            mObjectAnimator.cancel();
+            mObjectAnimator = null;
+        }
+        if (null != mAnimatorSet) {
+            mAnimatorSet.end();
+            mAnimatorSet.cancel();
+            mAnimatorSet = null;
+        }
     }
 
     private long mLastSyncDataTime = 0;
@@ -645,7 +631,9 @@ public class LockScreenManager {
                 mLockPrompt.setText("");
             }
             if (null != mLockArrow) {
-                mAnimatorSet.start();
+                if (null != mAnimatorSet) {
+                    mAnimatorSet.start();
+                }
                 mLockArrow.setVisibility(View.VISIBLE);
             }
             if (mIsShowGesture) {
@@ -695,7 +683,9 @@ public class LockScreenManager {
             }
             mLockTime = System.currentTimeMillis();
             if (null != mLockArrow) {
-                mAnimatorSet.end();
+                if (null != mAnimatorSet) {
+                    mAnimatorSet.end();
+                }
                 mLockArrow.setVisibility(View.GONE);
             }
 
@@ -745,6 +735,7 @@ public class LockScreenManager {
 
     public void onScreenOff() {
         invisiableViews(mDate, mWeatherSummary, mDigitalClockView);
+        cancelAnimatorIfNeeded();
     }
 
     public void onScreenOn() {
@@ -805,5 +796,26 @@ public class LockScreenManager {
         finalSet.setInterpolator(new DecelerateInterpolator());
         // finalSet.setInterpolator(new BounceInterpolator());
         finalSet.start();
+
+        mObjectAnimator = ObjectAnimator.ofFloat(mLockPrompt, "alpha", 1, 0.2f, 1);
+        mObjectAnimator.setDuration(2000);
+        mObjectAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        mObjectAnimator.setRepeatCount(-1);
+        mObjectAnimator.start();
+
+        int lenght = (int) mContext.getResources().getDimension(R.dimen.locker_arrow_move_lenght);
+        ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(mLockArrow, "alpha", 0, 1, 0);
+        objectAnimatorAlpha.setDuration(2000);
+        objectAnimatorAlpha.setRepeatMode(ValueAnimator.RESTART);
+        objectAnimatorAlpha.setRepeatCount(-1);
+        ObjectAnimator objectAnimatorTranslate = ObjectAnimator.ofFloat(mLockArrow, "translationY",
+                0, lenght);
+        objectAnimatorTranslate.setDuration(2000);
+        objectAnimatorTranslate.setRepeatMode(ValueAnimator.RESTART);
+        objectAnimatorTranslate.setRepeatCount(-1);
+        mAnimatorSet = new AnimatorSet();
+        mAnimatorSet.playTogether(objectAnimatorTranslate, objectAnimatorAlpha);
+        mAnimatorSet.start();
     }
+
 }
