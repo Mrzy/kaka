@@ -29,13 +29,10 @@ public class FakeActivity extends Activity {
 
     public static final String ACTION_PANDORA_SHARE = "actionPandoraShare";
 
-    public UMSocialService mController;
-
     @SuppressLint("InlinedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mController = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
         if (Build.VERSION.SDK_INT >= 19) {
             Window window = getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
@@ -74,6 +71,7 @@ public class FakeActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         /** 使用SSO授权必须添加如下代码 */
+        UMSocialService mController = UMServiceFactory.getUMSocialService("cn.zmdx.kaka.locker");
         UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode);
         if (ssoHandler != null) {
             ssoHandler.authorizeCallBack(requestCode, resultCode, data);
@@ -140,15 +138,13 @@ public class FakeActivity extends Activity {
                         // imagePath);
                         break;
                     case PandoraShareManager.Tencent:
-                        PandoraShareManager.qzoneShare(mController, FakeActivity.this, imagePath);
+                        PandoraShareManager.qzoneShare(FakeActivity.this, imagePath);
                         break;
                     case PandoraShareManager.Weixin:
-                        PandoraShareManager.weixinShare(mController, FakeActivity.this, imagePath,
-                                isHtml);
+                        PandoraShareManager.weixinShare(FakeActivity.this, imagePath, isHtml);
                         break;
                     case PandoraShareManager.WeixinCircle:
-                        PandoraShareManager.weixinCircleShare(mController, FakeActivity.this,
-                                imagePath, isHtml);
+                        PandoraShareManager.weixinCircleShare(FakeActivity.this, imagePath, isHtml);
                         break;
                     default:
                 }
