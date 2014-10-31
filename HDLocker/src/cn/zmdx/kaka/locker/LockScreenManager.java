@@ -170,12 +170,6 @@ public class LockScreenManager {
         }
 
         mIsLocked = true;
-        checkNewVersion();
-
-        String currentDate = BaseInfoHelper.getCurrentDate();
-        UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
-        UmengCustomEventManager.statisticalUseTheme(pandoraConfig, currentDate);
-        UmengCustomEventManager.statisticalEntryLockTimes(pandoraConfig, currentDate);
 
         mTextGuideTimes = pandoraConfig.getGuideTimesInt();
         mWinParams = new WindowManager.LayoutParams();
@@ -215,6 +209,13 @@ public class LockScreenManager {
         notifyLocked();
         onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
         syncDataIfNeeded();
+
+        checkNewVersion();
+
+        String currentDate = BaseInfoHelper.getCurrentDate();
+        UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
+        UmengCustomEventManager.statisticalUseTheme(pandoraConfig, currentDate);
+        UmengCustomEventManager.statisticalEntryLockTimes(pandoraConfig, currentDate);
     }
 
     public void setWindowAnimations(int anim) {
@@ -804,7 +805,7 @@ public class LockScreenManager {
         mObjectAnimator.start();
 
         int lenght = (int) mContext.getResources().getDimension(R.dimen.locker_arrow_move_lenght);
-        ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(mLockArrow, "alpha", 0, 1, 0);
+        ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(mLockArrow, "alpha", 0, 0.5f, 0);
         objectAnimatorAlpha.setDuration(2000);
         objectAnimatorAlpha.setRepeatMode(ValueAnimator.RESTART);
         objectAnimatorAlpha.setRepeatCount(-1);

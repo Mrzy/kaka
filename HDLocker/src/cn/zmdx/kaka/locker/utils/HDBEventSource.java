@@ -119,62 +119,62 @@ public class HDBEventSource {
         final Context appContext = ctx.getApplicationContext();
         sAppContext = appContext;
 
-        IntentFilter filter = null;
-
-        // build sync intent index: those intent must be process synchonized
-        for (String s : SYNCHRONIZED_INTENTS) {
-            mSyncIntent.add(s);
-        }
-
-        HashSet<String> filteredActions = new HashSet<String>();
-        if (actions != null) {
-            for (String s : actions) {
-                filteredActions.add(s);
-            }
-        }
-
-        // register receiver for general intents
-        filter = new IntentFilter();
-        for (String s : sGeneralActions) {
-            if (!filteredActions.contains(s)) {
-                filter.addAction(s);
-            }
-        }
-        appContext.registerReceiver(sReceiverGeneral, filter);
-
-        // register receiver for package
-        filter = new IntentFilter();
-        for (String s : sPackageActions) {
-            if (!filteredActions.contains(s)) {
-                filter.addAction(s);
-            }
-        }
-        filter.addDataScheme("package");
-        appContext.registerReceiver(sReceiverPackage, filter);
-
-        // register receiver for media
-        filter = new IntentFilter();
-        for (String s : sMediaActions) {
-            if (!filteredActions.contains(s)) {
-                filter.addAction(s);
-            }
-        }
-        filter.addDataScheme("file");
-        appContext.registerReceiver(sReceiverStorage, filter);
+//        IntentFilter filter = null;
+//
+//        // build sync intent index: those intent must be process synchonized
+//        for (String s : SYNCHRONIZED_INTENTS) {
+//            mSyncIntent.add(s);
+//        }
+//
+//        HashSet<String> filteredActions = new HashSet<String>();
+//        if (actions != null) {
+//            for (String s : actions) {
+//                filteredActions.add(s);
+//            }
+//        }
+//
+//        // register receiver for general intents
+//        filter = new IntentFilter();
+//        for (String s : sGeneralActions) {
+//            if (!filteredActions.contains(s)) {
+//                filter.addAction(s);
+//            }
+//        }
+//        appContext.registerReceiver(sReceiverGeneral, filter);
+//
+//        // register receiver for package
+//        filter = new IntentFilter();
+//        for (String s : sPackageActions) {
+//            if (!filteredActions.contains(s)) {
+//                filter.addAction(s);
+//            }
+//        }
+//        filter.addDataScheme("package");
+//        appContext.registerReceiver(sReceiverPackage, filter);
+//
+//        // register receiver for media
+//        filter = new IntentFilter();
+//        for (String s : sMediaActions) {
+//            if (!filteredActions.contains(s)) {
+//                filter.addAction(s);
+//            }
+//        }
+//        filter.addDataScheme("file");
+//        appContext.registerReceiver(sReceiverStorage, filter);
 
         HDBNetworkState.init(sAppContext);
     }
 
     public static void shutdown() {
-        sAppContext.unregisterReceiver(sReceiverGeneral);
-        sAppContext.unregisterReceiver(sReceiverPackage);
-        sAppContext.unregisterReceiver(sReceiverStorage);
-        for (GeneralReceiver gr : sDynamicReceivers.values()) {
-            if (gr != null) {
-                sAppContext.unregisterReceiver(gr);
-            }
-        }
-        sDynamicReceivers.clear();
+//        sAppContext.unregisterReceiver(sReceiverGeneral);
+//        sAppContext.unregisterReceiver(sReceiverPackage);
+//        sAppContext.unregisterReceiver(sReceiverStorage);
+//        for (GeneralReceiver gr : sDynamicReceivers.values()) {
+//            if (gr != null) {
+//                sAppContext.unregisterReceiver(gr);
+//            }
+//        }
+//        sDynamicReceivers.clear();
     }
 
     private static boolean searchForActions(String action, String[] data) {

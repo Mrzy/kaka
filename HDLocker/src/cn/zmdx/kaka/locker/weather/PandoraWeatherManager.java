@@ -2,22 +2,16 @@
 package cn.zmdx.kaka.locker.weather;
 
 import java.text.NumberFormat;
-import java.util.List;
-import java.util.Set;
 
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
-import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -28,7 +22,7 @@ public class PandoraWeatherManager {
 
     private static final String BASE_WEATHER_URL = "http://caiyunapp.com/fcgi-bin/v1/api.py?";
 
-    private static final String TOKEN = "TAkhjf8d1nlSlspN";
+    private static final String TOKEN = "D8u1CU4iFc-lVDci";
 
     private static PandoraWeatherManager INSTANCE = null;
 
@@ -67,7 +61,8 @@ public class PandoraWeatherManager {
             callback.onFailed();
             return;
         }
-        final String lonlat = getLocation();
+        Location loc = PandoraLocationManager.getRecentLocation();
+        final String lonlat = makeLocationString(loc);
         if (TextUtils.isEmpty(lonlat)) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("未获得位置信息，中断请求天气数据");
@@ -119,29 +114,18 @@ public class PandoraWeatherManager {
     /**
      * 返回的字符串格式为：[经度],[纬度] 精确到小数点后4位
      */
-    private String getLocation() {
-        final LocationManager locationManager = (LocationManager) HDApplication.getInstannce()
-                .getSystemService(Context.LOCATION_SERVICE);
-        List<String> providers = locationManager.getAllProviders();
-        Location location = null;
-        for (int i = 0; i < providers.size(); i++) {
-            location = locationManager.getLastKnownLocation(providers.get(i));
-            if (location != null) {
-                break;
-            }
-        }
+    private String makeLocationString(Location location) {
         if (location == null) {
             return null;
         }
         final double latitude = location.getLatitude(); // 经度
         final double longitude = location.getLongitude(); // 纬度
-        final double altitude = location.getAltitude(); // 海拔
+//        final double altitude = location.getAltitude(); // 海拔
 
         final NumberFormat format = NumberFormat.getNumberInstance();
         format.setMaximumFractionDigits(4);
         if (BuildConfig.DEBUG) {
-            HDBLOG.logD("latitude " + latitude + "  longitude:" + longitude + " altitude:"
-                    + altitude);
+            HDBLOG.logD("latitude " + latitude + "  longitude:" + longitude);
         }
         return format.format(longitude) + "," + format.format(latitude);
     }
