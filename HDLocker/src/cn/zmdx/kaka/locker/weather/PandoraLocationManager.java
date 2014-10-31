@@ -40,27 +40,36 @@ public class PandoraLocationManager {
             }
             return;
         }
-        if (isGpsProvider) {
-            Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            mRecentLocation = loc;
-            if (loc == null)
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10 * 60000, 1000,
-                        mLocaitonListener);
+
+        if (isNetworkProvider) {
+            Location loc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (loc == null) {
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000,
+                        1, mLocaitonListener);
+            } else {
+                mRecentLocation = loc;
+                return;
+            }
             return;
         }
 
-        if (isNetworkProvider) {
+        if (isGpsProvider) {
             Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            mRecentLocation = loc;
-            if (loc == null)
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10 * 60000, 1000,
+            if (loc == null) {
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1,
                         mLocaitonListener);
-            return;
+            } else {
+                mRecentLocation = loc;
+                return;
+            }
         }
     }
 
     public void unRegistLocationUpdates() {
         if (mLocaitonListener != null) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("unRegistLocationUpdates()");
+            }
             mLocationManager.removeUpdates(mLocaitonListener);
         }
     }
@@ -81,19 +90,28 @@ public class PandoraLocationManager {
                 HDBLOG.logD("onLocationChanged");
             }
             mRecentLocation = location;
-            mLocationManager.removeUpdates(mLocaitonListener);
+//            mLocationManager.removeUpdates(mLocaitonListener);
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("onStatusChanged");
+            }
         }
 
         @Override
         public void onProviderEnabled(String provider) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("onProviderEnabled");
+            }
         }
 
         @Override
         public void onProviderDisabled(String provider) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("onProviderDisabled");
+            }
         }
     };
 }

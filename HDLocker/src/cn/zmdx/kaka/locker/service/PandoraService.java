@@ -13,12 +13,15 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
-import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
 public class PandoraService extends Service {
 
     public static final String ALARM_ALERT_ACTION = "com.android.deskclock.ALARM_ALERT";
 
+    /**
+     * 中兴手机闹钟的action
+     */
+    public static final String ALARMALERT_ACTION_ZX = "com.zdworks.android.zdclock.ACTION_ALARM_ALERT";
     @Override
     public void onCreate() {
         if (BuildConfig.DEBUG) {
@@ -60,6 +63,7 @@ public class PandoraService extends Service {
         filter.setPriority(1000);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(ALARM_ALERT_ACTION);
+        filter.addAction(ALARMALERT_ACTION_ZX);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(mReceiver, filter);
         PandoraBatteryManager.getInstance().registerListener();
@@ -119,7 +123,7 @@ public class PandoraService extends Service {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("receive broadcast,action=" + action);
             }
-            if (action.equals(ALARM_ALERT_ACTION)) {
+            if (action.contains(ALARM_ALERT_ACTION) || action.contains(ALARMALERT_ACTION_ZX)) {
                 LockScreenManager.getInstance().unLock(true, true);
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 LockScreenManager.getInstance().lock();

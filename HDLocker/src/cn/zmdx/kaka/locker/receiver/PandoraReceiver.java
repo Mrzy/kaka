@@ -19,7 +19,7 @@ public class PandoraReceiver extends BroadcastReceiver {
             Intent service = new Intent(context, PandoraService.class);
             context.startService(service);
         } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {
-            LockScreenManager.getInstance().lock();
+//            LockScreenManager.getInstance().lock();
             Intent service = new Intent(context, PandoraService.class);
             context.startService(service);
         }
