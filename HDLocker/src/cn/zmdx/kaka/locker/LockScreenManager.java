@@ -170,12 +170,6 @@ public class LockScreenManager {
         }
 
         mIsLocked = true;
-        checkNewVersion();
-
-        String currentDate = BaseInfoHelper.getCurrentDate();
-        UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
-        UmengCustomEventManager.statisticalUseTheme(pandoraConfig, currentDate);
-        UmengCustomEventManager.statisticalEntryLockTimes(pandoraConfig, currentDate);
 
         mTextGuideTimes = pandoraConfig.getGuideTimesInt();
         mWinParams = new WindowManager.LayoutParams();
@@ -215,6 +209,13 @@ public class LockScreenManager {
         notifyLocked();
         onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
         syncDataIfNeeded();
+
+        checkNewVersion();
+
+        String currentDate = BaseInfoHelper.getCurrentDate();
+        UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
+        UmengCustomEventManager.statisticalUseTheme(pandoraConfig, currentDate);
+        UmengCustomEventManager.statisticalEntryLockTimes(pandoraConfig, currentDate);
     }
 
     public void setWindowAnimations(int anim) {

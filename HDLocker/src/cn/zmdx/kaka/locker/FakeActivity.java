@@ -19,6 +19,7 @@ import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.controller.UMServiceFactory;
@@ -65,6 +66,7 @@ public class FakeActivity extends Activity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_PANDORA_SHARE);
         LocalBroadcastManager.getInstance(this).registerReceiver(mShareReceiver, filter);
+        PandoraLocationManager.getInstance().registLocationUpdates();
     }
 
     @Override
@@ -109,6 +111,7 @@ public class FakeActivity extends Activity {
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mShareReceiver);
+        PandoraLocationManager.getInstance().unRegistLocationUpdates();
         super.onDestroy();
     }
 

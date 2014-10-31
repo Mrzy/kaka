@@ -13,6 +13,7 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
 public class PandoraService extends Service {
 
@@ -59,7 +60,7 @@ public class PandoraService extends Service {
         filter.setPriority(1000);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(ALARM_ALERT_ACTION);
-         filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(mReceiver, filter);
         PandoraBatteryManager.getInstance().registerListener();
     }
@@ -78,7 +79,7 @@ public class PandoraService extends Service {
                 switch (state) {
                     case TelephonyManager.CALL_STATE_IDLE: // 当前电话处于闲置状态
                         if (BuildConfig.DEBUG) {
-                            HDBLOG.logD("当前电话处于闲置状态CALL_STATE_IDLE");
+                            HDBLOG.logD("当前电话处于闲置状态CALL_STATE_IDLE, isRinging:" + mIsRinging);
                         }
                         if (mIsRinging) {
                             mIsRinging = false;
