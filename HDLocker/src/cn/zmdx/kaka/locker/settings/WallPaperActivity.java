@@ -299,6 +299,7 @@ public class WallPaperActivity extends Activity {
             case PandoraUtils.REQUEST_CODE_CROP_IMAGE:
                 String fileName = PandoraUtils.getRandomString();
                 addCustomWallpaperItem(null, PandoraUtils.sCropThumbBitmap, fileName);
+                checkCurrentAdviceWallpaper(INT_NO_SECECT_VIEW);
                 setBackground(PandoraUtils.sCropBitmap, -1);
                 saveWallpaperFile(fileName);
                 break;

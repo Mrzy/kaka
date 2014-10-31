@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -53,8 +54,9 @@ public class InitSettingActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        isMIUI = PandoraUtils.isMIUI(this);
         mMIUIVersion = PandoraUtils.getSystemProperty();
+        boolean miui = PandoraUtils.isMIUI(this);
+        isMIUI = miui || !TextUtils.isEmpty(mMIUIVersion);
         mPandoraConfig = PandoraConfig.newInstance(this);
         mThemeId = mPandoraConfig.getCurrentThemeId();
         setContentView(R.layout.init_setting_fragment);

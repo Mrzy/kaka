@@ -139,7 +139,7 @@ public class PandoraUtils {
     }
 
     public static String getSystemProperty() {
-        String line;
+        String line = "";
         BufferedReader input = null;
         try {
             Process p = Runtime.getRuntime().exec("getprop " + "ro.miui.ui.version.name");
@@ -147,7 +147,7 @@ public class PandoraUtils {
             line = input.readLine();
             input.close();
         } catch (IOException ex) {
-            return null;
+            return line;
         } finally {
             if (input != null) {
                 try {
@@ -160,25 +160,28 @@ public class PandoraUtils {
     }
 
     public static void setAllowFolatWindow(Context mContent, String version) {
-        if (version.equals(MUIU_V5)) {
-            Uri packageURI = Uri.parse("package:" + "cn.zmdx.kaka.locker");
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
-            mContent.startActivity(intent);
-        } else if (version.equals(MUIU_V6)) {
-            Intent i = new Intent("miui.intent.action.APP_PERM_EDITOR");
-            i.setClassName("com.miui.securitycenter",
-                    "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
-            i.putExtra("extra_pkgname", mContent.getPackageName());
-            mContent.startActivity(i);
-
+        try {
+            if (version.equals(MUIU_V5)) {
+                Uri packageURI = Uri.parse("package:" + "cn.zmdx.kaka.locker");
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
+                mContent.startActivity(intent);
+            } else if (version.equals(MUIU_V6)) {
+                Intent i = new Intent("miui.intent.action.APP_PERM_EDITOR");
+                i.setClassName("com.miui.securitycenter",
+                        "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
+                i.putExtra("extra_pkgname", mContent.getPackageName());
+                mContent.startActivity(i);
+            }
+        } catch (Exception e) {
+            Toast.makeText(mContent, R.string.error, Toast.LENGTH_SHORT).show();
         }
     }
 
     public static void setTrust(Context mContent, String version) {
-        if (version.equals(MUIU_V5)) {
-            PackageManager pm = mContent.getPackageManager();
-            PackageInfo info = null;
-            try {
+        try {
+            if (version.equals(MUIU_V5)) {
+                PackageManager pm = mContent.getPackageManager();
+                PackageInfo info = null;
                 info = pm.getPackageInfo(mContent.getPackageName(), 0);
 
                 Intent i = new Intent("miui.intent.action.APP_PERM_EDITOR");
@@ -186,15 +189,14 @@ public class PandoraUtils {
                         "com.miui.securitycenter.permission.AppPermissionsEditor");
                 i.putExtra("extra_package_uid", info.applicationInfo.uid);
                 mContent.startActivity(i);
-            } catch (NameNotFoundException e1) {
-                e1.printStackTrace();
+            } else if (version.equals(MUIU_V6)) {
+                Intent i = new Intent();
+                i.setClassName("com.miui.securitycenter", "com.miui.securitycenter.MainActivity");
+                mContent.startActivity(i);
             }
-        } else if (version.equals(MUIU_V6)) {
-            Intent i = new Intent();
-            i.setClassName("com.miui.securitycenter", "com.miui.securitycenter.MainActivity");
-            mContent.startActivity(i);
+        } catch (Exception e) {
+            Toast.makeText(mContent, R.string.error, Toast.LENGTH_SHORT).show();
         }
-
     }
 
     /**
@@ -420,7 +422,7 @@ public class PandoraUtils {
         }
         return drawable;
     }
-    
+
     private static int getTimeQuantum(int currentHour) {
         if (currentHour < TIME_MORNING && currentHour >= TIME_MORNING) {
             return TIME_MORNING;
