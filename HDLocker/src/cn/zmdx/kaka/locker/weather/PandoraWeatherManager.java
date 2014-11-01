@@ -15,8 +15,8 @@ import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.JsonObjectRequest;
 
 public class PandoraWeatherManager {
 

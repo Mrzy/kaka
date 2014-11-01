@@ -3,8 +3,6 @@ package cn.zmdx.kaka.locker;
 
 import android.app.Application;
 import android.graphics.Bitmap.CompressFormat;
-import cn.zmdx.kaka.locker.cache.ImageCacheManager;
-import cn.zmdx.kaka.locker.cache.ImageCacheManager.CacheType;
 import cn.zmdx.kaka.locker.utils.HDBEventSource;
 
 public class HDApplication extends Application {
@@ -39,14 +37,5 @@ public class HDApplication extends Application {
 //        CrashHandler crashHandler = CrashHandler.getInstance();
 //        crashHandler.init(getApplicationContext());
         super.onCreate();
-    }
-
-    /**
-     * Create the image cache. Uses Memory Cache by default. Change to Disk for
-     * a Disk based LRU implementation.
-     */
-    private void createImageCache() {
-        ImageCacheManager.getInstance().init(this, "PandoraLocker", DISK_IMAGECACHE_SIZE,
-                DISK_IMAGECACHE_COMPRESS_FORMAT, DISK_IMAGECACHE_QUALITY, CacheType.DISK);
     }
 }

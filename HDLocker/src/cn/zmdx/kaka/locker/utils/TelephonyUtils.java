@@ -1,7 +1,5 @@
 package cn.zmdx.kaka.locker.utils;
 
-import java.io.Serializable;
-
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;

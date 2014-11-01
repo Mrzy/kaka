@@ -1,11 +1,11 @@
 package cn.zmdx.kaka.locker.widget;
 
-import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.font.FontManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.widget.Button;
+import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.font.FontManager;
 
 public class BaseButton extends Button {
 

@@ -1,9 +1,9 @@
 package cn.zmdx.kaka.locker.utils;
 
-import android.os.IBinder;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import android.os.IBinder;
 
 public class ServiceManagerCompat {
     private static final String TAG = "ServiceManagerCompat";

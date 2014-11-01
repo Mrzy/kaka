@@ -1,13 +1,12 @@
 
 package cn.zmdx.kaka.locker.content.box;
 
-import cn.zmdx.kaka.locker.HDApplication;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import cn.zmdx.kaka.locker.HDApplication;
 
 public class HtmlBox extends BaseBox {
 

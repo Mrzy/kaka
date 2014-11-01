@@ -1,12 +1,12 @@
 
 package cn.zmdx.kaka.locker.content.box;
 
-import cn.zmdx.kaka.locker.R;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import cn.zmdx.kaka.locker.R;
 
 public class PlainTextBox implements IPandoraBox {
 

@@ -1,11 +1,7 @@
 package cn.zmdx.kaka.locker.utils;
 
 import java.io.File;
-import java.util.concurrent.CountDownLatch;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageStats;
-import android.os.Build;
+
 import android.os.Environment;
 import android.os.StatFs;
 

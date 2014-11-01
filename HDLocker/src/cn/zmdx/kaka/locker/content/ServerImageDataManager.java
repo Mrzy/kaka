@@ -13,14 +13,14 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.database.MySqlitDatabase;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
-import cn.zmdx.kaka.locker.network.DownloadRequest;
+import cn.zmdx.kaka.locker.network.ImageDownloadRequest;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 import com.android.volley.Request;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.JsonObjectRequest;
 
 public class ServerImageDataManager {
 
@@ -37,7 +37,7 @@ public class ServerImageDataManager {
     }
 
     public void downloadImage(final ServerImageData bd) {
-        Request<String> request = new DownloadRequest(bd.mUrl, new Listener<String>() {
+        Request<String> request = new ImageDownloadRequest(bd.mUrl, new Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (BuildConfig.DEBUG) {

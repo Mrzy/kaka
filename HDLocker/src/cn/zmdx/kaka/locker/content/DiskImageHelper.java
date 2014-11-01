@@ -6,14 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.utils.FileHelper;
-import cn.zmdx.kaka.locker.utils.HDBHashUtils;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.text.TextUtils;
+import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.utils.FileHelper;
+import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 
 public class DiskImageHelper {
 

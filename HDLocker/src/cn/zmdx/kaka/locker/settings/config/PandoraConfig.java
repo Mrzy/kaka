@@ -60,6 +60,8 @@ public class PandoraConfig {
 
     private static final String KEY_LOCK_WELCOME_STRING = "keyLockWelcomeString";
 
+    private static final String KEY_CURRENT_FONT = "m";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -266,6 +268,14 @@ public class PandoraConfig {
         Editor editor = mSp.edit();
         editor.putString(KEY_LOCK_WELCOME_STRING, welcomeString);
         editor.commit();
+    }
+
+    /**
+     * 如果没有设置第三方字体，会返回null
+     * @return
+     */
+    public String getCurrentFont() {
+        return mSp.getString(KEY_CURRENT_FONT, null);
     }
 
 }

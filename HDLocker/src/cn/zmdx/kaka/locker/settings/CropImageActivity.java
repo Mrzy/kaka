@@ -1,8 +1,6 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import java.io.FileNotFoundException;
-
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;

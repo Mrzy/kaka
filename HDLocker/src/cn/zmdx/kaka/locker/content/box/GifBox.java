@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 
 import pl.droidsonroids.gif.GifImageView;
-
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
