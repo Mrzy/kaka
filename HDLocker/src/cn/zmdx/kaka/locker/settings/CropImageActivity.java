@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Toast;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -74,6 +75,9 @@ public class CropImageActivity extends Activity {
         try {
             mCropBitmap = PandoraUtils.zoomBitmap(this, getIntent().getData());
         } catch (Exception e) {
+            if (BuildConfig.DEBUG) {
+                e.printStackTrace();
+            }
             Toast.makeText(CropImageActivity.this, getResources().getString(R.string.error),
                     Toast.LENGTH_LONG).show();
             finish();

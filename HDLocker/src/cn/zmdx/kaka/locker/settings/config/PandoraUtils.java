@@ -34,6 +34,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
@@ -308,12 +309,15 @@ public class PandoraUtils {
         int screenHeight = BaseInfoHelper.getRealHeight(activity);
         int screenWidth = BaseInfoHelper.getWidth(activity);
         BitmapFactory.Options realOpts = new Options();
-        if (screenWidth == DEFAULT_WIDTH && opts.outWidth > DEFAULT_BITMAP_WIDTH) {
-            realOpts.inSampleSize = 3;
-        } else {
-            realOpts.inSampleSize = computeSampleSize(opts, Math.min(screenWidth, screenHeight),
-                    screenWidth * screenHeight);
-        }
+        realOpts.inSampleSize = computeSampleSize(opts, screenWidth, screenHeight);
+        // if (screenWidth == DEFAULT_WIDTH && opts.outWidth >
+        // DEFAULT_BITMAP_WIDTH) {
+        // realOpts.inSampleSize = 3;
+        // } else {
+        // realOpts.inSampleSize = computeSampleSize(opts, Math.min(screenWidth,
+        // screenHeight),
+        // screenWidth * screenHeight);
+        // }
         realOpts.inJustDecodeBounds = false;
         realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
         realOpts.inPurgeable = true;
@@ -324,20 +328,32 @@ public class PandoraUtils {
 
     }
 
-    private static int computeSampleSize(BitmapFactory.Options options, int minSideLength,
-            int maxNumOfPixels) {
-        int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
-        int roundedSize;
-        if (initialSize <= 8) {
-            roundedSize = 1;
-            while (roundedSize < initialSize) {
-                roundedSize <<= 1;
-            }
-        } else {
-            roundedSize = (initialSize + 7) / 8 * 8;
+    private static int computeSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        try {
+            int widRate = Math.round((float) options.outWidth / (float) reqWidth);
+            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
+            return Math.min(widRate, heightRate);
+        } catch (Exception e) {
+            return 1;
         }
-        return roundedSize;
     }
+
+    // private static int computeSampleSize(BitmapFactory.Options options, int
+    // minSideLength,
+    // int maxNumOfPixels) {
+    // int initialSize = computeInitialSampleSize(options, minSideLength,
+    // maxNumOfPixels);
+    // int roundedSize;
+    // if (initialSize <= 8) {
+    // roundedSize = 1;
+    // while (roundedSize < initialSize) {
+    // roundedSize <<= 1;
+    // }
+    // } else {
+    // roundedSize = (initialSize + 7) / 8 * 8;
+    // }
+    // return roundedSize;
+    // }
 
     private static int computeInitialSampleSize(BitmapFactory.Options options, int minSideLength,
             int maxNumOfPixels) {

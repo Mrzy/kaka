@@ -272,10 +272,17 @@ public class PandoraConfig {
 
     /**
      * 如果没有设置第三方字体，会返回null
+     * 
      * @return
      */
     public String getCurrentFont() {
         return mSp.getString(KEY_CURRENT_FONT, null);
+    }
+
+    public void saveCurrentFont(String fontFilePath) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_CURRENT_FONT, fontFilePath);
+        editor.commit();
     }
 
 }

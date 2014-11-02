@@ -9,14 +9,23 @@ import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response.Listener;
+import com.android.volley.error.VolleyError;
+
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.text.TextUtils;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.RequestManager;
+import cn.zmdx.kaka.locker.network.DownloadRequest;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.FileHelper;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
 public class FontManager {
     private static final String FONT_FILE_EXTENSION = ".ttf";
@@ -25,15 +34,13 @@ public class FontManager {
 
     private static File mStorageDir;
 
-    private Context mContext;
-
     static {
         mStorageDir = initStorageDir();
     }
 
     public static Typeface getChineseTypeface(Context context) {
-        AssetManager mgr = context.getResources().getAssets();
         if (null == sTypeface || sTypeface.get() == null) {
+            AssetManager mgr = context.getResources().getAssets();
             sTypeface = new SoftReference<Typeface>(Typeface.createFromAsset(mgr,
                     "fonts/ltxh_GBK_Mobil.TTF"));
         }
@@ -52,10 +59,18 @@ public class FontManager {
             if (TextUtils.isEmpty(fontFileName)) {
                 return null;
             }
+            File file = new File(fontFileName);
+            if (!file.exists() || !file.isFile()) {
+                return null;
+            }
 
             sTypeface = new SoftReference<Typeface>(Typeface.createFromFile(fontFileName));
         }
         return sTypeface.get();
+    }
+
+    public void saveCurrentTypeface(Context context, String fontFilePath) {
+        PandoraConfig.newInstance(context).saveCurrentFont(fontFilePath);
     }
 
     private static File initStorageDir() {
@@ -119,6 +134,7 @@ public class FontManager {
 
     /**
      * 此方法较耗时，不要在UI线程调用该方法
+     * 
      * @return
      */
     public static List<Typeface> getAllTypefaces() {
@@ -131,7 +147,66 @@ public class FontManager {
         return result;
     }
 
-    public void downloadTypeface(String url) {
+    public interface IDownloadTypefaceListener {
+        void onSuccess(File file);
+
+        void onFailed();
+    }
+
+    public void downloadTypeface(String url, final IDownloadTypefaceListener listener) {
+        String fileName = getHash(url);
+        File file = new File(mStorageDir, fileName);
+        if (file.exists()) {
+            if (listener != null) {
+                listener.onSuccess(file);
+            }
+            return;
+        }
+
+        if (!HDBNetworkState.isNetworkAvailable()) {
+            if (listener != null) {
+                listener.onFailed();
+            }
+            return;
+        }
+
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            if (BuildConfig.DEBUG) {
+                e.printStackTrace();
+                HDBLOG.logD("下载字体失败。由于创建字体文件时异常，中断下载");
+            }
+            if (listener != null) {
+                listener.onFailed();
+            }
+            return;
+        }
+        DownloadRequest requset = new DownloadRequest(url, file.getAbsolutePath(),
+                new Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("下载字体文件成功，路径：" + response);
+                        }
+                        if (listener != null) {
+                            listener.onSuccess(new File(response));
+                        }
+                    }
+                }, new ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("下载字体文件失败，error：" + error.getMessage());
+                        }
+                        if (listener != null) {
+                            listener.onFailed();
+                        }
+                    }
+                });
+        RequestManager.getRequestQueue().add(requset);
     }
 
     public static void remove(String url) {
