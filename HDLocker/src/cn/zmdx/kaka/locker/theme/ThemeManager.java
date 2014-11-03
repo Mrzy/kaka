@@ -57,7 +57,7 @@ public class ThemeManager {
             theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
             theme.setmSettingsIconResId(R.drawable.ic_setting_common);
             theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
-            theme.setmThemeId(THEME_ID_BLUE);
+            theme.setmThemeId(THEME_ID_ROAD);
         } else {
             theme.setCustomWallpaper(true);
             theme.setmCustomBitmap(ImageUtils.bitmap2Drawable(context, bitmap));
@@ -95,11 +95,11 @@ public class ThemeManager {
                 theme.setmThemeId(THEME_ID_ROAD);
                 break;
             default:
-                theme.setmBackgroundResId(R.drawable.setting_background_blue_fore);
-                theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
+                theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
+                theme.setmForegroundResId(R.drawable.setting_background_road_fore);
                 theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-                theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
-                theme.setmThemeId(THEME_ID_BLUE);
+                theme.setmThumbnailResId(R.drawable.setting_wallpaper_road);
+                theme.setmThemeId(THEME_ID_ROAD);
                 break;
         }
         return theme;
