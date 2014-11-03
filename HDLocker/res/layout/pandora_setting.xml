@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
+<cn.zmdx.kaka.locker.widget.PandoraPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/setting_fore_view"
     android:layout_width="match_parent"
@@ -72,4 +72,4 @@
             android:contentDescription="@string/contentDescription" />
     </RelativeLayout>
 
-</cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
+</cn.zmdx.kaka.locker.widget.PandoraPanelLayout>

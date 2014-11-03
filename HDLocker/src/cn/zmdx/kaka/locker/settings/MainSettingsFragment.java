@@ -22,7 +22,7 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
+import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -31,7 +31,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         OnClickListener {
     private View mRootView;
 
-    private SlidingUpPanelLayout mSettingForeView;
+    private PandoraPanelLayout mSettingForeView;
 
     private LinearLayout mInitSetting;
 
@@ -104,7 +104,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             mInitSetting.setVisibility(View.VISIBLE);
         }
 
-        mSettingForeView = (SlidingUpPanelLayout) mRootView.findViewById(R.id.setting_fore_view);
+        mSettingForeView = (PandoraPanelLayout) mRootView.findViewById(R.id.setting_fore_view);
         mSettingIcon = (ImageView) mRootView.findViewById(R.id.setting_icon);
         mSettingIcon.setVisibility(View.GONE);
         mSettingBackground = mRootView.findViewById(R.id.setting_background);

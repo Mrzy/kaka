@@ -53,9 +53,9 @@ import cn.zmdx.kaka.locker.widget.LockPatternView;
 import cn.zmdx.kaka.locker.widget.LockPatternView.Cell;
 import cn.zmdx.kaka.locker.widget.LockPatternView.DisplayMode;
 import cn.zmdx.kaka.locker.widget.LockPatternView.OnPatternListener;
-import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
-import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.PanelSlideListener;
-import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
+import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
+import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.PanelSlideListener;
+import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
 
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -68,7 +68,7 @@ public class LockScreenManager {
 
     protected static final int MAX_TIMES_SHOW_GUIDE = 3;
 
-    private SlidingUpPanelLayout mSliderView;
+    private PandoraPanelLayout mSliderView;
 
     private View mEntireView;
 
@@ -374,7 +374,7 @@ public class LockScreenManager {
 
         mLockArrow = (ImageView) mEntireView.findViewById(R.id.lock_arrow1);
 
-        mSliderView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.locker_view);
+        mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
         setDrawable();
     }

@@ -325,7 +325,6 @@ public class PandoraUtils {
         InputStream realInputStream = activity.getContentResolver().openInputStream(uri);
         Bitmap bitmap = BitmapFactory.decodeStream(realInputStream, new Rect(), realOpts);
         return bitmap;
-
     }
 
     private static int computeSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
