@@ -95,7 +95,7 @@ public class PandoraConfig {
     }
 
     public int getCurrentThemeId() {
-        return mSp.getInt(THEME_ID, ThemeManager.THEME_ID_BLUE);
+        return mSp.getInt(THEME_ID, ThemeManager.THEME_ID_DEFAULT);
     }
 
     public int getCurrentThemeIdForStatistical() {

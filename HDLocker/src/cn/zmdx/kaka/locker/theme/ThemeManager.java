@@ -15,13 +15,23 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class ThemeManager {
-    public static final int THEME_ID_CUSTOM = -1; // default
+    public static final int THEME_ID_CUSTOM = -1;
 
-    public static final int THEME_ID_BLUE = 1; // default
+    public static final int THEME_ID_BLUE = 1;
 
     public static final int THEME_ID_JEAN = 3;
 
     public static final int THEME_ID_ROAD = 4;
+
+    public static final int THEME_ID_DEFAULT = THEME_ID_ROAD;
+
+    public static final int THEME_ID_DEFAULT_BACKGROUND_RESID = R.drawable.setting_background_road_fore;
+
+    public static final int THEME_ID_DEFAULT_FOREGROUND_RESID = R.drawable.setting_background_road_fore;
+
+    public static final int THEME_ID_DEFAULT_THUMBNAIL_RESID = R.drawable.setting_wallpaper_road;
+
+    public static final int THEME_ID_DEFAULT_SETTINGICON_RESID = R.drawable.ic_setting_common;
 
     public static Theme getCurrentTheme() {
         int themeId = PandoraConfig.newInstance(HDApplication.getInstannce()).getCurrentThemeId();
@@ -53,11 +63,11 @@ public class ThemeManager {
         if (null == bitmap) {
             theme.setCustomWallpaper(false);
             theme.setmCustomBitmap(null);
-            theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
-            theme.setmForegroundResId(R.drawable.setting_background_road_fore);
-            theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-            theme.setmThumbnailResId(R.drawable.setting_wallpaper_road);
-            theme.setmThemeId(THEME_ID_ROAD);
+            theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
+            theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
+            theme.setmSettingsIconResId(THEME_ID_DEFAULT_SETTINGICON_RESID);
+            theme.setmThumbnailResId(THEME_ID_DEFAULT_THUMBNAIL_RESID);
+            theme.setmThemeId(THEME_ID_DEFAULT);
         } else {
             theme.setCustomWallpaper(true);
             theme.setmCustomBitmap(ImageUtils.bitmap2Drawable(context, bitmap));
@@ -95,11 +105,11 @@ public class ThemeManager {
                 theme.setmThemeId(THEME_ID_ROAD);
                 break;
             default:
-                theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
-                theme.setmForegroundResId(R.drawable.setting_background_road_fore);
-                theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-                theme.setmThumbnailResId(R.drawable.setting_wallpaper_road);
-                theme.setmThemeId(THEME_ID_ROAD);
+                theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
+                theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
+                theme.setmSettingsIconResId(THEME_ID_DEFAULT_SETTINGICON_RESID);
+                theme.setmThumbnailResId(THEME_ID_DEFAULT_THUMBNAIL_RESID);
+                theme.setmThemeId(THEME_ID_DEFAULT);
                 break;
         }
         return theme;

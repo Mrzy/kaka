@@ -17,6 +17,7 @@
 package cn.zmdx.kaka.locker.settings;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -65,7 +66,7 @@ public class FixedGridLayout extends ViewGroup {
         // Use the size our parents gave us, but default to a minimum size to avoid
         // clipping transitioning children
         int minCount =  count > 3 ? count : 3;
-        int minHeight = ((float) (((float) minCount) / (float) 3)) > 1 ? 2 : 1;
+        int minHeight = (int) (((float) (((float) minCount) / (float) 3)) > 1 ? Math.ceil((((float) minCount) / (float) 3)) : 1);
         setMeasuredDimension(resolveSize(mCellWidth * minCount, widthMeasureSpec),
                 resolveSize(mCellHeight * minHeight, heightMeasureSpec));
     }
