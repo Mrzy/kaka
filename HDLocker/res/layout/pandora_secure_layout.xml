@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <View 
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/fakeDragView"
+        />
+    <RelativeLayout
+        android:id="@+id/flipper_gesture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#aa000000"
+        android:gravity="center"
+        android:padding="@dimen/lockscreen_gusture_padding_top" >
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:id="@+id/gusture_prompt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="18sp" />
+
+        <cn.zmdx.kaka.locker.widget.LockPatternView
+            android:id="@+id/gusture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/gusture_prompt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/gusture_pattern_lock_margin_top"
+            android:background="@android:color/transparent" />
+    </RelativeLayout>
+
+</FrameLayout>

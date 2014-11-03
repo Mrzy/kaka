@@ -16,20 +16,19 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.ViewStub;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
-import cn.zmdx.kaka.locker.animation.AnimationFactory;
-import cn.zmdx.kaka.locker.animation.AnimationFactory.FlipDirection;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
@@ -56,6 +55,7 @@ import cn.zmdx.kaka.locker.widget.LockPatternView.OnPatternListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
+import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -71,8 +71,6 @@ public class LockScreenManager {
     private PandoraPanelLayout mSliderView;
 
     private View mEntireView;
-
-    private ViewFlipper mViewFlipper;
 
     private ViewGroup mBoxView;
 
@@ -115,6 +113,8 @@ public class LockScreenManager {
     private long mLockTime;
 
     private Context mContext;
+
+    private SlidingUpPanelLayout mContentLayout;
 
     WindowManager.LayoutParams mWinParams;
 
@@ -360,10 +360,7 @@ public class LockScreenManager {
         mEntireView = LayoutInflater.from(mContext).inflate(R.layout.pandora_lockscreen, null);
         mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
-        mViewFlipper = (ViewFlipper) mEntireView.findViewById(R.id.viewFlipper);
-        mLockPatternView = (LockPatternView) mEntireView.findViewById(R.id.gusture);
-        mLockPatternView.setOnPatternListener(mPatternListener);
-        mGusturePrompt = (TextView) mEntireView.findViewById(R.id.gusture_prompt);
+            initSecurePanel();
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
         // mDate.setAlpha(0);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
@@ -377,6 +374,21 @@ public class LockScreenManager {
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
         setDrawable();
+    }
+
+    private void initSecurePanel() {
+        if (mPandoraConfig.getUnLockType() == PandoraConfig.UNLOCKER_TYPE_DEFAULT) {
+            //若没有开启密码锁，直接返回，无须初始化相关view
+            return;
+        }
+        ViewStub stub = (ViewStub) mEntireView.findViewById(R.id.gesture_stub);
+        ViewGroup view = (ViewGroup) stub.inflate();
+        mContentLayout = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.content);
+        mContentLayout.setDragView(view.findViewById(R.id.fakeDragView));
+//        mContentLayout.setAnchorPoint(0.8f);
+        mLockPatternView = (LockPatternView) view.findViewById(R.id.gusture);
+        mLockPatternView.setOnPatternListener(mPatternListener);
+        mGusturePrompt = (TextView) view.findViewById(R.id.gusture_prompt);
     }
 
     public void setDate() {
@@ -528,9 +540,12 @@ public class LockScreenManager {
         int unlockType = PandoraConfig.newInstance(mContext).getUnLockType();
         if (unlockType != PandoraConfig.UNLOCKER_TYPE_DEFAULT) {
             if (!mIsShowGesture) {
-                AnimationFactory.flipTransition(mViewFlipper, FlipDirection.BOTTOM_TOP, 200);
+                mContentLayout.expandPanel();
+                mIsShowGesture = true;
+            } else {
+                mContentLayout.collapsePanel();
+                mIsShowGesture = false;
             }
-            mIsShowGesture = true;
             return true;
         }
         return false;
@@ -638,7 +653,7 @@ public class LockScreenManager {
                 mLockArrow.setVisibility(View.VISIBLE);
             }
             if (mIsShowGesture) {
-                mViewFlipper.showPrevious();
+                mContentLayout.collapsePanel();
                 mIsShowGesture = false;
             }
             stopGifAnimationIfNeeded();
@@ -666,6 +681,7 @@ public class LockScreenManager {
 
         @Override
         public void onPanelClickedDuringFixed() {
+            Log.e("zy","onPanelClickedDuringFixed()");
             UmengCustomEventManager.statisticalFixedUnLockTimes();
             int duration = (int) (System.currentTimeMillis() - mLockTime);
             UmengCustomEventManager.statisticalLockTime(mPandoraBox, duration);

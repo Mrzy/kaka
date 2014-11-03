@@ -620,12 +620,11 @@ public class PandoraPanelLayout extends ViewGroup {
                 public void onClick(View v) {
                     if (!isEnabled())
                         return;
-                    if (!isPanelExpanded() && mIsFixed) {
+                    if (!isPanelExpanded()) {
                         dispatchOnPanelClickDuringFixed();
                     }
                 }
             });
-            ;
         }
     }
 
