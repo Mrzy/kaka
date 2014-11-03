@@ -53,10 +53,10 @@ public class ThemeManager {
         if (null == bitmap) {
             theme.setCustomWallpaper(false);
             theme.setmCustomBitmap(null);
-            theme.setmBackgroundResId(R.drawable.setting_background_blue_fore);
-            theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
+            theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
+            theme.setmForegroundResId(R.drawable.setting_background_road_fore);
             theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-            theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
+            theme.setmThumbnailResId(R.drawable.setting_wallpaper_road);
             theme.setmThemeId(THEME_ID_ROAD);
         } else {
             theme.setCustomWallpaper(true);
