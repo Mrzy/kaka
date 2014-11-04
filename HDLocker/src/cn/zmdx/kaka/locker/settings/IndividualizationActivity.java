@@ -7,7 +7,6 @@ import java.lang.ref.WeakReference;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -63,7 +61,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_individualization);
         initView();
-        initBackground();
+        initWallpaper();
         initLockDefaultBitmap();
     }
 
@@ -87,33 +85,19 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         mWelcomeText.setOnClickListener(this);
     }
 
-    private void initBackground() {
-        int themeId = PandoraConfig.newInstance(this).getCurrentThemeId();
-        if (themeId == -1) {
-            setCustomBackground();
-        } else {
-            setBackground(themeId);
-        }
-
-    }
-
     @SuppressWarnings("deprecation")
-    private void setCustomBackground() {
-        String fileName = PandoraConfig.newInstance(this).getCustomWallpaperFileName();
-        String path = CustomWallpaperManager.getCustomWallpaperFilePath(fileName);
-        Bitmap bitmap = PandoraUtils.getBitmap(path);
-        if (null == bitmap) {
-            mRootView.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.setting_background_blue_fore));
+    private void initWallpaper() {
+        Theme theme = ThemeManager.getCurrentTheme();
+        if (theme.isCustomWallpaper()) {
+            BitmapDrawable drawable = theme.getmCustomBitmap();
+            if (null == drawable) {
+                mRootView.setBackgroundResource(theme.getmBackgroundResId());
+            } else {
+                mRootView.setBackgroundDrawable(drawable);
+            }
         } else {
-            BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-            mRootView.setBackgroundDrawable(drawable);
+            mRootView.setBackgroundResource(theme.getmBackgroundResId());
         }
-    }
-
-    protected void setBackground(int themeId) {
-        Theme theme = ThemeManager.getThemeById(themeId);
-        mRootView.setBackgroundResource(theme.getmBackgroundResId());
     }
 
     private void initLockDefaultBitmap() {
@@ -323,7 +307,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     @Override
     public void onBackPressed() {
-        Intent in=new Intent();
+        Intent in = new Intent();
         in.setClass(IndividualizationActivity.this, MainSettingsActivity.class);
         startActivity(in);
         finish();

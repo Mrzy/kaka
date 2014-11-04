@@ -263,6 +263,10 @@ public class LockScreenManager {
             }
             return;
         }
+        // TODO
+        String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar.getInstance()
+                .get(Calendar.HOUR_OF_DAY));
+        mWeatherSummary.setText(promptString);
         PandoraWeatherManager.getInstance().getCurrentWeather(new IWeatherCallback() {
 
             @Override
@@ -311,6 +315,11 @@ public class LockScreenManager {
                     }
                     if (mWeatherSummary == null) {
                         return;
+                    }
+                    if (summary.contains("未来一小时")) {
+                        String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
+                                .getInstance().get(Calendar.HOUR_OF_DAY));
+                        summary = promptString;
                     }
                     mWeatherSummary.setVisibility(View.VISIBLE);
                     mWeatherSummary.setText(summary);
@@ -577,8 +586,13 @@ public class LockScreenManager {
     private void verifyGustureLock(List<Cell> pattern) {
         if (checkPattern(pattern)) {
             UmengCustomEventManager.statisticalGuestureUnLockSuccess();
-            internalUnLock();
+            HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
+                @Override
+                public void run() {
+                    internalUnLock();
+                }
+            }, 1);
             mIsUseCurrentBox = false;
         } else {
             UmengCustomEventManager.statisticalGuestureUnLockFail();
@@ -821,7 +835,8 @@ public class LockScreenManager {
         mObjectAnimator.start();
 
         int lenght = (int) mContext.getResources().getDimension(R.dimen.locker_arrow_move_lenght);
-        ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(mLockArrow, "alpha", 0, 0.5f, 0);
+        ObjectAnimator objectAnimatorAlpha = ObjectAnimator
+                .ofFloat(mLockArrow, "alpha", 0, 0.5f, 0);
         objectAnimatorAlpha.setDuration(2000);
         objectAnimatorAlpha.setRepeatMode(ValueAnimator.RESTART);
         objectAnimatorAlpha.setRepeatCount(-1);
