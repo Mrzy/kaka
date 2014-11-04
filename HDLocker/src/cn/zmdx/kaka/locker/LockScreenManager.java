@@ -16,7 +16,6 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -695,7 +694,6 @@ public class LockScreenManager {
 
         @Override
         public void onPanelClickedDuringFixed() {
-            Log.e("zy","onPanelClickedDuringFixed()");
             UmengCustomEventManager.statisticalFixedUnLockTimes();
             int duration = (int) (System.currentTimeMillis() - mLockTime);
             UmengCustomEventManager.statisticalLockTime(mPandoraBox, duration);
