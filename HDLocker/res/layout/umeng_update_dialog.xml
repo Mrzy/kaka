@@ -8,14 +8,14 @@
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/pandora_update_bg"
+        android:background="@drawable/umeng_update_dialog_bg"
         android:orientation="vertical" >
 
         <!-- Title -->
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="40dp" >
+            android:layout_height="50dp" >
 
             <!--
                  <ImageView
@@ -34,7 +34,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/UMUpdateTitle"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#63C2FF" />
+                android:textColor="#5D5D5D" />
 
             <Button
                 android:id="@+id/umeng_update_id_close"
@@ -77,7 +77,7 @@
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="10dp"
                     android:focusable="true"
-                    android:textColor="#AAABAF" />
+                    android:textColor="#5D5D5D" />
             </LinearLayout>
         </ScrollView>
 
@@ -101,12 +101,12 @@
                 android:id="@+id/umeng_update_id_ok"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/pandora_update_btn_selector"
                 android:focusable="true"
                 android:gravity="center"
-                android:padding="13dp"
+                android:padding="12dp"
                 android:text="@string/UMUpdateNow"
                 android:textColor="#FFFFFF" />
 
@@ -114,12 +114,12 @@
                 android:id="@+id/umeng_update_id_cancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/pandora_update_btn_cancel_selector"
                 android:focusable="true"
                 android:gravity="center"
-                android:padding="13dp"
+                android:padding="12dp"
                 android:text="@string/UMNotNow"
                 android:textColor="#AAABAF" />
 
@@ -132,7 +132,7 @@
                 android:background="@drawable/umeng_update_button_cancel_bg_selector"
                 android:focusable="true"
                 android:gravity="center"
-                android:padding="13dp"
+                android:padding="12dp"
                 android:text="@string/UMIgnore"
                 android:textColor="#AAABAF"
                 android:visibility="gone" />
