@@ -263,6 +263,10 @@ public class LockScreenManager {
             }
             return;
         }
+        //TODO
+        String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar.getInstance()
+                .get(Calendar.HOUR_OF_DAY));
+        mWeatherSummary.setText(promptString);
         PandoraWeatherManager.getInstance().getCurrentWeather(new IWeatherCallback() {
 
             @Override
@@ -311,6 +315,11 @@ public class LockScreenManager {
                     }
                     if (mWeatherSummary == null) {
                         return;
+                    }
+                    if (summary.contains("未来一小时")) {
+                        String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
+                                .getInstance().get(Calendar.HOUR_OF_DAY));
+                        summary = promptString;
                     }
                     mWeatherSummary.setVisibility(View.VISIBLE);
                     mWeatherSummary.setText(summary);

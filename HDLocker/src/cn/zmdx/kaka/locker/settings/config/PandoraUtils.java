@@ -34,7 +34,6 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
@@ -49,10 +48,6 @@ public class PandoraUtils {
     private PandoraUtils() {
 
     }
-
-    private static final int DEFAULT_WIDTH = 1080;
-
-    private static final int DEFAULT_BITMAP_WIDTH = 3000;
 
     public static final String MUIU_V5 = "V5";
 
@@ -310,14 +305,6 @@ public class PandoraUtils {
         int screenWidth = BaseInfoHelper.getWidth(activity);
         BitmapFactory.Options realOpts = new Options();
         realOpts.inSampleSize = computeSampleSize(opts, screenWidth, screenHeight);
-        // if (screenWidth == DEFAULT_WIDTH && opts.outWidth >
-        // DEFAULT_BITMAP_WIDTH) {
-        // realOpts.inSampleSize = 3;
-        // } else {
-        // realOpts.inSampleSize = computeSampleSize(opts, Math.min(screenWidth,
-        // screenHeight),
-        // screenWidth * screenHeight);
-        // }
         realOpts.inJustDecodeBounds = false;
         realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
         realOpts.inPurgeable = true;
@@ -338,23 +325,7 @@ public class PandoraUtils {
         }
     }
 
-    // private static int computeSampleSize(BitmapFactory.Options options, int
-    // minSideLength,
-    // int maxNumOfPixels) {
-    // int initialSize = computeInitialSampleSize(options, minSideLength,
-    // maxNumOfPixels);
-    // int roundedSize;
-    // if (initialSize <= 8) {
-    // roundedSize = 1;
-    // while (roundedSize < initialSize) {
-    // roundedSize <<= 1;
-    // }
-    // } else {
-    // roundedSize = (initialSize + 7) / 8 * 8;
-    // }
-    // return roundedSize;
-    // }
-
+    @SuppressWarnings("unused")
     private static int computeInitialSampleSize(BitmapFactory.Options options, int minSideLength,
             int maxNumOfPixels) {
         double w = options.outWidth;

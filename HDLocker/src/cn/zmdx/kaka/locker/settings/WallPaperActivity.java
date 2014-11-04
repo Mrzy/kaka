@@ -46,8 +46,6 @@ import com.umeng.analytics.MobclickAgent;
 @SuppressWarnings("deprecation")
 public class WallPaperActivity extends Activity implements IWallpaperClickListener {
 
-    private PandoraConfig mPandoraConfig;
-
     private View mRootView;
 
     private ViewGroup mCustomContainer = null;
@@ -58,13 +56,9 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
 
     private Animator customChangingAppearingAnim, customChangingDisappearingAnim;
 
-    private static final int MSG_SAVE_WALLPAPER = 11;
+    private static final int MSG_SAVE_CUSTOM_WALLPAPER = 11;
 
-    private static final int MSG_SAVE_WALLPAPER_DELAY = 100;
-
-    private static final int MSG_SAVE_ADVICE_WALLPAPER = 12;
-
-    private static final int MSG_SAVE_ADVICE_WALLPAPER_DELAY = 100;
+    private static final int MSG_SAVE_DEFAULT_WALLPAPER = 12;
 
     private List<PandoraWallpaper> mPandoraWallpaperList;
 
@@ -73,7 +67,6 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_wallpaper);
-        mPandoraConfig = PandoraConfig.newInstance(this);
         initView();
         initWallpaper();
         new Handler().postDelayed(new Runnable() {
@@ -125,31 +118,22 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     }
 
     private void initWallpaper() {
-        int themeId = mPandoraConfig.getCurrentThemeId();
-        if (themeId == -1) {
-            setCustomBackground();
+        Theme theme = ThemeManager.getCurrentTheme();
+        if (theme.isCustomWallpaper()) {
+            BitmapDrawable drawable = theme.getmCustomBitmap();
+            if (null == drawable) {
+                mRootView.setBackgroundResource(theme.getmBackgroundResId());
+            } else {
+                mRootView.setBackgroundDrawable(drawable);
+            }
         } else {
-            setSettingBackground(themeId);
+            mRootView.setBackgroundResource(theme.getmBackgroundResId());
         }
-
     }
 
     protected void setSettingBackground(int themeId) {
         Theme theme = ThemeManager.getThemeById(themeId);
         mRootView.setBackgroundResource(theme.getmBackgroundResId());
-    }
-
-    private void setCustomBackground() {
-        String fileName = PandoraConfig.newInstance(this).getCustomWallpaperFileName();
-        String path = CustomWallpaperManager.getCustomWallpaperFilePath(fileName);
-        Bitmap bitmap = PandoraUtils.getBitmap(path);
-        if (null == bitmap) {
-            mRootView.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.setting_background_blue_fore));
-        } else {
-            BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-            mRootView.setBackgroundDrawable(drawable);
-        }
     }
 
     private void initAddCustomButton() {
@@ -215,6 +199,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         switch (requestCode) {
             case PandoraUtils.REQUEST_CODE_CROP_IMAGE:
                 String fileName = PandoraUtils.getRandomString();
+                saveWallpaperSP(fileName);
                 PandoraWallpaperManager.setCustomWallpaperItem(this, mCustomContainer,
                         PandoraUtils.sCropThumbBitmap, fileName, fileName, this,
                         mPandoraWallpaperList);
@@ -251,7 +236,6 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
                         CustomWallpaperManager.WALLPAPER_SDCARD_LOCATION, fileName);
                 PandoraUtils.saveBitmap(PandoraUtils.sCropThumbBitmap,
                         CustomWallpaperManager.WALLPAPER_THUMB_SDCARD_LOCATION, fileName);
-                saveWallpaperSP(fileName);
             }
         }).start();
     }
@@ -283,13 +267,13 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     }
 
     private void saveWallpaperSP(String fileName) {
-        if (mHandler.hasMessages(MSG_SAVE_WALLPAPER)) {
-            mHandler.removeMessages(MSG_SAVE_WALLPAPER);
+        if (mHandler.hasMessages(MSG_SAVE_CUSTOM_WALLPAPER)) {
+            mHandler.removeMessages(MSG_SAVE_CUSTOM_WALLPAPER);
         }
         Message message = Message.obtain();
-        message.what = MSG_SAVE_WALLPAPER;
+        message.what = MSG_SAVE_CUSTOM_WALLPAPER;
         message.obj = fileName;
-        mHandler.sendMessageDelayed(message, MSG_SAVE_WALLPAPER_DELAY);
+        mHandler.sendMessage(message);
     }
 
     private MyHandler mHandler = new MyHandler(this);
@@ -305,12 +289,12 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         public void handleMessage(Message msg) {
             Activity activity = mActicity.get();
             switch (msg.what) {
-                case MSG_SAVE_WALLPAPER:
+                case MSG_SAVE_CUSTOM_WALLPAPER:
                     String fileName = (String) msg.obj;
                     ((WallPaperActivity) activity).saveCustomWallpaperFileName(fileName);
                     ((WallPaperActivity) activity).saveThemeId(ThemeManager.THEME_ID_CUSTOM);
                     break;
-                case MSG_SAVE_ADVICE_WALLPAPER:
+                case MSG_SAVE_DEFAULT_WALLPAPER:
                     int themeId = msg.arg1;
                     ((WallPaperActivity) activity).saveThemeId(themeId);
                     ((WallPaperActivity) activity).saveCustomWallpaperFileName("");
@@ -447,23 +431,25 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
 
         PandoraUtils.sCropBitmap = null;
         PandoraUtils.sCropThumbBitmap = null;
-        if (mHandler.hasMessages(MSG_SAVE_ADVICE_WALLPAPER)) {
-            mHandler.removeMessages(MSG_SAVE_ADVICE_WALLPAPER);
+        if (mHandler.hasMessages(MSG_SAVE_DEFAULT_WALLPAPER)) {
+            mHandler.removeMessages(MSG_SAVE_DEFAULT_WALLPAPER);
         }
         Message message = Message.obtain();
-        message.what = MSG_SAVE_ADVICE_WALLPAPER;
+        message.what = MSG_SAVE_DEFAULT_WALLPAPER;
         message.arg1 = themeId;
-        mHandler.sendMessageDelayed(message, MSG_SAVE_ADVICE_WALLPAPER_DELAY);
-
+        mHandler.sendMessage(message);
     }
 
     @Override
-    public void onDelClickListener(RelativeLayout mWallpaperRl, final String fileName,
-            String currentFileName) {
+    public void onDelClickListener(RelativeLayout mWallpaperRl, final String fileName) {
         mCustomContainer.removeView(mWallpaperRl);
         delPandoraWallpaperListItem(fileName);
+        String currentFileName = PandoraConfig.newInstance(this).getCustomWallpaperFileName();
         if (fileName.equals(currentFileName)) {
             PandoraConfig.newInstance(this).saveCustomWallpaperFileName("");
+            PandoraConfig.newInstance(this).saveThemeId(ThemeManager.THEME_ID_DEFAULT);
+            PandoraUtils.sCropBitmap = null;
+            PandoraUtils.sCropThumbBitmap = null;
             setDefaultWallPaperBoolean();
             Theme theme = ThemeManager.getThemeById(ThemeManager.THEME_ID_DEFAULT);
             setBackground(null, theme.getmBackgroundResId());

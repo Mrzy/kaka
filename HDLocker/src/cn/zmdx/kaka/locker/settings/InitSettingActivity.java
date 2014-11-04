@@ -5,7 +5,6 @@ import java.lang.ref.WeakReference;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,10 +15,9 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
-import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
@@ -33,10 +31,6 @@ public class InitSettingActivity extends Activity implements OnClickListener {
     private Button mTrustBtn;
 
     private TypefaceTextView mCompleteBtn;
-
-    private PandoraConfig mPandoraConfig;
-
-    private int mThemeId;
 
     private static boolean isMIUI = false;
 
@@ -57,8 +51,6 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         mMIUIVersion = PandoraUtils.getSystemProperty();
         boolean miui = PandoraUtils.isMIUI(this);
         isMIUI = miui || !TextUtils.isEmpty(mMIUIVersion);
-        mPandoraConfig = PandoraConfig.newInstance(this);
-        mThemeId = mPandoraConfig.getCurrentThemeId();
         setContentView(R.layout.init_setting_fragment);
         initView();
         initWallpaper();
@@ -85,23 +77,17 @@ public class InitSettingActivity extends Activity implements OnClickListener {
     @SuppressWarnings("deprecation")
     private void initWallpaper() {
         View view = findViewById(R.id.init_setting_background);
-        int themeId = mPandoraConfig.getCurrentThemeId();
-        if (themeId == -1) {
-            String fileName = PandoraConfig.newInstance(this).getCustomWallpaperFileName();
-            String path = CustomWallpaperManager.getCustomWallpaperFilePath(fileName);
-            Bitmap bitmap = PandoraUtils.getBitmap(path);
-            if (null == bitmap) {
-                view.setBackgroundDrawable(getResources().getDrawable(
-                        R.drawable.setting_background_blue_fore));
+        Theme theme = ThemeManager.getCurrentTheme();
+        if (theme.isCustomWallpaper()) {
+            BitmapDrawable drawable = theme.getmCustomBitmap();
+            if (null == drawable) {
+                view.setBackgroundResource(theme.getmBackgroundResId());
             } else {
-                BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
                 view.setBackgroundDrawable(drawable);
             }
         } else {
-            int resId = ThemeManager.getThemeById(mThemeId).getmBackgroundResId();
-            view.setBackgroundResource(resId);
+            view.setBackgroundResource(theme.getmBackgroundResId());
         }
-
     }
 
     private void showPromptActicity(boolean isMIUI, String mMIUIVersion, int type) {

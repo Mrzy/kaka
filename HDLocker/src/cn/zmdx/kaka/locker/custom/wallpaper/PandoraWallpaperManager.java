@@ -32,7 +32,7 @@ public class PandoraWallpaperManager {
 
         void onDefaultClickListener(int themeId);
 
-        void onDelClickListener(RelativeLayout layout, String fileName, String currentFileName);
+        void onDelClickListener(RelativeLayout layout, String fileName);
     }
 
     public static List<PandoraWallpaper> getWallpaperList(Context mContext,
@@ -86,7 +86,7 @@ public class PandoraWallpaperManager {
         mWallpaperDel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (null != listener) {
-                    listener.onDelClickListener(mWallpaperRl, fileName, currentFileName);
+                    listener.onDelClickListener(mWallpaperRl, fileName);
                 }
             }
         });

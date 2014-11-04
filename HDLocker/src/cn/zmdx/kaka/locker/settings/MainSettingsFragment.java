@@ -4,7 +4,6 @@ package cn.zmdx.kaka.locker.settings;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -105,6 +104,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         }
 
         mSettingForeView = (SlidingUpPanelLayout) mRootView.findViewById(R.id.setting_fore_view);
+        mSettingForeView.setForegroundResource(R.drawable.splash_bg);
         mSettingIcon = (ImageView) mRootView.findViewById(R.id.setting_icon);
         mSettingIcon.setVisibility(View.GONE);
         mSettingBackground = mRootView.findViewById(R.id.setting_background);
@@ -143,13 +143,31 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         titleLayout.setPadding(0, statusBarHeight, 0, 0);
     }
 
+    @SuppressWarnings("deprecation")
     private void initBackground() {
         if (null != PandoraUtils.sCropBitmap) {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), PandoraUtils.sCropBitmap);
-            setSettingBackground(null, drawable);
+            mSettingBackground.setBackgroundDrawable(drawable);
+            // mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
+            // ThemeManager.THEME_ID_DEFAULT_FOREGROUND_RESID));
+            // mSettingIcon.setBackgroundResource(ThemeManager.THEME_ID_DEFAULT_SETTINGICON_RESID);
         } else {
-            Theme theme = ThemeManager.getCurrentTheme();
-            setSettingBackground(theme, null);
+            initWallpaper();
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void initWallpaper() {
+        Theme theme = ThemeManager.getCurrentTheme();
+        if (theme.isCustomWallpaper()) {
+            BitmapDrawable drawable = theme.getmCustomBitmap();
+            if (null == drawable) {
+                mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
+            } else {
+                mSettingBackground.setBackgroundDrawable(drawable);
+            }
+        } else {
+            mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
         }
     }
 
@@ -157,26 +175,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
         mLockerTypeSButton.setChecked(getUnLockType() == PandoraConfig.UNLOCKER_TYPE_GUSTURE);
         mIsCurrentlyPressed = true;
-    }
-
-    @SuppressWarnings("deprecation")
-    protected void setSettingBackground(Theme theme, Drawable drawable) {
-        if (null == drawable) {
-            if (theme.isCustomWallpaper()) {
-                mSettingBackground.setBackgroundDrawable(theme.getmCustomBitmap());
-            } else {
-                mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
-            }
-            mSettingForeView.setForegroundResource(R.drawable.splash_bg);
-            // mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
-            // theme.getmForegroundResId()));
-            mSettingIcon.setBackgroundResource(theme.getmSettingsIconResId());
-        } else {
-            mSettingBackground.setBackgroundDrawable(drawable);
-            mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
-                    R.drawable.setting_background_blue_fore));
-            mSettingIcon.setBackgroundResource(R.drawable.ic_setting_common);
-        }
     }
 
     @Override

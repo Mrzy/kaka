@@ -9,10 +9,10 @@ import android.os.Environment;
 
 public class CustomWallpaperManager {
     public static String WALLPAPER_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
-            .getPath() + "/Pandora/wallpaper/background/";
+            .getPath() + "/.Pandora/wallpaper/background/";
 
     public static String WALLPAPER_THUMB_SDCARD_LOCATION = Environment
-            .getExternalStorageDirectory().getPath() + "/Pandora/wallpaper/thumb/";
+            .getExternalStorageDirectory().getPath() + "/.Pandora/wallpaper/thumb/";
 
     public static boolean isHaveCustomWallpaper() {
         return isHaveFile(WALLPAPER_SDCARD_LOCATION);
