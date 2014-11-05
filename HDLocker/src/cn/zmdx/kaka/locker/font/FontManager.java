@@ -9,12 +9,7 @@ import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.error.VolleyError;
-
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
@@ -27,6 +22,10 @@ import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response.Listener;
+import com.android.volley.error.VolleyError;
+
 public class FontManager {
     private static final String FONT_FILE_EXTENSION = ".ttf";
 
@@ -36,15 +35,6 @@ public class FontManager {
 
     static {
         mStorageDir = initStorageDir();
-    }
-
-    public static Typeface getChineseTypeface(Context context) {
-        if (null == sTypeface || sTypeface.get() == null) {
-            AssetManager mgr = context.getResources().getAssets();
-            sTypeface = new SoftReference<Typeface>(Typeface.createFromAsset(mgr,
-                    "fonts/ltxh_GBK_Mobil.TTF"));
-        }
-        return sTypeface.get();
     }
 
     /**
