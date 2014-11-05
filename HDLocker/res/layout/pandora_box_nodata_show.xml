@@ -67,7 +67,7 @@
 
         <cn.zmdx.kaka.locker.widget.BaseButton
             android:id="@+id/pandora_box_set_default_image"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_below="@id/pandora_box_nodata_detail_show_textview"
             android:layout_centerHorizontal="true"

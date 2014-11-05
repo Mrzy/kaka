@@ -28,7 +28,7 @@
     <dimen name="gusture_view_button_margin_top">10dp</dimen>
     <dimen name="gusture_view_button_height">44dp</dimen>
     <dimen name="gusture_view_button_margin_left">10dp</dimen>
-    
+    <dimen name="setting_fb_contact_height">46dp</dimen>
     <dimen name="setting_about_us_height">60dp</dimen>
     <dimen name="setting_about_pandora_imageview_width">121dp</dimen>
     <dimen name="setting_about_pandora_imageview_height">90dp</dimen>
