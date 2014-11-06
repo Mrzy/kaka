@@ -23,7 +23,9 @@ public class TypefaceTextView extends TextView {
     }
 
     private void setTypeFace() {
-        Typeface tf = FontManager.getChineseTypeface(getContext());
-        setTypeface(tf);
+        Typeface typeface = FontManager.getCurrentTypeface(getContext());
+        if (null != typeface) {
+            setTypeface(typeface);
+        }
     }
 }
