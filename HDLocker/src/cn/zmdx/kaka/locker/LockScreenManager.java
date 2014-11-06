@@ -585,6 +585,7 @@ public class LockScreenManager {
     private void verifyGustureLock(List<Cell> pattern) {
         if (checkPattern(pattern)) {
             UmengCustomEventManager.statisticalGuestureUnLockSuccess();
+            mGusturePrompt.setText("");
             HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
                 @Override

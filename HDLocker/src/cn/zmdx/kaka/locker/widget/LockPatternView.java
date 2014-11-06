@@ -1045,7 +1045,7 @@ public class LockPatternView extends View {
         } else if (mPatternDisplayMode == DisplayMode.Wrong) {
             // the pattern is wrong
             outerCircle = mBitmapCircleRed;
-            innerCircle = mBitmapBtnDefault;
+            innerCircle = mBitmapArrowRedUp;
         } else if (mPatternDisplayMode == DisplayMode.Correct
                 || mPatternDisplayMode == DisplayMode.Animate) {
             // the pattern is correct
