@@ -59,6 +59,8 @@ public class PandoraPolicy {
      */
     public static final float DEFAULT_MAX_YVEL = 1500.0f * BaseInfoHelper.getDensity(HDApplication.getInstannce());
 
+    public static final int MIN_COUNT_FOLDABLE_BOX = 10;
+
     public static boolean verifyImageLegal(String url, int w, int h) {
         try {
             if (w / h > 2.5 || h / w > 2.5 || w > 1500 || h > 2000) {

@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.DiskImageHelper;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 public class SingleImageBox extends BaseBox {
@@ -103,21 +106,16 @@ public class SingleImageBox extends BaseBox {
         mFromPlatformText.setText(mData.getmFromWebSite());
         mImageNewsContent.setText(mData.getmContent());
         mSingleImgView.setImageBitmap(mData.getmImage());
-        // mSingleImgView.setOnClickListener(new OnClickListener() {
-        //
-        // @Override
-        // public void onClick(View v) {
-        // if (mIsHide) {
-        // mDescView.setVisibility(View.VISIBLE);
-        // } else {
-        // mDescView.setVisibility(View.INVISIBLE);
-        // }
-        // mIsHide = !mIsHide;
-        // }
-        // });
         mDescView.setText(mData.getmTitle());
-
         return true;
+    }
+
+    public static PandoraData convertFromServerData(ServerImageData data) {
+        PandoraData pd = new PandoraData();
+        pd.setmFromWebSite(data.getCollectWebsite());
+        pd.setmContent(data.getImageDesc());
+        pd.setmImage(DiskImageHelper.getBitmapByUrl(data.getUrl(), null));
+        return pd;
     }
 
 }

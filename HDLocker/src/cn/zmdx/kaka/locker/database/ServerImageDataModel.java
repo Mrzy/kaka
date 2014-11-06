@@ -114,9 +114,11 @@ public class ServerImageDataModel {
         String[] selectionArgu = null;
         if (!TextUtils.isEmpty(dataType)) {
             selection = TableStructure.SERVER_IMAGE_DATA_TYPE + "=? and "
-                    + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and " + TableStructure.SERVER_IMAGE_SETP + "=?";
+                    + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
+                    + TableStructure.SERVER_IMAGE_SETP + "=?";
             selectionArgu = new String[] {
-                    dataType, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
+                    dataType, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE),
+                    ServerImageDataModel.UN_READ
             };
         } else {
 
@@ -299,5 +301,51 @@ public class ServerImageDataModel {
             cursor.close();
         }
         return lastTime;
+    }
+
+    public List<ServerImageData> queryByRandom(int minCountFoldableBox, boolean containHtml) {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        List<ServerImageData> result = new ArrayList<ServerImageData>();
+
+        String selection = null;
+        String[] selectionArgus = null;
+        if (containHtml) {
+            selection = TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
+                    + TableStructure.SERVER_IMAGE_SETP + "=?";
+            selectionArgus = new String[] {
+                    String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
+            };
+        } else {
+            selection = TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
+                    + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
+                    + TableStructure.SERVER_IMAGE_SETP + "=?";
+            selectionArgus = new String[] {
+                    String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE),
+                    ServerDataMapping.S_DATATYPE_HTML, ServerImageDataModel.UN_READ
+            };
+        }
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
+                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
+                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_COLLECT_WEBSITE
+        }, selection, selectionArgus, null, null, "RANDOM()", "10");
+
+        try {
+            while (cursor.moveToNext()) {
+                ServerImageData data = new ServerImageData();
+                data.setId(cursor.getInt(0));
+                data.setUrl(cursor.getString(1));
+                data.setImageDesc(cursor.getString(2));
+                data.setTitle(cursor.getString(3));
+                data.setDataType(cursor.getString(4));
+                data.setCollectWebsite(cursor.getString(5));
+                result.add(data);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return result;
     }
 }

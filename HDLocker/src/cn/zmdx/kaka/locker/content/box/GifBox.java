@@ -14,6 +14,8 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class GifBox implements IPandoraBox {
@@ -107,5 +109,12 @@ public class GifBox implements IPandoraBox {
             HDBLOG.logD("停止播放gif动画");
         }
         mImageView.stopGif();
+    }
+
+    public static PandoraData convertFormServerImageData(ServerImageData data) {
+        PandoraData pd = new PandoraData();
+        pd.setmImageUrl(data.getUrl());
+        pd.setmTitle(data.getTitle());
+        return pd;
     }
 }

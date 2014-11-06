@@ -19,6 +19,7 @@ public interface IPandoraBox {
     public static final int CATEGORY_GIF = 5;
 
     public static final int CATEGORY_SCROLL_CONTENT = 6;
+    public static final int CATEGORY_FOLDABLE = 7;
 
     public int getCategory();
 

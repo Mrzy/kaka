@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker.content;
 
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,13 +10,16 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
+import cn.zmdx.kaka.locker.content.box.FoldableBox;
 import cn.zmdx.kaka.locker.content.box.GifBox;
 import cn.zmdx.kaka.locker.content.box.HtmlBox;
+import cn.zmdx.kaka.locker.content.box.IFoldableBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.box.SingleImageBox;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.database.TableStructure;
+import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
@@ -48,9 +53,9 @@ public class PandoraBoxManager {
             if (fromTable == null) {
                 return;
             } else if (fromTable.equals(TableStructure.TABLE_NAME_SERVER_IMAGE)) {
-//                ServerImageDataModel.getInstance().deleteById(data.getmId());
+                // ServerImageDataModel.getInstance().deleteById(data.getmId());
                 ServerImageDataModel.getInstance().markRead(data.getmId(), true);
-//                DiskImageHelper.remove(data.getmImageUrl());
+                // DiskImageHelper.remove(data.getmImageUrl());
                 recycleBitmap(data.getmImage());
                 mPreDisplayBox = null;
             }
@@ -63,6 +68,18 @@ public class PandoraBoxManager {
             bmp = null;
             System.gc();
         }
+    }
+
+    public IFoldableBox getFoldableBox() {
+        boolean containHtml = HDBNetworkState.isNetworkAvailable()
+                && HDBNetworkState.isWifiNetwork();
+        List<ServerImageData> data = ServerImageDataModel.getInstance().queryByRandom(
+                PandoraPolicy.MIN_COUNT_FOLDABLE_BOX, containHtml);
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("从本地取出数据条数：" + data.size());
+        }
+        IFoldableBox box = new FoldableBox(mContext, data);
+        return box;
     }
 
     public IPandoraBox getNextPandoraBox() {
@@ -105,7 +122,7 @@ public class PandoraBoxManager {
             box = getJokeBox(bd);
         } else if (ServerDataMapping.S_DATATYPE_NEWS.equals(dataType)) {
             box = getNewsBox(bd);
-        } else {//对于不识别的类型数据，删除此数据
+        } else {// 对于不识别的类型数据，删除此数据
             ServerImageDataModel.getInstance().deleteById(bd.getId());
             return null;
         }
@@ -128,7 +145,7 @@ public class PandoraBoxManager {
         final Bitmap bmp = DiskImageHelper.getBitmapByUrl(url, null);
         if (bmp == null) {
             ServerImageDataModel.getInstance().markRead(bd.getId(), true);
-//            ServerImageDataModel.getInstance().deleteById(bd.getId());
+            // ServerImageDataModel.getInstance().deleteById(bd.getId());
             return null;
         }
 
@@ -155,7 +172,7 @@ public class PandoraBoxManager {
 
         if (bmp == null) {
             ServerImageDataModel.getInstance().markRead(bd.getId(), true);
-//            ServerImageDataModel.getInstance().deleteById(bd.getId());
+            // ServerImageDataModel.getInstance().deleteById(bd.getId());
             return null;
         }
         final PandoraData pd = new PandoraData();
@@ -181,7 +198,7 @@ public class PandoraBoxManager {
 
         if (bmp == null) {
             ServerImageDataModel.getInstance().markRead(bd.getId(), true);
-//            ServerImageDataModel.getInstance().deleteById(bd.getId());
+            // ServerImageDataModel.getInstance().deleteById(bd.getId());
             return null;
         }
         final PandoraData pd = new PandoraData();

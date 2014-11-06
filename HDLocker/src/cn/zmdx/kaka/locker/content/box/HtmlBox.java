@@ -7,6 +7,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 
 public class HtmlBox extends BaseBox {
 
@@ -24,6 +25,12 @@ public class HtmlBox extends BaseBox {
         mWebView.getSettings().setJavaScriptEnabled(true);
 //        mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.setWebViewClient(new WebViewClient());
+    }
+
+    public static PandoraData convertFormServerImageData(ServerImageData data) {
+        PandoraData pd = new PandoraData();
+        pd.setmContentUrl(data.getUrl());
+        return pd;
     }
 
     @Override

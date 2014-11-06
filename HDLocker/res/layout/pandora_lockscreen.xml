@@ -27,6 +27,7 @@
 
             <RelativeLayout
                 android:id="@+id/flipper_box"
+                android:background="#F7F7F7"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
             </RelativeLayout>

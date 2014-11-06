@@ -22,7 +22,7 @@ public class PandoraWeatherManager {
 
     private static final String BASE_WEATHER_URL = "http://caiyunapp.com/fcgi-bin/v1/api.py?";
 
-    private static final String TOKEN = "D8u1CU4iFc-lVDci";
+    private static final String TOKEN = BuildConfig.DEBUG ? "TAkhjf8d1nlSlspN" : "D8u1CU4iFc-lVDci";
 
     private static PandoraWeatherManager INSTANCE = null;
 

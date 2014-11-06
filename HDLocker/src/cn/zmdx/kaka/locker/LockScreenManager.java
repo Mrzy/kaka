@@ -32,6 +32,7 @@ import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.GifBox;
+import cn.zmdx.kaka.locker.content.box.IFoldableBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
@@ -343,13 +344,17 @@ public class LockScreenManager {
     private boolean mIsUseCurrentBox = false;
 
     private void refreshContent() {
-        if (!mIsUseCurrentBox
-                || (mPandoraBox != null && mPandoraBox.getCategory() == IPandoraBox.CATEGORY_DEFAULT)) {
-            mPandoraBox = PandoraBoxManager.newInstance(mContext).getNextPandoraBox();
+        // if (!mIsUseCurrentBox
+        // || (mPandoraBox != null && mPandoraBox.getCategory() ==
+        // IPandoraBox.CATEGORY_DEFAULT)) {
+        // mPandoraBox =
+        // PandoraBoxManager.newInstance(mContext).getNextPandoraBox();
+        //
+        // }
 
-        }
+        IFoldableBox box = PandoraBoxManager.newInstance(mContext).getFoldableBox();
 
-        View contentView = mPandoraBox.getRenderedView();
+        View contentView = box.getRenderedView();
         if (contentView == null) {
             return;
         }
@@ -368,7 +373,7 @@ public class LockScreenManager {
         mEntireView = LayoutInflater.from(mContext).inflate(R.layout.pandora_lockscreen, null);
         mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
-            initSecurePanel();
+        initSecurePanel();
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
         // mDate.setAlpha(0);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
@@ -386,14 +391,14 @@ public class LockScreenManager {
 
     private void initSecurePanel() {
         if (mPandoraConfig.getUnLockType() == PandoraConfig.UNLOCKER_TYPE_DEFAULT) {
-            //若没有开启密码锁，直接返回，无须初始化相关view
+            // 若没有开启密码锁，直接返回，无须初始化相关view
             return;
         }
         ViewStub stub = (ViewStub) mEntireView.findViewById(R.id.gesture_stub);
         ViewGroup view = (ViewGroup) stub.inflate();
         mContentLayout = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.content);
         mContentLayout.setDragView(view.findViewById(R.id.fakeDragView));
-//        mContentLayout.setAnchorPoint(0.8f);
+        // mContentLayout.setAnchorPoint(0.8f);
         mLockPatternView = (LockPatternView) view.findViewById(R.id.gusture);
         mLockPatternView.setOnPatternListener(mPatternListener);
         mGusturePrompt = (TextView) view.findViewById(R.id.gusture_prompt);
@@ -670,7 +675,7 @@ public class LockScreenManager {
                 mContentLayout.collapsePanel();
                 mIsShowGesture = false;
             }
-            stopGifAnimationIfNeeded();
+            // stopGifAnimationIfNeeded();
         }
 
         @Override
@@ -719,7 +724,7 @@ public class LockScreenManager {
                 mLockArrow.setVisibility(View.GONE);
             }
 
-            startGifAnimationIfNeeded();
+            // startGifAnimationIfNeeded();
         };
 
         public void onPanelHiddenEnd() {
