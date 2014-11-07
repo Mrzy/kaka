@@ -15,7 +15,6 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
-import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class GifBox implements IPandoraBox {

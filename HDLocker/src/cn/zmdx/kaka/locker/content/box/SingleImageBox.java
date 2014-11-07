@@ -13,10 +13,9 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
-import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
-public class SingleImageBox extends BaseBox {
+public class SingleImageBox implements IPandoraBox {
 
     private Context mContext;
 
@@ -32,10 +31,6 @@ public class SingleImageBox extends BaseBox {
 
     private boolean mIsRendered = false;
 
-    private boolean mIsHide = false;
-
-    private ViewGroup mShareLayout;
-
     private TextView mFromPlatformText;
 
     public SingleImageBox(Context context, PandoraData data) {
@@ -49,9 +44,6 @@ public class SingleImageBox extends BaseBox {
         mDescView.getPaint().setFakeBoldText(true);
         mFromPlatformText = (TextView) mEntireView.findViewById(R.id.from_platform_text);
         mImageNewsContent = (TextView) mEntireView.findViewById(R.id.image_news_content);
-        mShareLayout = (ViewGroup) mEntireView.findViewById(R.id.share_from_platform);
-        enableShare();
-        mShareLayout.addView(createShareView());
     }
 
     private void setImageViewSize(ImageView iv) {

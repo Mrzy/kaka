@@ -22,7 +22,6 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
-import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.UnfoldableView.OnFoldingListener;

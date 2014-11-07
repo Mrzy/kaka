@@ -9,7 +9,7 @@ import android.webkit.WebViewClient;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 
-public class HtmlBox extends BaseBox {
+public class HtmlBox implements IPandoraBox {
 
     private Context mContext;
 
@@ -17,13 +17,13 @@ public class HtmlBox extends BaseBox {
 
     private WebView mWebView;
 
-    @SuppressLint("SetJavaScriptEnabled") 
+    @SuppressLint("SetJavaScriptEnabled")
     public HtmlBox(PandoraData data) {
         mData = data;
         mContext = HDApplication.getInstannce();
         mWebView = new WebView(mContext);
         mWebView.getSettings().setJavaScriptEnabled(true);
-//        mWebView.setWebChromeClient(new WebChromeClient());
+        // mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.setWebViewClient(new WebViewClient());
     }
 
