@@ -21,7 +21,7 @@
     <dimen name="gusture_view_button_margin_left">10dp</dimen>
     <dimen name="setting_about_us_height">60dp</dimen>
     <dimen name="setting_about_us_textview_height">40dp</dimen>
-    <dimen name="setting_about_us_textview_margin_top">25dp</dimen>
+    <dimen name="setting_about_us_textview_margin_top">18dp</dimen>
     <dimen name="setting_about_pandora_height">84dp</dimen>
     <dimen name="setting_about_pandora_margin">4dp</dimen>
     <dimen name="setting_about_pandora_margin_one">17dp</dimen>
