@@ -201,7 +201,7 @@ public class LockScreenManager {
 
         initLockScreenViews();
 
-        refreshContent();
+//        refreshContent();
         setDate();
         mWinManager.addView(mEntireView, mWinParams);
         startFakeActivity();
@@ -351,6 +351,9 @@ public class LockScreenManager {
         // PandoraBoxManager.newInstance(mContext).getNextPandoraBox();
         //
         // }
+        if (mBoxView != null && mBoxView.getChildCount() > 0) {
+            return;
+        }
 
         IFoldableBox box = PandoraBoxManager.newInstance(mContext).getFoldableBox();
 
@@ -688,6 +691,7 @@ public class LockScreenManager {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("onPanelFixed");
             }
+            refreshContent();
             UmengCustomEventManager.statisticalFixedTimes();
             mVibrator.vibrate(50);
             if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {

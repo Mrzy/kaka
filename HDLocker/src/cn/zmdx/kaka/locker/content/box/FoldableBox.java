@@ -86,7 +86,8 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
         mListTouchInterceptor.setClickable(false);
         List<Card> cards = new ArrayList<Card>();
         loadData(cards, mData);
-        CardArrayAdapter adapter = new CardArrayAdapter(mContext, cards);
+//        CardArrayAdapter adapter = new CardArrayAdapter(mContext, cards);
+        CardArrayAdapter adapter = new FoldableBoxAdapter(mContext, cards);
         mListView.setAdapter(adapter);
         return mContainerView;
     }
@@ -118,6 +119,7 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
         }
 
         private void init() {
+            setBackgroundResourceId(R.drawable.pandora_box_item_selector);
             setSwipeable(true);
             setOnSwipeListener(new OnSwipeListener() {
                 @Override
@@ -129,22 +131,27 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
                 public void onClick(Card card, View view) {
                     if (mBox instanceof FoldableBox) {
                         FoldableBox box = (FoldableBox) mBox;
-                        ImageView iv = (ImageView) view.findViewById(R.id.card_imageview);
-                        if (iv != null) {
-                            box.openDetails(iv, mData);
+                        View v = view.findViewById(R.id.card_item_layout_simple);
+                        if (v != null && v.getVisibility() == View.VISIBLE) {
+                            box.openDetails(v, mData);
+                        } else {
+                            box.openDetails(view.findViewById(R.id.card_item_layout_large), mData);
                         }
                     }
                 }
             });
         }
 
+        public String getDataType() {
+            return mData.getDataType();
+        }
+
+        public ServerImageData getData() {
+            return mData;
+        }
+
         @Override
         public void setupInnerViewElements(ViewGroup parent, View view) {
-            final ImageView imageView = (ImageView) view.findViewById(R.id.card_imageview);
-            TextView titleView = (TextView) view.findViewById(R.id.card_title);
-            titleView.setText(mData.getTitle());
-            Bitmap bmp = DiskImageHelper.getBitmapByUrl(mData.getUrl(), null);
-            imageView.setImageBitmap(bmp);
             super.setupInnerViewElements(parent, view);
         }
     }

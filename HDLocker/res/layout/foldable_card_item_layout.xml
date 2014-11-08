@@ -1,23 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-     >
+    android:layout_gravity="center_vertical"
+    android:layout_height="match_parent" >
 
-    <ImageView
-        android:id="@+id/card_imageview"
-        android:scaleType="centerCrop"
+    <RelativeLayout
+        android:id="@+id/card_item_layout_large"
+        android:paddingTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/card_title"
-        android:textColor="#ffffff"
-        android:background="#a0000000"
-        android:textSize="18dp"
+        <ImageView
+            android:id="@+id/card_item_large_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/card_item_large_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#a0000000"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#ffffff"
+            android:padding="3dp"
+            android:textSize="17dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/card_item_layout_simple"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="test" />
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        android:visibility="gone" >
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/card_item_simple_imageview"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/card_item_simple_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:textColor="#e0ffffff"
+            android:layout_marginLeft="5dp"
+            android:ellipsize="end"
+            android:maxLines="2" />
+    </LinearLayout>
+
+</FrameLayout>

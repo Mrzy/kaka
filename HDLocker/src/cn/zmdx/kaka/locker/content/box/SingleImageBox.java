@@ -105,9 +105,9 @@ public class SingleImageBox implements IPandoraBox {
     public static PandoraData convertFromServerData(ServerImageData data) {
         PandoraData pd = new PandoraData();
         pd.setmFromWebSite(data.getCollectWebsite());
+        pd.setmTitle(data.getTitle());
         pd.setmContent(data.getImageDesc());
         pd.setmImage(DiskImageHelper.getBitmapByUrl(data.getUrl(), null));
         return pd;
     }
-
 }
