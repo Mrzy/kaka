@@ -7,7 +7,6 @@ import java.util.Map;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 
 import com.umeng.analytics.MobclickAgent;
@@ -60,18 +59,6 @@ public class UmengCustomEventManager {
     public static final String EVENT_SET_CUSTOM_WALLPAPER_SUCCESS_TIMES = "setCustomWallpaperSuccess"; // 成功设置自定义主题壁纸时上报一次事件；
 
     // share
-    public static final String EVENT_SHARE_WXCIRCLE_SECCESS = "shareWXCircleSuccess";
-
-    public static final String EVENT_SHARE_WXCIRCLE_FAIL = "shareWXCircleFail";
-
-    public static final String EVENT_SHARE_WECHAT_SECCESS = "shareWechatSuccess";
-
-    public static final String EVENT_SHARE_WECHAT_FAIL = "shareWechatFail";
-
-    public static final String EVENT_SHARE_QZONE_SECCESS = "shareQzoneSuccess";
-
-    public static final String EVENT_SHARE_QZONE_FAIL = "shareQzoneFail";
-
     public static final String EVENT_SET_DEFAULT_IMAGE_SUCCESS = "shareSetDefaultImageSuccess";
 
     public static final String EVENT_SET_DEFAULT_IMAGE = "shareSetDefaultImage";
@@ -291,47 +278,6 @@ public class UmengCustomEventManager {
     public static void statisticalPandoraSwitchCloseTimes() {
         MobclickAgent.onEvent(HDApplication.getInstannce(),
                 UmengCustomEventManager.EVENT_PANDORA_SWITCH_CLOSE_TIMES);
-    }
-
-    /**
-     * 统计分享事件
-     * 
-     * @param shareType 分享的平台
-     * @param state 成功或者失败
-     */
-    public static void statisticalShareBehavior(int shareType, boolean state) {
-        switch (shareType) {
-            case PandoraShareManager.WeixinCircle:
-                if (state) {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_WXCIRCLE_SECCESS);
-                } else {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_WXCIRCLE_FAIL);
-                }
-                break;
-            case PandoraShareManager.Weixin:
-                if (state) {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_WECHAT_SECCESS);
-                } else {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_WECHAT_FAIL);
-                }
-                break;
-            case PandoraShareManager.Tencent:
-                if (state) {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_QZONE_SECCESS);
-                } else {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_QZONE_FAIL);
-                }
-                break;
-
-            default:
-                break;
-        }
     }
 
     public static void statisticalSetDefaultImage(boolean state) {
