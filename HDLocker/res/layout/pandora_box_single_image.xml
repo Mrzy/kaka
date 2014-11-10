@@ -8,42 +8,63 @@
     <cn.zmdx.kaka.locker.widget.BaseScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="6dp" >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/pandora_box_single_image_background"
             android:paddingBottom="5dp" >
 
             <RelativeLayout
                 android:id="@+id/pandora_locker_title"
                 android:layout_width="match_parent"
-                android:layout_height="49dp" >
+                android:layout_height="38dp" >
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="11dp"
+                    android:layout_marginLeft="12dp"
                     android:orientation="horizontal" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        android:id="@+id/from_text"
+                    <ImageButton
+                        android:id="@+id/pandora_box_single_back_btn"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:text="@string/share_image_news_from"
-                        android:textColor="#3f3f3f"
-                        android:textSize="15sp" />
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/pandora_single_box_image_selector"
+                        android:gravity="center_vertical" />
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        android:id="@+id/from_platform_text"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:textColor="#565656"
-                        android:textSize="13sp" />
-                </LinearLayout>
+                        android:layout_alignParentRight="true"
+                        android:orientation="horizontal"
+                        android:paddingRight="14dp" >
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            android:id="@+id/from_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="@string/share_image_news_from"
+                            android:textColor="#ccfffeff"
+                            android:textSize="15sp" />
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            android:id="@+id/from_platform_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="#88fffeff"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/share_from_platform"
@@ -60,6 +81,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/pandora_locker_title"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:scaleType="centerCrop" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
@@ -67,24 +90,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/desc"
-                android:gravity="center_vertical"
+                android:layout_centerHorizontal="true"
                 android:lineSpacingExtra="6dp"
-                android:paddingLeft="18dp"
-                android:paddingRight="13dp"
+                android:paddingBottom="51dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="8dp"
                 android:paddingTop="10dp"
-                android:textColor="#272727"
+                android:textColor="#ccfffeff"
                 android:textSize="17sp" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:id="@+id/desc"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_below="@+id/single_img"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:textColor="#272727"
+                android:gravity="center_horizontal"
+                android:paddingLeft="45dp"
+                android:paddingRight="45dp"
+                android:textColor="@android:color/white"
                 android:textSize="23sp" />
         </RelativeLayout>
     </cn.zmdx.kaka.locker.widget.BaseScrollView>
