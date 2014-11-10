@@ -66,10 +66,6 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
 
     @Override
     public View getRenderedView() {
-        if (mData != null && mData.size() <= 0) {
-            return PandoraBoxManager.newInstance(mContext).getDefaultBox().getRenderedView();
-        }
-
         mContainerView = LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_flodable_box_layout, null);
         mFrameLayout = (ViewGroup) mContainerView.findViewById(R.id.frameLayout);

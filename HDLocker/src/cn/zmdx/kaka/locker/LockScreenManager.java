@@ -31,6 +31,7 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.GifBox;
 import cn.zmdx.kaka.locker.content.box.IFoldableBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
@@ -351,11 +352,14 @@ public class LockScreenManager {
         // PandoraBoxManager.newInstance(mContext).getNextPandoraBox();
         //
         // }
-        if (mBoxView != null && mBoxView.getChildCount() > 0) {
+        if (mBoxView != null && mBoxView.getChildCount() > 1) {
             return;
         }
 
         IFoldableBox box = PandoraBoxManager.newInstance(mContext).getFoldableBox();
+        if (box.getData().size() <= 0) {
+            return;
+        }
 
         View contentView = box.getRenderedView();
         if (contentView == null) {
@@ -368,7 +372,8 @@ public class LockScreenManager {
         ViewGroup.LayoutParams lp = mBoxView.getLayoutParams();
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        mBoxView.addView(contentView, 0, lp);
+        mBoxView.removeAllViews();
+        mBoxView.addView(contentView, mBoxView.getChildCount(), lp);
     }
 
     @SuppressLint("InflateParams")
@@ -377,6 +382,7 @@ public class LockScreenManager {
         mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
         initSecurePanel();
+        initDefaultPhoto();
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
         // mDate.setAlpha(0);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
@@ -390,6 +396,14 @@ public class LockScreenManager {
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
         setDrawable();
+    }
+
+    private void initDefaultPhoto() {
+        final DefaultBox box = (DefaultBox) PandoraBoxManager.newInstance(mContext).getDefaultBox();
+        if (box.isSetCustomImage()) {
+            View defaultView = box.getRenderedView();
+            mBoxView.addView(defaultView);
+        }
     }
 
     private void initSecurePanel() {
