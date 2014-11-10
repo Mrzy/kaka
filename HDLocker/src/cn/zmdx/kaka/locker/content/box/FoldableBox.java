@@ -207,6 +207,13 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
                     mUnfoldableView.foldBack();
                 }
             });
+            view.findViewById(R.id.pandora_box_single_back_btn).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    mUnfoldableView.foldBack();
+                }
+            });
             renderDetailView(view);
         } else {
             mTitleView.setText(data.getTitle());

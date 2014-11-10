@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class SingleImageBox implements IPandoraBox {
     private TextView mFromPlatformText;
 
     private BaseScrollView mScrollView;
+    private ImageButton mImageButton;
 
     public SingleImageBox(Context context, PandoraData data) {
         mData = data;
@@ -46,6 +48,7 @@ public class SingleImageBox implements IPandoraBox {
 //        mScrollView.setOnTouchListener(new ScrollTouchListener(mScrollListener));
         mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
         setImageViewSize(mSingleImgView);
+        mImageButton = (ImageButton) mEntireView.findViewById(R.id.pandora_box_single_back_btn);
         mDescView = (TextView) mEntireView.findViewById(R.id.desc);
         mDescView.getPaint().setFakeBoldText(true);
         mFromPlatformText = (TextView) mEntireView.findViewById(R.id.from_platform_text);
