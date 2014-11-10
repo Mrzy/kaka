@@ -14,6 +14,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.widget.BaseScrollView;
 
 public class SingleImageBox implements IPandoraBox {
 
@@ -33,17 +34,26 @@ public class SingleImageBox implements IPandoraBox {
 
     private TextView mFromPlatformText;
 
+    private BaseScrollView mScrollView;
+
     public SingleImageBox(Context context, PandoraData data) {
         mData = data;
         mContext = context;
         mEntireView = (ViewGroup) LayoutInflater.from(context).inflate(
                 R.layout.pandora_box_single_image, null);
+        mScrollView = (BaseScrollView) mEntireView.findViewById(R.id.scrollView);
+//        mScrollView.setOnScrollListener(listener)
+//        mScrollView.setOnTouchListener(new ScrollTouchListener(mScrollListener));
         mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
         setImageViewSize(mSingleImgView);
         mDescView = (TextView) mEntireView.findViewById(R.id.desc);
         mDescView.getPaint().setFakeBoldText(true);
         mFromPlatformText = (TextView) mEntireView.findViewById(R.id.from_platform_text);
         mImageNewsContent = (TextView) mEntireView.findViewById(R.id.image_news_content);
+    }
+
+    public boolean isAtTop() {
+        return mScrollView.isAtTop();
     }
 
     private void setImageViewSize(ImageView iv) {

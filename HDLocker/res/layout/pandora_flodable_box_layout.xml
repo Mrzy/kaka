@@ -24,32 +24,8 @@
         <FrameLayout
             android:id="@+id/cardDetailContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/card_detail_toolbar_height" >
+            android:layout_height="match_parent" >
         </FrameLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:background="#101010"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" >
-
-            <Button
-                android:id="@+id/card_detail_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="back" />
-
-            <Button
-                android:id="@+id/card_detail_share"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="share" />
-        </RelativeLayout>
     </RelativeLayout>
 
     <com.alexvasilkov.foldablelayout.UnfoldableView

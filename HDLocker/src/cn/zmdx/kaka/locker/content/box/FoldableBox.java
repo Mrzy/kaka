@@ -44,8 +44,6 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
 
     private ImageView mImageView;
 
-    private Button mBackBtn, mShareBtn;
-
     public FoldableBox(Context context, List<ServerImageData> data) {
         mContext = context;
         mData = data;
@@ -70,10 +68,6 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
         mUnfoldableView.setOnFoldingListener(this);
         mTitleView = (TextView) mContainerView.findViewById(R.id.card_detail_title);
         mContentView = (TextView) mContainerView.findViewById(R.id.card_detail_content);
-        mBackBtn = (Button) mContainerView.findViewById(R.id.card_detail_back);
-        mBackBtn.setOnClickListener(this);
-        mShareBtn = (Button) mContainerView.findViewById(R.id.card_detail_share);
-        mShareBtn.setOnClickListener(this);
         mContentContainerView = (ViewGroup) mContainerView.findViewById(R.id.cardDetailContainer);
         mImageView = (ImageView) mContainerView.findViewById(R.id.card_detail_image);
         Bitmap glance = ((BitmapDrawable) mContext.getResources().getDrawable(
@@ -86,7 +80,6 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
         mListTouchInterceptor.setClickable(false);
         List<Card> cards = new ArrayList<Card>();
         loadData(cards, mData);
-//        CardArrayAdapter adapter = new CardArrayAdapter(mContext, cards);
         CardArrayAdapter adapter = new FoldableBoxAdapter(mContext, cards);
         mListView.setAdapter(adapter);
         return mContainerView;
@@ -173,7 +166,15 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
                 || type.equals(ServerDataMapping.S_DATATYPE_JOKE)) {
             SingleImageBox box = new SingleImageBox(mContext,
                     SingleImageBox.convertFromServerData(data));
+
             View view = box.getRenderedView();
+            view.findViewById(R.id.single_img).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    mUnfoldableView.foldBack();
+                }
+            });
             renderDetailView(view);
         } else {
             mTitleView.setText(data.getTitle());
@@ -205,10 +206,6 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
 
     @Override
     public void onClick(View v) {
-        if (v == mBackBtn) {
-            mUnfoldableView.foldBack();
-        } else if (v == mShareBtn) {
-        }
     }
 
     @Override

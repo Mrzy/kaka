@@ -5,7 +5,8 @@
     android:background="@drawable/pandora_locker_content_background"
     android:orientation="vertical" >
 
-    <ScrollView
+    <cn.zmdx.kaka.locker.widget.BaseScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -86,6 +87,6 @@
                 android:textColor="#272727"
                 android:textSize="23sp" />
         </RelativeLayout>
-    </ScrollView>
+    </cn.zmdx.kaka.locker.widget.BaseScrollView>
 
 </LinearLayout>
