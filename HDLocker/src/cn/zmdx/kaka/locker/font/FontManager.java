@@ -64,9 +64,9 @@ public class FontManager {
     }
 
     private static File initStorageDir() {
-        File file = HDApplication.getInstannce().getExternalFilesDir(null);
+        File file = HDApplication.getContext().getExternalFilesDir(null);
         if (file == null) {
-            file = HDApplication.getInstannce().getCacheDir();
+            file = HDApplication.getContext().getCacheDir();
         }
         file = new File(file + File.separator + "fonts");
         if (!file.exists()) {

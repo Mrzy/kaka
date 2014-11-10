@@ -60,7 +60,7 @@ public class DigitalClocks extends TextView {
         if (mCalendar == null) {
             mCalendar = Calendar.getInstance();
         }
-        Typeface face = Typeface.createFromAsset(HDApplication.getInstannce().getAssets(),
+        Typeface face = Typeface.createFromAsset(HDApplication.getContext().getAssets(),
                 "fonts/Roboto-Thin.ttf");
         setTypeface(face);
         mFormatChangeObserver = new FormatChangeObserver();

@@ -63,7 +63,7 @@ public class PandoraWallpaperManager {
             final Bitmap bitmap, final String fileName, final String currentFileName,
             final IWallpaperClickListener listener, List<PandoraWallpaper> pWallpaperList) {
         final RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
-                HDApplication.getInstannce()).inflate(R.layout.pandora_wallpaper_item, null);
+                HDApplication.getContext()).inflate(R.layout.pandora_wallpaper_item, null);
         RelativeLayout mWallpaperIvRl = (RelativeLayout) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
         ImageView mWallpaperIv = (ImageView) mWallpaperRl
@@ -127,7 +127,7 @@ public class PandoraWallpaperManager {
         for (int i = 0; i < mThemeList.size(); i++) {
             final int themeId = mThemeList.get(i).getmThemeId();
             final RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
-                    HDApplication.getInstannce()).inflate(R.layout.pandora_wallpaper_item, null);
+                    HDApplication.getContext()).inflate(R.layout.pandora_wallpaper_item, null);
             RelativeLayout mWallpaperIvRl = (RelativeLayout) mWallpaperRl
                     .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
             ImageView mWallpaperIv = (ImageView) mWallpaperRl

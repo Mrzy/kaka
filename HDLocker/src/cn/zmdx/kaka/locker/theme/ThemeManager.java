@@ -34,21 +34,21 @@ public class ThemeManager {
     public static final int THEME_ID_DEFAULT_SETTINGICON_RESID = R.drawable.ic_setting_common;
 
     public static Theme getCurrentTheme() {
-        int themeId = PandoraConfig.newInstance(HDApplication.getInstannce()).getCurrentThemeId();
+        int themeId = PandoraConfig.newInstance(HDApplication.getContext()).getCurrentThemeId();
         if (themeId == THEME_ID_CUSTOM) {
-            return getCustomTheme(HDApplication.getInstannce());
+            return getCustomTheme(HDApplication.getContext());
         } else {
             return getThemeById(themeId);
         }
     }
 
     public static int getCurrentThemeIdForStatistical() {
-        return PandoraConfig.newInstance(HDApplication.getInstannce())
+        return PandoraConfig.newInstance(HDApplication.getContext())
                 .getCurrentThemeIdForStatistical();
     }
 
     public static void saveTheme(int themeId) {
-        PandoraConfig.newInstance(HDApplication.getInstannce()).saveThemeId(themeId);
+        PandoraConfig.newInstance(HDApplication.getContext()).saveThemeId(themeId);
     }
 
     /**

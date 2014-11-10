@@ -26,7 +26,7 @@ public class ServerImageDataModel {
     private static ServerImageDataModel sServerImageDataModel = null;
 
     private ServerImageDataModel() {
-        mMySqlitDatabase = MySqlitDatabase.getInstance(HDApplication.getInstannce(),
+        mMySqlitDatabase = MySqlitDatabase.getInstance(HDApplication.getContext(),
                 PandoraConfig.DATABASE_NAME, null);
     }
 
@@ -222,7 +222,7 @@ public class ServerImageDataModel {
         }
     }
 
-    public ServerImageData queryOneByRandom() {
+    public ServerImageData queryOneByRandom(int count) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         ServerImageData data = null;
 
@@ -233,7 +233,7 @@ public class ServerImageDataModel {
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
                 + TableStructure.SERVER_IMAGE_SETP + "=?", new String[] {
                 String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
-        }, null, null, "RANDOM()", "1");
+        }, null, null, "RANDOM()", String.valueOf(count));
 
         try {
             while (cursor.moveToNext()) {
@@ -303,7 +303,7 @@ public class ServerImageDataModel {
         return lastTime;
     }
 
-    public List<ServerImageData> queryByRandom(int minCountFoldableBox, boolean containHtml) {
+    public List<ServerImageData> queryByRandom(int count, boolean containHtml) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         List<ServerImageData> result = new ArrayList<ServerImageData>();
 
@@ -328,7 +328,7 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
                 TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_COLLECT_WEBSITE
-        }, selection, selectionArgus, null, null, "RANDOM()", "10");
+        }, selection, selectionArgus, null, null, "RANDOM()", String.valueOf(count));
 
         try {
             while (cursor.moveToNext()) {

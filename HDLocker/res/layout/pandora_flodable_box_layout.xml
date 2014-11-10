@@ -2,15 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/frameLayout"
     android:layout_marginBottom="5dp"
     android:layout_marginTop="5dp"
     android:orientation="vertical" >
 
     <it.gmariotti.cardslib.library.view.CardListView
         android:id="@+id/cardListView"
+        android:layoutAnimation="@anim/list_anim_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
     <View
         android:id="@+id/touch_interceptor_view"
         android:layout_width="match_parent"

@@ -2,12 +2,13 @@
 package cn.zmdx.kaka.locker;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap.CompressFormat;
 import cn.zmdx.kaka.locker.utils.HDBEventSource;
 
 public class HDApplication extends Application {
 
-    private static HDApplication instance = null;
+    private static Context instance = null;
 
     private static int DISK_IMAGECACHE_SIZE = 1024 * 1024 * 100;// 100Mb磁盘缓存区
 
@@ -21,12 +22,13 @@ public class HDApplication extends Application {
         instance = this;
     }
 
-    public static HDApplication getInstannce() {
+    public static Context getContext() {
         return instance;
     }
 
     @Override
     public void onCreate() {
+        instance = getApplicationContext();
         HDBEventSource.startup(getApplicationContext(), null);
         // Intialize the request manager and the image cache
         RequestManager.init(this);

@@ -133,7 +133,7 @@ public class LockScreenManager {
     }
 
     private LockScreenManager() {
-        mContext = HDApplication.getInstannce();
+        mContext = HDApplication.getContext();
         mWinManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         KeyguardManager keyguard = (KeyguardManager) mContext

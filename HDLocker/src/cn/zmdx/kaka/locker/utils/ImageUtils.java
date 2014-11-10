@@ -77,6 +77,25 @@ public class ImageUtils {
         return bitmap;
     }
 
+    public static int computeSampleSize(BitmapFactory.Options options, int reqWidth) {
+        try {
+            int widRate = Math.round((float) options.outWidth / (float) reqWidth);
+//            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
+            return widRate;
+        } catch (Exception e) {
+            return 1;
+        }
+    }
+
+    public static int computeSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        try {
+            int widRate = Math.round((float) options.outWidth / (float) reqWidth);
+            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
+            return Math.min(widRate, heightRate);
+        } catch (Exception e) {
+            return 1;
+        }
+    }
     /**
      * Create a BitmapDrawable object from the specified Bitmap object.
      */

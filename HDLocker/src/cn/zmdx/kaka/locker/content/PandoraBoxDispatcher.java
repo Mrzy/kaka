@@ -32,7 +32,7 @@ public class PandoraBoxDispatcher extends Handler {
 
     private PandoraBoxDispatcher(Looper looper) {
         super(looper);
-        mConfig = PandoraConfig.newInstance(HDApplication.getInstannce());
+        mConfig = PandoraConfig.newInstance(HDApplication.getContext());
     }
 
     public static synchronized PandoraBoxDispatcher getInstance() {

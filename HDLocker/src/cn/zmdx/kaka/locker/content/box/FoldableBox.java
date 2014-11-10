@@ -9,19 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
+import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.UnfoldableView.OnFoldingListener;
@@ -36,13 +39,15 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
 
     private UnfoldableView mUnfoldableView;
 
-    private ViewGroup mDetailLayout, mContentContainerView;
+    private ViewGroup mDetailLayout, mContentContainerView, mFrameLayout;
 
     private View mContainerView, mListTouchInterceptor;
 
     private TextView mTitleView, mContentView;
 
     private ImageView mImageView;
+
+    private CardArrayAdapter mAdapter;
 
     public FoldableBox(Context context, List<ServerImageData> data) {
         mContext = context;
@@ -61,8 +66,13 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
 
     @Override
     public View getRenderedView() {
+        if (mData != null && mData.size() <= 0) {
+            return PandoraBoxManager.newInstance(mContext).getDefaultBox().getRenderedView();
+        }
+
         mContainerView = LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_flodable_box_layout, null);
+        mFrameLayout = (ViewGroup) mContainerView.findViewById(R.id.frameLayout);
         mListView = (CardListView) mContainerView.findViewById(R.id.cardListView);
         mUnfoldableView = (UnfoldableView) mContainerView.findViewById(R.id.unfoldable_view);
         mUnfoldableView.setOnFoldingListener(this);
@@ -80,9 +90,32 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
         mListTouchInterceptor.setClickable(false);
         List<Card> cards = new ArrayList<Card>();
         loadData(cards, mData);
-        CardArrayAdapter adapter = new FoldableBoxAdapter(mContext, cards);
-        mListView.setAdapter(adapter);
+        mAdapter = new FoldableBoxAdapter(mContext, cards);
+        mAdapter.registerDataSetObserver(mObserver);
+        mListView.setAdapter(mAdapter);
         return mContainerView;
+    }
+
+    @Override
+    public void onFinish() {
+        mAdapter.unregisterDataSetObserver(mObserver);
+    }
+
+    private DataSetObserver mObserver = new DataSetObserver() {
+        public void onChanged() {
+            int count = mAdapter.getCount();
+            if (count == 0) {
+                fadeInEmptyView();
+            }
+        };
+    };
+
+    private void fadeInEmptyView() {
+        IPandoraBox box = PandoraBoxManager.newInstance(mContext).getDefaultBox();
+        View defaultView = box.getRenderedView();
+        defaultView.setAlpha(0);
+        mFrameLayout.addView(defaultView);
+        defaultView.animate().alpha(1).setDuration(800).start();
     }
 
     private void loadData(List<Card> cards, List<ServerImageData> data) {
@@ -117,6 +150,9 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
             setOnSwipeListener(new OnSwipeListener() {
                 @Override
                 public void onSwipe(Card card) {
+                    ServerImageData data = ((FoldableCard) card).getData();
+                    int id = data.getId();
+                    ServerImageDataModel.getInstance().markRead(id, true);
                 }
             });
             setOnClickListener(new OnCardClickListener() {

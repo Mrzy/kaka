@@ -57,9 +57,9 @@ public class PandoraPolicy {
     /**
      * 锁屏页下滑速率，值越下，越灵敏，即越容易下滑解锁
      */
-    public static final float DEFAULT_MAX_YVEL = 1500.0f * BaseInfoHelper.getDensity(HDApplication.getInstannce());
+    public static final float DEFAULT_MAX_YVEL = 1500.0f * BaseInfoHelper.getDensity(HDApplication.getContext());
 
-    public static final int MIN_COUNT_FOLDABLE_BOX = 10;
+    public static final int MIN_COUNT_FOLDABLE_BOX = 5;
 
     public static boolean verifyImageLegal(String url, int w, int h) {
         try {

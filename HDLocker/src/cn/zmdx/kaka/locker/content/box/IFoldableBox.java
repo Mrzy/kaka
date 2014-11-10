@@ -14,4 +14,6 @@ public interface IFoldableBox {
 
     public View getRenderedView();
 
+    public void onFinish();
+
 }

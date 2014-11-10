@@ -43,6 +43,7 @@ public class DefaultBox implements IPandoraBox {
 
     private TextView mTextView3;
 
+    private boolean isSetCustomImage = false;
     public DefaultBox(Context context, PandoraData data) {
         mContext = context;
         mData = data;
@@ -78,13 +79,19 @@ public class DefaultBox implements IPandoraBox {
     private void initDefaultImage(Context context) {
         BitmapDrawable drawable = PandoraUtils.getLockDefaultBitmap(context);
         if (null != drawable) {
+            isSetCustomImage = true;
             mCustomImageView.setImageDrawable(drawable);
             mDefaultRl.setVisibility(View.GONE);
             mCustomRl.setVisibility(View.VISIBLE);
         } else {
+            isSetCustomImage = false;
             mDefaultRl.setVisibility(View.VISIBLE);
             mCustomRl.setVisibility(View.GONE);
         }
+    }
+
+    public boolean isSetCustomImage() {
+        return isSetCustomImage;
     }
 
     private OnClickListener clickListener = new OnClickListener() {

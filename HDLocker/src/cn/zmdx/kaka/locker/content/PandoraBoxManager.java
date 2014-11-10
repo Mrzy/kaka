@@ -86,7 +86,7 @@ public class PandoraBoxManager {
         releasePreResource(mPreDisplayBox);
         IPandoraBox box = getRandomBox();
         if (box == null) {
-            return getDefaultData();
+            return getDefaultBox();
         }
         mPreDisplayBox = box;
         if (BuildConfig.DEBUG) {
@@ -99,7 +99,7 @@ public class PandoraBoxManager {
         ServerImageData bd = null;
         // 只有在wifi网络下，才显示html类型数据
         if (HDBNetworkState.isNetworkAvailable() && HDBNetworkState.isWifiNetwork()) {
-            bd = ServerImageDataModel.getInstance().queryOneByRandom();
+            bd = ServerImageDataModel.getInstance().queryOneByRandom(5);
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("queryOneByRandom, return data:" + bd);
             }
@@ -214,7 +214,7 @@ public class PandoraBoxManager {
         return box;
     }
 
-    public IPandoraBox getDefaultData() {
+    public IPandoraBox getDefaultBox() {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("获得默认页面");
         }

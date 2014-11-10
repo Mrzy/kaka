@@ -20,7 +20,7 @@ public class HtmlBox implements IPandoraBox {
     @SuppressLint("SetJavaScriptEnabled")
     public HtmlBox(PandoraData data) {
         mData = data;
-        mContext = HDApplication.getInstannce();
+        mContext = HDApplication.getContext();
         mWebView = new WebView(mContext);
         mWebView.getSettings().setJavaScriptEnabled(true);
         // mWebView.setWebChromeClient(new WebChromeClient());

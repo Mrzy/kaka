@@ -138,7 +138,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
 
     private void initAddCustomButton() {
         final RelativeLayout mWallpaperRl = (RelativeLayout) LayoutInflater.from(
-                HDApplication.getInstannce()).inflate(R.layout.pandora_wallpaper_item, null);
+                HDApplication.getContext()).inflate(R.layout.pandora_wallpaper_item, null);
         RelativeLayout mWallpaperIvRl = (RelativeLayout) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
         ImageView mWallpaperIv = (ImageView) mWallpaperRl
