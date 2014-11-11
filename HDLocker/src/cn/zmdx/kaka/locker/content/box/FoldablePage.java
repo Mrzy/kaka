@@ -13,14 +13,12 @@ import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
@@ -30,7 +28,7 @@ import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.UnfoldableView.OnFoldingListener;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 
-public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClickListener {
+public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnClickListener {
     private Context mContext;
 
     private List<ServerImageData> mData;
@@ -43,13 +41,9 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
 
     private View mContainerView, mListTouchInterceptor;
 
-    private TextView mTitleView, mContentView;
-
-    private ImageView mImageView;
-
     private CardArrayAdapter mAdapter;
 
-    public FoldableBox(Context context, List<ServerImageData> data) {
+    public FoldablePage(Context context, List<ServerImageData> data) {
         mContext = context;
         mData = data;
     }
@@ -72,10 +66,7 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
         mListView = (CardListView) mContainerView.findViewById(R.id.cardListView);
         mUnfoldableView = (UnfoldableView) mContainerView.findViewById(R.id.unfoldable_view);
         mUnfoldableView.setOnFoldingListener(this);
-        mTitleView = (TextView) mContainerView.findViewById(R.id.card_detail_title);
-        mContentView = (TextView) mContainerView.findViewById(R.id.card_detail_content);
         mContentContainerView = (ViewGroup) mContainerView.findViewById(R.id.cardDetailContainer);
-        mImageView = (ImageView) mContainerView.findViewById(R.id.card_detail_image);
         Bitmap glance = ((BitmapDrawable) mContext.getResources().getDrawable(
                 R.drawable.unfold_glance)).getBitmap();
         mUnfoldableView.setFoldShading(new GlanceFoldShading(mContext, glance));
@@ -154,8 +145,8 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
             setOnClickListener(new OnCardClickListener() {
                 @Override
                 public void onClick(Card card, View view) {
-                    if (mBox instanceof FoldableBox) {
-                        FoldableBox box = (FoldableBox) mBox;
+                    if (mBox instanceof FoldablePage) {
+                        FoldablePage box = (FoldablePage) mBox;
                         View v = view.findViewById(R.id.card_item_layout_simple);
                         if (v != null && v.getVisibility() == View.VISIBLE) {
                             box.openDetails(v, mData);
@@ -191,38 +182,30 @@ public class FoldableBox implements IFoldableBox, OnFoldingListener, View.OnClic
             View v = htmlBox.getRenderedView();
             renderDetailView(v);
         } else if (type.equals(ServerDataMapping.S_DATATYPE_GIF)) {
-            GifBox box = new GifBox(mContext, GifBox.convertFormServerImageData(data));
+            GifBox box = new GifBox(mContext, this, GifBox.convertFormServerImageData(data));
             View v = box.getRenderedView();
-            renderDetailView(v);
+            if (v != null) {
+                renderDetailView(v);
+                box.startGif();
+            }
         } else if (type.equals(ServerDataMapping.S_DATATYPE_NEWS)
                 || type.equals(ServerDataMapping.S_DATATYPE_JOKE)) {
-            SingleImageBox box = new SingleImageBox(mContext,
+            SingleImageBox box = new SingleImageBox(mContext, this,
                     SingleImageBox.convertFromServerData(data));
-
             View view = box.getRenderedView();
-            view.findViewById(R.id.single_img).setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    mUnfoldableView.foldBack();
-                }
-            });
-            view.findViewById(R.id.pandora_box_single_back_btn).setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    mUnfoldableView.foldBack();
-                }
-            });
             renderDetailView(view);
         } else {
-            mTitleView.setText(data.getTitle());
-            mContentView.setText(data.getImageDesc());
-            Bitmap bmp = DiskImageHelper.getBitmapByUrl(data.getUrl(), null);
-            resizeImageViewForImage(mImageView, bmp);
-            mImageView.setImageBitmap(bmp);
+            // mTitleView.setText(data.getTitle());
+            // mContentView.setText(data.getImageDesc());
+            // Bitmap bmp = DiskImageHelper.getBitmapByUrl(data.getUrl(), null);
+            // resizeImageViewForImage(mImageView, bmp);
+            // mImageView.setImageBitmap(bmp);
         }
         mUnfoldableView.unfold(coverView, mDetailLayout);
+    }
+
+    public void foldBack() {
+        mUnfoldableView.foldBack();
     }
 
     private void renderDetailView(View contentView) {

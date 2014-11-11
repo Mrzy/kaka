@@ -29,6 +29,7 @@ public class HtmlBox implements IPandoraBox {
 
     public static PandoraData convertFormServerImageData(ServerImageData data) {
         PandoraData pd = new PandoraData();
+        pd.setmId(data.getId());
         pd.setmContentUrl(data.getUrl());
         return pd;
     }

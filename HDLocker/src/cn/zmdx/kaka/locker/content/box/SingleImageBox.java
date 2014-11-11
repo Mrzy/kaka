@@ -17,7 +17,7 @@ import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.widget.BaseScrollView;
 
-public class SingleImageBox implements IPandoraBox {
+public class SingleImageBox implements IPandoraBox, View.OnClickListener {
 
     private Context mContext;
 
@@ -36,27 +36,36 @@ public class SingleImageBox implements IPandoraBox {
     private TextView mFromPlatformText;
 
     private BaseScrollView mScrollView;
-    private ImageButton mImageButton;
 
-    public SingleImageBox(Context context, PandoraData data) {
+    private FoldablePage mPage;
+
+    private View mBackBtn;
+
+    public SingleImageBox(Context context, FoldablePage page, PandoraData data) {
         mData = data;
+        mPage = page;
         mContext = context;
-        mEntireView = (ViewGroup) LayoutInflater.from(context).inflate(
-                R.layout.pandora_box_single_image, null);
-        mScrollView = (BaseScrollView) mEntireView.findViewById(R.id.scrollView);
-//        mScrollView.setOnScrollListener(listener)
-//        mScrollView.setOnTouchListener(new ScrollTouchListener(mScrollListener));
-        mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
-        setImageViewSize(mSingleImgView);
-        mImageButton = (ImageButton) mEntireView.findViewById(R.id.pandora_box_single_back_btn);
-        mDescView = (TextView) mEntireView.findViewById(R.id.desc);
-        mDescView.getPaint().setFakeBoldText(true);
-        mFromPlatformText = (TextView) mEntireView.findViewById(R.id.from_platform_text);
-        mImageNewsContent = (TextView) mEntireView.findViewById(R.id.image_news_content);
     }
 
     public boolean isAtTop() {
         return mScrollView.isAtTop();
+    }
+
+    private void initViews() {
+        mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
+                R.layout.pandora_box_single_image, null);
+        mScrollView = (BaseScrollView) mEntireView.findViewById(R.id.scrollView);
+        // mScrollView.setOnScrollListener(listener)
+        // mScrollView.setOnTouchListener(new
+        // ScrollTouchListener(mScrollListener));
+        mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
+        setImageViewSize(mSingleImgView);
+        mDescView = (TextView) mEntireView.findViewById(R.id.desc);
+        mDescView.getPaint().setFakeBoldText(true);
+        mFromPlatformText = (TextView) mEntireView.findViewById(R.id.from_platform_text);
+        mImageNewsContent = (TextView) mEntireView.findViewById(R.id.image_news_content);
+        mBackBtn = mEntireView.findViewById(R.id.pandora_box_single_back_btn);
+        mBackBtn.setOnClickListener(this);
     }
 
     private void setImageViewSize(ImageView iv) {
@@ -108,19 +117,31 @@ public class SingleImageBox implements IPandoraBox {
         if (mData == null || mData.getmImage() == null) {
             return false;
         }
+        initViews();
         mFromPlatformText.setText(mData.getmFromWebSite());
         mImageNewsContent.setText(mData.getmContent());
         mSingleImgView.setImageBitmap(mData.getmImage());
+        mSingleImgView.setOnClickListener(this);
         mDescView.setText(mData.getmTitle());
         return true;
     }
 
     public static PandoraData convertFromServerData(ServerImageData data) {
         PandoraData pd = new PandoraData();
+        pd.setmId(data.getId());
         pd.setmFromWebSite(data.getCollectWebsite());
         pd.setmTitle(data.getTitle());
         pd.setmContent(data.getImageDesc());
         pd.setmImage(DiskImageHelper.getBitmapByUrl(data.getUrl(), null));
         return pd;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == mBackBtn) {
+            mPage.foldBack();
+        } else if (v == mSingleImgView) {
+            mPage.foldBack();
+        }
     }
 }

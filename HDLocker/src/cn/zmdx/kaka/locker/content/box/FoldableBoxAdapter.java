@@ -7,10 +7,8 @@ import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import java.util.List;
 
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory.Options;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,7 +17,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
-import cn.zmdx.kaka.locker.content.box.FoldableBox.FoldableCard;
+import cn.zmdx.kaka.locker.content.box.FoldablePage.FoldableCard;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.android.volley.misc.ImageUtils;

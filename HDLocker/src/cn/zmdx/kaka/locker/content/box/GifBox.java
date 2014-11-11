@@ -14,6 +14,7 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
+import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
@@ -28,10 +29,11 @@ public class GifBox implements IPandoraBox {
 
     private boolean mIsRendered = false;
 
-    private boolean mIsHide = false;
+    private FoldablePage mPage;
 
-    public GifBox(Context context, PandoraData data) {
+    public GifBox(Context context, FoldablePage page, PandoraData data) {
         mData = data;
+        mPage = page;
         mEntireView = LayoutInflater.from(context).inflate(R.layout.pandora_box_gif_image, null);
         mImageView = (GifImageView) mEntireView.findViewById(R.id.gif_image);
         mTextView = (TextView) mEntireView.findViewById(R.id.gif_desc);
@@ -64,7 +66,7 @@ public class GifBox implements IPandoraBox {
     }
 
     private boolean render() {
-        if (mData == null || mData.getmImage() == null) {
+        if (mData == null || TextUtils.isEmpty(mData.getmImageUrl())) {
             return false;
         }
         File file = DiskImageHelper.getFileByUrl(mData.getmImageUrl());
@@ -83,12 +85,8 @@ public class GifBox implements IPandoraBox {
 
             @Override
             public void onClick(View v) {
-                if (mIsHide) {
-                    mTextView.setVisibility(View.VISIBLE);
-                } else {
-                    mTextView.setVisibility(View.INVISIBLE);
-                }
-                mIsHide = !mIsHide;
+                stopGif();
+                mPage.foldBack();
             }
         });
         mImageView.stopGif();
@@ -112,8 +110,12 @@ public class GifBox implements IPandoraBox {
 
     public static PandoraData convertFormServerImageData(ServerImageData data) {
         PandoraData pd = new PandoraData();
+        pd.setmId(data.getId());
         pd.setmImageUrl(data.getUrl());
         pd.setmTitle(data.getTitle());
+        pd.setDataType(ServerDataMapping.S_DATATYPE_GIF);
+        pd.setmFromWebSite(data.getCollectWebsite());
+        pd.setmContent(data.getImageDesc());
         return pd;
     }
 }
