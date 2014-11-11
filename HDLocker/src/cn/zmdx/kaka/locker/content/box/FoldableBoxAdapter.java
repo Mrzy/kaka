@@ -21,6 +21,7 @@ import cn.zmdx.kaka.locker.content.box.FoldablePage.FoldableCard;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.android.volley.misc.ImageUtils;
+import com.android.volley.ui.AnimateImageView;
 
 public class FoldableBoxAdapter extends CardArrayAdapter {
 
@@ -49,6 +50,7 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
             titleView = (TextView) view.findViewById(R.id.card_item_large_title);
             opt.inSampleSize = ImageUtils.calculateInSampleSize(opt,
                     BaseInfoHelper.getWidth(mContext), BaseInfoHelper.getWidth(mContext));
+            animateLargeView(largeView);
         } else {
             View simpleView = view.findViewById(R.id.card_item_layout_simple);
             view.findViewById(R.id.card_item_layout_large).setVisibility(View.GONE);
@@ -62,7 +64,16 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
         titleView.setText(data.getTitle());
         opt.inJustDecodeBounds = false;
         Bitmap bmp = DiskImageHelper.getBitmapByUrl(data.getUrl(), opt);
-        imageView.setImageBitmap(bmp);
+        if (bmp == null && card.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML)) {// html类型没有缩略图，使用默认图
+            imageView.setImageResource(R.drawable.html_icon_default);
+        } else {
+            imageView.setImageBitmap(bmp);
+        }
         return view;
+    }
+
+    private void animateLargeView(View largeView) {
+        largeView.setAlpha(0);
+        largeView.animate().alpha(1).setDuration(500).start();
     }
 }

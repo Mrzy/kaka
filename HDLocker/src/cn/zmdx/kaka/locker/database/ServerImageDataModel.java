@@ -328,7 +328,7 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
                 TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_COLLECT_WEBSITE
-        }, selection, selectionArgus, null, null, "RANDOM()", String.valueOf(count));
+        }, selection, selectionArgus, null, null, null, String.valueOf(count));
 
         try {
             while (cursor.moveToNext()) {

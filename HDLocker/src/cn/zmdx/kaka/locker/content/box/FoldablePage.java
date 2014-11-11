@@ -102,7 +102,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         View defaultView = box.getRenderedView();
         defaultView.setAlpha(0);
         mFrameLayout.addView(defaultView);
-        defaultView.animate().alpha(1).setDuration(800).start();
+        defaultView.animate().alpha(1).setDuration(500).start();
     }
 
     private void loadData(List<Card> cards, List<ServerImageData> data) {
@@ -195,11 +195,6 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             View view = box.getRenderedView();
             renderDetailView(view);
         } else {
-            // mTitleView.setText(data.getTitle());
-            // mContentView.setText(data.getImageDesc());
-            // Bitmap bmp = DiskImageHelper.getBitmapByUrl(data.getUrl(), null);
-            // resizeImageViewForImage(mImageView, bmp);
-            // mImageView.setImageBitmap(bmp);
         }
         mUnfoldableView.unfold(coverView, mDetailLayout);
     }
@@ -255,7 +250,5 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     @Override
     public void onFoldProgress(UnfoldableView unfoldableView, float progress) {
-        // TODO Auto-generated method stub
-
     }
 }

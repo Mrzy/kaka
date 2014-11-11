@@ -6,7 +6,6 @@
 
     <RelativeLayout
         android:id="@+id/card_item_layout_large"
-        android:paddingTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -14,6 +13,8 @@
             android:id="@+id/card_item_large_imageview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxHeight="200dp"
+            android:adjustViewBounds="true"
             android:scaleType="centerCrop" />
 
         <TextView

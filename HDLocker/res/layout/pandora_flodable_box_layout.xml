@@ -5,6 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_marginBottom="5dp"
     android:layout_marginTop="5dp"
+    android:paddingTop="5dp"
     android:orientation="vertical" >
 
     <it.gmariotti.cardslib.library.view.CardListView
