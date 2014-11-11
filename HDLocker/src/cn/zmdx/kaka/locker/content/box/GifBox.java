@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
@@ -25,6 +26,10 @@ public class GifBox implements IPandoraBox {
 
     private GifImageView mImageView;
 
+    private TextView mFromPlatformText;
+
+    private ImageButton mImageButton;
+
     private TextView mTextView;
 
     private boolean mIsRendered = false;
@@ -37,6 +42,8 @@ public class GifBox implements IPandoraBox {
         mEntireView = LayoutInflater.from(context).inflate(R.layout.pandora_box_gif_image, null);
         mImageView = (GifImageView) mEntireView.findViewById(R.id.gif_image);
         mTextView = (TextView) mEntireView.findViewById(R.id.gif_desc);
+        mFromPlatformText = (TextView) mEntireView.findViewById(R.id.gif_from_platform_text);
+        mImageButton = (ImageButton) mEntireView.findViewById(R.id.pandora_box_gif_single_back_btn);
     }
 
     @Override
@@ -80,6 +87,7 @@ public class GifBox implements IPandoraBox {
             mTextView.setVisibility(View.GONE);
             return true;
         }
+        mFromPlatformText.setText(mData.getmFromWebSite());
         mTextView.setText(mData.getmTitle());
         mImageView.setOnClickListener(new OnClickListener() {
 
@@ -89,6 +97,15 @@ public class GifBox implements IPandoraBox {
                 mPage.foldBack();
             }
         });
+        mImageButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                stopGif();
+                mPage.foldBack();
+            }
+        });
+
         mImageView.stopGif();
         mIsRendered = true;
         return true;
