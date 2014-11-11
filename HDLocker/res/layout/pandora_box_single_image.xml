@@ -9,9 +9,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_marginTop="6dp" >
+        android:layout_margin="6dp" >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,7 +20,7 @@
             <RelativeLayout
                 android:id="@+id/pandora_locker_title"
                 android:layout_width="match_parent"
-                android:layout_height="38dp" >
+                android:layout_height="45dp" >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
