@@ -32,7 +32,6 @@ import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
-import cn.zmdx.kaka.locker.content.box.GifBox;
 import cn.zmdx.kaka.locker.content.box.IFoldableBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
@@ -161,7 +160,7 @@ public class LockScreenManager {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public void lock() {
-        if (mIsLocked || PandoraService.isRinging())
+        if (mIsLocked || PandoraService.isCalling())
             return;
 
         PandoraConfig pandoraConfig = PandoraConfig.newInstance(mContext);
@@ -202,7 +201,7 @@ public class LockScreenManager {
 
         initLockScreenViews();
 
-//        refreshContent();
+        // refreshContent();
         setDate();
         mWinManager.addView(mEntireView, mWinParams);
         startFakeActivity();
@@ -341,8 +340,6 @@ public class LockScreenManager {
         UmengUpdateAgent.update(mContext);
         config.setFlagCheckNewVersionTime(today);
     }
-
-    private boolean mIsUseCurrentBox = false;
 
     private void refreshContent() {
         // if (!mIsUseCurrentBox
@@ -487,8 +484,11 @@ public class LockScreenManager {
     }
 
     private void internalUnLock(boolean isCloseFakeActivity) {
-        if (!mIsLocked)
+        if (!mIsLocked) {
+            if (isCloseFakeActivity)
+                notifyUnLocked();
             return;
+        }
         if (isCloseFakeActivity)
             notifyUnLocked();
         cancelAnimatorIfNeeded();
@@ -615,7 +615,6 @@ public class LockScreenManager {
                     internalUnLock();
                 }
             }, 1);
-            mIsUseCurrentBox = false;
         } else {
             UmengCustomEventManager.statisticalGuestureUnLockFail();
             mGusturePrompt.setText(mContext.getResources().getString(R.string.gusture_verify_fail));
@@ -630,20 +629,6 @@ public class LockScreenManager {
             return stored.equals(LockPatternUtils.patternToString(pattern)) ? true : false;
         }
         return false;
-    }
-
-    private void startGifAnimationIfNeeded() {
-        if (mPandoraBox.getCategory() == IPandoraBox.CATEGORY_GIF) {
-            GifBox gifBox = (GifBox) mPandoraBox;
-            gifBox.startGif();
-        }
-    }
-
-    private void stopGifAnimationIfNeeded() {
-        if (mPandoraBox.getCategory() == IPandoraBox.CATEGORY_GIF) {
-            GifBox gifBox = (GifBox) mPandoraBox;
-            gifBox.stopGif();
-        }
     }
 
     private PanelSlideListener mSlideListener = new SimplePanelSlideListener() {
@@ -665,15 +650,6 @@ public class LockScreenManager {
             UmengCustomEventManager.statisticalUnLockTimes();
             if (!showGestureView()) {
                 internalUnLock();
-                // 如果从开始下拉到直接解锁所经历的总时间小于1秒，则不更新数据
-                if (System.currentTimeMillis() - mLockTime < 800) {
-                    if (BuildConfig.DEBUG) {
-                        HDBLOG.logD("操作时间小于1秒，不更新pandoraBox,mLockTime:" + mLockTime);
-                    }
-                    mIsUseCurrentBox = true;
-                } else {
-                    mIsUseCurrentBox = false;
-                }
             }
         }
 
@@ -723,7 +699,6 @@ public class LockScreenManager {
             UmengCustomEventManager.statisticalLockTime(mPandoraBox, duration);
             if (!showGestureView()) {
                 internalUnLock();
-                mIsUseCurrentBox = false;
             }
             if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
                 mPandoraConfig.saveGuideTimes(mTextGuideTimes + 1);
@@ -872,4 +847,6 @@ public class LockScreenManager {
         mAnimatorSet.start();
     }
 
+    public void onBackPressed() {
+    }
 }

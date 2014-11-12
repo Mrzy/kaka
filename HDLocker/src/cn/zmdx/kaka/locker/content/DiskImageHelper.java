@@ -77,6 +77,7 @@ public class DiskImageHelper {
             option.inSampleSize = ImageUtils.computeSampleSize(option,
                     BaseInfoHelper.getWidth(HDApplication.getContext()));
             option.inJustDecodeBounds = false;
+            option.inPreferredConfig = Bitmap.Config.RGB_565;
         }
         try {
             return BitmapFactory.decodeFile(file.getAbsolutePath(), option);
