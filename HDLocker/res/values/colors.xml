@@ -18,7 +18,7 @@
     <color name="setting_black_translucent">#c5000000</color>
     <color name="setting_divider_line">#65ffffff</color>
     <color name="pandora_box_no_net_prompt">#fff3bb</color>
-    <color name="pandora_box_text_color">#272727</color>
+    <color name="pandora_box_text_color">#ccfffeff</color>
     <color name="guesture_verify_error_color">#ff8c07</color>
     
 </resources>

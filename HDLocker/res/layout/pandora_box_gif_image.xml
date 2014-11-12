@@ -1,26 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/pandora_locker_content_background"
+    android:orientation="vertical" >
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/gif_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitCenter" />
-
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-        android:id="@+id/gif_desc"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal"
-        android:background="#a0000000"
-        android:paddingBottom="4dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="4dp"
-        android:textColor="#ffffff"
-        android:textSize="18sp" />
+        android:layout_margin="6dp"
+        android:background="@drawable/pandora_box_single_image_background"
+        android:paddingBottom="5dp" >
+
+        <RelativeLayout
+            android:id="@+id/pandora_locker_gif_title"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="12dp"
+                android:orientation="horizontal" >
+
+                <ImageButton
+                    android:id="@+id/pandora_box_gif_single_back_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/pandora_single_box_image_selector"
+                    android:gravity="center_vertical" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal"
+                    android:paddingRight="14dp" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/from_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/share_image_news_from"
+                        android:textColor="#ccfffeff"
+                        android:textSize="15sp" />
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/gif_from_platform_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:textColor="#88fffeff"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/share_from_platform"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+            </LinearLayout>
+        </RelativeLayout>
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gif_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/pandora_locker_gif_title"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:scaleType="fitCenter" />
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:id="@+id/gif_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="4dp"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
 </RelativeLayout>
