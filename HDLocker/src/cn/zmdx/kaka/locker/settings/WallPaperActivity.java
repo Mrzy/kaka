@@ -16,6 +16,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -217,12 +218,40 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     }
 
     private void setBackground(Bitmap bitmap, int resId) {
-        if (null == bitmap) {
-            mRootView.setBackgroundDrawable(getResources().getDrawable(resId));
+        Drawable rootViewDrawable = mRootView.getBackground();
+        if (null != rootViewDrawable) {
+            setAnimator(bitmap, resId);
         } else {
-            BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-            mRootView.setBackgroundDrawable(drawable);
+            if (null == bitmap) {
+                mRootView.setBackgroundDrawable(getResources().getDrawable(resId));
+            } else {
+                BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+                mRootView.setBackgroundDrawable(drawable);
+            }
         }
+    }
+
+    private void setAnimator(final Bitmap bitmap, final int resId) {
+        ObjectAnimator animatorAlphaInvisible = ObjectAnimator.ofInt(mRootView.getBackground(),
+                "alpha", 255, 100);
+        animatorAlphaInvisible.setDuration(250);
+        animatorAlphaInvisible.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator anim) {
+                Drawable drawable = null;
+                if (null == bitmap) {
+                    drawable = getResources().getDrawable(resId);
+                    mRootView.setBackgroundDrawable(drawable);
+                } else {
+                    drawable = new BitmapDrawable(getResources(), bitmap);
+                    mRootView.setBackgroundDrawable(drawable);
+                }
+                ObjectAnimator animatorAlphaVisible = ObjectAnimator.ofInt(drawable, "alpha", 100,
+                        255);
+                animatorAlphaVisible.setDuration(250);
+                animatorAlphaVisible.start();
+            }
+        });
+        animatorAlphaInvisible.start();
     }
 
     private void saveWallpaperFile(final String fileName) {
