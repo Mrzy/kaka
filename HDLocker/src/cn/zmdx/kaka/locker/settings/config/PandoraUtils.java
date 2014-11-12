@@ -3,6 +3,7 @@ package cn.zmdx.kaka.locker.settings.config;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -54,8 +55,6 @@ public class PandoraUtils {
     public static final String MUIU_V6 = "V6";
 
     public static Bitmap sCropBitmap;
-
-    public static Bitmap sCropThumbBitmap;
 
     public static Bitmap sLockDefaultThumbBitmap;
 
@@ -359,6 +358,23 @@ public class PandoraUtils {
                     .getBoxWidthHeightRate()));
         }
         return ImageUtils.scaleTo(cropBitmap, thumbWidth, thumbHeight, false);
+    }
+
+    public static Bitmap getThumbBitmap(Activity activity, String path, int realWidth,
+            int realHeight) throws FileNotFoundException {
+        FileInputStream inputStream = new FileInputStream(path);
+        BitmapFactory.Options opts = new Options();
+        opts.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(inputStream, new Rect(), opts);
+        BitmapFactory.Options realOpts = new Options();
+        realOpts.inSampleSize = computeSampleSize(opts, realWidth, realHeight);
+        realOpts.inJustDecodeBounds = false;
+        realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
+        realOpts.inPurgeable = true;
+        realOpts.inInputShareable = true;
+        FileInputStream realInputStream = new FileInputStream(path);
+        Bitmap bitmap = BitmapFactory.decodeStream(realInputStream, new Rect(), realOpts);
+        return bitmap;
     }
 
     public static void saveBitmap(Bitmap bitmap, String path, String fileName) {

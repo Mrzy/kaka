@@ -110,15 +110,6 @@ public class CropImageActivity extends Activity {
                 if (isWallpaper) {
                     UmengCustomEventManager.statisticalSuccessSetCustomTimes();
                     PandoraUtils.sCropBitmap = mCropImageView.getCroppedImage();
-                    try {
-                        PandoraUtils.sCropThumbBitmap = PandoraUtils.zoomThumbBitmap(
-                                CropImageActivity.this, PandoraUtils.sCropBitmap, true);
-                    } catch (Exception e) {
-                        Toast.makeText(CropImageActivity.this,
-                                getResources().getString(R.string.error), Toast.LENGTH_LONG).show();
-                        PandoraUtils.sCropBitmap = null;
-                        PandoraUtils.sCropThumbBitmap = null;
-                    }
                 } else {
                     UmengCustomEventManager.statisticalSetDefaultImage(true);
                     try {

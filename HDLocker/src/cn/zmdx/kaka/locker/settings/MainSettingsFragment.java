@@ -304,7 +304,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     @Override
     public void onDestroyView() {
         PandoraUtils.sCropBitmap = null;
-        PandoraUtils.sCropThumbBitmap = null;
+//        PandoraUtils.sCropThumbBitmap = null;
         PandoraUtils.sLockDefaultThumbBitmap = null;
         super.onDestroyView();
     }
