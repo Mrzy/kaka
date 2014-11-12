@@ -11,16 +11,16 @@ public class CustomWallpaperManager {
     public static String WALLPAPER_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
             .getPath() + "/.Pandora/wallpaper/background/";
 
-    public static String WALLPAPER_THUMB_SDCARD_LOCATION = Environment
-            .getExternalStorageDirectory().getPath() + "/.Pandora/wallpaper/thumb/";
+//    public static String WALLPAPER_THUMB_SDCARD_LOCATION = Environment
+//            .getExternalStorageDirectory().getPath() + "/.Pandora/wallpaper/thumb/";
 
     public static boolean isHaveCustomWallpaper() {
         return isHaveFile(WALLPAPER_SDCARD_LOCATION);
     }
 
-    public static boolean isHaveCustomThumbWallpaper() {
-        return isHaveFile(WALLPAPER_THUMB_SDCARD_LOCATION);
-    }
+//    public static boolean isHaveCustomThumbWallpaper() {
+//        return isHaveFile(WALLPAPER_THUMB_SDCARD_LOCATION);
+//    }
 
     private static boolean isHaveFile(String path) {
         boolean isHave = false;
@@ -37,6 +37,7 @@ public class CustomWallpaperManager {
         return isHave;
     }
 
+    @SuppressWarnings("unused")
     private static boolean isHaveFileWithFileName(String path, String name) {
         boolean isHave = false;
         try {
@@ -62,28 +63,29 @@ public class CustomWallpaperManager {
         for (int i = 0; i < files.length; i++) {
             CustomWallpaper customWallpaper = new CustomWallpaper();
             customWallpaper.setFilePath(files[i].getPath());
-            customWallpaper.setFileName(files[i].getName());
+            customWallpaper.setFileName(files[i].getName().substring(0,
+                    files[i].getName().indexOf(".")));
             list.add(customWallpaper);
         }
         return list;
     }
 
-    public static List<CustomWallpaper> getCustomThumbWallpaper() {
-        List<CustomWallpaper> list = new ArrayList<CustomWallpaper>();
-        File file = new File(WALLPAPER_THUMB_SDCARD_LOCATION);
-        File[] files = file.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            if (isHaveFileWithFileName(WALLPAPER_SDCARD_LOCATION, files[i].getName())) {
-                CustomWallpaper customWallpaper = new CustomWallpaper();
-                customWallpaper.setFilePath(files[i].getPath());
-                customWallpaper.setFileName(files[i].getName().substring(0,
-                        files[i].getName().indexOf(".")));
-                list.add(customWallpaper);
-            }
-        }
-        return list;
-
-    }
+//    public static List<CustomWallpaper> getCustomThumbWallpaper() {
+//        List<CustomWallpaper> list = new ArrayList<CustomWallpaper>();
+//        File file = new File(WALLPAPER_THUMB_SDCARD_LOCATION);
+//        File[] files = file.listFiles();
+//        for (int i = 0; i < files.length; i++) {
+//            if (isHaveFileWithFileName(WALLPAPER_SDCARD_LOCATION, files[i].getName())) {
+//                CustomWallpaper customWallpaper = new CustomWallpaper();
+//                customWallpaper.setFilePath(files[i].getPath());
+//                customWallpaper.setFileName(files[i].getName().substring(0,
+//                        files[i].getName().indexOf(".")));
+//                list.add(customWallpaper);
+//            }
+//        }
+//        return list;
+//
+//    }
 
     public static String getCustomWallpaperFilePath(String fileName) {
         return WALLPAPER_SDCARD_LOCATION + fileName + ".jpg";

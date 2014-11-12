@@ -1,9 +1,11 @@
 
 package cn.zmdx.kaka.locker.custom.wallpaper;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager.CustomWallpaper;
@@ -46,13 +49,27 @@ public class PandoraWallpaperManager {
 
     public static void setCustomWallpaperList(Context mContext, ViewGroup mCustomContainer,
             final IWallpaperClickListener listener, List<PandoraWallpaper> pWallpaperList) {
-        if (CustomWallpaperManager.isHaveCustomThumbWallpaper()) {
+        if (CustomWallpaperManager.isHaveCustomWallpaper()) {
             final String currentFileName = PandoraConfig.newInstance(mContext)
                     .getCustomWallpaperFileName();
-            List<CustomWallpaper> wallpaperList = CustomWallpaperManager.getCustomThumbWallpaper();
+            int thumbWidth = (int) mContext.getResources().getDimension(
+                    R.dimen.pandora_wallpaper_width);
+            int thumbHeight = (int) mContext.getResources().getDimension(
+                    R.dimen.pandora_wallpaper_height);
+            List<CustomWallpaper> wallpaperList = CustomWallpaperManager.getCustomWallpaper();
             for (int i = 0; i < wallpaperList.size(); i++) {
-                final Bitmap bitmap = PandoraUtils.getBitmap(wallpaperList.get(i).getFilePath());
                 final String fileName = wallpaperList.get(i).getFileName();
+                String path = wallpaperList.get(i).getFilePath();
+                Bitmap bitmap = null;
+                try {
+                    bitmap = PandoraUtils.getThumbBitmap(((Activity) mContext), path, thumbWidth,
+                            thumbHeight);
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(mContext, mContext.getResources().getString(R.string.error),
+                            Toast.LENGTH_LONG).show();
+                    PandoraUtils.sCropBitmap = null;
+                    ((Activity) mContext).finish();
+                }
                 setCustomWallpaperItem(mContext, mCustomContainer, bitmap, fileName,
                         currentFileName, listener, pWallpaperList);
             }
@@ -73,7 +90,7 @@ public class PandoraWallpaperManager {
         final ImageView mWallpaperDel = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_delete);
         mWallpaperIv.setImageBitmap(bitmap);
-        mWallpaperIv.setBackgroundResource(R.drawable.setting_wallpaper_border_default);
+        mWallpaperIvRl.setBackgroundResource(R.drawable.setting_wallpaper_border_default);
         mWallpaperIv.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -137,7 +154,7 @@ public class PandoraWallpaperManager {
             mWallpaperRl.findViewById(R.id.pandora_wallpaper_item_delete).setVisibility(View.GONE);
             mWallpaperIv.setTag(i);
             mWallpaperIv.setImageResource(mThemeList.get(i).getmThumbnailResId());
-            mWallpaperIv.setBackgroundResource(R.drawable.setting_wallpaper_border_default);
+            mWallpaperIvRl.setBackgroundResource(R.drawable.setting_wallpaper_border_default);
             mWallpaperIv.setOnClickListener(new OnClickListener() {
 
                 @Override

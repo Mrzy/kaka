@@ -1,6 +1,7 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import java.io.FileNotFoundException;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -59,6 +60,8 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     private static final int MSG_SAVE_CUSTOM_WALLPAPER = 11;
 
     private static final int MSG_SAVE_DEFAULT_WALLPAPER = 12;
+
+    private static final int MSG_HANDLE_THUMB_BITMAP = 13;
 
     private List<PandoraWallpaper> mPandoraWallpaperList;
 
@@ -200,11 +203,6 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
             case PandoraUtils.REQUEST_CODE_CROP_IMAGE:
                 String fileName = PandoraUtils.getRandomString();
                 saveWallpaperSP(fileName);
-                PandoraWallpaperManager.setCustomWallpaperItem(this, mCustomContainer,
-                        PandoraUtils.sCropThumbBitmap, fileName, fileName, this,
-                        mPandoraWallpaperList);
-                setCurrentWallpaperBoolean(true, fileName,
-                        PandoraWallpaperManager.THEME_INT_KEY_NO_NEED);
                 setBackground(PandoraUtils.sCropBitmap, -1);
                 saveWallpaperFile(fileName);
                 break;
@@ -234,8 +232,16 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
             public void run() {
                 PandoraUtils.saveBitmap(PandoraUtils.sCropBitmap,
                         CustomWallpaperManager.WALLPAPER_SDCARD_LOCATION, fileName);
-                PandoraUtils.saveBitmap(PandoraUtils.sCropThumbBitmap,
-                        CustomWallpaperManager.WALLPAPER_THUMB_SDCARD_LOCATION, fileName);
+                // PandoraUtils.saveBitmap(PandoraUtils.sCropThumbBitmap,
+                // CustomWallpaperManager.WALLPAPER_THUMB_SDCARD_LOCATION,
+                // fileName);
+                if (mHandler.hasMessages(MSG_HANDLE_THUMB_BITMAP)) {
+                    mHandler.removeMessages(MSG_HANDLE_THUMB_BITMAP);
+                }
+                Message message = Message.obtain();
+                message.what = MSG_HANDLE_THUMB_BITMAP;
+                message.obj = fileName;
+                mHandler.sendMessage(message);
             }
         }).start();
     }
@@ -299,6 +305,12 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
                     ((WallPaperActivity) activity).saveThemeId(themeId);
                     ((WallPaperActivity) activity).saveCustomWallpaperFileName("");
                     break;
+                case MSG_HANDLE_THUMB_BITMAP:
+                    String mFileName = (String) msg.obj;
+                    ((WallPaperActivity) activity).setWallpaperItem(mFileName);
+                    ((WallPaperActivity) activity).setCurrentWallpaperBoolean(true, mFileName,
+                            PandoraWallpaperManager.THEME_INT_KEY_NO_NEED);
+                    break;
 
             }
             super.handleMessage(msg);
@@ -311,6 +323,23 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
 
     public void saveThemeId(int themeId) {
         ThemeManager.saveTheme(themeId);
+    }
+
+    public void setWallpaperItem(String fileName) {
+        String path = CustomWallpaperManager.getCustomWallpaperFilePath(fileName);
+        int thumbWidth = (int) getResources().getDimension(R.dimen.pandora_wallpaper_width);
+        int thumbHeight = (int) getResources().getDimension(R.dimen.pandora_wallpaper_height);
+        Bitmap bitmap = null;
+        try {
+            bitmap = PandoraUtils.getThumbBitmap(this, path, thumbWidth, thumbHeight);
+        } catch (FileNotFoundException e) {
+            Toast.makeText(this, getResources().getString(R.string.error), Toast.LENGTH_LONG)
+                    .show();
+            PandoraUtils.sCropBitmap = null;
+            finish();
+        }
+        PandoraWallpaperManager.setCustomWallpaperItem(WallPaperActivity.this, mCustomContainer,
+                bitmap, fileName, fileName, this, mPandoraWallpaperList);
     }
 
     protected void showDelDialog() {
@@ -417,7 +446,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         Bitmap backgroundBitmap = PandoraUtils.getBitmap(CustomWallpaperManager
                 .getCustomWallpaperFilePath(fileName));
         PandoraUtils.sCropBitmap = backgroundBitmap;
-        PandoraUtils.sCropThumbBitmap = bitmap;
+        // PandoraUtils.sCropThumbBitmap = bitmap;
         setBackground(backgroundBitmap, -1);
         saveWallpaperSP(fileName);
 
@@ -430,7 +459,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         UmengCustomEventManager.statisticalSelectTheme(themeId);
 
         PandoraUtils.sCropBitmap = null;
-        PandoraUtils.sCropThumbBitmap = null;
+        // PandoraUtils.sCropThumbBitmap = null;
         if (mHandler.hasMessages(MSG_SAVE_DEFAULT_WALLPAPER)) {
             mHandler.removeMessages(MSG_SAVE_DEFAULT_WALLPAPER);
         }
@@ -449,7 +478,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
             PandoraConfig.newInstance(this).saveCustomWallpaperFileName("");
             PandoraConfig.newInstance(this).saveThemeId(ThemeManager.THEME_ID_DEFAULT);
             PandoraUtils.sCropBitmap = null;
-            PandoraUtils.sCropThumbBitmap = null;
+            // PandoraUtils.sCropThumbBitmap = null;
             setDefaultWallPaperBoolean();
             Theme theme = ThemeManager.getThemeById(ThemeManager.THEME_ID_DEFAULT);
             setBackground(null, theme.getmBackgroundResId());
@@ -459,8 +488,8 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
             @Override
             public void run() {
                 PandoraUtils.deleteFile(CustomWallpaperManager.WALLPAPER_SDCARD_LOCATION, fileName);
-                PandoraUtils.deleteFile(CustomWallpaperManager.WALLPAPER_THUMB_SDCARD_LOCATION,
-                        fileName);
+                // PandoraUtils.deleteFile(CustomWallpaperManager.WALLPAPER_THUMB_SDCARD_LOCATION,
+                // fileName);
             }
         }).start();
 
