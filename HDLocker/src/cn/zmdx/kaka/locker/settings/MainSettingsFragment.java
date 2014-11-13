@@ -12,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
@@ -20,8 +19,6 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -29,8 +26,6 @@ import com.umeng.analytics.MobclickAgent;
 public class MainSettingsFragment extends BaseSettingsFragment implements OnCheckedChangeListener,
         OnClickListener {
     private View mRootView;
-
-    private PandoraPanelLayout mSettingForeView;
 
     private LinearLayout mInitSetting;
 
@@ -48,15 +43,9 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private SwitchButton mLockerTypeSButton;
 
-    private ImageView mSettingIcon;
-
     private View mSettingBackground;
 
     private boolean mIsCurrentlyPressed = false;
-
-    private static final int TIME_COLLAPSE_PANEL_DELAY = 1500;
-
-    private static final int TIME_COLLAPSE_PANEL_DURATION = 1000;
 
     public static final int GUSTURE_REQUEST_CODE_SUCCESS = 37;
 
@@ -83,13 +72,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         initView();
         initTitleHeight();
         initSwitchButtonState();
-        HDBThreadUtils.postOnUiDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                mSettingForeView.collapsePanel(TIME_COLLAPSE_PANEL_DURATION);
-            }
-        }, TIME_COLLAPSE_PANEL_DELAY);
         return mRootView;
     }
 
@@ -103,13 +85,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             mInitSetting.setVisibility(View.VISIBLE);
         }
 
-        mSettingForeView = (PandoraPanelLayout) mRootView.findViewById(R.id.setting_fore_view);
-        mSettingForeView.setForegroundResource(R.drawable.splash_bg);
-        mSettingIcon = (ImageView) mRootView.findViewById(R.id.setting_icon);
-        mSettingIcon.setVisibility(View.GONE);
         mSettingBackground = mRootView.findViewById(R.id.setting_background);
-
-        mSettingIcon.setOnClickListener(this);
 
         mSettingIndividualization = (LinearLayout) mRootView
                 .findViewById(R.id.setting_individualization);
@@ -148,9 +124,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         if (null != PandoraUtils.sCropBitmap) {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), PandoraUtils.sCropBitmap);
             mSettingBackground.setBackgroundDrawable(drawable);
-            // mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
-            // ThemeManager.THEME_ID_DEFAULT_FOREGROUND_RESID));
-            // mSettingIcon.setBackgroundResource(ThemeManager.THEME_ID_DEFAULT_SETTINGICON_RESID);
         } else {
             initWallpaper();
         }
@@ -282,14 +255,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 // mPicScrollView.startAnimation(viewAnimation);
                 // }
                 break;
-            case R.id.setting_icon:
-                if (mSettingForeView.isPanelExpanded()) {
-                    mSettingForeView.collapsePanel(TIME_COLLAPSE_PANEL_DURATION);
-                } else {
-                    mSettingForeView.expandPanel();
-                }
-                break;
-
             case R.id.setting_init:
                 gotoInit();
                 break;
@@ -304,7 +269,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     @Override
     public void onDestroyView() {
         PandoraUtils.sCropBitmap = null;
-//        PandoraUtils.sCropThumbBitmap = null;
+        // PandoraUtils.sCropThumbBitmap = null;
         PandoraUtils.sLockDefaultThumbBitmap = null;
         super.onDestroyView();
     }
