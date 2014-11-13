@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
@@ -80,7 +79,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         mDetailLayout.setVisibility(View.INVISIBLE);
         mListTouchInterceptor = mContainerView.findViewById(R.id.touch_interceptor_view);
         mListTouchInterceptor.setClickable(false);
-//        mAdapter = new FoldableBoxAdapter(mContext, cards);
+        // mAdapter = new FoldableBoxAdapter(mContext, cards);
         mAdapter.registerDataSetObserver(mObserver);
         mListView.setAdapter(mAdapter);
         createGuidePageIfNeed();
@@ -88,20 +87,23 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
     }
 
     private void createGuidePageIfNeed() {
-        final View guideView = mContainerView.findViewById(R.id.card_item_layout_guide_finger);
-        guideView.setVisibility(View.VISIBLE);
-        View fingerView = mContainerView.findViewById(R.id.guide_finger);
-        final ObjectAnimator anim = ObjectAnimator.ofFloat(fingerView, "translationX", BaseInfoHelper.dip2px(mContext, 100));
-        anim.setRepeatCount(-1);
-        anim.setDuration(1500);
-        anim.start();
-        guideView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                anim.cancel();
-                guideView.setVisibility(View.GONE);
-            }
-        });
+        if (!PandoraConfig.newInstance(mContext).getFlagDisplayBoxGuide()) {
+            final View guideView = mContainerView.findViewById(R.id.card_item_layout_guide_finger);
+            guideView.setVisibility(View.VISIBLE);
+            View fingerView = mContainerView.findViewById(R.id.guide_finger);
+            final ObjectAnimator anim = ObjectAnimator.ofFloat(fingerView, "translationX",
+                    BaseInfoHelper.dip2px(mContext, 100));
+            anim.setRepeatCount(-1);
+            anim.setDuration(1500);
+            anim.start();
+            guideView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    anim.cancel();
+                    guideView.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     public List<Card> makeCardList(List<ServerImageData> oriData) {
@@ -218,7 +220,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             return;
         }
         if (type.equals(ServerDataMapping.S_DATATYPE_HTML)) {
-            HtmlBox htmlBox = new HtmlBox(mContext,this,HtmlBox.convertFormServerImageData(data));
+            HtmlBox htmlBox = new HtmlBox(mContext, this, HtmlBox.convertFormServerImageData(data));
             View v = htmlBox.getRenderedView();
             renderDetailView(v);
         } else if (type.equals(ServerDataMapping.S_DATATYPE_GIF)) {
@@ -235,7 +237,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             View view = box.getRenderedView();
             renderDetailView(view);
         } else if (type.equals(ServerDataMapping.S_DATATYPE_GUIDE)) {
-            
+
         }
         mUnfoldableView.unfold(coverView, mDetailLayout);
     }
@@ -246,20 +248,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     private void renderDetailView(View contentView) {
         mContentContainerView.removeAllViews();
-        mContentContainerView.addView(contentView,0);
-    }
-
-    private void resizeImageViewForImage(ImageView imageView, Bitmap bmp) {
-        ViewGroup.LayoutParams lp = imageView.getLayoutParams();
-        if (bmp != null) {
-            int width = bmp.getWidth();
-            int height = bmp.getHeight();
-            int viewWidth = imageView.getWidth();
-            float rate = (float) viewWidth / (float) width;
-            height = (int) ((float) height * rate);
-            lp.height = height;
-            imageView.setLayoutParams(lp);
-        }
+        mContentContainerView.addView(contentView, 0);
     }
 
     @Override

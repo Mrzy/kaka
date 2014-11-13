@@ -64,7 +64,7 @@ public class PandoraConfig {
     private static final String GUIDE_HTML_TIMES = "n";
 
 
-    private static final String KEY_DISPLAY_BOX_GUIDE = "n";
+    private static final String KEY_DISPLAY_BOX_GUIDE = "o";
 
     private PandoraConfig(Context context) {
         mContext = context;

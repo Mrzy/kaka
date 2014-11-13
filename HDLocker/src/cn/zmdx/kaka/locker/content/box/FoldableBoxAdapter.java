@@ -55,7 +55,6 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
             simpleView.setVisibility(View.VISIBLE);
             imageView = (ImageView) simpleView.findViewById(R.id.card_item_simple_imageview);
             titleView = (TextView) simpleView.findViewById(R.id.card_item_simple_title);
-            
         } else {
             View simpleView = view.findViewById(R.id.card_item_layout_simple);
             view.findViewById(R.id.card_item_layout_large).setVisibility(View.GONE);
@@ -70,9 +69,8 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
         opt.inJustDecodeBounds = false;
         Bitmap bmp = DiskImageHelper.getBitmapByUrl(data.getUrl(), opt);
         if (bmp == null
-                && (card.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML) || card
-                        .getDataType().equals(ServerDataMapping.S_DATATYPE_GUIDE))) {// html类型没有缩略图，使用默认图
-            imageView.setVisibility(View.INVISIBLE);
+                && (card.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML))) {// html类型没有缩略图，使用默认图
+            imageView.setImageResource(R.drawable.html_icon_default);
         } else {
             imageView.setImageBitmap(bmp);
         }
