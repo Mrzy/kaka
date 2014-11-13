@@ -109,5 +109,7 @@
     <string name="share_image_news_from">来自：</string>
     <string name="pandora_crop_image_rotate">旋转</string>
     <string name="pandora_box_html_back_text">点击此处返回</string>
+    <string name="guide_item_title_one">不感兴趣，右滑删除</string>
+    <string name="guide_item_title_two">阅后即焚，保持清净</string>
 
 </resources>

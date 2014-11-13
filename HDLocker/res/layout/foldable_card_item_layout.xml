@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_gravity="center_vertical"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical" >
 
     <RelativeLayout
         android:id="@+id/card_item_layout_large"
@@ -13,8 +13,8 @@
             android:id="@+id/card_item_large_imageview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="200dp"
             android:adjustViewBounds="true"
+            android:maxHeight="200dp"
             android:scaleType="centerCrop" />
 
         <TextView
@@ -24,9 +24,9 @@
             android:layout_alignParentBottom="true"
             android:background="#a0000000"
             android:ellipsize="end"
+            android:padding="3dp"
             android:singleLine="true"
             android:textColor="#ffffff"
-            android:padding="3dp"
             android:textSize="17dp" />
     </RelativeLayout>
 
@@ -34,8 +34,8 @@
         android:id="@+id/card_item_layout_simple"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp"
         android:gravity="center_vertical"
+        android:padding="5dp"
         android:visibility="gone" >
 
         <ImageView
@@ -48,11 +48,11 @@
             android:id="@+id/card_item_simple_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="17dp"
-            android:textColor="#e0ffffff"
             android:layout_marginLeft="5dp"
             android:ellipsize="end"
-            android:maxLines="2" />
+            android:maxLines="2"
+            android:textColor="#e0ffffff"
+            android:textSize="17dp" />
     </LinearLayout>
 
 </FrameLayout>

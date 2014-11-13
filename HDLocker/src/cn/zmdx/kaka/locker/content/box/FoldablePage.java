@@ -17,16 +17,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.UnfoldableView.OnFoldingListener;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnClickListener {
     private Context mContext;
@@ -43,9 +45,9 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     private CardArrayAdapter mAdapter;
 
-    public FoldablePage(Context context, List<ServerImageData> data) {
+    public FoldablePage(Context context, List<ServerImageData> cards) {
         mContext = context;
-        mData = data;
+        mData = cards;
     }
 
     @Override
@@ -60,6 +62,9 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     @Override
     public View getRenderedView() {
+        if (mData == null || mData.size() <= 0) {
+            return null;
+        }
         mContainerView = LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_flodable_box_layout, null);
         mFrameLayout = (ViewGroup) mContainerView.findViewById(R.id.frameLayout);
@@ -75,12 +80,50 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         mDetailLayout.setVisibility(View.INVISIBLE);
         mListTouchInterceptor = mContainerView.findViewById(R.id.touch_interceptor_view);
         mListTouchInterceptor.setClickable(false);
-        List<Card> cards = new ArrayList<Card>();
-        loadData(cards, mData);
-        mAdapter = new FoldableBoxAdapter(mContext, cards);
+//        mAdapter = new FoldableBoxAdapter(mContext, cards);
         mAdapter.registerDataSetObserver(mObserver);
         mListView.setAdapter(mAdapter);
+        createGuidePageIfNeed();
         return mContainerView;
+    }
+
+    private void createGuidePageIfNeed() {
+        final View guideView = mContainerView.findViewById(R.id.card_item_layout_guide_finger);
+        guideView.setVisibility(View.VISIBLE);
+        View fingerView = mContainerView.findViewById(R.id.guide_finger);
+        final ObjectAnimator anim = ObjectAnimator.ofFloat(fingerView, "translationX", BaseInfoHelper.dip2px(mContext, 100));
+        anim.setRepeatCount(-1);
+        anim.setDuration(1500);
+        anim.start();
+        guideView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                anim.cancel();
+                guideView.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    public List<Card> makeCardList(List<ServerImageData> oriData) {
+        List<Card> cards = new ArrayList<Card>();
+        int size = oriData.size();
+        FoldableCard card = null;
+        for (int i = 0; i < size; i++) {
+            card = new FoldableCard(mContext, this, oriData.get(i));
+            cards.add(card);
+        }
+        return cards;
+    }
+
+    public void setAdapter(CardArrayAdapter adapter) {
+        if (mAdapter != null) {
+            mAdapter.unregisterDataSetObserver(mObserver);
+        }
+        mAdapter = adapter;
+    }
+
+    public CardArrayAdapter getAdatper() {
+        return mAdapter;
     }
 
     @Override
@@ -93,6 +136,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             int count = mAdapter.getCount();
             if (count == 0) {
                 fadeInEmptyView();
+                PandoraConfig.newInstance(mContext).saveHasAlreadyDisplayBoxGuide();
             }
         };
     };
@@ -103,15 +147,6 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         defaultView.setAlpha(0);
         mFrameLayout.addView(defaultView);
         defaultView.animate().alpha(1).setDuration(500).start();
-    }
-
-    private void loadData(List<Card> cards, List<ServerImageData> data) {
-        int size = data.size();
-        FoldableCard card = null;
-        for (int i = 0; i < size; i++) {
-            card = new FoldableCard(mContext, this, data.get(i));
-            cards.add(card);
-        }
     }
 
     public static class FoldableCard extends Card {
@@ -137,7 +172,8 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             setOnSwipeListener(new OnSwipeListener() {
                 @Override
                 public void onSwipe(Card card) {
-                    ServerImageData data = ((FoldableCard) card).getData();
+                    FoldableCard fCard = ((FoldableCard) card);
+                    ServerImageData data = fCard.getData();
                     int id = data.getId();
                     ServerImageDataModel.getInstance().markRead(id, true);
                 }
@@ -147,6 +183,10 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                 public void onClick(Card card, View view) {
                     if (mBox instanceof FoldablePage) {
                         FoldablePage box = (FoldablePage) mBox;
+                        FoldableCard fCard = (FoldableCard) card;
+                        if (fCard.getDataType().equals(ServerDataMapping.S_DATATYPE_GUIDE)) {
+                            return;
+                        }
                         View v = view.findViewById(R.id.card_item_layout_simple);
                         if (v != null && v.getVisibility() == View.VISIBLE) {
                             box.openDetails(v, mData);
@@ -194,7 +234,8 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                     SingleImageBox.convertFromServerData(data));
             View view = box.getRenderedView();
             renderDetailView(view);
-        } else {
+        } else if (type.equals(ServerDataMapping.S_DATATYPE_GUIDE)) {
+            
         }
         mUnfoldableView.unfold(coverView, mDetailLayout);
     }

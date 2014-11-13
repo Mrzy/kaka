@@ -21,11 +21,8 @@ import cn.zmdx.kaka.locker.content.box.FoldablePage.FoldableCard;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.android.volley.misc.ImageUtils;
-import com.android.volley.ui.AnimateImageView;
 
 public class FoldableBoxAdapter extends CardArrayAdapter {
-
-    int density;
 
     public FoldableBoxAdapter(Context context, List<Card> cards) {
         super(context, cards);
@@ -42,7 +39,8 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
         DiskImageHelper.getBitmapByUrl(data.getUrl(), opt);
         ImageView imageView;
         TextView titleView;
-        if (position == 0 && !card.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML)) {
+        if (position == 0 && !card.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML)
+                && !card.getDataType().equals(ServerDataMapping.S_DATATYPE_GUIDE)) {
             view.findViewById(R.id.card_item_layout_simple).setVisibility(View.GONE);
             View largeView = view.findViewById(R.id.card_item_layout_large);
             largeView.setVisibility(View.VISIBLE);
@@ -51,6 +49,13 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
             opt.inSampleSize = ImageUtils.calculateInSampleSize(opt,
                     BaseInfoHelper.getWidth(mContext), BaseInfoHelper.getWidth(mContext));
             animateLargeView(largeView);
+        } else if (card.getDataType().equals(ServerDataMapping.S_DATATYPE_GUIDE)) {
+            View simpleView = view.findViewById(R.id.card_item_layout_simple);
+            view.findViewById(R.id.card_item_layout_large).setVisibility(View.GONE);
+            simpleView.setVisibility(View.VISIBLE);
+            imageView = (ImageView) simpleView.findViewById(R.id.card_item_simple_imageview);
+            titleView = (TextView) simpleView.findViewById(R.id.card_item_simple_title);
+            
         } else {
             View simpleView = view.findViewById(R.id.card_item_layout_simple);
             view.findViewById(R.id.card_item_layout_large).setVisibility(View.GONE);
@@ -64,8 +69,10 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
         titleView.setText(data.getTitle());
         opt.inJustDecodeBounds = false;
         Bitmap bmp = DiskImageHelper.getBitmapByUrl(data.getUrl(), opt);
-        if (bmp == null && card.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML)) {// html类型没有缩略图，使用默认图
-            imageView.setImageResource(R.drawable.html_icon_default);
+        if (bmp == null
+                && (card.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML) || card
+                        .getDataType().equals(ServerDataMapping.S_DATATYPE_GUIDE))) {// html类型没有缩略图，使用默认图
+            imageView.setVisibility(View.INVISIBLE);
         } else {
             imageView.setImageBitmap(bmp);
         }

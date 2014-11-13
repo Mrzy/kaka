@@ -1,25 +1,25 @@
 
 package cn.zmdx.kaka.locker.content;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
+import cn.zmdx.kaka.locker.content.box.FoldableBoxAdapter;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
-import cn.zmdx.kaka.locker.content.box.GifBox;
 import cn.zmdx.kaka.locker.content.box.HtmlBox;
 import cn.zmdx.kaka.locker.content.box.IFoldableBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
-import cn.zmdx.kaka.locker.content.box.SingleImageBox;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.database.TableStructure;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
@@ -30,8 +30,6 @@ public class PandoraBoxManager {
     private FoldablePage mPage;
 
     private Context mContext;
-
-    private IPandoraBox mPreDisplayBox;
 
     private PandoraBoxManager(Context context) {
         mContext = context;
@@ -44,35 +42,44 @@ public class PandoraBoxManager {
         return mPbManager;
     }
 
-    private void releasePreResource(IPandoraBox box) {
-        if (box == null) {
-            return;
-        }
+    // private void releasePreResource(IPandoraBox box) {
+    // if (box == null) {
+    // return;
+    // }
+    //
+    // PandoraData data = box.getData();
+    // if (data != null) {
+    // String fromTable = data.getFromTable();
+    // if (fromTable == null) {
+    // return;
+    // } else if (fromTable.equals(TableStructure.TABLE_NAME_SERVER_IMAGE)) {
+    // // ServerImageDataModel.getInstance().deleteById(data.getmId());
+    // ServerImageDataModel.getInstance().markRead(data.getmId(), true);
+    // // DiskImageHelper.remove(data.getmImageUrl());
+    // recycleBitmap(data.getmImage());
+    // mPreDisplayBox = null;
+    // }
+    // }
+    // }
 
-        PandoraData data = box.getData();
-        if (data != null) {
-            String fromTable = data.getFromTable();
-            if (fromTable == null) {
-                return;
-            } else if (fromTable.equals(TableStructure.TABLE_NAME_SERVER_IMAGE)) {
-                // ServerImageDataModel.getInstance().deleteById(data.getmId());
-                ServerImageDataModel.getInstance().markRead(data.getmId(), true);
-                // DiskImageHelper.remove(data.getmImageUrl());
-                recycleBitmap(data.getmImage());
-                mPreDisplayBox = null;
-            }
-        }
-    }
-
-    private void recycleBitmap(Bitmap bmp) {
-        if (bmp != null && !bmp.isRecycled()) {
-            bmp.recycle();
-            bmp = null;
-            System.gc();
-        }
-    }
+    // private void recycleBitmap(Bitmap bmp) {
+    // if (bmp != null && !bmp.isRecycled()) {
+    // bmp.recycle();
+    // bmp = null;
+    // System.gc();
+    // }
+    // }
 
     public IFoldableBox getFoldableBox() {
+        if (needShowOperationGuide()) {
+            List<ServerImageData> guideData = createGuideData();
+            FoldablePage box = new FoldablePage(mContext, guideData);
+            FoldableBoxAdapter guideAdapter = new FoldableBoxAdapter(mContext,
+                    box.makeCardList(guideData));
+            box.setAdapter(guideAdapter);
+            return box;
+        }
+
         boolean containHtml = HDBNetworkState.isNetworkAvailable()
                 && HDBNetworkState.isWifiNetwork();
         List<ServerImageData> data = ServerImageDataModel.getInstance().queryByRandom(
@@ -80,7 +87,9 @@ public class PandoraBoxManager {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("从本地取出数据条数：" + data.size());
         }
-        IFoldableBox box = new FoldablePage(mContext, data);
+        FoldablePage box = new FoldablePage(mContext, data);
+        FoldableBoxAdapter adapter = new FoldableBoxAdapter(mContext, box.makeCardList(data));
+        box.setAdapter(adapter);
         return box;
     }
 
@@ -216,6 +225,107 @@ public class PandoraBoxManager {
     // IPandoraBox box = new SingleImageBox(mContext, pd);
     // return box;
     // }
+    // private IPandoraBox getHtmlBox(ServerImageData bd) {
+    // final PandoraData pd = new PandoraData();
+    // pd.setmId(bd.getId());
+    // pd.setmContentUrl(bd.getUrl());
+    // pd.setFromTable(TableStructure.TABLE_NAME_SERVER_IMAGE);
+    // pd.setDataType(ServerDataMapping.S_DATATYPE_HTML);
+    // pd.setmFromWebSite(bd.getCollectWebsite());
+    // final IPandoraBox box = new HtmlBox(pd);
+    // return box;
+    // }
+
+    // private IPandoraBox getGifBox(ServerImageData bd) {
+    // final String url = bd.getUrl();
+    // final Bitmap bmp = DiskImageHelper.getBitmapByUrl(url, null);
+    // if (bmp == null) {
+    // ServerImageDataModel.getInstance().markRead(bd.getId(), true);
+    // // ServerImageDataModel.getInstance().deleteById(bd.getId());
+    // return null;
+    // }
+    //
+    // final PandoraData pd = new PandoraData();
+    // pd.setmId(bd.getId());
+    // pd.setFromTable(TableStructure.TABLE_NAME_SERVER_IMAGE);
+    // pd.setmTitle(bd.getTitle());
+    // pd.setDataType("TYPE_GIF");
+    // pd.setmImageUrl(bd.getUrl());
+    // pd.setmImage(bmp);
+    // pd.setmContent(bd.getImageDesc());
+    // pd.setmFromWebSite(bd.getCollectWebsite());
+    // IPandoraBox box = new GifBox(mContext, pd);
+    // return box;
+    // }
+
+    // private IPandoraBox getJokeBox(ServerImageData bd) {
+    // Bitmap bmp = DiskImageHelper.getBitmapByUrl(bd.getUrl(), null);
+    // try {
+    // bmp = DiskImageHelper.getBitmapByUrl(bd.getUrl(), null);
+    // } catch (Exception e) {
+    // return null;
+    // }
+    //
+    // if (bmp == null) {
+    // ServerImageDataModel.getInstance().markRead(bd.getId(), true);
+    // // ServerImageDataModel.getInstance().deleteById(bd.getId());
+    // return null;
+    // }
+    // final PandoraData pd = new PandoraData();
+    // pd.setmId(bd.getId());
+    // pd.setFromTable(TableStructure.TABLE_NAME_SERVER_IMAGE);
+    // pd.setmTitle(bd.getTitle());
+    // pd.setDataType("TYPE_MIX_JOKE");
+    // pd.setmImageUrl(bd.getUrl());
+    // pd.setmImage(bmp);
+    // pd.setmContent(bd.getImageDesc());
+    // pd.setmFromWebSite(bd.getCollectWebsite());
+    // IPandoraBox box = new SingleImageBox(mContext, pd);
+    // return box;
+    // }
+
+    // private IPandoraBox getNewsBox(ServerImageData bd) {
+    // Bitmap bmp = DiskImageHelper.getBitmapByUrl(bd.getUrl(), null);
+    // try {
+    // bmp = DiskImageHelper.getBitmapByUrl(bd.getUrl(), null);
+    // } catch (Exception e) {
+    // return null;
+    // }
+    //
+    // if (bmp == null) {
+    // ServerImageDataModel.getInstance().markRead(bd.getId(), true);
+    // // ServerImageDataModel.getInstance().deleteById(bd.getId());
+    // return null;
+    // }
+    // final PandoraData pd = new PandoraData();
+    // pd.setmId(bd.getId());
+    // pd.setFromTable(TableStructure.TABLE_NAME_SERVER_IMAGE);
+    // pd.setmTitle(bd.getTitle());
+    // pd.setDataType("TYPE_MIX_NEWS");
+    // pd.setmImageUrl(bd.getUrl());
+    // pd.setmImage(bmp);
+    // pd.setmContent(bd.getImageDesc());
+    // pd.setmFromWebSite(bd.getCollectWebsite());
+    // IPandoraBox box = new SingleImageBox(mContext, pd);
+    // return box;
+    // }
+
+    private boolean needShowOperationGuide() {
+        return !PandoraConfig.newInstance(mContext).getFlagDisplayBoxGuide();
+    }
+
+    private List<ServerImageData> createGuideData() {
+        final List<ServerImageData> data = new ArrayList<ServerImageData>();
+        ServerImageData sid = new ServerImageData();
+        sid.setDataType(ServerDataMapping.S_DATATYPE_GUIDE);
+        sid.setTitle(mContext.getResources().getString(R.string.guide_item_title_one));
+        data.add(sid);
+        sid = new ServerImageData();
+        sid.setDataType(ServerDataMapping.S_DATATYPE_GUIDE);
+        sid.setTitle(mContext.getResources().getString(R.string.guide_item_title_two));
+        data.add(sid);
+        return data;
+    }
 
     public IPandoraBox getDefaultBox() {
         if (BuildConfig.DEBUG) {

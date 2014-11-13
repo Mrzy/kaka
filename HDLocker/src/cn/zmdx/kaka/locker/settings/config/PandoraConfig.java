@@ -64,6 +64,8 @@ public class PandoraConfig {
     private static final String GUIDE_HTML_TIMES = "n";
 
 
+    private static final String KEY_DISPLAY_BOX_GUIDE = "n";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -296,4 +298,13 @@ public class PandoraConfig {
         editor.commit();
     }
 
+    public boolean getFlagDisplayBoxGuide() {
+        return mSp.getBoolean(KEY_DISPLAY_BOX_GUIDE, false);
+    }
+
+    public void saveHasAlreadyDisplayBoxGuide() {
+        Editor editor = mSp.edit();
+        editor.putBoolean(KEY_DISPLAY_BOX_GUIDE, true);
+        editor.commit();
+    }
 }

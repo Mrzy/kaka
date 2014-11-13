@@ -342,24 +342,15 @@ public class LockScreenManager {
     }
 
     private void refreshContent() {
-        // if (!mIsUseCurrentBox
-        // || (mPandoraBox != null && mPandoraBox.getCategory() ==
-        // IPandoraBox.CATEGORY_DEFAULT)) {
-        // mPandoraBox =
-        // PandoraBoxManager.newInstance(mContext).getNextPandoraBox();
-        //
-        // }
         if (mBoxView != null && mBoxView.getChildCount() > 1) {
             return;
         }
 
         IFoldableBox box = PandoraBoxManager.newInstance(mContext).getFoldableBox();
-        if (box.getData().size() <= 0) {
-            return;
-        }
 
         View contentView = box.getRenderedView();
         if (contentView == null) {
+            initDefaultPhoto(false);
             return;
         }
         ViewParent parent = contentView.getParent();
@@ -379,7 +370,7 @@ public class LockScreenManager {
         mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
         initSecurePanel();
-        initDefaultPhoto();
+        initDefaultPhoto(true);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
         // mDate.setAlpha(0);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
@@ -393,11 +384,23 @@ public class LockScreenManager {
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
         setDrawable();
+        refreshContent();
     }
 
-    private void initDefaultPhoto() {
+    /**
+     * 设置拉开后内容的背景图片，如果onlyDisplayCustomImage为true，则只有当设置了个性化背景时才会显示，否则不显示任何东西（
+     * 包括引导设置页）；如果onlyDisplayCustomImage为false，则可能会显示引导设置页
+     * 
+     * @param onlyDisplayCustomImage
+     */
+    private void initDefaultPhoto(boolean onlyDisplayCustomImage) {
         final DefaultBox box = (DefaultBox) PandoraBoxManager.newInstance(mContext).getDefaultBox();
-        if (box.isSetCustomImage()) {
+        if (onlyDisplayCustomImage) {
+            if (box.isSetCustomImage()) {
+                View defaultView = box.getRenderedView();
+                mBoxView.addView(defaultView);
+            }
+        } else {
             View defaultView = box.getRenderedView();
             mBoxView.addView(defaultView);
         }
@@ -681,9 +684,8 @@ public class LockScreenManager {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("onPanelFixed");
             }
-            refreshContent();
             UmengCustomEventManager.statisticalFixedTimes();
-            mVibrator.vibrate(50);
+            mVibrator.vibrate(30);
             if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
                 if (null != mLockPrompt) {
                     mLockPrompt.setText(mContext.getResources().getString(
