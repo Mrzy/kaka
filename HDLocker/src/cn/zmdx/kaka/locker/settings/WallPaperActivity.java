@@ -484,7 +484,9 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     @Override
     public void onDefaultClickListener(int themeId) {
         setCurrentWallpaperBoolean(false, "", themeId);
-        setSettingBackground(themeId);
+        // setSettingBackground(themeId);
+        Theme theme = ThemeManager.getThemeById(themeId);
+        setBackground(null, theme.getmBackgroundResId());
         UmengCustomEventManager.statisticalSelectTheme(themeId);
 
         PandoraUtils.sCropBitmap = null;
