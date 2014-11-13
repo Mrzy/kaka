@@ -61,6 +61,8 @@ public class PandoraConfig {
     private static final String KEY_LOCK_WELCOME_STRING = "keyLockWelcomeString";
 
     private static final String KEY_CURRENT_FONT = "m";
+    private static final String GUIDE_HTML_TIMES = "n";
+
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -126,6 +128,15 @@ public class PandoraConfig {
 
     public int getGuideTimesInt() {
         return mSp.getInt(GUIDE_TIMES, 0);
+    }
+    public void saveHtmlTimes(int times) {
+        Editor editor = mSp.edit();
+        editor.putInt(GUIDE_HTML_TIMES, times);
+        editor.commit();
+    }
+    
+    public int getGuideHtmlTimesInt() {
+        return mSp.getInt(GUIDE_HTML_TIMES, 0);
     }
 
     public void saveEventGuestureLockEnabledDaily(String time) {
