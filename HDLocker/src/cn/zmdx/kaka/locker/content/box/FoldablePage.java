@@ -178,7 +178,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             return;
         }
         if (type.equals(ServerDataMapping.S_DATATYPE_HTML)) {
-            HtmlBox htmlBox = new HtmlBox(HtmlBox.convertFormServerImageData(data));
+            HtmlBox htmlBox = new HtmlBox(mContext,this,HtmlBox.convertFormServerImageData(data));
             View v = htmlBox.getRenderedView();
             renderDetailView(v);
         } else if (type.equals(ServerDataMapping.S_DATATYPE_GIF)) {
@@ -205,7 +205,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     private void renderDetailView(View contentView) {
         mContentContainerView.removeAllViews();
-        mContentContainerView.addView(contentView, 0);
+        mContentContainerView.addView(contentView,0);
     }
 
     private void resizeImageViewForImage(ImageView imageView, Bitmap bmp) {
