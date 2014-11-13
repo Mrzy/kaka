@@ -45,6 +45,7 @@ public class FakeActivity extends Activity {
             @Override
             public void onInitDefaultImage() {
                 Intent intent = new Intent();
+                intent.putExtra(IndividualizationActivity.KEY_LOCK_DEFAULT_DIRECT, true);
                 intent.setClass(FakeActivity.this, IndividualizationActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

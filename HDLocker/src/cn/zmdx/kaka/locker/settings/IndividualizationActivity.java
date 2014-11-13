@@ -55,6 +55,8 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private static final int MSG_SAVE_LOCK_DEFAULT_DELAY = 100;
 
+    public static final String KEY_LOCK_DEFAULT_DIRECT = "lockDefaultDirect";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -63,6 +65,12 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         initView();
         initWallpaper();
         initLockDefaultBitmap();
+        boolean isDirect = getIntent().getBooleanExtra(KEY_LOCK_DEFAULT_DIRECT, false);
+        if (isDirect) {
+            PandoraUtils.gotoGalleryActivity(IndividualizationActivity.this,
+                    PandoraUtils.REQUEST_CODE_GALLERY);
+            UmengCustomEventManager.statisticalSetDefaultImage(false);
+        }
     }
 
     private void initView() {
