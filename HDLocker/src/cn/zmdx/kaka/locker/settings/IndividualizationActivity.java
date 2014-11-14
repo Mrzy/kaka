@@ -49,7 +49,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     private LinearLayout mWelcomeText;
 
     public static String LOCK_DEFAULT_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
-            .getPath() + "/Pandora/lockDefault/";
+            .getPath() + "/.Pandora/lockDefault/";
 
     private static final int MSG_SAVE_LOCK_DEFAULT = 11;
 
@@ -225,10 +225,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                 String fileName = PandoraUtils.getRandomString();
                 setBitmap();
                 saveWallpaperFile(fileName);
-                if (isDirect) {
-                    LockScreenManager.getInstance().lock();
-                    onBackPressed();
-                }
                 break;
             case PandoraUtils.REQUEST_CODE_GALLERY: {
                 gotoCropActivity(data.getData());
@@ -279,6 +275,10 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                     PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
                             LOCK_DEFAULT_SDCARD_LOCATION, fileName);
                     saveLockDefaultSP(fileName);
+                    if (isDirect) {
+                        LockScreenManager.getInstance().lock();
+                        onBackPressed();
+                    }
                 }
             }
         }).start();
