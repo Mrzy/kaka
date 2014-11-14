@@ -100,15 +100,27 @@
     <string name="individualization_welcome_text_detail">锁屏页面，当天气信息无法获取时显示此欢迎语</string>
     <string name="pandora_box_guide_set_default_image_detail">锁屏页面，当没有信息时显示此默认图</string>
     <string name="individualization_welcome_text_hint">请输入欢迎语!</string>
-    <string name="individualization_welcome_text_default_morning">最近天气冷暖不均，要多穿点衣服哦</string>
-    <string name="individualization_welcome_text_default_morning_work">开开窗，看看外面的世界多美好啊</string>
-    <string name="individualization_welcome_text_default_afternoon">午睡一会，下午有精神哦！</string>
-    <string name="individualization_welcome_text_default_afternoon_work">让你不午睡，困了吧？该！</string>
-    <string name="individualization_welcome_text_default_evening">该吃晚饭了，饭后出去活动一下吧</string>
-    <string name="individualization_welcome_text_default_evening_work">夜空的星在点亮，绽放出梦的光芒</string>
     <string name="share_image_news_from">来自：</string>
     <string name="pandora_crop_image_rotate">旋转</string>
     <string name="pandora_box_html_back_text">点击此处返回</string>
     <string name="guide_item_title_one">不感兴趣，滑动移除\n旧料不去，新料不来</string>
-
+    
+    <string name="warm_prompt_6_10_1">美好的一天开始了</string>
+    <string name="warm_prompt_6_10_2">早上好，一束阳光照在你身上，祝你天天开心</string>
+    <string name="warm_prompt_10_12_1">每一天的阳光都是温暖的</string>
+    <string name="warm_prompt_10_12_2">美丽的一天，灿烂的你</string>
+    <string name="warm_prompt_12_13_1">来一顿丰盛的午餐吧</string>
+    <string name="warm_prompt_12_13_2">忙碌了一上午，来一顿丰盛的午餐吧</string>
+    <string name="warm_prompt_13_15_1">小憩一会儿，精神倍棒</string>
+    <string name="warm_prompt_13_15_2">午睡一会，精神百倍</string>
+    <string name="warm_prompt_15_17_1">来杯下午茶吧</string>
+    <string name="warm_prompt_15_17_2">暖暖的下午茶，融化你的心</string>
+    <string name="warm_prompt_17_19_1">和家人一起好好的享受晚餐</string>
+    <string name="warm_prompt_17_19_2">不要错过和家人的晚餐哦</string>
+    <string name="warm_prompt_19_23_1">放下一天的疲惫，尽情放松吧</string>
+    <string name="warm_prompt_19_23_2">吃过晚饭吗？放松一下吧</string>
+    <string name="warm_prompt_23_1_1">该睡觉了，做个好梦</string>
+    <string name="warm_prompt_23_1_2">该休息了，晚安咯~</string>
+    <string name="warm_prompt_1_6_1">zZZ  zZZ</string>
+    <string name="warm_prompt_1_6_2">夜深了，还不睡，你在做什么呢</string>
 </resources>
