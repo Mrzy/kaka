@@ -136,6 +136,10 @@ public class PandoraBoxDispatcher extends Handler {
                             + PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE + ",无需启动下载图片程序");
                 }
             }
+        } else {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("下载图片条件不允许，无网络");
+            }
         }
     }
 
@@ -144,6 +148,9 @@ public class PandoraBoxDispatcher extends Handler {
         // 规则说明：若wifi,则每个频道取5条数据，共5*5=25条数据；若非wifi，则每个频道取1条，共1 * 5 = 5条数据
         int count = HDBNetworkState.isWifiNetwork() ? PandoraPolicy.COUNT_DOWNLOAD_IMAGE_WIFI
                 : PandoraPolicy.COUNT_DOWNLOAD_IMAGE_NON_WIFI;
+        if (count <= 0) {
+            return;
+        }
         List<ServerImageData> list = new ArrayList<ServerImageData>();
         List<ServerImageData> tmpList = ServerImageDataModel.getInstance().queryWithoutImg(count);
         list.addAll(tmpList);
@@ -155,6 +162,9 @@ public class PandoraBoxDispatcher extends Handler {
         long lastModified = 0;
         if (!isFirstPull) {
             lastModified = ServerImageDataModel.getInstance().queryLastModifiedOfToday();
+        }
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("isFirstPull:" + isFirstPull + ", lastModified:" + lastModified);
         }
         ServerImageDataManager.getInstance().pullTodayData(lastModified);
     }

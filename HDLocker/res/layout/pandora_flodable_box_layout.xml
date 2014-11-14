@@ -36,11 +36,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/card_item_layout_guide_finger"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#80000000"
+        android:background="#c0000000"
+        android:orientation="vertical"
         android:visibility="gone" >
 
         <ImageView
@@ -51,6 +52,16 @@
             android:layout_marginTop="35dp"
             android:background="@drawable/guide_finger"
             android:scaleType="centerInside" />
-    </FrameLayout>
+        <TextView
+            android:id="@+id/guide_finger_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:text="@string/guide_item_title_one"
+            android:textColor="#FF7D40"
+            android:textSize="18dp"
+            />
+    </LinearLayout>
 
 </FrameLayout>

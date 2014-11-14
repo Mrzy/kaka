@@ -370,7 +370,7 @@ public class LockScreenManager {
         mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
         initSecurePanel();
-        initDefaultPhoto(true);
+        // initDefaultPhoto(true);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
         // mDate.setAlpha(0);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
@@ -532,33 +532,11 @@ public class LockScreenManager {
         if (delta > PandoraPolicy.MIN_DURATION_SYNC_DATA_TIME) {
             PandoraBoxDispatcher pd = PandoraBoxDispatcher.getInstance();
             pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
-            pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 4000);
-            mLastSyncDataTime = curTime;
+            if (!pd.hasMessages(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES)) {
+                pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 4000);
+                mLastSyncDataTime = curTime;
+            }
         }
-        // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
-        // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_JOKE);
-        // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_IMAGE_NEWS);
-        // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_TEXT_DATA);
-        // pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_SERVER_GIF);
-        // if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG)) {
-        // pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_BAIDU_IMG,
-        // 4000);
-        // }
-        // if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE))
-        // {
-        // pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_JOKE,
-        // 5000);
-        // }
-        // if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS))
-        // {
-        // pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_IMAGE_NEWS,
-        // 6000);
-        // }
-        // if (!pd.hasMessages(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF)) {
-        // pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_LOAD_SERVER_GIF,
-        // 7000);
-        // }
-
     }
 
     public boolean isLocked() {
@@ -766,6 +744,9 @@ public class LockScreenManager {
     public void onScreenOff() {
         invisiableViews(mDate, mWeatherSummary, mDigitalClockView);
         cancelAnimatorIfNeeded();
+        if (mSliderView != null && !mSliderView.isPanelExpanded()) {
+            mSliderView.expandPanel();
+        }
     }
 
     public void onScreenOn() {
