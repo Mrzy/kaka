@@ -225,6 +225,10 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                 String fileName = PandoraUtils.getRandomString();
                 setBitmap();
                 saveWallpaperFile(fileName);
+                if (isDirect) {
+                    LockScreenManager.getInstance().lock();
+                    onBackPressed();
+                }
                 break;
             case PandoraUtils.REQUEST_CODE_GALLERY: {
                 gotoCropActivity(data.getData());
@@ -275,10 +279,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                     PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
                             LOCK_DEFAULT_SDCARD_LOCATION, fileName);
                     saveLockDefaultSP(fileName);
-                    if (isDirect) {
-                        LockScreenManager.getInstance().lock();
-                        onBackPressed();
-                    }
                 }
             }
         }).start();
