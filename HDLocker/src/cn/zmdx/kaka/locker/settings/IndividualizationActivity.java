@@ -57,6 +57,8 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     public static final String KEY_LOCK_DEFAULT_DIRECT = "lockDefaultDirect";
 
+    private boolean isDirect = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -65,7 +67,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         initView();
         initWallpaper();
         initLockDefaultBitmap();
-        boolean isDirect = getIntent().getBooleanExtra(KEY_LOCK_DEFAULT_DIRECT, false);
+        isDirect = getIntent().getBooleanExtra(KEY_LOCK_DEFAULT_DIRECT, false);
         if (isDirect) {
             PandoraUtils.gotoGalleryActivity(IndividualizationActivity.this,
                     PandoraUtils.REQUEST_CODE_GALLERY);
@@ -223,6 +225,10 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                 String fileName = PandoraUtils.getRandomString();
                 setBitmap();
                 saveWallpaperFile(fileName);
+                if (isDirect) {
+                    LockScreenManager.getInstance().lock();
+                    onBackPressed();
+                }
                 break;
             case PandoraUtils.REQUEST_CODE_GALLERY: {
                 gotoCropActivity(data.getData());
@@ -268,10 +274,12 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
             @Override
             public void run() {
-                PandoraUtils.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
-                PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
-                        LOCK_DEFAULT_SDCARD_LOCATION, fileName);
-                saveLockDefaultSP(fileName);
+                if (null != PandoraUtils.sLockDefaultThumbBitmap) {
+                    PandoraUtils.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
+                    PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
+                            LOCK_DEFAULT_SDCARD_LOCATION, fileName);
+                    saveLockDefaultSP(fileName);
+                }
             }
         }).start();
     }

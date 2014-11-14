@@ -80,7 +80,8 @@ public class CropImageActivity extends Activity {
             }
             Toast.makeText(CropImageActivity.this, getResources().getString(R.string.error),
                     Toast.LENGTH_LONG).show();
-            finish();
+            setResult(Activity.RESULT_CANCELED);
+            onBackPressed();
         }
         mAspectRatioX = getIntent().getExtras().getInt(KEY_BUNDLE_ASPECTRATIO_X);
         mAspectRatioY = getIntent().getExtras().getInt(KEY_BUNDLE_ASPECTRATIO_Y);
@@ -115,13 +116,14 @@ public class CropImageActivity extends Activity {
                     try {
                         PandoraUtils.sLockDefaultThumbBitmap = PandoraUtils.zoomThumbBitmap(
                                 CropImageActivity.this, mCropImageView.getCroppedImage(), false);
+                        setResult(Activity.RESULT_OK);
                     } catch (Exception e) {
                         Toast.makeText(CropImageActivity.this,
                                 getResources().getString(R.string.error), Toast.LENGTH_LONG).show();
                         PandoraUtils.sLockDefaultThumbBitmap = null;
+                        setResult(Activity.RESULT_CANCELED);
                     }
                 }
-                setResult(Activity.RESULT_OK);
                 onBackPressed();
             }
         });

@@ -14,6 +14,7 @@ public class GuideActivity extends BaseGuideActivity {
     protected View getContentView() {
         View view = LayoutInflater.from(this).inflate(R.layout.pandora_guide, null);
         btn = (Button) view.findViewById(R.id.go_setting);
+        btn.setBackgroundResource(R.drawable.guide_button_background_selector);
         return view;
     }
 
