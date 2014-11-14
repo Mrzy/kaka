@@ -60,6 +60,12 @@ public class PandoraConfig {
 
     private static final String KEY_LOCK_WELCOME_STRING = "keyLockWelcomeString";
 
+    private static final String KEY_CURRENT_FONT = "m";
+    private static final String GUIDE_HTML_TIMES = "n";
+
+
+    private static final String KEY_DISPLAY_BOX_GUIDE = "o";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -93,7 +99,7 @@ public class PandoraConfig {
     }
 
     public int getCurrentThemeId() {
-        return mSp.getInt(THEME_ID, ThemeManager.THEME_ID_BLUE);
+        return mSp.getInt(THEME_ID, ThemeManager.THEME_ID_DEFAULT);
     }
 
     public int getCurrentThemeIdForStatistical() {
@@ -124,6 +130,15 @@ public class PandoraConfig {
 
     public int getGuideTimesInt() {
         return mSp.getInt(GUIDE_TIMES, 0);
+    }
+    public void saveHtmlTimes(int times) {
+        Editor editor = mSp.edit();
+        editor.putInt(GUIDE_HTML_TIMES, times);
+        editor.commit();
+    }
+    
+    public int getGuideHtmlTimesInt() {
+        return mSp.getInt(GUIDE_HTML_TIMES, 0);
     }
 
     public void saveEventGuestureLockEnabledDaily(String time) {
@@ -268,4 +283,28 @@ public class PandoraConfig {
         editor.commit();
     }
 
+    /**
+     * 如果没有设置第三方字体，会返回null
+     * 
+     * @return
+     */
+    public String getCurrentFont() {
+        return mSp.getString(KEY_CURRENT_FONT, null);
+    }
+
+    public void saveCurrentFont(String fontFilePath) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_CURRENT_FONT, fontFilePath);
+        editor.commit();
+    }
+
+    public boolean getFlagDisplayBoxGuide() {
+        return mSp.getBoolean(KEY_DISPLAY_BOX_GUIDE, false);
+    }
+
+    public void saveHasAlreadyDisplayBoxGuide() {
+        Editor editor = mSp.edit();
+        editor.putBoolean(KEY_DISPLAY_BOX_GUIDE, true);
+        editor.commit();
+    }
 }

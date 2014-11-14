@@ -7,7 +7,6 @@ import java.util.Map;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 
 import com.umeng.analytics.MobclickAgent;
@@ -60,18 +59,6 @@ public class UmengCustomEventManager {
     public static final String EVENT_SET_CUSTOM_WALLPAPER_SUCCESS_TIMES = "setCustomWallpaperSuccess"; // 成功设置自定义主题壁纸时上报一次事件；
 
     // share
-    public static final String EVENT_SHARE_WXCIRCLE_SECCESS = "shareWXCircleSuccess";
-
-    public static final String EVENT_SHARE_WXCIRCLE_FAIL = "shareWXCircleFail";
-
-    public static final String EVENT_SHARE_WECHAT_SECCESS = "shareWechatSuccess";
-
-    public static final String EVENT_SHARE_WECHAT_FAIL = "shareWechatFail";
-
-    public static final String EVENT_SHARE_QZONE_SECCESS = "shareQzoneSuccess";
-
-    public static final String EVENT_SHARE_QZONE_FAIL = "shareQzoneFail";
-
     public static final String EVENT_SET_DEFAULT_IMAGE_SUCCESS = "shareSetDefaultImageSuccess";
 
     public static final String EVENT_SET_DEFAULT_IMAGE = "shareSetDefaultImage";
@@ -90,7 +77,7 @@ public class UmengCustomEventManager {
         String saveDate = pandoraConfig.getEventGuestureLockEnabledDailyString();
         if (!currentDate.equals(saveDate)) {
             if (pandoraConfig.isPandolaLockerOn()) {
-                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                MobclickAgent.onEvent(HDApplication.getContext(),
                         UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY);
                 pandoraConfig.saveEventGuestureLockEnabledDaily(currentDate);
             }
@@ -128,7 +115,7 @@ public class UmengCustomEventManager {
             if (themeId != PandoraConfig.DEFAULT_NO_THRME_INT) {
                 Map<String, String> map_value = new HashMap<String, String>();
                 map_value.put("themeName", themeName);
-                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                MobclickAgent.onEvent(HDApplication.getContext(),
                         UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, map_value);
                 pandoraConfig.saveEventCurrentThemeDaily(currentDate);
             }
@@ -144,7 +131,7 @@ public class UmengCustomEventManager {
     public static void statisticalEntryLockTimes(PandoraConfig pandoraConfig, String currentDate) {
         String saveDate = pandoraConfig.getEventActiveDailyString();
         if (!currentDate.equals(saveDate)) {
-            MobclickAgent.onEvent(HDApplication.getInstannce(),
+            MobclickAgent.onEvent(HDApplication.getContext(),
                     UmengCustomEventManager.EVENT_ACTIVE_DAILY);
             pandoraConfig.saveEventActiveDaily(currentDate);
         }
@@ -155,7 +142,7 @@ public class UmengCustomEventManager {
      * 统计手势锁成功解锁的次数
      */
     public static void statisticalGuestureUnLockSuccess() {
-        MobclickAgent.onEvent(HDApplication.getInstannce(),
+        MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_GUESTURE_UNLOCK_SUCCESS_TIMES);
     }
 
@@ -163,7 +150,7 @@ public class UmengCustomEventManager {
      * 统计手势锁失败解锁的次数
      */
     public static void statisticalGuestureUnLockFail() {
-        MobclickAgent.onEvent(HDApplication.getInstannce(),
+        MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_GUESTURE_UNLOCK_FAIL_TIMES);
     }
 
@@ -171,7 +158,7 @@ public class UmengCustomEventManager {
      * 统计未固定，直接解锁次数
      */
     public static void statisticalUnLockTimes() {
-        MobclickAgent.onEvent(HDApplication.getInstannce(),
+        MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_DIRECT_UNLOCK);
     }
 
@@ -179,7 +166,7 @@ public class UmengCustomEventManager {
      * 统计固定的次数
      */
     public static void statisticalFixedTimes() {
-        MobclickAgent.onEvent(HDApplication.getInstannce(),
+        MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_FIXED_TIMES);
     }
 
@@ -187,7 +174,7 @@ public class UmengCustomEventManager {
      * 统计固定之后解锁次数
      */
     public static void statisticalFixedUnLockTimes() {
-        MobclickAgent.onEvent(HDApplication.getInstannce(),
+        MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_CLICK_WHEN_FIXED);
     }
 
@@ -202,23 +189,23 @@ public class UmengCustomEventManager {
         Map<String, String> map_value = new HashMap<String, String>();
         if (dataType.equals("TYPE_MIX_JOKE")) {
             map_value.put("dataType", dataType);
-            MobclickAgent.onEventValue(HDApplication.getInstannce(),
+            MobclickAgent.onEventValue(HDApplication.getContext(),
                     UmengCustomEventManager.EVENT_TYPE_MIX_JOKE, map_value, duration);
         } else if (dataType.equals("TYPE_MIX_NEWS")) {
             map_value.put("dataType", dataType);
-            MobclickAgent.onEventValue(HDApplication.getInstannce(),
+            MobclickAgent.onEventValue(HDApplication.getContext(),
                     UmengCustomEventManager.EVENT_TYPE_MIX_NEWS, map_value, duration);
         } else if (dataType.equals("TYPE_PLAIN_TEXT_JOKE")) {
             map_value.put("dataType", dataType);
-            MobclickAgent.onEventValue(HDApplication.getInstannce(),
+            MobclickAgent.onEventValue(HDApplication.getContext(),
                     UmengCustomEventManager.EVENT_TYPE_PLAIN_TEXT_JOKE, map_value, duration);
         } else if (dataType.equals("TYPE_MIX_BAIDU")) {
             map_value.put("dataType", dataType);
-            MobclickAgent.onEventValue(HDApplication.getInstannce(),
+            MobclickAgent.onEventValue(HDApplication.getContext(),
                     UmengCustomEventManager.EVENT_TYPE_MIX_BAIDU, map_value, duration);
         } else {
             map_value.put("dataType", dataType);
-            MobclickAgent.onEventValue(HDApplication.getInstannce(),
+            MobclickAgent.onEventValue(HDApplication.getContext(),
                     UmengCustomEventManager.EVENT_TYPE_DEFAULT, map_value, duration);
         }
 
@@ -229,7 +216,7 @@ public class UmengCustomEventManager {
      */
     public static void statisticalGuideTime(int duration) {
         Map<String, String> map_value = new HashMap<String, String>();
-        MobclickAgent.onEventValue(HDApplication.getInstannce(),
+        MobclickAgent.onEventValue(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_GUIDE_PAGE_DURATION, map_value, duration);
     }
 
@@ -239,19 +226,19 @@ public class UmengCustomEventManager {
     public static void statisticalSelectTheme(int themeId) {
         switch (themeId) {
             case ThemeManager.THEME_ID_BLUE:
-                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                MobclickAgent.onEvent(HDApplication.getContext(),
                         UmengCustomEventManager.EVENT_WALLPAPER_BLUE_TIMES);
                 break;
             case ThemeManager.THEME_ID_JEAN:
-                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                MobclickAgent.onEvent(HDApplication.getContext(),
                         UmengCustomEventManager.EVENT_WALLPAPER_JEAN_TIMES);
                 break;
             case ThemeManager.THEME_ID_ROAD:
-                MobclickAgent.onEvent(HDApplication.getInstannce(), EVENT_WALLPAPER_ROAD_TIMES);
+                MobclickAgent.onEvent(HDApplication.getContext(), EVENT_WALLPAPER_ROAD_TIMES);
                 break;
 
             default:
-                MobclickAgent.onEvent(HDApplication.getInstannce(),
+                MobclickAgent.onEvent(HDApplication.getContext(),
                         UmengCustomEventManager.EVENT_WALLPAPER_BLUE_TIMES);
                 break;
         }
@@ -263,7 +250,7 @@ public class UmengCustomEventManager {
      * @param themeId
      */
     public static void statisticalClickCustomButtonTimes() {
-        MobclickAgent.onEvent(HDApplication.getInstannce(),
+        MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_SET_CUSTOM_WALLPAPER_TIMES);
     }
 
@@ -273,7 +260,7 @@ public class UmengCustomEventManager {
      * @param themeId
      */
     public static void statisticalSuccessSetCustomTimes() {
-        MobclickAgent.onEvent(HDApplication.getInstannce(),
+        MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_SET_CUSTOM_WALLPAPER_SUCCESS_TIMES);
     }
 
@@ -281,7 +268,7 @@ public class UmengCustomEventManager {
      * 统计打开锁屏开关次数
      */
     public static void statisticalPandoraSwitchOpenTimes() {
-        MobclickAgent.onEvent(HDApplication.getInstannce(),
+        MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_PANDORA_SWITCH_OPEN_TIMES);
     }
 
@@ -289,57 +276,16 @@ public class UmengCustomEventManager {
      * 统计关闭锁屏开关次数
      */
     public static void statisticalPandoraSwitchCloseTimes() {
-        MobclickAgent.onEvent(HDApplication.getInstannce(),
+        MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_PANDORA_SWITCH_CLOSE_TIMES);
-    }
-
-    /**
-     * 统计分享事件
-     * 
-     * @param shareType 分享的平台
-     * @param state 成功或者失败
-     */
-    public static void statisticalShareBehavior(int shareType, boolean state) {
-        switch (shareType) {
-            case PandoraShareManager.WeixinCircle:
-                if (state) {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_WXCIRCLE_SECCESS);
-                } else {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_WXCIRCLE_FAIL);
-                }
-                break;
-            case PandoraShareManager.Weixin:
-                if (state) {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_WECHAT_SECCESS);
-                } else {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_WECHAT_FAIL);
-                }
-                break;
-            case PandoraShareManager.Tencent:
-                if (state) {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_QZONE_SECCESS);
-                } else {
-                    MobclickAgent.onEvent(HDApplication.getInstannce(),
-                            UmengCustomEventManager.EVENT_SHARE_QZONE_FAIL);
-                }
-                break;
-
-            default:
-                break;
-        }
     }
 
     public static void statisticalSetDefaultImage(boolean state) {
         if (state) {
-            MobclickAgent.onEvent(HDApplication.getInstannce(),
+            MobclickAgent.onEvent(HDApplication.getContext(),
                     UmengCustomEventManager.EVENT_SET_DEFAULT_IMAGE_SUCCESS);
         } else {
-            MobclickAgent.onEvent(HDApplication.getInstannce(),
+            MobclickAgent.onEvent(HDApplication.getContext(),
                     UmengCustomEventManager.EVENT_SET_DEFAULT_IMAGE);
         }
     }
@@ -348,10 +294,10 @@ public class UmengCustomEventManager {
         if (state) {
             Map<String, String> map_value = new HashMap<String, String>();
             map_value.put("welcomeString", welcomeString);
-            MobclickAgent.onEvent(HDApplication.getInstannce(),
+            MobclickAgent.onEvent(HDApplication.getContext(),
                     UmengCustomEventManager.EVENT_SET_WELCOME_SUCCESS, map_value);
         } else {
-            MobclickAgent.onEvent(HDApplication.getInstannce(),
+            MobclickAgent.onEvent(HDApplication.getContext(),
                     UmengCustomEventManager.EVENT_SET_WELCOME);
         }
     }

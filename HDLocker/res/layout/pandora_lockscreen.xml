@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout
+    <cn.zmdx.kaka.locker.widget.PandoraPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:id="@+id/locker_view"
         android:layout_width="match_parent"
@@ -15,45 +15,30 @@
         sothree:shadowHeight="8dp"
         sothree:topSeekoutHeight="60dp" >
 
-        <ViewFlipper
-            android:id="@+id/viewFlipper"
-            android:background="@drawable/pandora_locker_content_background"
+        <cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout
+            xmlns:pandora="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            pandora:slidingPanelHeight="0dp"
+            pandora:slidingOverlay="true"
+            pandora:slidingShadowHeight="0dp" >
 
             <RelativeLayout
                 android:id="@+id/flipper_box"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/flipper_gesture"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:background="@drawable/gesture_bg"
-                android:gravity="center"
-                android:padding="@dimen/lockscreen_gusture_padding_top" >
-
-                <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                    android:id="@+id/gusture_prompt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:textColor="@android:color/holo_red_light"
-                    android:textSize="18sp" />
-
-                <cn.zmdx.kaka.locker.widget.LockPatternView
-                    android:id="@+id/gusture"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/gusture_prompt"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/gusture_pattern_lock_margin_top"
-                    android:background="@android:color/transparent" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
             </RelativeLayout>
-        </ViewFlipper>
+
+            <ViewStub
+                android:id="@+id/gesture_stub"
+                android:layout="@layout/pandora_secure_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+            </ViewStub>
+        </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -140,6 +125,6 @@
                 android:textColor="#FAFAFA"
                 android:textSize="13sp" />
         </RelativeLayout>
-    </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
+    </cn.zmdx.kaka.locker.widget.PandoraPanelLayout>
 
 </FrameLayout>

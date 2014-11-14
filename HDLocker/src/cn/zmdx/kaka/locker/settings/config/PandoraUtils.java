@@ -3,6 +3,7 @@ package cn.zmdx.kaka.locker.settings.config;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -49,17 +50,11 @@ public class PandoraUtils {
 
     }
 
-    private static final int DEFAULT_WIDTH = 1080;
-
-    private static final int DEFAULT_BITMAP_WIDTH = 3000;
-
     public static final String MUIU_V5 = "V5";
 
     public static final String MUIU_V6 = "V6";
 
     public static Bitmap sCropBitmap;
-
-    public static Bitmap sCropThumbBitmap;
 
     public static Bitmap sLockDefaultThumbBitmap;
 
@@ -67,19 +62,37 @@ public class PandoraUtils {
 
     public static final int REQUEST_CODE_GALLERY = 1;
 
-    public static final int TIME_MORNING = 9;
+    // public static final int TIME_MORNING = 9;
+    //
+    // public static final int TIME_MORNING_WORK = 12;
+    //
+    // public static final int TIME_AFTERNOON = 14;
+    //
+    // public static final int TIME_AFTERNOON_WORK = 18;
+    //
+    // public static final int TIME_EVENING = 20;
+    //
+    // public static final int TIME_EVENING_WORK = 0;
+    //
+    // public static final int TIME_EVENING_WORK_24 = 24;
 
-    public static final int TIME_MORNING_WORK = 12;
+    public static final int WARM_PROMPT_6 = 6;
 
-    public static final int TIME_AFTERNOON = 14;
+    public static final int WARM_PROMPT_10 = 10;
 
-    public static final int TIME_AFTERNOON_WORK = 18;
+    public static final int WARM_PROMPT_12 = 12;
 
-    public static final int TIME_EVENING = 20;
+    public static final int WARM_PROMPT_13 = 13;
 
-    public static final int TIME_EVENING_WORK = 0;
+    public static final int WARM_PROMPT_15 = 15;
 
-    public static final int TIME_EVENING_WORK_24 = 24;
+    public static final int WARM_PROMPT_17 = 17;
+
+    public static final int WARM_PROMPT_19 = 19;
+
+    public static final int WARM_PROMPT_23 = 23;
+
+    public static final int WARM_PROMPT_1 = 1;
 
     public static Bitmap fastBlur(View decorView) {
         decorView.setDrawingCacheEnabled(true);
@@ -308,12 +321,7 @@ public class PandoraUtils {
         int screenHeight = BaseInfoHelper.getRealHeight(activity);
         int screenWidth = BaseInfoHelper.getWidth(activity);
         BitmapFactory.Options realOpts = new Options();
-        if (screenWidth == DEFAULT_WIDTH && opts.outWidth > DEFAULT_BITMAP_WIDTH) {
-            realOpts.inSampleSize = 3;
-        } else {
-            realOpts.inSampleSize = computeSampleSize(opts, Math.min(screenWidth, screenHeight),
-                    screenWidth * screenHeight);
-        }
+        realOpts.inSampleSize = computeSampleSize(opts, screenWidth, screenHeight);
         realOpts.inJustDecodeBounds = false;
         realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
         realOpts.inPurgeable = true;
@@ -321,24 +329,19 @@ public class PandoraUtils {
         InputStream realInputStream = activity.getContentResolver().openInputStream(uri);
         Bitmap bitmap = BitmapFactory.decodeStream(realInputStream, new Rect(), realOpts);
         return bitmap;
-
     }
 
-    private static int computeSampleSize(BitmapFactory.Options options, int minSideLength,
-            int maxNumOfPixels) {
-        int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
-        int roundedSize;
-        if (initialSize <= 8) {
-            roundedSize = 1;
-            while (roundedSize < initialSize) {
-                roundedSize <<= 1;
-            }
-        } else {
-            roundedSize = (initialSize + 7) / 8 * 8;
+    private static int computeSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        try {
+            int widRate = Math.round((float) options.outWidth / (float) reqWidth);
+            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
+            return Math.min(widRate, heightRate);
+        } catch (Exception e) {
+            return 1;
         }
-        return roundedSize;
     }
 
+    @SuppressWarnings("unused")
     private static int computeInitialSampleSize(BitmapFactory.Options options, int minSideLength,
             int maxNumOfPixels) {
         double w = options.outWidth;
@@ -373,6 +376,23 @@ public class PandoraUtils {
                     .getBoxWidthHeightRate()));
         }
         return ImageUtils.scaleTo(cropBitmap, thumbWidth, thumbHeight, false);
+    }
+
+    public static Bitmap getThumbBitmap(Activity activity, String path, int realWidth,
+            int realHeight) throws FileNotFoundException {
+        FileInputStream inputStream = new FileInputStream(path);
+        BitmapFactory.Options opts = new Options();
+        opts.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(inputStream, new Rect(), opts);
+        BitmapFactory.Options realOpts = new Options();
+        realOpts.inSampleSize = computeSampleSize(opts, realWidth, realHeight);
+        realOpts.inJustDecodeBounds = false;
+        realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
+        realOpts.inPurgeable = true;
+        realOpts.inInputShareable = true;
+        FileInputStream realInputStream = new FileInputStream(path);
+        Bitmap bitmap = BitmapFactory.decodeStream(realInputStream, new Rect(), realOpts);
+        return bitmap;
     }
 
     public static void saveBitmap(Bitmap bitmap, String path, String fileName) {
@@ -424,50 +444,115 @@ public class PandoraUtils {
     }
 
     private static int getTimeQuantum(int currentHour) {
-        if (currentHour < TIME_MORNING && currentHour >= TIME_MORNING) {
-            return TIME_MORNING;
-        } else if (currentHour < TIME_MORNING_WORK && currentHour >= TIME_MORNING) {
-            return TIME_MORNING_WORK;
-        } else if (currentHour < TIME_AFTERNOON && currentHour >= TIME_MORNING_WORK) {
-            return TIME_AFTERNOON;
-        } else if (currentHour < TIME_AFTERNOON_WORK && currentHour >= TIME_AFTERNOON) {
-            return TIME_AFTERNOON_WORK;
-        } else if (currentHour < TIME_EVENING && currentHour >= TIME_AFTERNOON_WORK) {
-            return TIME_EVENING;
-        } else if (currentHour < TIME_EVENING_WORK_24 && currentHour >= TIME_EVENING) {
-            return TIME_EVENING_WORK;
+        if (currentHour < WARM_PROMPT_10 && currentHour >= WARM_PROMPT_6) {
+            return WARM_PROMPT_6;
+        } else if (currentHour < WARM_PROMPT_12 && currentHour >= WARM_PROMPT_10) {
+            return WARM_PROMPT_10;
+        } else if (currentHour < WARM_PROMPT_13 && currentHour >= WARM_PROMPT_12) {
+            return WARM_PROMPT_12;
+        } else if (currentHour < WARM_PROMPT_15 && currentHour >= WARM_PROMPT_13) {
+            return WARM_PROMPT_13;
+        } else if (currentHour < WARM_PROMPT_17 && currentHour >= WARM_PROMPT_15) {
+            return WARM_PROMPT_15;
+        } else if (currentHour < WARM_PROMPT_19 && currentHour >= WARM_PROMPT_17) {
+            return WARM_PROMPT_17;
+        } else if (currentHour < WARM_PROMPT_23 && currentHour >= WARM_PROMPT_19) {
+            return WARM_PROMPT_19;
+        } else if (currentHour < WARM_PROMPT_1 || currentHour >= WARM_PROMPT_23) {
+            return WARM_PROMPT_23;
+        } else if (currentHour < WARM_PROMPT_6 || currentHour >= WARM_PROMPT_1) {
+            return WARM_PROMPT_1;
         } else {
-            return TIME_MORNING;
+            return WARM_PROMPT_6;
         }
     }
 
     public static String getTimeQuantumString(Context mContext, int currentHour) {
         String promptString = "";
         int currentQuantum = getTimeQuantum(currentHour);
+        int random = (int) Math.round(Math.random());
         switch (currentQuantum) {
-            case TIME_MORNING:
-                promptString = mContext.getResources().getString(
-                        R.string.individualization_welcome_text_default_morning);
+            case WARM_PROMPT_6:
+                if (random == 0) {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_6_10_1);
+                } else {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_6_10_2);
+                }
                 break;
-            case TIME_MORNING_WORK:
-                promptString = mContext.getResources().getString(
-                        R.string.individualization_welcome_text_default_morning_work);
+            case WARM_PROMPT_10:
+                if (random == 0) {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_10_12_1);
+                } else {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_10_12_2);
+                }
                 break;
-            case TIME_AFTERNOON:
-                promptString = mContext.getResources().getString(
-                        R.string.individualization_welcome_text_default_afternoon);
+            case WARM_PROMPT_12:
+                if (random == 0) {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_12_13_1);
+                } else {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_12_13_2);
+                }
                 break;
-            case TIME_AFTERNOON_WORK:
-                promptString = mContext.getResources().getString(
-                        R.string.individualization_welcome_text_default_afternoon_work);
+            case WARM_PROMPT_13:
+                if (random == 0) {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_13_15_1);
+                } else {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_13_15_2);
+                }
                 break;
-            case TIME_EVENING:
-                promptString = mContext.getResources().getString(
-                        R.string.individualization_welcome_text_default_evening);
+            case WARM_PROMPT_15:
+                if (random == 0) {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_15_17_1);
+                } else {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_15_17_2);
+                }
                 break;
-            case TIME_EVENING_WORK:
-                promptString = mContext.getResources().getString(
-                        R.string.individualization_welcome_text_default_evening_work);
+            case WARM_PROMPT_17:
+                if (random == 0) {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_17_19_1);
+                } else {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_17_19_2);
+                }
+                break;
+            case WARM_PROMPT_19:
+                if (random == 0) {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_19_23_1);
+                } else {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_19_23_2);
+                }
+                break;
+
+            case WARM_PROMPT_23:
+                if (random == 0) {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_23_1_1);
+                } else {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_23_1_2);
+                }
+                break;
+            case WARM_PROMPT_1:
+                if (random == 0) {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_1_6_1);
+                } else {
+                    promptString = mContext.getResources().getString(
+                            R.string.warm_prompt_1_6_2);
+                }
                 break;
 
             default:

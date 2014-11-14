@@ -3,9 +3,6 @@ package cn.zmdx.kaka.locker.widget;
 
 import java.util.Calendar;
 
-import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.R;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -20,6 +17,8 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.DigitalClock;
 import android.widget.TextView;
+import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.R;
 
 public class DigitalClocks extends TextView {
     // FIXME: implement separate views for hours/minutes/seconds, so
@@ -61,7 +60,7 @@ public class DigitalClocks extends TextView {
         if (mCalendar == null) {
             mCalendar = Calendar.getInstance();
         }
-        Typeface face = Typeface.createFromAsset(HDApplication.getInstannce().getAssets(),
+        Typeface face = Typeface.createFromAsset(HDApplication.getContext().getAssets(),
                 "fonts/Roboto-Thin.ttf");
         setTypeface(face);
         mFormatChangeObserver = new FormatChangeObserver();

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager.LayoutParams;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.guide.GuideActivity;
@@ -52,12 +54,11 @@ public class MainSettingsActivity extends FragmentActivity {
         init();
         super.onCreate(savedInstanceState);
         MobclickAgent.openActivityDurationTrack(false);
-//        UmengUpdateAgent.silentUpdate(this);
+        // UmengUpdateAgent.silentUpdate(this);
         setContentView(R.layout.main_setting_activity);
         getWindow().getAttributes().flags = LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content, new MainSettingsFragment()).commit();
-
     }
 
     private void init() {
@@ -86,8 +87,9 @@ public class MainSettingsActivity extends FragmentActivity {
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("MainSettingsActivity"); // 保证 onPageEnd 在onPause
-                                                 // 之前调用,因为 onPause 中会保存信息
+        MobclickAgent.onPageEnd("MainSettingsActivity"); // 保证 onPageEnd
+                                                         // 在onPause
+        // 之前调用,因为 onPause 中会保存信息
         MobclickAgent.onPause(this);
     }
 

@@ -4,7 +4,6 @@ package cn.zmdx.kaka.locker.settings;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
@@ -21,8 +19,6 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -30,8 +26,6 @@ import com.umeng.analytics.MobclickAgent;
 public class MainSettingsFragment extends BaseSettingsFragment implements OnCheckedChangeListener,
         OnClickListener {
     private View mRootView;
-
-    private SlidingUpPanelLayout mSettingForeView;
 
     private LinearLayout mInitSetting;
 
@@ -49,15 +43,9 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private SwitchButton mLockerTypeSButton;
 
-    private ImageView mSettingIcon;
-
     private View mSettingBackground;
 
     private boolean mIsCurrentlyPressed = false;
-
-    private static final int TIME_COLLAPSE_PANEL_DELAY = 1500;
-
-    private static final int TIME_COLLAPSE_PANEL_DURATION = 1000;
 
     public static final int GUSTURE_REQUEST_CODE_SUCCESS = 37;
 
@@ -84,13 +72,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         initView();
         initTitleHeight();
         initSwitchButtonState();
-        HDBThreadUtils.postOnUiDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                mSettingForeView.collapsePanel(TIME_COLLAPSE_PANEL_DURATION);
-            }
-        }, TIME_COLLAPSE_PANEL_DELAY);
         return mRootView;
     }
 
@@ -104,12 +85,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             mInitSetting.setVisibility(View.VISIBLE);
         }
 
-        mSettingForeView = (SlidingUpPanelLayout) mRootView.findViewById(R.id.setting_fore_view);
-        mSettingIcon = (ImageView) mRootView.findViewById(R.id.setting_icon);
-        mSettingIcon.setVisibility(View.GONE);
         mSettingBackground = mRootView.findViewById(R.id.setting_background);
-
-        mSettingIcon.setOnClickListener(this);
 
         mSettingIndividualization = (LinearLayout) mRootView
                 .findViewById(R.id.setting_individualization);
@@ -143,13 +119,28 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         titleLayout.setPadding(0, statusBarHeight, 0, 0);
     }
 
+    @SuppressWarnings("deprecation")
     private void initBackground() {
         if (null != PandoraUtils.sCropBitmap) {
             BitmapDrawable drawable = new BitmapDrawable(getResources(), PandoraUtils.sCropBitmap);
-            setSettingBackground(null, drawable);
+            mSettingBackground.setBackgroundDrawable(drawable);
         } else {
-            Theme theme = ThemeManager.getCurrentTheme();
-            setSettingBackground(theme, null);
+            initWallpaper();
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void initWallpaper() {
+        Theme theme = ThemeManager.getCurrentTheme();
+        if (theme.isCustomWallpaper()) {
+            BitmapDrawable drawable = theme.getmCustomBitmap();
+            if (null == drawable) {
+                mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
+            } else {
+                mSettingBackground.setBackgroundDrawable(drawable);
+            }
+        } else {
+            mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
         }
     }
 
@@ -157,26 +148,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
         mLockerTypeSButton.setChecked(getUnLockType() == PandoraConfig.UNLOCKER_TYPE_GUSTURE);
         mIsCurrentlyPressed = true;
-    }
-
-    @SuppressWarnings("deprecation")
-    protected void setSettingBackground(Theme theme, Drawable drawable) {
-        if (null == drawable) {
-            if (theme.isCustomWallpaper()) {
-                mSettingBackground.setBackgroundDrawable(theme.getmCustomBitmap());
-            } else {
-                mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
-            }
-            mSettingForeView.setForegroundResource(R.drawable.splash_bg);
-            // mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
-            // theme.getmForegroundResId()));
-            mSettingIcon.setBackgroundResource(theme.getmSettingsIconResId());
-        } else {
-            mSettingBackground.setBackgroundDrawable(drawable);
-            mSettingForeView.setForegroundDrawable(getActivity().getResources().getDrawable(
-                    R.drawable.setting_background_blue_fore));
-            mSettingIcon.setBackgroundResource(R.drawable.ic_setting_common);
-        }
     }
 
     @Override
@@ -284,14 +255,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 // mPicScrollView.startAnimation(viewAnimation);
                 // }
                 break;
-            case R.id.setting_icon:
-                if (mSettingForeView.isPanelExpanded()) {
-                    mSettingForeView.collapsePanel(TIME_COLLAPSE_PANEL_DURATION);
-                } else {
-                    mSettingForeView.expandPanel();
-                }
-                break;
-
             case R.id.setting_init:
                 gotoInit();
                 break;
@@ -306,7 +269,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     @Override
     public void onDestroyView() {
         PandoraUtils.sCropBitmap = null;
-        PandoraUtils.sCropThumbBitmap = null;
+        // PandoraUtils.sCropThumbBitmap = null;
         PandoraUtils.sLockDefaultThumbBitmap = null;
         super.onDestroyView();
     }

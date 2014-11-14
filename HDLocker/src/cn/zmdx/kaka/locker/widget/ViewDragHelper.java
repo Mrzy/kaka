@@ -16,6 +16,8 @@
 
 package cn.zmdx.kaka.locker.widget;
 
+import java.util.Arrays;
+
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.VelocityTrackerCompat;
@@ -27,8 +29,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
-
-import java.util.Arrays;
 
 /**
  * ViewDragHelper is a utility class for writing custom ViewGroups. It offers a

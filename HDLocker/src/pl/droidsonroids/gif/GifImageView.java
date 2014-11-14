@@ -7,7 +7,6 @@ import java.io.IOException;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;

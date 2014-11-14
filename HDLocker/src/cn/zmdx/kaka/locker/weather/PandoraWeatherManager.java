@@ -15,14 +15,14 @@ import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.JsonObjectRequest;
 
 public class PandoraWeatherManager {
 
     private static final String BASE_WEATHER_URL = "http://caiyunapp.com/fcgi-bin/v1/api.py?";
 
-    private static final String TOKEN = "D8u1CU4iFc-lVDci";
+    private static final String TOKEN = BuildConfig.DEBUG ? "TAkhjf8d1nlSlspN" : "D8u1CU4iFc-lVDci";
 
     private static PandoraWeatherManager INSTANCE = null;
 

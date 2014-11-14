@@ -1,11 +1,5 @@
 package pl.droidsonroids.gif;
 
-import android.content.ContentResolver;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
-import android.net.Uri;
-
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -13,6 +7,12 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Locale;
+
+import android.content.ContentResolver;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
+import android.net.Uri;
 
 /**
  * Lightweight version of {@link pl.droidsonroids.gif.GifDrawable} used to retrieve metadata of GIF only,

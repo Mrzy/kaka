@@ -7,13 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.DiskImageHelper;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.widget.BaseScrollView;
 
-public class SingleImageBox extends BaseBox {
+public class SingleImageBox implements IPandoraBox, View.OnClickListener {
 
     private Context mContext;
 
@@ -29,26 +33,39 @@ public class SingleImageBox extends BaseBox {
 
     private boolean mIsRendered = false;
 
-    private boolean mIsHide = false;
-
-    private ViewGroup mShareLayout;
-
     private TextView mFromPlatformText;
 
-    public SingleImageBox(Context context, PandoraData data) {
+    private BaseScrollView mScrollView;
+
+    private FoldablePage mPage;
+
+    private View mBackBtn;
+
+    public SingleImageBox(Context context, FoldablePage page, PandoraData data) {
         mData = data;
+        mPage = page;
         mContext = context;
-        mEntireView = (ViewGroup) LayoutInflater.from(context).inflate(
+    }
+
+    public boolean isAtTop() {
+        return mScrollView.isAtTop();
+    }
+
+    private void initViews() {
+        mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_box_single_image, null);
+        mScrollView = (BaseScrollView) mEntireView.findViewById(R.id.scrollView);
+        // mScrollView.setOnScrollListener(listener)
+        // mScrollView.setOnTouchListener(new
+        // ScrollTouchListener(mScrollListener));
         mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
         setImageViewSize(mSingleImgView);
         mDescView = (TextView) mEntireView.findViewById(R.id.desc);
         mDescView.getPaint().setFakeBoldText(true);
         mFromPlatformText = (TextView) mEntireView.findViewById(R.id.from_platform_text);
         mImageNewsContent = (TextView) mEntireView.findViewById(R.id.image_news_content);
-        mShareLayout = (ViewGroup) mEntireView.findViewById(R.id.share_from_platform);
-        enableShare();
-        mShareLayout.addView(createShareView());
+        mBackBtn = mEntireView.findViewById(R.id.pandora_box_single_back_btn);
+        mBackBtn.setOnClickListener(this);
     }
 
     private void setImageViewSize(ImageView iv) {
@@ -100,24 +117,31 @@ public class SingleImageBox extends BaseBox {
         if (mData == null || mData.getmImage() == null) {
             return false;
         }
+        initViews();
         mFromPlatformText.setText(mData.getmFromWebSite());
         mImageNewsContent.setText(mData.getmContent());
         mSingleImgView.setImageBitmap(mData.getmImage());
-        // mSingleImgView.setOnClickListener(new OnClickListener() {
-        //
-        // @Override
-        // public void onClick(View v) {
-        // if (mIsHide) {
-        // mDescView.setVisibility(View.VISIBLE);
-        // } else {
-        // mDescView.setVisibility(View.INVISIBLE);
-        // }
-        // mIsHide = !mIsHide;
-        // }
-        // });
+        mSingleImgView.setOnClickListener(this);
         mDescView.setText(mData.getmTitle());
-
         return true;
     }
 
+    public static PandoraData convertFromServerData(ServerImageData data) {
+        PandoraData pd = new PandoraData();
+        pd.setmId(data.getId());
+        pd.setmFromWebSite(data.getCollectWebsite());
+        pd.setmTitle(data.getTitle());
+        pd.setmContent(data.getImageDesc());
+        pd.setmImage(DiskImageHelper.getBitmapByUrl(data.getUrl(), null));
+        return pd;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == mBackBtn) {
+            mPage.foldBack();
+        } else if (v == mSingleImgView) {
+            mPage.foldBack();
+        }
+    }
 }

@@ -6,14 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.utils.FileHelper;
-import cn.zmdx.kaka.locker.utils.HDBHashUtils;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.text.TextUtils;
+import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.FileHelper;
+import cn.zmdx.kaka.locker.utils.HDBHashUtils;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class DiskImageHelper {
 
@@ -24,9 +25,9 @@ public class DiskImageHelper {
     }
 
     private static File initStorageDir() {
-        File file = HDApplication.getInstannce().getExternalFilesDir(null);
+        File file = HDApplication.getContext().getExternalFilesDir(null);
         if (file == null) {
-            file = HDApplication.getInstannce().getCacheDir();
+            file = HDApplication.getContext().getCacheDir();
         }
         file = new File(file + File.separator + "picture");
         if (!file.exists()) {
@@ -69,7 +70,20 @@ public class DiskImageHelper {
         if (file == null) {
             return null;
         }
-        return BitmapFactory.decodeFile(file.getAbsolutePath(), option);
+        if (option == null) {
+            option = new Options();
+            option.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(file.getAbsolutePath(), option);
+            option.inSampleSize = ImageUtils.computeSampleSize(option,
+                    BaseInfoHelper.getWidth(HDApplication.getContext()));
+            option.inJustDecodeBounds = false;
+            option.inPreferredConfig = Bitmap.Config.RGB_565;
+        }
+        try {
+            return BitmapFactory.decodeFile(file.getAbsolutePath(), option);
+        } catch (OutOfMemoryError error) {
+            return null;
+        }
     }
 
     public static void remove(String url) {
@@ -86,7 +100,7 @@ public class DiskImageHelper {
         }
         return 0;
     }
-    
+
     public static String getHash(String url) {
         return HDBHashUtils.getStringMD5(url);
     }

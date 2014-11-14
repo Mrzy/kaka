@@ -19,7 +19,7 @@ public class PandoraLocationManager {
     private static Location mRecentLocation;
 
     private PandoraLocationManager() {
-        mLocationManager = (LocationManager) HDApplication.getInstannce().getSystemService(
+        mLocationManager = (LocationManager) HDApplication.getContext().getSystemService(
                 Context.LOCATION_SERVICE);
     }
 

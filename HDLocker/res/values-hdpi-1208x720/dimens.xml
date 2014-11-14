@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ############################################################################################## -->
+<!-- 以下资源内容适配如下机型 [2014.09.11 11:13]   shiyc -->
+<!--  -->
+<!-- 为方便以后的维护，如果此文件适配的机型未在下方列表，请您补全: -->
+<!-- M1        1208x720          240dpi   px/dp = 1.5 -->
+<!--  -->
+<!-- ############################################################################################## -->
+<resources>
+
+    <dimen name="pandora_box_nodata_show_image_width">75dp</dimen>
+    <dimen name="pandora_box_nodata_show_image_height">75dp</dimen>
+    <dimen name="panelHeight">200dp</dimen>
+    <dimen name="pandora_wallpaper_layout_width">150dp</dimen>
+    <dimen name="pandora_wallpaper_layout_height">208.5dp</dimen>
+    <dimen name="pandora_wallpaper_width">122.5dp</dimen>
+    <dimen name="pandora_wallpaper_height">181dp</dimen>
+    <dimen name="setting_fb_contact_height">52dp</dimen>
+    <dimen name="gusture_pattern_lock_width">400dp</dimen>
+    <dimen name="gusture_pattern_lock_height">400dp</dimen>
+    <dimen name="gusture_pattern_lock_margin_top">20dp</dimen>
+    <dimen name="setting_about_pandora_height">100dp</dimen>
+    <dimen name="pandora_update_dialog_width">350dp</dimen>
+
+</resources>

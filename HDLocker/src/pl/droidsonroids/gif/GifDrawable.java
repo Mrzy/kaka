@@ -1,5 +1,13 @@
 package pl.droidsonroids.gif;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.util.Locale;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import android.content.ContentResolver;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -17,14 +25,6 @@ import android.net.Uri;
 import android.os.StrictMode;
 import android.os.SystemClock;
 import android.widget.MediaController.MediaPlayerControl;
-
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.util.Locale;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * A {@link Drawable} which can be used to hold GIF images, especially animations.

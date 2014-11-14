@@ -25,6 +25,7 @@
     <dimen name="setting_about_pandora_height">84dp</dimen>
     <dimen name="setting_about_pandora_margin">4dp</dimen>
     <dimen name="setting_about_pandora_margin_one">17dp</dimen>
+    <dimen name="setting_fb_contact_height">46dp</dimen>
     <dimen name="pandora_box_nodata_show_image_width">100dp</dimen>
     <dimen name="pandora_box_nodata_show_image_height">100dp</dimen>
     <dimen name="lockscreen_gusture_padding_top">25dp</dimen>
@@ -50,5 +51,10 @@
     <dimen name="pandora_wallpaper_default_line_margin_top">21dp</dimen>
     <dimen name="init_setting_complete_button_margin_right">10dp</dimen>
     <dimen name="individualization_image_height">46dp</dimen>
+    <dimen name="pandora_setting_guide_logo_width">65dp</dimen>
+    <dimen name="pandora_setting_guide_logo_height">65dp</dimen>
+    <dimen name="pandora_setting_guide_logo_layout_marginTop">125dp</dimen>
+    <dimen name="pandora_update_dialog_width">280dp</dimen>
+    <dimen name="card_detail_toolbar_height">40dp</dimen>
 
 </resources>

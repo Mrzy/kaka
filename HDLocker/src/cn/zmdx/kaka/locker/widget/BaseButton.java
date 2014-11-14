@@ -1,11 +1,13 @@
+
 package cn.zmdx.kaka.locker.widget;
 
-import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.font.FontManager;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.Button;
+import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.font.FontManager;
 
 public class BaseButton extends Button {
 
@@ -13,10 +15,12 @@ public class BaseButton extends Button {
         super(context, attrs, defStyle);
         init();
     }
+
     public BaseButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
+
     public BaseButton(Context context) {
         this(context, null);
     }
@@ -24,6 +28,9 @@ public class BaseButton extends Button {
     private void init() {
         setBackgroundResource(R.drawable.base_button_selector);
         setTextColor(Color.parseColor("#ffffff"));
-        setTypeface(FontManager.getChineseTypeface(getContext()));
+        Typeface typeface = FontManager.getCurrentTypeface(getContext());
+        if (null != typeface) {
+            setTypeface(typeface);
+        }
     }
 }

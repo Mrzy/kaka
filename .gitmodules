@@ -4,3 +4,6 @@
 [submodule "HDLocker/submodules/volley"]
 	path = HDLocker/submodules/volley
 	url = https://github.com/Mrzy/android-volley.git
+[submodule "HDLocker/submodules/CardLibrary"]
+	path = HDLocker/submodules/CardLibrary
+	url = https://github.com/Mrzy/CardLibrary.git

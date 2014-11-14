@@ -20,6 +20,10 @@ public interface IPandoraBox {
 
     public static final int CATEGORY_SCROLL_CONTENT = 6;
 
+    public static final int CATEGORY_FOLDABLE = 7;
+
+    public static final int CATEGORY_GUIDE = 8;
+
     public int getCategory();
 
     public PandoraData getData();

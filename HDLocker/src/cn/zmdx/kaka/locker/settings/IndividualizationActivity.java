@@ -7,7 +7,6 @@ import java.lang.ref.WeakReference;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.custom.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -51,11 +49,15 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     private LinearLayout mWelcomeText;
 
     public static String LOCK_DEFAULT_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
-            .getPath() + "/Pandora/lockDefault/";
+            .getPath() + "/.Pandora/lockDefault/";
 
     private static final int MSG_SAVE_LOCK_DEFAULT = 11;
 
     private static final int MSG_SAVE_LOCK_DEFAULT_DELAY = 100;
+
+    public static final String KEY_LOCK_DEFAULT_DIRECT = "lockDefaultDirect";
+
+    private boolean isDirect = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +65,14 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_individualization);
         initView();
-        initBackground();
+        initWallpaper();
         initLockDefaultBitmap();
+        isDirect = getIntent().getBooleanExtra(KEY_LOCK_DEFAULT_DIRECT, false);
+        if (isDirect) {
+            PandoraUtils.gotoGalleryActivity(IndividualizationActivity.this,
+                    PandoraUtils.REQUEST_CODE_GALLERY);
+            UmengCustomEventManager.statisticalSetDefaultImage(false);
+        }
     }
 
     private void initView() {
@@ -87,33 +95,19 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         mWelcomeText.setOnClickListener(this);
     }
 
-    private void initBackground() {
-        int themeId = PandoraConfig.newInstance(this).getCurrentThemeId();
-        if (themeId == -1) {
-            setCustomBackground();
-        } else {
-            setBackground(themeId);
-        }
-
-    }
-
     @SuppressWarnings("deprecation")
-    private void setCustomBackground() {
-        String fileName = PandoraConfig.newInstance(this).getCustomWallpaperFileName();
-        String path = CustomWallpaperManager.getCustomWallpaperFilePath(fileName);
-        Bitmap bitmap = PandoraUtils.getBitmap(path);
-        if (null == bitmap) {
-            mRootView.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.setting_background_blue_fore));
+    private void initWallpaper() {
+        Theme theme = ThemeManager.getCurrentTheme();
+        if (theme.isCustomWallpaper()) {
+            BitmapDrawable drawable = theme.getmCustomBitmap();
+            if (null == drawable) {
+                mRootView.setBackgroundResource(theme.getmBackgroundResId());
+            } else {
+                mRootView.setBackgroundDrawable(drawable);
+            }
         } else {
-            BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
-            mRootView.setBackgroundDrawable(drawable);
+            mRootView.setBackgroundResource(theme.getmBackgroundResId());
         }
-    }
-
-    protected void setBackground(int themeId) {
-        Theme theme = ThemeManager.getThemeById(themeId);
-        mRootView.setBackgroundResource(theme.getmBackgroundResId());
     }
 
     private void initLockDefaultBitmap() {
@@ -231,6 +225,10 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                 String fileName = PandoraUtils.getRandomString();
                 setBitmap();
                 saveWallpaperFile(fileName);
+                if (isDirect) {
+                    LockScreenManager.getInstance().lock();
+                    onBackPressed();
+                }
                 break;
             case PandoraUtils.REQUEST_CODE_GALLERY: {
                 gotoCropActivity(data.getData());
@@ -276,10 +274,12 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
             @Override
             public void run() {
-                PandoraUtils.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
-                PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
-                        LOCK_DEFAULT_SDCARD_LOCATION, fileName);
-                saveLockDefaultSP(fileName);
+                if (null != PandoraUtils.sLockDefaultThumbBitmap) {
+                    PandoraUtils.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
+                    PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
+                            LOCK_DEFAULT_SDCARD_LOCATION, fileName);
+                    saveLockDefaultSP(fileName);
+                }
             }
         }).start();
     }
@@ -323,7 +323,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     @Override
     public void onBackPressed() {
-        Intent in=new Intent();
+        Intent in = new Intent();
         in.setClass(IndividualizationActivity.this, MainSettingsActivity.class);
         startActivity(in);
         finish();

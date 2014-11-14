@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
@@ -22,6 +23,7 @@ public class PandoraService extends Service {
      * 中兴手机闹钟的action
      */
     public static final String ALARMALERT_ACTION_ZX = "com.zdworks.android.zdclock.ACTION_ALARM_ALERT";
+
     @Override
     public void onCreate() {
         if (BuildConfig.DEBUG) {
@@ -74,7 +76,15 @@ public class PandoraService extends Service {
         PandoraBatteryManager.getInstance().unRegisterListener();
     }
 
-    private static boolean mIsRinging = false;
+    private static boolean isComingCall = false;
+
+    private static boolean isCalling = false;
+
+    private boolean isLockedWhenComingCall = true;
+
+    public static boolean isCalling() {
+        return isCalling;
+    }
 
     private class MyPhoneListener extends PhoneStateListener {
         @Override
@@ -83,10 +93,10 @@ public class PandoraService extends Service {
                 switch (state) {
                     case TelephonyManager.CALL_STATE_IDLE: // 当前电话处于闲置状态
                         if (BuildConfig.DEBUG) {
-                            HDBLOG.logD("当前电话处于闲置状态CALL_STATE_IDLE, isRinging:" + mIsRinging);
+                            HDBLOG.logD("当前电话处于闲置状态CALL_STATE_IDLE, isRinging:");
                         }
-                        if (mIsRinging) {
-                            mIsRinging = false;
+                        isCalling = false;
+                        if (isComingCall && isLockedWhenComingCall) {
                             LockScreenManager.getInstance().lock();
                         }
                         break;
@@ -94,14 +104,17 @@ public class PandoraService extends Service {
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("CALL_STATE_RINGING电话号码为 " + incomingNumber);
                         }
-                        mIsRinging = true;
+                        isCalling = true;
+                        isLockedWhenComingCall = LockScreenManager.getInstance().isLocked();
+                        isComingCall = true;
                         LockScreenManager.getInstance().unLock(true, true);
                         break;
                     case TelephonyManager.CALL_STATE_OFFHOOK: // 当前电话处于接听状态
                         if (BuildConfig.DEBUG) {
                             HDBLOG.logD("当前电话处于通话状态CALL_STATE_OFFHOOK ");
                         }
-                        mIsRinging = true;
+                        isCalling = true;
+                        isLockedWhenComingCall = false;
                         break;
                 }
             } catch (Exception e) {
@@ -109,10 +122,6 @@ public class PandoraService extends Service {
             }
             super.onCallStateChanged(state, incomingNumber);
         }
-    }
-
-    public static boolean isRinging() {
-        return mIsRinging;
     }
 
     public final BroadcastReceiver mReceiver = new BroadcastReceiver() {

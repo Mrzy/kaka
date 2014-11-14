@@ -8,17 +8,17 @@ import java.io.FileOutputStream;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Bitmap.Config;
-import android.graphics.PorterDuff.Mode;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -77,6 +77,25 @@ public class ImageUtils {
         return bitmap;
     }
 
+    public static int computeSampleSize(BitmapFactory.Options options, int reqWidth) {
+        try {
+            int widRate = Math.round((float) options.outWidth / (float) reqWidth);
+//            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
+            return widRate;
+        } catch (Exception e) {
+            return 1;
+        }
+    }
+
+    public static int computeSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        try {
+            int widRate = Math.round((float) options.outWidth / (float) reqWidth);
+            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
+            return Math.min(widRate, heightRate);
+        } catch (Exception e) {
+            return 1;
+        }
+    }
     /**
      * Create a BitmapDrawable object from the specified Bitmap object.
      */

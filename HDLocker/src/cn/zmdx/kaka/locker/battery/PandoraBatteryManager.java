@@ -43,11 +43,11 @@ public class PandoraBatteryManager {
     public void registerListener() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        HDApplication.getInstannce().registerReceiver(receiver, filter);
+        HDApplication.getContext().registerReceiver(receiver, filter);
     }
 
     public void unRegisterListener() {
-        HDApplication.getInstannce().unregisterReceiver(receiver);
+        HDApplication.getContext().unregisterReceiver(receiver);
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {

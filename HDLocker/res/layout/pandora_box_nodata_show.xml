@@ -16,7 +16,7 @@
             android:layout_height="@dimen/setting_about_us_textview_height"
             android:background="@color/pandora_box_no_net_prompt"
             android:gravity="center"
-            android:textColor="@color/pandora_box_text_color"
+            android:textColor="@color/pandora_box_text_color_no_net"
             android:textSize="12sp"
             android:visibility="invisible" />
 
@@ -67,7 +67,7 @@
 
         <cn.zmdx.kaka.locker.widget.BaseButton
             android:id="@+id/pandora_box_set_default_image"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_below="@id/pandora_box_nodata_detail_show_textview"
             android:layout_centerHorizontal="true"
@@ -103,9 +103,9 @@
 
         <ImageView
             android:id="@+id/pandora_box_custom_set_default_image"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentBottom="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:clickable="true"
             android:src="@drawable/ic_setting_common"

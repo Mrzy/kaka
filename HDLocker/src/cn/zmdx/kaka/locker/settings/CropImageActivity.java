@@ -1,8 +1,6 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import java.io.FileNotFoundException;
-
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Toast;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -76,9 +75,13 @@ public class CropImageActivity extends Activity {
         try {
             mCropBitmap = PandoraUtils.zoomBitmap(this, getIntent().getData());
         } catch (Exception e) {
+            if (BuildConfig.DEBUG) {
+                e.printStackTrace();
+            }
             Toast.makeText(CropImageActivity.this, getResources().getString(R.string.error),
                     Toast.LENGTH_LONG).show();
-            finish();
+            setResult(Activity.RESULT_CANCELED);
+            onBackPressed();
         }
         mAspectRatioX = getIntent().getExtras().getInt(KEY_BUNDLE_ASPECTRATIO_X);
         mAspectRatioY = getIntent().getExtras().getInt(KEY_BUNDLE_ASPECTRATIO_Y);
@@ -108,27 +111,19 @@ public class CropImageActivity extends Activity {
                 if (isWallpaper) {
                     UmengCustomEventManager.statisticalSuccessSetCustomTimes();
                     PandoraUtils.sCropBitmap = mCropImageView.getCroppedImage();
-                    try {
-                        PandoraUtils.sCropThumbBitmap = PandoraUtils.zoomThumbBitmap(
-                                CropImageActivity.this, PandoraUtils.sCropBitmap, true);
-                    } catch (Exception e) {
-                        Toast.makeText(CropImageActivity.this,
-                                getResources().getString(R.string.error), Toast.LENGTH_LONG).show();
-                        PandoraUtils.sCropBitmap = null;
-                        PandoraUtils.sCropThumbBitmap = null;
-                    }
                 } else {
                     UmengCustomEventManager.statisticalSetDefaultImage(true);
                     try {
                         PandoraUtils.sLockDefaultThumbBitmap = PandoraUtils.zoomThumbBitmap(
                                 CropImageActivity.this, mCropImageView.getCroppedImage(), false);
+                        setResult(Activity.RESULT_OK);
                     } catch (Exception e) {
                         Toast.makeText(CropImageActivity.this,
                                 getResources().getString(R.string.error), Toast.LENGTH_LONG).show();
                         PandoraUtils.sLockDefaultThumbBitmap = null;
+                        setResult(Activity.RESULT_CANCELED);
                     }
                 }
-                setResult(Activity.RESULT_OK);
                 onBackPressed();
             }
         });

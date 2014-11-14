@@ -21,12 +21,6 @@ public class DefaultBox implements IPandoraBox {
 
     private ViewGroup mLayoutView;
 
-    private ImageView mImageView;
-
-    private TextView mTextView1;
-
-    private TextView mTextView2;
-
     private PandoraData mData;
 
     private BaseButton mDefaultButton;
@@ -43,14 +37,12 @@ public class DefaultBox implements IPandoraBox {
 
     private TextView mTextView3;
 
+    private boolean isSetCustomImage = false;
     public DefaultBox(Context context, PandoraData data) {
         mContext = context;
         mData = data;
         mLayoutView = (ViewGroup) LayoutInflater.from(context).inflate(
                 R.layout.pandora_box_nodata_show, null);
-        mImageView = (ImageView) mLayoutView.findViewById(R.id.pandora_box_nodata_show_imageview);
-        mTextView1 = (TextView) mLayoutView.findViewById(R.id.pandora_box_nodata_show_textview);
-        mTextView2 = (TextView) mLayoutView.findViewById(R.id.pandora_box_nodata_show_tip);
         mTextView3 = (TextView) mLayoutView.findViewById(R.id.pandora_box_no_net_prompt);
         if (!HDBNetworkState.isNetworkAvailable()) {
             mTextView3.setVisibility(View.VISIBLE);
@@ -78,13 +70,19 @@ public class DefaultBox implements IPandoraBox {
     private void initDefaultImage(Context context) {
         BitmapDrawable drawable = PandoraUtils.getLockDefaultBitmap(context);
         if (null != drawable) {
+            isSetCustomImage = true;
             mCustomImageView.setImageDrawable(drawable);
             mDefaultRl.setVisibility(View.GONE);
             mCustomRl.setVisibility(View.VISIBLE);
         } else {
+            isSetCustomImage = false;
             mDefaultRl.setVisibility(View.VISIBLE);
             mCustomRl.setVisibility(View.GONE);
         }
+    }
+
+    public boolean isSetCustomImage() {
+        return isSetCustomImage;
     }
 
     private OnClickListener clickListener = new OnClickListener() {
