@@ -235,7 +235,9 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             SingleImageBox box = new SingleImageBox(mContext, this,
                     SingleImageBox.convertFromServerData(data));
             View view = box.getRenderedView();
-            renderDetailView(view);
+            if (view != null) {
+                renderDetailView(view);
+            }
         } else if (type.equals(ServerDataMapping.S_DATATYPE_GUIDE)) {
 
         }
