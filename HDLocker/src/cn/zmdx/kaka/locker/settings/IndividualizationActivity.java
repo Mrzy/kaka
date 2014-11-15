@@ -226,7 +226,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                 setBitmap();
                 saveWallpaperFile(fileName);
                 if (isDirect) {
-                    LockScreenManager.getInstance().lock();
                     onBackPressed();
                 }
                 break;
