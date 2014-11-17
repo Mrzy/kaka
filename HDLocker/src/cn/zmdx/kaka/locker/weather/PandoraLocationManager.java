@@ -31,9 +31,17 @@ public class PandoraLocationManager {
     }
 
     public void registLocationUpdates() {
-        boolean isNetworkProvider = mLocationManager
-                .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        boolean isGpsProvider = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean isNetworkProvider = false;
+        boolean isGpsProvider = false;
+        try {
+            isNetworkProvider = mLocationManager
+                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            isGpsProvider = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        } catch (Exception e) {
+            return;
+        }
+
         if (!isNetworkProvider && !isGpsProvider) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("没有可用的provider，注册位置更新监听失败");
@@ -44,8 +52,8 @@ public class PandoraLocationManager {
         if (isNetworkProvider) {
             Location loc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (loc == null) {
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000,
-                        1, mLocaitonListener);
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1,
+                        mLocaitonListener);
             } else {
                 mRecentLocation = loc;
                 return;
@@ -90,7 +98,7 @@ public class PandoraLocationManager {
                 HDBLOG.logD("onLocationChanged");
             }
             mRecentLocation = location;
-//            mLocationManager.removeUpdates(mLocaitonListener);
+            // mLocationManager.removeUpdates(mLocaitonListener);
         }
 
         @Override

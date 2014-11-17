@@ -55,9 +55,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private static final int MSG_SAVE_LOCK_DEFAULT_DELAY = 100;
 
-    public static final String KEY_LOCK_DEFAULT_DIRECT = "lockDefaultDirect";
-
-    private boolean isDirect = false;
+    public static boolean sIsDirect = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +65,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         initView();
         initWallpaper();
         initLockDefaultBitmap();
-        isDirect = getIntent().getBooleanExtra(KEY_LOCK_DEFAULT_DIRECT, false);
-        if (isDirect) {
-            PandoraUtils.gotoGalleryActivity(IndividualizationActivity.this,
-                    PandoraUtils.REQUEST_CODE_GALLERY);
-            UmengCustomEventManager.statisticalSetDefaultImage(false);
-        }
     }
 
     private void initView() {
@@ -225,10 +217,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                 String fileName = PandoraUtils.getRandomString();
                 setBitmap();
                 saveWallpaperFile(fileName);
-                if (isDirect) {
-                    LockScreenManager.getInstance().lock();
-                    onBackPressed();
-                }
                 break;
             case PandoraUtils.REQUEST_CODE_GALLERY: {
                 gotoCropActivity(data.getData());
@@ -270,18 +258,18 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     }
 
     private void saveWallpaperFile(final String fileName) {
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
+//        new Thread(new Runnable() {
+//
+//            @Override
+//            public void run() {
                 if (null != PandoraUtils.sLockDefaultThumbBitmap) {
                     PandoraUtils.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
                     PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
                             LOCK_DEFAULT_SDCARD_LOCATION, fileName);
                     saveLockDefaultSP(fileName);
                 }
-            }
-        }).start();
+//            }
+//        }).start();
     }
 
     private void saveLockDefaultSP(String fileName) {
@@ -335,6 +323,12 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         super.onResume();
         MobclickAgent.onPageStart("IndividualizationActivity"); // 统计页面
         MobclickAgent.onResume(this); // 统计时长
+        if (sIsDirect) {
+            sIsDirect = false;
+            PandoraUtils.gotoGalleryActivity(IndividualizationActivity.this,
+                    PandoraUtils.REQUEST_CODE_GALLERY);
+            UmengCustomEventManager.statisticalSetDefaultImage(false);
+        }
     }
 
     public void onPause() {
