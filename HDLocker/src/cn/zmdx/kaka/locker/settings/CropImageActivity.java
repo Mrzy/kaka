@@ -111,6 +111,7 @@ public class CropImageActivity extends Activity {
                 if (isWallpaper) {
                     UmengCustomEventManager.statisticalSuccessSetCustomTimes();
                     PandoraUtils.sCropBitmap = mCropImageView.getCroppedImage();
+                    setResult(Activity.RESULT_OK);
                 } else {
                     UmengCustomEventManager.statisticalSetDefaultImage(true);
                     try {
