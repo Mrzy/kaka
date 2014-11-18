@@ -133,6 +133,14 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         mAdapter.unregisterDataSetObserver(mObserver);
     }
 
+    public boolean isTodayData() {
+        if (mData != null && mData.size() > 0) {
+            int id = mData.get(0).getId();
+            ServerImageData sid = ServerImageDataModel.getInstance().queryById(id);
+            return sid != null;
+        }
+        return true;
+    }
     private DataSetObserver mObserver = new DataSetObserver() {
         public void onChanged() {
             int count = mAdapter.getCount();

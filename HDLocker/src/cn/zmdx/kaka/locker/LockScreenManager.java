@@ -31,7 +31,9 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
+import cn.zmdx.kaka.locker.content.box.FoldablePage;
 import cn.zmdx.kaka.locker.content.box.IFoldableBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
@@ -120,6 +122,8 @@ public class LockScreenManager {
 
     private ILockScreenListener mLockListener = null;
 
+    private IFoldableBox mFoldableBox;
+
     public interface ILockScreenListener {
         void onLock();
 
@@ -201,7 +205,7 @@ public class LockScreenManager {
 
         initLockScreenViews();
 
-        // refreshContent();
+        refreshContent();
         setDate();
         mWinManager.addView(mEntireView, mWinParams);
         startFakeActivity();
@@ -343,12 +347,17 @@ public class LockScreenManager {
 
     private void refreshContent() {
         if (mBoxView != null && mBoxView.getChildCount() > 1) {
-            return;
+            if (mFoldableBox != null && mFoldableBox instanceof FoldablePage) {
+                FoldablePage page = (FoldablePage) mFoldableBox;
+                if (page.isTodayData()) {
+                    return;
+                }
+            }
         }
 
-        IFoldableBox box = PandoraBoxManager.newInstance(mContext).getFoldableBox();
+        mFoldableBox = PandoraBoxManager.newInstance(mContext).getFoldableBox();
 
-        View contentView = box.getRenderedView();
+        View contentView = mFoldableBox.getRenderedView();
         if (contentView == null) {
             initDefaultPhoto(false);
             return;
@@ -384,7 +393,6 @@ public class LockScreenManager {
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
         setDrawable();
-        refreshContent();
     }
 
     /**
@@ -533,7 +541,7 @@ public class LockScreenManager {
             PandoraBoxDispatcher pd = PandoraBoxDispatcher.getInstance();
             pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
             if (!pd.hasMessages(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES)) {
-                pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 4000);
+                pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 2000);
                 mLastSyncDataTime = curTime;
             }
         }
@@ -753,6 +761,7 @@ public class LockScreenManager {
         if (mIsLocked) {
             processWeatherInfo();
             processAnimations();
+            refreshContent();
         }
     }
 
