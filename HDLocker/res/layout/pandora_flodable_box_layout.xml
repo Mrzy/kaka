@@ -11,8 +11,7 @@
     <it.gmariotti.cardslib.library.view.CardListView
         android:id="@+id/cardListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutAnimation="@anim/list_anim_layout" />
+        android:layout_height="match_parent" />
 
     <View
         android:id="@+id/touch_interceptor_view"
@@ -52,6 +51,7 @@
             android:layout_marginTop="35dp"
             android:background="@drawable/guide_finger"
             android:scaleType="centerInside" />
+
         <TextView
             android:id="@+id/guide_finger_desc"
             android:layout_width="wrap_content"
@@ -60,8 +60,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/guide_item_title_one"
             android:textColor="#FF7D40"
-            android:textSize="18dp"
-            />
+            android:textSize="18dp" />
     </LinearLayout>
 
 </FrameLayout>
