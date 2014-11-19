@@ -22,7 +22,6 @@ import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.UnfoldableView.OnFoldingListener;
@@ -42,7 +41,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     private View mContainerView, mListTouchInterceptor;
 
-    private CardArrayAdapter mAdapter;
+    private FoldableBoxAdapter mAdapter;
 
     public FoldablePage(Context context, List<ServerImageData> cards) {
         mContext = context;
@@ -86,23 +85,43 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         return mContainerView;
     }
 
+    private ObjectAnimator mFingerAnim;
+
     private void createGuidePageIfNeed() {
         if (!PandoraConfig.newInstance(mContext).getFlagDisplayBoxGuide()) {
             final View guideView = mContainerView.findViewById(R.id.card_item_layout_guide_finger);
             guideView.setVisibility(View.VISIBLE);
-            View fingerView = mContainerView.findViewById(R.id.guide_finger);
-            final ObjectAnimator anim = ObjectAnimator.ofFloat(fingerView, "translationX",
-                    BaseInfoHelper.dip2px(mContext, 100));
-            anim.setRepeatCount(-1);
-            anim.setDuration(1500);
-            anim.start();
+            // View fingerView = mContainerView.findViewById(R.id.guide_finger);
+            // mFingerAnim = ObjectAnimator.ofFloat(fingerView, "translationX",
+            // BaseInfoHelper.dip2px(mContext, 100));
+            // mFingerAnim.setRepeatCount(-1);
+            // mFingerAnim.setDuration(1500);
+            // mFingerAnim.start();
             guideView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    anim.cancel();
+                    // mFingerAnim.cancel();
                     guideView.setVisibility(View.GONE);
                 }
             });
+        }
+    }
+
+    public void removeItemsByCategory(String category) {
+        if (mAdapter == null || TextUtils.isEmpty(category)) {
+            return;
+        }
+
+        List<Card> locData = mAdapter.getCardsData();
+        if (locData != null && locData.size() > 0) {
+            int length = locData.size();
+            for (int i = length - 1; i >= 0; i--) {
+                FoldableCard card = (FoldableCard) locData.get(i);
+                if (category.equals(card.getDataType())) {
+                    locData.remove(i);
+                }
+            }
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -117,7 +136,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         return cards;
     }
 
-    public void setAdapter(CardArrayAdapter adapter) {
+    public void setAdapter(FoldableBoxAdapter adapter) {
         if (mAdapter != null) {
             mAdapter.unregisterDataSetObserver(mObserver);
         }
@@ -130,7 +149,14 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     @Override
     public void onFinish() {
-        mAdapter.unregisterDataSetObserver(mObserver);
+        try {
+            mAdapter.unregisterDataSetObserver(mObserver);
+        } catch (Exception e) {
+        }
+        if (mFingerAnim != null) {
+            mFingerAnim.cancel();
+            mFingerAnim = null;
+        }
     }
 
     public boolean isTodayData() {
@@ -141,6 +167,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         }
         return true;
     }
+
     private DataSetObserver mObserver = new DataSetObserver() {
         public void onChanged() {
             int count = mAdapter.getCount();

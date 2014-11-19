@@ -31,6 +31,7 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
@@ -45,6 +46,7 @@ import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
@@ -346,10 +348,13 @@ public class LockScreenManager {
     }
 
     private void refreshContent() {
-        if (mBoxView != null && mBoxView.getChildCount() > 1) {
+        if (mBoxView != null && mBoxView.getChildCount() > 0) {
             if (mFoldableBox != null && mFoldableBox instanceof FoldablePage) {
                 FoldablePage page = (FoldablePage) mFoldableBox;
                 if (page.isTodayData()) {
+                    if (!HDBNetworkState.isWifiNetwork()) {
+                        page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_HTML);
+                    }
                     return;
                 }
             }
@@ -504,6 +509,7 @@ public class LockScreenManager {
             notifyUnLocked();
         cancelAnimatorIfNeeded();
 
+        mFoldableBox.onFinish();
         if (mUnLockRunnable != null) {
             mWinManager.removeView(mEntireView);
         } else {

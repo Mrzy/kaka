@@ -1,8 +1,6 @@
 
 package cn.zmdx.kaka.locker.content.box;
 
-import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
-
 import java.util.List;
 
 import android.view.View;
@@ -16,7 +14,7 @@ public interface IFoldableBox {
 
     public View getRenderedView();
 
-    public void setAdapter(CardArrayAdapter adapter);
+    public void setAdapter(FoldableBoxAdapter adapter);
 
     public void onFinish();
 

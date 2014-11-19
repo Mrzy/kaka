@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 public class HDBNetworkState {
     private static boolean LOGV = HDBConfig.SHOULD_LOG && false;

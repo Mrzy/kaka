@@ -282,7 +282,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         int mAspectRatioX = 0;
         int mAspectRatioY = 0;
         int width = BaseInfoHelper.getWidth(this);
-        int height = BaseInfoHelper.getRealHeight(this);
+        int height = Integer.parseInt(BaseInfoHelper.getHeight(this));
         if (width >= height) {
             mAspectRatioX = 100;
             mAspectRatioY = (mAspectRatioX * height) / width;

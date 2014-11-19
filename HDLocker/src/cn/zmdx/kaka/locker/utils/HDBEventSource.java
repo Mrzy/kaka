@@ -119,28 +119,25 @@ public class HDBEventSource {
         final Context appContext = ctx.getApplicationContext();
         sAppContext = appContext;
 
-//        IntentFilter filter = null;
-//
+        IntentFilter filter = null;
 //        // build sync intent index: those intent must be process synchonized
 //        for (String s : SYNCHRONIZED_INTENTS) {
 //            mSyncIntent.add(s);
 //        }
-//
-//        HashSet<String> filteredActions = new HashSet<String>();
-//        if (actions != null) {
-//            for (String s : actions) {
-//                filteredActions.add(s);
-//            }
-//        }
-//
+        HashSet<String> filteredActions = new HashSet<String>();
+        if (actions != null) {
+            for (String s : actions) {
+                filteredActions.add(s);
+            }
+        }
 //        // register receiver for general intents
-//        filter = new IntentFilter();
-//        for (String s : sGeneralActions) {
-//            if (!filteredActions.contains(s)) {
-//                filter.addAction(s);
-//            }
-//        }
-//        appContext.registerReceiver(sReceiverGeneral, filter);
+        filter = new IntentFilter();
+        for (String s : sGeneralActions) {
+            if (!filteredActions.contains(s)) {
+                filter.addAction(s);
+            }
+        }
+        appContext.registerReceiver(sReceiverGeneral, filter);
 //
 //        // register receiver for package
 //        filter = new IntentFilter();

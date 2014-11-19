@@ -24,8 +24,10 @@ import com.android.volley.misc.ImageUtils;
 
 public class FoldableBoxAdapter extends CardArrayAdapter {
 
+    private List<Card> mCards;
     public FoldableBoxAdapter(Context context, List<Card> cards) {
         super(context, cards);
+        mCards = cards;
     }
 
     @Override
@@ -80,5 +82,9 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
     private void animateLargeView(View largeView) {
         largeView.setAlpha(0);
         largeView.animate().alpha(1).setDuration(500).start();
+    }
+
+    public List<Card> getCardsData() {
+        return mCards;
     }
 }
