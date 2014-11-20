@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -31,6 +32,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -307,9 +309,17 @@ public class PandoraUtils {
         activity.startActivityForResult(intent, requestCode);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static void gotoGalleryActivity(Activity activity, int requestCode) {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
+        Intent intent = new Intent();
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        //根据版本号不同使用不同的Action
+        if (Build.VERSION.SDK_INT <19) {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+        }else {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        }
         activity.startActivityForResult(intent, requestCode);
     }
 
