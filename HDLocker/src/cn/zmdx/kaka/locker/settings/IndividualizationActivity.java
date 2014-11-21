@@ -90,15 +90,15 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     @SuppressWarnings("deprecation")
     private void initWallpaper() {
         Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isCustomWallpaper()) {
-            BitmapDrawable drawable = theme.getmCustomBitmap();
+        if (theme.isDefaultTheme()) {
+            mRootView.setBackgroundResource(theme.getmBackgroundResId());
+        } else {
+            BitmapDrawable drawable = theme.getmBitmap();
             if (null == drawable) {
                 mRootView.setBackgroundResource(theme.getmBackgroundResId());
             } else {
                 mRootView.setBackgroundDrawable(drawable);
             }
-        } else {
-            mRootView.setBackgroundResource(theme.getmBackgroundResId());
         }
     }
 

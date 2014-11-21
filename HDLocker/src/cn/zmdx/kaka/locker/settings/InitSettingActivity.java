@@ -78,15 +78,15 @@ public class InitSettingActivity extends Activity implements OnClickListener {
     private void initWallpaper() {
         View view = findViewById(R.id.init_setting_background);
         Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isCustomWallpaper()) {
-            BitmapDrawable drawable = theme.getmCustomBitmap();
+        if (theme.isDefaultTheme()) {
+            view.setBackgroundResource(theme.getmBackgroundResId());
+        } else {
+            BitmapDrawable drawable = theme.getmBitmap();
             if (null == drawable) {
                 view.setBackgroundResource(theme.getmBackgroundResId());
             } else {
                 view.setBackgroundDrawable(drawable);
             }
-        } else {
-            view.setBackgroundResource(theme.getmBackgroundResId());
         }
     }
 

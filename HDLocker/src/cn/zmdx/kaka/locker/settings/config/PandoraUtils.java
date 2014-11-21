@@ -396,7 +396,16 @@ public class PandoraUtils {
         return ImageUtils.scaleTo(cropBitmap, thumbWidth, thumbHeight, false);
     }
 
-    public static Bitmap getThumbBitmap(Activity activity, String path, int realWidth,
+    /**
+     *  获取适应realWidth，realHeight的图片
+     * @param activity
+     * @param path
+     * @param realWidth
+     * @param realHeight
+     * @return
+     * @throws FileNotFoundException
+     */
+    public static Bitmap getAdaptBitmap(Activity activity, String path, int realWidth,
             int realHeight) throws FileNotFoundException {
         FileInputStream inputStream = new FileInputStream(path);
         BitmapFactory.Options opts = new Options();

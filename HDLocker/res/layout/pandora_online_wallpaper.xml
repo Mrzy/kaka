@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pandora_online_wallpaper_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="true"
+    android:clickable="false"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
+        android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+        android:orientation="vertical" >
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            style="@style/init_setting_big_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/setting_title_textview_margin_bottom"
+            android:layout_marginTop="@dimen/setting_title_textview_margin_top"
+            android:gravity="center_vertical"
+            android:text="壁纸" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_title_line_height"
+            android:contentDescription="@string/contentDescription"
+            android:scaleType="fitXY"
+            android:src="@color/setting_divider_line" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical|right"
+                android:orientation="vertical" >
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <ImageView
+                        android:id="@+id/pandora_online_wallpaper_preview_imageview"
+                        android:layout_width="@dimen/pandora_online_wallpaper_preview_imageview_width"
+                        android:layout_height="@dimen/pandora_online_wallpaper_preview_imageview_height"
+                        android:contentDescription="@string/contentDescription"
+                        android:scaleType="fitXY" />
+
+                    <ProgressBar
+                        android:id="@+id/pandora_online_wallpaper_preview_progress"
+                        style="@android:style/Widget.ProgressBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <cn.zmdx.kaka.locker.widget.BaseButton
+                    android:id="@+id/pandora_online_wallpaper_preview_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:text="应用" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="27dp"
+            android:paddingRight="19dp" >
+
+            <GridView
+                android:id="@+id/pandora_online_wallpaper_gridview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:columnWidth="61dp"
+                android:fadingEdge="vertical"
+                android:horizontalSpacing="10dp"
+                android:numColumns="2"
+                android:verticalSpacing="16dp" >
+            </GridView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_title_line_height"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="@string/contentDescription"
+        android:scaleType="fitXY"
+        android:src="@color/setting_divider_line" />
+
+</LinearLayout>

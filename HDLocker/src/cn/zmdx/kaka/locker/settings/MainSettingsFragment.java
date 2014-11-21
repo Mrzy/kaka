@@ -110,6 +110,38 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mChangeBackground = (LinearLayout) mRootView.findViewById(R.id.setting_change_background);
         mChangeBackground.setOnClickListener(this);
 
+        LinearLayout mOnlineWallpaper = (LinearLayout) mRootView
+                .findViewById(R.id.setting_online_wallpaper);
+        mOnlineWallpaper.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent in = new Intent();
+                in.setClass(getActivity(), OnlineWallpaperActivity.class);
+                startActivity(in);
+                getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                        R.anim.umeng_fb_slide_out_from_left);
+
+            }
+        });
+        
+        LinearLayout mDown = (LinearLayout) mRootView
+                .findViewById(R.id.setting_down);
+        mDown.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent in = new Intent();
+                in.setClass(getActivity(), DownActivity.class);
+                startActivity(in);
+                getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                        R.anim.umeng_fb_slide_out_from_left);
+
+            }
+        });
+
     }
 
     private void initTitleHeight() {
@@ -132,15 +164,15 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     @SuppressWarnings("deprecation")
     private void initWallpaper() {
         Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isCustomWallpaper()) {
-            BitmapDrawable drawable = theme.getmCustomBitmap();
+        if (theme.isDefaultTheme()) {
+            mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
+        } else {
+            BitmapDrawable drawable = theme.getmBitmap();
             if (null == drawable) {
                 mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
             } else {
                 mSettingBackground.setBackgroundDrawable(drawable);
             }
-        } else {
-            mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
         }
     }
 
