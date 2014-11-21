@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -31,6 +32,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -303,14 +305,30 @@ public class PandoraUtils {
     }
 
     public static void gotoCaptureActivity(Activity activity, int requestCode) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        activity.startActivityForResult(intent, requestCode);
+        try {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            activity.startActivityForResult(intent, requestCode);
+        } catch (Exception e) {
+            Toast.makeText(activity, R.string.error, Toast.LENGTH_SHORT).show();
+        }
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static void gotoGalleryActivity(Activity activity, int requestCode) {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
-        activity.startActivityForResult(intent, requestCode);
+        Intent intent = new Intent();
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        // 根据版本号不同使用不同的Action
+        if (Build.VERSION.SDK_INT < 19) {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+        } else {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        }
+        try {
+            activity.startActivityForResult(intent, requestCode);
+        } catch (Exception e) {
+            Toast.makeText(activity, R.string.error, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static Bitmap zoomBitmap(Activity activity, Uri uri) throws FileNotFoundException {
@@ -474,84 +492,66 @@ public class PandoraUtils {
         switch (currentQuantum) {
             case WARM_PROMPT_6:
                 if (random == 0) {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_6_10_1);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_6_10_1);
                 } else {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_6_10_2);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_6_10_2);
                 }
                 break;
             case WARM_PROMPT_10:
                 if (random == 0) {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_10_12_1);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_10_12_1);
                 } else {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_10_12_2);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_10_12_2);
                 }
                 break;
             case WARM_PROMPT_12:
                 if (random == 0) {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_12_13_1);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_12_13_1);
                 } else {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_12_13_2);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_12_13_2);
                 }
                 break;
             case WARM_PROMPT_13:
                 if (random == 0) {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_13_15_1);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_13_15_1);
                 } else {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_13_15_2);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_13_15_2);
                 }
                 break;
             case WARM_PROMPT_15:
                 if (random == 0) {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_15_17_1);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_15_17_1);
                 } else {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_15_17_2);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_15_17_2);
                 }
                 break;
             case WARM_PROMPT_17:
                 if (random == 0) {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_17_19_1);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_17_19_1);
                 } else {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_17_19_2);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_17_19_2);
                 }
                 break;
             case WARM_PROMPT_19:
                 if (random == 0) {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_19_23_1);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_19_23_1);
                 } else {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_19_23_2);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_19_23_2);
                 }
                 break;
 
             case WARM_PROMPT_23:
                 if (random == 0) {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_23_1_1);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_23_1_1);
                 } else {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_23_1_2);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_23_1_2);
                 }
                 break;
             case WARM_PROMPT_1:
                 if (random == 0) {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_1_6_1);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_1_6_1);
                 } else {
-                    promptString = mContext.getResources().getString(
-                            R.string.warm_prompt_1_6_2);
+                    promptString = mContext.getResources().getString(R.string.warm_prompt_1_6_2);
                 }
                 break;
 

@@ -507,18 +507,20 @@ public class PandoraPanelLayout extends ViewGroup {
         if (mIsForeBackgroundCutOff)
             return;
         int width = BaseInfoHelper.getWidth(getContext());
-        int height = BaseInfoHelper.getRealHeight(getContext());
-        // int height =
-        // Integer.parseInt(BaseInfoHelper.getHeight(getContext()));
+        int realHeight = BaseInfoHelper.getRealHeight(getContext());
+        int height = Integer.parseInt(BaseInfoHelper.getHeight(mContext));
         Bitmap srcBmp = ImageUtils.drawable2Bitmap(mForegroundDrawable);
-        srcBmp = ImageUtils.scaleTo(srcBmp, width, height, true);
+        float rate = (float) realHeight / (float) height;
+        int toWidth = (int ) ((float) width * rate);
+        srcBmp = ImageUtils.scaleTo(srcBmp, toWidth, realHeight, true);
         Bitmap topBmp = null;
         Bitmap bottomBmp = null;
+        int x = (toWidth - width) / 2;
         try {
-            topBmp = Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(),
+            topBmp = Bitmap.createBitmap(srcBmp, x, 0, width,
                     mTopView.getMeasuredHeight());
-            bottomBmp = Bitmap.createBitmap(srcBmp, 0, mTopView.getMeasuredHeight(),
-                    srcBmp.getWidth(), mSlideableView.getMeasuredHeight());
+            bottomBmp = Bitmap.createBitmap(srcBmp, x, mTopView.getMeasuredHeight(),
+                    width, mSlideableView.getMeasuredHeight());
         } catch (Exception e) {
             topBmp = null;
             bottomBmp = null;

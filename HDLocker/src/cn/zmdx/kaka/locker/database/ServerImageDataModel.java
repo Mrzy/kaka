@@ -348,4 +348,32 @@ public class ServerImageDataModel {
         }
         return result;
     }
+
+    public ServerImageData queryById(int id) {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        ServerImageData data = null;
+
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
+                TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
+                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_COLLECT_WEBSITE
+        }, TableStructure.SERVER_ID + "=?", new String[] {String.valueOf(id)}, null, null, null, null);
+
+        try {
+            while (cursor.moveToNext()) {
+                data = new ServerImageData();
+                data.setId(cursor.getInt(0));
+                data.setUrl(cursor.getString(1));
+                data.setImageDesc(cursor.getString(2));
+                data.setTitle(cursor.getString(3));
+                data.setDataType(cursor.getString(4));
+                data.setCollectWebsite(cursor.getString(5));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return data;
+    }
 }
