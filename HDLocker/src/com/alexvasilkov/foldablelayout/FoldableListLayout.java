@@ -1,5 +1,8 @@
 package com.alexvasilkov.foldablelayout;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -16,9 +19,6 @@ import android.widget.FrameLayout;
 
 import com.alexvasilkov.foldablelayout.shading.FoldShading;
 import com.alexvasilkov.foldablelayout.shading.SimpleFoldShading;
-
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Foldable items list layout.

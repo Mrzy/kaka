@@ -18,10 +18,6 @@ public class HDApplication extends Application {
                                                       // quality is ignored but
                                                       // must be provided
 
-    public HDApplication() {
-        instance = this;
-    }
-
     public static Context getContext() {
         return instance;
     }

@@ -16,7 +16,8 @@
         <it.gmariotti.cardslib.library.view.CardListView
             android:id="@+id/cardListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layoutAnimation="@anim/list_anim_layout" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <View
@@ -68,4 +69,5 @@
             android:textColor="#FF7D40"
             android:textSize="18dp" />
     </LinearLayout>
+
 </FrameLayout>
