@@ -18,6 +18,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import cn.zmdx.kaka.locker.LockScreenManager;
+import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
@@ -52,6 +54,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
     public FoldablePage(Context context, List<ServerImageData> cards) {
         mContext = context;
         mData = cards;
+        LockScreenManager.getInstance().registBackPressedListener(mBackPressedListener);
     }
 
     @Override
@@ -159,6 +162,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
     public void onFinish() {
         try {
             mAdapter.unregisterDataSetObserver(mObserver);
+            LockScreenManager.getInstance().unRegistBackPressedListener(mBackPressedListener);
         } catch (Exception e) {
         }
         if (mFingerAnim != null) {
@@ -166,6 +170,16 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             mFingerAnim = null;
         }
     }
+
+    private OnBackPressedListener mBackPressedListener = new OnBackPressedListener() {
+
+        @Override
+        public void onBackPressed() {
+            if (mUnfoldableView.isUnfolded()) {
+                foldBack();
+            }
+        }
+    };
 
     public boolean isTodayData() {
         if (mData != null && mData.size() > 0) {
@@ -232,12 +246,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                         if (fCard.getDataType().equals(ServerDataMapping.S_DATATYPE_GUIDE)) {
                             return;
                         }
-                        View v = view.findViewById(R.id.card_item_layout_simple);
-                        if (v != null && v.getVisibility() == View.VISIBLE) {
-                            box.openDetails(v, mData);
-                        } else {
-                            box.openDetails(view.findViewById(R.id.card_item_layout_large), mData);
-                        }
+                        box.openDetails(view.findViewById(R.id.card_item_layout_large), mData);
                     }
                 }
             });

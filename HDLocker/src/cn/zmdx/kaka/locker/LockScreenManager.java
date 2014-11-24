@@ -2,7 +2,9 @@
 package cn.zmdx.kaka.locker;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -15,7 +17,6 @@ import android.content.res.Resources;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
@@ -845,6 +846,28 @@ public class LockScreenManager {
         mAnimatorSet.start();
     }
 
+    private Set<OnBackPressedListener> mBackPressedListeners = new HashSet<OnBackPressedListener>();
+
     public void onBackPressed() {
+        for (OnBackPressedListener listener : mBackPressedListeners) {
+            listener.onBackPressed();
+        }
+    }
+
+    public boolean registBackPressedListener(OnBackPressedListener listener) {
+        if (listener != null)
+            return mBackPressedListeners.add(listener);
+        return false;
+    }
+
+    public boolean unRegistBackPressedListener(OnBackPressedListener listener) {
+        if (listener != null) {
+            return mBackPressedListeners.remove(listener);
+        }
+        return false;
+    }
+
+    public interface OnBackPressedListener {
+        void onBackPressed();
     }
 }

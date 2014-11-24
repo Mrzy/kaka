@@ -1,58 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_item_layout_large"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center_vertical" >
+    android:layout_height="match_parent" >
 
-    <RelativeLayout
-        android:id="@+id/card_item_layout_large"
+    <ImageView
+        android:id="@+id/card_item_large_imageview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxHeight="200dp"
+        android:scaleType="centerCrop" />
 
-        <ImageView
-            android:id="@+id/card_item_large_imageview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:maxHeight="200dp"
-            android:scaleType="centerCrop" />
-
-        <TextView
-            android:id="@+id/card_item_large_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="#a0000000"
-            android:ellipsize="end"
-            android:padding="3dp"
-            android:singleLine="true"
-            android:textColor="#ffffff"
-            android:textSize="17dp" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/card_item_layout_simple"
+    <TextView
+        android:id="@+id/card_item_large_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:visibility="gone" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#a0000000"
+        android:ellipsize="end"
+        android:padding="3dp"
+        android:singleLine="true"
+        android:textColor="#ffffff"
+        android:textSize="17dp" />
 
-        <ImageView
-            android:id="@+id/card_item_simple_imageview"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:scaleType="centerCrop" />
-
-        <TextView
-            android:id="@+id/card_item_simple_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="#e0ffffff"
-            android:textSize="17dp" />
-    </LinearLayout>
-
-</FrameLayout>
+</RelativeLayout>

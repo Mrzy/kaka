@@ -96,7 +96,5 @@ public class FakeActivity extends Activity {
     @Override
     public void onBackPressed() {
         LockScreenManager.getInstance().onBackPressed();
-        return;
     }
-
 }
