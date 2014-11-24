@@ -12,6 +12,8 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +24,15 @@ import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.UnfoldableView.OnFoldingListener;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.nineoldandroids.animation.ObjectAnimator;
 
-public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnClickListener {
+public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnClickListener,
+        OnRefreshListener {
     private Context mContext;
 
     private List<ServerImageData> mData;
@@ -42,6 +46,8 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
     private View mContainerView, mListTouchInterceptor;
 
     private FoldableBoxAdapter mAdapter;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public FoldablePage(Context context, List<ServerImageData> cards) {
         mContext = context;
@@ -65,6 +71,9 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         }
         mContainerView = LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_flodable_box_layout, null);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mContainerView
+                .findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         mFrameLayout = (ViewGroup) mContainerView.findViewById(R.id.frameLayout);
         mListView = (CardListView) mContainerView.findViewById(R.id.cardListView);
         mUnfoldableView = (UnfoldableView) mContainerView.findViewById(R.id.unfoldable_view);
@@ -100,7 +109,6 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             guideView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // mFingerAnim.cancel();
                     guideView.setVisibility(View.GONE);
                 }
             });
@@ -318,4 +326,18 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
     @Override
     public void onFoldProgress(UnfoldableView unfoldableView, float progress) {
     }
+
+    @Override
+    public void onRefresh() {
+        HDBThreadUtils.postOnUiDelayed(mUpdateCardRunnable, 1000);
+    }
+
+    Runnable mUpdateCardRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            mSwipeRefreshLayout.setRefreshing(false);
+            // TODO 换一批数据
+        }
+    };
 }
