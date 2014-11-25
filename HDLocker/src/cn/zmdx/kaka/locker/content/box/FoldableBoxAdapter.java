@@ -27,7 +27,7 @@ import com.android.volley.misc.ImageUtils;
 public class FoldableBoxAdapter extends CardArrayAdapter {
     // px
     protected static final int MAX_HEIGHT_IMAGE_VIEW = BaseInfoHelper.dip2px(
-            HDApplication.getContext(), 200);
+            HDApplication.getContext(), 180);
 
     protected static final int MIN_HEIGHT_IMAGE_VIEW = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 120);
