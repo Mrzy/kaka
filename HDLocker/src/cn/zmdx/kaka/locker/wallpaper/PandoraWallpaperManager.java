@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -20,13 +19,10 @@ public class PandoraWallpaperManager {
     public static List<PandoraWallpaper> getWallpaperList(Context mContext,
             ViewGroup mOnlineContainer, ViewGroup mCustomContainer, IWallpaperClickListener listener) {
         List<PandoraWallpaper> pWallpaperList = new ArrayList<PandoraWallpaper>();
-        Log.d("syc", "one    " + System.currentTimeMillis());
         CustomWallpaperManager.getInstance().setCustomWallpaperList(mContext, mCustomContainer,
                 listener, pWallpaperList);
-        Log.d("syc", "two  " + System.currentTimeMillis());
         OnlineWallpaperManager.getInstance().setOnlineWallpaperList(mContext, mOnlineContainer,
                 listener, pWallpaperList);
-        Log.d("syc", "three  " + System.currentTimeMillis());
         return pWallpaperList;
     }
 

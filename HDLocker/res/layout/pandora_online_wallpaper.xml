@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:background="@null"
     android:baselineAligned="true"
-    android:clickable="true"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -42,6 +41,7 @@
             android:layout_width="@dimen/pandora_online_wallpaper_preview_imageview_width"
             android:layout_height="match_parent"
             android:layout_marginLeft="18dp"
+            android:layout_marginTop="23dp"
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
@@ -91,39 +91,55 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:textSize="20dp"
+                        android:textSize="30dp"
                         clock:format="24" />
                 </LinearLayout>
             </FrameLayout>
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:text="应用应用应用应用应用应用应用"
-                android:textSize="10dp" />
+                android:layout_marginTop="13dp"
+                android:paddingLeft="10dp"
+                android:text="中国人民大学国际关系学院"
+                android:textSize="12dp" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="应用应用应用应用应用应用应用"
-                android:textSize="10dp" />
+                android:paddingLeft="10dp"
+                android:text="教授时殷弘表示腐败，打击"
+                android:textSize="12dp" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="应用应用应用应用应用应用应用"
-                android:textSize="10dp" />
+                android:paddingLeft="10dp"
+                android:text="犯罪是世界各国共同面临的"
+                android:textSize="12dp" />
 
-            <cn.zmdx.kaka.locker.widget.BaseButton
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="难题。"
+                android:textSize="12dp" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingLeft="10dp"
+                android:text="微博 智美点心"
+                android:textSize="12dp" />
+
+            <Button
                 android:id="@+id/pandora_online_wallpaper_preview_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="57dp"
+                android:layout_height="28dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
+                android:background="#77506232"
                 android:text="应用" />
         </LinearLayout>
 
@@ -151,6 +167,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_title_line_height"
         android:layout_marginBottom="30dp"
+        android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
+        android:layout_marginRight="@dimen/setting_title_textview_margin_left"
         android:contentDescription="@string/contentDescription"
         android:scaleType="fitXY"
         android:src="@color/setting_divider_line" />

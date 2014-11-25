@@ -11,7 +11,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,7 +25,9 @@ import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.network.DownloadRequest;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.IWallpaperClickListener;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.PandoraWallpaper;
 
@@ -41,7 +42,7 @@ public class OnlineWallpaperManager {
 
     public static String ONLINE_WALLPAPER_TMP_SDCARD_LOCATION = Environment
             .getExternalStorageDirectory().getPath() + "/.Pandora/onlineWallpaper/tmp/";
-
+    
     public String getFilePath(String fileName) {
         return ONLINE_WALLPAPER_SDCARD_LOCATION + fileName + ".jpg";
     }
@@ -83,13 +84,13 @@ public class OnlineWallpaperManager {
     }
 
     public void saveOnlineWallpaperFile(final String fileName, final Bitmap bitmap) {
-        new Thread(new Runnable() {
+        HDBThreadUtils.runOnWorker(new Runnable() {
 
             @Override
             public void run() {
                 PandoraUtils.saveBitmap(bitmap, ONLINE_WALLPAPER_SDCARD_LOCATION, fileName);
             }
-        }).start();
+        });
     }
 
     // public void deleteFile(String fileName) {
@@ -100,14 +101,20 @@ public class OnlineWallpaperManager {
     // PandoraUtils.deleteFile(file);
     // }
     public void mkDirs() {
-        File tmpDir = new File(ONLINE_WALLPAPER_TMP_SDCARD_LOCATION);
-        if (!tmpDir.exists()) {
-            tmpDir.mkdirs();
-        }
-        File dir = new File(ONLINE_WALLPAPER_SDCARD_LOCATION);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        HDBThreadUtils.runOnWorker(new Runnable() {
+
+            @Override
+            public void run() {
+                File tmpDir = new File(ONLINE_WALLPAPER_TMP_SDCARD_LOCATION);
+                if (!tmpDir.exists()) {
+                    tmpDir.mkdirs();
+                }
+                File dir = new File(ONLINE_WALLPAPER_SDCARD_LOCATION);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+            }
+        });
     }
 
     public void clearTmpFolderFile() {
@@ -134,18 +141,13 @@ public class OnlineWallpaperManager {
     public void setOnlineWallpaperList(Context mContext, ViewGroup mOnlineContainer,
             final IWallpaperClickListener listener, List<PandoraWallpaper> pWallpaperList) {
         if (isHaveCustomWallpaper()) {
-            Log.d("syc", "one 0  " + System.currentTimeMillis());
             List<OnlineWallpaper> wallpaperList = getOnlineWallpaper(mContext);
-            Log.d("syc", "one 1  " + System.currentTimeMillis());
             for (int i = 0; i < wallpaperList.size(); i++) {
-                Log.d("syc", "one 2  " + System.currentTimeMillis());
                 String fileName = wallpaperList.get(i).getFileName();
                 boolean isCurrentTheme = wallpaperList.get(i).isCurrentTheme();
-                Log.d("syc", "one 3  " + System.currentTimeMillis());
                 setOnlineWallpaperItem(mContext, mOnlineContainer, fileName, isCurrentTheme,
                         listener, pWallpaperList);
             }
-            Log.d("syc", "one 4  " + System.currentTimeMillis());
         }
     }
 
@@ -156,13 +158,19 @@ public class OnlineWallpaperManager {
                 HDApplication.getContext()).inflate(R.layout.pandora_wallpaper_item, null);
         RelativeLayout mWallpaperIvRl = (RelativeLayout) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
-        ImageView mWallpaperIv = (ImageView) mWallpaperRl
+        final ImageView mWallpaperIv = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_iamge);
         ImageView mWallpaperSelect = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_select);
         final ImageView mWallpaperDel = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_delete);
-        PandoraUtils.loadBitmap(mContext, fileName, mWallpaperIv, false);
+        PandoraUtils.loadBitmap(mContext, getFilePath(fileName), new ILoadBitmapCallback() {
+
+            @Override
+            public void imageLoaded(Bitmap bitmap, String filePath) {
+                mWallpaperIv.setImageBitmap(bitmap);
+            }
+        });
         mWallpaperIvRl.setBackgroundResource(R.drawable.setting_wallpaper_border_default);
         mWallpaperIv.setOnClickListener(new OnClickListener() {
 
@@ -223,7 +231,6 @@ public class OnlineWallpaperManager {
         File[] files = file.listFiles();
         for (int i = 0; i < files.length; i++) {
             String fileName = files[i].getName().substring(0, files[i].getName().indexOf("."));
-            Log.d("syc", "fileName=" + fileName);
             OnlineWallpaper onlineWallpaper = new OnlineWallpaper();
             onlineWallpaper.setFilePath(files[i].getPath());
             onlineWallpaper.setFileName(fileName);

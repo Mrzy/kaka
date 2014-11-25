@@ -7,8 +7,8 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,6 +21,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.IWallpaperClickListener;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.PandoraWallpaper;
@@ -89,16 +90,13 @@ public class CustomWallpaperManager {
     public void setCustomWallpaperList(Context mContext, ViewGroup mCustomContainer,
             final IWallpaperClickListener listener, List<PandoraWallpaper> pWallpaperList) {
         if (isHaveCustomWallpaper()) {
-            Log.d("syc", "one 0  " + System.currentTimeMillis());
             List<CustomWallpaper> wallpaperList = getCustomWallpaper(mContext);
-            Log.d("syc", "one 1  " + System.currentTimeMillis());
             for (int i = 0; i < wallpaperList.size(); i++) {
                 String fileName = wallpaperList.get(i).getFileName();
                 boolean isCurrentTheme = wallpaperList.get(i).isCurrentTheme();
                 setCustomWallpaperItem(mContext, mCustomContainer, fileName, isCurrentTheme,
                         listener, pWallpaperList);
             }
-            Log.d("syc", "one 2  " + System.currentTimeMillis());
         }
     }
 
@@ -109,13 +107,19 @@ public class CustomWallpaperManager {
                 HDApplication.getContext()).inflate(R.layout.pandora_wallpaper_item, null);
         RelativeLayout mWallpaperIvRl = (RelativeLayout) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_iamge_rl);
-        ImageView mWallpaperIv = (ImageView) mWallpaperRl
+        final ImageView mWallpaperIv = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_iamge);
         ImageView mWallpaperSelect = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_select);
         final ImageView mWallpaperDel = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_delete);
-        PandoraUtils.loadBitmap(mContext, fileName, mWallpaperIv, true);
+        PandoraUtils.loadBitmap(mContext, getFilePath(fileName), new ILoadBitmapCallback() {
+
+            @Override
+            public void imageLoaded(Bitmap bitmap, String filePath) {
+                mWallpaperIv.setImageBitmap(bitmap);
+            }
+        });
         mWallpaperIvRl.setBackgroundResource(R.drawable.setting_wallpaper_border_default);
         mWallpaperIv.setOnClickListener(new OnClickListener() {
 

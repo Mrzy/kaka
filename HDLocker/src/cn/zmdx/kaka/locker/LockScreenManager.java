@@ -25,7 +25,6 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.ViewStub;
@@ -558,7 +557,8 @@ public class LockScreenManager {
             mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
         } else {
             // mViewFlipper.setBackgroundResource(mCurTheme.getmBackgroundResId());
-            mSliderView.setForegroundDrawable(mCurTheme.getmBitmap());
+            Bitmap bitmap =PandoraUtils.getBitmap(mCurTheme.getFilePath());
+            mSliderView.setForegroundDrawable(new BitmapDrawable(mContext.getResources(),bitmap));
         }
     }
 

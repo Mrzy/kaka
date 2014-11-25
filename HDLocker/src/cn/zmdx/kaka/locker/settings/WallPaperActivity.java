@@ -21,7 +21,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,9 +35,11 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.IWallpaperClickListener;
@@ -66,32 +67,18 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
 
     private static final int MSG_HANDLE_THUMB_BITMAP = 13;
 
-    private static final int HANDLE_DELAY = 150;
-
     private List<PandoraWallpaper> mPandoraWallpaperList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        Log.d("syc", "xx   1 " + System.currentTimeMillis());
         setContentView(R.layout.pandora_wallpaper);
-        Log.d("syc", "xx   2 " + System.currentTimeMillis());
         initView();
-        Log.d("syc", "xx   3 " + System.currentTimeMillis());
         initWallpaper();
-        Log.d("syc", "xx   4 " + System.currentTimeMillis());
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                mPandoraWallpaperList = PandoraWallpaperManager.getWallpaperList(
-                        WallPaperActivity.this, mOnlineContainer, mCustomContainer,
-                        WallPaperActivity.this);
-                markSelectState();
-            }
-        }, HANDLE_DELAY);
-        Log.d("syc", "xx   5 " + System.currentTimeMillis());
+        mPandoraWallpaperList = PandoraWallpaperManager.getWallpaperList(WallPaperActivity.this,
+                mOnlineContainer, mCustomContainer, WallPaperActivity.this);
+        markSelectState();
     }
 
     @Override
@@ -138,34 +125,21 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     }
 
     private void initWallpaper() {
-        new Thread(new Runnable() {
+        Theme theme = ThemeManager.getCurrentTheme();
+        if (theme.isDefaultTheme()) {
+            mRootView.setBackgroundResource(theme.getmBackgroundResId());
+        } else {
+            PandoraUtils.loadBitmap(WallPaperActivity.this, theme.getFilePath(),
+                    new ILoadBitmapCallback() {
 
-            @Override
-            public void run() {
-                final Theme theme = ThemeManager.getCurrentTheme();
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        // TODO 壁纸动画
-                        if (theme.isDefaultTheme()) {
-                            mRootView.setBackgroundResource(theme.getmBackgroundResId());
-                        } else {
-                            BitmapDrawable drawable = theme.getmBitmap();
-                            if (null == drawable) {
-                                mRootView.setBackgroundResource(theme.getmBackgroundResId());
-                            } else {
-                                mRootView.setBackgroundDrawable(drawable);
-                            }
+                        @Override
+                        public void imageLoaded(Bitmap bitmap, String filePath) {
+                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
+                                    bitmap));
                         }
-                        ObjectAnimator animatorAlphaVisible = ObjectAnimator.ofInt(
-                                mRootView.getBackground(), "alpha", 100, 255);
-                        animatorAlphaVisible.setDuration(250);
-                        animatorAlphaVisible.start();
-                    }
-                });
-            }
-        }).start();
+                    });
+        }
+
     }
 
     private void initAddCustomButton() {
@@ -287,7 +261,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     }
 
     private void saveWallpaperFile(final String fileName) {
-        new Thread(new Runnable() {
+        HDBThreadUtils.runOnWorker(new Runnable() {
 
             @Override
             public void run() {
@@ -301,7 +275,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
                 message.obj = fileName;
                 mHandler.sendMessage(message);
             }
-        }).start();
+        });
     }
 
     private void gotoCropActivity(Uri uri) {
@@ -500,34 +474,33 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
             Theme theme = ThemeManager.getThemeById(ThemeManager.THEME_ID_DEFAULT);
             setBackground(null, theme.getmBackgroundResId());
         }
-        new Thread(new Runnable() {
+        HDBThreadUtils.runOnWorker(new Runnable() {
 
             @Override
             public void run() {
                 PandoraUtils.deleteFile(filePath);
             }
-        }).start();
-
+        });
     }
 
     private void delPandoraWallpaperListItem(String fileName) {
         PandoraWallpaper pandoraWallpaper = new PandoraWallpaper();
-        for (int i = 0; i < mPandoraWallpaperList.size(); i++) {
-            if (fileName.equals(mPandoraWallpaperList.get(i).getFileName())) {
-                pandoraWallpaper = mPandoraWallpaperList.get(i);
+        for (PandoraWallpaper wallpaper : mPandoraWallpaperList) {
+            if (fileName.equals(wallpaper.getFileName())) {
+                pandoraWallpaper = wallpaper;
             }
         }
         mPandoraWallpaperList.remove(pandoraWallpaper);
     }
 
     private void markSelectState(String fileName) {
-        for (int i = 0; i < mPandoraWallpaperList.size(); i++) {
-            if (mPandoraWallpaperList.get(i).getFileName().equals(fileName)) {
-                mPandoraWallpaperList.get(i).setCurrentWallpaper(true);
-                mPandoraWallpaperList.get(i).getImageView().setVisibility(View.VISIBLE);
+        for (PandoraWallpaper wallpaper : mPandoraWallpaperList) {
+            if (wallpaper.getFileName().equals(fileName)) {
+                wallpaper.setCurrentWallpaper(true);
+                wallpaper.getImageView().setVisibility(View.VISIBLE);
             } else {
-                mPandoraWallpaperList.get(i).setCurrentWallpaper(false);
-                mPandoraWallpaperList.get(i).getImageView().setVisibility(View.INVISIBLE);
+                wallpaper.setCurrentWallpaper(false);
+                wallpaper.getImageView().setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -536,11 +509,11 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
      * 标记当前选中壁纸状态
      */
     private void markSelectState() {
-        for (int i = 0; i < mPandoraWallpaperList.size(); i++) {
-            if (mPandoraWallpaperList.get(i).isCurrentWallpaper()) {
-                mPandoraWallpaperList.get(i).getImageView().setVisibility(View.VISIBLE);
+        for (PandoraWallpaper wallpaper : mPandoraWallpaperList) {
+            if (wallpaper.isCurrentWallpaper()) {
+                wallpaper.getImageView().setVisibility(View.VISIBLE);
             } else {
-                mPandoraWallpaperList.get(i).getImageView().setVisibility(View.INVISIBLE);
+                wallpaper.getImageView().setVisibility(View.INVISIBLE);
             }
         }
     }

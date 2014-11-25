@@ -28,6 +28,7 @@ public class HDApplication extends Application {
         HDBEventSource.startup(getApplicationContext(), null);
         // Intialize the request manager and the image cache
         RequestManager.init(this);
+        ImageLoaderManager.init(instance);
         // createImageCache();
         // Pull baidu image data to local db
         // PandoraBoxDispatcher.getInstance().sendEmptyMessage(

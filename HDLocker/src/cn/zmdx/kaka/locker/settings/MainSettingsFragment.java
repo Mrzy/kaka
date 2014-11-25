@@ -3,6 +3,7 @@ package cn.zmdx.kaka.locker.settings;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
@@ -128,18 +130,19 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void initWallpaper() {
         Theme theme = ThemeManager.getCurrentTheme();
         if (theme.isDefaultTheme()) {
             mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            BitmapDrawable drawable = theme.getmBitmap();
-            if (null == drawable) {
-                mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
-            } else {
-                mSettingBackground.setBackgroundDrawable(drawable);
-            }
+            PandoraUtils.loadBitmap(getActivity(), theme.getFilePath(), new ILoadBitmapCallback() {
+
+                @SuppressWarnings("deprecation")
+                @Override
+                public void imageLoaded(Bitmap bitmap, String filePath) {
+                    mSettingBackground.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+                }
+            });
         }
     }
 
