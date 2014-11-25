@@ -229,9 +229,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     }
 
     private void gotoCropActivity(Uri uri) {
-        Intent intent = new Intent();
-        intent.setClass(this, CropImageActivity.class);
-        intent.setData(uri);
         int mAspectRatioX = 0;
         int mAspectRatioY = 0;
         float rate = LockScreenManager.getInstance().getBoxWidthHeightRate();
@@ -243,14 +240,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
             mAspectRatioY = 100;
             mAspectRatioX = (int) (mAspectRatioY * rate);
         }
-        Bundle bundle = new Bundle();
-        bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_X, mAspectRatioX);
-        bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_Y, mAspectRatioY);
-        bundle.putBoolean(CropImageActivity.KEY_BUNDLE_IS_WALLPAPER, false);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, PandoraUtils.REQUEST_CODE_CROP_IMAGE);
-        overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                R.anim.umeng_fb_slide_out_from_left);
+        PandoraUtils.gotoCropActivity(this, uri, mAspectRatioX, mAspectRatioY);
     }
 
     private void setBitmap() {
@@ -258,18 +248,18 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     }
 
     private void saveWallpaperFile(final String fileName) {
-//        new Thread(new Runnable() {
-//
-//            @Override
-//            public void run() {
-                if (null != PandoraUtils.sLockDefaultThumbBitmap) {
-                    PandoraUtils.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
-                    PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
-                            LOCK_DEFAULT_SDCARD_LOCATION, fileName);
-                    saveLockDefaultSP(fileName);
-                }
-//            }
-//        }).start();
+        // new Thread(new Runnable() {
+        //
+        // @Override
+        // public void run() {
+        if (null != PandoraUtils.sLockDefaultThumbBitmap) {
+            PandoraUtils.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
+            PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
+                    LOCK_DEFAULT_SDCARD_LOCATION, fileName);
+            saveLockDefaultSP(fileName);
+        }
+        // }
+        // }).start();
     }
 
     private void saveLockDefaultSP(String fileName) {

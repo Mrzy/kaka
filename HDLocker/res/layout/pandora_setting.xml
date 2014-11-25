@@ -247,44 +247,6 @@
                         android:gravity="center_vertical"
                         android:text="@string/setting_about_us" />
                 </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/setting_online_wallpaper"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/setting_item_height"
-                    android:background="@drawable/setting_item_selector"
-                    android:clickable="true"
-                    android:orientation="horizontal"
-                    android:paddingLeft="@dimen/setting_title_textview_margin_left"
-                    android:paddingRight="@dimen/setting_title_textview_margin_left" >
-
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        style="@style/setting_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:clickable="false"
-                        android:gravity="center_vertical"
-                        android:text="网络壁纸" />
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/setting_down"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/setting_item_height"
-                    android:background="@drawable/setting_item_selector"
-                    android:clickable="true"
-                    android:orientation="horizontal"
-                    android:paddingLeft="@dimen/setting_title_textview_margin_left"
-                    android:paddingRight="@dimen/setting_title_textview_margin_left" >
-
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        style="@style/setting_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:clickable="false"
-                        android:gravity="center_vertical"
-                        android:text="测试" />
-                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

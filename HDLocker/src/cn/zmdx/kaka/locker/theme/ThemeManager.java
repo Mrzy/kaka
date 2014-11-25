@@ -20,9 +20,9 @@ public class ThemeManager {
 
     public static final int THEME_ID_ONLINE = -2;
 
-    public static final int THEME_ID_BLUE = 1;
-
-    public static final int THEME_ID_JEAN = 3;
+//    public static final int THEME_ID_BLUE = 1;
+//
+//    public static final int THEME_ID_JEAN = 3;
 
     public static final int THEME_ID_ROAD = 4;
 
@@ -48,9 +48,9 @@ public class ThemeManager {
     }
 
     private static Theme getOnlineTheme(Context context) {
-        String fileName = PandoraConfig.newInstance(context).getOnlineWallpaperFileName();
+        String fileName = PandoraConfig.newInstance(context).getCurrentWallpaperFileName();
         Bitmap bitmap = PandoraUtils.getBitmap(OnlineWallpaperManager.getInstance()
-                .getOnlineWallpaperFilePath(fileName));
+                .getFilePath(fileName));
         Theme theme = new Theme();
         if (null == bitmap) {
             theme.setDefaultTheme(true);
@@ -83,11 +83,11 @@ public class ThemeManager {
      * @return
      */
     private static Theme getCustomTheme(Context context) {
-        String fileName = PandoraConfig.newInstance(context).getCustomWallpaperFileName();
+        String fileName = PandoraConfig.newInstance(context).getCurrentWallpaperFileName();
         Bitmap bitmap = PandoraUtils.getBitmap(CustomWallpaperManager.getInstance()
-                .getCustomWallpaperFilePath(fileName));
+                .getFilePath(fileName));
         Bitmap thumbBitmap = PandoraUtils.getBitmap(CustomWallpaperManager.getInstance()
-                .getCustomWallpaperFilePath(fileName));
+                .getFilePath(fileName));
         Theme theme = new Theme();
         if (null == bitmap) {
             theme.setDefaultTheme(true);
@@ -109,20 +109,20 @@ public class ThemeManager {
     public static Theme getThemeById(int themeId) {
         Theme theme = new Theme();
         switch (themeId) {
-            case THEME_ID_BLUE:
-                theme.setmBackgroundResId(R.drawable.setting_background_blue_fore);
-                theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
-                theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-                theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
-                theme.setmThemeId(THEME_ID_BLUE);
-                break;
-            case THEME_ID_JEAN:
-                theme.setmBackgroundResId(R.drawable.setting_background_jean_fore);
-                theme.setmForegroundResId(R.drawable.setting_background_jean_fore);
-                theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-                theme.setmThumbnailResId(R.drawable.setting_wallpaper_jean);
-                theme.setmThemeId(THEME_ID_JEAN);
-                break;
+//            case THEME_ID_BLUE:
+//                theme.setmBackgroundResId(R.drawable.setting_background_blue_fore);
+//                theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
+//                theme.setmSettingsIconResId(R.drawable.ic_setting_common);
+//                theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
+//                theme.setmThemeId(THEME_ID_BLUE);
+//                break;
+//            case THEME_ID_JEAN:
+//                theme.setmBackgroundResId(R.drawable.setting_background_jean_fore);
+//                theme.setmForegroundResId(R.drawable.setting_background_jean_fore);
+//                theme.setmSettingsIconResId(R.drawable.ic_setting_common);
+//                theme.setmThumbnailResId(R.drawable.setting_wallpaper_jean);
+//                theme.setmThemeId(THEME_ID_JEAN);
+//                break;
             case THEME_ID_ROAD:
                 theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
                 theme.setmForegroundResId(R.drawable.setting_background_road_fore);
@@ -145,20 +145,20 @@ public class ThemeManager {
     public static List<Theme> getAllTheme() {
         List<Theme> list = new ArrayList<Theme>();
         Theme theme = new Theme();
-        theme.setmBackgroundResId(R.drawable.setting_background_blue_fore);
-        theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
-        theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-        theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
-        theme.setmThemeId(THEME_ID_BLUE);
-        list.add(theme);
-
-        theme = new Theme();
-        theme.setmBackgroundResId(R.drawable.setting_background_jean_fore);
-        theme.setmForegroundResId(R.drawable.setting_background_jean_fore);
-        theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-        theme.setmThumbnailResId(R.drawable.setting_wallpaper_jean);
-        theme.setmThemeId(THEME_ID_JEAN);
-        list.add(theme);
+//        theme.setmBackgroundResId(R.drawable.setting_background_blue_fore);
+//        theme.setmForegroundResId(R.drawable.setting_background_blue_fore);
+//        theme.setmSettingsIconResId(R.drawable.ic_setting_common);
+//        theme.setmThumbnailResId(R.drawable.setting_wallpaper_blue);
+//        theme.setmThemeId(THEME_ID_BLUE);
+//        list.add(theme);
+//
+//        theme = new Theme();
+//        theme.setmBackgroundResId(R.drawable.setting_background_jean_fore);
+//        theme.setmForegroundResId(R.drawable.setting_background_jean_fore);
+//        theme.setmSettingsIconResId(R.drawable.ic_setting_common);
+//        theme.setmThumbnailResId(R.drawable.setting_wallpaper_jean);
+//        theme.setmThemeId(THEME_ID_JEAN);
+//        list.add(theme);
 
         theme = new Theme();
         theme.setmBackgroundResId(R.drawable.setting_background_road_fore);

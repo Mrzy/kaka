@@ -65,5 +65,21 @@
             <enum name="hidden" value="3" />
         </attr>
     </declare-styleable>
+    <declare-styleable name="WallpaperPanelLayout">
+        <attr name="PanelHeight" format="dimension" />
+        <attr name="ShadowHeight" format="dimension" />
+        <attr name="ParalaxOffset" format="dimension" />
+        <attr name="FadeColor" format="color" />
+        <attr name="FlingVelocity" format="integer" />
+        <attr name="DragView" format="reference" />
+        <attr name="Overlay" format="boolean" />
+        <attr name="AnchorPoint" format="float" />
+        <attr name="InitialState" format="enum">
+            <enum name="expanded" value="0" />
+            <enum name="collapsed" value="1" />
+            <enum name="anchored" value="2" />
+            <enum name="hidden" value="3" />
+        </attr>
+    </declare-styleable>
 
 </resources>

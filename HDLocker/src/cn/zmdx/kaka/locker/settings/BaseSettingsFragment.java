@@ -144,6 +144,6 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
 
     protected String getCustomWallpaperFileName() {
-        return mPandoraConfig.getCustomWallpaperFileName();
+        return mPandoraConfig.getCurrentWallpaperFileName();
     }
 }

@@ -96,12 +96,12 @@ public class UmengCustomEventManager {
             int themeId = pandoraConfig.getCurrentThemeIdForStatistical();
             String themeName = "";
             switch (themeId) {
-                case ThemeManager.THEME_ID_BLUE:
-                    themeName = "blue";
-                    break;
-                case ThemeManager.THEME_ID_JEAN:
-                    themeName = "jean";
-                    break;
+//                case ThemeManager.THEME_ID_BLUE:
+//                    themeName = "blue";
+//                    break;
+//                case ThemeManager.THEME_ID_JEAN:
+//                    themeName = "jean";
+//                    break;
                 case ThemeManager.THEME_ID_ROAD:
                     themeName = "road";
                     break;
@@ -225,14 +225,14 @@ public class UmengCustomEventManager {
      */
     public static void statisticalSelectTheme(int themeId) {
         switch (themeId) {
-            case ThemeManager.THEME_ID_BLUE:
-                MobclickAgent.onEvent(HDApplication.getContext(),
-                        UmengCustomEventManager.EVENT_WALLPAPER_BLUE_TIMES);
-                break;
-            case ThemeManager.THEME_ID_JEAN:
-                MobclickAgent.onEvent(HDApplication.getContext(),
-                        UmengCustomEventManager.EVENT_WALLPAPER_JEAN_TIMES);
-                break;
+//            case ThemeManager.THEME_ID_BLUE:
+//                MobclickAgent.onEvent(HDApplication.getContext(),
+//                        UmengCustomEventManager.EVENT_WALLPAPER_BLUE_TIMES);
+//                break;
+//            case ThemeManager.THEME_ID_JEAN:
+//                MobclickAgent.onEvent(HDApplication.getContext(),
+//                        UmengCustomEventManager.EVENT_WALLPAPER_JEAN_TIMES);
+//                break;
             case ThemeManager.THEME_ID_ROAD:
                 MobclickAgent.onEvent(HDApplication.getContext(), EVENT_WALLPAPER_ROAD_TIMES);
                 break;

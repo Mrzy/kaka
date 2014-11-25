@@ -109,39 +109,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mConcernTeam.setOnClickListener(this);
         mChangeBackground = (LinearLayout) mRootView.findViewById(R.id.setting_change_background);
         mChangeBackground.setOnClickListener(this);
-
-        LinearLayout mOnlineWallpaper = (LinearLayout) mRootView
-                .findViewById(R.id.setting_online_wallpaper);
-        mOnlineWallpaper.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Intent in = new Intent();
-                in.setClass(getActivity(), OnlineWallpaperActivity.class);
-                startActivity(in);
-                getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                        R.anim.umeng_fb_slide_out_from_left);
-
-            }
-        });
-        
-        LinearLayout mDown = (LinearLayout) mRootView
-                .findViewById(R.id.setting_down);
-        mDown.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Intent in = new Intent();
-                in.setClass(getActivity(), DownActivity.class);
-                startActivity(in);
-                getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                        R.anim.umeng_fb_slide_out_from_left);
-
-            }
-        });
-
     }
 
     private void initTitleHeight() {
