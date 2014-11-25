@@ -38,10 +38,8 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
@@ -50,9 +48,8 @@ import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.FileHelper;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
-import cn.zmdx.kaka.locker.wallpaper.CustomWallpaperManager;
-import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager;
 
 public class PandoraUtils {
     private PandoraUtils() {
@@ -616,46 +613,43 @@ public class PandoraUtils {
         return isHave;
     }
 
-    public static void loadBitmap(final Context mContext, final String fileName,
-            final ImageView mImageView, final boolean isCustom) {
-        new Thread(new Runnable() {
+    public interface ILoadBitmapCallback {
+        public void imageLoaded(Bitmap bitmap, String filePath);
+    }
+
+    public static void loadBitmap(final Context context, final String filePath,
+            final ILoadBitmapCallback callback) {
+        HDBThreadUtils.runOnWorker(new Runnable() {
 
             @Override
             public void run() {
-                String filePath = "";
-                if (isCustom) {
-                    filePath = CustomWallpaperManager.getInstance().getFilePath(fileName);
-                } else {
-                    filePath = OnlineWallpaperManager.getInstance().getFilePath(fileName);
-                }
-                int thumbWidth = (int) mContext.getResources().getDimension(
+                int thumbWidth = (int) context.getResources().getDimension(
                         R.dimen.pandora_wallpaper_width);
-                int thumbHeight = (int) mContext.getResources().getDimension(
+                int thumbHeight = (int) context.getResources().getDimension(
                         R.dimen.pandora_wallpaper_height);
                 try {
                     final Bitmap bitmap = PandoraUtils.getAdaptBitmap(filePath, thumbWidth,
                             thumbHeight);
-                    ((Activity) mContext).runOnUiThread(new Runnable() {
+                    HDBThreadUtils.runOnUi(new Runnable() {
 
                         @Override
                         public void run() {
-                            mImageView.setImageBitmap(bitmap);
+                            callback.imageLoaded(bitmap, filePath);
                         }
                     });
                 } catch (FileNotFoundException e) {
-                    Log.d("syc", "FileNotFoundException " + e.getMessage());
-                    ((Activity) mContext).runOnUiThread(new Runnable() {
+                    HDBThreadUtils.runOnUi(new Runnable() {
 
                         @Override
                         public void run() {
-                            Toast.makeText(mContext,
-                                    mContext.getResources().getString(R.string.error),
+                            Toast.makeText(context,
+                                    context.getResources().getString(R.string.error),
                                     Toast.LENGTH_LONG).show();
                         }
                     });
                 }
             }
-        }).start();
+        });
 
     }
 

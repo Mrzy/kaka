@@ -7,6 +7,7 @@ import java.lang.ref.WeakReference;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.widget.BaseEditText;
@@ -93,12 +95,13 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         if (theme.isDefaultTheme()) {
             mRootView.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            BitmapDrawable drawable = theme.getmBitmap();
-            if (null == drawable) {
-                mRootView.setBackgroundResource(theme.getmBackgroundResId());
-            } else {
-                mRootView.setBackgroundDrawable(drawable);
-            }
+            PandoraUtils.loadBitmap(this, theme.getFilePath(), new ILoadBitmapCallback() {
+
+                @Override
+                public void imageLoaded(Bitmap bitmap, String filePath) {
+                    mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+                }
+            });
         }
     }
 
@@ -248,18 +251,12 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     }
 
     private void saveWallpaperFile(final String fileName) {
-        // new Thread(new Runnable() {
-        //
-        // @Override
-        // public void run() {
         if (null != PandoraUtils.sLockDefaultThumbBitmap) {
             PandoraUtils.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
             PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
                     LOCK_DEFAULT_SDCARD_LOCATION, fileName);
             saveLockDefaultSP(fileName);
         }
-        // }
-        // }).start();
     }
 
     private void saveLockDefaultSP(String fileName) {
