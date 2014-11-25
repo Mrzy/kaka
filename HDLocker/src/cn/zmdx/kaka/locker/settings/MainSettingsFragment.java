@@ -109,7 +109,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mConcernTeam.setOnClickListener(this);
         mChangeBackground = (LinearLayout) mRootView.findViewById(R.id.setting_change_background);
         mChangeBackground.setOnClickListener(this);
-
     }
 
     private void initTitleHeight() {
@@ -132,15 +131,15 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     @SuppressWarnings("deprecation")
     private void initWallpaper() {
         Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isCustomWallpaper()) {
-            BitmapDrawable drawable = theme.getmCustomBitmap();
+        if (theme.isDefaultTheme()) {
+            mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
+        } else {
+            BitmapDrawable drawable = theme.getmBitmap();
             if (null == drawable) {
                 mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
             } else {
                 mSettingBackground.setBackgroundDrawable(drawable);
             }
-        } else {
-            mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
         }
     }
 

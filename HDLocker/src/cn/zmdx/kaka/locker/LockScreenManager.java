@@ -14,14 +14,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.ViewStub;
@@ -29,6 +33,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
@@ -50,6 +55,8 @@ import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
+import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
+import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaper;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
@@ -61,6 +68,7 @@ import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
+import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -126,6 +134,14 @@ public class LockScreenManager {
     private ILockScreenListener mLockListener = null;
 
     private IFoldableBox mFoldableBox;
+
+    private boolean isInit = false;
+
+    private WallpaperPanelLayout mWallpaperPanelLayout;
+
+    private OnlineWallpaperView mOnlineWallpaperView;
+
+    private LinearLayout mOnlineView;
 
     public interface ILockScreenListener {
         void onLock();
@@ -274,6 +290,9 @@ public class LockScreenManager {
         String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar.getInstance()
                 .get(Calendar.HOUR_OF_DAY));
         mWeatherSummary.setText(promptString);
+        if (null != mOnlineWallpaperView) {
+            mOnlineWallpaperView.setWeatherString(promptString);
+        }
         PandoraWeatherManager.getInstance().getCurrentWeather(new IWeatherCallback() {
 
             @Override
@@ -306,11 +325,17 @@ public class LockScreenManager {
                     if (!TextUtils.isEmpty(welcomeString)) {
                         mWeatherSummary.setText(welcomeString);
                         mWeatherSummary.setVisibility(View.VISIBLE);
+                        if (null != mOnlineWallpaperView) {
+                            mOnlineWallpaperView.setWeatherString(welcomeString);
+                        }
                     } else {
                         String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
                                 .getInstance().get(Calendar.HOUR_OF_DAY));
                         mWeatherSummary.setText(promptString);
                         mWeatherSummary.setVisibility(View.VISIBLE);
+                        if (null != mOnlineWallpaperView) {
+                            mOnlineWallpaperView.setWeatherString(promptString);
+                        }
                     }
                 } else {
                     int temp = pw.getTemp();
@@ -318,6 +343,9 @@ public class LockScreenManager {
                     if (mDate != null) {
                         if (mDate.getText() != null && !mDate.getText().toString().endsWith("ºC")) {
                             mDate.append(" " + temp + "ºC");
+                            if (null != mOnlineWallpaperView) {
+                                mOnlineWallpaperView.setDateAppend(" " + temp + "ºC");
+                            }
                         }
                     }
                     if (mWeatherSummary == null) {
@@ -330,6 +358,9 @@ public class LockScreenManager {
                     }
                     mWeatherSummary.setVisibility(View.VISIBLE);
                     mWeatherSummary.setText(summary);
+                    if (null != mOnlineWallpaperView) {
+                        mOnlineWallpaperView.setWeatherString(summary);
+                    }
                 }
             }
         });
@@ -399,6 +430,7 @@ public class LockScreenManager {
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
         setDrawable();
+        initOnlinePaperPanel();
     }
 
     /**
@@ -435,21 +467,98 @@ public class LockScreenManager {
         mGusturePrompt = (TextView) view.findViewById(R.id.gusture_prompt);
     }
 
+    private boolean isShow = false;
+
+    private void initOnlinePaperPanel() {
+        //TODO
+        mOnlineView = (LinearLayout) mEntireView.findViewById(R.id.pandora_online_wallpaper);
+        final ImageView mPullImage = (ImageView) mEntireView.findViewById(R.id.lock_wallpaper_view_im);
+        mWallpaperPanelLayout = (WallpaperPanelLayout) mEntireView.findViewById(R.id.locker_wallpaper_sliding);
+        mWallpaperPanelLayout.setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
+            
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                Log.d("syc", "onPanelSlide slideOffset="+slideOffset);
+                if (!isInit) {
+                    isInit= true;
+                    initOnlinePaperPanelView();
+                }
+            }
+            
+            @Override
+            public void onPanelHidden(View panel) {
+                Log.d("syc", "onPanelHidden");
+            }
+            
+            @Override
+            public void onPanelExpanded(View panel) {
+                Log.d("syc", "onPanelExpanded");
+                mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+//                ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(mPullImage,
+//                        "rotation", 0, 45f);
+//                objectAnimatorAlpha.setDuration(1000);
+//                objectAnimatorAlpha.start();
+            }
+            
+            @Override
+            public void onPanelCollapsed(View panel) {
+                Log.d("syc", "onPanelCollapsed");
+                isInit= false;
+                isShow= !isShow;
+//                ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(mPullImage,
+//                        "rotation", 45f, 0);
+//                objectAnimatorAlpha.setDuration(1000);
+//                objectAnimatorAlpha.start();
+                mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+            }
+            
+            @Override
+            public void onPanelAnchored(View panel) {
+                Log.d("syc", "onPanelAnchored");
+            }
+        });
+    }
+
+    protected void initOnlinePaperPanelView() {
+        if (null == mOnlineWallpaperView) {
+            mOnlineWallpaperView = new OnlineWallpaperView(mContext);
+        }
+        mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
+
+            @Override
+            public void setWallpaper(Bitmap bitmap) {
+                if (null != mSliderView) {
+                    mSliderView.setForegroundDrawable(new BitmapDrawable(mContext.getResources(),
+                            bitmap));
+                }
+            }
+        });
+        mOnlineWallpaperView.setTheme(mCurTheme);
+        mOnlineView.removeAllViews();
+        mOnlineView.addView(mOnlineWallpaperView);
+        mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText().toString());
+        mOnlineWallpaperView.setDate(mDate.getText().toString());
+    }
+
     public void setDate() {
         int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
         int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         int week = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         String weekString = PandoraUtils.getWeekString(mContext, week);
-        mDate.setText("" + month + "月" + "" + day + "日 " + weekString);
+        String dateString = "" + month + "月" + "" + day + "日 " + weekString;
+        mDate.setText(dateString);
+        if (null != mOnlineWallpaperView) {
+            mOnlineWallpaperView.setDate(dateString);
+        }
     }
 
     private void setDrawable() {
         mCurTheme = ThemeManager.getCurrentTheme();
-        if (mCurTheme.isCustomWallpaper()) {
-            mSliderView.setForegroundDrawable(mCurTheme.getmCustomBitmap());
+        if (mCurTheme.isDefaultTheme()) {
+            mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
         } else {
             // mViewFlipper.setBackgroundResource(mCurTheme.getmBackgroundResId());
-            mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
+            mSliderView.setForegroundDrawable(mCurTheme.getmBitmap());
         }
     }
 
@@ -520,6 +629,8 @@ public class LockScreenManager {
         mEntireView = null;
         mIsShowGesture = false;
         mIsLocked = false;
+
+        mOnlineView.removeAllViews();
 
         if (mUnLockRunnable != null) {
             HDBThreadUtils.runOnUi(mUnLockRunnable);

@@ -40,7 +40,7 @@ public class PandoraConfig {
 
     private static final String KEY_NEW_VERSION_CHECKED = "f";
 
-    private static final String KEY_CUSTOM_WALLPAPER = "g";
+    private static final String KEY_CURRENT_WALLPAPER = "g";
 
     private static final String KEY_LAST_CHECK_WEATHER = "h";
 
@@ -61,8 +61,8 @@ public class PandoraConfig {
     private static final String KEY_LOCK_WELCOME_STRING = "keyLockWelcomeString";
 
     private static final String KEY_CURRENT_FONT = "m";
-    private static final String GUIDE_HTML_TIMES = "n";
 
+    private static final String GUIDE_HTML_TIMES = "n";
 
     private static final String KEY_DISPLAY_BOX_GUIDE = "o";
 
@@ -131,12 +131,13 @@ public class PandoraConfig {
     public int getGuideTimesInt() {
         return mSp.getInt(GUIDE_TIMES, 0);
     }
+
     public void saveHtmlTimes(int times) {
         Editor editor = mSp.edit();
         editor.putInt(GUIDE_HTML_TIMES, times);
         editor.commit();
     }
-    
+
     public int getGuideHtmlTimesInt() {
         return mSp.getInt(GUIDE_HTML_TIMES, 0);
     }
@@ -191,14 +192,14 @@ public class PandoraConfig {
         editor.commit();
     }
 
-    public void saveCustomWallpaperFileName(String fileName) {
+    public void saveCurrentWallpaperFileName(String fileName) {
         Editor editor = mSp.edit();
-        editor.putString(KEY_CUSTOM_WALLPAPER, fileName);
+        editor.putString(KEY_CURRENT_WALLPAPER, fileName);
         editor.commit();
     }
 
-    public String getCustomWallpaperFileName() {
-        return mSp.getString(KEY_CUSTOM_WALLPAPER, "");
+    public String getCurrentWallpaperFileName() {
+        return mSp.getString(KEY_CURRENT_WALLPAPER, "");
     }
 
     public long getLastCheckWeatherTime() {
@@ -307,4 +308,5 @@ public class PandoraConfig {
         editor.putBoolean(KEY_DISPLAY_BOX_GUIDE, true);
         editor.commit();
     }
+
 }

@@ -56,5 +56,7 @@
     <dimen name="pandora_setting_guide_logo_layout_marginTop">125dp</dimen>
     <dimen name="pandora_update_dialog_width">280dp</dimen>
     <dimen name="card_detail_toolbar_height">40dp</dimen>
+    <dimen name="pandora_online_wallpaper_preview_imageview_width">174dp</dimen>
+    <dimen name="pandora_online_wallpaper_preview_imageview_height">310dp</dimen>
 
 </resources>
