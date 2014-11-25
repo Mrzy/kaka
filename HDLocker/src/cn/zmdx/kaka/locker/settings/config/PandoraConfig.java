@@ -66,6 +66,8 @@ public class PandoraConfig {
 
     private static final String KEY_DISPLAY_BOX_GUIDE = "o";
 
+    private static final String KEY_NEED_MOBILE_NETWORK = "p";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -232,6 +234,17 @@ public class PandoraConfig {
 
     public boolean isHasGuided() {
         return mSp.getBoolean(KEY_HAS_GUIDED, false);
+    }
+
+    //开关手机网络状态存入SharedPreferences
+    public void saveMobileNetwork(boolean mobileNetwork) {
+        Editor editor = mSp.edit();
+        editor.putBoolean(KEY_NEED_MOBILE_NETWORK, mobileNetwork);
+        editor.commit();
+    }
+
+    public boolean isMobileNetwork() {
+        return mSp.getBoolean(KEY_NEED_MOBILE_NETWORK, true);
     }
 
     public void saveNeedNotice(boolean isNeed) {
