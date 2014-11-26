@@ -179,7 +179,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
         @Override
         public void onBackPressed() {
-            if (mUnfoldableView.isUnfolded()) {
+            if (mUnfoldableView != null && mUnfoldableView.isUnfolded()) {
                 foldBack();
             }
         }

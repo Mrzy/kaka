@@ -105,16 +105,6 @@ public class ServerImageDataManager {
         return sb.toString();
     }
 
-    /**
-     * 
-     */
-    public String getUrl(int limit, String dataType, String webSite) {
-        StringBuilder sb = new StringBuilder(UrlBuilder.getBaseUrl());
-        if (dataType != null)
-            sb.append("dataType=" + dataType);
-        return sb.toString();
-    }
-
     public static class ServerImageData extends BaseDataManager {
 
         /**
