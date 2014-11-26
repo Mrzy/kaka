@@ -44,6 +44,8 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private SwitchButton mNoticeSButton;
 
+    private SwitchButton mNoticeMobileNetworkSButton;
+
     private LinearLayout mLockerDefaultImage;
 
     private ImageView mLockerDefaultImageThumb;
@@ -74,6 +76,9 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         mNoticeSButton = (SwitchButton) findViewById(R.id.individualization_notice_switch_button);
         mNoticeSButton.setOnCheckedChangeListener(this);
         mNoticeSButton.setChecked(isNeedNotice());
+        mNoticeMobileNetworkSButton = (SwitchButton) findViewById(R.id.individualization_3G_4G_switch_button);
+        mNoticeMobileNetworkSButton.setOnCheckedChangeListener(this);
+        mNoticeMobileNetworkSButton.setChecked(isMobileNetwork());
         mLockerDefaultImage = (LinearLayout) findViewById(R.id.individualization_locker_default_image);
         mLockerDefaultImage.setOnClickListener(this);
         mLockerDefaultImageThumb = (ImageView) findViewById(R.id.individualization_locker_default_thumb_image);
@@ -125,7 +130,13 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                     closeNoticeBar();
                 }
                 break;
-
+            case R.id.individualization_3G_4G_switch_button:
+                if (isChecked) {
+                    openMobileNetwork();
+                } else {
+                    closeMobileNetwork();
+                }
+                break;
             default:
                 break;
         }
@@ -185,6 +196,18 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private boolean isNeedNotice() {
         return PandoraConfig.newInstance(this).isNeedNotice();
+    }
+
+    private void closeMobileNetwork() {
+        PandoraConfig.newInstance(this).saveMobileNetwork(false);
+    }
+
+    private void openMobileNetwork() {
+        PandoraConfig.newInstance(this).saveMobileNetwork(true);
+    }
+
+    private boolean isMobileNetwork() {
+        return PandoraConfig.newInstance(this).isMobileNetwork();
     }
 
     private void saveWelcomeString(String welcomeString) {
