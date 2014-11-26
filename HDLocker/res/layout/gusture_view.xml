@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textColor="@color/gusture_textview_color"
+        android:textColor="@color/lock_pattern_view_success_color"
         android:text="@string/gustrue_prompt"
         android:textSize="15sp" />
 
