@@ -85,6 +85,8 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
     @Override
     public void onPatternStart() {
         setGuseturePromptString(mContext.getResources().getString(R.string.gusture_complete));
+        setGuseturePromptColor(mContext.getResources().getColor(
+                R.color.lock_pattern_view_success_color));
     }
 
     @Override
@@ -124,6 +126,8 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
         } else {
             mLockPatternView.setDisplayMode(DisplayMode.Wrong);
             setGuseturePromptString(mContext.getResources().getString(R.string.gusture_error));
+            setGuseturePromptColor(mContext.getResources().getColor(
+                    R.color.lock_pattern_view_error_color));
             HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
                 @Override
@@ -139,6 +143,8 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
         if (isLeastPointCount(pattern.size())) {
             setGuseturePromptString(mContext.getResources()
                     .getString(R.string.gusture_limit_prompt));
+            setGuseturePromptColor(mContext.getResources().getColor(
+                    R.color.lock_pattern_view_success_color));
             mLockPatternView.setDisplayMode(DisplayMode.Wrong);
             return;
         }
@@ -146,9 +152,13 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
             if (checkPattern(pattern)) {
                 setGuseturePromptString(mContext.getResources().getString(
                         R.string.gusture_new_pattern));
+                setGuseturePromptColor(mContext.getResources().getColor(
+                        R.color.lock_pattern_view_success_color));
             } else {
                 mLockPatternView.setDisplayMode(DisplayMode.Wrong);
                 setGuseturePromptString(mContext.getResources().getString(R.string.gusture_error));
+                setGuseturePromptColor(mContext.getResources().getColor(
+                        R.color.lock_pattern_view_error_color));
                 return;
             }
         }
@@ -160,6 +170,8 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
         }
         // success to detected once
         setGuseturePromptString(mContext.getResources().getString(R.string.gusture_save_prompt));
+        setGuseturePromptColor(mContext.getResources().getColor(
+                R.color.lock_pattern_view_success_color));
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
             @Override
@@ -169,6 +181,8 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
                 saveLockPattern(LockPatternUtils.patternToString(pattern));
                 setGuseturePromptString(mContext.getResources().getString(
                         R.string.gusture_confirmation_prompt));
+                setGuseturePromptColor(mContext.getResources().getColor(
+                        R.color.lock_pattern_view_success_color));
                 mLockPatternView.clearPattern();
             }
         }, THREAD_SLEPPING_DELAY);
@@ -215,6 +229,8 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
             // TODO
         }
         setGuseturePromptString(mContext.getResources().getString(R.string.gusture_verify_fail));
+        setGuseturePromptColor(mContext.getResources().getColor(
+                R.color.lock_pattern_view_error_color));
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
             @Override
@@ -231,6 +247,10 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
 
     private void setGuseturePromptString(String prompt) {
         mGusturePrompt.setText(prompt);
+    }
+
+    private void setGuseturePromptColor(int color) {
+        mGusturePrompt.setTextColor(color);
     }
 
     private boolean isPatternDetectedForConfirmation(int onPatternDetectedTimes) {

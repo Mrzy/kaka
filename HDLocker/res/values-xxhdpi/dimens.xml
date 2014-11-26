@@ -73,5 +73,10 @@
     <dimen name="pandora_online_wallpaper_gridview_vertical_spacing">10dp</dimen>
     <dimen name="pandora_online_wallpaper_gridview_item_width">60dp</dimen>
     <dimen name="pandora_online_wallpaper_gridview_item_height">108dp</dimen>
-
+    
+    <dimen name="lock_pattern_dot_line_width">3dp</dimen>
+    <dimen name="lock_pattern_dot_size">12dp</dimen>
+    <dimen name="lock_pattern_dot_size_activated">42dp</dimen>
+    
+    
 </resources>
