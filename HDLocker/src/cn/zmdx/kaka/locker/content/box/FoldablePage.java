@@ -26,6 +26,7 @@ import android.view.ViewPropertyAnimator;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
@@ -363,6 +364,13 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             mSwipeRefreshLayout.setRefreshing(false);
             removeAllCardWithAnimation(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
+                    //将刚刚移除的卡片新闻全部标记为已读
+                    List<Card> cards = mAdapter.getCardsData();
+                    for (Card card : cards) {
+                        markRead(card);
+                    }
+                    PandoraBoxDispatcher.getInstance().sendEmptyMessage(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES);
+                    //更换一批新的数据
                     changeNextGroupCard();
                 };
             });
@@ -397,7 +405,6 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             } else {
                 card.doSwipeOut(true, 300, delay, null);
             }
-            markRead(card);
             delay += 50;
             i++;
         }
