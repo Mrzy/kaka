@@ -128,7 +128,7 @@
                         android:layout_height="match_parent"
                         android:clickable="false"
                         android:gravity="center_vertical"
-                        android:text="@string/setting_background" />
+                        android:text="@string/pandora_wallpaper_title" />
                 </LinearLayout>
 
                 <LinearLayout

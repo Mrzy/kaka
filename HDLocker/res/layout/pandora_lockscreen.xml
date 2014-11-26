@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="top"
-        wallpaper:DragView="@+id/lock_wallpaper_view"
+        wallpaper:DragView="@+id/lock_wallpaper_dragview"
         wallpaper:Overlay="true"
         wallpaper:PanelHeight="68dp"
         wallpaper:ParalaxOffset="0dp"
@@ -146,7 +146,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -159,6 +158,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lock_wallpaper_dragview_all"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:orientation="horizontal" >
@@ -169,10 +169,10 @@
                     android:layout_weight="3" />
 
                 <LinearLayout
-                    android:id="@+id/lock_wallpaper_view"
+                    android:id="@+id/lock_wallpaper_dragview"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
                     android:layout_weight="1"
                     android:orientation="vertical" >
 

@@ -4,11 +4,14 @@ package cn.zmdx.kaka.locker.wallpaper;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +27,7 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager.OnlineWallpaper;
+import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.android.volley.Response.ErrorListener;
@@ -40,6 +43,8 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private GridView mGridView;
 
+    private ProgressBar mGVPb;
+
     private WallpaperAdpter mWallpaperAdpter;
 
     private ImageView mPreview;
@@ -48,9 +53,9 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private ProgressBar mProgressBar;
 
-    private ArrayList<OnlineWallpaper> list = new ArrayList<OnlineWallpaper>();
+    private ArrayList<ServerOnlineWallpaper> list;
 
-    private OnlineWallpaper mCurrentItem;
+    private ServerOnlineWallpaper mCurrentItem;
 
     private Bitmap mPreviewBitmap;
 
@@ -61,19 +66,6 @@ public class OnlineWallpaperView extends LinearLayout {
     private IOnlineWallpaper mListener;
 
     private Theme mCurTheme;
-
-    private String[] urls = {
-            "http://cos.myqcloud.com/11000436/bucket_1/image/1.jpg",
-            "http://cos.myqcloud.com/11000436/bucket_1/image/2.jpg",
-            "http://cos.myqcloud.com/11000436/bucket_1/image/3.jpg",
-            "http://cos.myqcloud.com/11000436/bucket_1/image/4.jpg",
-            "http://cos.myqcloud.com/11000436/bucket_1/image/5.jpg",
-            "http://cos.myqcloud.com/11000436/bucket_1/image/6.jpg",
-            "http://cos.myqcloud.com/11000436/bucket_1/image/7.jpg",
-            "http://cos.myqcloud.com/11000436/bucket_1/image/8.jpg",
-            "http://cos.myqcloud.com/11000436/bucket_1/image/9.jpg",
-            "http://cos.myqcloud.com/11000436/bucket_1/image/10.jpg",
-    };
 
     public interface IOnlineWallpaper {
         void setWallpaper(Bitmap bitmap);
@@ -102,14 +94,6 @@ public class OnlineWallpaperView extends LinearLayout {
     }
 
     public void init() {
-        for (int i = 0; i < urls.length; i++) {
-            OnlineWallpaper onlineWallpaper = new OnlineWallpaper();
-            onlineWallpaper.setUrl(urls[i]);
-            onlineWallpaper.setFileName(PandoraUtils.getStringMD5(urls[i].substring(
-                    urls[i].lastIndexOf("/") + 1, urls[i].lastIndexOf("."))));
-            onlineWallpaper.setExt(".jpg");
-            list.add(onlineWallpaper);
-        }
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.pandora_online_wallpaper, null);
         addView(mRootView);
         mPreview = (ImageView) mRootView
@@ -121,16 +105,16 @@ public class OnlineWallpaperView extends LinearLayout {
 
             @Override
             public void onClick(View v) {
-                // if (mPreviewBitmap == null || mCurrentItem == null) {
-                // return;
-                // }
+                if (mPreviewBitmap == null || mCurrentItem == null) {
+                    return;
+                }
                 OnlineWallpaperManager.getInstance().saveThemeId(mContext,
                         ThemeManager.THEME_ID_ONLINE);
                 OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(mContext,
-                        mCurrentItem.getFileName());
-                OnlineWallpaperManager.getInstance().renameFile(mCurrentItem.getFileName());
+                        mCurrentItem.getImageNAME());
+                OnlineWallpaperManager.getInstance().renameFile(mCurrentItem.getImageNAME());
                 Bitmap bitmap = PandoraUtils.getBitmap(OnlineWallpaperManager.getInstance()
-                        .getFilePath(mCurrentItem.getFileName()));
+                        .getFilePath(mCurrentItem.getImageNAME()));
                 if (null != bitmap) {
                     mListener.setWallpaper(bitmap);
                 }
@@ -144,9 +128,34 @@ public class OnlineWallpaperView extends LinearLayout {
         mDateView = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_date);
 
+        mGVPb = (ProgressBar) mRootView.findViewById(R.id.pandora_online_wallpaper_gridview_pb);
         mGridView = (GridView) mRootView.findViewById(R.id.pandora_online_wallpaper_gridview);
-        mWallpaperAdpter = new WallpaperAdpter(mGridView);
-        mGridView.setAdapter(mWallpaperAdpter);
+
+        pullWallpaperFromServer();
+    }
+
+    private void pullWallpaperFromServer() {
+        mGVPb.setVisibility(View.VISIBLE);
+        OnlineWallpaperManager.getInstance().pullWallpaperFromServer(new Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                mGVPb.setVisibility(View.GONE);
+                list = ServerOnlineWallpaperManager.parseJson(response);
+                Log.d("syc", "response=" + response.toString());
+                if (null == mWallpaperAdpter) {
+                    mWallpaperAdpter = new WallpaperAdpter();
+                    mGridView.setAdapter(mWallpaperAdpter);
+                }
+                mWallpaperAdpter.notifyDataSetChanged();
+            }
+        }, new ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
     }
 
     private void initPreview() {
@@ -170,10 +179,6 @@ public class OnlineWallpaperView extends LinearLayout {
 
     class WallpaperAdpter extends BaseAdapter {// 上下文对象
         private ViewHolder viewHolder = null;
-
-        public WallpaperAdpter(GridView gridView) {
-            mGridView = gridView;
-        }
 
         public int getCount() {
             return list.size();
@@ -209,36 +214,31 @@ public class OnlineWallpaperView extends LinearLayout {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            if (null == list.get(position).getSelectView()) {
-                list.get(position).setId(position);
-                list.get(position).setSelectView(viewHolder.mImageViewRl);
+            ServerOnlineWallpaper item = list.get(position);
+            if (null == item.getSelectView()) {
+                item.setPosition(position);
+                item.setSelectView(viewHolder.mImageViewRl);
             }
 
-            viewHolder.mImageView.setImageUrl(list.get(position).getUrl(), ImageLoaderManager.getImageLoader());
+            viewHolder.mImageView.setImageUrl(item.getThumbURL(),
+                    ImageLoaderManager.getImageLoader());
+            viewHolder.mImageView.setFadeInImage(true);
             viewHolder.mImageView.setDefaultImageResId(R.drawable.online_wallpaper_default);
-            viewHolder.mImageView.setImageListener(new Listener<Bitmap>() {
-
-                @Override
-                public void onResponse(Bitmap response) {
-                    list.get(position).setBitmap(response);
-                }
-            });
             viewHolder.mImageView.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-
-                    for (int i = 0; i < list.size(); i++) {
-                        if (list.get(i).getId() == position) {
-                            if (null != list.get(i).getSelectView()) {
-                                list.get(i).getSelectView()
-                                        .setBackgroundResource(R.drawable.setting_wallpaper_border);
+                    for (ServerOnlineWallpaper sItem : list) {
+                        if (sItem.getPosition() == position) {
+                            if (null != sItem.getSelectView()) {
+                                sItem.getSelectView().setBackgroundResource(
+                                        R.drawable.setting_wallpaper_border);
                                 mCurrentItem = list.get(position);
                                 downloadImage();
                             }
                         } else {
-                            if (null != list.get(i).getSelectView()) {
-                                list.get(i).getSelectView().setBackgroundResource(0);
+                            if (null != sItem.getSelectView()) {
+                                sItem.getSelectView().setBackgroundResource(0);
                             }
                         }
                     }
@@ -253,8 +253,8 @@ public class OnlineWallpaperView extends LinearLayout {
     private void downloadImage() {
         mProgressBar.setVisibility(View.VISIBLE);
         OnlineWallpaperManager.getInstance().clearTmpFolderFile();
-        OnlineWallpaperManager.getInstance().downloadImage(mCurrentItem.getUrl(),
-                mCurrentItem.getFileName(), new Listener<String>() {
+        OnlineWallpaperManager.getInstance().downloadImage(mCurrentItem.getImageURL(),
+                mCurrentItem.getImageNAME(), new Listener<String>() {
 
                     @Override
                     public void onResponse(String response) {

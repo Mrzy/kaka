@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.Keyframe;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
@@ -498,6 +499,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
             if (wallpaper.getFileName().equals(fileName)) {
                 wallpaper.setCurrentWallpaper(true);
                 wallpaper.getImageView().setVisibility(View.VISIBLE);
+                createSelectStateAnimations(wallpaper.getImageView());
             } else {
                 wallpaper.setCurrentWallpaper(false);
                 wallpaper.getImageView().setVisibility(View.INVISIBLE);
@@ -512,9 +514,34 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         for (PandoraWallpaper wallpaper : mPandoraWallpaperList) {
             if (wallpaper.isCurrentWallpaper()) {
                 wallpaper.getImageView().setVisibility(View.VISIBLE);
+                createSelectStateAnimations(wallpaper.getImageView());
             } else {
                 wallpaper.getImageView().setVisibility(View.INVISIBLE);
             }
         }
+    }
+
+    private void createSelectStateAnimations(final View view) {
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1.1f);
+        scaleXAnimator.setDuration(250);
+
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1.1f);
+        scaleYAnimator.setDuration(250);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleXAnimator, scaleYAnimator);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator anim) {
+                ObjectAnimator resetScaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f);
+                resetScaleXAnimator.setDuration(250);
+
+                ObjectAnimator resetScaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f);
+                resetScaleYAnimator.setDuration(250);
+                AnimatorSet resetAnimatorSet = new AnimatorSet();
+                resetAnimatorSet.playTogether(resetScaleXAnimator, resetScaleYAnimator);
+                resetAnimatorSet.start();
+            }
+        });
+        animatorSet.start();
     }
 }

@@ -14,7 +14,6 @@
     <!-- setting -->
     <string name="setting_open_pandoralocker">启用锁屏</string>
     <string name="setting_lock_type">开启锁屏密码</string>
-    <string name="setting_background">锁屏壁纸</string>
     <string name="init_setting_close_systemlocker">关闭系统锁屏</string>
     <string name="init_setting_close_systemlocker_detail">解决潘多拉锁屏和系统锁屏冲突的问题</string>
     <string name="setting_feedback">意见反馈</string>
@@ -32,7 +31,7 @@
     <string name="gusture_limit_prompt">至少需连接四个点，请重试</string>
     <string name="gusture_new_pattern">您的新解锁图案</string>
     <string name="gusture_error">请重试</string>
-    <string name="gusture_save_prompt">已经记录在案</string>
+    <string name="gusture_save_prompt">已记录</string>
     <string name="gusture_confirmation_prompt">再次绘制图案进行确定</string>
     <string name="gusture_redraw">重绘</string>
     <string name="gusture_close_prompt">确认已保存的图案</string>
@@ -74,9 +73,9 @@
     <string name="pandora_box_no_net_tip">网络未连接，猛料拉不出</string>
     <string name="pandora_box_battery_charging">正在充电</string>
     <string name="pandora_box_battery_full">电量已满</string>
-    <string name="pandora_wallpaper_title">锁屏壁纸</string>
+    <string name="pandora_wallpaper_title">管理壁纸</string>
     <string name="pandora_wallpaper_custom">自定义壁纸</string>
-    <string name="pandora_wallpaper_advice">默认壁纸</string>
+    <string name="pandora_wallpaper_advice">下载壁纸</string>
     <string name="pandora_wallpaper_show_image_title">图片</string>
     <string name="pandora_wallpaper_dialog_camera">拍照</string>
     <string name="pandora_wallpaper_dialog_gallery">相册</string>
