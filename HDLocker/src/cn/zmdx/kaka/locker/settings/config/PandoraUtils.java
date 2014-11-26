@@ -336,14 +336,14 @@ public class PandoraUtils {
     }
 
     public static void gotoCropActivity(Activity activity, Uri uri, int mAspectRatioX,
-            int mAspectRatioY) {
+            int mAspectRatioY, boolean isWallpaper) {
         Intent intent = new Intent();
         intent.setClass(activity, CropImageActivity.class);
         intent.setData(uri);
         Bundle bundle = new Bundle();
         bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_X, mAspectRatioX);
         bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_Y, mAspectRatioY);
-        bundle.putBoolean(CropImageActivity.KEY_BUNDLE_IS_WALLPAPER, true);
+        bundle.putBoolean(CropImageActivity.KEY_BUNDLE_IS_WALLPAPER, isWallpaper);
         intent.putExtras(bundle);
         activity.startActivityForResult(intent, PandoraUtils.REQUEST_CODE_CROP_IMAGE);
         activity.overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
@@ -469,10 +469,6 @@ public class PandoraUtils {
 
     public static boolean isHaveCustomWallpaper(Context context) {
         return !TextUtils.isEmpty(PandoraConfig.newInstance(context).getCurrentWallpaperFileName());
-    }
-
-    public static void deleteFile(String dirName, String fileName) {
-        FileHelper.deleteFile(dirName, fileName + ".jpg");
     }
 
     public static void deleteFile(String filePath) {

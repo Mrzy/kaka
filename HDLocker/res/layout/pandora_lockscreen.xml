@@ -13,7 +13,7 @@
         android:gravity="top"
         wallpaper:DragView="@+id/lock_wallpaper_dragview"
         wallpaper:Overlay="true"
-        wallpaper:PanelHeight="68dp"
+        wallpaper:PanelHeight="@dimen/pandora_online_wallpaper_panelHeight"
         wallpaper:ParalaxOffset="0dp"
         wallpaper:ShadowHeight="0dp" >
 
@@ -153,14 +153,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="@color/setting_black_translucent"
+                android:background="@color/online_wallpaper_translucent"
                 android:orientation="vertical" >
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lock_wallpaper_dragview_all"
                 android:layout_width="match_parent"
-                android:layout_height="68dp"
+                android:layout_height="@dimen/pandora_online_wallpaper_panelHeight"
                 android:orientation="horizontal" >
 
                 <View
@@ -181,6 +181,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:scaleType="fitXY"
+                        android:contentDescription="@string/contentDescription"
                         android:src="@drawable/pandora_online_paper_pull_button_normal" />
                 </LinearLayout>
             </LinearLayout>

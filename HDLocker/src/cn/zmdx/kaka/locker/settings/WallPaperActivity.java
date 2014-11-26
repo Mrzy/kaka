@@ -292,7 +292,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
             mAspectRatioY = 100;
             mAspectRatioX = (mAspectRatioY * width) / height;
         }
-        PandoraUtils.gotoCropActivity(this, uri, mAspectRatioX, mAspectRatioY);
+        PandoraUtils.gotoCropActivity(this, uri, mAspectRatioX, mAspectRatioY, true);
     }
 
     private void saveCustomWallpaperSP(String fileName) {

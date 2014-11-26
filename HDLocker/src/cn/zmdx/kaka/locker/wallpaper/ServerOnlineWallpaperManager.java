@@ -57,10 +57,10 @@ public class ServerOnlineWallpaperManager {
 
         public void parseBaseJson(JSONObject jsonObject) {
             id = jsonObject.optString("id");
-            author = jsonObject.optString("author");
-            desc = jsonObject.optString("desc");
+            author = jsonObject.optString("p_author");
+            desc = jsonObject.optString("p_desc");
             thumbURL = jsonObject.optString("thumbURL");
-            name = jsonObject.optString("name");
+            name = jsonObject.optString("p_name");
             publishDATE = jsonObject.optInt("publishDATE", 0);
             imageNAME = HDBHashUtils.getStringMD5(jsonObject.optString("imageNAME"));
             imageURL = jsonObject.optString("imageURL");

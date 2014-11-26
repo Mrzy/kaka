@@ -25,5 +25,8 @@
     
     <color name="guide_button_background_press">#22ffffff</color>
     <color name="guide_button_background_normal">#500096ff</color>
+    
+    <color name="online_wallpaper_translucent">#cc000000</color>
+    <color name="online_wallpaper_preview_translucent">#22000000</color>
 
 </resources>

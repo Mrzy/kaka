@@ -20,7 +20,6 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -489,8 +488,9 @@ public class LockScreenManager {
             
             @Override
             public void onPanelExpanded(View panel) {
-                Log.d("syc", "onPanelExpanded");
                 mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+                mDragView.setClickable(false);
+                mDragView.setFocusable(false);
                 mPullImage.setClickable(false);
                 mPullImage.setFocusable(false);
                 mWallpaperPanelLayout.setDragView(mDragViewAll);
@@ -498,7 +498,6 @@ public class LockScreenManager {
             
             @Override
             public void onPanelCollapsed(View panel) {
-                Log.d("syc", "onPanelCollapsed");
                 isInit= false;
                 mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
                 mWallpaperPanelLayout.setDragView(mDragView);
