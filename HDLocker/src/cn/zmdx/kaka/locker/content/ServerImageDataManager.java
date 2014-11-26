@@ -116,9 +116,9 @@ public class ServerImageDataManager {
 
     public String getBaseUrl() {
         if (BuildConfig.DEBUG) {
-            return "http://182.254.159.63/pandora/locker!queryDataImgTable.action?";
+            return "http://nb.hdlocker.com/pandora/locker!queryDataImgTable.action?";
         } else {
-            return "http://182.254.214.26:8080/pandora/locker!queryDataImgTable.action?";
+            return "http://pandora.hdlocker.com:8080/pandora/locker!queryDataImgTable.action?";
         }
     }
 
