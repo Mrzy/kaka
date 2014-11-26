@@ -123,4 +123,10 @@
     <string name="warm_prompt_23_1_2">该休息了，晚安咯~</string>
     <string name="warm_prompt_1_6_1">zZZ  zZZ</string>
     <string name="warm_prompt_1_6_2">夜深了，还不睡，你在做什么呢</string>
+    
+    <!-- onlinePaper -->
+    <string name="pandora_online_wallpaper_title">壁纸库</string>
+    <string name="pandora_online_wallpaper_apple">应用</string>
+    
+    <string name="sdcard_error">未检测到SDCARD,请检查后重试！</string>
 </resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ############################################################################################## -->
+<!-- 以下资源内容适配如下机型 [2014.09.11 11:13]   shiyc -->
+<!--  -->
+<!-- 为方便以后的维护，如果此文件适配的机型未在下方列表，请您补全: -->
+<!--     Nexus 4              320dpi   1184x768   px/dp = 1.5 -->
+<!--  -->
+<!-- ############################################################################################## -->
+<resources>
+
+    <dimen name="setting_wallpaper_margin_left">33dp</dimen>
+
+    <!-- onlinePaper -->
+    <dimen name="pandora_online_wallpaper_panelHeight">68dp</dimen>
+    <dimen name="pandora_online_wallpaper_margin_bottom">18dp</dimen>
+    <dimen name="pandora_online_wallpaper_gridview_margin_left">10dp</dimen>
+    <dimen name="pandora_online_wallpaper_gridview_item_width">75dp</dimen>
+    <dimen name="pandora_online_wallpaper_gridview_item_height">135dp</dimen>
+    
+    <!-- wallpaper -->
+    <dimen name="pandora_wallpaper_layout_width">115dp</dimen>
+    <dimen name="pandora_wallpaper_layout_height">165dp</dimen>
+    <dimen name="pandora_wallpaper_width">100dp</dimen>
+    <dimen name="pandora_wallpaper_height">150dp</dimen>
+</resources>

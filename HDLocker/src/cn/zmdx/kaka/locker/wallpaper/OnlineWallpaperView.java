@@ -27,6 +27,7 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
@@ -48,6 +49,10 @@ public class OnlineWallpaperView extends LinearLayout {
     private WallpaperAdpter mWallpaperAdpter;
 
     private ImageView mPreview;
+
+    private TypefaceTextView mDesc;
+
+    private TypefaceTextView mAuthor;
 
     private Button mBaseButton;
 
@@ -98,6 +103,10 @@ public class OnlineWallpaperView extends LinearLayout {
         addView(mRootView);
         mPreview = (ImageView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_imageview);
+        mDesc = (TypefaceTextView) mRootView
+                .findViewById(R.id.pandora_online_wallpaper_preview_desc);
+        mAuthor = (TypefaceTextView) mRootView
+                .findViewById(R.id.pandora_online_wallpaper_preview_author);
         mProgressBar = (ProgressBar) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_progress);
         mBaseButton = (Button) mRootView.findViewById(R.id.pandora_online_wallpaper_preview_button);
@@ -142,7 +151,6 @@ public class OnlineWallpaperView extends LinearLayout {
             public void onResponse(JSONObject response) {
                 mGVPb.setVisibility(View.GONE);
                 list = ServerOnlineWallpaperManager.parseJson(response);
-                Log.d("syc", "response=" + response.toString());
                 if (null == mWallpaperAdpter) {
                     mWallpaperAdpter = new WallpaperAdpter();
                     mGridView.setAdapter(mWallpaperAdpter);
@@ -222,7 +230,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
             viewHolder.mImageView.setImageUrl(item.getThumbURL(),
                     ImageLoaderManager.getImageLoader());
-            viewHolder.mImageView.setFadeInImage(true);
+            // viewHolder.mImageView.setFadeInImage(true);
             viewHolder.mImageView.setDefaultImageResId(R.drawable.online_wallpaper_default);
             viewHolder.mImageView.setOnClickListener(new OnClickListener() {
 
@@ -263,6 +271,8 @@ public class OnlineWallpaperView extends LinearLayout {
                             mPreviewBitmap.recycle();
                             System.gc();
                         }
+                        mDesc.setText(mCurrentItem.getDesc());
+                        mAuthor.setText(mCurrentItem.getAuthor());
                         int realWidth = (int) getResources().getDimension(
                                 R.dimen.pandora_online_wallpaper_preview_imageview_width);
                         int realHeight = (int) getResources().getDimension(
