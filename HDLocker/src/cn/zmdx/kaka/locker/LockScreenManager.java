@@ -466,18 +466,17 @@ public class LockScreenManager {
         mGusturePrompt = (TextView) view.findViewById(R.id.gusture_prompt);
     }
 
-    private boolean isShow = false;
-
     private void initOnlinePaperPanel() {
         //TODO
         mOnlineView = (LinearLayout) mEntireView.findViewById(R.id.pandora_online_wallpaper);
         final ImageView mPullImage = (ImageView) mEntireView.findViewById(R.id.lock_wallpaper_view_im);
+        final LinearLayout mDragViewAll = (LinearLayout) mEntireView.findViewById(R.id.lock_wallpaper_dragview_all);
+        final LinearLayout mDragView = (LinearLayout) mEntireView.findViewById(R.id.lock_wallpaper_dragview);
         mWallpaperPanelLayout = (WallpaperPanelLayout) mEntireView.findViewById(R.id.locker_wallpaper_sliding);
         mWallpaperPanelLayout.setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
             
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                Log.d("syc", "onPanelSlide slideOffset="+slideOffset);
                 if (!isInit) {
                     isInit= true;
                     initOnlinePaperPanelView();
@@ -486,34 +485,27 @@ public class LockScreenManager {
             
             @Override
             public void onPanelHidden(View panel) {
-                Log.d("syc", "onPanelHidden");
             }
             
             @Override
             public void onPanelExpanded(View panel) {
                 Log.d("syc", "onPanelExpanded");
                 mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
-//                ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(mPullImage,
-//                        "rotation", 0, 45f);
-//                objectAnimatorAlpha.setDuration(1000);
-//                objectAnimatorAlpha.start();
+                mPullImage.setClickable(false);
+                mPullImage.setFocusable(false);
+                mWallpaperPanelLayout.setDragView(mDragViewAll);
             }
             
             @Override
             public void onPanelCollapsed(View panel) {
                 Log.d("syc", "onPanelCollapsed");
                 isInit= false;
-                isShow= !isShow;
-//                ObjectAnimator objectAnimatorAlpha = ObjectAnimator.ofFloat(mPullImage,
-//                        "rotation", 45f, 0);
-//                objectAnimatorAlpha.setDuration(1000);
-//                objectAnimatorAlpha.start();
                 mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+                mWallpaperPanelLayout.setDragView(mDragView);
             }
             
             @Override
             public void onPanelAnchored(View panel) {
-                Log.d("syc", "onPanelAnchored");
             }
         });
     }

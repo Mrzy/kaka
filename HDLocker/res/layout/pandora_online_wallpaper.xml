@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@null"
     android:baselineAligned="true"
     android:orientation="vertical" >
 
@@ -34,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginBottom="22dp"
         android:baselineAligned="false"
         android:orientation="horizontal" >
 
@@ -41,7 +41,7 @@
             android:layout_width="@dimen/pandora_online_wallpaper_preview_imageview_width"
             android:layout_height="match_parent"
             android:layout_marginLeft="18dp"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
@@ -99,7 +99,7 @@
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="10dp"
                 android:paddingLeft="10dp"
                 android:text="中国人民大学国际关系学院"
                 android:textSize="12dp" />
@@ -143,7 +143,7 @@
                 android:text="应用" />
         </LinearLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
@@ -158,18 +158,25 @@
                 android:numColumns="2"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
-                android:verticalSpacing="10dp" >
-            </GridView>
-        </LinearLayout>
+                android:verticalSpacing="10dp" />
+
+            <ProgressBar
+                android:id="@+id/pandora_online_wallpaper_gridview_pb"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+        </FrameLayout>
     </LinearLayout>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_title_line_height"
-        android:layout_marginBottom="30dp"
         android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
         android:layout_marginRight="@dimen/setting_title_textview_margin_left"
         android:contentDescription="@string/contentDescription"
+        android:layout_gravity="bottom"
         android:scaleType="fitXY"
         android:src="@color/setting_divider_line" />
 

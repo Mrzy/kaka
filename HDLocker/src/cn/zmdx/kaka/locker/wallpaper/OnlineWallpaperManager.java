@@ -37,12 +37,15 @@ import com.android.volley.request.JsonObjectRequest;
 
 @SuppressLint("InflateParams")
 public class OnlineWallpaperManager {
+
+    private static String URL = "http://192.168.1.111:8080/pandora/locker!queryWallPaper.action";
+
     public static String ONLINE_WALLPAPER_SDCARD_LOCATION = Environment
             .getExternalStorageDirectory().getPath() + "/.Pandora/onlineWallpaper/background/";
 
     public static String ONLINE_WALLPAPER_TMP_SDCARD_LOCATION = Environment
             .getExternalStorageDirectory().getPath() + "/.Pandora/onlineWallpaper/tmp/";
-    
+
     public String getFilePath(String fileName) {
         return ONLINE_WALLPAPER_SDCARD_LOCATION + fileName + ".jpg";
     }
@@ -93,13 +96,6 @@ public class OnlineWallpaperManager {
         });
     }
 
-    // public void deleteFile(String fileName) {
-    // File file = new File(getFilePath(fileName));
-    // if (!file.exists()) {
-    // file.mkdirs();
-    // }
-    // PandoraUtils.deleteFile(file);
-    // }
     public void mkDirs() {
         HDBThreadUtils.runOnWorker(new Runnable() {
 
@@ -130,7 +126,7 @@ public class OnlineWallpaperManager {
 
     public void pullWallpaperFromServer(Listener<JSONObject> listener, ErrorListener errorListener) {
         JsonObjectRequest request = null;
-        request = new JsonObjectRequest("", null, listener, errorListener);
+        request = new JsonObjectRequest(URL, null, listener, errorListener);
         RequestManager.getRequestQueue().add(request);
     }
 
@@ -245,55 +241,12 @@ public class OnlineWallpaperManager {
     }
 
     public static final class OnlineWallpaper {
-        private int mId;
-
-        private Bitmap mBitmap;
-
-        private View mSelectView;
-
-        private String mUrl;
 
         private String mFilePath;
 
         private String mFileName;
 
-        private String mExt;
-
-        private String mFullName;
-
         private boolean isCurrentTheme = false;
-
-        public int getId() {
-            return mId;
-        }
-
-        public void setId(int mId) {
-            this.mId = mId;
-        }
-
-        public Bitmap getBitmap() {
-            return mBitmap;
-        }
-
-        public void setBitmap(Bitmap mBitmap) {
-            this.mBitmap = mBitmap;
-        }
-
-        public View getSelectView() {
-            return mSelectView;
-        }
-
-        public void setSelectView(View mSelectView) {
-            this.mSelectView = mSelectView;
-        }
-
-        public String getUrl() {
-            return mUrl;
-        }
-
-        public void setUrl(String mUrl) {
-            this.mUrl = mUrl;
-        }
 
         public String getFilePath() {
             return mFilePath;
@@ -317,22 +270,6 @@ public class OnlineWallpaperManager {
 
         public void setCurrentTheme(boolean isCurrentTheme) {
             this.isCurrentTheme = isCurrentTheme;
-        }
-
-        public String getExt() {
-            return mExt;
-        }
-
-        public void setExt(String ext) {
-            this.mExt = ext;
-        }
-
-        public String getFullName() {
-            return mFullName;
-        }
-
-        public void setFullName(String mFullName) {
-            this.mFullName = mFullName;
         }
 
     }
