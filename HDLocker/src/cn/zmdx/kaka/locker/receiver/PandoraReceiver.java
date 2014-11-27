@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 

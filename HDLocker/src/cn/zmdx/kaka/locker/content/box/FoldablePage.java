@@ -364,13 +364,16 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
             mSwipeRefreshLayout.setRefreshing(false);
             removeAllCardWithAnimation(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animation) {
-                    //将刚刚移除的卡片新闻全部标记为已读
+                    // 将刚刚移除的卡片新闻全部标记为已读
                     List<Card> cards = mAdapter.getCardsData();
                     for (Card card : cards) {
                         markRead(card);
                     }
-                    PandoraBoxDispatcher.getInstance().sendEmptyMessage(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES);
-                    //更换一批新的数据
+                    PandoraBoxDispatcher.getInstance().sendEmptyMessage(
+                            PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
+                    PandoraBoxDispatcher.getInstance().sendEmptyMessage(
+                            PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES);
+                    // 更换一批新的数据
                     changeNextGroupCard();
                 };
             });

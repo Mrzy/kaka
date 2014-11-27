@@ -24,6 +24,10 @@ public class FakeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!LockScreenManager.getInstance().isLocked()) {
+            finish();
+        }
+
         if (Build.VERSION.SDK_INT >= 19) {
             Window window = getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,

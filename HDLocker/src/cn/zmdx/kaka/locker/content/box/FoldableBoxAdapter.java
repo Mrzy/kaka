@@ -61,6 +61,7 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
         titleView.setText(data.getTitle());
         opt.inJustDecodeBounds = false;
         Bitmap bmp = DiskImageHelper.getBitmapByUrl(data.getUrl(), opt);
+
         if (bmp == null && (card.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML))) {// html类型没有缩略图，使用默认图
             imageView.setImageResource(R.drawable.html_icon_default);
         } else {

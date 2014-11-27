@@ -11,15 +11,15 @@ public class PandoraPolicy {
      */
     public static final int MIN_COUNT_LOCAL_DB_HAS_IMAGE = 5;
 
-    public static final int COUNT_DOWNLOAD_IMAGE_WIFI = 15;
+    public static final int COUNT_DOWNLOAD_IMAGE_WIFI = 20;
 
-    public static final int COUNT_DOWNLOAD_IMAGE_NON_WIFI = 0;
+    public static final int COUNT_DOWNLOAD_IMAGE_NON_WIFI = 10;
 
     public static final long MIN_CHECK_WEATHER_DURAION = 1 * 60 * 1000;
 
     public static final int MIN_DURATION_SYNC_DATA_TIME = 60 * 1000;
 
-    public static final long MIN_PULL_ORIGINAL_TIME = 5 * 60 * 1000;
+    public static final long MIN_PULL_ORIGINAL_TIME = 30 * 60 * 1000;//30min
 
     /**
      * 锁屏页下滑速率，值越小，越灵敏，即越容易下滑解锁
