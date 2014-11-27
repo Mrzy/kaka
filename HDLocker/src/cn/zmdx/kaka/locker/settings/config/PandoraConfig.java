@@ -68,6 +68,8 @@ public class PandoraConfig {
 
     private static final String KEY_NEED_MOBILE_NETWORK = "p";
 
+    private static final String KEY_PERMISSION_DOWN_INFORM = "q";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -236,7 +238,7 @@ public class PandoraConfig {
         return mSp.getBoolean(KEY_HAS_GUIDED, false);
     }
 
-    //开关手机网络状态存入SharedPreferences
+    // 开关手机网络状态存入SharedPreferences
     public void saveMobileNetwork(boolean mobileNetwork) {
         Editor editor = mSp.edit();
         editor.putBoolean(KEY_NEED_MOBILE_NETWORK, mobileNetwork);
@@ -245,6 +247,18 @@ public class PandoraConfig {
 
     public boolean isMobileNetwork() {
         return mSp.getBoolean(KEY_NEED_MOBILE_NETWORK, true);
+    }
+
+    // 允许下拉通知栏存入SharedPreferences
+    public void savePermissionDownInform(boolean downInform) {
+        Editor editor = mSp.edit();
+        editor.putBoolean(KEY_PERMISSION_DOWN_INFORM, downInform);
+        editor.commit();
+    }
+
+    public boolean isPermissionDownInform() {
+        return mSp.getBoolean(KEY_PERMISSION_DOWN_INFORM, true);
+
     }
 
     public void saveNeedNotice(boolean isNeed) {

@@ -47,11 +47,11 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private SwitchButton mNoticeMobileNetworkSButton;
 
+    private SwitchButton mPermissionDownInformSButton;
+
     private LinearLayout mLockerDefaultImage;
 
     private ImageView mLockerDefaultImageThumb;
-
-    private LinearLayout mWelcomeText;
 
     public static String LOCK_DEFAULT_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
             .getPath() + "/.Pandora/lockDefault/";
@@ -81,6 +81,9 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         mNoticeMobileNetworkSButton = (SwitchButton) findViewById(R.id.individualization_3G_4G_switch_button);
         mNoticeMobileNetworkSButton.setOnCheckedChangeListener(this);
         mNoticeMobileNetworkSButton.setChecked(isMobileNetwork());
+        mPermissionDownInformSButton = (SwitchButton) findViewById(R.id.individualization_permission_down_inform_switch_button);
+        mPermissionDownInformSButton.setOnCheckedChangeListener(this);
+        mPermissionDownInformSButton.setChecked(isPermissionDownInform());
         mLockerDefaultImage = (LinearLayout) findViewById(R.id.individualization_locker_default_image);
         mLockerDefaultImage.setOnClickListener(this);
         mLockerDefaultImageThumb = (ImageView) findViewById(R.id.individualization_locker_default_thumb_image);
@@ -92,8 +95,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         params.height = height;
         mLockerDefaultImageThumb.setLayoutParams(params);
 
-        mWelcomeText = (LinearLayout) findViewById(R.id.individualization_welcome_text);
-        mWelcomeText.setOnClickListener(this);
     }
 
     @SuppressWarnings("deprecation")
@@ -137,6 +138,13 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                     openMobileNetwork();
                 } else {
                     closeMobileNetwork();
+                }
+                break;
+            case R.id.individualization_permission_down_inform_switch_button:
+                if (isChecked) {
+                    openPermissionDownInform();
+                } else {
+                    closePermissionDownInform();
                 }
                 break;
             default:
@@ -212,6 +220,18 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         return PandoraConfig.newInstance(this).isMobileNetwork();
     }
 
+    private void closePermissionDownInform() {
+        PandoraConfig.newInstance(this).savePermissionDownInform(false);
+    }
+
+    private void openPermissionDownInform() {
+        PandoraConfig.newInstance(this).savePermissionDownInform(true);
+    }
+
+    private boolean isPermissionDownInform() {
+        return PandoraConfig.newInstance(this).isPermissionDownInform();
+    }
+
     private void saveWelcomeString(String welcomeString) {
         PandoraConfig.newInstance(this).saveWelcomeString(welcomeString);
     }
@@ -225,10 +245,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                 UmengCustomEventManager.statisticalSetDefaultImage(false);
                 break;
 
-            case R.id.individualization_welcome_text:
-                showInputDialog();
-                UmengCustomEventManager.statisticalSetWelcomeString("", false);
-                break;
             default:
                 break;
         }
