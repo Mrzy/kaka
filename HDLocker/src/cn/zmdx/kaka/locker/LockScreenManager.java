@@ -135,11 +135,11 @@ public class LockScreenManager {
 
     private boolean isInit = false;
 
-    private WallpaperPanelLayout mWallpaperPanelLayout;
+    private WallpaperPanelLayout mOnlinePanel;
 
     private OnlineWallpaperView mOnlineWallpaperView;
 
-    private LinearLayout mOnlineView;
+    private LinearLayout mOnlineViewContainer;
 
     public interface ILockScreenListener {
         void onLock();
@@ -466,68 +466,63 @@ public class LockScreenManager {
     }
 
     private void initOnlinePaperPanel() {
-        //TODO
-        mOnlineView = (LinearLayout) mEntireView.findViewById(R.id.pandora_online_wallpaper);
+        // TODO
+        mOnlineViewContainer = (LinearLayout) mEntireView.findViewById(R.id.pandora_online_wallpaper);
         final ImageView mPullImage = (ImageView) mEntireView.findViewById(R.id.lock_wallpaper_view_im);
-        final LinearLayout mDragViewAll = (LinearLayout) mEntireView.findViewById(R.id.lock_wallpaper_dragview_all);
-        final LinearLayout mDragView = (LinearLayout) mEntireView.findViewById(R.id.lock_wallpaper_dragview);
-        mWallpaperPanelLayout = (WallpaperPanelLayout) mEntireView.findViewById(R.id.locker_wallpaper_sliding);
-        mWallpaperPanelLayout.setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
-            
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-                if (!isInit) {
-                    isInit= true;
-                    initOnlinePaperPanelView();
-                }
-            }
-            
-            @Override
-            public void onPanelHidden(View panel) {
-            }
-            
-            @Override
-            public void onPanelExpanded(View panel) {
-                mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
-                mDragView.setClickable(false);
-                mDragView.setFocusable(false);
-                mPullImage.setClickable(false);
-                mPullImage.setFocusable(false);
-                mWallpaperPanelLayout.setDragView(mDragViewAll);
-            }
-            
-            @Override
-            public void onPanelCollapsed(View panel) {
-                isInit= false;
-                mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
-                mWallpaperPanelLayout.setDragView(mDragView);
-            }
-            
-            @Override
-            public void onPanelAnchored(View panel) {
-            }
-        });
+        mOnlinePanel = (WallpaperPanelLayout) mEntireView.findViewById(R.id.locker_wallpaper_sliding);
+        mOnlinePanel.setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
+
+                    @Override
+                    public void onPanelSlide(View panel, float slideOffset) {
+                        if (!isInit) {
+                            isInit = true;
+                            initOnlinePaperPanelView();
+                        }
+                    }
+
+                    @Override
+                    public void onPanelHidden(View panel) {
+                    }
+
+                    @Override
+                    public void onPanelExpanded(View panel) {
+                        mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+                        mSliderView.setEnabled(false);
+                    }
+
+                    @Override
+                    public void onPanelCollapsed(View panel) {
+                        isInit = false;
+                        mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+                        mSliderView.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onPanelAnchored(View panel) {
+                    }
+                });
     }
 
     protected void initOnlinePaperPanelView() {
         if (null == mOnlineWallpaperView) {
             mOnlineWallpaperView = new OnlineWallpaperView(mContext);
-        }
-        mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
+            mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
 
-            @Override
-            public void setWallpaper(Bitmap bitmap) {
-                if (null != mSliderView) {
-                    mSliderView.setForegroundDrawable(new BitmapDrawable(mContext.getResources(),
-                            bitmap));
+                @Override
+                public void applyOnlinePaper(Bitmap bitmap) {
+                    if (null != mSliderView) {
+                        mSliderView.setForegroundDrawable(new BitmapDrawable(mContext.getResources(), bitmap));
+                    }
+                    mOnlinePanel.collapsePanel();
                 }
-            }
-        });
-        mOnlineWallpaperView.setTheme(mCurTheme);
-        mOnlineView.removeAllViews();
-        mOnlineView.addView(mOnlineWallpaperView);
-        mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText().toString());
-        mOnlineWallpaperView.setDate(mDate.getText().toString());
+
+            });
+            mOnlineWallpaperView.setTheme(mCurTheme);
+            mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText().toString());
+            mOnlineWallpaperView.setDate(mDate.getText().toString());
+        }
+        mOnlineViewContainer.removeAllViews();
+        mOnlineViewContainer.addView(mOnlineWallpaperView);
     }
 
     public void setDate() {
@@ -621,7 +616,7 @@ public class LockScreenManager {
         mIsShowGesture = false;
         mIsLocked = false;
 
-        mOnlineView.removeAllViews();
+        mOnlineViewContainer.removeAllViews();
 
         if (mUnLockRunnable != null) {
             HDBThreadUtils.runOnUi(mUnLockRunnable);

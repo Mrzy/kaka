@@ -38,7 +38,7 @@ import com.android.volley.request.JsonObjectRequest;
 @SuppressLint("InflateParams")
 public class OnlineWallpaperManager {
 
-    private static String URL = "http://192.168.1.111:8080/pandora/locker!queryWallPaper.action";
+    private static String URL = "http://192.168.1.114:8080/pandora/locker!queryWallPaper.action";
 
     public static String ONLINE_WALLPAPER_SDCARD_LOCATION = Environment
             .getExternalStorageDirectory().getPath() + "/.Pandora/onlineWallpaper/background/";

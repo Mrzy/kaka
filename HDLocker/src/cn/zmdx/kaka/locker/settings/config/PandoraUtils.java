@@ -68,20 +68,6 @@ public class PandoraUtils {
 
     public static final int REQUEST_CODE_GALLERY = 1;
 
-    // public static final int TIME_MORNING = 9;
-    //
-    // public static final int TIME_MORNING_WORK = 12;
-    //
-    // public static final int TIME_AFTERNOON = 14;
-    //
-    // public static final int TIME_AFTERNOON_WORK = 18;
-    //
-    // public static final int TIME_EVENING = 20;
-    //
-    // public static final int TIME_EVENING_WORK = 0;
-    //
-    // public static final int TIME_EVENING_WORK_24 = 24;
-
     public static final int WARM_PROMPT_6 = 6;
 
     public static final int WARM_PROMPT_10 = 10;
@@ -652,4 +638,5 @@ public class PandoraUtils {
     public static String getStringMD5(String input) {
         return HDBHashUtils.getStringMD5(input);
     }
+
 }
