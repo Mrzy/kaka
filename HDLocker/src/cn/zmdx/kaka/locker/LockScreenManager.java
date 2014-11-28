@@ -14,8 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
@@ -509,9 +507,9 @@ public class LockScreenManager {
             mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
 
                 @Override
-                public void applyOnlinePaper(Bitmap bitmap) {
-                    if (null != mSliderView) {
-                        mSliderView.setForegroundDrawable(new BitmapDrawable(mContext.getResources(), bitmap));
+                public void applyOnlinePaper(String filePath) {
+                    if (null != mSliderView ) {
+                        mSliderView.setForgroundFile(filePath);
                     }
                     mOnlinePanel.collapsePanel();
                 }
@@ -618,6 +616,7 @@ public class LockScreenManager {
         mIsShowGesture = false;
         mIsLocked = false;
 
+        mOnlineWallpaperView = null;
         mOnlineViewContainer.removeAllViews();
 
         if (mUnLockRunnable != null) {

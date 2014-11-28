@@ -68,6 +68,10 @@ public class PandoraConfig {
 
     private static final String KEY_NEED_MOBILE_NETWORK = "p";
 
+    private static final String KEY_ONLINE_PULL_TIME = "q";
+
+    private static final String KEY_ONLINE_SERVER_JSON_DATA = "r";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -236,7 +240,7 @@ public class PandoraConfig {
         return mSp.getBoolean(KEY_HAS_GUIDED, false);
     }
 
-    //开关手机网络状态存入SharedPreferences
+    // 开关手机网络状态存入SharedPreferences
     public void saveMobileNetwork(boolean mobileNetwork) {
         Editor editor = mSp.edit();
         editor.putBoolean(KEY_NEED_MOBILE_NETWORK, mobileNetwork);
@@ -319,6 +323,26 @@ public class PandoraConfig {
     public void saveHasAlreadyDisplayBoxGuide() {
         Editor editor = mSp.edit();
         editor.putBoolean(KEY_DISPLAY_BOX_GUIDE, true);
+        editor.commit();
+    }
+
+    public long getLastOnlinePullTime() {
+        return mSp.getLong(KEY_ONLINE_PULL_TIME, 0);
+    }
+
+    public void saveLastOnlinePullTime(long lastTime) {
+        Editor editor = mSp.edit();
+        editor.putLong(KEY_ONLINE_PULL_TIME, lastTime);
+        editor.commit();
+    }
+
+    public String getLastOnlineServerJsonData() {
+        return mSp.getString(KEY_ONLINE_SERVER_JSON_DATA, "");
+    }
+
+    public void saveLastOnlineServerJsonData(String lastJsonString) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_ONLINE_SERVER_JSON_DATA, lastJsonString);
         editor.commit();
     }
 

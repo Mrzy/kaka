@@ -135,7 +135,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         if (theme.isDefaultTheme()) {
             mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            PandoraUtils.loadBitmap(getActivity(), theme.getFilePath(), new ILoadBitmapCallback() {
+            PandoraUtils.loadBackgroundBitmap(getActivity(), theme.getFilePath(), new ILoadBitmapCallback() {
 
                 @SuppressWarnings("deprecation")
                 @Override
