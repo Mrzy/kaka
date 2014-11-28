@@ -14,8 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
@@ -52,7 +50,6 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaper;
@@ -510,9 +507,9 @@ public class LockScreenManager {
             mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
 
                 @Override
-                public void applyOnlinePaper(Bitmap bitmap) {
-                    if (null != mSliderView) {
-                        mSliderView.setForegroundDrawable(new BitmapDrawable(mContext.getResources(), bitmap));
+                public void applyOnlinePaper(String filePath) {
+                    if (null != mSliderView ) {
+                        mSliderView.setForgroundFile(filePath);
                     }
                     mOnlinePanel.collapsePanel();
                 }
@@ -619,6 +616,7 @@ public class LockScreenManager {
         mIsShowGesture = false;
         mIsLocked = false;
 
+        mOnlineWallpaperView = null;
         mOnlineViewContainer.removeAllViews();
 
         if (mUnLockRunnable != null) {

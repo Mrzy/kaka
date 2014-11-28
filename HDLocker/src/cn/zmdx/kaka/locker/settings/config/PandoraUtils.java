@@ -449,10 +449,6 @@ public class PandoraUtils {
         }
     }
 
-    public static Bitmap getBitmap(String path) {
-        return ImageUtils.getBitmapFromFile(path, null);
-    }
-
     public static boolean isHaveCustomWallpaper(Context context) {
         return !TextUtils.isEmpty(PandoraConfig.newInstance(context).getCurrentWallpaperFileName());
     }
@@ -472,7 +468,7 @@ public class PandoraUtils {
     public static BitmapDrawable getLockDefaultBitmap(Context context) {
         String fileName = PandoraConfig.newInstance(context).getLockDefaultFileName();
         String path = IndividualizationActivity.LOCK_DEFAULT_SDCARD_LOCATION + fileName + ".jpg";
-        Bitmap bitmap = PandoraUtils.getBitmap(path);
+        Bitmap bitmap = ImageUtils.getBitmapFromFile(path, null);
         BitmapDrawable drawable = null;
         if (null != bitmap) {
             drawable = new BitmapDrawable(context.getResources(), bitmap);
@@ -629,6 +625,38 @@ public class PandoraUtils {
                                     Toast.LENGTH_LONG).show();
                         }
                     });
+                }
+            }
+        });
+
+    }
+
+    public static void loadBackgroundBitmap(final Context context, final String filePath,
+            final ILoadBitmapCallback callback) {
+        HDBThreadUtils.runOnWorker(new Runnable() {
+
+            @Override
+            public void run() {
+                int width = BaseInfoHelper.getWidth(context);
+                int realHeight = BaseInfoHelper.getRealHeight(context);
+                Bitmap bitamp = ImageUtils.getBitmapFromFile(filePath, width, realHeight);
+                bitamp = ImageUtils.getResizedBitmap(bitamp, width, realHeight);
+                int x = Math.max(0, (bitamp.getWidth() - width));
+                try {
+                    final Bitmap finalBitmap = Bitmap.createBitmap(bitamp, x, 0, width, realHeight);
+                    HDBThreadUtils.runOnUi(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            callback.imageLoaded(finalBitmap, filePath);
+                        }
+                    });
+                } catch (Exception e) {
+
+                }
+                if (bitamp != null && !bitamp.isRecycled()) {
+                    bitamp.recycle();
+                    bitamp = null;
                 }
             }
         });

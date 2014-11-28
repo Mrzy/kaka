@@ -41,6 +41,7 @@ import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.IWallpaperClickListener;
@@ -130,7 +131,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         if (theme.isDefaultTheme()) {
             mRootView.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            PandoraUtils.loadBitmap(WallPaperActivity.this, theme.getFilePath(),
+            PandoraUtils.loadBackgroundBitmap(WallPaperActivity.this, theme.getFilePath(),
                     new ILoadBitmapCallback() {
 
                         @Override
@@ -451,15 +452,23 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     }
 
     @Override
-    public void onClickListener(String fileName, String filePath, boolean isCustom) {
+    public void onClickListener(final String fileName, final String filePath, boolean isCustom) {
         markSelectState(fileName);
-        Bitmap backgroundBitmap = PandoraUtils.getBitmap(filePath);
-        PandoraUtils.sCropBitmap = backgroundBitmap;
-        setBackground(backgroundBitmap, -1);
         if (isCustom) {
+            Bitmap backgroundBitmap = ImageUtils.getBitmapFromFile(filePath, null);
+            PandoraUtils.sCropBitmap = backgroundBitmap;
             saveCustomWallpaperSP(fileName);
+            setBackground(backgroundBitmap, -1);
         } else {
-            saveOnlineWallpaperSP(fileName);
+            PandoraUtils.loadBackgroundBitmap(this, filePath, new ILoadBitmapCallback() {
+                
+                @Override
+                public void imageLoaded(Bitmap bitmap, String filePath) {
+                    PandoraUtils.sCropBitmap = bitmap;
+                    saveOnlineWallpaperSP(fileName);
+                    setBackground(bitmap, -1);
+                }
+            });
         }
     }
 

@@ -102,7 +102,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         if (theme.isDefaultTheme()) {
             mRootView.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            PandoraUtils.loadBitmap(this, theme.getFilePath(), new ILoadBitmapCallback() {
+            PandoraUtils.loadBackgroundBitmap(this, theme.getFilePath(), new ILoadBitmapCallback() {
 
                 @Override
                 public void imageLoaded(Bitmap bitmap, String filePath) {

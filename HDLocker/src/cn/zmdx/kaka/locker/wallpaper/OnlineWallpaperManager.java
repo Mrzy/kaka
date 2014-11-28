@@ -3,6 +3,8 @@ package cn.zmdx.kaka.locker.wallpaper;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -186,7 +188,7 @@ public class OnlineWallpaperManager {
                 }
             }
         });
-        mOnlineContainer.addView(mWallpaperRl, Math.min(1, mOnlineContainer.getChildCount()));
+        mOnlineContainer.addView(mWallpaperRl, Math.min(0, mOnlineContainer.getChildCount()));
         LayoutParams params = mWallpaperIvRl.getLayoutParams();
         int width = (int) mContext.getResources().getDimension(R.dimen.pandora_wallpaper_width);
         int height = (int) mContext.getResources().getDimension(R.dimen.pandora_wallpaper_height);
@@ -230,6 +232,7 @@ public class OnlineWallpaperManager {
             OnlineWallpaper onlineWallpaper = new OnlineWallpaper();
             onlineWallpaper.setFilePath(files[i].getPath());
             onlineWallpaper.setFileName(fileName);
+            onlineWallpaper.setLastModified(files[i].lastModified());
             if (currentThemeId == ThemeManager.THEME_ID_ONLINE) {
                 if (currentThemeFileName.equals(fileName)) {
                     onlineWallpaper.setCurrentTheme(true);
@@ -237,8 +240,16 @@ public class OnlineWallpaperManager {
             }
             list.add(onlineWallpaper);
         }
+        Collections.sort(list, comparator);
         return list;
     }
+
+    public static Comparator<OnlineWallpaper> comparator = new Comparator<OnlineWallpaper>() {
+        @Override
+        public int compare(OnlineWallpaper object1, OnlineWallpaper object2) {
+            return (object1.getLastModified() - object2.getLastModified()) > 0 ? 1 : -1;
+        }
+    };
 
     public static final class OnlineWallpaper {
 
@@ -247,6 +258,8 @@ public class OnlineWallpaperManager {
         private String mFileName;
 
         private boolean isCurrentTheme = false;
+
+        private long mLastModified;
 
         public String getFilePath() {
             return mFilePath;
@@ -270,6 +283,14 @@ public class OnlineWallpaperManager {
 
         public void setCurrentTheme(boolean isCurrentTheme) {
             this.isCurrentTheme = isCurrentTheme;
+        }
+
+        public long getLastModified() {
+            return mLastModified;
+        }
+
+        public void setLastModified(long mLastModified) {
+            this.mLastModified = mLastModified;
         }
 
     }
