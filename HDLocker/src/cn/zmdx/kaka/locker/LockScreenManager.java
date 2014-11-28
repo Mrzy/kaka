@@ -52,7 +52,6 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaper;
@@ -764,7 +763,6 @@ public class LockScreenManager {
                 mContentLayout.collapsePanel();
                 mIsShowGesture = false;
             }
-            // stopGifAnimationIfNeeded();
         }
 
         @Override
@@ -811,8 +809,6 @@ public class LockScreenManager {
                 }
                 mLockArrow.setVisibility(View.GONE);
             }
-
-            // startGifAnimationIfNeeded();
         };
 
         public void onPanelHiddenEnd() {
