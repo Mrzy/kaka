@@ -50,9 +50,7 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
         DiskImageHelper.getBitmapByUrl(data.getUrl(), opt);
         ImageView imageView = null;
         TextView titleView = null;
-        View largeView = view.findViewById(R.id.card_item_layout_large);
-        largeView.setVisibility(View.VISIBLE);
-        imageView = (ImageView) largeView.findViewById(R.id.card_item_large_imageview);
+        imageView = (ImageView) view.findViewById(R.id.card_item_large_imageview);
         titleView = (TextView) view.findViewById(R.id.card_item_large_title);
         opt.inSampleSize = ImageUtils.calculateInSampleSize(opt, BaseInfoHelper.getWidth(mContext),
                 BaseInfoHelper.getWidth(mContext));
