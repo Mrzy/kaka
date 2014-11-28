@@ -11,7 +11,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
@@ -54,7 +52,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private TypefaceTextView mAuthor;
 
-    private Button mBaseButton;
+    private Button mApplyButton;
 
     private ProgressBar mProgressBar;
 
@@ -73,7 +71,7 @@ public class OnlineWallpaperView extends LinearLayout {
     private Theme mCurTheme;
 
     public interface IOnlineWallpaper {
-        void setWallpaper(Bitmap bitmap);
+        void applyOnlinePaper(Bitmap bitmap);
     }
 
     public void setOnWallpaperListener(IOnlineWallpaper listener) {
@@ -109,8 +107,8 @@ public class OnlineWallpaperView extends LinearLayout {
                 .findViewById(R.id.pandora_online_wallpaper_preview_author);
         mProgressBar = (ProgressBar) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_progress);
-        mBaseButton = (Button) mRootView.findViewById(R.id.pandora_online_wallpaper_preview_button);
-        mBaseButton.setOnClickListener(new OnClickListener() {
+        mApplyButton = (Button) mRootView.findViewById(R.id.pandora_online_wallpaper_apply_button);
+        mApplyButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -125,7 +123,7 @@ public class OnlineWallpaperView extends LinearLayout {
                 Bitmap bitmap = PandoraUtils.getBitmap(OnlineWallpaperManager.getInstance()
                         .getFilePath(mCurrentItem.getImageNAME()));
                 if (null != bitmap) {
-                    mListener.setWallpaper(bitmap);
+                    mListener.applyOnlinePaper(bitmap);
                 }
             }
         });

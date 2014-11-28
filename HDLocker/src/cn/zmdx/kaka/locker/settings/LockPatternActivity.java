@@ -144,7 +144,7 @@ public class LockPatternActivity extends Activity implements OnClickListener, On
             setGuseturePromptString(mContext.getResources()
                     .getString(R.string.gusture_limit_prompt));
             setGuseturePromptColor(mContext.getResources().getColor(
-                    R.color.lock_pattern_view_success_color));
+                    R.color.lock_pattern_view_error_color));
             mLockPatternView.setDisplayMode(DisplayMode.Wrong);
             return;
         }
