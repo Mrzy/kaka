@@ -9,22 +9,32 @@ import com.android.volley.toolbox.ImageLoader;
 
 public class ImageLoaderManager {
 
-    private static ImageLoader mImageLoader;
+    private static ImageLoader sImageLoader;
+
+    public static DiskImageCache sOnlineImageCache;
 
     public static void init(Context context) {
         try {
             DiskImageCache cache = new DiskImageCache(context, "onlineCache", 1024 * 30 * 1024);
-            mImageLoader = new ImageLoader(RequestManager.getRequestQueue(), cache);
+            sImageLoader = new ImageLoader(RequestManager.getRequestQueue(), cache);
         } catch (Exception e) {
-            Toast.makeText(context, context.getResources().getString(R.string.sdcard_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getResources().getString(R.string.sdcard_error),
+                    Toast.LENGTH_LONG).show();
         }
     }
 
     public static ImageLoader getImageLoader() {
-        if (mImageLoader != null) {
-            return mImageLoader;
+        if (sImageLoader != null) {
+            return sImageLoader;
         } else {
             throw new IllegalStateException("Not initialized");
         }
+    }
+
+    public static DiskImageCache getOnlineImageCache(Context context) {
+        if (null == sOnlineImageCache) {
+            sOnlineImageCache = new DiskImageCache(context, "onlineImageCache", 1024 * 50 * 1024);
+        }
+        return sOnlineImageCache;
     }
 }

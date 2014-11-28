@@ -508,10 +508,10 @@ public class LockScreenManager {
 
                 @Override
                 public void applyOnlinePaper(String filePath) {
-                    if (null != mSliderView ) {
+                    mOnlinePanel.collapsePanel();
+                    if (null != mSliderView || !TextUtils.isEmpty(filePath)) {
                         mSliderView.setForgroundFile(filePath);
                     }
-                    mOnlinePanel.collapsePanel();
                 }
 
             });

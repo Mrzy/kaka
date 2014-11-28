@@ -1,6 +1,7 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -36,16 +37,18 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.FileHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.IWallpaperClickListener;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.PandoraWallpaper;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -67,7 +70,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
 
     private static final int MSG_SAVE_ONLINE_WALLPAPER = 12;
 
-    private static final int MSG_HANDLE_THUMB_BITMAP = 13;
+    private static final int MSG_INSERT_WALLPAPER_ITEM = 13;
 
     private List<PandoraWallpaper> mPandoraWallpaperList;
 
@@ -131,7 +134,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         if (theme.isDefaultTheme()) {
             mRootView.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            PandoraUtils.loadBackgroundBitmap(WallPaperActivity.this, theme.getFilePath(),
+            WallpaperUtils.loadBackgroundBitmap(WallPaperActivity.this, theme.getFilePath(),
                     new ILoadBitmapCallback() {
 
                         @Override
@@ -209,7 +212,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
                 String fileName = PandoraUtils.getRandomString();
                 saveCustomWallpaperSP(fileName);
                 setBackground(PandoraUtils.sCropBitmap, -1);
-                saveWallpaperFile(fileName);
+                saveCustomWallpaperFile(fileName);
                 break;
             case PandoraUtils.REQUEST_CODE_GALLERY: {
                 gotoCropActivity(data.getData());
@@ -262,18 +265,18 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         animatorAlphaInvisible.start();
     }
 
-    private void saveWallpaperFile(final String fileName) {
+    private void saveCustomWallpaperFile(final String fileName) {
         HDBThreadUtils.runOnWorker(new Runnable() {
 
             @Override
             public void run() {
-                PandoraUtils.saveBitmap(PandoraUtils.sCropBitmap,
-                        CustomWallpaperManager.WALLPAPER_SDCARD_LOCATION, fileName);
-                if (mHandler.hasMessages(MSG_HANDLE_THUMB_BITMAP)) {
-                    mHandler.removeMessages(MSG_HANDLE_THUMB_BITMAP);
+                ImageUtils.saveImageToFile(PandoraUtils.sCropBitmap, CustomWallpaperManager
+                        .getInstance().getFilePath(fileName));
+                if (mHandler.hasMessages(MSG_INSERT_WALLPAPER_ITEM)) {
+                    mHandler.removeMessages(MSG_INSERT_WALLPAPER_ITEM);
                 }
                 Message message = Message.obtain();
-                message.what = MSG_HANDLE_THUMB_BITMAP;
+                message.what = MSG_INSERT_WALLPAPER_ITEM;
                 message.obj = fileName;
                 mHandler.sendMessage(message);
             }
@@ -337,7 +340,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
                     ((WallPaperActivity) activity).saveCurrentWallpaperFileName((String) msg.obj);
                     ((WallPaperActivity) activity).saveThemeId(ThemeManager.THEME_ID_ONLINE);
                     break;
-                case MSG_HANDLE_THUMB_BITMAP:
+                case MSG_INSERT_WALLPAPER_ITEM:
                     ((WallPaperActivity) activity).setWallpaperItem((String) msg.obj);
                     ((WallPaperActivity) activity).markSelectState((String) msg.obj);
                     break;
@@ -460,8 +463,8 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
             saveCustomWallpaperSP(fileName);
             setBackground(backgroundBitmap, -1);
         } else {
-            PandoraUtils.loadBackgroundBitmap(this, filePath, new ILoadBitmapCallback() {
-                
+            WallpaperUtils.loadBackgroundBitmap(this, filePath, new ILoadBitmapCallback() {
+
                 @Override
                 public void imageLoaded(Bitmap bitmap, String filePath) {
                     PandoraUtils.sCropBitmap = bitmap;
@@ -488,7 +491,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
 
             @Override
             public void run() {
-                PandoraUtils.deleteFile(filePath);
+                FileHelper.deleteFile(new File(filePath));
             }
         });
     }

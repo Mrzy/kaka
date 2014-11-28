@@ -18,9 +18,10 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -135,7 +136,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         if (theme.isDefaultTheme()) {
             mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            PandoraUtils.loadBackgroundBitmap(getActivity(), theme.getFilePath(), new ILoadBitmapCallback() {
+            WallpaperUtils.loadBackgroundBitmap(getActivity(), theme.getFilePath(), new ILoadBitmapCallback() {
 
                 @SuppressWarnings("deprecation")
                 @Override
@@ -271,7 +272,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     @Override
     public void onDestroyView() {
         PandoraUtils.sCropBitmap = null;
-        // PandoraUtils.sCropThumbBitmap = null;
         PandoraUtils.sLockDefaultThumbBitmap = null;
         super.onDestroyView();
     }
