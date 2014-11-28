@@ -464,7 +464,7 @@ public class PandoraUtils {
     }
 
     public static Bitmap getBitmap(String path) {
-        return ImageUtils.getBitmapFromFile(path);
+        return ImageUtils.getBitmapFromFile(path, null);
     }
 
     public static boolean isHaveCustomWallpaper(Context context) {

@@ -508,14 +508,11 @@ public class PandoraPanelLayout extends ViewGroup {
             return;
         int width = BaseInfoHelper.getWidth(getContext());
         int realHeight = BaseInfoHelper.getRealHeight(getContext());
-        int height = Integer.parseInt(BaseInfoHelper.getHeight(mContext));
         Bitmap srcBmp = ImageUtils.drawable2Bitmap(mForegroundDrawable);
-        float rate = (float) realHeight / (float) height;
-        int toWidth = (int ) ((float) width * rate);
-        srcBmp = ImageUtils.scaleTo(srcBmp, toWidth, realHeight, true);
+        srcBmp = ImageUtils.getResizedBitmap(srcBmp, width, realHeight);
         Bitmap topBmp = null;
         Bitmap bottomBmp = null;
-        int x = (toWidth - width) / 2;
+        int x = Math.max(0, (srcBmp.getWidth() - width) / 2);
         try {
             topBmp = Bitmap.createBitmap(srcBmp, x, 0, width,
                     mTopView.getMeasuredHeight());

@@ -301,9 +301,15 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                 box.startGif();
             }
         } else if (type.equals(ServerDataMapping.S_DATATYPE_NEWS)
-                || type.equals(ServerDataMapping.S_DATATYPE_JOKE)) {
+                || type.equals(ServerDataMapping.S_DATATYPE_JOKE) || type.equals(ServerDataMapping.S_DATATYPE_SINGLEIMG)) {
             SingleImageBox box = new SingleImageBox(mContext, this,
                     SingleImageBox.convertFromServerData(data));
+            View view = box.getRenderedView();
+            if (view != null) {
+                renderDetailView(view);
+            }
+        } else if (type.equals(ServerDataMapping.S_DATATYPE_MULTIIMG)) {
+            final MultiImgBox box = new MultiImgBox(mContext, this, MultiImgBox.convertToMultiBox(data));
             View view = box.getRenderedView();
             if (view != null) {
                 renderDetailView(view);

@@ -30,15 +30,18 @@ public class ImageUtils {
     /**
      * null may be returned if the image file not found
      */
-    public static Bitmap getBitmapFromFile(String filepath) {
+    public static Bitmap getBitmapFromFile(String filepath, BitmapFactory.Options opts) {
         try {
-            if (new File(filepath).exists()) {
-                return BitmapFactory.decodeFile(filepath);
-            }
+            return BitmapFactory.decodeFile(filepath, opts);
         } catch (OutOfMemoryError e) {
-            return null;
         }
         return null;
+    }
+
+    public static Bitmap getBitmapFromFile(String filePath, int reqWidth, int reqHeight) {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = computeSampleSize(filePath, reqWidth, reqHeight);
+        return getBitmapFromFile(filePath, opts);
     }
 
     /**
@@ -96,6 +99,9 @@ public class ImageUtils {
     }
 
     public static int computeSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        if (reqWidth <= 0 || reqHeight <= 0) {
+            return 1;
+        }
         try {
             int widRate = Math.round((float) options.outWidth / (float) reqWidth);
             int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
@@ -103,6 +109,22 @@ public class ImageUtils {
         } catch (Exception e) {
             return 1;
         }
+    }
+
+    public static int computeSampleSize(String bmpFile, int reqWidth, int reqHeight) {
+        if (reqWidth <= 0 || reqHeight <= 0) {
+            return 1;
+        }
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(bmpFile, options);
+            int widRate = Math.round((float) options.outWidth / (float) reqWidth);
+            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
+            return Math.min(widRate, heightRate);
+        } catch (Exception e) {
+        }
+        return 1;
     }
 
     /**
@@ -168,6 +190,33 @@ public class ImageUtils {
         }
 
         return target;
+    }
+
+    /**
+     * 根据resize图片后的宽和高，在保证宽高比的情况下，缩放或放大到最合适的尺寸
+     * 
+     * @param srcBmp
+     * @param targetWidth 目标宽度
+     * @param targetHeight 目标高度
+     * @return
+     */
+    public static Bitmap getResizedBitmap(Bitmap srcBmp, int targetWidth, int targetHeight) {
+        if (srcBmp == null || targetWidth <= 0 || targetHeight <= 0) {
+            return null;
+        }
+
+        try {
+            float hRate = (float) targetHeight / (float) srcBmp.getHeight();
+            float wRate = (float) targetWidth / (float) srcBmp.getWidth();
+            float rate = Math.max(hRate, wRate);
+            Matrix matrix = new Matrix();
+            // resize the Bitmap
+            matrix.postScale(rate, rate);
+            return Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(), srcBmp.getHeight(), matrix,
+                    true);
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     /**

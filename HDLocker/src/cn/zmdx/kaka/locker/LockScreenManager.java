@@ -52,6 +52,7 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaper;
@@ -554,7 +555,9 @@ public class LockScreenManager {
         if (mCurTheme.isDefaultTheme()) {
             mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
         } else {
-            Bitmap bitmap = PandoraUtils.getBitmap(mCurTheme.getFilePath());
+            int screenWidth = BaseInfoHelper.getWidth(mContext);
+            int screenHeight = BaseInfoHelper.getRealHeight(mContext);
+            Bitmap bitmap = ImageUtils.getBitmapFromFile(mCurTheme.getFilePath(), screenWidth, screenHeight);
             mSliderView.setForegroundDrawable(new BitmapDrawable(mContext.getResources(), bitmap));
         }
     }
