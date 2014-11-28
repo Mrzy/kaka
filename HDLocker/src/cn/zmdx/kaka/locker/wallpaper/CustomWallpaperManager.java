@@ -3,6 +3,8 @@ package cn.zmdx.kaka.locker.wallpaper;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -21,10 +23,10 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.IWallpaperClickListener;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.PandoraWallpaper;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 
 @SuppressLint("InflateParams")
 public class CustomWallpaperManager {
@@ -44,25 +46,6 @@ public class CustomWallpaperManager {
         return PandoraUtils.isHaveFile(WALLPAPER_SDCARD_LOCATION);
     }
 
-    @SuppressWarnings("unused")
-    private boolean isHaveFileWithFileName(String path, String name) {
-        boolean isHave = false;
-        try {
-            File file = new File(path);
-            File[] files = file.listFiles();
-            if (files != null && files.length != 0) {
-                for (int i = 0; i < files.length; i++) {
-                    if (files[i].getName().equals(name)) {
-                        isHave = true;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return isHave;
-    }
-
     public List<CustomWallpaper> getCustomWallpaper(Context context) {
         int currentThemeId = ThemeManager.getCurrentTheme().getmThemeId();
         String currentThemeFileName = null;
@@ -73,10 +56,12 @@ public class CustomWallpaperManager {
         File file = new File(WALLPAPER_SDCARD_LOCATION);
         File[] files = file.listFiles();
         for (int i = 0; i < files.length; i++) {
-            String fileName = files[i].getName().substring(0, files[i].getName().indexOf("."));
+            File filePos = files[i];
+            String fileName = filePos.getName().substring(0, filePos.getName().indexOf("."));
             CustomWallpaper customWallpaper = new CustomWallpaper();
-            customWallpaper.setFilePath(files[i].getPath());
+            customWallpaper.setFilePath(filePos.getPath());
             customWallpaper.setFileName(fileName);
+            customWallpaper.setLastModified(filePos.lastModified());
             if (currentThemeId == ThemeManager.THEME_ID_CUSTOM) {
                 if (currentThemeFileName.equals(fileName)) {
                     customWallpaper.setCurrentTheme(true);
@@ -84,16 +69,24 @@ public class CustomWallpaperManager {
             }
             list.add(customWallpaper);
         }
+        Collections.sort(list, comparator);
         return list;
     }
+
+    public static Comparator<CustomWallpaper> comparator = new Comparator<CustomWallpaper>() {
+        @Override
+        public int compare(CustomWallpaper object1, CustomWallpaper object2) {
+            return (object1.getLastModified() - object2.getLastModified()) > 0 ? 1 : -1;
+        }
+    };
 
     public void setCustomWallpaperList(Context mContext, ViewGroup mCustomContainer,
             final IWallpaperClickListener listener, List<PandoraWallpaper> pWallpaperList) {
         if (isHaveCustomWallpaper()) {
             List<CustomWallpaper> wallpaperList = getCustomWallpaper(mContext);
-            for (int i = 0; i < wallpaperList.size(); i++) {
-                String fileName = wallpaperList.get(i).getFileName();
-                boolean isCurrentTheme = wallpaperList.get(i).isCurrentTheme();
+            for (CustomWallpaper list : wallpaperList) {
+                String fileName = list.getFileName();
+                boolean isCurrentTheme = list.isCurrentTheme();
                 setCustomWallpaperItem(mContext, mCustomContainer, fileName, isCurrentTheme,
                         listener, pWallpaperList);
             }
@@ -113,7 +106,7 @@ public class CustomWallpaperManager {
                 .findViewById(R.id.pandora_wallpaper_item_select);
         final ImageView mWallpaperDel = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_delete);
-        PandoraUtils.loadBitmap(mContext, getFilePath(fileName), new ILoadBitmapCallback() {
+        WallpaperUtils.loadBitmap(mContext, getFilePath(fileName), new ILoadBitmapCallback() {
 
             @Override
             public void imageLoaded(Bitmap bitmap, String filePath) {
@@ -175,6 +168,8 @@ public class CustomWallpaperManager {
 
         private boolean isCurrentTheme = false;
 
+        private long mLastModified;
+
         public String getFilePath() {
             return mFilePath;
         }
@@ -198,5 +193,14 @@ public class CustomWallpaperManager {
         public void setCurrentTheme(boolean isCurrentTheme) {
             this.isCurrentTheme = isCurrentTheme;
         }
+
+        public long getLastModified() {
+            return mLastModified;
+        }
+
+        public void setLastModified(long mLastModified) {
+            this.mLastModified = mLastModified;
+        }
+
     }
 }

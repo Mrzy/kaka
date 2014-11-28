@@ -3,11 +3,7 @@ package cn.zmdx.kaka.locker.settings.config;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -25,30 +21,21 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
-import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.CropImageActivity;
 import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
-import cn.zmdx.kaka.locker.utils.FileHelper;
-import cn.zmdx.kaka.locker.utils.HDBHashUtils;
-import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class PandoraUtils {
@@ -336,135 +323,6 @@ public class PandoraUtils {
                 R.anim.umeng_fb_slide_out_from_left);
     }
 
-    public static Bitmap zoomBitmap(Activity activity, Uri uri) throws FileNotFoundException {
-        InputStream inputStream = activity.getContentResolver().openInputStream(uri);
-        BitmapFactory.Options opts = new Options();
-        opts.inJustDecodeBounds = true;// 设置为true时，BitmapFactory只会解析要加载的图片的边框的信息，但是不会为该图片分配内存
-        BitmapFactory.decodeStream(inputStream, new Rect(), opts);
-        int screenHeight = BaseInfoHelper.getRealHeight(activity);
-        int screenWidth = BaseInfoHelper.getWidth(activity);
-        BitmapFactory.Options realOpts = new Options();
-        realOpts.inSampleSize = computeSampleSize(opts, screenWidth, screenHeight);
-        realOpts.inJustDecodeBounds = false;
-        realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
-        realOpts.inPurgeable = true;
-        realOpts.inInputShareable = true;
-        InputStream realInputStream = activity.getContentResolver().openInputStream(uri);
-        Bitmap bitmap = BitmapFactory.decodeStream(realInputStream, new Rect(), realOpts);
-        return bitmap;
-    }
-
-    private static int computeSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        try {
-            int widRate = Math.round((float) options.outWidth / (float) reqWidth);
-            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
-            return Math.min(widRate, heightRate);
-        } catch (Exception e) {
-            return 1;
-        }
-    }
-
-    @SuppressWarnings("unused")
-    private static int computeInitialSampleSize(BitmapFactory.Options options, int minSideLength,
-            int maxNumOfPixels) {
-        double w = options.outWidth;
-        double h = options.outHeight;
-        int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math.sqrt(w * h
-                / maxNumOfPixels));
-        int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(
-                Math.floor(w / minSideLength), Math.floor(h / minSideLength));
-        if (upperBound < lowerBound) {
-            // return the larger one when there is no overlapping zone.
-            return lowerBound;
-        }
-        if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
-            return 1;
-        } else if (minSideLength == -1) {
-            return lowerBound;
-        } else {
-            return upperBound;
-        }
-    }
-
-    public static Bitmap zoomThumbBitmap(Context context, Bitmap cropBitmap, boolean isWallpaper) {
-        int thumbWidth = 0;
-        int thumbHeight = 0;
-        if (isWallpaper) {
-            thumbWidth = (int) context.getResources().getDimension(R.dimen.pandora_wallpaper_width);
-            thumbHeight = (int) context.getResources().getDimension(
-                    R.dimen.pandora_wallpaper_height);
-        } else {
-            thumbWidth = BaseInfoHelper.getWidth(context);
-            thumbHeight = (int) (thumbWidth / (LockScreenManager.getInstance()
-                    .getBoxWidthHeightRate()));
-        }
-        return ImageUtils.scaleTo(cropBitmap, thumbWidth, thumbHeight, false);
-    }
-
-    /**
-     * 获取适应realWidth，realHeight的图片
-     * 
-     * @param activity
-     * @param path
-     * @param realWidth
-     * @param realHeight
-     * @return
-     * @throws FileNotFoundException
-     */
-    public static Bitmap getAdaptBitmap(String path, int realWidth, int realHeight)
-            throws FileNotFoundException {
-        FileInputStream inputStream = new FileInputStream(path);
-        BitmapFactory.Options opts = new Options();
-        opts.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(inputStream, new Rect(), opts);
-        BitmapFactory.Options realOpts = new Options();
-        realOpts.inSampleSize = computeSampleSize(opts, realWidth, realHeight);
-        realOpts.inJustDecodeBounds = false;
-        realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
-        realOpts.inPurgeable = true;
-        realOpts.inInputShareable = true;
-        FileInputStream realInputStream = new FileInputStream(path);
-        Bitmap bitmap = BitmapFactory.decodeStream(realInputStream, new Rect(), realOpts);
-        return bitmap;
-    }
-
-    public static void saveBitmap(Bitmap bitmap, String path, String fileName) {
-        try {
-            File dirFile = new File(path);
-            if (!dirFile.exists()) {
-                dirFile.mkdirs();
-            }
-            File file = new File(path + fileName + ".jpg");
-            file.createNewFile();
-            FileOutputStream out;
-            out = new FileOutputStream(file);
-            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)) {
-                out.flush();
-                out.close();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static boolean isHaveCustomWallpaper(Context context) {
-        return !TextUtils.isEmpty(PandoraConfig.newInstance(context).getCurrentWallpaperFileName());
-    }
-
-    public static void deleteFile(String filePath) {
-        deleteFile(new File(filePath));
-    }
-
-    public static void deleteFile(File file) {
-        FileHelper.deleteFile(file);
-    }
-
-    public static void clearFolderFiles(File dir) {
-        FileHelper.clearFolderFiles(dir);
-    }
-
     public static BitmapDrawable getLockDefaultBitmap(Context context) {
         String fileName = PandoraConfig.newInstance(context).getLockDefaultFileName();
         String path = IndividualizationActivity.LOCK_DEFAULT_SDCARD_LOCATION + fileName + ".jpg";
@@ -587,80 +445,7 @@ public class PandoraUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return isHave;
-    }
-
-    public interface ILoadBitmapCallback {
-        public void imageLoaded(Bitmap bitmap, String filePath);
-    }
-
-    public static void loadBitmap(final Context context, final String filePath,
-            final ILoadBitmapCallback callback) {
-        HDBThreadUtils.runOnWorker(new Runnable() {
-
-            @Override
-            public void run() {
-                int thumbWidth = (int) context.getResources().getDimension(
-                        R.dimen.pandora_wallpaper_width);
-                int thumbHeight = (int) context.getResources().getDimension(
-                        R.dimen.pandora_wallpaper_height);
-                try {
-                    final Bitmap bitmap = PandoraUtils.getAdaptBitmap(filePath, thumbWidth,
-                            thumbHeight);
-                    HDBThreadUtils.runOnUi(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            callback.imageLoaded(bitmap, filePath);
-                        }
-                    });
-                } catch (FileNotFoundException e) {
-                    HDBThreadUtils.runOnUi(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            Toast.makeText(context,
-                                    context.getResources().getString(R.string.error),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
-
-    }
-
-    public static void loadBackgroundBitmap(final Context context, final String filePath,
-            final ILoadBitmapCallback callback) {
-        HDBThreadUtils.runOnWorker(new Runnable() {
-
-            @Override
-            public void run() {
-                int width = BaseInfoHelper.getWidth(context);
-                int realHeight = BaseInfoHelper.getRealHeight(context);
-                Bitmap bitamp = ImageUtils.getBitmapFromFile(filePath, width, realHeight);
-                bitamp = ImageUtils.getResizedBitmap(bitamp, width, realHeight);
-                int x = Math.max(0, (bitamp.getWidth() - width));
-                try {
-                    final Bitmap finalBitmap = Bitmap.createBitmap(bitamp, x, 0, width, realHeight);
-                    HDBThreadUtils.runOnUi(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            callback.imageLoaded(finalBitmap, filePath);
-                        }
-                    });
-                } catch (Exception e) {
-
-                }
-            }
-        });
-
-    }
-
-    public static String getStringMD5(String input) {
-        return HDBHashUtils.getStringMD5(input);
     }
 
 }

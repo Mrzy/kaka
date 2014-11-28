@@ -17,9 +17,10 @@ import android.view.Window;
 import android.widget.Button;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
@@ -83,7 +84,7 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         if (theme.isDefaultTheme()) {
             mRootView.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            PandoraUtils.loadBackgroundBitmap(this, theme.getFilePath(), new ILoadBitmapCallback() {
+            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(), new ILoadBitmapCallback() {
 
                 @SuppressWarnings("deprecation")
                 @Override

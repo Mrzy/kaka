@@ -2,7 +2,6 @@
 package cn.zmdx.kaka.locker.utils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
@@ -10,6 +9,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory.Options;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
@@ -43,7 +43,7 @@ public class ImageUtils {
         opts.inSampleSize = computeSampleSize(filePath, reqWidth, reqHeight);
         return getBitmapFromFile(filePath, opts);
     }
-
+    
     /**
      * Create a bitmap object from a drawable object.
      * 
@@ -348,5 +348,28 @@ public class ImageUtils {
             HDBLOG.logE("Failed to save image file: " + e);
         }
         return false;
+    }
+
+    /**
+     * Returns the largest power-of-two divisor for use in downscaling a bitmap
+     * that will not result in the scaling past the desired dimensions.
+     * 
+     * @param actualWidth Actual width of the bitmap
+     * @param actualHeight Actual height of the bitmap
+     * @param desiredWidth Desired width of the bitmap
+     * @param desiredHeight Desired height of the bitmap
+     */
+    // Visible for testing.
+    public static int findBestSampleSize(int actualWidth, int actualHeight, int desiredWidth,
+            int desiredHeight) {
+        double wr = (double) actualWidth / desiredWidth;
+        double hr = (double) actualHeight / desiredHeight;
+        double ratio = Math.min(wr, hr);
+        float n = 1.0f;
+        while ((n * 2) <= ratio) {
+            n *= 2;
+        }
+
+        return (int) n;
     }
 }

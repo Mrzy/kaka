@@ -20,6 +20,8 @@ public class PandoraPolicy {
     public static final int MIN_DURATION_SYNC_DATA_TIME = 60 * 1000;
 
     public static final long MIN_PULL_ORIGINAL_TIME = 30 * 60 * 1000;//30min
+    
+    public static final long MIN_PULL_WALLPAPER_ORIGINAL_TIME = 3 * 60 * 60 * 1000;// 3h
 
     /**
      * 锁屏页下滑速率，值越小，越灵敏，即越容易下滑解锁

@@ -28,10 +28,13 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
+import cn.zmdx.kaka.locker.utils.FileHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.BaseEditText;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
@@ -102,13 +105,15 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         if (theme.isDefaultTheme()) {
             mRootView.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            PandoraUtils.loadBackgroundBitmap(this, theme.getFilePath(), new ILoadBitmapCallback() {
+            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(),
+                    new ILoadBitmapCallback() {
 
-                @Override
-                public void imageLoaded(Bitmap bitmap, String filePath) {
-                    mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
-                }
-            });
+                        @Override
+                        public void imageLoaded(Bitmap bitmap, String filePath) {
+                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
+                                    bitmap));
+                        }
+                    });
         }
     }
 
@@ -277,11 +282,15 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private void saveWallpaperFile(final String fileName) {
         if (null != PandoraUtils.sLockDefaultThumbBitmap) {
-            PandoraUtils.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
-            PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
-                    LOCK_DEFAULT_SDCARD_LOCATION, fileName);
+            FileHelper.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
+            ImageUtils.saveImageToFile(PandoraUtils.sLockDefaultThumbBitmap,
+                    getLockDefaultFilePath(fileName));
             saveLockDefaultSP(fileName);
         }
+    }
+
+    private String getLockDefaultFilePath(String fileName) {
+        return LOCK_DEFAULT_SDCARD_LOCATION + fileName + ".jpg";
     }
 
     public void mkDirs() {

@@ -1,7 +1,6 @@
 
 package cn.zmdx.kaka.locker.wallpaper;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import org.json.JSONException;
@@ -10,6 +9,7 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -26,18 +26,22 @@ import android.widget.Toast;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.error.VolleyError;
+import com.android.volley.misc.Utils;
 import com.android.volley.ui.NetworkImageView;
 
 @SuppressLint("InflateParams")
@@ -75,6 +79,8 @@ public class OnlineWallpaperView extends LinearLayout {
     private IOnlineWallpaper mListener;
 
     private Theme mCurTheme;
+
+    private static final boolean PREFER_QUALITY_OVER_SPEED = false;
 
     public interface IOnlineWallpaper {
         void applyOnlinePaper(String filePath);
@@ -125,7 +131,8 @@ public class OnlineWallpaperView extends LinearLayout {
                         ThemeManager.THEME_ID_ONLINE);
                 OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(mContext,
                         mCurrentItem.getImageNAME());
-                OnlineWallpaperManager.getInstance().renameFile(mCurrentItem.getImageNAME());
+                ImageUtils.saveImageToFile(mPreviewBitmap, OnlineWallpaperManager.getInstance()
+                        .getFilePath(mCurrentItem.getImageNAME()));
                 mListener.applyOnlinePaper(OnlineWallpaperManager.getInstance().getFilePath(
                         mCurrentItem.getImageNAME()));
             }
@@ -149,7 +156,8 @@ public class OnlineWallpaperView extends LinearLayout {
         long lastPullTime = PandoraConfig.newInstance(mContext).getLastOnlinePullTime();
         String lastPullJson = PandoraConfig.newInstance(mContext).getLastOnlineServerJsonData();
         mGVPb.setVisibility(View.VISIBLE);
-        if ((curTime - lastPullTime) >= 60 * 60 * 3 || TextUtils.isEmpty(lastPullJson)) {
+        if ((curTime - lastPullTime) >= PandoraPolicy.MIN_PULL_WALLPAPER_ORIGINAL_TIME
+                || TextUtils.isEmpty(lastPullJson)) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
             }
@@ -177,9 +185,9 @@ public class OnlineWallpaperView extends LinearLayout {
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(mContext, mContext.getString(R.string.error),
+                            Toast.makeText(mContext, mContext.getString(R.string.network_error),
                                     Toast.LENGTH_SHORT).show();
-                            mListener.applyOnlinePaper(null);
+                            mListener.applyOnlinePaper("");
                         }
                     });
         } else {
@@ -198,7 +206,7 @@ public class OnlineWallpaperView extends LinearLayout {
                 e.printStackTrace();
                 Toast.makeText(mContext, mContext.getString(R.string.error), Toast.LENGTH_SHORT)
                         .show();
-                mListener.applyOnlinePaper(null);
+                mListener.applyOnlinePaper("");
             }
 
         }
@@ -209,7 +217,7 @@ public class OnlineWallpaperView extends LinearLayout {
             if (mCurTheme.isDefaultTheme()) {
                 mPreview.setImageResource(mCurTheme.getmBackgroundResId());
             } else {
-                PandoraUtils.loadBitmap(mContext, mCurTheme.getFilePath(),
+                WallpaperUtils.loadBackgroundBitmap(mContext, mCurTheme.getFilePath(),
                         new ILoadBitmapCallback() {
 
                             @Override
@@ -298,48 +306,131 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private void downloadImage() {
         mProgressBar.setVisibility(View.VISIBLE);
-        OnlineWallpaperManager.getInstance().clearTmpFolderFile();
-        OnlineWallpaperManager.getInstance().downloadImage(mCurrentItem.getImageURL(),
-                mCurrentItem.getImageNAME(), new Listener<String>() {
+        Bitmap cacheBitmap = ImageLoaderManager.getOnlineImageCache(mContext).getBitmap(
+                HDBHashUtils.getStringMD5(mCurrentItem.getImageURL()));
+        if (null == cacheBitmap) {
+            OnlineWallpaperManager.getInstance().downloadImage(mCurrentItem.getImageURL(),
+                    mCurrentItem.getImageNAME(), new Listener<byte[]>() {
 
-                    @Override
-                    public void onResponse(String response) {
-                        mProgressBar.setVisibility(View.GONE);
-                        if (null != mPreviewBitmap && !mPreviewBitmap.isRecycled()) {
-                            mPreviewBitmap.recycle();
-                            System.gc();
-                        }
-                        mDesc.setText(mCurrentItem.getDesc());
-                        mAuthor.setText(mCurrentItem.getAuthor());
-                        int realWidth = (int) getResources().getDimension(
-                                R.dimen.pandora_online_wallpaper_preview_imageview_width);
-                        int realHeight = (int) getResources().getDimension(
-                                R.dimen.pandora_online_wallpaper_preview_imageview_height);
-                        try {
-                            mPreviewBitmap = PandoraUtils.getAdaptBitmap(response, realWidth,
-                                    realHeight);
-                            if (null != mPreviewBitmap) {
-                                mPreview.setImageDrawable(new BitmapDrawable(getResources(),
-                                        mPreviewBitmap));
+                        @Override
+                        public void onResponse(byte[] data) {
+                            mPreviewBitmap = doParse(data, BaseInfoHelper.getWidth(mContext),
+                                    BaseInfoHelper.getRealHeight(mContext));
+                            if (null != mPreviewBitmap && null != mCurrentItem) {
+                                setPreView();
+                                ImageLoaderManager.getOnlineImageCache(mContext).putBitmap(
+                                        HDBHashUtils.getStringMD5(mCurrentItem.getImageURL()),
+                                        mPreviewBitmap);
                             }
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
                         }
-                    }
-                }, new ErrorListener() {
+                    }, new ErrorListener() {
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        mProgressBar.setVisibility(View.GONE);
-                    }
-                });
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            mProgressBar.setVisibility(View.GONE);
+                            Toast.makeText(mContext, "", Toast.LENGTH_LONG).show();
+                            mListener.applyOnlinePaper("");
+                        }
+                    });
+        } else {
+            mPreviewBitmap = cacheBitmap;
+            setPreView();
+        }
+    }
+
+    private void setPreView() {
+        mDesc.setText(mCurrentItem.getDesc());
+        mAuthor.setText(mCurrentItem.getAuthor());
+        mPreview.setImageDrawable(new BitmapDrawable(getResources(), mPreviewBitmap));
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    /**
+     * Scales one side of a rectangle to fit aspect ratio.
+     * 
+     * @param maxPrimary Maximum size of the primary dimension (i.e. width for
+     *            max width), or zero to maintain aspect ratio with secondary
+     *            dimension
+     * @param maxSecondary Maximum size of the secondary dimension, or zero to
+     *            maintain aspect ratio with primary dimension
+     * @param actualPrimary Actual size of the primary dimension
+     * @param actualSecondary Actual size of the secondary dimension
+     */
+    public static int getResizedDimension(int maxPrimary, int maxSecondary, int actualPrimary,
+            int actualSecondary) {
+        // If no dominant value at all, just return the actual.
+        if (maxPrimary == 0 && maxSecondary == 0) {
+            return actualPrimary;
+        }
+
+        // If primary is unspecified, scale primary to match secondary's scaling
+        // ratio.
+        if (maxPrimary == 0) {
+            double ratio = (double) maxSecondary / (double) actualSecondary;
+            return (int) (actualPrimary * ratio);
+        }
+
+        if (maxSecondary == 0) {
+            return maxPrimary;
+        }
+
+        double ratio = (double) actualSecondary / (double) actualPrimary;
+        int resized = maxPrimary;
+        if (resized * ratio > maxSecondary) {
+            resized = (int) (maxSecondary / ratio);
+        }
+        return resized;
+    }
+
+    private Bitmap doParse(byte[] data, int mMaxWidth, int mMaxHeight) {
+        BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
+        decodeOptions.inInputShareable = true;
+        decodeOptions.inPurgeable = true;
+        decodeOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+        Bitmap bitmap = null;
+        if (mMaxWidth == 0 && mMaxHeight == 0) {
+            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, decodeOptions);
+        } else {
+            // If we have to resize this image, first get the natural bounds.
+            decodeOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeByteArray(data, 0, data.length, decodeOptions);
+            int actualWidth = decodeOptions.outWidth;
+            int actualHeight = decodeOptions.outHeight;
+
+            // Then compute the dimensions we would ideally like to decode to.
+            int desiredWidth = getResizedDimension(mMaxWidth, mMaxHeight, actualWidth, actualHeight);
+            int desiredHeight = getResizedDimension(mMaxHeight, mMaxWidth, actualHeight,
+                    actualWidth);
+
+            // Decode to the nearest power of two scaling factor.
+            decodeOptions.inJustDecodeBounds = false;
+
+            // TODO(ficus): Do we need this or is it okay since API 8 doesn't
+            // support it?
+            if (Utils.hasGingerbreadMR1()) {
+                decodeOptions.inPreferQualityOverSpeed = PREFER_QUALITY_OVER_SPEED;
+            }
+
+            decodeOptions.inSampleSize = ImageUtils.findBestSampleSize(actualWidth, actualHeight,
+                    desiredWidth, desiredHeight);
+            Bitmap tempBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, decodeOptions);
+
+            // If necessary, scale down to the maximal acceptable size.
+            if (tempBitmap != null
+                    && (tempBitmap.getWidth() > desiredWidth || tempBitmap.getHeight() > desiredHeight)) {
+                bitmap = Bitmap.createScaledBitmap(tempBitmap, desiredWidth, desiredHeight, true);
+                tempBitmap.recycle();
+            } else {
+                bitmap = tempBitmap;
+            }
+        }
+        return bitmap;
     }
 
     public void setDate(String dateString) {
         if (null != mDateView) {
             mDateView.setText(dateString);
         }
-
     }
 
     public void setDateAppend(String appendString) {

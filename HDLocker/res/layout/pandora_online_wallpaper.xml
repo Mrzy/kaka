@@ -67,7 +67,7 @@
                             android:layout_width="@dimen/pandora_online_wallpaper_preview_imageview_width"
                             android:layout_height="@dimen/pandora_online_wallpaper_preview_imageview_height"
                             android:contentDescription="@string/contentDescription"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerInside"
                             android:src="@drawable/online_wallpaper_default" />
 
                         <ImageView
