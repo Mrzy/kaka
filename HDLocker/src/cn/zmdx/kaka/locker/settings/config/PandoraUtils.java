@@ -654,10 +654,6 @@ public class PandoraUtils {
                 } catch (Exception e) {
 
                 }
-                if (bitamp != null && !bitamp.isRecycled()) {
-                    bitamp.recycle();
-                    bitamp = null;
-                }
             }
         });
 
