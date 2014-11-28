@@ -645,6 +645,17 @@ public class PandoraPanelLayout extends ViewGroup {
         invalidate();
     }
 
+    /**
+     * 使用磁盘的图片文件设置背景图。此方法会decode出合适大小的bitmap避免OOM
+     * @param fileName
+     */
+    public void setForgroundFile(String fileName) {
+        int screenWidth = BaseInfoHelper.getWidth(mContext);
+        int screenHeight = BaseInfoHelper.getRealHeight(mContext);
+        Bitmap bitmap = ImageUtils.getBitmapFromFile(fileName, screenWidth, screenHeight);
+        setForegroundDrawable(ImageUtils.bitmap2Drawable(mContext, bitmap));
+    }
+
     public void setForegroundResource(int resId) {
         Drawable drawable = mContext.getResources().getDrawable(resId);
         setForegroundDrawable(drawable);

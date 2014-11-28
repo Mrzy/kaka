@@ -543,10 +543,11 @@ public class LockScreenManager {
         if (mCurTheme.isDefaultTheme()) {
             mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
         } else {
-            int screenWidth = BaseInfoHelper.getWidth(mContext);
-            int screenHeight = BaseInfoHelper.getRealHeight(mContext);
-            Bitmap bitmap = ImageUtils.getBitmapFromFile(mCurTheme.getFilePath(), screenWidth, screenHeight);
-            mSliderView.setForegroundDrawable(new BitmapDrawable(mContext.getResources(), bitmap));
+            if (TextUtils.isEmpty(mCurTheme.getFilePath())) {
+                mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
+            } else {
+                mSliderView.setForgroundFile(mCurTheme.getFilePath());
+            }
         }
     }
 
