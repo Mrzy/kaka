@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
@@ -224,10 +225,11 @@ public class LockScreenManager {
 
         initLockScreenViews();
 
-        refreshContent();
-        setDate();
         mWinManager.addView(mEntireView, mWinParams);
         startFakeActivity();
+
+        refreshContent();
+        setDate();
 
         notifyLocked();
         onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
