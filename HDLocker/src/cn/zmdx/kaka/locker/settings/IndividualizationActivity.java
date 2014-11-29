@@ -59,8 +59,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private static final int MSG_SAVE_LOCK_DEFAULT = 11;
 
-    private static final int MSG_SAVE_LOCK_DEFAULT_DELAY = 100;
-
     public static boolean sIsDirect = false;
 
     @Override
@@ -274,7 +272,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private void saveWallpaperFile(final String fileName) {
         if (null != PandoraUtils.sLockDefaultThumbBitmap) {
-            FileHelper.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
+            FileHelper.clearFolderFiles(new File(LOCK_DEFAULT_SDCARD_LOCATION));
             ImageUtils.saveImageToFile(PandoraUtils.sLockDefaultThumbBitmap,
                     getLockDefaultFilePath(fileName));
             saveLockDefaultSP(fileName);
@@ -305,7 +303,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         Message message = Message.obtain();
         message.what = MSG_SAVE_LOCK_DEFAULT;
         message.obj = fileName;
-        mHandler.sendMessageDelayed(message, MSG_SAVE_LOCK_DEFAULT_DELAY);
+        mHandler.sendMessage(message);
     }
 
     private MyHandler mHandler = new MyHandler(this);
