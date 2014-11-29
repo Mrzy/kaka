@@ -195,11 +195,23 @@
     </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/pandora_online_wallpaper_pb"
+        android:id="@+id/pandora_online_wallpaper_prompt_pb"
         style="@android:style/Widget.ProgressBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="visible" />
+
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/pandora_online_wallpaper_prompt_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/online_wallpaper_translucent"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
 </FrameLayout>
