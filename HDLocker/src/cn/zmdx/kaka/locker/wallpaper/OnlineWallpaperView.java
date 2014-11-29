@@ -26,6 +26,8 @@ import android.widget.Toast;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.RequestManager;
+import cn.zmdx.kaka.locker.network.ByteArrayRequest;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -79,8 +81,6 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private IOnlineWallpaper mListener;
 
-    private Theme mCurTheme;
-
     private ProgressBar mProgressBar;
 
     private LinearLayout mContentView;
@@ -118,6 +118,9 @@ public class OnlineWallpaperView extends LinearLayout {
         addView(mRootView);
         mContentView = (LinearLayout) mRootView.findViewById(R.id.pandora_online_wallpaper_content);
         mProgressBar = (ProgressBar) mRootView.findViewById(R.id.pandora_online_wallpaper_pb);
+        mPreview = (ImageView) mRootView
+                .findViewById(R.id.pandora_online_wallpaper_preview_imageview);
+        initPreview();
         setVisibility(false);
     }
 
@@ -134,8 +137,6 @@ public class OnlineWallpaperView extends LinearLayout {
 
     public void initContentView() {
         setVisibility(true);
-        mPreview = (ImageView) mRootView
-                .findViewById(R.id.pandora_online_wallpaper_preview_imageview);
         mDesc = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_desc);
         mAuthor = (TypefaceTextView) mRootView
@@ -242,11 +243,12 @@ public class OnlineWallpaperView extends LinearLayout {
     }
 
     private void initPreview() {
-        if (null != mCurTheme) {
-            if (mCurTheme.isDefaultTheme()) {
-                mPreview.setImageResource(mCurTheme.getmBackgroundResId());
+        Theme curTheme=ThemeManager.getCurrentTheme();
+        if (null != curTheme) {
+            if (curTheme.isDefaultTheme()) {
+                mPreview.setImageResource(curTheme.getmBackgroundResId());
             } else {
-                WallpaperUtils.loadBackgroundBitmap(mContext, mCurTheme.getFilePath(),
+                WallpaperUtils.loadBackgroundBitmap(mContext, curTheme.getFilePath(),
                         new ILoadBitmapCallback() {
 
                             @Override
@@ -305,7 +307,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
             viewHolder.mImageView.setImageUrl(item.getThumbURL(),
                     ImageLoaderManager.getImageLoader());
-            // viewHolder.mImageView.setFadeInImage(true);
+            viewHolder.mImageView.setFadeInImage(true);
             viewHolder.mImageView.setDefaultImageResId(R.drawable.online_wallpaper_default);
             viewHolder.mImageView.setOnClickListener(new OnClickListener() {
 
@@ -316,8 +318,8 @@ public class OnlineWallpaperView extends LinearLayout {
                             if (null != sItem.getSelectView()) {
                                 sItem.getSelectView().setBackgroundResource(
                                         R.drawable.setting_wallpaper_border);
-                                mCurrentItem = list.get(position);
-                                downloadImage();
+                                ServerOnlineWallpaper curItem = list.get(position);
+                                downloadImage(curItem);
                             }
                         } else {
                             if (null != sItem.getSelectView()) {
@@ -333,27 +335,28 @@ public class OnlineWallpaperView extends LinearLayout {
         }
     }
 
-    private void downloadImage() {
+    private void downloadImage(final ServerOnlineWallpaper serverOnlineWallpaper) {
         if (!PandoraConfig.newInstance(mContext).isMobileNetwork()
                 && !HDBNetworkState.isWifiNetwork()) {
             return;
         }
         mPreviewProgressBar.setVisibility(View.VISIBLE);
         Bitmap cacheBitmap = ImageLoaderManager.getOnlineImageCache(mContext).getBitmap(
-                HDBHashUtils.getStringMD5(mCurrentItem.getImageURL()));
+                HDBHashUtils.getStringMD5(serverOnlineWallpaper.getImageURL()));
         if (null == cacheBitmap) {
-            OnlineWallpaperManager.getInstance().downloadImage(mCurrentItem.getImageURL(),
-                    mCurrentItem.getImageNAME(), new Listener<byte[]>() {
+            ByteArrayRequest mRequest = new ByteArrayRequest(serverOnlineWallpaper.getImageURL(),
+                    new Listener<byte[]>() {
 
                         @Override
                         public void onResponse(byte[] data) {
                             mPreviewBitmap = doParse(data, BaseInfoHelper.getWidth(mContext),
                                     BaseInfoHelper.getRealHeight(mContext));
-                            if (null != mPreviewBitmap && null != mCurrentItem) {
-                                setPreView();
+                            if (null != mPreviewBitmap) {
+                                mCurrentItem = serverOnlineWallpaper;
+                                setPreView(serverOnlineWallpaper);
                                 ImageLoaderManager.getOnlineImageCache(mContext).putBitmap(
-                                        HDBHashUtils.getStringMD5(mCurrentItem.getImageURL()),
-                                        mPreviewBitmap);
+                                        HDBHashUtils.getStringMD5(serverOnlineWallpaper
+                                                .getImageURL()), mPreviewBitmap);
                             }
                         }
                     }, new ErrorListener() {
@@ -365,15 +368,17 @@ public class OnlineWallpaperView extends LinearLayout {
                             mListener.applyOnlinePaper("");
                         }
                     });
+            RequestManager.getRequestQueue().add(mRequest);
         } else {
             mPreviewBitmap = cacheBitmap;
-            setPreView();
+            mCurrentItem = serverOnlineWallpaper;
+            setPreView(serverOnlineWallpaper);
         }
     }
 
-    private void setPreView() {
-        mDesc.setText(mCurrentItem.getDesc());
-        mAuthor.setText(mCurrentItem.getAuthor());
+    private void setPreView(ServerOnlineWallpaper serverOnlineWallpaper) {
+        mDesc.setText(serverOnlineWallpaper.getDesc());
+        mAuthor.setText(serverOnlineWallpaper.getAuthor());
         mPreview.setImageDrawable(new BitmapDrawable(getResources(), mPreviewBitmap));
         mPreviewProgressBar.setVisibility(View.GONE);
     }
@@ -478,8 +483,4 @@ public class OnlineWallpaperView extends LinearLayout {
         }
     }
 
-    public void setTheme(Theme curTheme) {
-        mCurTheme = curTheme;
-        initPreview();
-    }
 }

@@ -502,7 +502,6 @@ public class LockScreenManager {
                                     mOnlinePanel.collapsePanel();
                                 }
                             });
-                            mOnlineWallpaperView.setTheme(mCurTheme);
                             mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText().toString());
                             mOnlineWallpaperView.setDate(mDate.getText().toString());
                         }

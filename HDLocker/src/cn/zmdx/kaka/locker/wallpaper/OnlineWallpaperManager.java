@@ -24,7 +24,6 @@ import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
-import cn.zmdx.kaka.locker.network.ByteArrayRequest;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -61,8 +60,6 @@ public class OnlineWallpaperManager {
         return mInstance;
     }
 
-    private ByteArrayRequest mRequest;
-
     public void saveCurrentWallpaperFileName(Context mContext, String fileName) {
         PandoraConfig.newInstance(mContext).saveCurrentWallpaperFileName(fileName);
     }
@@ -73,15 +70,6 @@ public class OnlineWallpaperManager {
 
     public void saveThemeId(Context mContext, int themeId) {
         PandoraConfig.newInstance(mContext).saveThemeId(themeId);
-    }
-
-    public void downloadImage(String url, String fileName, Listener<byte[]> listener,
-            ErrorListener errorListener) {
-        if (null != mRequest && !mRequest.isCanceled()) {
-            mRequest.cancel();
-        }
-        mRequest = new ByteArrayRequest(url, listener, errorListener);
-        RequestManager.getRequestQueue().add(mRequest);
     }
 
     public void saveOnlineWallpaperFile(final String fileName, final Bitmap bitmap) {
