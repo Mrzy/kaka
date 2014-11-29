@@ -193,7 +193,11 @@ public class LockScreenManager {
         mTextGuideTimes = pandoraConfig.getGuideTimesInt();
         mWinParams = new WindowManager.LayoutParams();
 
-        mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        if (mPandoraConfig.isNeedNotice()) {
+            mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        } else {
+            mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+        }
         mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
@@ -465,10 +469,14 @@ public class LockScreenManager {
 
     private void initOnlinePaperPanel() {
         // TODO
-        mOnlineViewContainer = (LinearLayout) mEntireView.findViewById(R.id.pandora_online_wallpaper);
-        final ImageView mPullImage = (ImageView) mEntireView.findViewById(R.id.lock_wallpaper_view_im);
-        mOnlinePanel = (WallpaperPanelLayout) mEntireView.findViewById(R.id.locker_wallpaper_sliding);
-        mOnlinePanel.setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
+        mOnlineViewContainer = (LinearLayout) mEntireView
+                .findViewById(R.id.pandora_online_wallpaper);
+        final ImageView mPullImage = (ImageView) mEntireView
+                .findViewById(R.id.lock_wallpaper_view_im);
+        mOnlinePanel = (WallpaperPanelLayout) mEntireView
+                .findViewById(R.id.locker_wallpaper_sliding);
+        mOnlinePanel
+                .setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
 
                     @Override
                     public void onPanelSlide(View panel, float slideOffset) {
@@ -484,14 +492,16 @@ public class LockScreenManager {
 
                     @Override
                     public void onPanelExpanded(View panel) {
-                        mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+                        mPullImage
+                                .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
                         mSliderView.setEnabled(false);
                     }
 
                     @Override
                     public void onPanelCollapsed(View panel) {
                         isInit = false;
-                        mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+                        mPullImage
+                                .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
                         mSliderView.setEnabled(true);
                     }
 

@@ -54,8 +54,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private ImageView mLockerDefaultImageThumb;
 
-    private LinearLayout mWelcomeText;
-
     public static String LOCK_DEFAULT_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
             .getPath() + "/.Pandora/lockDefault/";
 
@@ -95,8 +93,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         params.height = height;
         mLockerDefaultImageThumb.setLayoutParams(params);
 
-        mWelcomeText = (LinearLayout) findViewById(R.id.individualization_welcome_text);
-        mWelcomeText.setOnClickListener(this);
     }
 
     @SuppressWarnings("deprecation")
@@ -230,10 +226,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                 UmengCustomEventManager.statisticalSetDefaultImage(false);
                 break;
 
-            case R.id.individualization_welcome_text:
-                showInputDialog();
-                UmengCustomEventManager.statisticalSetWelcomeString("", false);
-                break;
             default:
                 break;
         }

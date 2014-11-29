@@ -103,7 +103,7 @@
     <string name="pandora_crop_image_rotate">旋转</string>
     <string name="pandora_box_html_back_text">点击此处返回</string>
     <string name="guide_item_title_one">不感兴趣，滑动移除\n旧料不去，新料不来</string>
-    <string name="setting_individualization_open_3G_4G">开启3G/4G接收图文</string>
+    <string name="setting_individualization_open_3G_4G">允许3G/4G时缓存图文</string>
     
     <string name="warm_prompt_6_10_1">美好的一天开始了</string>
     <string name="warm_prompt_6_10_2">早上好，一束阳光照在你身上，祝你天天开心</string>
