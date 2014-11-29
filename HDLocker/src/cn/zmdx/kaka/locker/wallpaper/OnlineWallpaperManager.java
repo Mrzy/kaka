@@ -27,6 +27,7 @@ import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.utils.FileHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.IWallpaperClickListener;
@@ -218,10 +219,23 @@ public class OnlineWallpaperManager {
                 needDelList.add(onlineWallpaper);
             }
             list.removeAll(needDelList);
+            deleteFile(needDelList);
         }
         return list;
     }
 
+    private void deleteFile(final List<OnlineWallpaper> needDelList){
+        HDBThreadUtils.runOnWorker(new Runnable() {
+            
+            @Override
+            public void run() {
+                for (OnlineWallpaper wallpaper: needDelList) {
+                    FileHelper.deleteFile(new File(wallpaper.mFilePath));
+                }
+            }
+        });
+    }
+    
     public static Comparator<OnlineWallpaper> comparator = new Comparator<OnlineWallpaper>() {
         @Override
         public int compare(OnlineWallpaper object1, OnlineWallpaper object2) {

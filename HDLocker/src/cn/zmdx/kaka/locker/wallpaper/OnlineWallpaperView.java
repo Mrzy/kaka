@@ -243,7 +243,7 @@ public class OnlineWallpaperView extends LinearLayout {
     }
 
     private void initPreview() {
-        Theme curTheme=ThemeManager.getCurrentTheme();
+        Theme curTheme = ThemeManager.getCurrentTheme();
         if (null != curTheme) {
             if (curTheme.isDefaultTheme()) {
                 mPreview.setImageResource(curTheme.getmBackgroundResId());
@@ -336,14 +336,17 @@ public class OnlineWallpaperView extends LinearLayout {
     }
 
     private void downloadImage(final ServerOnlineWallpaper serverOnlineWallpaper) {
-        if (!PandoraConfig.newInstance(mContext).isMobileNetwork()
-                && !HDBNetworkState.isWifiNetwork()) {
-            return;
-        }
         mPreviewProgressBar.setVisibility(View.VISIBLE);
         Bitmap cacheBitmap = ImageLoaderManager.getOnlineImageCache(mContext).getBitmap(
                 HDBHashUtils.getStringMD5(serverOnlineWallpaper.getImageURL()));
         if (null == cacheBitmap) {
+            if (!PandoraConfig.newInstance(mContext).isMobileNetwork()
+                    && !HDBNetworkState.isWifiNetwork()) {
+                Toast.makeText(mContext,
+                        mContext.getResources().getString(R.string.setting_network_error),
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
             ByteArrayRequest mRequest = new ByteArrayRequest(serverOnlineWallpaper.getImageURL(),
                     new Listener<byte[]>() {
 
