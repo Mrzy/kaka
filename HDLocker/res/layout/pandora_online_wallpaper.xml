@@ -1,189 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="true"
     android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/pandora_online_wallpaper_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
-        android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+        android:layout_height="match_parent"
+        android:baselineAligned="true"
         android:orientation="vertical" >
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-            style="@style/init_setting_big_textview"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/setting_title_textview_margin_bottom"
-            android:layout_marginTop="@dimen/setting_title_textview_margin_top"
-            android:gravity="center_vertical"
-            android:text="@string/pandora_online_wallpaper_title" />
+            android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
+            android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+            android:orientation="vertical" >
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                style="@style/init_setting_big_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/setting_title_textview_margin_bottom"
+                android:layout_marginTop="@dimen/setting_title_textview_margin_top"
+                android:gravity="center_vertical"
+                android:text="@string/pandora_online_wallpaper_title" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_title_line_height"
+                android:contentDescription="@string/contentDescription"
+                android:scaleType="fitXY"
+                android:src="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/pandora_online_wallpaper_margin_bottom"
+            android:baselineAligned="false"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="@dimen/pandora_online_wallpaper_preview_imageview_width"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/pandora_online_wallpaper_margin_left"
+                android:layout_marginTop="@dimen/pandora_online_wallpaper_margin_top"
+                android:gravity="center_vertical"
+                android:orientation="vertical" >
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/pandora_online_wallpaper_apply_button_height"
+                    android:fillViewport="true"
+                    android:orientation="vertical"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                            <ImageView
+                                android:id="@+id/pandora_online_wallpaper_preview_imageview"
+                                android:layout_width="@dimen/pandora_online_wallpaper_preview_imageview_width"
+                                android:layout_height="@dimen/pandora_online_wallpaper_preview_imageview_height"
+                                android:contentDescription="@string/contentDescription"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/online_wallpaper_default" />
+
+                            <ImageView
+                                android:layout_width="@dimen/pandora_online_wallpaper_preview_imageview_width"
+                                android:layout_height="@dimen/pandora_online_wallpaper_preview_imageview_height"
+                                android:contentDescription="@string/contentDescription"
+                                android:scaleType="fitXY"
+                                android:src="@color/online_wallpaper_preview_translucent" />
+
+                            <ProgressBar
+                                android:id="@+id/pandora_online_wallpaper_preview_progress"
+                                style="@android:style/Widget.ProgressBar.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:visibility="gone" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="top|left"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginTop="5dp"
+                                android:orientation="vertical" >
+
+                                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                                    android:id="@+id/pandora_online_wallpaper_preview_weather"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp" />
+
+                                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                                    android:id="@+id/pandora_online_wallpaper_preview_date"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/white"
+                                    android:textSize="11sp" />
+
+                                <cn.zmdx.kaka.locker.widget.DigitalClocks
+                                    xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/white"
+                                    android:textSize="30sp"
+                                    clock:format="24" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            android:id="@+id/pandora_online_wallpaper_preview_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:paddingLeft="5dp"
+                            android:textSize="14sp" />
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            android:id="@+id/pandora_online_wallpaper_preview_author"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:paddingRight="5dp"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </ScrollView>
+
+                <Button
+                    android:id="@+id/pandora_online_wallpaper_apply_button"
+                    android:layout_width="@dimen/pandora_online_wallpaper_apply_button_width"
+                    android:layout_height="@dimen/pandora_online_wallpaper_apply_button_height"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:layout_marginTop="@dimen/pandora_online_wallpaper_apply_button_margin_top"
+                    android:background="#77506232"
+                    android:text="@string/pandora_online_wallpaper_apple" />
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/pandora_online_wallpaper_gridview_margin_left"
+                android:orientation="vertical" >
+
+                <GridView
+                    android:id="@+id/pandora_online_wallpaper_gridview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:columnWidth="@dimen/pandora_online_wallpaper_gridview_item_width"
+                    android:fadingEdge="vertical"
+                    android:numColumns="2"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:verticalSpacing="@dimen/pandora_online_wallpaper_gridview_vertical_spacing" />
+
+                <ProgressBar
+                    android:id="@+id/pandora_online_wallpaper_gridview_pb"
+                    style="@android:style/Widget.ProgressBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </LinearLayout>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/setting_title_line_height"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
+            android:layout_marginRight="@dimen/setting_title_textview_margin_left"
             android:contentDescription="@string/contentDescription"
             android:scaleType="fitXY"
-            android:src="@color/white" />
+            android:src="@color/setting_divider_line"
+            android:visibility="gone" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/pandora_online_wallpaper_margin_bottom"
-        android:baselineAligned="false"
-        android:orientation="horizontal" >
+    <ProgressBar
+        android:id="@+id/pandora_online_wallpaper_pb"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible" />
 
-        <RelativeLayout
-            android:layout_width="@dimen/pandora_online_wallpaper_preview_imageview_width"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/pandora_online_wallpaper_margin_left"
-            android:layout_marginTop="@dimen/pandora_online_wallpaper_margin_top"
-            android:gravity="center_vertical"
-            android:orientation="vertical" >
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true"
-                android:orientation="vertical"
-                android:overScrollMode="never"
-                android:layout_marginBottom="@dimen/pandora_online_wallpaper_apply_button_height"
-                android:scrollbars="none" >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
-
-                        <ImageView
-                            android:id="@+id/pandora_online_wallpaper_preview_imageview"
-                            android:layout_width="@dimen/pandora_online_wallpaper_preview_imageview_width"
-                            android:layout_height="@dimen/pandora_online_wallpaper_preview_imageview_height"
-                            android:contentDescription="@string/contentDescription"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/online_wallpaper_default" />
-
-                        <ImageView
-                            android:layout_width="@dimen/pandora_online_wallpaper_preview_imageview_width"
-                            android:layout_height="@dimen/pandora_online_wallpaper_preview_imageview_height"
-                            android:contentDescription="@string/contentDescription"
-                            android:scaleType="fitXY"
-                            android:src="@color/online_wallpaper_preview_translucent" />
-
-                        <ProgressBar
-                            android:id="@+id/pandora_online_wallpaper_preview_progress"
-                            style="@android:style/Widget.ProgressBar.Small"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:visibility="gone" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="top|left"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginTop="5dp"
-                            android:orientation="vertical" >
-
-                            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                                android:id="@+id/pandora_online_wallpaper_preview_weather"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:textSize="12sp" />
-
-                            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                                android:id="@+id/pandora_online_wallpaper_preview_date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:textSize="11sp" />
-
-                            <cn.zmdx.kaka.locker.widget.DigitalClocks
-                                xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:textSize="30sp"
-                                clock:format="24" />
-                        </LinearLayout>
-                    </FrameLayout>
-
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        android:id="@+id/pandora_online_wallpaper_preview_desc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:paddingLeft="5dp"
-                        android:textSize="14sp" />
-
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        android:id="@+id/pandora_online_wallpaper_preview_author"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:paddingRight="5dp"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </ScrollView>
-
-            <Button
-                android:id="@+id/pandora_online_wallpaper_apply_button"
-                android:layout_width="@dimen/pandora_online_wallpaper_apply_button_width"
-                android:layout_height="@dimen/pandora_online_wallpaper_apply_button_height"
-                android:layout_gravity="center_horizontal|bottom"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/pandora_online_wallpaper_apply_button_margin_top"
-                android:background="#77506232"
-                android:text="@string/pandora_online_wallpaper_apple" />
-        </RelativeLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/pandora_online_wallpaper_gridview_margin_left"
-            android:orientation="vertical" >
-
-            <GridView
-                android:id="@+id/pandora_online_wallpaper_gridview"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:columnWidth="@dimen/pandora_online_wallpaper_gridview_item_width"
-                android:fadingEdge="vertical"
-                android:numColumns="2"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:verticalSpacing="@dimen/pandora_online_wallpaper_gridview_vertical_spacing" />
-
-            <ProgressBar
-                android:id="@+id/pandora_online_wallpaper_gridview_pb"
-                style="@android:style/Widget.ProgressBar.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone" />
-        </FrameLayout>
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_title_line_height"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
-        android:layout_marginRight="@dimen/setting_title_textview_margin_left"
-        android:contentDescription="@string/contentDescription"
-        android:scaleType="fitXY"
-        android:visibility="gone"
-        android:src="@color/setting_divider_line" />
-
-</LinearLayout>
+</FrameLayout>

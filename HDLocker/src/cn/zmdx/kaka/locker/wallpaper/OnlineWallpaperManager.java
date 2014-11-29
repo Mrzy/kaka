@@ -24,7 +24,6 @@ import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
-import cn.zmdx.kaka.locker.network.ByteArrayRequest;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -50,6 +49,8 @@ public class OnlineWallpaperManager {
         return ONLINE_WALLPAPER_SDCARD_LOCATION + fileName + ".jpg";
     }
 
+    public static int MAX_ONLINE_PAPER_COUNT_LIMIT = 12;
+
     private static OnlineWallpaperManager mInstance;
 
     public static OnlineWallpaperManager getInstance() {
@@ -58,8 +59,6 @@ public class OnlineWallpaperManager {
         }
         return mInstance;
     }
-
-    private ByteArrayRequest mRequest;
 
     public void saveCurrentWallpaperFileName(Context mContext, String fileName) {
         PandoraConfig.newInstance(mContext).saveCurrentWallpaperFileName(fileName);
@@ -71,15 +70,6 @@ public class OnlineWallpaperManager {
 
     public void saveThemeId(Context mContext, int themeId) {
         PandoraConfig.newInstance(mContext).saveThemeId(themeId);
-    }
-
-    public void downloadImage(String url, String fileName, Listener<byte[]> listener,
-            ErrorListener errorListener) {
-        if (null != mRequest && !mRequest.isCanceled()) {
-            mRequest.cancel();
-        }
-        mRequest = new ByteArrayRequest(url, listener, errorListener);
-        RequestManager.getRequestQueue().add(mRequest);
     }
 
     public void saveOnlineWallpaperFile(final String fileName, final Bitmap bitmap) {
@@ -221,6 +211,14 @@ public class OnlineWallpaperManager {
             list.add(onlineWallpaper);
         }
         Collections.sort(list, comparator);
+        if (list.size() > MAX_ONLINE_PAPER_COUNT_LIMIT) {
+            List<OnlineWallpaper> needDelList = new ArrayList<OnlineWallpaper>();
+            for (int i = 0; i < list.size() - MAX_ONLINE_PAPER_COUNT_LIMIT; i++) {
+                OnlineWallpaper onlineWallpaper = list.get(i);
+                needDelList.add(onlineWallpaper);
+            }
+            list.removeAll(needDelList);
+        }
         return list;
     }
 
