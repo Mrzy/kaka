@@ -23,11 +23,7 @@ public class DefaultBox implements IPandoraBox {
 
     private PandoraData mData;
 
-    private BaseButton mDefaultButton;
-
     private RelativeLayout mDefaultRl;
-
-    private RelativeLayout mCustomRl;
 
     private ImageView mCustomImageView;
 
@@ -52,14 +48,9 @@ public class DefaultBox implements IPandoraBox {
         }
         mDefaultRl = (RelativeLayout) mLayoutView.findViewById(R.id.pandora_box_nodata_default);
 
-        mCustomRl = (RelativeLayout) mLayoutView.findViewById(R.id.pandora_box_nodata_custom);
-
         mCustomImageView = (ImageView) mLayoutView
                 .findViewById(R.id.pandora_box_nodata_custom_show_imageview);
         mCustomImageView.setOnClickListener(clickListener);
-
-        mDefaultButton = (BaseButton) mLayoutView.findViewById(R.id.pandora_box_set_default_image);
-        mDefaultButton.setOnClickListener(clickListener);
 
         mCustomSetImageView = (ImageView) mLayoutView
                 .findViewById(R.id.pandora_box_custom_set_default_image);
@@ -73,11 +64,9 @@ public class DefaultBox implements IPandoraBox {
             isSetCustomImage = true;
             mCustomImageView.setImageDrawable(drawable);
             mDefaultRl.setVisibility(View.GONE);
-            mCustomRl.setVisibility(View.VISIBLE);
         } else {
             isSetCustomImage = false;
             mDefaultRl.setVisibility(View.VISIBLE);
-            mCustomRl.setVisibility(View.GONE);
         }
     }
 
