@@ -33,6 +33,7 @@ import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
@@ -64,7 +65,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private Button mApplyButton;
 
-    private ProgressBar mProgressBar;
+    private ProgressBar mPreviewProgressBar;
 
     private ArrayList<ServerOnlineWallpaper> list;
 
@@ -80,6 +81,10 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private Theme mCurTheme;
 
+    private ProgressBar mProgressBar;
+
+    private LinearLayout mContentView;
+
     private static final boolean PREFER_QUALITY_OVER_SPEED = false;
 
     public interface IOnlineWallpaper {
@@ -93,31 +98,49 @@ public class OnlineWallpaperView extends LinearLayout {
     public OnlineWallpaperView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
-        init();
+        initRootView();
     }
 
     public OnlineWallpaperView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        init();
+        initRootView();
     }
 
     public OnlineWallpaperView(Context context) {
         super(context);
         mContext = context;
-        init();
+        initRootView();
     }
 
-    public void init() {
+    private void initRootView() {
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.pandora_online_wallpaper, null);
         addView(mRootView);
+        mContentView = (LinearLayout) mRootView.findViewById(R.id.pandora_online_wallpaper_content);
+        mProgressBar = (ProgressBar) mRootView.findViewById(R.id.pandora_online_wallpaper_pb);
+        setVisibility(false);
+    }
+
+    private void setVisibility(boolean isShowContent) {
+        if (isShowContent) {
+            mContentView.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
+        } else {
+            mContentView.setVisibility(View.INVISIBLE);
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    public void initContentView() {
+        setVisibility(true);
         mPreview = (ImageView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_imageview);
         mDesc = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_desc);
         mAuthor = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_author);
-        mProgressBar = (ProgressBar) mRootView
+        mPreviewProgressBar = (ProgressBar) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_progress);
         mApplyButton = (Button) mRootView.findViewById(R.id.pandora_online_wallpaper_apply_button);
         mApplyButton.setOnClickListener(new OnClickListener() {
@@ -161,6 +184,11 @@ public class OnlineWallpaperView extends LinearLayout {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
             }
+
+            if (!PandoraConfig.newInstance(mContext).isMobileNetwork()
+                    && !HDBNetworkState.isWifiNetwork()) {
+                return;
+            }
             OnlineWallpaperManager.getInstance().pullWallpaperFromServer(
                     new Listener<JSONObject>() {
 
@@ -187,6 +215,7 @@ public class OnlineWallpaperView extends LinearLayout {
                         public void onErrorResponse(VolleyError error) {
                             Toast.makeText(mContext, mContext.getString(R.string.network_error),
                                     Toast.LENGTH_SHORT).show();
+                            mGVPb.setVisibility(View.GONE);
                             mListener.applyOnlinePaper("");
                         }
                     });
@@ -305,7 +334,11 @@ public class OnlineWallpaperView extends LinearLayout {
     }
 
     private void downloadImage() {
-        mProgressBar.setVisibility(View.VISIBLE);
+        if (!PandoraConfig.newInstance(mContext).isMobileNetwork()
+                && !HDBNetworkState.isWifiNetwork()) {
+            return;
+        }
+        mPreviewProgressBar.setVisibility(View.VISIBLE);
         Bitmap cacheBitmap = ImageLoaderManager.getOnlineImageCache(mContext).getBitmap(
                 HDBHashUtils.getStringMD5(mCurrentItem.getImageURL()));
         if (null == cacheBitmap) {
@@ -327,7 +360,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            mProgressBar.setVisibility(View.GONE);
+                            mPreviewProgressBar.setVisibility(View.GONE);
                             Toast.makeText(mContext, "", Toast.LENGTH_LONG).show();
                             mListener.applyOnlinePaper("");
                         }
@@ -342,7 +375,7 @@ public class OnlineWallpaperView extends LinearLayout {
         mDesc.setText(mCurrentItem.getDesc());
         mAuthor.setText(mCurrentItem.getAuthor());
         mPreview.setImageDrawable(new BitmapDrawable(getResources(), mPreviewBitmap));
-        mProgressBar.setVisibility(View.GONE);
+        mPreviewProgressBar.setVisibility(View.GONE);
     }
 
     /**

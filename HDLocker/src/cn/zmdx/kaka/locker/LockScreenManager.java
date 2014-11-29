@@ -469,14 +469,10 @@ public class LockScreenManager {
 
     private void initOnlinePaperPanel() {
         // TODO
-        mOnlineViewContainer = (LinearLayout) mEntireView
-                .findViewById(R.id.pandora_online_wallpaper);
-        final ImageView mPullImage = (ImageView) mEntireView
-                .findViewById(R.id.lock_wallpaper_view_im);
-        mOnlinePanel = (WallpaperPanelLayout) mEntireView
-                .findViewById(R.id.locker_wallpaper_sliding);
-        mOnlinePanel
-                .setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
+        mOnlineViewContainer = (LinearLayout) mEntireView.findViewById(R.id.pandora_online_wallpaper);
+        final ImageView mPullImage = (ImageView) mEntireView.findViewById(R.id.lock_wallpaper_view_im);
+        mOnlinePanel = (WallpaperPanelLayout) mEntireView.findViewById(R.id.locker_wallpaper_sliding);
+        mOnlinePanel.setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
 
                     @Override
                     public void onPanelSlide(View panel, float slideOffset) {
@@ -492,16 +488,30 @@ public class LockScreenManager {
 
                     @Override
                     public void onPanelExpanded(View panel) {
-                        mPullImage
-                                .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+                        mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
                         mSliderView.setEnabled(false);
+                        if (null != mOnlineWallpaperView) {
+                            mOnlineWallpaperView.initContentView();
+                            mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
+
+                                @Override
+                                public void applyOnlinePaper(String filePath) {
+                                    if (null != mSliderView && !TextUtils.isEmpty(filePath)) {
+                                        mSliderView.setForgroundFile(filePath);
+                                    }
+                                    mOnlinePanel.collapsePanel();
+                                }
+                            });
+                            mOnlineWallpaperView.setTheme(mCurTheme);
+                            mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText().toString());
+                            mOnlineWallpaperView.setDate(mDate.getText().toString());
+                        }
                     }
 
                     @Override
                     public void onPanelCollapsed(View panel) {
                         isInit = false;
-                        mPullImage
-                                .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+                        mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
                         mSliderView.setEnabled(true);
                     }
 
@@ -514,20 +524,6 @@ public class LockScreenManager {
     protected void initOnlinePaperPanelView() {
         if (null == mOnlineWallpaperView) {
             mOnlineWallpaperView = new OnlineWallpaperView(mContext);
-            mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
-
-                @Override
-                public void applyOnlinePaper(String filePath) {
-                    mOnlinePanel.collapsePanel();
-                    if (null != mSliderView || !TextUtils.isEmpty(filePath)) {
-                        mSliderView.setForgroundFile(filePath);
-                    }
-                }
-
-            });
-            mOnlineWallpaperView.setTheme(mCurTheme);
-            mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText().toString());
-            mOnlineWallpaperView.setDate(mDate.getText().toString());
         }
         mOnlineViewContainer.removeAllViews();
         mOnlineViewContainer.addView(mOnlineWallpaperView);

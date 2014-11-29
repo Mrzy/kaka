@@ -50,6 +50,8 @@ public class OnlineWallpaperManager {
         return ONLINE_WALLPAPER_SDCARD_LOCATION + fileName + ".jpg";
     }
 
+    public static int MAX_ONLINE_PAPER_COUNT_LIMIT = 12;
+
     private static OnlineWallpaperManager mInstance;
 
     public static OnlineWallpaperManager getInstance() {
@@ -221,6 +223,14 @@ public class OnlineWallpaperManager {
             list.add(onlineWallpaper);
         }
         Collections.sort(list, comparator);
+        if (list.size() > MAX_ONLINE_PAPER_COUNT_LIMIT) {
+            List<OnlineWallpaper> needDelList = new ArrayList<OnlineWallpaper>();
+            for (int i = 0; i < list.size() - MAX_ONLINE_PAPER_COUNT_LIMIT; i++) {
+                OnlineWallpaper onlineWallpaper = list.get(i);
+                needDelList.add(onlineWallpaper);
+            }
+            list.removeAll(needDelList);
+        }
         return list;
     }
 
