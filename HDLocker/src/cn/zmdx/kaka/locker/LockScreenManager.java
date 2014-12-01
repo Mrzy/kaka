@@ -369,6 +369,9 @@ public class LockScreenManager {
 
     }
 
+    /**
+     * 检查新版本
+     */
     private void checkNewVersion() {
         PandoraConfig config = PandoraConfig.newInstance(mContext);
         String lastCheckTime = config.getFlagCheckNewVersion();
