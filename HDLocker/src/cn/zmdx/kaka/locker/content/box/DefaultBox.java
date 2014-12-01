@@ -14,7 +14,6 @@ import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
-import cn.zmdx.kaka.locker.widget.BaseButton;
 
 public class DefaultBox implements IPandoraBox {
     private Context mContext;

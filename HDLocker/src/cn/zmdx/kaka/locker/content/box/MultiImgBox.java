@@ -1,8 +1,8 @@
 package cn.zmdx.kaka.locker.content.box;
 
+import android.content.Context;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
-import android.content.Context;
 
 public class MultiImgBox extends HtmlBox {
 
@@ -20,7 +20,7 @@ public class MultiImgBox extends HtmlBox {
         pd.setmFromWebSite(data.getCollectWebsite());
         pd.setmTitle(data.getTitle());
         pd.setmImage(DiskImageHelper.getBitmapByUrl(data.getUrl(), null));
-        pd.setmContentUrl(data.getUrl());
+        pd.setmContentUrl(data.getImageDesc());
         return pd;
     }
 }

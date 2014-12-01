@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
@@ -391,6 +390,7 @@ public class LockScreenManager {
                 if (page.isTodayData()) {
                     if (!HDBNetworkState.isWifiNetwork()) {
                         page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_HTML);
+                        page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_MULTIIMG);
                     }
                     return;
                 }
@@ -871,8 +871,8 @@ public class LockScreenManager {
 
     public void onScreenOn() {
         if (mIsLocked) {
-            processWeatherInfo();
             processAnimations();
+            processWeatherInfo();
             refreshContent();
         }
     }
