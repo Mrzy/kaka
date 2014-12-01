@@ -7,9 +7,9 @@ import cn.zmdx.kaka.locker.BuildConfig;
 
 public class UrlBuilder {
 
-    private static String sBaseDebugUrl = "http://nb.hdlocker.com/pandora/locker!queryDataImgTable.action?";
+    private static String sBaseDebugUrl = "http://nb.hdlocker.com/pandora/locker!";
 
-    private static String sBaseProdUrl = "http://pandora.hdlocker.com:8080/pandora/locker!queryDataImgTable.action?";
+    private static String sBaseProdUrl = "http://pandora.hdlocker.com:8080/pandora/locker!";
 
     public static String getBaseUrl() {
         if (BuildConfig.DEBUG) {
@@ -19,7 +19,7 @@ public class UrlBuilder {
         }
     }
 
-    /**
+    /**@deprecated
      * @param params url参数
      * @return
      */
