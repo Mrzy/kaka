@@ -151,7 +151,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center_horizontal|bottom"
                     android:layout_marginTop="@dimen/pandora_online_wallpaper_apply_button_margin_top"
-                    android:background="#77506232"
+                    android:background="@drawable/pandora_online_wallpaper_apply_selector"
                     android:text="@string/pandora_online_wallpaper_apple" />
             </RelativeLayout>
 
