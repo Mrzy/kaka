@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.RequestManager;
@@ -41,8 +42,18 @@ import com.android.volley.request.JsonObjectRequest;
 @SuppressLint("InflateParams")
 public class OnlineWallpaperManager {
 
-    private static String URL = "http://192.168.1.114:8080/pandora/locker!queryWallPaper.action";
+    private static String sBaseDebugUrl = "http://182.254.159.63/pandora/locker!queryWallPaper.action";
 
+    private static String sBaseProdUrl = "http://182.254.214.26:8080/pandora/locker!queryWallPaper.action";
+
+    public static String getBaseUrl() {
+        if (BuildConfig.DEBUG) {
+            return sBaseDebugUrl;
+        } else {
+            return sBaseProdUrl;
+        }
+    }
+    
     public static String ONLINE_WALLPAPER_SDCARD_LOCATION = Environment
             .getExternalStorageDirectory().getPath() + "/.Pandora/onlineWallpaper/background/";
 
@@ -98,10 +109,11 @@ public class OnlineWallpaperManager {
 
     public void pullWallpaperFromServer(Listener<JSONObject> listener, ErrorListener errorListener) {
         JsonObjectRequest request = null;
-        request = new JsonObjectRequest(URL, null, listener, errorListener);
+        request = new JsonObjectRequest(getBaseUrl(), null, listener, errorListener);
         RequestManager.getRequestQueue().add(request);
     }
 
+    
     public boolean isHaveOnlineWallpaper() {
         return PandoraUtils.isHaveFile(ONLINE_WALLPAPER_SDCARD_LOCATION);
     }

@@ -22,6 +22,8 @@ public class ServerOnlineWallpaperManager {
                 serverOnlineWallpaper.parseBaseJson(jsonObject);
                 sdList.add(serverOnlineWallpaper);
             }
+        }else {
+            sdList = null;
         }
         return sdList;
     }

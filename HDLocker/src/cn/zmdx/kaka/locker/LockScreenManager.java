@@ -478,6 +478,7 @@ public class LockScreenManager {
                     public void onPanelSlide(View panel, float slideOffset) {
                         if (!isInit) {
                             isInit = true;
+                            mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
                             initOnlinePaperPanelView();
                         }
                     }
@@ -488,7 +489,6 @@ public class LockScreenManager {
 
                     @Override
                     public void onPanelExpanded(View panel) {
-                        mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
                         mSliderView.setEnabled(false);
                         if (null != mOnlineWallpaperView) {
                             mOnlineWallpaperView.initContentView();

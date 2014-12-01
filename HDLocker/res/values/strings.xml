@@ -51,12 +51,12 @@
     <string name="init_setting_to_set">前往设置</string>
     <string name="init_setting_complete_to_set">完成</string>
     <string name="init_setting_close_systemlocker_prompt">请选择『无』模式</string>
-    <string name="init_setting_MIUI_close_systemlocker_prompt_miui_one">请先开启『开发者选项』开关</string>
-    <string name="init_setting_MIUI_close_systemlocker_prompt_miui_two">再开启『直接进入系统』开关</string>
+    <string name="init_setting_MIUI_close_systemlocker_prompt_miui_one">开启『开发者选项』开关</string>
+    <string name="init_setting_MIUI_close_systemlocker_prompt_miui_two">开启『直接进入系统』开关</string>
     <string name="init_setting_MIUI_close_systemlocker_prompt_miui_three">*如果您已经开启屏幕密码，需要先关闭系统屏幕密码</string>
     <string name="init_setting_MIUI_allow_floating_window_prompt">请开启『显示悬浮窗』开关</string>
-    <string name="init_setting_MIUI_trust_prompt_one">请开启『我信任该程序』开关</string>
-    <string name="init_setting_MIUI_trust_prompt_two">再开启『自动启动』开关</string>
+    <string name="init_setting_MIUI_trust_prompt_one">开启『我信任该程序』</string>
+    <string name="init_setting_MIUI_trust_prompt_two">和『自动启动』开关</string>
     <string name="lock_week_monday">周一</string>
     <string name="lock_week_tuesday">周二</string>
     <string name="lock_week_wednesday">周三</string>
