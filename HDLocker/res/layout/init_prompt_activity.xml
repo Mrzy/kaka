@@ -35,58 +35,64 @@
             android:id="@+id/init_setting_V5_close_systemlocker_prompt_miui"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone" >
-
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/init_setting_MIUI_close_systemlocker_prompt_miui_one"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="3dp"
-                android:gravity="center"
-                android:text="@string/init_setting_MIUI_close_systemlocker_prompt_miui_two"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="3dp"
-                android:gravity="center"
-                android:text="@string/init_setting_MIUI_close_systemlocker_prompt_miui_three"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/init_setting_V5_allow_floating_window_prompt"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/init_setting_V5_close_systemlocker_prompt_margin_top"
             android:orientation="vertical"
             android:visibility="gone" >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/contentDescription"
-                android:src="@drawable/init_setting_prompt_float_window" />
+                android:src="@drawable/init_setting_allow_floating_window" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
+                android:layout_marginTop="@dimen/init_setting_V5_textview_prompt_margin_top"
+                android:text="@string/init_setting_MIUI_close_systemlocker_prompt_miui_one"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/init_setting_V5_close_systemlocker_prompt_imageview_margin_top"
+                android:contentDescription="@string/contentDescription"
+                android:src="@drawable/init_setting_close_systemlocker" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
+                android:layout_marginTop="@dimen/init_setting_V5_textview_prompt_margin_top"
+                android:text="@string/init_setting_MIUI_close_systemlocker_prompt_miui_two"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/init_setting_V5_allow_floating_window_prompt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/init_setting_V5_allow_floating_window_prompt_margin_top"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/contentDescription"
+                android:src="@drawable/init_setting_allow_floating_window" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
+                android:layout_marginTop="@dimen/init_setting_V5_textview_prompt_margin_top"
                 android:text="@string/init_setting_MIUI_allow_floating_window_prompt"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
@@ -96,21 +102,22 @@
             android:id="@+id/init_setting_V5_trust_prompt"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/init_setting_V5_trust_prompt_margin_top"
             android:orientation="vertical"
             android:visibility="gone" >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/contentDescription"
                 android:src="@drawable/init_setting_prompt_trust" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
+                android:layout_marginTop="@dimen/init_setting_V5_textview_prompt_margin_top"
                 android:text="@string/init_setting_MIUI_trust_prompt_one"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
@@ -118,9 +125,8 @@
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="3dp"
-                android:gravity="center"
+                android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
+                android:layout_marginTop="@dimen/init_setting_V5_textview_prompt_margin_top"
                 android:text="@string/init_setting_MIUI_trust_prompt_two"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
@@ -154,7 +160,7 @@
                 android:text="@string/init_setting_V6_close_systemlocker_prompt"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -200,10 +206,10 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:gravity="center"
-                android:text="@string/init_setting_V6_close_systemlocker_prompt"
+                android:text="@string/init_setting_V6_allow_floating_window_prompt"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -244,7 +250,7 @@
                 android:text="@string/init_setting_V6_trust_prompt_one"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:layout_width="match_parent"
@@ -255,7 +261,7 @@
                 android:text="@string/init_setting_V6_trust_prompt_two"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:layout_width="match_parent"
@@ -266,7 +272,7 @@
                 android:text="@string/init_setting_V6_trust_prompt_three"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:id="@+id/init_setting_V6_trust_prompt_button"

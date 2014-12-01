@@ -12,7 +12,7 @@ import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
 import cn.zmdx.kaka.locker.LockScreenManager.ILockScreenListener;
-import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
+import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
@@ -48,9 +48,8 @@ public class FakeActivity extends Activity {
 
             @Override
             public void onInitDefaultImage() {
-                IndividualizationActivity.sIsDirect = true;
                 Intent intent = new Intent();
-                intent.setClass(FakeActivity.this, IndividualizationActivity.class);
+                intent.setClass(FakeActivity.this, MainSettingsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,

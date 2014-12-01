@@ -3,11 +3,18 @@
 <!-- 以下资源内容适配如下机型 [2014.09.11 11:13]   shiyc -->
 <!--  -->
 <!-- 为方便以后的维护，如果此文件适配的机型未在下方列表，请您补全: -->
-<!--                   320dpi   px/dp = 1.5 -->
+<!--                   320dpi   px/dp = 2 -->
+<!--    红米              320dpi   1280x720   px/dp = 2-->
 <!--  -->
 <!-- ############################################################################################## -->
 <resources>
 
     <dimen name="setting_wallpaper_margin_left">33dp</dimen>
 
+    <!-- MIUI V5 init_promt -->
+    <dimen name="init_setting_V5_close_systemlocker_prompt_margin_top">67dp</dimen>
+    <dimen name="init_setting_V5_close_systemlocker_prompt_imageview_margin_top">30dp</dimen>
+    
+    <dimen name="init_setting_V5_allow_floating_window_prompt_margin_top">207dp</dimen>
+    <dimen name="init_setting_V5_trust_prompt_margin_top">70dp</dimen>
 </resources>

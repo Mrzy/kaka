@@ -78,5 +78,14 @@
     <dimen name="lock_pattern_dot_size">12dp</dimen>
     <dimen name="lock_pattern_dot_size_activated">42dp</dimen>
     
+    <!-- MIUI V5 init_promt -->
+    <dimen name="init_setting_V5_close_systemlocker_prompt_margin_top">56dp</dimen>
+    <dimen name="init_setting_V5_close_systemlocker_prompt_imageview_margin_top">6dp</dimen>
+    <dimen name="init_setting_V5_textview_prompt_margin_top">3dp</dimen>
+    <dimen name="init_setting_V5_textview_prompt_margin_left">21dp</dimen>
+    
+    <dimen name="init_setting_V5_allow_floating_window_prompt_margin_top">184dp</dimen>
+    <dimen name="init_setting_V5_trust_prompt_margin_top">56dp</dimen>
+    
     
 </resources>

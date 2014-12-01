@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -41,11 +43,17 @@ public class InitPromptActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.init_prompt_activity);
         isMIUI = getIntent().getBooleanExtra("isMIUI", false);
         mMIUIVersion = getIntent().getStringExtra("mMIUIVersion");
         mPromptType = getIntent().getIntExtra("type", PROMPT_CLOSE_SYSTEM_LOCKER);
+        if (isMIUI) {
+            if (PandoraUtils.MUIU_V5.equals(mMIUIVersion)) {
+                getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            }
+        }
         initView();
         showView();
     }

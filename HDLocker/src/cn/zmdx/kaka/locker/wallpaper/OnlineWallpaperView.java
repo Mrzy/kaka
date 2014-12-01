@@ -85,9 +85,9 @@ public class OnlineWallpaperView extends LinearLayout {
     private IOnlineWallpaper mListener;
 
     private LinearLayout mContentView;
-    
+
     private TypefaceTextView mPromptTextView;
-    
+
     private ProgressBar mPromptPb;
 
     private static final boolean PREFER_QUALITY_OVER_SPEED = false;
@@ -127,8 +127,10 @@ public class OnlineWallpaperView extends LinearLayout {
         addView(mRootView);
         mContentView = (LinearLayout) mRootView.findViewById(R.id.pandora_online_wallpaper_content);
         mPromptPb = (ProgressBar) mRootView.findViewById(R.id.pandora_online_wallpaper_prompt_pb);
-        mPromptTextView = (TypefaceTextView) mRootView.findViewById(R.id.pandora_online_wallpaper_prompt_text_view);
-        mPreview = (ImageView) mRootView.findViewById(R.id.pandora_online_wallpaper_preview_imageview);
+        mPromptTextView = (TypefaceTextView) mRootView
+                .findViewById(R.id.pandora_online_wallpaper_prompt_text_view);
+        mPreview = (ImageView) mRootView
+                .findViewById(R.id.pandora_online_wallpaper_preview_imageview);
         setVisibility(false);
         initPreview();
     }
@@ -208,6 +210,11 @@ public class OnlineWallpaperView extends LinearLayout {
                             }
                             mGVPb.setVisibility(View.GONE);
                             list = ServerOnlineWallpaperManager.parseJson(response);
+                            if (list == null) {
+                                String promptString = mContext.getString(R.string.data_error);
+                                showTextPrompt(false, promptString);
+                                return ;
+                            }
                             if (null == mWallpaperAdpter) {
                                 mWallpaperAdpter = new WallpaperAdpter();
                                 mGridView.setAdapter(mWallpaperAdpter);
@@ -225,7 +232,6 @@ public class OnlineWallpaperView extends LinearLayout {
                             String promptString = mContext.getString(R.string.network_error);
                             showTextPrompt(false, promptString);
                             mGVPb.setVisibility(View.GONE);
-                            mListener.applyOnlinePaper("");
                         }
                     });
         } else {
@@ -242,8 +248,7 @@ public class OnlineWallpaperView extends LinearLayout {
             } catch (JSONException e) {
                 e.printStackTrace();
                 String promptString = mContext.getString(R.string.error);
-                showTextPrompt(false, promptString);
-                mListener.applyOnlinePaper("");
+                showTextPrompt(true, promptString);
             }
 
         }
@@ -348,8 +353,9 @@ public class OnlineWallpaperView extends LinearLayout {
         if (null == cacheBitmap) {
             if (!PandoraConfig.newInstance(mContext).isMobileNetwork()
                     && !HDBNetworkState.isWifiNetwork()) {
-                String promptString = mContext.getResources().getString(R.string.setting_network_error);
-                showTextPrompt(true, promptString);
+                String promptString = mContext.getResources().getString(
+                        R.string.setting_network_error);
+                showTextPrompt(false, promptString);
                 return;
             }
             mPreviewProgressBar.setVisibility(View.VISIBLE);
@@ -387,22 +393,23 @@ public class OnlineWallpaperView extends LinearLayout {
         }
     }
 
-    private void showTextPrompt(boolean isNeedGone, String promptString) {
+    private void showTextPrompt(final boolean isNeedClose, String promptString) {
         mPromptTextView.setText(promptString);
         mPromptTextView.setVisibility(View.VISIBLE);
         showTextPromptAnimations(false);
-        if (isNeedGone) {
-            HDBThreadUtils.postOnUiDelayed(new Runnable() {
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
-                @Override
-                public void run() {
-                    showTextPromptAnimations(true);
+            @Override
+            public void run() {
+                showTextPromptAnimations(true);
+                if (isNeedClose) {
+                    mListener.applyOnlinePaper("");
                 }
-            }, DELAY_PROMPT_TEXTVIEW_GONE);
-        }
+            }
+        }, DELAY_PROMPT_TEXTVIEW_GONE);
     }
 
-    private void showTextPromptAnimations(boolean isGone){
+    private void showTextPromptAnimations(boolean isGone) {
         if (null != mPromptTextView) {
             if (isGone) {
                 ObjectAnimator animator = ObjectAnimator.ofFloat(mPromptTextView, "alpha", 1, 0.1f);
@@ -421,7 +428,7 @@ public class OnlineWallpaperView extends LinearLayout {
             }
         }
     }
-    
+
     private void setPreView(ServerOnlineWallpaper serverOnlineWallpaper) {
         mDesc.setText(serverOnlineWallpaper.getDesc());
         mAuthor.setText(serverOnlineWallpaper.getAuthor());
