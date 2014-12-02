@@ -174,7 +174,8 @@ public class OnlineWallpaperView extends LinearLayout {
                         md5ImageUrl));
             }
         });
-
+        
+        OnlineWallpaperManager.getInstance().mkDirs();
         mWeatherView = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_weather);
         mDateView = (TypefaceTextView) mRootView
