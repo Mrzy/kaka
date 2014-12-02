@@ -79,7 +79,6 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_wallpaper);
-        CustomWallpaperManager.getInstance().mkDirs();
         initView();
         initWallpaper();
         mPandoraWallpaperList = PandoraWallpaperManager.getWallpaperList(WallPaperActivity.this,
@@ -271,6 +270,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
 
             @Override
             public void run() {
+                CustomWallpaperManager.getInstance().mkDirs();
                 ImageUtils.saveImageToFile(PandoraUtils.sCropBitmap, CustomWallpaperManager
                         .getInstance().getFilePath(fileName));
                 if (mHandler.hasMessages(MSG_INSERT_WALLPAPER_ITEM)) {

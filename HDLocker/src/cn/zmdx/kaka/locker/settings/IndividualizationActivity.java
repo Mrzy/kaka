@@ -69,7 +69,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         initView();
         initWallpaper();
         initLockDefaultBitmap();
-        mkDirs();
     }
 
     private void initView() {
@@ -272,6 +271,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private void saveWallpaperFile(final String fileName) {
         if (null != PandoraUtils.sLockDefaultThumbBitmap) {
+            mkDirs();
             FileHelper.clearFolderFiles(new File(LOCK_DEFAULT_SDCARD_LOCATION));
             ImageUtils.saveImageToFile(PandoraUtils.sLockDefaultThumbBitmap,
                     getLockDefaultFilePath(fileName));
