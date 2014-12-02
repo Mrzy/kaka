@@ -108,7 +108,7 @@
                 android:paddingLeft="45dp"
                 android:paddingRight="45dp"
                 android:textColor="@android:color/white"
-                android:textSize="23sp" />
+                android:textSize="21sp" />
         </RelativeLayout>
     </cn.zmdx.kaka.locker.widget.BaseScrollView>
 
