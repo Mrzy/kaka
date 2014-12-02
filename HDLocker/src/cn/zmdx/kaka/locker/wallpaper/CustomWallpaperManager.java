@@ -46,6 +46,13 @@ public class CustomWallpaperManager {
         return PandoraUtils.isHaveFile(WALLPAPER_SDCARD_LOCATION);
     }
 
+    public void mkDirs() {
+        File dir = new File(WALLPAPER_SDCARD_LOCATION);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+    }
+
     public List<CustomWallpaper> getCustomWallpaper(Context context) {
         int currentThemeId = ThemeManager.getCurrentTheme().getmThemeId();
         String currentThemeFileName = null;

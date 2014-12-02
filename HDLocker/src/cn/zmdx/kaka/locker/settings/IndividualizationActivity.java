@@ -31,7 +31,6 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.FileHelper;
-import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
@@ -69,7 +68,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         initView();
         initWallpaper();
         initLockDefaultBitmap();
-        mkDirs();
     }
 
     private void initView() {
@@ -272,6 +270,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private void saveWallpaperFile(final String fileName) {
         if (null != PandoraUtils.sLockDefaultThumbBitmap) {
+            mkDirs();
             FileHelper.clearFolderFiles(new File(LOCK_DEFAULT_SDCARD_LOCATION));
             ImageUtils.saveImageToFile(PandoraUtils.sLockDefaultThumbBitmap,
                     getLockDefaultFilePath(fileName));
@@ -284,16 +283,10 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     }
 
     public void mkDirs() {
-        HDBThreadUtils.runOnWorker(new Runnable() {
-
-            @Override
-            public void run() {
-                File tmpDir = new File(LOCK_DEFAULT_SDCARD_LOCATION);
-                if (!tmpDir.exists()) {
-                    tmpDir.mkdirs();
-                }
-            }
-        });
+        File tmpDir = new File(LOCK_DEFAULT_SDCARD_LOCATION);
+        if (!tmpDir.exists()) {
+            tmpDir.mkdirs();
+        }
     }
 
     private void saveLockDefaultSP(String fileName) {

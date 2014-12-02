@@ -162,6 +162,7 @@ public class OnlineWallpaperView extends LinearLayout {
                 if (mPreviewBitmap == null || mCurrentItem == null) {
                     return;
                 }
+                OnlineWallpaperManager.getInstance().mkDirs();
                 String md5ImageUrl = HDBHashUtils.getStringMD5(mCurrentItem.getImageURL());
                 OnlineWallpaperManager.getInstance().saveThemeId(mContext,
                         ThemeManager.THEME_ID_ONLINE);
@@ -173,8 +174,6 @@ public class OnlineWallpaperView extends LinearLayout {
                         md5ImageUrl));
             }
         });
-
-        OnlineWallpaperManager.getInstance().mkDirs();
 
         mWeatherView = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_weather);

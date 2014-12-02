@@ -270,6 +270,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
 
             @Override
             public void run() {
+                CustomWallpaperManager.getInstance().mkDirs();
                 ImageUtils.saveImageToFile(PandoraUtils.sCropBitmap, CustomWallpaperManager
                         .getInstance().getFilePath(fileName));
                 if (mHandler.hasMessages(MSG_INSERT_WALLPAPER_ITEM)) {
