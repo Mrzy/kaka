@@ -22,13 +22,14 @@ import java.util.List;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Debug;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -848,10 +849,12 @@ public class LockPatternView extends View {
             mInvalidate.set(mTmpInvalidateRect);
         }
     }
-
-    @SuppressLint("NewApi")
+ 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void sendAccessEvent(int resId) {
-        announceForAccessibility(getContext().getString(resId));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            announceForAccessibility(getContext().getString(resId));
+        }
     }
 
     private void handleActionUp(MotionEvent event) {

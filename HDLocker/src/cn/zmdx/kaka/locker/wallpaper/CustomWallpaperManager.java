@@ -24,6 +24,7 @@ import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.IWallpaperClickListener;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.PandoraWallpaper;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
@@ -46,6 +47,19 @@ public class CustomWallpaperManager {
         return PandoraUtils.isHaveFile(WALLPAPER_SDCARD_LOCATION);
     }
 
+    public void mkDirs() {
+        HDBThreadUtils.runOnWorker(new Runnable() {
+
+            @Override
+            public void run() {
+                File dir = new File(WALLPAPER_SDCARD_LOCATION);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+            }
+        });
+    }
+    
     public List<CustomWallpaper> getCustomWallpaper(Context context) {
         int currentThemeId = ThemeManager.getCurrentTheme().getmThemeId();
         String currentThemeFileName = null;
