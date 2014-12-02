@@ -51,6 +51,7 @@ public class FakeActivity extends Activity {
                 Intent intent = new Intent();
                 intent.setClass(FakeActivity.this, MainSettingsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                         R.anim.umeng_fb_slide_out_from_left);
