@@ -85,16 +85,10 @@ public class OnlineWallpaperManager {
     }
 
     public void mkDirs() {
-        HDBThreadUtils.runOnWorker(new Runnable() {
-
-            @Override
-            public void run() {
-                File dir = new File(ONLINE_WALLPAPER_SDCARD_LOCATION);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-            }
-        });
+        File dir = new File(ONLINE_WALLPAPER_SDCARD_LOCATION);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
     }
 
     public void pullWallpaperFromServer(Listener<JSONObject> listener, ErrorListener errorListener) {
