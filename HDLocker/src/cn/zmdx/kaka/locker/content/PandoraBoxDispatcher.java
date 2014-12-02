@@ -75,10 +75,10 @@ public class PandoraBoxDispatcher extends Handler {
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("原始数据已经下载完成，开始入库，条数:" + oriDataList.size());
                 }
-                //标记最后一次拉取原始数据的时间
+                // 标记最后一次拉取原始数据的时间
                 mConfig.saveLastPullOriginalDataTime(System.currentTimeMillis());
 
-                //如果这是今天第一次拉取，则删除当前库中的旧数据
+                // 如果这是今天第一次拉取，则删除当前库中的旧数据
                 if (checkFirstPullToday()) {
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("今天第一次拉取到原始数据，删除以前的旧数据及sd卡上的图片缓存");
@@ -86,13 +86,13 @@ public class PandoraBoxDispatcher extends Handler {
                     ServerImageDataModel.getInstance().deleteAll();
                     DiskImageHelper.clear();
                 }
-                //标记今天已经拉取过原始数据
+                // 标记今天已经拉取过原始数据
                 mConfig.saveTodayPullOriginalDataTime(BaseInfoHelper.getCurrentDate());
 
                 if (oriDataList.size() <= 0) {
                     return;
                 }
-                //将今天的数据保存到本地数据库
+                // 将今天的数据保存到本地数据库
                 ServerImageData.saveToDatabase(oriDataList);
                 break;
         }
@@ -123,7 +123,8 @@ public class PandoraBoxDispatcher extends Handler {
                 return;
             }
 
-            int hasImageCount = ServerImageDataModel.getInstance().queryCountHasImageAndUnRead(null);
+            int hasImageCount = ServerImageDataModel.getInstance()
+                    .queryCountHasImageAndUnRead(null);
             if (hasImageCount < PandoraPolicy.MIN_COUNT_LOCAL_DB_HAS_IMAGE) {
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("ServerImage数据库中标记为已下载的数据总数:" + hasImageCount + "已小于阀值:"
@@ -146,8 +147,14 @@ public class PandoraBoxDispatcher extends Handler {
     private void downloadServerImages() {
         // 根据不同网络情况查询出不同数量的数据，准备下载其图片
         // 规则说明：若wifi,则每个频道取5条数据，共5*5=25条数据；若非wifi，则每个频道取1条，共1 * 5 = 5条数据
-        int count = HDBNetworkState.isWifiNetwork() ? PandoraPolicy.COUNT_DOWNLOAD_IMAGE_WIFI
-                : PandoraPolicy.COUNT_DOWNLOAD_IMAGE_NON_WIFI;
+        int count = 0;
+        if (HDBNetworkState.isWifiNetwork()) {
+            count = PandoraPolicy.COUNT_DOWNLOAD_IMAGE_WIFI;
+        } else {
+            if (mConfig.isMobileNetwork()) {
+                count = PandoraPolicy.COUNT_DOWNLOAD_IMAGE_NON_WIFI;
+            }
+        }
         if (count <= 0) {
             return;
         }

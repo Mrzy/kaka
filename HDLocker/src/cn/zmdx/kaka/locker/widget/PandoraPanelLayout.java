@@ -394,8 +394,8 @@ public class PandoraPanelLayout extends ViewGroup {
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.PandoraPanelLayout);
 
             if (ta != null) {
-                mPanelHeight = ta.getDimensionPixelSize(
-                        R.styleable.PandoraPanelLayout_panelHeight, -1);
+                mPanelHeight = ta.getDimensionPixelSize(R.styleable.PandoraPanelLayout_panelHeight,
+                        -1);
                 mTopViewSeekOutHeight = ta.getDimensionPixelSize(
                         R.styleable.PandoraPanelLayout_topSeekoutHeight, -1);
                 mShadowHeight = ta.getDimensionPixelSize(
@@ -417,8 +417,7 @@ public class PandoraPanelLayout extends ViewGroup {
                         DEFAULT_ANCHOR_POINT);
 
                 mSlideState = SlideState.values()[ta.getInt(
-                        R.styleable.PandoraPanelLayout_initialState,
-                        DEFAULT_SLIDE_STATE.ordinal())];
+                        R.styleable.PandoraPanelLayout_initialState, DEFAULT_SLIDE_STATE.ordinal())];
                 mForegroundDrawable = ta
                         .getDrawable(R.styleable.PandoraPanelLayout_foregroundDrawable);
             }
@@ -504,23 +503,19 @@ public class PandoraPanelLayout extends ViewGroup {
     private boolean mIsForeBackgroundCutOff = false;
 
     private void cutOffForegroundDrawable() {
-        if (mIsForeBackgroundCutOff)
+        if (mIsForeBackgroundCutOff || mForegroundDrawable == null)
             return;
         int width = BaseInfoHelper.getWidth(getContext());
         int realHeight = BaseInfoHelper.getRealHeight(getContext());
-        int height = Integer.parseInt(BaseInfoHelper.getHeight(mContext));
         Bitmap srcBmp = ImageUtils.drawable2Bitmap(mForegroundDrawable);
-        float rate = (float) realHeight / (float) height;
-        int toWidth = (int ) ((float) width * rate);
-        srcBmp = ImageUtils.scaleTo(srcBmp, toWidth, realHeight, true);
+        srcBmp = ImageUtils.getResizedBitmap(srcBmp, width, realHeight);
         Bitmap topBmp = null;
         Bitmap bottomBmp = null;
-        int x = (toWidth - width) / 2;
+        int x = Math.max(0, (srcBmp.getWidth() - width) / 2);
         try {
-            topBmp = Bitmap.createBitmap(srcBmp, x, 0, width,
-                    mTopView.getMeasuredHeight());
-            bottomBmp = Bitmap.createBitmap(srcBmp, x, mTopView.getMeasuredHeight(),
-                    width, mSlideableView.getMeasuredHeight());
+            topBmp = Bitmap.createBitmap(srcBmp, x, 0, width, mTopView.getMeasuredHeight());
+            bottomBmp = Bitmap.createBitmap(srcBmp, x, mTopView.getMeasuredHeight(), width,
+                    mSlideableView.getMeasuredHeight());
         } catch (Exception e) {
             topBmp = null;
             bottomBmp = null;
@@ -539,6 +534,20 @@ public class PandoraPanelLayout extends ViewGroup {
         }
 
         mIsForeBackgroundCutOff = true;
+    }
+
+    public Drawable getTopPanelDrawable() {
+        return mTopPanelBgDrawable;
+    }
+
+    public View getTopView() {
+        return mTopView;
+    }
+    public View getBottomView() {
+        return mSlideableView;
+    }
+    public Drawable getBottomPanelDrawable() {
+        return mBottomPanelBgDrawable;
     }
 
     public void recycle() {
@@ -646,6 +655,18 @@ public class PandoraPanelLayout extends ViewGroup {
         mForegroundDrawable = drawable;
         mIsForeBackgroundCutOff = false;
         invalidate();
+    }
+
+    /**
+     * 使用磁盘的图片文件设置背景图。此方法会decode出合适大小的bitmap避免OOM
+     * 
+     * @param fileName
+     */
+    public void setForgroundFile(String fileName) {
+        int screenWidth = BaseInfoHelper.getWidth(mContext);
+        int screenHeight = BaseInfoHelper.getRealHeight(mContext);
+        Bitmap bitmap = ImageUtils.getBitmapFromFile(fileName, screenWidth, screenHeight);
+        setForegroundDrawable(ImageUtils.bitmap2Drawable(mContext, bitmap));
     }
 
     public void setForegroundResource(int resId) {

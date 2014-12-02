@@ -17,5 +17,20 @@
     <dimen name="pandora_wallpaper_layout_height">132.5dp</dimen>
     <dimen name="pandora_wallpaper_width">80dp</dimen>
     <dimen name="pandora_wallpaper_height">117.5dp</dimen>
+    
+    <!-- onlinePaper -->
+    <dimen name="pandora_online_wallpaper_preview_imageview_width">130dp</dimen>
+    <dimen name="pandora_online_wallpaper_preview_imageview_height">232dp</dimen>
+    <dimen name="pandora_online_wallpaper_gridview_item_width">68dp</dimen>
+    <dimen name="pandora_online_wallpaper_gridview_item_height">122.5dp</dimen>
+    <dimen name="pandora_online_wallpaper_gridview_margin_left">10dp</dimen>
+    <dimen name="pandora_online_wallpaper_margin_bottom">18dp</dimen>
+    
+    <!-- MIUI V5 init_promt -->
+    <dimen name="init_setting_V5_close_systemlocker_prompt_margin_top">57dp</dimen>
+    <dimen name="init_setting_V5_close_systemlocker_prompt_imageview_margin_top">40dp</dimen>
+    
+    <dimen name="init_setting_V5_allow_floating_window_prompt_margin_top">196dp</dimen>
+    <dimen name="init_setting_V5_trust_prompt_margin_top">64dp</dimen>
 
 </resources>

@@ -2,7 +2,9 @@
 package cn.zmdx.kaka.locker;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -27,6 +29,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
@@ -48,6 +51,8 @@ import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
+import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
+import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaper;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
@@ -59,6 +64,7 @@ import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
+import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -125,6 +131,14 @@ public class LockScreenManager {
 
     private IFoldableBox mFoldableBox;
 
+    private boolean isInit = false;
+
+    private WallpaperPanelLayout mOnlinePanel;
+
+    private OnlineWallpaperView mOnlineWallpaperView;
+
+    private LinearLayout mOnlineViewContainer;
+
     public interface ILockScreenListener {
         void onLock();
 
@@ -179,7 +193,11 @@ public class LockScreenManager {
         mTextGuideTimes = pandoraConfig.getGuideTimesInt();
         mWinParams = new WindowManager.LayoutParams();
 
-        mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        if (mPandoraConfig.isNeedNotice()) {
+            mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        } else {
+            mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+        }
         mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
@@ -206,10 +224,11 @@ public class LockScreenManager {
 
         initLockScreenViews();
 
-        refreshContent();
-        setDate();
         mWinManager.addView(mEntireView, mWinParams);
         startFakeActivity();
+
+        refreshContent();
+        setDate();
 
         notifyLocked();
         onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
@@ -272,6 +291,9 @@ public class LockScreenManager {
         String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar.getInstance()
                 .get(Calendar.HOUR_OF_DAY));
         mWeatherSummary.setText(promptString);
+        if (null != mOnlineWallpaperView) {
+            mOnlineWallpaperView.setWeatherString(promptString);
+        }
         PandoraWeatherManager.getInstance().getCurrentWeather(new IWeatherCallback() {
 
             @Override
@@ -304,11 +326,17 @@ public class LockScreenManager {
                     if (!TextUtils.isEmpty(welcomeString)) {
                         mWeatherSummary.setText(welcomeString);
                         mWeatherSummary.setVisibility(View.VISIBLE);
+                        if (null != mOnlineWallpaperView) {
+                            mOnlineWallpaperView.setWeatherString(welcomeString);
+                        }
                     } else {
                         String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
                                 .getInstance().get(Calendar.HOUR_OF_DAY));
                         mWeatherSummary.setText(promptString);
                         mWeatherSummary.setVisibility(View.VISIBLE);
+                        if (null != mOnlineWallpaperView) {
+                            mOnlineWallpaperView.setWeatherString(promptString);
+                        }
                     }
                 } else {
                     int temp = pw.getTemp();
@@ -316,6 +344,9 @@ public class LockScreenManager {
                     if (mDate != null) {
                         if (mDate.getText() != null && !mDate.getText().toString().endsWith("ºC")) {
                             mDate.append(" " + temp + "ºC");
+                            if (null != mOnlineWallpaperView) {
+                                mOnlineWallpaperView.setDateAppend(" " + temp + "ºC");
+                            }
                         }
                     }
                     if (mWeatherSummary == null) {
@@ -328,12 +359,18 @@ public class LockScreenManager {
                     }
                     mWeatherSummary.setVisibility(View.VISIBLE);
                     mWeatherSummary.setText(summary);
+                    if (null != mOnlineWallpaperView) {
+                        mOnlineWallpaperView.setWeatherString(summary);
+                    }
                 }
             }
         });
 
     }
 
+    /**
+     * 检查新版本
+     */
     private void checkNewVersion() {
         PandoraConfig config = PandoraConfig.newInstance(mContext);
         String lastCheckTime = config.getFlagCheckNewVersion();
@@ -353,6 +390,7 @@ public class LockScreenManager {
                 if (page.isTodayData()) {
                     if (!HDBNetworkState.isWifiNetwork()) {
                         page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_HTML);
+                        page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_MULTIIMG);
                     }
                     return;
                 }
@@ -397,6 +435,7 @@ public class LockScreenManager {
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
         setDrawable();
+        initOnlinePaperPanel();
     }
 
     /**
@@ -433,21 +472,89 @@ public class LockScreenManager {
         mGusturePrompt = (TextView) view.findViewById(R.id.gusture_prompt);
     }
 
+    private void initOnlinePaperPanel() {
+        // TODO
+        mOnlineViewContainer = (LinearLayout) mEntireView.findViewById(R.id.pandora_online_wallpaper);
+        final ImageView mPullImage = (ImageView) mEntireView.findViewById(R.id.lock_wallpaper_view_im);
+        mOnlinePanel = (WallpaperPanelLayout) mEntireView.findViewById(R.id.locker_wallpaper_sliding);
+        mOnlinePanel.setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
+
+                    @Override
+                    public void onPanelSlide(View panel, float slideOffset) {
+                        if (!isInit) {
+                            isInit = true;
+                            mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+                            initOnlinePaperPanelView();
+                        }
+                    }
+
+                    @Override
+                    public void onPanelHidden(View panel) {
+                    }
+
+                    @Override
+                    public void onPanelExpanded(View panel) {
+                        mSliderView.setEnabled(false);
+                        if (null != mOnlineWallpaperView) {
+                            mOnlineWallpaperView.initContentView();
+                            mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
+
+                                @Override
+                                public void applyOnlinePaper(String filePath) {
+                                    if (null != mSliderView && !TextUtils.isEmpty(filePath)) {
+                                        mSliderView.setForgroundFile(filePath);
+                                    }
+                                    mOnlinePanel.collapsePanel();
+                                }
+                            });
+                            mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText().toString());
+                            mOnlineWallpaperView.setDate(mDate.getText().toString());
+                        }
+                    }
+
+                    @Override
+                    public void onPanelCollapsed(View panel) {
+                        isInit = false;
+                        mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+                        mSliderView.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onPanelAnchored(View panel) {
+                    }
+                });
+    }
+
+    protected void initOnlinePaperPanelView() {
+        if (null == mOnlineWallpaperView) {
+            mOnlineWallpaperView = new OnlineWallpaperView(mContext);
+        }
+        mOnlineViewContainer.removeAllViews();
+        mOnlineViewContainer.addView(mOnlineWallpaperView);
+    }
+
     public void setDate() {
         int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
         int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         int week = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         String weekString = PandoraUtils.getWeekString(mContext, week);
-        mDate.setText("" + month + "月" + "" + day + "日 " + weekString);
+        String dateString = "" + month + "月" + "" + day + "日 " + weekString;
+        mDate.setText(dateString);
+        if (null != mOnlineWallpaperView) {
+            mOnlineWallpaperView.setDate(dateString);
+        }
     }
 
     private void setDrawable() {
         mCurTheme = ThemeManager.getCurrentTheme();
-        if (mCurTheme.isCustomWallpaper()) {
-            mSliderView.setForegroundDrawable(mCurTheme.getmCustomBitmap());
-        } else {
-            // mViewFlipper.setBackgroundResource(mCurTheme.getmBackgroundResId());
+        if (mCurTheme.isDefaultTheme()) {
             mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
+        } else {
+            if (TextUtils.isEmpty(mCurTheme.getFilePath())) {
+                mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
+            } else {
+                mSliderView.setForgroundFile(mCurTheme.getFilePath());
+            }
         }
     }
 
@@ -518,6 +625,9 @@ public class LockScreenManager {
         mEntireView = null;
         mIsShowGesture = false;
         mIsLocked = false;
+
+        mOnlineWallpaperView = null;
+        mOnlineViewContainer.removeAllViews();
 
         if (mUnLockRunnable != null) {
             HDBThreadUtils.runOnUi(mUnLockRunnable);
@@ -620,7 +730,7 @@ public class LockScreenManager {
         PandoraConfig mPandoraConfig = PandoraConfig.newInstance(mContext);
         String stored = mPandoraConfig.getLockPaternString();
         if (!stored.equals(null)) {
-            return stored.equals(LockPatternUtils.patternToString(pattern)) ? true : false;
+            return stored.equals(LockPatternUtils.patternToString(pattern));
         }
         return false;
     }
@@ -662,7 +772,6 @@ public class LockScreenManager {
                 mContentLayout.collapsePanel();
                 mIsShowGesture = false;
             }
-            // stopGifAnimationIfNeeded();
         }
 
         @Override
@@ -709,8 +818,6 @@ public class LockScreenManager {
                 }
                 mLockArrow.setVisibility(View.GONE);
             }
-
-            // startGifAnimationIfNeeded();
         };
 
         public void onPanelHiddenEnd() {
@@ -764,8 +871,8 @@ public class LockScreenManager {
 
     public void onScreenOn() {
         if (mIsLocked) {
-            processWeatherInfo();
             processAnimations();
+            processWeatherInfo();
             refreshContent();
         }
     }
@@ -844,6 +951,28 @@ public class LockScreenManager {
         mAnimatorSet.start();
     }
 
+    private Set<OnBackPressedListener> mBackPressedListeners = new HashSet<OnBackPressedListener>();
+
     public void onBackPressed() {
+        for (OnBackPressedListener listener : mBackPressedListeners) {
+            listener.onBackPressed();
+        }
+    }
+
+    public boolean registBackPressedListener(OnBackPressedListener listener) {
+        if (listener != null)
+            return mBackPressedListeners.add(listener);
+        return false;
+    }
+
+    public boolean unRegistBackPressedListener(OnBackPressedListener listener) {
+        if (listener != null) {
+            return mBackPressedListeners.remove(listener);
+        }
+        return false;
+    }
+
+    public interface OnBackPressedListener {
+        void onBackPressed();
     }
 }

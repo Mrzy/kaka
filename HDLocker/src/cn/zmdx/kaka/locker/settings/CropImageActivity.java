@@ -1,17 +1,27 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.edmodo.cropper.CropImageView;
@@ -73,7 +83,7 @@ public class CropImageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_crop_image);
         try {
-            mCropBitmap = PandoraUtils.zoomBitmap(this, getIntent().getData());
+            mCropBitmap = getBitmap(getIntent().getData());
         } catch (Exception e) {
             if (BuildConfig.DEBUG) {
                 e.printStackTrace();
@@ -115,8 +125,7 @@ public class CropImageActivity extends Activity {
                 } else {
                     UmengCustomEventManager.statisticalSetDefaultImage(true);
                     try {
-                        PandoraUtils.sLockDefaultThumbBitmap = PandoraUtils.zoomThumbBitmap(
-                                CropImageActivity.this, mCropImageView.getCroppedImage(), false);
+                        PandoraUtils.sLockDefaultThumbBitmap = zoomBitmap();
                         setResult(Activity.RESULT_OK);
                     } catch (Exception e) {
                         Toast.makeText(CropImageActivity.this,
@@ -137,6 +146,44 @@ public class CropImageActivity extends Activity {
                 onBackPressed();
             }
         });
+    }
+
+    /**
+     * 获取适应当前屏幕宽高比的图片
+     * 
+     * @param activity
+     * @param uri
+     * @return
+     * @throws FileNotFoundException
+     */
+    public Bitmap getBitmap(Uri uri) throws FileNotFoundException {
+        InputStream inputStream = getContentResolver().openInputStream(uri);
+        BitmapFactory.Options opts = new Options();
+        opts.inJustDecodeBounds = true;// 设置为true时，BitmapFactory只会解析要加载的图片的边框的信息，但是不会为该图片分配内存
+        BitmapFactory.decodeStream(inputStream, new Rect(), opts);
+        int screenHeight = BaseInfoHelper.getRealHeight(this);
+        int screenWidth = BaseInfoHelper.getWidth(this);
+        BitmapFactory.Options realOpts = new Options();
+        realOpts.inSampleSize = ImageUtils.computeSampleSize(opts, screenWidth, screenHeight);
+        realOpts.inJustDecodeBounds = false;
+        realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
+        realOpts.inPurgeable = true;
+        realOpts.inInputShareable = true;
+        InputStream realInputStream = getContentResolver().openInputStream(uri);
+        Bitmap bitmap = BitmapFactory.decodeStream(realInputStream, new Rect(), realOpts);
+        return bitmap;
+    }
+
+    /**
+     * 将图片缩放到适应锁屏页面默认图片比例的图片
+     * 
+     * @return
+     */
+    public Bitmap zoomBitmap() {
+        int thumbWidth = BaseInfoHelper.getWidth(this);
+        int thumbHeight = (int) (thumbWidth / (LockScreenManager.getInstance()
+                .getBoxWidthHeightRate()));
+        return ImageUtils.scaleTo(mCropImageView.getCroppedImage(), thumbWidth, thumbHeight, false);
     }
 
     @Override

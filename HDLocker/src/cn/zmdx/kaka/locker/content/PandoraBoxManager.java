@@ -37,10 +37,7 @@ public class PandoraBoxManager {
     }
 
     public IFoldableBox getFoldableBox() {
-        boolean containHtml = HDBNetworkState.isNetworkAvailable()
-                && HDBNetworkState.isWifiNetwork();
-        List<ServerImageData> data = ServerImageDataModel.getInstance().queryByRandom(
-                PandoraPolicy.MIN_COUNT_FOLDABLE_BOX, containHtml);
+        List<ServerImageData> data = getDataFormLocalDB(PandoraPolicy.MIN_COUNT_FOLDABLE_BOX);
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("从本地取出数据条数：" + data.size());
         }
@@ -48,6 +45,12 @@ public class PandoraBoxManager {
         FoldableBoxAdapter adapter = new FoldableBoxAdapter(mContext, box.makeCardList(data));
         box.setAdapter(adapter);
         return box;
+    }
+
+    public List<ServerImageData> getDataFormLocalDB(int count) {
+        boolean containHtml = HDBNetworkState.isNetworkAvailable()
+                && HDBNetworkState.isWifiNetwork();
+        return ServerImageDataModel.getInstance().queryByRandom(count, containHtml);
     }
 
     public IPandoraBox getDefaultBox() {

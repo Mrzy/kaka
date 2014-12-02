@@ -40,7 +40,7 @@ public class PandoraConfig {
 
     private static final String KEY_NEW_VERSION_CHECKED = "f";
 
-    private static final String KEY_CUSTOM_WALLPAPER = "g";
+    private static final String KEY_CURRENT_WALLPAPER = "g";
 
     private static final String KEY_LAST_CHECK_WEATHER = "h";
 
@@ -61,10 +61,16 @@ public class PandoraConfig {
     private static final String KEY_LOCK_WELCOME_STRING = "keyLockWelcomeString";
 
     private static final String KEY_CURRENT_FONT = "m";
+
     private static final String GUIDE_HTML_TIMES = "n";
 
-
     private static final String KEY_DISPLAY_BOX_GUIDE = "o";
+
+    private static final String KEY_NEED_MOBILE_NETWORK = "p";
+
+    private static final String KEY_ONLINE_PULL_TIME = "q";
+
+    private static final String KEY_ONLINE_SERVER_JSON_DATA = "r";
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -131,12 +137,13 @@ public class PandoraConfig {
     public int getGuideTimesInt() {
         return mSp.getInt(GUIDE_TIMES, 0);
     }
+
     public void saveHtmlTimes(int times) {
         Editor editor = mSp.edit();
         editor.putInt(GUIDE_HTML_TIMES, times);
         editor.commit();
     }
-    
+
     public int getGuideHtmlTimesInt() {
         return mSp.getInt(GUIDE_HTML_TIMES, 0);
     }
@@ -191,14 +198,14 @@ public class PandoraConfig {
         editor.commit();
     }
 
-    public void saveCustomWallpaperFileName(String fileName) {
+    public void saveCurrentWallpaperFileName(String fileName) {
         Editor editor = mSp.edit();
-        editor.putString(KEY_CUSTOM_WALLPAPER, fileName);
+        editor.putString(KEY_CURRENT_WALLPAPER, fileName);
         editor.commit();
     }
 
-    public String getCustomWallpaperFileName() {
-        return mSp.getString(KEY_CUSTOM_WALLPAPER, "");
+    public String getCurrentWallpaperFileName() {
+        return mSp.getString(KEY_CURRENT_WALLPAPER, "");
     }
 
     public long getLastCheckWeatherTime() {
@@ -231,6 +238,17 @@ public class PandoraConfig {
 
     public boolean isHasGuided() {
         return mSp.getBoolean(KEY_HAS_GUIDED, false);
+    }
+
+    // 开关手机网络状态存入SharedPreferences
+    public void saveMobileNetwork(boolean mobileNetwork) {
+        Editor editor = mSp.edit();
+        editor.putBoolean(KEY_NEED_MOBILE_NETWORK, mobileNetwork);
+        editor.commit();
+    }
+
+    public boolean isMobileNetwork() {
+        return mSp.getBoolean(KEY_NEED_MOBILE_NETWORK, true);
     }
 
     public void saveNeedNotice(boolean isNeed) {
@@ -307,4 +325,25 @@ public class PandoraConfig {
         editor.putBoolean(KEY_DISPLAY_BOX_GUIDE, true);
         editor.commit();
     }
+
+    public long getLastOnlinePullTime() {
+        return mSp.getLong(KEY_ONLINE_PULL_TIME, 0);
+    }
+
+    public void saveLastOnlinePullTime(long lastTime) {
+        Editor editor = mSp.edit();
+        editor.putLong(KEY_ONLINE_PULL_TIME, lastTime);
+        editor.commit();
+    }
+
+    public String getLastOnlineServerJsonData() {
+        return mSp.getString(KEY_ONLINE_SERVER_JSON_DATA, "");
+    }
+
+    public void saveLastOnlineServerJsonData(String lastJsonString) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_ONLINE_SERVER_JSON_DATA, lastJsonString);
+        editor.commit();
+    }
+
 }

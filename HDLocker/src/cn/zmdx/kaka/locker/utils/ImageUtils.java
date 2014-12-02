@@ -1,7 +1,7 @@
+
 package cn.zmdx.kaka.locker.utils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
@@ -23,23 +23,31 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
-
 public class ImageUtils {
     private static final String TAG = "ImageUtils";
 
     /**
      * null may be returned if the image file not found
      */
-    public static Bitmap getBitmapFromFile(String filepath) {
-        if (new File(filepath).exists()) {
-            return BitmapFactory.decodeFile(filepath);
+    public static Bitmap getBitmapFromFile(String filepath, BitmapFactory.Options opts) {
+        try {
+            return BitmapFactory.decodeFile(filepath, opts);
+        } catch (OutOfMemoryError e) {
         }
         return null;
     }
 
+    public static Bitmap getBitmapFromFile(String filePath, int reqWidth, int reqHeight) {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = computeSampleSize(filePath, reqWidth, reqHeight);
+        return getBitmapFromFile(filePath, opts);
+    }
+    
     /**
      * Create a bitmap object from a drawable object.
-     * @return null may be returned if the drawable object has no intrinsic width/height.
+     * 
+     * @return null may be returned if the drawable object has no intrinsic
+     *         width/height.
      */
     public static Bitmap drawable2Bitmap(Drawable drawable) {
         return drawable2Bitmap(drawable, false);
@@ -48,7 +56,8 @@ public class ImageUtils {
     public static Bitmap drawable2Bitmap(Drawable drawable, boolean directReturn) {
         if (drawable == null) {
             return null;
-        };
+        }
+        ;
 
         /**
          * In that case, we cannot release the returned Bitmap anymore.
@@ -69,8 +78,8 @@ public class ImageUtils {
 
         Drawable clone = drawable.getConstantState().newDrawable();
         Bitmap bitmap = Bitmap.createBitmap(width, height,
-                clone.getOpacity() != PixelFormat.OPAQUE ?
-                        Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
+                clone.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                        : Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(bitmap);
         clone.setBounds(0, 0, width, height);
         clone.draw(canvas);
@@ -80,7 +89,8 @@ public class ImageUtils {
     public static int computeSampleSize(BitmapFactory.Options options, int reqWidth) {
         try {
             int widRate = Math.round((float) options.outWidth / (float) reqWidth);
-//            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
+            // int heightRate = Math.round((float) options.outHeight / (float)
+            // reqHeight);
             return widRate;
         } catch (Exception e) {
             return 1;
@@ -88,6 +98,9 @@ public class ImageUtils {
     }
 
     public static int computeSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        if (reqWidth <= 0 || reqHeight <= 0) {
+            return 1;
+        }
         try {
             int widRate = Math.round((float) options.outWidth / (float) reqWidth);
             int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
@@ -96,6 +109,23 @@ public class ImageUtils {
             return 1;
         }
     }
+
+    public static int computeSampleSize(String bmpFile, int reqWidth, int reqHeight) {
+        if (reqWidth <= 0 || reqHeight <= 0) {
+            return 1;
+        }
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(bmpFile, options);
+            int widRate = Math.round((float) options.outWidth / (float) reqWidth);
+            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
+            return Math.min(widRate, heightRate);
+        } catch (Exception e) {
+        }
+        return 1;
+    }
+
     /**
      * Create a BitmapDrawable object from the specified Bitmap object.
      */
@@ -126,7 +156,9 @@ public class ImageUtils {
     }
 
     /**
-     * @deprecated Use {@link #scaleTo(Bitmap src, int newWidth, int newHeight, boolean recycle)} instead
+     * @deprecated Use
+     *             {@link #scaleTo(Bitmap src, int newWidth, int newHeight, boolean recycle)}
+     *             instead
      */
     public static Bitmap scaleTo(Bitmap src, int newWidth, int newHeight) {
         return scaleTo(src, newWidth, newHeight, false);
@@ -160,7 +192,36 @@ public class ImageUtils {
     }
 
     /**
-     * @deprecated Use {@link #getRoundBitmap(Bitmap src, float roundPx, boolean recycle)} instead
+     * 根据resize图片后的宽和高，在保证宽高比的情况下，缩放或放大到最合适的尺寸
+     * 
+     * @param srcBmp
+     * @param targetWidth 目标宽度
+     * @param targetHeight 目标高度
+     * @return
+     */
+    public static Bitmap getResizedBitmap(Bitmap srcBmp, int targetWidth, int targetHeight) {
+        if (srcBmp == null || targetWidth <= 0 || targetHeight <= 0) {
+            return null;
+        }
+
+        try {
+            float hRate = (float) targetHeight / (float) srcBmp.getHeight();
+            float wRate = (float) targetWidth / (float) srcBmp.getWidth();
+            float rate = Math.max(hRate, wRate);
+            Matrix matrix = new Matrix();
+            // resize the Bitmap
+            matrix.postScale(rate, rate);
+            return Bitmap.createBitmap(srcBmp, 0, 0, srcBmp.getWidth(), srcBmp.getHeight(), matrix,
+                    true);
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    /**
+     * @deprecated Use
+     *             {@link #getRoundBitmap(Bitmap src, float roundPx, boolean recycle)}
+     *             instead
      */
     public static Bitmap getRoundBitmap(Bitmap src, float roundPx) {
         return getRoundBitmap(src, roundPx, false);
@@ -206,21 +267,26 @@ public class ImageUtils {
 
         Matrix matrix = new Matrix();
         matrix.preScale(1, -1);
-        Bitmap reflectionBmp = Bitmap.createBitmap(src, 0, height - (height / scaleLevel), width, height / scaleLevel, matrix, false);
+        Bitmap reflectionBmp = Bitmap.createBitmap(src, 0, height - (height / scaleLevel), width,
+                height / scaleLevel, matrix, false);
 
-        Bitmap target = Bitmap.createBitmap(width, (height + height / scaleLevel), Config.ARGB_8888);
+        Bitmap target = Bitmap
+                .createBitmap(width, (height + height / scaleLevel), Config.ARGB_8888);
         Canvas canvas = new Canvas(target);
 
         Paint paint = new Paint();
         paint.setAntiAlias(true);
 
         canvas.drawBitmap(src, 0, 0, paint);
-        canvas.drawRect(0, height, width, height + reflectionGap, paint); // TODO: why need this rect
+        canvas.drawRect(0, height, width, height + reflectionGap, paint); // TODO:
+                                                                          // why
+                                                                          // need
+                                                                          // this
+                                                                          // rect
         canvas.drawBitmap(reflectionBmp, 0, height + reflectionGap, paint);
 
-        LinearGradient shader = new LinearGradient(0, src.getHeight(),
-                0, target.getHeight() + reflectionGap,
-                0x70ffffff, 0x00ffffff, TileMode.CLAMP);
+        LinearGradient shader = new LinearGradient(0, src.getHeight(), 0, target.getHeight()
+                + reflectionGap, 0x70ffffff, 0x00ffffff, TileMode.CLAMP);
         paint.setShader(shader);
         paint.setXfermode(new PorterDuffXfermode(Mode.DST_IN));
         canvas.drawRect(0, height, width, target.getHeight() + reflectionGap, paint);
@@ -234,6 +300,7 @@ public class ImageUtils {
 
     /**
      * Create a new Bitmap object to add a background color.
+     * 
      * @param src
      * @param bkgColor
      * @param recycle Indicate if recycle the <b>src</b> Bitmap object
@@ -261,6 +328,7 @@ public class ImageUtils {
 
     /**
      * Scale the source Bitmap
+     * 
      * @param bmp the source Bitmap
      * @param scale scale factor
      * @return result Bitmap
@@ -279,5 +347,28 @@ public class ImageUtils {
             HDBLOG.logE("Failed to save image file: " + e);
         }
         return false;
+    }
+
+    /**
+     * Returns the largest power-of-two divisor for use in downscaling a bitmap
+     * that will not result in the scaling past the desired dimensions.
+     * 
+     * @param actualWidth Actual width of the bitmap
+     * @param actualHeight Actual height of the bitmap
+     * @param desiredWidth Desired width of the bitmap
+     * @param desiredHeight Desired height of the bitmap
+     */
+    // Visible for testing.
+    public static int findBestSampleSize(int actualWidth, int actualHeight, int desiredWidth,
+            int desiredHeight) {
+        double wr = (double) actualWidth / desiredWidth;
+        double hr = (double) actualHeight / desiredHeight;
+        double ratio = Math.min(wr, hr);
+        float n = 1.0f;
+        while ((n * 2) <= ratio) {
+            n *= 2;
+        }
+
+        return (int) n;
     }
 }

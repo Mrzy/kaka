@@ -3,11 +3,7 @@ package cn.zmdx.kaka.locker.settings.config;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -25,26 +21,21 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
-import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.CropImageActivity;
 import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
-import cn.zmdx.kaka.locker.utils.FileHelper;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class PandoraUtils {
@@ -63,20 +54,6 @@ public class PandoraUtils {
     public static final int REQUEST_CODE_CROP_IMAGE = 0;
 
     public static final int REQUEST_CODE_GALLERY = 1;
-
-    // public static final int TIME_MORNING = 9;
-    //
-    // public static final int TIME_MORNING_WORK = 12;
-    //
-    // public static final int TIME_AFTERNOON = 14;
-    //
-    // public static final int TIME_AFTERNOON_WORK = 18;
-    //
-    // public static final int TIME_EVENING = 20;
-    //
-    // public static final int TIME_EVENING_WORK = 0;
-    //
-    // public static final int TIME_EVENING_WORK_24 = 24;
 
     public static final int WARM_PROMPT_6 = 6;
 
@@ -331,129 +308,25 @@ public class PandoraUtils {
         }
     }
 
-    public static Bitmap zoomBitmap(Activity activity, Uri uri) throws FileNotFoundException {
-        InputStream inputStream = activity.getContentResolver().openInputStream(uri);
-        BitmapFactory.Options opts = new Options();
-        opts.inJustDecodeBounds = true;// 设置为true时，BitmapFactory只会解析要加载的图片的边框的信息，但是不会为该图片分配内存
-        BitmapFactory.decodeStream(inputStream, new Rect(), opts);
-        int screenHeight = BaseInfoHelper.getRealHeight(activity);
-        int screenWidth = BaseInfoHelper.getWidth(activity);
-        BitmapFactory.Options realOpts = new Options();
-        realOpts.inSampleSize = computeSampleSize(opts, screenWidth, screenHeight);
-        realOpts.inJustDecodeBounds = false;
-        realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
-        realOpts.inPurgeable = true;
-        realOpts.inInputShareable = true;
-        InputStream realInputStream = activity.getContentResolver().openInputStream(uri);
-        Bitmap bitmap = BitmapFactory.decodeStream(realInputStream, new Rect(), realOpts);
-        return bitmap;
-    }
-
-    private static int computeSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        try {
-            int widRate = Math.round((float) options.outWidth / (float) reqWidth);
-            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
-            return Math.min(widRate, heightRate);
-        } catch (Exception e) {
-            return 1;
-        }
-    }
-
-    @SuppressWarnings("unused")
-    private static int computeInitialSampleSize(BitmapFactory.Options options, int minSideLength,
-            int maxNumOfPixels) {
-        double w = options.outWidth;
-        double h = options.outHeight;
-        int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math.sqrt(w * h
-                / maxNumOfPixels));
-        int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(
-                Math.floor(w / minSideLength), Math.floor(h / minSideLength));
-        if (upperBound < lowerBound) {
-            // return the larger one when there is no overlapping zone.
-            return lowerBound;
-        }
-        if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
-            return 1;
-        } else if (minSideLength == -1) {
-            return lowerBound;
-        } else {
-            return upperBound;
-        }
-    }
-
-    public static Bitmap zoomThumbBitmap(Context context, Bitmap cropBitmap, boolean isWallpaper) {
-        int thumbWidth = 0;
-        int thumbHeight = 0;
-        if (isWallpaper) {
-            thumbWidth = (int) context.getResources().getDimension(R.dimen.pandora_wallpaper_width);
-            thumbHeight = (int) context.getResources().getDimension(
-                    R.dimen.pandora_wallpaper_height);
-        } else {
-            thumbWidth = BaseInfoHelper.getWidth(context);
-            thumbHeight = (int) (thumbWidth / (LockScreenManager.getInstance()
-                    .getBoxWidthHeightRate()));
-        }
-        return ImageUtils.scaleTo(cropBitmap, thumbWidth, thumbHeight, false);
-    }
-
-    public static Bitmap getThumbBitmap(Activity activity, String path, int realWidth,
-            int realHeight) throws FileNotFoundException {
-        FileInputStream inputStream = new FileInputStream(path);
-        BitmapFactory.Options opts = new Options();
-        opts.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(inputStream, new Rect(), opts);
-        BitmapFactory.Options realOpts = new Options();
-        realOpts.inSampleSize = computeSampleSize(opts, realWidth, realHeight);
-        realOpts.inJustDecodeBounds = false;
-        realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
-        realOpts.inPurgeable = true;
-        realOpts.inInputShareable = true;
-        FileInputStream realInputStream = new FileInputStream(path);
-        Bitmap bitmap = BitmapFactory.decodeStream(realInputStream, new Rect(), realOpts);
-        return bitmap;
-    }
-
-    public static void saveBitmap(Bitmap bitmap, String path, String fileName) {
-        try {
-            File dirFile = new File(path);
-            if (!dirFile.exists()) {
-                dirFile.mkdirs();
-            }
-            File file = new File(path + fileName + ".jpg");
-            file.createNewFile();
-            FileOutputStream out;
-            out = new FileOutputStream(file);
-            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)) {
-                out.flush();
-                out.close();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static Bitmap getBitmap(String path) {
-        return ImageUtils.getBitmapFromFile(path);
-    }
-
-    public static boolean isHaveCustomWallpaper(Context context) {
-        return !TextUtils.isEmpty(PandoraConfig.newInstance(context).getCustomWallpaperFileName());
-    }
-
-    public static void deleteFile(String dirName, String fileName) {
-        FileHelper.deleteFile(dirName, fileName + ".jpg");
-    }
-
-    public static void deleteFile(File file) {
-        FileHelper.deleteFile(file);
+    public static void gotoCropActivity(Activity activity, Uri uri, int mAspectRatioX,
+            int mAspectRatioY, boolean isWallpaper) {
+        Intent intent = new Intent();
+        intent.setClass(activity, CropImageActivity.class);
+        intent.setData(uri);
+        Bundle bundle = new Bundle();
+        bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_X, mAspectRatioX);
+        bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_Y, mAspectRatioY);
+        bundle.putBoolean(CropImageActivity.KEY_BUNDLE_IS_WALLPAPER, isWallpaper);
+        intent.putExtras(bundle);
+        activity.startActivityForResult(intent, PandoraUtils.REQUEST_CODE_CROP_IMAGE);
+        activity.overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
     }
 
     public static BitmapDrawable getLockDefaultBitmap(Context context) {
         String fileName = PandoraConfig.newInstance(context).getLockDefaultFileName();
         String path = IndividualizationActivity.LOCK_DEFAULT_SDCARD_LOCATION + fileName + ".jpg";
-        Bitmap bitmap = PandoraUtils.getBitmap(path);
+        Bitmap bitmap = ImageUtils.getBitmapFromFile(path, null);
         BitmapDrawable drawable = null;
         if (null != bitmap) {
             drawable = new BitmapDrawable(context.getResources(), bitmap);
@@ -560,4 +433,19 @@ public class PandoraUtils {
         }
         return promptString;
     }
+
+    public static boolean isHaveFile(String path) {
+        boolean isHave = false;
+        try {
+            File file = new File(path);
+            File[] files = file.listFiles();
+            if (files != null && files.length != 0) {
+                isHave = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isHave;
+    }
+
 }

@@ -1,10 +1,11 @@
 package cn.zmdx.kaka.locker.content.box;
 
+import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
+
 import java.util.List;
 
 import android.content.Context;
-import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 
 public class GuideBoxAdapter extends CardArrayAdapter {
 

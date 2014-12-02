@@ -14,6 +14,7 @@ import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.database.MySqlitDatabase;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.network.ImageDownloadRequest;
+import cn.zmdx.kaka.locker.network.UrlBuilder;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 import com.android.volley.Request;
@@ -99,27 +100,10 @@ public class ServerImageDataManager {
     }
 
     public String getUrl(long lastModified) {
-        StringBuilder sb = new StringBuilder(getBaseUrl());
+        StringBuilder sb = new StringBuilder(UrlBuilder.getBaseUrl());
+        sb.append("queryDataImgTable.action?");
         sb.append("lastModified=" + lastModified);
         return sb.toString();
-    }
-
-    /**
-     * 
-     */
-    public String getUrl(int limit, String dataType, String webSite) {
-        StringBuilder sb = new StringBuilder(getBaseUrl());
-        if (dataType != null)
-            sb.append("dataType=" + dataType);
-        return sb.toString();
-    }
-
-    public String getBaseUrl() {
-        if (BuildConfig.DEBUG) {
-            return "http://182.254.159.63/pandora/locker!queryDataImgTable.action?";
-        } else {
-            return "http://182.254.214.26:8080/pandora/locker!queryDataImgTable.action?";
-        }
     }
 
     public static class ServerImageData extends BaseDataManager {

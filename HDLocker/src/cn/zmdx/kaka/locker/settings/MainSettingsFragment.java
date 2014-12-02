@@ -3,6 +3,7 @@ package cn.zmdx.kaka.locker.settings;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +20,8 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -109,7 +112,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mConcernTeam.setOnClickListener(this);
         mChangeBackground = (LinearLayout) mRootView.findViewById(R.id.setting_change_background);
         mChangeBackground.setOnClickListener(this);
-
     }
 
     private void initTitleHeight() {
@@ -129,18 +131,19 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void initWallpaper() {
         Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isCustomWallpaper()) {
-            BitmapDrawable drawable = theme.getmCustomBitmap();
-            if (null == drawable) {
-                mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
-            } else {
-                mSettingBackground.setBackgroundDrawable(drawable);
-            }
-        } else {
+        if (theme.isDefaultTheme()) {
             mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
+        } else {
+            WallpaperUtils.loadBackgroundBitmap(getActivity(), theme.getFilePath(), new ILoadBitmapCallback() {
+
+                @SuppressWarnings("deprecation")
+                @Override
+                public void imageLoaded(Bitmap bitmap, String filePath) {
+                    mSettingBackground.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+                }
+            });
         }
     }
 
@@ -269,7 +272,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     @Override
     public void onDestroyView() {
         PandoraUtils.sCropBitmap = null;
-        // PandoraUtils.sCropThumbBitmap = null;
         PandoraUtils.sLockDefaultThumbBitmap = null;
         super.onDestroyView();
     }

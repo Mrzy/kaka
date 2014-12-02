@@ -5,6 +5,7 @@ import java.lang.ref.WeakReference;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,8 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
@@ -29,6 +32,8 @@ public class InitSettingActivity extends Activity implements OnClickListener {
     private Button mFolatfingWindowBtn;
 
     private Button mTrustBtn;
+
+    private View mRootView;
 
     private TypefaceTextView mCompleteBtn;
 
@@ -62,7 +67,7 @@ public class InitSettingActivity extends Activity implements OnClickListener {
                     View.VISIBLE);
             findViewById(R.id.init_setting_MIUI_trust_guide).setVisibility(View.VISIBLE);
         }
-
+        mRootView = findViewById(R.id.init_setting_background);
         mCloseSystemLockBtn = (Button) findViewById(R.id.init_setting_close_systemlocker_to_set);
         mCloseSystemLockBtn.setOnClickListener(this);
         mFolatfingWindowBtn = (Button) findViewById(R.id.init_setting_MIUI_allow_floating_window_to_set);
@@ -74,19 +79,19 @@ public class InitSettingActivity extends Activity implements OnClickListener {
 
     }
 
-    @SuppressWarnings("deprecation")
     private void initWallpaper() {
-        View view = findViewById(R.id.init_setting_background);
         Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isCustomWallpaper()) {
-            BitmapDrawable drawable = theme.getmCustomBitmap();
-            if (null == drawable) {
-                view.setBackgroundResource(theme.getmBackgroundResId());
-            } else {
-                view.setBackgroundDrawable(drawable);
-            }
+        if (theme.isDefaultTheme()) {
+            mRootView.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            view.setBackgroundResource(theme.getmBackgroundResId());
+            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(), new ILoadBitmapCallback() {
+
+                @SuppressWarnings("deprecation")
+                @Override
+                public void imageLoaded(Bitmap bitmap, String filePath) {
+                    mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+                }
+            });
         }
     }
 

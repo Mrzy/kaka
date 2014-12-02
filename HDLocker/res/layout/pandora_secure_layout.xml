@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textColor="@color/guesture_verify_error_color"
+            android:textColor="@color/lock_pattern_view_error_color"
             android:textSize="18sp" />
 
         <cn.zmdx.kaka.locker.widget.LockPatternView

@@ -8,10 +8,17 @@
     android:orientation="vertical"
     android:paddingTop="5dp" >
 
-    <it.gmariotti.cardslib.library.view.CardListView
-        android:id="@+id/cardListView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+        <it.gmariotti.cardslib.library.view.CardListView
+            android:id="@+id/cardListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layoutAnimation="@anim/list_anim_layout" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <View
         android:id="@+id/touch_interceptor_view"

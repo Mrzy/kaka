@@ -7,6 +7,7 @@ import java.lang.ref.WeakReference;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +30,10 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
+import cn.zmdx.kaka.locker.utils.FileHelper;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.BaseEditText;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
@@ -42,18 +47,16 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private SwitchButton mNoticeSButton;
 
+    private SwitchButton mNoticeMobileNetworkSButton;
+
     private LinearLayout mLockerDefaultImage;
 
     private ImageView mLockerDefaultImageThumb;
-
-    private LinearLayout mWelcomeText;
 
     public static String LOCK_DEFAULT_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
             .getPath() + "/.Pandora/lockDefault/";
 
     private static final int MSG_SAVE_LOCK_DEFAULT = 11;
-
-    private static final int MSG_SAVE_LOCK_DEFAULT_DELAY = 100;
 
     public static boolean sIsDirect = false;
 
@@ -72,6 +75,9 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         mNoticeSButton = (SwitchButton) findViewById(R.id.individualization_notice_switch_button);
         mNoticeSButton.setOnCheckedChangeListener(this);
         mNoticeSButton.setChecked(isNeedNotice());
+        mNoticeMobileNetworkSButton = (SwitchButton) findViewById(R.id.individualization_3G_4G_switch_button);
+        mNoticeMobileNetworkSButton.setOnCheckedChangeListener(this);
+        mNoticeMobileNetworkSButton.setChecked(isMobileNetwork());
         mLockerDefaultImage = (LinearLayout) findViewById(R.id.individualization_locker_default_image);
         mLockerDefaultImage.setOnClickListener(this);
         mLockerDefaultImageThumb = (ImageView) findViewById(R.id.individualization_locker_default_thumb_image);
@@ -83,22 +89,23 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         params.height = height;
         mLockerDefaultImageThumb.setLayoutParams(params);
 
-        mWelcomeText = (LinearLayout) findViewById(R.id.individualization_welcome_text);
-        mWelcomeText.setOnClickListener(this);
     }
 
     @SuppressWarnings("deprecation")
     private void initWallpaper() {
         Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isCustomWallpaper()) {
-            BitmapDrawable drawable = theme.getmCustomBitmap();
-            if (null == drawable) {
-                mRootView.setBackgroundResource(theme.getmBackgroundResId());
-            } else {
-                mRootView.setBackgroundDrawable(drawable);
-            }
-        } else {
+        if (theme.isDefaultTheme()) {
             mRootView.setBackgroundResource(theme.getmBackgroundResId());
+        } else {
+            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(),
+                    new ILoadBitmapCallback() {
+
+                        @Override
+                        public void imageLoaded(Bitmap bitmap, String filePath) {
+                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
+                                    bitmap));
+                        }
+                    });
         }
     }
 
@@ -122,7 +129,13 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                     closeNoticeBar();
                 }
                 break;
-
+            case R.id.individualization_3G_4G_switch_button:
+                if (isChecked) {
+                    openMobileNetwork();
+                } else {
+                    closeMobileNetwork();
+                }
+                break;
             default:
                 break;
         }
@@ -184,6 +197,18 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         return PandoraConfig.newInstance(this).isNeedNotice();
     }
 
+    private void closeMobileNetwork() {
+        PandoraConfig.newInstance(this).saveMobileNetwork(false);
+    }
+
+    private void openMobileNetwork() {
+        PandoraConfig.newInstance(this).saveMobileNetwork(true);
+    }
+
+    private boolean isMobileNetwork() {
+        return PandoraConfig.newInstance(this).isMobileNetwork();
+    }
+
     private void saveWelcomeString(String welcomeString) {
         PandoraConfig.newInstance(this).saveWelcomeString(welcomeString);
     }
@@ -197,10 +222,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                 UmengCustomEventManager.statisticalSetDefaultImage(false);
                 break;
 
-            case R.id.individualization_welcome_text:
-                showInputDialog();
-                UmengCustomEventManager.statisticalSetWelcomeString("", false);
-                break;
             default:
                 break;
         }
@@ -229,9 +250,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     }
 
     private void gotoCropActivity(Uri uri) {
-        Intent intent = new Intent();
-        intent.setClass(this, CropImageActivity.class);
-        intent.setData(uri);
         int mAspectRatioX = 0;
         int mAspectRatioY = 0;
         float rate = LockScreenManager.getInstance().getBoxWidthHeightRate();
@@ -243,14 +261,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
             mAspectRatioY = 100;
             mAspectRatioX = (int) (mAspectRatioY * rate);
         }
-        Bundle bundle = new Bundle();
-        bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_X, mAspectRatioX);
-        bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_Y, mAspectRatioY);
-        bundle.putBoolean(CropImageActivity.KEY_BUNDLE_IS_WALLPAPER, false);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, PandoraUtils.REQUEST_CODE_CROP_IMAGE);
-        overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                R.anim.umeng_fb_slide_out_from_left);
+        PandoraUtils.gotoCropActivity(this, uri, mAspectRatioX, mAspectRatioY, false);
     }
 
     private void setBitmap() {
@@ -258,18 +269,24 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     }
 
     private void saveWallpaperFile(final String fileName) {
-//        new Thread(new Runnable() {
-//
-//            @Override
-//            public void run() {
-                if (null != PandoraUtils.sLockDefaultThumbBitmap) {
-                    PandoraUtils.deleteFile(new File(LOCK_DEFAULT_SDCARD_LOCATION));
-                    PandoraUtils.saveBitmap(PandoraUtils.sLockDefaultThumbBitmap,
-                            LOCK_DEFAULT_SDCARD_LOCATION, fileName);
-                    saveLockDefaultSP(fileName);
-                }
-//            }
-//        }).start();
+        if (null != PandoraUtils.sLockDefaultThumbBitmap) {
+            mkDirs();
+            FileHelper.clearFolderFiles(new File(LOCK_DEFAULT_SDCARD_LOCATION));
+            ImageUtils.saveImageToFile(PandoraUtils.sLockDefaultThumbBitmap,
+                    getLockDefaultFilePath(fileName));
+            saveLockDefaultSP(fileName);
+        }
+    }
+
+    private String getLockDefaultFilePath(String fileName) {
+        return LOCK_DEFAULT_SDCARD_LOCATION + fileName + ".jpg";
+    }
+
+    public void mkDirs() {
+        File tmpDir = new File(LOCK_DEFAULT_SDCARD_LOCATION);
+        if (!tmpDir.exists()) {
+            tmpDir.mkdirs();
+        }
     }
 
     private void saveLockDefaultSP(String fileName) {
@@ -279,7 +296,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         Message message = Message.obtain();
         message.what = MSG_SAVE_LOCK_DEFAULT;
         message.obj = fileName;
-        mHandler.sendMessageDelayed(message, MSG_SAVE_LOCK_DEFAULT_DELAY);
+        mHandler.sendMessage(message);
     }
 
     private MyHandler mHandler = new MyHandler(this);

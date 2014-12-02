@@ -24,6 +24,8 @@ public interface IPandoraBox {
 
     public static final int CATEGORY_GUIDE = 8;
 
+    public static final int CATEGORY_MULTIIMG = 9;
+
     public int getCategory();
 
     public PandoraData getData();

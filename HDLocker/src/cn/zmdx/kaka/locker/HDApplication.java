@@ -12,15 +12,11 @@ public class HDApplication extends Application {
 
     private static int DISK_IMAGECACHE_SIZE = 1024 * 1024 * 100;// 100Mb磁盘缓存区
 
-    private static CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.PNG;
+    private static CompressFormat DISK_IMAGECACHE_COMPRESS_FORMAT = CompressFormat.JPEG;
 
-    private static int DISK_IMAGECACHE_QUALITY = 100; // PNG is lossless so
+    private static int DISK_IMAGECACHE_QUALITY = 80; // PNG is lossless so
                                                       // quality is ignored but
                                                       // must be provided
-
-    public HDApplication() {
-        instance = this;
-    }
 
     public static Context getContext() {
         return instance;
@@ -30,14 +26,8 @@ public class HDApplication extends Application {
     public void onCreate() {
         instance = getApplicationContext();
         HDBEventSource.startup(getApplicationContext(), null);
-        // Intialize the request manager and the image cache
         RequestManager.init(this);
-        // createImageCache();
-        // Pull baidu image data to local db
-        // PandoraBoxDispatcher.getInstance().sendEmptyMessage(
-        // PandoraBoxDispatcher.MSG_PULL_BAIDU_DATA);
-//        CrashHandler crashHandler = CrashHandler.getInstance();
-//        crashHandler.init(getApplicationContext());
+        ImageLoaderManager.init(instance);
         super.onCreate();
     }
 }
