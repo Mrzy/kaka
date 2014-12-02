@@ -162,14 +162,15 @@ public class OnlineWallpaperView extends LinearLayout {
                 if (mPreviewBitmap == null || mCurrentItem == null) {
                     return;
                 }
+                String md5ImageUrl = HDBHashUtils.getStringMD5(mCurrentItem.getImageURL());
                 OnlineWallpaperManager.getInstance().saveThemeId(mContext,
                         ThemeManager.THEME_ID_ONLINE);
                 OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(mContext,
-                        mCurrentItem.getImageNAME());
+                        md5ImageUrl);
                 ImageUtils.saveImageToFile(mPreviewBitmap, OnlineWallpaperManager.getInstance()
-                        .getFilePath(mCurrentItem.getImageNAME()));
+                        .getFilePath(md5ImageUrl));
                 mListener.applyOnlinePaper(OnlineWallpaperManager.getInstance().getFilePath(
-                        mCurrentItem.getImageNAME()));
+                        md5ImageUrl));
             }
         });
 
@@ -213,7 +214,7 @@ public class OnlineWallpaperView extends LinearLayout {
                             if (list == null) {
                                 String promptString = mContext.getString(R.string.data_error);
                                 showTextPrompt(false, promptString);
-                                return ;
+                                return;
                             }
                             if (null == mWallpaperAdpter) {
                                 mWallpaperAdpter = new WallpaperAdpter();
@@ -312,9 +313,12 @@ public class OnlineWallpaperView extends LinearLayout {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             ServerOnlineWallpaper item = list.get(position);
-            if (null == item.getSelectView()) {
-                item.setPosition(position);
-                item.setSelectView(viewHolder.mImageViewRl);
+            item.setPosition(position);
+
+            if (item.isCurItem()) {
+                viewHolder.mImageViewRl.setBackgroundResource(R.drawable.setting_wallpaper_border);
+            } else {
+                viewHolder.mImageViewRl.setBackgroundResource(0);
             }
 
             viewHolder.mImageView.setImageUrl(item.getThumbURL(),
@@ -327,19 +331,15 @@ public class OnlineWallpaperView extends LinearLayout {
                 public void onClick(View v) {
                     for (ServerOnlineWallpaper sItem : list) {
                         if (sItem.getPosition() == position) {
-                            if (null != sItem.getSelectView()) {
-                                sItem.getSelectView().setBackgroundResource(
-                                        R.drawable.setting_wallpaper_border);
-                                ServerOnlineWallpaper curItem = list.get(position);
-                                downloadImage(curItem);
-                            }
+                            sItem.setCurItem(true);
+                            ServerOnlineWallpaper curItem = list.get(position);
+                            downloadImage(curItem);
                         } else {
-                            if (null != sItem.getSelectView()) {
-                                sItem.getSelectView().setBackgroundResource(0);
-                            }
+                            sItem.setCurItem(false);
                         }
                     }
 
+                    mWallpaperAdpter.notifyDataSetChanged();
                 }
             });
 

@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.view.View;
-import cn.zmdx.kaka.locker.utils.HDBHashUtils;
-
 public class ServerOnlineWallpaperManager {
     
     public static ArrayList<ServerOnlineWallpaper> parseJson(JSONObject jsonObj) {
@@ -50,12 +47,9 @@ public class ServerOnlineWallpaperManager {
         /**
          * 数据所在位置
          */
-        private int mPosition;
+        private int mPosition = -1;
 
-        /**
-         * 边框View
-         */
-        private View mSelectView;
+        private boolean isCurItem = false;
 
         public void parseBaseJson(JSONObject jsonObject) {
             id = jsonObject.optString("id");
@@ -64,7 +58,7 @@ public class ServerOnlineWallpaperManager {
             thumbURL = jsonObject.optString("thumbURL");
             name = jsonObject.optString("p_name");
             publishDATE = jsonObject.optInt("publishDATE", 0);
-            imageNAME = HDBHashUtils.getStringMD5(jsonObject.optString("imageNAME"));
+            imageNAME = jsonObject.optString("imageNAME");
             imageURL = jsonObject.optString("imageURL");
             imageEXT = jsonObject.optString("imageEXT");
         }
@@ -149,12 +143,12 @@ public class ServerOnlineWallpaperManager {
             this.mPosition = mPosition;
         }
 
-        public View getSelectView() {
-            return mSelectView;
+        public boolean isCurItem() {
+            return isCurItem;
         }
 
-        public void setSelectView(View mSelectView) {
-            this.mSelectView = mSelectView;
+        public void setCurItem(boolean isCurItem) {
+            this.isCurItem = isCurItem;
         }
 
     }
