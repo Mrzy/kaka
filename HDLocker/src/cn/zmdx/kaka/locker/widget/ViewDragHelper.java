@@ -360,7 +360,7 @@ public class ViewDragHelper {
     /**
      * Interpolator defining the animation curve for mScroller
      */
-    private static final Interpolator sInterpolator = new Interpolator() {
+    private Interpolator mInterpolator = new Interpolator() {
         public float getInterpolation(float t) {
             t -= 1.0f;
             return t * t * t * t * t + 1.0f;
@@ -380,8 +380,8 @@ public class ViewDragHelper {
      * @param cb Callback to provide information and receive events
      * @return a new ViewDragHelper instance
      */
-    public static ViewDragHelper create(ViewGroup forParent, Callback cb) {
-        return new ViewDragHelper(forParent.getContext(), forParent, cb);
+    public static ViewDragHelper create(ViewGroup forParent, Callback cb, Interpolator interpolator) {
+        return new ViewDragHelper(forParent.getContext(), forParent, cb, interpolator);
     }
 
     /**
@@ -395,7 +395,13 @@ public class ViewDragHelper {
      * @return a new ViewDragHelper instance
      */
     public static ViewDragHelper create(ViewGroup forParent, float sensitivity, Callback cb) {
-        final ViewDragHelper helper = create(forParent, cb);
+        final ViewDragHelper helper = create(forParent, cb, null);
+        helper.mTouchSlop = (int) (helper.mTouchSlop * (1 / sensitivity));
+        return helper;
+    }
+
+    public static ViewDragHelper create(ViewGroup forParent, float sensitivity, Callback cb, Interpolator interpolator) {
+        final ViewDragHelper helper = create(forParent, cb, interpolator);
         helper.mTouchSlop = (int) (helper.mTouchSlop * (1 / sensitivity));
         return helper;
     }
@@ -408,7 +414,7 @@ public class ViewDragHelper {
      * @param context Context to initialize config-dependent params from
      * @param forParent Parent view to monitor
      */
-    private ViewDragHelper(Context context, ViewGroup forParent, Callback cb) {
+    private ViewDragHelper(Context context, ViewGroup forParent, Callback cb, Interpolator interpolator) {
         if (forParent == null) {
             throw new IllegalArgumentException("Parent view may not be null");
         }
@@ -426,7 +432,10 @@ public class ViewDragHelper {
         mTouchSlop = vc.getScaledTouchSlop();
         mMaxVelocity = vc.getScaledMaximumFlingVelocity();
         mMinVelocity = vc.getScaledMinimumFlingVelocity();
-        mScroller = ScrollerCompat.create(context, sInterpolator);
+        if (interpolator != null) {
+            mInterpolator = interpolator;
+        }
+        mScroller = ScrollerCompat.create(context, mInterpolator);
     }
 
     /**

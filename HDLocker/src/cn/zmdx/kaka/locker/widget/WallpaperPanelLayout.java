@@ -19,6 +19,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
 import cn.zmdx.kaka.locker.R;
 
 import com.nineoldandroids.view.animation.AnimatorProxy;
@@ -81,6 +86,8 @@ public class WallpaperPanelLayout extends ViewGroup{
      * Default paralax length of the main view
      */
     private static final int DEFAULT_PARALAX_OFFSET = 0;
+
+    private static final int DURATION_EXPAND_OR_COLLAPSE = 700;
 
     /**
      * The paint used to dim the main layout when sliding
@@ -189,6 +196,11 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     private final ViewDragHelper mDragHelper;
 
+    private static Interpolator sExpandAndCollapseInterpolator = new OvershootInterpolator(1.5f);
+//    private static Interpolator sExpandAndCollapseInterpolator = new DecelerateInterpolator();
+//    private static Interpolator sExpandAndCollapseInterpolator = new  BounceInterpolator();
+//    private static Interpolator sExpandAndCollapseInterpolator = new  AccelerateDecelerateInterpolator();
+
     /**
      * Stores whether or not the pane was expanded the last time it was slideable.
      * If expand/collapse operations are invoked this state is modified. Used by
@@ -264,6 +276,10 @@ public class WallpaperPanelLayout extends ViewGroup{
     }
 
     public WallpaperPanelLayout(Context context, AttributeSet attrs, int defStyle) {
+        this(context, attrs, defStyle, sExpandAndCollapseInterpolator);
+    }
+
+    public WallpaperPanelLayout(Context context, AttributeSet attrs, int defStyle, Interpolator interpolator) {
         super(context, attrs, defStyle);
 
         if(isInEditMode()) {
@@ -331,12 +347,11 @@ public class WallpaperPanelLayout extends ViewGroup{
 
         setWillNotDraw(false);
 
-        mDragHelper = ViewDragHelper.create(this, 0.5f, new DragHelperCallback());
+        mDragHelper = ViewDragHelper.create(this, 0.5f, new DragHelperCallback(), interpolator);
         mDragHelper.setMinVelocity(mMinFlingVelocity * density);
 
         mIsSlidingEnabled = true;
     }
-
     /**
      * Set the Drag View after the view is inflated
      */
@@ -805,8 +820,15 @@ public class WallpaperPanelLayout extends ViewGroup{
         return mFirstLayout || smoothSlideTo(mSlideOffset, initialVelocity);
     }
 
+    private boolean expandPanel(View pane, int initialVelocity, float mSlideOffset, int duration) {
+        return mFirstLayout || smoothSlideTo(mSlideOffset, initialVelocity, duration);
+    }
     private boolean collapsePanel(View pane, int initialVelocity) {
         return mFirstLayout || smoothSlideTo(0.0f, initialVelocity);
+    }
+
+    private boolean collapsePanel(View pane, int initialVelocity, int duration) {
+        return mFirstLayout || smoothSlideTo(0.0f, initialVelocity, duration);
     }
 
     /*
@@ -848,7 +870,7 @@ public class WallpaperPanelLayout extends ViewGroup{
         } else {
             if (mSlideState == SlideState.HIDDEN || mSlideState == SlideState.COLLAPSED)
                 return false;
-            return collapsePanel(mSlideableView, 0);
+            return collapsePanel(mSlideableView, 0, DURATION_EXPAND_OR_COLLAPSE);
         }
     }
 
@@ -889,7 +911,7 @@ public class WallpaperPanelLayout extends ViewGroup{
     public boolean expandPanel(float mSlideOffset) {
         if (mSlideableView == null || mSlideState == SlideState.EXPANDED) return false;
         mSlideableView.setVisibility(View.VISIBLE);
-        return expandPanel(mSlideableView, 0, mSlideOffset);
+        return expandPanel(mSlideableView, 0, mSlideOffset, DURATION_EXPAND_OR_COLLAPSE);
     }
 
     /**
@@ -1019,6 +1041,22 @@ public class WallpaperPanelLayout extends ViewGroup{
 
         int panelTop = computePanelTopPosition(slideOffset);
         if (mDragHelper.smoothSlideViewTo(mSlideableView, mSlideableView.getLeft(), panelTop)) {
+            setAllChildrenVisible();
+            ViewCompat.postInvalidateOnAnimation(this);
+            return true;
+        }
+        return false;
+    }
+
+    boolean smoothSlideTo(float slideOffset, int velocity, int duration) {
+        if (!isSlidingEnabled()) {
+            // Nothing to do.
+            return false;
+        }
+
+        int panelTop = computePanelTopPosition(slideOffset);
+        if (mDragHelper.smoothSlideViewTo(mSlideableView, mSlideableView.getLeft(), panelTop,
+                duration)) {
             setAllChildrenVisible();
             ViewCompat.postInvalidateOnAnimation(this);
             return true;
