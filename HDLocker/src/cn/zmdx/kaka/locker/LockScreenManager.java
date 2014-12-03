@@ -193,7 +193,7 @@ public class LockScreenManager {
         mTextGuideTimes = pandoraConfig.getGuideTimesInt();
         mWinParams = new WindowManager.LayoutParams();
 
-        if (mPandoraConfig.isNeedNotice()) {
+        if (mPandoraConfig.isNeedNotice(mContext)) {
             mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         } else {
             mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
@@ -202,7 +202,7 @@ public class LockScreenManager {
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 
-        if (!PandoraConfig.newInstance(mContext).isNeedNotice()) {
+        if (!PandoraConfig.newInstance(mContext).isNeedNotice(mContext)) {
             mWinParams.flags |= LayoutParams.FLAG_FULLSCREEN;
         }
         if (Build.VERSION.SDK_INT >= 19) {
@@ -291,6 +291,7 @@ public class LockScreenManager {
         String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar.getInstance()
                 .get(Calendar.HOUR_OF_DAY));
         mWeatherSummary.setText(promptString);
+        mWeatherSummary.setVisibility(View.VISIBLE);
         if (null != mOnlineWallpaperView) {
             mOnlineWallpaperView.setWeatherString(promptString);
         }
@@ -322,21 +323,12 @@ public class LockScreenManager {
                     return;
                 }
                 if (pw == null) {
-                    String welcomeString = PandoraConfig.newInstance(mContext).getWelcomeString();
-                    if (!TextUtils.isEmpty(welcomeString)) {
-                        mWeatherSummary.setText(welcomeString);
-                        mWeatherSummary.setVisibility(View.VISIBLE);
-                        if (null != mOnlineWallpaperView) {
-                            mOnlineWallpaperView.setWeatherString(welcomeString);
-                        }
-                    } else {
-                        String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
-                                .getInstance().get(Calendar.HOUR_OF_DAY));
-                        mWeatherSummary.setText(promptString);
-                        mWeatherSummary.setVisibility(View.VISIBLE);
-                        if (null != mOnlineWallpaperView) {
-                            mOnlineWallpaperView.setWeatherString(promptString);
-                        }
+                    String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
+                            .getInstance().get(Calendar.HOUR_OF_DAY));
+                    mWeatherSummary.setText(promptString);
+                    mWeatherSummary.setVisibility(View.VISIBLE);
+                    if (null != mOnlineWallpaperView) {
+                        mOnlineWallpaperView.setWeatherString(promptString);
                     }
                 } else {
                     int temp = pw.getTemp();
@@ -351,11 +343,6 @@ public class LockScreenManager {
                     }
                     if (mWeatherSummary == null) {
                         return;
-                    }
-                    if (summary.contains("未来一小时")) {
-                        String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
-                                .getInstance().get(Calendar.HOUR_OF_DAY));
-                        summary = promptString;
                     }
                     mWeatherSummary.setVisibility(View.VISIBLE);
                     mWeatherSummary.setText(summary);
