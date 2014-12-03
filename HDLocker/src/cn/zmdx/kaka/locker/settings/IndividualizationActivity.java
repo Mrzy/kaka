@@ -5,7 +5,6 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,7 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -34,9 +32,7 @@ import cn.zmdx.kaka.locker.utils.FileHelper;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
-import cn.zmdx.kaka.locker.widget.BaseEditText;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
-import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -57,9 +53,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
             .getPath() + "/.Pandora/lockDefault/";
 
     private static final int MSG_SAVE_LOCK_DEFAULT = 11;
-
-    public static boolean sIsDirect = false;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -142,48 +136,48 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     }
 
-    private void showInputDialog() {
-        final Dialog dialog = new Dialog(this, R.style.pandora_dialog_style);
-        dialog.getWindow().setContentView(R.layout.pandora_dialog);
-        dialog.show();
-        dialog.setCancelable(false);
-
-        TypefaceTextView mTitle = (TypefaceTextView) dialog.findViewById(R.id.pandora_dialog_title);
-        mTitle.setText(getResources().getString(R.string.individualization_welcome_text));
-        dialog.findViewById(R.id.pandora_dialog_individualization).setVisibility(View.VISIBLE);
-        final BaseEditText mEditText = (BaseEditText) dialog
-                .findViewById(R.id.pandora_dialog_individualization_edit_text);
-
-        String welcomeString = PandoraConfig.newInstance(IndividualizationActivity.this)
-                .getWelcomeString();
-        if (!TextUtils.isEmpty(welcomeString)) {
-            mEditText.setText(welcomeString);
-            mEditText.setSelection(welcomeString.length());
-        }
-
-        TypefaceTextView mCancle = (TypefaceTextView) dialog
-                .findViewById(R.id.pandora_dialog_individualization_button_cancle);
-        mCancle.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        TypefaceTextView mSure = (TypefaceTextView) dialog
-                .findViewById(R.id.pandora_dialog_individualization_button_sure);
-        mSure.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                String welcomeString = mEditText.getText().toString();
-                UmengCustomEventManager.statisticalSetWelcomeString(welcomeString, true);
-                saveWelcomeString(welcomeString);
-                dialog.dismiss();
-            }
-        });
-
-    }
+//    private void showInputDialog() {
+//        final Dialog dialog = new Dialog(this, R.style.pandora_dialog_style);
+//        dialog.getWindow().setContentView(R.layout.pandora_dialog);
+//        dialog.show();
+//        dialog.setCancelable(false);
+//
+//        TypefaceTextView mTitle = (TypefaceTextView) dialog.findViewById(R.id.pandora_dialog_title);
+//        mTitle.setText(getResources().getString(R.string.individualization_welcome_text));
+//        dialog.findViewById(R.id.pandora_dialog_individualization).setVisibility(View.VISIBLE);
+//        final BaseEditText mEditText = (BaseEditText) dialog
+//                .findViewById(R.id.pandora_dialog_individualization_edit_text);
+//
+//        String welcomeString = PandoraConfig.newInstance(IndividualizationActivity.this)
+//                .getWelcomeString();
+//        if (!TextUtils.isEmpty(welcomeString)) {
+//            mEditText.setText(welcomeString);
+//            mEditText.setSelection(welcomeString.length());
+//        }
+//
+//        TypefaceTextView mCancle = (TypefaceTextView) dialog
+//                .findViewById(R.id.pandora_dialog_individualization_button_cancle);
+//        mCancle.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//        TypefaceTextView mSure = (TypefaceTextView) dialog
+//                .findViewById(R.id.pandora_dialog_individualization_button_sure);
+//        mSure.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                String welcomeString = mEditText.getText().toString();
+//                UmengCustomEventManager.statisticalSetWelcomeString(welcomeString, true);
+//                saveWelcomeString(welcomeString);
+//                dialog.dismiss();
+//            }
+//        });
+//
+//    }
 
     private void closeNoticeBar() {
         PandoraConfig.newInstance(this).saveNeedNotice(false);
@@ -194,7 +188,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
     }
 
     private boolean isNeedNotice() {
-        return PandoraConfig.newInstance(this).isNeedNotice();
+        return PandoraConfig.newInstance(this).isNeedNotice(this);
     }
 
     private void closeMobileNetwork() {
@@ -207,10 +201,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private boolean isMobileNetwork() {
         return PandoraConfig.newInstance(this).isMobileNetwork();
-    }
-
-    private void saveWelcomeString(String welcomeString) {
-        PandoraConfig.newInstance(this).saveWelcomeString(welcomeString);
     }
 
     @Override
@@ -340,12 +330,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         super.onResume();
         MobclickAgent.onPageStart("IndividualizationActivity"); // 统计页面
         MobclickAgent.onResume(this); // 统计时长
-        if (sIsDirect) {
-            sIsDirect = false;
-            PandoraUtils.gotoGalleryActivity(IndividualizationActivity.this,
-                    PandoraUtils.REQUEST_CODE_GALLERY);
-            UmengCustomEventManager.statisticalSetDefaultImage(false);
-        }
     }
 
     public void onPause() {

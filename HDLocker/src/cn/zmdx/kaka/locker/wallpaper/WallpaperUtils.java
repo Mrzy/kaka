@@ -49,16 +49,20 @@ public class WallpaperUtils {
                 int width = BaseInfoHelper.getWidth(context);
                 int realHeight = BaseInfoHelper.getRealHeight(context);
                 Bitmap bitamp = ImageUtils.getBitmapFromFile(filePath, width, realHeight);
-                bitamp = ImageUtils.getResizedBitmap(bitamp, width, realHeight);
-                int x = Math.max(0, (bitamp.getWidth() - width));
-                final Bitmap finalBitmap = Bitmap.createBitmap(bitamp, x, 0, width, realHeight);
-                HDBThreadUtils.runOnUi(new Runnable() {
+                if (null != bitamp) {
+                    bitamp = ImageUtils.getResizedBitmap(bitamp, width, realHeight);
+                    int x = Math.max(0, (bitamp.getWidth() - width));
+                    final Bitmap finalBitmap = Bitmap.createBitmap(bitamp, x, 0, width, realHeight);
+                    HDBThreadUtils.runOnUi(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        callback.imageLoaded(finalBitmap, filePath);
-                    }
-                });
+                        @Override
+                        public void run() {
+                            if (null != finalBitmap) {
+                                callback.imageLoaded(finalBitmap, filePath);
+                            }
+                        }
+                    });
+                }
             }
         });
 

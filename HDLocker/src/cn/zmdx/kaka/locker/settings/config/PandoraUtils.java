@@ -29,6 +29,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
@@ -114,7 +115,7 @@ public class PandoraUtils {
 
     public static boolean isMIUI(Context context) {
         String manufacturer = android.os.Build.MANUFACTURER;
-        return "Xiaomi".equals(manufacturer);
+        return "Xiaomi".equals(manufacturer) || !TextUtils.isEmpty(getSystemProperty());
     }
 
     public static boolean isMeizu(Context context) {
