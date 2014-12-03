@@ -37,8 +37,11 @@ public class DiskImageCache implements ImageCache {
     }
 
     public DiskImageCache(Context context, String uniqueName, long maxSize) {
-        File cacheDir = new File(context.getExternalCacheDir().getPath() + File.separator
-                + uniqueName);
+        File file = context.getExternalCacheDir();
+        if (file == null) {//外部存储不可用时，使用内部存储
+            file = context.getCacheDir();
+        }
+        File cacheDir = new File(file.getPath() + File.separator + uniqueName);
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
         }
