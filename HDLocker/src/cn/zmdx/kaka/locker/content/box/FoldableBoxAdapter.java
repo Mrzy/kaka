@@ -9,12 +9,14 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory.Options;
+import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
@@ -23,6 +25,7 @@ import cn.zmdx.kaka.locker.content.box.FoldablePage.FoldableCard;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.android.volley.misc.ImageUtils;
+import com.nineoldandroids.view.ViewHelper;
 
 public class FoldableBoxAdapter extends CardArrayAdapter {
     // px
@@ -58,14 +61,49 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
 
         titleView.setText(data.getTitle());
         opt.inJustDecodeBounds = false;
-        Bitmap bmp = DiskImageHelper.getBitmapByUrl(data.getUrl(), opt);
-
-        if (bmp == null && (card.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML))) {// html类型没有缩略图，使用默认图
+        if (card.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML)) {
             imageView.setImageResource(R.drawable.html_icon_default);
         } else {
-            imageView.setImageBitmap(bmp);
+            Bitmap cacheBmp = getCoverImageFromCache(data.getUrl());
+            if (cacheBmp == null) {
+                new ImageAsyncLoadTask(imageView, opt).execute(data.getUrl());
+            } else {
+                imageView.setImageBitmap(cacheBmp);
+            }
         }
         return view;
+    }
+
+    private Bitmap getCoverImageFromCache(String url) {
+        return ImageLoaderManager.getImageMemCache().getBitmap(url);
+    }
+
+    private static class ImageAsyncLoadTask extends AsyncTask<String, Integer, Bitmap> {
+
+        private ImageView mImageView;
+
+        private Options mOpt;
+
+        public ImageAsyncLoadTask(ImageView imageView, Options opt) {
+            mImageView = imageView;
+            mOpt = opt;
+        }
+
+        // 获得封面图片的Bitmap。此方法会优先从内存缓存中寻找，如果没有，会从磁盘decode
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            String imgUrl = params[0];
+            Bitmap bmp = DiskImageHelper.getBitmapByUrl(imgUrl, mOpt);
+            ImageLoaderManager.getImageMemCache().putBitmap(imgUrl, bmp);
+            return bmp;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap coverBmp) {
+            ViewHelper.setAlpha(mImageView, 0);
+            mImageView.setImageBitmap(coverBmp);
+            mImageView.animate().alpha(1).setDuration(200).start();
+        }
     }
 
     private void setImageViewSize(ImageView iv, Options opt) {
@@ -90,11 +128,6 @@ public class FoldableBoxAdapter extends CardArrayAdapter {
             lp.height = MIN_HEIGHT_IMAGE_VIEW;
         }
         iv.setLayoutParams(lp);
-    }
-
-    private void animateLargeView(View largeView) {
-        largeView.setAlpha(0);
-        largeView.animate().alpha(1).setDuration(500).start();
     }
 
     public List<Card> getCardsData() {

@@ -2,9 +2,13 @@
 package cn.zmdx.kaka.locker;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.widget.ImageView;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.cache.DiskImageCache;
 
+import com.android.volley.cache.BitmapCache;
 import com.android.volley.toolbox.ImageLoader;
 
 public class ImageLoaderManager {
@@ -12,6 +16,8 @@ public class ImageLoaderManager {
     private static ImageLoader sImageLoader;
 
     public static DiskImageCache sOnlineImageCache;
+
+    public static BitmapCache sBmpCache = null;
 
     public static void init(Context context) {
         try {
@@ -37,4 +43,13 @@ public class ImageLoaderManager {
         }
         return sOnlineImageCache;
     }
+
+    public static BitmapCache getImageMemCache() {
+        if (sBmpCache == null) {
+            // 使用可用RAM的15%作为图片的内存缓存
+            sBmpCache = BitmapCache.getInstance(null, 0.15f);
+        }
+        return sBmpCache;
+    }
+
 }
