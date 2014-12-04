@@ -58,8 +58,6 @@ public class PandoraConfig {
 
     private static final String KEY_LAST_TIME_PULL_ORIGINAL_DATA = "l";
 
-    private static final String KEY_LOCK_WELCOME_STRING = "keyLockWelcomeString";
-
     private static final String KEY_CURRENT_FONT = "m";
 
     private static final String GUIDE_HTML_TIMES = "n";
@@ -257,8 +255,12 @@ public class PandoraConfig {
         editor.commit();
     }
 
-    public boolean isNeedNotice() {
-        return mSp.getBoolean(KEY_NEED_NOTICE, true);
+    public boolean isNeedNotice(Context context) {
+        if (PandoraUtils.isMIUI(context) || PandoraUtils.isMeizu(context)) {
+            return mSp.getBoolean(KEY_NEED_NOTICE, false);
+        } else {
+            return mSp.getBoolean(KEY_NEED_NOTICE, true);
+        }
     }
 
     public void saveLockDefaultFileName(String fileName) {
@@ -288,16 +290,6 @@ public class PandoraConfig {
     public void saveLastPullOriginalDataTime(long time) {
         Editor editor = mSp.edit();
         editor.putLong(KEY_LAST_TIME_PULL_ORIGINAL_DATA, time);
-        editor.commit();
-    }
-
-    public String getWelcomeString() {
-        return mSp.getString(KEY_LOCK_WELCOME_STRING, "");
-    }
-
-    public void saveWelcomeString(String welcomeString) {
-        Editor editor = mSp.edit();
-        editor.putString(KEY_LOCK_WELCOME_STRING, welcomeString);
         editor.commit();
     }
 

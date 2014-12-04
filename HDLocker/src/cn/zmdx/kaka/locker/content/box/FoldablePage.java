@@ -4,7 +4,6 @@ package cn.zmdx.kaka.locker.content.box;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
-import it.gmariotti.cardslib.library.view.CardView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +21,10 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.FoldableCard;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
@@ -216,72 +215,6 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         ServerImageData data = fCard.getData();
         int id = data.getId();
         ServerImageDataModel.getInstance().markRead(id, true);
-    }
-
-    public static class FoldableCard extends Card {
-
-        private ServerImageData mData;
-
-        private IFoldableBox mBox;
-
-        public FoldableCard(Context context, int innerLayout) {
-            super(context, innerLayout);
-            init();
-        }
-
-        public FoldableCard(Context context, IFoldableBox box, ServerImageData data) {
-            this(context, R.layout.foldable_card_item_layout);
-            mData = data;
-            mBox = box;
-        }
-
-        private void init() {
-            setBackgroundResourceId(R.drawable.pandora_box_item_selector);
-            setSwipeable(true);
-            setOnSwipeListener(new OnSwipeListener() {
-                @Override
-                public void onSwipe(Card card) {
-                    markRead(card);
-                }
-            });
-            setOnClickListener(new OnCardClickListener() {
-                @Override
-                public void onClick(Card card, View view) {
-                    if (mBox instanceof FoldablePage) {
-                        FoldablePage box = (FoldablePage) mBox;
-                        box.openDetails(view.findViewById(R.id.card_item_layout_large), mData);
-                    }
-                }
-            });
-        }
-
-        public void doSwipeOut(boolean isRight, int duration, int delay, AnimatorListener listener) {
-            final CardView cv = getCardView();
-            if (cv == null) {
-                return;
-            }
-            final ViewPropertyAnimator vpa = cv.animate();
-            vpa.setStartDelay(delay);
-            vpa.translationX(isRight ? cv.getMeasuredWidth() : -cv.getMeasuredWidth());
-            vpa.setDuration(duration);
-            if (listener != null) {
-                vpa.setListener(listener);
-            }
-            vpa.start();
-        }
-
-        public String getDataType() {
-            return mData.getDataType();
-        }
-
-        public ServerImageData getData() {
-            return mData;
-        }
-
-        @Override
-        public void setupInnerViewElements(ViewGroup parent, View view) {
-            super.setupInnerViewElements(parent, view);
-        }
     }
 
     public void openDetails(View coverView, ServerImageData data) {

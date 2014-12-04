@@ -324,6 +324,7 @@ public class OnlineWallpaperView extends LinearLayout {
             viewHolder.mImageView.setImageUrl(item.getThumbURL(),
                     ImageLoaderManager.getImageLoader());
             viewHolder.mImageView.setFadeInImage(true);
+            viewHolder.mImageView.setErrorImageResId(R.drawable.online_wallpaper_default);
             viewHolder.mImageView.setDefaultImageResId(R.drawable.online_wallpaper_default);
             viewHolder.mImageView.setOnClickListener(new OnClickListener() {
 
