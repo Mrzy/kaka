@@ -30,6 +30,7 @@ import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -234,7 +235,8 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                 box.startGif();
             }
         } else if (type.equals(ServerDataMapping.S_DATATYPE_NEWS)
-                || type.equals(ServerDataMapping.S_DATATYPE_JOKE) || type.equals(ServerDataMapping.S_DATATYPE_SINGLEIMG)) {
+                || type.equals(ServerDataMapping.S_DATATYPE_JOKE)
+                || type.equals(ServerDataMapping.S_DATATYPE_SINGLEIMG)) {
             SingleImageBox box = new SingleImageBox(mContext, this,
                     SingleImageBox.convertFromServerData(data));
             View view = box.getRenderedView();
@@ -242,7 +244,8 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                 renderDetailView(view);
             }
         } else if (type.equals(ServerDataMapping.S_DATATYPE_MULTIIMG)) {
-            final MultiImgBox box = new MultiImgBox(mContext, this, MultiImgBox.convertToMultiBox(data));
+            final MultiImgBox box = new MultiImgBox(mContext, this,
+                    MultiImgBox.convertToMultiBox(data));
             View view = box.getRenderedView();
             if (view != null) {
                 renderDetailView(view);
@@ -294,6 +297,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
     @Override
     public void onRefresh() {
         HDBThreadUtils.postOnUiDelayed(mUpdateCardRunnable, 1000);
+        UmengCustomEventManager.statisticalPullToRefreshTimes();
     }
 
     private Runnable mUpdateCardRunnable = new Runnable() {

@@ -157,21 +157,21 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.setting_pandoralocker_switch_button:
+                enablePandoraLocker();
                 if (isChecked) {
-                    enablePandoraLocker();
+                    UmengCustomEventManager.statisticalPandoraSwitchOpenTimes();
                 } else {
                     disablePandoraLocker();
+                    UmengCustomEventManager.statisticalPandoraSwitchCloseTimes();
                 }
                 break;
             case R.id.setting_pandoralocker_password:
                 if (isChecked) {
                     if (mIsCurrentlyPressed) {
-                        UmengCustomEventManager.statisticalPandoraSwitchOpenTimes();
                         showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_OPEN);
                     }
                 } else {
                     if (mIsCurrentlyPressed) {
-                        UmengCustomEventManager.statisticalPandoraSwitchCloseTimes();
                         showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_CLOSE);
                     }
                 }

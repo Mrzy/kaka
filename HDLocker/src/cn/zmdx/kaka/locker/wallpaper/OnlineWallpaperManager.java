@@ -148,7 +148,6 @@ public class OnlineWallpaperManager {
         mWallpaperDel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (null != listener) {
-                    UmengCustomEventManager.statisticalSelectTheme(ThemeManager.THEME_ID_ONLINE);
                     mOnlineContainer.removeView(mWallpaperRl);
                     listener.onDelClickListener(fileName, getFilePath(fileName));
                 }
