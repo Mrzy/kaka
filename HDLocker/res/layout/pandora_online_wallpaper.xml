@@ -165,10 +165,12 @@
                 <GridView
                     android:id="@+id/pandora_online_wallpaper_gridview"
                     android:layout_width="wrap_content"
+                    android:layout_marginRight="@dimen/setting_title_textview_margin_left"
                     android:layout_height="match_parent"
                     android:columnWidth="@dimen/pandora_online_wallpaper_gridview_item_width"
                     android:fadingEdge="vertical"
                     android:numColumns="2"
+                    android:scrollbars="none"
                     android:paddingBottom="8dp"
                     android:paddingTop="8dp"
                     android:verticalSpacing="@dimen/pandora_online_wallpaper_gridview_vertical_spacing" />
