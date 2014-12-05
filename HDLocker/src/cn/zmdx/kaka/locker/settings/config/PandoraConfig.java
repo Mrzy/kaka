@@ -70,6 +70,8 @@ public class PandoraConfig {
 
     private static final String KEY_ONLINE_SERVER_JSON_DATA = "r";
 
+    private static final String OPEN_LOCK_SCREEN_VOCIE = "s";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -227,6 +229,18 @@ public class PandoraConfig {
 
     public boolean isMobileNetwork() {
         return mSp.getBoolean(KEY_NEED_MOBILE_NETWORK, true);
+    }
+
+    // 开关锁屏声音存入SPreferences
+    public void saveLockScreenVoice(boolean lockscreenvoice) {
+        Editor editor = mSp.edit();
+        editor.putBoolean(OPEN_LOCK_SCREEN_VOCIE, lockscreenvoice);
+        editor.commit();
+    }
+
+    public boolean isLockScreenVoice() {
+        return mSp.getBoolean(OPEN_LOCK_SCREEN_VOCIE, true);
+
     }
 
     public void saveNeedNotice(boolean isNeed) {

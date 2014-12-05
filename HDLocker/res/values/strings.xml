@@ -130,5 +130,7 @@
     <string name="setting_network_error">您已设置禁止在3G/4G时下载。\n如需正常使用功能，请打开开关！</string>
     <string name="network_error">网络出现异常，请稍候再试</string>
     <string name="data_error">服务器出现异常，请稍候再试</string>
+    <string name="setting_individualization_open_lockscreen_voice">开启锁屏声音</string>
+    
 
 </resources>

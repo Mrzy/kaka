@@ -49,6 +49,8 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private ImageView mLockerDefaultImageThumb;
 
+    private SwitchButton mLockscreenvoiceSButton;
+
     public static String LOCK_DEFAULT_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
             .getPath() + "/.Pandora/lockDefault/";
 
@@ -72,6 +74,9 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         mNoticeMobileNetworkSButton = (SwitchButton) findViewById(R.id.individualization_3G_4G_switch_button);
         mNoticeMobileNetworkSButton.setOnCheckedChangeListener(this);
         mNoticeMobileNetworkSButton.setChecked(isMobileNetwork());
+        mLockscreenvoiceSButton = (SwitchButton) findViewById(R.id.individualization_open_lockscreen_voice_switch_button);
+        mLockscreenvoiceSButton.setOnCheckedChangeListener(this);
+        mLockscreenvoiceSButton.setChecked(isLockscreenvoice());
         mLockerDefaultImage = (LinearLayout) findViewById(R.id.individualization_locker_default_image);
         mLockerDefaultImage.setOnClickListener(this);
         mLockerDefaultImageThumb = (ImageView) findViewById(R.id.individualization_locker_default_thumb_image);
@@ -134,6 +139,12 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                     UmengCustomEventManager.statisticalDisallowAutoDownload();
                 }
                 break;
+            case R.id.individualization_open_lockscreen_voice_switch_button:
+                if (isChecked) {
+                    openLockscreenvoice();
+                } else {
+                    closeLockscreenvoice();
+                }
             default:
                 break;
         }
@@ -207,6 +218,18 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private boolean isMobileNetwork() {
         return PandoraConfig.newInstance(this).isMobileNetwork();
+    }
+
+    private void closeLockscreenvoice() {
+        PandoraConfig.newInstance(this).saveLockScreenVoice(false);
+    }
+
+    private void openLockscreenvoice() {
+        PandoraConfig.newInstance(this).saveLockScreenVoice(true);
+    }
+
+    private boolean isLockscreenvoice() {
+        return PandoraConfig.newInstance(this).isLockScreenVoice();
     }
 
     @Override
