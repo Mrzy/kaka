@@ -49,7 +49,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private ImageView mLockerDefaultImageThumb;
 
-    private SwitchButton mLockscreenvoiceSButton;
+    private SwitchButton mLockScreenVoiceSButton;
 
     public static String LOCK_DEFAULT_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
             .getPath() + "/.Pandora/lockDefault/";
@@ -74,9 +74,9 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         mNoticeMobileNetworkSButton = (SwitchButton) findViewById(R.id.individualization_3G_4G_switch_button);
         mNoticeMobileNetworkSButton.setOnCheckedChangeListener(this);
         mNoticeMobileNetworkSButton.setChecked(isMobileNetwork());
-        mLockscreenvoiceSButton = (SwitchButton) findViewById(R.id.individualization_open_lockscreen_voice_switch_button);
-        mLockscreenvoiceSButton.setOnCheckedChangeListener(this);
-        mLockscreenvoiceSButton.setChecked(isLockscreenvoice());
+        mLockScreenVoiceSButton = (SwitchButton) findViewById(R.id.individualization_open_lockscreen_voice_switch_button);
+        mLockScreenVoiceSButton.setOnCheckedChangeListener(this);
+        mLockScreenVoiceSButton.setChecked(isLockScreenVoice());
         mLockerDefaultImage = (LinearLayout) findViewById(R.id.individualization_locker_default_image);
         mLockerDefaultImage.setOnClickListener(this);
         mLockerDefaultImageThumb = (ImageView) findViewById(R.id.individualization_locker_default_thumb_image);
@@ -141,9 +141,9 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                 break;
             case R.id.individualization_open_lockscreen_voice_switch_button:
                 if (isChecked) {
-                    openLockscreenvoice();
+                    openLockScreenVoice();
                 } else {
-                    closeLockscreenvoice();
+                    closeLocksScreenVoice();
                 }
             default:
                 break;
@@ -220,15 +220,15 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         return PandoraConfig.newInstance(this).isMobileNetwork();
     }
 
-    private void closeLockscreenvoice() {
+    private void closeLocksScreenVoice() {
         PandoraConfig.newInstance(this).saveLockScreenVoice(false);
     }
 
-    private void openLockscreenvoice() {
+    private void openLockScreenVoice() {
         PandoraConfig.newInstance(this).saveLockScreenVoice(true);
     }
 
-    private boolean isLockscreenvoice() {
+    private boolean isLockScreenVoice() {
         return PandoraConfig.newInstance(this).isLockScreenVoice();
     }
 
