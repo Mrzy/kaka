@@ -142,8 +142,10 @@ public class IndividualizationActivity extends Activity implements OnClickListen
             case R.id.individualization_open_lockscreen_voice_switch_button:
                 if (isChecked) {
                     openLockScreenVoice();
+                    UmengCustomEventManager.statisticalEnableLockScreenSound();
                 } else {
                     closeLocksScreenVoice();
+                    UmengCustomEventManager.statisticalDisableLockScreenSound();
                 }
             default:
                 break;

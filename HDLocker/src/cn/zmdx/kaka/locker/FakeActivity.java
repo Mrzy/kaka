@@ -37,18 +37,26 @@ public class FakeActivity extends Activity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
         LockScreenManager.getInstance().setOnLockScreenListener(new ILockScreenListener() {
+            PandoraConfig config = PandoraConfig.newInstance(getApplicationContext());
+
+            boolean lockScreenVoice = config.isLockScreenVoice();
+
             @Override
             public void onLock() {
-                LockSoundManager.initSoundPool();
-                LockSoundManager.play(LockSoundManager.SOUND_ID_LOCK);
+                if (lockScreenVoice) {
+                    LockSoundManager.initSoundPool();
+                    LockSoundManager.play(LockSoundManager.SOUND_ID_LOCK);
+                }
             }
 
             @Override
             public void onUnLock() {
                 finish();
                 overridePendingTransition(0, 0);
-                LockSoundManager.initSoundPool();
-                LockSoundManager.play(LockSoundManager.SOUND_ID_UNLOCK);
+                if (lockScreenVoice) {
+                    LockSoundManager.initSoundPool();
+                    LockSoundManager.play(LockSoundManager.SOUND_ID_UNLOCK);
+                }
             }
 
             @Override
