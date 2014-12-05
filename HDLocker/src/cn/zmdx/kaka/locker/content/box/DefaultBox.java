@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
@@ -85,6 +86,7 @@ public class DefaultBox implements IPandoraBox {
                     mCustomSetImageView.setVisibility(View.GONE);
                 }
             } else {
+                UmengCustomEventManager.statisticalSetLockScreenWallpaperTimes();
                 LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
 
                     @Override

@@ -156,26 +156,6 @@ public class PandoraConfig {
         return mSp.getString(UmengCustomEventManager.EVENT_GUESTURE_LOCK_ENABLED_DAILY, "");
     }
 
-    public void saveEventCurrentThemeDaily(String time) {
-        Editor editor = mSp.edit();
-        editor.putString(UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, time);
-        editor.commit();
-    }
-
-    public String getEventCurrentThemeDailyString() {
-        return mSp.getString(UmengCustomEventManager.EVENT_CURRENT_THEME_DAILY, "");
-    }
-
-    public void saveEventActiveDaily(String time) {
-        Editor editor = mSp.edit();
-        editor.putString(UmengCustomEventManager.EVENT_ACTIVE_DAILY, time);
-        editor.commit();
-    }
-
-    public String getEventActiveDailyString() {
-        return mSp.getString(UmengCustomEventManager.EVENT_ACTIVE_DAILY, "");
-    }
-
     public long getLastPullBaiduTime() {
         return mSp.getLong(KEY_LAST_PULL_BAIDU_TIME, 0);
     }

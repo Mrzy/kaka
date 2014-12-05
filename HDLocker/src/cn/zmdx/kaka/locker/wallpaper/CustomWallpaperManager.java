@@ -133,7 +133,6 @@ public class CustomWallpaperManager {
         mWallpaperDel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (null != listener) {
-                    UmengCustomEventManager.statisticalSelectTheme(ThemeManager.THEME_ID_CUSTOM);
                     mCustomContainer.removeView(mWallpaperRl);
                     listener.onDelClickListener(fileName, getFilePath(fileName));
                 }

@@ -238,8 +238,6 @@ public class LockScreenManager {
 
         String currentDate = BaseInfoHelper.getCurrentDate();
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
-        UmengCustomEventManager.statisticalUseTheme(pandoraConfig, currentDate);
-        UmengCustomEventManager.statisticalEntryLockTimes(pandoraConfig, currentDate);
     }
 
     public void setWindowAnimations(int anim) {
@@ -461,16 +459,21 @@ public class LockScreenManager {
 
     private void initOnlinePaperPanel() {
         // TODO
-        mOnlineViewContainer = (LinearLayout) mEntireView.findViewById(R.id.pandora_online_wallpaper);
-        final ImageView mPullImage = (ImageView) mEntireView.findViewById(R.id.lock_wallpaper_view_im);
-        mOnlinePanel = (WallpaperPanelLayout) mEntireView.findViewById(R.id.locker_wallpaper_sliding);
-        mOnlinePanel.setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
+        mOnlineViewContainer = (LinearLayout) mEntireView
+                .findViewById(R.id.pandora_online_wallpaper);
+        final ImageView mPullImage = (ImageView) mEntireView
+                .findViewById(R.id.lock_wallpaper_view_im);
+        mOnlinePanel = (WallpaperPanelLayout) mEntireView
+                .findViewById(R.id.locker_wallpaper_sliding);
+        mOnlinePanel
+                .setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
 
                     @Override
                     public void onPanelSlide(View panel, float slideOffset) {
                         if (!isInit) {
                             isInit = true;
-                            mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+                            mPullImage
+                                    .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
                             initOnlinePaperPanelView();
                         }
                     }
@@ -494,7 +497,8 @@ public class LockScreenManager {
                                     mOnlinePanel.collapsePanel();
                                 }
                             });
-                            mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText().toString());
+                            mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText()
+                                    .toString());
                             mOnlineWallpaperView.setDate(mDate.getText().toString());
                         }
                     }
@@ -502,7 +506,8 @@ public class LockScreenManager {
                     @Override
                     public void onPanelCollapsed(View panel) {
                         isInit = false;
-                        mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+                        mPullImage
+                                .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
                         mSliderView.setEnabled(true);
                     }
 
@@ -784,8 +789,6 @@ public class LockScreenManager {
         @Override
         public void onPanelClickedDuringFixed() {
             UmengCustomEventManager.statisticalFixedUnLockTimes();
-            int duration = (int) (System.currentTimeMillis() - mLockTime);
-            UmengCustomEventManager.statisticalLockTime(mPandoraBox, duration);
             if (!showGestureView()) {
                 internalUnLock();
             }
