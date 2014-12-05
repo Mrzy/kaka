@@ -21,7 +21,7 @@ public class LockSoundManager {
      * 初始化SoundPool
      */
     public static void initSoundPool() {
-        if (sPool != null) {
+        if (sPool == null) {
             sPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
             load(R.raw.lock);
             load(R.raw.unlock);

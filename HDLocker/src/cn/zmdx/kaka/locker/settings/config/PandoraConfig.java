@@ -240,7 +240,6 @@ public class PandoraConfig {
 
     public boolean isLockScreenVoice() {
         return mSp.getBoolean(OPEN_LOCK_SCREEN_VOCIE, true);
-
     }
 
     public void saveNeedNotice(boolean isNeed) {

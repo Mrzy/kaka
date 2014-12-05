@@ -50,6 +50,36 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_DISALLOW_AUTO_DOWNLOAD = "disallowAutoDownload";// 用户不允许3G/4G时缓存图文
 
+    public static final String EVENT_ENABLE_LOCKSCREEN_SOUND = "enableLockScreenSound";// 音效开关打开
+
+    public static final String EVENT_DISABLE_LOCKSCREEN_SOUND = "disableLockScreenSound";// 音效开关关闭
+
+    public static final String EVENT_SEE_CONTENT_DETAILS = "seeContentDetails";// 查看新闻条目的详情
+
+    /**
+     * 统计查看新闻条目的详情
+     */
+    public static void statisticalSeeContentDetails() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_SEE_CONTENT_DETAILS);
+    }
+
+    /**
+     * 统计用户音效开关打开
+     */
+    public static void statisticalEnableLockScreenSound() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_ENABLE_LOCKSCREEN_SOUND);
+    }
+
+    /**
+     * 统计用户音效开关关闭
+     */
+    public static void statisticalDisableLockScreenSound() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_DISABLE_LOCKSCREEN_SOUND);
+    }
+
     /**
      * 统计用户点击或者拉动绳索的次数
      */
