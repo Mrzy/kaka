@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import cn.zmdx.kaka.locker.LockScreenManager.ILockScreenListener;
 import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
 import com.umeng.analytics.MobclickAgent;
@@ -38,12 +39,16 @@ public class FakeActivity extends Activity {
         LockScreenManager.getInstance().setOnLockScreenListener(new ILockScreenListener() {
             @Override
             public void onLock() {
+                LockSoundManager.initSoundPool();
+                LockSoundManager.play(LockSoundManager.SOUND_ID_LOCK);
             }
 
             @Override
             public void onUnLock() {
                 finish();
                 overridePendingTransition(0, 0);
+                LockSoundManager.initSoundPool();
+                LockSoundManager.play(LockSoundManager.SOUND_ID_UNLOCK);
             }
 
             @Override
