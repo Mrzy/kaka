@@ -14,7 +14,7 @@ public class PandoraReceiver extends BroadcastReceiver {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("receive broadcast,action:" + intent.getAction());
         }
-        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
             Intent service = new Intent(context, PandoraService.class);
             context.startService(service);
         } else if (intent.getAction().equals(Intent.ACTION_USER_PRESENT)) {

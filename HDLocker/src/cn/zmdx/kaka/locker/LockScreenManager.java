@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
@@ -63,6 +64,7 @@ import cn.zmdx.kaka.locker.widget.LockPatternView.OnPatternListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
+import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SlideState;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
@@ -889,6 +891,10 @@ public class LockScreenManager {
         }
         mBoxRate = rate;
         return mBoxRate;
+    }
+
+    public SlideState getLockPanelState() {
+        return mSliderView != null ? mSliderView.getSlideState() : null;
     }
 
     private void processAnimations() {

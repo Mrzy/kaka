@@ -34,6 +34,7 @@ import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SlideState;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.UnfoldableView.OnFoldingListener;
@@ -296,8 +297,13 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     @Override
     public void onRefresh() {
-        HDBThreadUtils.postOnUiDelayed(mUpdateCardRunnable, 1000);
-        UmengCustomEventManager.statisticalPullToRefreshTimes();
+        SlideState state = LockScreenManager.getInstance().getLockPanelState();
+        if (state == SlideState.COLLAPSED) { //只有在展开状态下才可以刷新
+            HDBThreadUtils.postOnUiDelayed(mUpdateCardRunnable, 1000);
+            UmengCustomEventManager.statisticalPullToRefreshTimes();
+        } else {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     private Runnable mUpdateCardRunnable = new Runnable() {
