@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pandora_locker_content_background"
+    android:background="@drawable/gesture_bg"
     android:orientation="vertical" >
 
     <RelativeLayout
