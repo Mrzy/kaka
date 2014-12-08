@@ -29,6 +29,7 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.RequestManager;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.network.ByteArrayRequest;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -148,6 +149,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     public void initContentView() {
         setVisibility(true);
+        UmengCustomEventManager.statisticalClickOrDragRopeTimes();
         mDesc = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_desc);
         mAuthor = (TypefaceTextView) mRootView
@@ -172,9 +174,10 @@ public class OnlineWallpaperView extends LinearLayout {
                         .getFilePath(md5ImageUrl));
                 mListener.applyOnlinePaper(OnlineWallpaperManager.getInstance().getFilePath(
                         md5ImageUrl));
+                UmengCustomEventManager.statisticalApplyLockScreenWallpaperTimes();
             }
         });
-        
+
         OnlineWallpaperManager.getInstance().mkDirs();
         mWeatherView = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_weather);

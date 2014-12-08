@@ -25,8 +25,6 @@ public class ThemeManager {
 
     public static final int THEME_ID_DEFAULT_FOREGROUND_RESID = R.drawable.setting_background_road_fore;
 
-    public static final int THEME_ID_DEFAULT_THUMBNAIL_RESID = R.drawable.setting_wallpaper_road;
-
     public static final int THEME_ID_DEFAULT_SETTINGICON_RESID = R.drawable.ic_setting_common;
 
     public static Theme getCurrentTheme() {
@@ -49,7 +47,6 @@ public class ThemeManager {
             theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
             theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
             theme.setmSettingsIconResId(THEME_ID_DEFAULT_SETTINGICON_RESID);
-            theme.setmThumbnailResId(THEME_ID_DEFAULT_THUMBNAIL_RESID);
             theme.setmThemeId(THEME_ID_DEFAULT);
         } else {
             theme.setDefaultTheme(false);
@@ -82,7 +79,6 @@ public class ThemeManager {
             theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
             theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
             theme.setmSettingsIconResId(THEME_ID_DEFAULT_SETTINGICON_RESID);
-            theme.setmThumbnailResId(THEME_ID_DEFAULT_THUMBNAIL_RESID);
             theme.setmThemeId(THEME_ID_DEFAULT);
         } else {
             theme.setDefaultTheme(false);
@@ -99,14 +95,12 @@ public class ThemeManager {
                 theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
                 theme.setmForegroundResId(R.drawable.setting_background_road_fore);
                 theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-                theme.setmThumbnailResId(R.drawable.setting_wallpaper_road);
                 theme.setmThemeId(THEME_ID_ROAD);
                 break;
             default:
                 theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
                 theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
                 theme.setmSettingsIconResId(THEME_ID_DEFAULT_SETTINGICON_RESID);
-                theme.setmThumbnailResId(THEME_ID_DEFAULT_THUMBNAIL_RESID);
                 theme.setmThemeId(THEME_ID_DEFAULT);
                 break;
         }
@@ -120,7 +114,6 @@ public class ThemeManager {
         theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
         theme.setmForegroundResId(R.drawable.setting_background_road_fore);
         theme.setmSettingsIconResId(R.drawable.ic_setting_common);
-        theme.setmThumbnailResId(R.drawable.setting_wallpaper_road);
         theme.setmThemeId(THEME_ID_ROAD);
         list.add(theme);
         return list;

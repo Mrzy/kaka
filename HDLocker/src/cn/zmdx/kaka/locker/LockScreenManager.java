@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
@@ -44,6 +45,7 @@ import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -63,6 +65,7 @@ import cn.zmdx.kaka.locker.widget.LockPatternView.OnPatternListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
+import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SlideState;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
@@ -232,14 +235,14 @@ public class LockScreenManager {
 
         notifyLocked();
         onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
-        syncDataIfNeeded();
+
+        //尝试拉取资讯数据及图片的预下载
+        PandoraBoxDispatcher.getInstance().pullData();
 
         checkNewVersion();
 
         String currentDate = BaseInfoHelper.getCurrentDate();
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
-        UmengCustomEventManager.statisticalUseTheme(pandoraConfig, currentDate);
-        UmengCustomEventManager.statisticalEntryLockTimes(pandoraConfig, currentDate);
     }
 
     public void setWindowAnimations(int anim) {
@@ -461,16 +464,21 @@ public class LockScreenManager {
 
     private void initOnlinePaperPanel() {
         // TODO
-        mOnlineViewContainer = (LinearLayout) mEntireView.findViewById(R.id.pandora_online_wallpaper);
-        final ImageView mPullImage = (ImageView) mEntireView.findViewById(R.id.lock_wallpaper_view_im);
-        mOnlinePanel = (WallpaperPanelLayout) mEntireView.findViewById(R.id.locker_wallpaper_sliding);
-        mOnlinePanel.setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
+        mOnlineViewContainer = (LinearLayout) mEntireView
+                .findViewById(R.id.pandora_online_wallpaper);
+        final ImageView mPullImage = (ImageView) mEntireView
+                .findViewById(R.id.lock_wallpaper_view_im);
+        mOnlinePanel = (WallpaperPanelLayout) mEntireView
+                .findViewById(R.id.locker_wallpaper_sliding);
+        mOnlinePanel
+                .setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
 
                     @Override
                     public void onPanelSlide(View panel, float slideOffset) {
                         if (!isInit) {
                             isInit = true;
-                            mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+                            mPullImage
+                                    .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
                             initOnlinePaperPanelView();
                         }
                     }
@@ -494,7 +502,8 @@ public class LockScreenManager {
                                     mOnlinePanel.collapsePanel();
                                 }
                             });
-                            mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText().toString());
+                            mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText()
+                                    .toString());
                             mOnlineWallpaperView.setDate(mDate.getText().toString());
                         }
                     }
@@ -502,7 +511,8 @@ public class LockScreenManager {
                     @Override
                     public void onPanelCollapsed(View panel) {
                         isInit = false;
-                        mPullImage.setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+                        mPullImage
+                                .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
                         mSliderView.setEnabled(true);
                     }
 
@@ -631,21 +641,6 @@ public class LockScreenManager {
             mAnimatorSet.end();
             mAnimatorSet.cancel();
             mAnimatorSet = null;
-        }
-    }
-
-    private long mLastSyncDataTime = 0;
-
-    private void syncDataIfNeeded() {
-        long curTime = System.currentTimeMillis();
-        long delta = curTime - mLastSyncDataTime;
-        if (delta > PandoraPolicy.MIN_DURATION_SYNC_DATA_TIME) {
-            PandoraBoxDispatcher pd = PandoraBoxDispatcher.getInstance();
-            pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
-            if (!pd.hasMessages(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES)) {
-                pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 2000);
-                mLastSyncDataTime = curTime;
-            }
         }
     }
 
@@ -784,8 +779,6 @@ public class LockScreenManager {
         @Override
         public void onPanelClickedDuringFixed() {
             UmengCustomEventManager.statisticalFixedUnLockTimes();
-            int duration = (int) (System.currentTimeMillis() - mLockTime);
-            UmengCustomEventManager.statisticalLockTime(mPandoraBox, duration);
             if (!showGestureView()) {
                 internalUnLock();
             }
@@ -886,6 +879,10 @@ public class LockScreenManager {
         }
         mBoxRate = rate;
         return mBoxRate;
+    }
+
+    public SlideState getLockPanelState() {
+        return mSliderView != null ? mSliderView.getSlideState() : null;
     }
 
     private void processAnimations() {

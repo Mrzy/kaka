@@ -26,6 +26,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.FileHelper;
@@ -49,11 +50,13 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private ImageView mLockerDefaultImageThumb;
 
+    private SwitchButton mLockScreenVoiceSButton;
+
     public static String LOCK_DEFAULT_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
             .getPath() + "/.Pandora/lockDefault/";
 
     private static final int MSG_SAVE_LOCK_DEFAULT = 11;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -72,6 +75,9 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         mNoticeMobileNetworkSButton = (SwitchButton) findViewById(R.id.individualization_3G_4G_switch_button);
         mNoticeMobileNetworkSButton.setOnCheckedChangeListener(this);
         mNoticeMobileNetworkSButton.setChecked(isMobileNetwork());
+        mLockScreenVoiceSButton = (SwitchButton) findViewById(R.id.individualization_open_lockscreen_voice_switch_button);
+        mLockScreenVoiceSButton.setOnCheckedChangeListener(this);
+        mLockScreenVoiceSButton.setChecked(isLockScreenVoice());
         mLockerDefaultImage = (LinearLayout) findViewById(R.id.individualization_locker_default_image);
         mLockerDefaultImage.setOnClickListener(this);
         mLockerDefaultImageThumb = (ImageView) findViewById(R.id.individualization_locker_default_thumb_image);
@@ -119,15 +125,28 @@ public class IndividualizationActivity extends Activity implements OnClickListen
             case R.id.individualization_notice_switch_button:
                 if (isChecked) {
                     openNoticeBar();
+                    UmengCustomEventManager.statisticalShowNotifyTimes();
                 } else {
                     closeNoticeBar();
+                    UmengCustomEventManager.statisticalCloseNotifyTimes();
                 }
                 break;
             case R.id.individualization_3G_4G_switch_button:
                 if (isChecked) {
                     openMobileNetwork();
+                    UmengCustomEventManager.statisticalAllowAutoDownload();
                 } else {
                     closeMobileNetwork();
+                    UmengCustomEventManager.statisticalDisallowAutoDownload();
+                }
+                break;
+            case R.id.individualization_open_lockscreen_voice_switch_button:
+                if (isChecked) {
+                    openLockScreenVoice();
+                    UmengCustomEventManager.statisticalEnableLockScreenSound();
+                } else {
+                    closeLocksScreenVoice();
+                    UmengCustomEventManager.statisticalDisableLockScreenSound();
                 }
                 break;
             default:
@@ -136,48 +155,50 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     }
 
-//    private void showInputDialog() {
-//        final Dialog dialog = new Dialog(this, R.style.pandora_dialog_style);
-//        dialog.getWindow().setContentView(R.layout.pandora_dialog);
-//        dialog.show();
-//        dialog.setCancelable(false);
-//
-//        TypefaceTextView mTitle = (TypefaceTextView) dialog.findViewById(R.id.pandora_dialog_title);
-//        mTitle.setText(getResources().getString(R.string.individualization_welcome_text));
-//        dialog.findViewById(R.id.pandora_dialog_individualization).setVisibility(View.VISIBLE);
-//        final BaseEditText mEditText = (BaseEditText) dialog
-//                .findViewById(R.id.pandora_dialog_individualization_edit_text);
-//
-//        String welcomeString = PandoraConfig.newInstance(IndividualizationActivity.this)
-//                .getWelcomeString();
-//        if (!TextUtils.isEmpty(welcomeString)) {
-//            mEditText.setText(welcomeString);
-//            mEditText.setSelection(welcomeString.length());
-//        }
-//
-//        TypefaceTextView mCancle = (TypefaceTextView) dialog
-//                .findViewById(R.id.pandora_dialog_individualization_button_cancle);
-//        mCancle.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//        TypefaceTextView mSure = (TypefaceTextView) dialog
-//                .findViewById(R.id.pandora_dialog_individualization_button_sure);
-//        mSure.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                String welcomeString = mEditText.getText().toString();
-//                UmengCustomEventManager.statisticalSetWelcomeString(welcomeString, true);
-//                saveWelcomeString(welcomeString);
-//                dialog.dismiss();
-//            }
-//        });
-//
-//    }
+    // private void showInputDialog() {
+    // final Dialog dialog = new Dialog(this, R.style.pandora_dialog_style);
+    // dialog.getWindow().setContentView(R.layout.pandora_dialog);
+    // dialog.show();
+    // dialog.setCancelable(false);
+    //
+    // TypefaceTextView mTitle = (TypefaceTextView)
+    // dialog.findViewById(R.id.pandora_dialog_title);
+    // mTitle.setText(getResources().getString(R.string.individualization_welcome_text));
+    // dialog.findViewById(R.id.pandora_dialog_individualization).setVisibility(View.VISIBLE);
+    // final BaseEditText mEditText = (BaseEditText) dialog
+    // .findViewById(R.id.pandora_dialog_individualization_edit_text);
+    //
+    // String welcomeString =
+    // PandoraConfig.newInstance(IndividualizationActivity.this)
+    // .getWelcomeString();
+    // if (!TextUtils.isEmpty(welcomeString)) {
+    // mEditText.setText(welcomeString);
+    // mEditText.setSelection(welcomeString.length());
+    // }
+    //
+    // TypefaceTextView mCancle = (TypefaceTextView) dialog
+    // .findViewById(R.id.pandora_dialog_individualization_button_cancle);
+    // mCancle.setOnClickListener(new OnClickListener() {
+    //
+    // @Override
+    // public void onClick(View v) {
+    // dialog.dismiss();
+    // }
+    // });
+    // TypefaceTextView mSure = (TypefaceTextView) dialog
+    // .findViewById(R.id.pandora_dialog_individualization_button_sure);
+    // mSure.setOnClickListener(new OnClickListener() {
+    //
+    // @Override
+    // public void onClick(View v) {
+    // String welcomeString = mEditText.getText().toString();
+    // UmengCustomEventManager.statisticalSetWelcomeString(welcomeString, true);
+    // saveWelcomeString(welcomeString);
+    // dialog.dismiss();
+    // }
+    // });
+    //
+    // }
 
     private void closeNoticeBar() {
         PandoraConfig.newInstance(this).saveNeedNotice(false);
@@ -203,13 +224,27 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         return PandoraConfig.newInstance(this).isMobileNetwork();
     }
 
+    private void closeLocksScreenVoice() {
+        PandoraConfig.newInstance(this).saveLockScreenVoice(false);
+        LockSoundManager.release();
+    }
+
+    private void openLockScreenVoice() {
+        PandoraConfig.newInstance(this).saveLockScreenVoice(true);
+        LockSoundManager.initSoundPool();
+    }
+
+    private boolean isLockScreenVoice() {
+        return PandoraConfig.newInstance(this).isLockScreenVoice();
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.individualization_locker_default_image:
                 PandoraUtils.gotoGalleryActivity(IndividualizationActivity.this,
                         PandoraUtils.REQUEST_CODE_GALLERY);
-                UmengCustomEventManager.statisticalSetDefaultImage(false);
+                UmengCustomEventManager.statisticalClickCustomButtonTimes();
                 break;
 
             default:

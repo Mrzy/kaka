@@ -28,6 +28,8 @@ public class PandoraBoxDispatcher extends Handler {
 
     private static PandoraBoxDispatcher INSTANCE;
 
+    private long mLastSyncDataTime = 0;
+
     private PandoraConfig mConfig;
 
     private PandoraBoxDispatcher(Looper looper) {
@@ -98,6 +100,19 @@ public class PandoraBoxDispatcher extends Handler {
         }
 
         super.handleMessage(msg);
+    }
+
+    /**
+     * 尝试拉取原始数据及图片的预下载，此方法仅是尝试拉取，如果判断条件都满足才会真正做拉取动作
+     */
+    public void pullData() {
+        long curTime = System.currentTimeMillis();
+        long delta = curTime - mLastSyncDataTime;
+        if (delta > PandoraPolicy.MIN_DURATION_SYNC_DATA_TIME) {
+            sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
+            sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 2000);
+            mLastSyncDataTime = curTime;
+        }
     }
 
     private boolean checkFirstPullToday() {

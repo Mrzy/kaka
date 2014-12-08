@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import cn.zmdx.kaka.locker.LockScreenManager.ILockScreenListener;
 import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
 import com.umeng.analytics.MobclickAgent;
@@ -36,14 +37,24 @@ public class FakeActivity extends Activity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
         LockScreenManager.getInstance().setOnLockScreenListener(new ILockScreenListener() {
+            PandoraConfig config = PandoraConfig.newInstance(getApplicationContext());
+
             @Override
             public void onLock() {
+                boolean lockScreenVoice = config.isLockScreenVoice();
+                if (lockScreenVoice) {
+                    LockSoundManager.play(LockSoundManager.SOUND_ID_LOCK);
+                }
             }
 
             @Override
             public void onUnLock() {
                 finish();
                 overridePendingTransition(0, 0);
+                boolean lockScreenVoice = config.isLockScreenVoice();
+                if (lockScreenVoice) {
+                    LockSoundManager.play(LockSoundManager.SOUND_ID_UNLOCK);
+                }
             }
 
             @Override

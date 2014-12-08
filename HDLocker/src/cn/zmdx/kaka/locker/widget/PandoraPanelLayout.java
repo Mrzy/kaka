@@ -166,7 +166,7 @@ public class PandoraPanelLayout extends ViewGroup {
     /**
      * Current state of the slideable view.
      */
-    private enum SlideState {
+    public enum SlideState {
         EXPANDED, COLLAPSED, ANCHORED, HIDDEN, DRAGGING
     }
 
@@ -297,6 +297,10 @@ public class PandoraPanelLayout extends ViewGroup {
         public boolean onPanelFastDown(float yvel);
 
         public void onPanelStartDown(float y);
+    }
+
+    public SlideState getSlideState() {
+        return mSlideState;
     }
 
     /**

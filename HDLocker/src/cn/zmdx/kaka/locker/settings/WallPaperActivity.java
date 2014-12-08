@@ -168,7 +168,6 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
                             Toast.LENGTH_LONG).show();
                     return;
                 }
-                UmengCustomEventManager.statisticalClickCustomButtonTimes();
                 showSelectDialog();
             }
         });
@@ -362,6 +361,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     public void setWallpaperItem(String fileName) {
         CustomWallpaperManager.getInstance().setCustomWallpaperItem(WallPaperActivity.this,
                 mCustomContainer, fileName, true, this, mPandoraWallpaperList);
+        UmengCustomEventManager.statisticalSelectLockScreenWallpaperCount(fileName);
     }
 
     protected void showDelDialog() {

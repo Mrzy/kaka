@@ -17,6 +17,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
 import cn.zmdx.kaka.locker.content.box.IFoldableBox;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.android.volley.misc.ImageUtils;
@@ -50,19 +51,14 @@ public class FoldableCard extends Card {
 
     private void init() {
         setBackgroundResourceId(R.drawable.pandora_box_item_selector);
-        setSwipeable(true);
-        setOnSwipeListener(new OnSwipeListener() {
-            @Override
-            public void onSwipe(Card card) {
-                FoldablePage.markRead(card);
-            }
-        });
+        setSwipeable(false);
         setOnClickListener(new OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
                 if (mBox instanceof FoldablePage) {
                     FoldablePage box = (FoldablePage) mBox;
                     box.openDetails(view.findViewById(R.id.card_item_layout_large), mData);
+                    UmengCustomEventManager.statisticalSeeContentDetails();
                 }
             }
         });

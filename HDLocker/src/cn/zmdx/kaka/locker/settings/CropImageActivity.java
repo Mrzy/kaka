@@ -123,7 +123,6 @@ public class CropImageActivity extends Activity {
                     PandoraUtils.sCropBitmap = mCropImageView.getCroppedImage();
                     setResult(Activity.RESULT_OK);
                 } else {
-                    UmengCustomEventManager.statisticalSetDefaultImage(true);
                     try {
                         PandoraUtils.sLockDefaultThumbBitmap = zoomBitmap();
                         setResult(Activity.RESULT_OK);

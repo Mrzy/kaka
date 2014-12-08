@@ -30,9 +30,11 @@ import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SlideState;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.UnfoldableView.OnFoldingListener;
@@ -234,7 +236,8 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                 box.startGif();
             }
         } else if (type.equals(ServerDataMapping.S_DATATYPE_NEWS)
-                || type.equals(ServerDataMapping.S_DATATYPE_JOKE) || type.equals(ServerDataMapping.S_DATATYPE_SINGLEIMG)) {
+                || type.equals(ServerDataMapping.S_DATATYPE_JOKE)
+                || type.equals(ServerDataMapping.S_DATATYPE_SINGLEIMG)) {
             SingleImageBox box = new SingleImageBox(mContext, this,
                     SingleImageBox.convertFromServerData(data));
             View view = box.getRenderedView();
@@ -242,7 +245,8 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                 renderDetailView(view);
             }
         } else if (type.equals(ServerDataMapping.S_DATATYPE_MULTIIMG)) {
-            final MultiImgBox box = new MultiImgBox(mContext, this, MultiImgBox.convertToMultiBox(data));
+            final MultiImgBox box = new MultiImgBox(mContext, this,
+                    MultiImgBox.convertToMultiBox(data));
             View view = box.getRenderedView();
             if (view != null) {
                 renderDetailView(view);
@@ -293,7 +297,13 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     @Override
     public void onRefresh() {
-        HDBThreadUtils.postOnUiDelayed(mUpdateCardRunnable, 1000);
+        SlideState state = LockScreenManager.getInstance().getLockPanelState();
+        if (state == SlideState.COLLAPSED) { // 只有在展开状态下才可以刷新
+            HDBThreadUtils.postOnUiDelayed(mUpdateCardRunnable, 1000);
+            UmengCustomEventManager.statisticalPullToRefreshTimes();
+        } else {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     private Runnable mUpdateCardRunnable = new Runnable() {
@@ -308,10 +318,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                     for (Card card : cards) {
                         markRead(card);
                     }
-                    PandoraBoxDispatcher.getInstance().sendEmptyMessage(
-                            PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
-                    PandoraBoxDispatcher.getInstance().sendEmptyMessage(
-                            PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES);
+                    PandoraBoxDispatcher.getInstance().pullData();
                     // 更换一批新的数据
                     changeNextGroupCard();
                 };

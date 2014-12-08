@@ -3,7 +3,7 @@
     android:id="@+id/pandora_box_nodata_show"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pandora_locker_content_background" >
+    android:background="@drawable/gesture_bg" >
 
     <RelativeLayout
         android:id="@+id/pandora_box_nodata_default"
