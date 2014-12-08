@@ -115,7 +115,7 @@ public class ServerImageDataModel {
         if (!TextUtils.isEmpty(dataType)) {
             selection = TableStructure.SERVER_IMAGE_DATA_TYPE + "=? and "
                     + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
-                    + TableStructure.SERVER_IMAGE_SETP + "=?";
+                    + TableStructure.SERVER_IMAGE_READED + "=?";
             selectionArgu = new String[] {
                     dataType, String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE),
                     ServerImageDataModel.UN_READ
@@ -124,7 +124,7 @@ public class ServerImageDataModel {
 
             selection = TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
                     + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
-                    + TableStructure.SERVER_IMAGE_SETP + "=?";
+                    + TableStructure.SERVER_IMAGE_READED + "=?";
             selectionArgu = new String[] {
                     ServerDataMapping.S_DATATYPE_HTML,
                     String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
@@ -174,7 +174,7 @@ public class ServerImageDataModel {
     public synchronized boolean markRead(int id, boolean isRead) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(TableStructure.SERVER_IMAGE_SETP, isRead ? READ : UN_READ);
+        cv.put(TableStructure.SERVER_IMAGE_READED, isRead ? READ : UN_READ);
         int result = sqliteDatabase.update(TableStructure.TABLE_NAME_SERVER_IMAGE, cv,
                 TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
                     String.valueOf(id)
@@ -189,7 +189,7 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_DESC,
                 TableStructure.SERVER_IMAGE_TITLE, TableStructure.SERVER_IMAGE_URL,
-                TableStructure.SERVER_COLLECT_WEBSITE
+                TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
 
         }, TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
                 + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
@@ -231,7 +231,7 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
                 TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
-                + TableStructure.SERVER_IMAGE_SETP + "=?", new String[] {
+                + TableStructure.SERVER_IMAGE_READED + "=?", new String[] {
                 String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
         }, null, null, "RANDOM()", String.valueOf(count));
 
@@ -260,10 +260,10 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
-                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_COLLECT_WEBSITE
+                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
                 + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
-                + TableStructure.SERVER_IMAGE_SETP + "=?", new String[] {
+                + TableStructure.SERVER_IMAGE_READED + "=?", new String[] {
                 String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerDataMapping.S_DATATYPE_HTML,
                 ServerImageDataModel.UN_READ
         }, null, null, "RANDOM()", "1");
@@ -311,14 +311,14 @@ public class ServerImageDataModel {
         String[] selectionArgus = null;
         if (containHtml) {
             selection = TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
-                    + TableStructure.SERVER_IMAGE_SETP + "=?";
+                    + TableStructure.SERVER_IMAGE_READED + "=?";
             selectionArgus = new String[] {
                     String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
             };
         } else {
             selection = TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
                     + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
-                    + TableStructure.SERVER_IMAGE_SETP + "=?";
+                    + TableStructure.SERVER_IMAGE_READED + "=?";
             selectionArgus = new String[] {
                     String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE),
                     ServerDataMapping.S_DATATYPE_HTML, ServerImageDataModel.UN_READ
@@ -327,7 +327,7 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
-                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_COLLECT_WEBSITE
+                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
         }, selection, selectionArgus, null, null, null, String.valueOf(count));
 
         try {
@@ -356,8 +356,8 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
-                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_COLLECT_WEBSITE
-        }, TableStructure.SERVER_ID + "=?", new String[] {String.valueOf(id)}, null, null, null, null);
+                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
+        }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {String.valueOf(id)}, null, null, null, null);
 
         try {
             while (cursor.moveToNext()) {

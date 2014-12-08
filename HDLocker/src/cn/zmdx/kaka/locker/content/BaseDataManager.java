@@ -114,8 +114,8 @@ public class BaseDataManager {
         this.mCloudId = jsonObject.optString("id");
         mTitle = jsonObject.optString("title");
         mTop = jsonObject.optString("top");
-//        mSetp = jsonObject.optString("step");
-        mRead = ServerImageDataModel.UN_READ;//默认为未读
+        // mSetp = jsonObject.optString("step");
+        mRead = ServerImageDataModel.UN_READ;// 默认为未读
         mCollectTime = jsonObject.optString("collect_time");
         mReleaseTime = jsonObject.optString("release_time");
         mCollectWebsite = jsonObject.optString("collect_website");

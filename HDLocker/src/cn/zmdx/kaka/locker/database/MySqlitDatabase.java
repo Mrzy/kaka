@@ -56,16 +56,7 @@ public class MySqlitDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        TableStructure.createContentTable(db);
-        TableStructure.createServerTable(db);
         TableStructure.createServerImageTable(db);
-        db.execSQL("create unique index if not exists baiduId_index on "
-                + TableStructure.TABLE_NAME_CONTENT + "(" + TableStructure.CONTENT_BAIDU_ID + ")");
-        db.execSQL("create unique index if not exists cloudId_index on "
-                + TableStructure.TABLE_NAME_SERVER + "(" + TableStructure.SERVER_CLOUD_ID + ")");
-        db.execSQL("create unique index if not exists cloudId_img_index on "
-                + TableStructure.TABLE_NAME_SERVER_IMAGE + "(" + TableStructure.SERVER_CLOUD_ID
-                + ")");
     }
 
     @Override
