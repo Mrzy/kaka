@@ -51,13 +51,7 @@ public class FoldableCard extends Card {
 
     private void init() {
         setBackgroundResourceId(R.drawable.pandora_box_item_selector);
-        setSwipeable(true);
-        setOnSwipeListener(new OnSwipeListener() {
-            @Override
-            public void onSwipe(Card card) {
-                FoldablePage.markRead(card);
-            }
-        });
+        setSwipeable(false);
         setOnClickListener(new OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {

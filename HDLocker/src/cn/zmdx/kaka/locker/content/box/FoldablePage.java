@@ -298,7 +298,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
     @Override
     public void onRefresh() {
         SlideState state = LockScreenManager.getInstance().getLockPanelState();
-        if (state == SlideState.COLLAPSED) { //只有在展开状态下才可以刷新
+        if (state == SlideState.COLLAPSED) { // 只有在展开状态下才可以刷新
             HDBThreadUtils.postOnUiDelayed(mUpdateCardRunnable, 1000);
             UmengCustomEventManager.statisticalPullToRefreshTimes();
         } else {
@@ -318,10 +318,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                     for (Card card : cards) {
                         markRead(card);
                     }
-                    PandoraBoxDispatcher.getInstance().sendEmptyMessage(
-                            PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
-                    PandoraBoxDispatcher.getInstance().sendEmptyMessage(
-                            PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES);
+                    PandoraBoxDispatcher.getInstance().pullData();
                     // 更换一批新的数据
                     changeNextGroupCard();
                 };
