@@ -36,6 +36,8 @@ public class LockSoundManager {
     public static void play(int soundId) {
         if (sPool != null) {
             sPool.play(soundId, 1, 1, 0, 0, 1);
+        } else {
+            initSoundPool();
         }
     }
 
@@ -65,6 +67,7 @@ public class LockSoundManager {
         unLoad(SOUND_ID_UNLOCK);
         if (sPool != null) {
             sPool.release();
+            sPool = null;
         }
     }
 }

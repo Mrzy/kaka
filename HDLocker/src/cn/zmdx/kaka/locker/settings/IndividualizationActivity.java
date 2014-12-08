@@ -26,6 +26,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.FileHelper;
@@ -147,6 +148,7 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                     closeLocksScreenVoice();
                     UmengCustomEventManager.statisticalDisableLockScreenSound();
                 }
+                break;
             default:
                 break;
         }
@@ -224,10 +226,12 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private void closeLocksScreenVoice() {
         PandoraConfig.newInstance(this).saveLockScreenVoice(false);
+        LockSoundManager.release();
     }
 
     private void openLockScreenVoice() {
         PandoraConfig.newInstance(this).saveLockScreenVoice(true);
+        LockSoundManager.initSoundPool();
     }
 
     private boolean isLockScreenVoice() {

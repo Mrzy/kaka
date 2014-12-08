@@ -235,7 +235,9 @@ public class LockScreenManager {
 
         notifyLocked();
         onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
-        syncDataIfNeeded();
+
+        //尝试拉取资讯数据及图片的预下载
+        PandoraBoxDispatcher.getInstance().pullData();
 
         checkNewVersion();
 
@@ -639,21 +641,6 @@ public class LockScreenManager {
             mAnimatorSet.end();
             mAnimatorSet.cancel();
             mAnimatorSet = null;
-        }
-    }
-
-    private long mLastSyncDataTime = 0;
-
-    private void syncDataIfNeeded() {
-        long curTime = System.currentTimeMillis();
-        long delta = curTime - mLastSyncDataTime;
-        if (delta > PandoraPolicy.MIN_DURATION_SYNC_DATA_TIME) {
-            PandoraBoxDispatcher pd = PandoraBoxDispatcher.getInstance();
-            pd.sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
-            if (!pd.hasMessages(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES)) {
-                pd.sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 2000);
-                mLastSyncDataTime = curTime;
-            }
         }
     }
 

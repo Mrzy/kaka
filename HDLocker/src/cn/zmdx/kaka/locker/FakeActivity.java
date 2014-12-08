@@ -39,12 +39,10 @@ public class FakeActivity extends Activity {
         LockScreenManager.getInstance().setOnLockScreenListener(new ILockScreenListener() {
             PandoraConfig config = PandoraConfig.newInstance(getApplicationContext());
 
-            boolean lockScreenVoice = config.isLockScreenVoice();
-
             @Override
             public void onLock() {
+                boolean lockScreenVoice = config.isLockScreenVoice();
                 if (lockScreenVoice) {
-                    LockSoundManager.initSoundPool();
                     LockSoundManager.play(LockSoundManager.SOUND_ID_LOCK);
                 }
             }
@@ -53,8 +51,8 @@ public class FakeActivity extends Activity {
             public void onUnLock() {
                 finish();
                 overridePendingTransition(0, 0);
+                boolean lockScreenVoice = config.isLockScreenVoice();
                 if (lockScreenVoice) {
-                    LockSoundManager.initSoundPool();
                     LockSoundManager.play(LockSoundManager.SOUND_ID_UNLOCK);
                 }
             }
