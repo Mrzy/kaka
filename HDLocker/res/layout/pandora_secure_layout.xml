@@ -14,7 +14,7 @@
         android:id="@+id/flipper_gesture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#aa000000"
+        android:background="#cc000000"
         android:gravity="center"
         android:padding="@dimen/lockscreen_gusture_padding_top" >
 
