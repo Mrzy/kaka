@@ -3,8 +3,6 @@ package cn.zmdx.kaka.locker.event;
 
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.wallpaper.CustomWallpaperManager.CustomWallpaper;
-import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 
 import com.umeng.analytics.MobclickAgent;
 

@@ -3,7 +3,6 @@ package cn.zmdx.kaka.locker;
 
 import android.app.Application;
 import android.content.Context;
-import android.graphics.Bitmap.CompressFormat;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.utils.HDBEventSource;

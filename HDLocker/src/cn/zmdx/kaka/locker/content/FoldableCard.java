@@ -1,5 +1,7 @@
 package cn.zmdx.kaka.locker.content;
 
+import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.view.CardView;
 import android.animation.Animator.AnimatorListener;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,8 +9,8 @@ import android.graphics.BitmapFactory.Options;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.HDApplication;
@@ -22,9 +24,6 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.android.volley.misc.ImageUtils;
 import com.nineoldandroids.view.ViewHelper;
-
-import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.view.CardView;
 
 public class FoldableCard extends Card {
 

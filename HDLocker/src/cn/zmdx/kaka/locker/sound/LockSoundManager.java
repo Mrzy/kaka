@@ -1,11 +1,11 @@
 
 package cn.zmdx.kaka.locker.sound;
 
-import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.R;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.R;
 
 public class LockSoundManager {
 
