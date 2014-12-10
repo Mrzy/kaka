@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <android.support.v4.widget.SlidingPaneLayout
         android:id="@+id/sliding_layout"
-        android:background="#00000000"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="#00000000" >
 
         <FrameLayout
             android:id="@+id/sliding_behind_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#000000" />
+            android:background="#000000"
+            android:gravity="bottom|center_horizontal" />
 
         <cn.zmdx.kaka.locker.widget.WallpaperPanelLayout
             xmlns:wallpaper="http://schemas.android.com/apk/res-auto"
@@ -30,7 +29,6 @@
             wallpaper:ShadowHeight="0dp" >
 
             <!-- MAIN CONTENT -->
-
             <cn.zmdx.kaka.locker.widget.PandoraPanelLayout
                 xmlns:sothree="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/locker_view"
@@ -41,30 +39,12 @@
                 sothree:shadowHeight="8dp"
                 sothree:topSeekoutHeight="60dp" >
 
-                <cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout
-                    xmlns:pandora="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/content"
+                <RelativeLayout
+                    android:id="@+id/flipper_box"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    pandora:slidingOverlay="true"
-                    pandora:slidingPanelHeight="0dp"
-                    pandora:slidingShadowHeight="0dp" >
-
-                    <RelativeLayout
-                        android:id="@+id/flipper_box"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/gesture_bg" >
-                    </RelativeLayout>
-
-                    <ViewStub
-                        android:id="@+id/gesture_stub"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout="@layout/pandora_secure_layout" >
-                    </ViewStub>
-                </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
+                    android:background="@drawable/gesture_bg" >
+                </RelativeLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -103,6 +83,7 @@
                             android:textSize="13sp" />
 
                         <cn.zmdx.kaka.locker.widget.DigitalClocks
+                            xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
                             android:id="@+id/digitalClock"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

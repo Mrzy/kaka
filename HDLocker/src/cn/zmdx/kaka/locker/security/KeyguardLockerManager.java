@@ -14,6 +14,10 @@ public class KeyguardLockerManager {
 
     private Context mContext;
 
+    public KeyguardLockerManager(Context context) {
+        mContext = context;
+    }
+
     public static int getCurrentLockerType() {
         return LOCKER_TYPE_NON;
     }
@@ -44,7 +48,7 @@ public class KeyguardLockerManager {
 
         void onSuccess();
 
-        void onFaild(int reason);
+        void onFaild(View v);
 
     }
 }
