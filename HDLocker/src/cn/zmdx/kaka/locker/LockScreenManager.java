@@ -14,9 +14,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.ColorDrawable;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
@@ -28,6 +32,7 @@ import android.view.ViewStub;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -81,6 +86,10 @@ public class LockScreenManager {
     private PandoraPanelLayout mSliderView;
 
     private View mEntireView;
+
+    private SlidingPaneLayout mSlidingPanelLayout;
+
+    private FrameLayout mSlidingBehindLayout;
 
     private ViewGroup mBoxView;
 
@@ -219,6 +228,7 @@ public class LockScreenManager {
 
         mWinParams.x = 0;
         mWinParams.y = 0;
+        mWinParams.format = PixelFormat.TRANSPARENT;
         // params.format=PixelFormat.RGBA_8888;
         mWinParams.windowAnimations = R.style.anim_locker_window;
         mWinParams.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
@@ -408,6 +418,10 @@ public class LockScreenManager {
     @SuppressLint("InflateParams")
     private void initLockScreenViews() {
         mEntireView = LayoutInflater.from(mContext).inflate(R.layout.pandora_lockscreen, null);
+        mSlidingPanelLayout = (SlidingPaneLayout) mEntireView.findViewById(R.id.sliding_layout);
+        mSlidingPanelLayout.setPanelSlideListener(mSlideOutListener);
+        mSlidingBehindLayout = (FrameLayout) mEntireView.findViewById(R.id.sliding_behind_layout);
+
         mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
         initSecurePanel();
@@ -429,6 +443,28 @@ public class LockScreenManager {
         setDrawable();
         initOnlinePaperPanel();
     }
+
+    /**
+     * 向右侧滑的监听q
+     */
+    private android.support.v4.widget.SlidingPaneLayout.PanelSlideListener mSlideOutListener = new android.support.v4.widget.SlidingPaneLayout.PanelSlideListener() {
+
+        @Override
+        public void onPanelSlide(View panel, float slideOffset) {
+            mSlidingBehindLayout.setAlpha(1.0f - slideOffset);
+        }
+
+        @Override
+        public void onPanelOpened(View panel) {
+
+        }
+
+        @Override
+        public void onPanelClosed(View panel) {
+
+        }
+
+    };
 
     /**
      * 设置拉开后内容的背景图片，如果onlyDisplayCustomImage为true，则只有当设置了个性化背景时才会显示，否则不显示任何东西（
