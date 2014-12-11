@@ -17,8 +17,8 @@ import android.graphics.PixelFormat;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
-import cn.zmdx.kaka.locker.widget.SlidingPaneLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -61,6 +61,7 @@ import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SlideState;
+import cn.zmdx.kaka.locker.widget.SlidingPaneLayout;
 import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
 import com.nineoldandroids.animation.AnimatorSet;
@@ -429,7 +430,9 @@ public class LockScreenManager {
 
         @Override
         public void onPanelSlide(View panel, float slideOffset) {
-            mSlidingBehindLayout.setAlpha(1.0f - slideOffset);
+            if (!mNeedPassword) {
+                mSlidingBehindLayout.setAlpha(1.0f - slideOffset);
+            }
         }
 
         @Override
@@ -467,12 +470,17 @@ public class LockScreenManager {
         final View view = klm.getCurrentLockerView(new IUnlockListener() {
             @Override
             public void onSuccess() {
-                unLock();
+                HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        internalUnLock();
+                    }
+                }, 3);
             }
 
             @Override
             public void onFaild(View view) {
-                // TODO Auto-generated method stub
             }
 
         });
@@ -600,9 +608,7 @@ public class LockScreenManager {
      * isCloseFakeActivity)方法
      */
     public void unLock() {
-        // if (!showGestureView()) {
-        internalUnLock();
-        // }
+        unLock(true, false);
     }
 
     /**
@@ -613,17 +619,16 @@ public class LockScreenManager {
      */
     public void unLock(boolean isCloseFakeActivity, boolean forceClose) {
         if (forceClose) {
-            internalUnLock(true);
+            internalUnLock();
             return;
         }
-        if (!needPassword()) {
+        if (!mNeedPassword) {
             internalUnLock(isCloseFakeActivity);
+        } else {
+            if (!mSlidingPanelLayout.isOpen()) {
+                mSlidingPanelLayout.openPane();
+            }
         }
-    }
-
-    private boolean needPassword() {
-        // TODO
-        return false;
     }
 
     private void internalUnLock() {
@@ -648,7 +653,6 @@ public class LockScreenManager {
         }
         mSliderView.recycle();
         mEntireView = null;
-        // mIsShowGesture = false;
         mIsLocked = false;
 
         mOnlineWallpaperView = null;
@@ -676,74 +680,7 @@ public class LockScreenManager {
         return mIsLocked;
     }
 
-    // private boolean mIsShowGesture = false;
-
     private Runnable mUnLockRunnable = null;
-
-    // private boolean showGestureView() {
-    // int unlockType = PandoraConfig.newInstance(mContext).getUnLockType();
-    // if (unlockType != PandoraConfig.UNLOCKER_TYPE_DEFAULT) {
-    // if (!mIsShowGesture) {
-    // mContentLayout.expandPanel();
-    // mIsShowGesture = true;
-    // } else {
-    // mContentLayout.collapsePanel();
-    // mIsShowGesture = false;
-    // }
-    // return true;
-    // }
-    // return false;
-    // }
-
-    // private OnPatternListener mPatternListener = new OnPatternListener() {
-    //
-    // @Override
-    // public void onPatternStart() {
-    //
-    // }
-    //
-    // @Override
-    // public void onPatternDetected(List<Cell> pattern) {
-    // verifyGustureLock(pattern);
-    // }
-    //
-    // @Override
-    // public void onPatternCleared() {
-    //
-    // }
-    //
-    // @Override
-    // public void onPatternCellAdded(List<Cell> pattern) {
-    //
-    // }
-    // };
-
-    // private void verifyGustureLock(List<Cell> pattern) {
-    // if (checkPattern(pattern)) {
-    // UmengCustomEventManager.statisticalGuestureUnLockSuccess();
-    // mGusturePrompt.setText("");
-    // HDBThreadUtils.postOnUiDelayed(new Runnable() {
-    //
-    // @Override
-    // public void run() {
-    // internalUnLock();
-    // }
-    // }, 1);
-    // } else {
-    // UmengCustomEventManager.statisticalGuestureUnLockFail();
-    // mGusturePrompt.setText(mContext.getResources().getString(R.string.gusture_verify_fail));
-    // mLockPatternView.setDisplayMode(DisplayMode.Wrong);
-    // }
-    // }
-
-    // private boolean checkPattern(List<Cell> pattern) {
-    // PandoraConfig mPandoraConfig = PandoraConfig.newInstance(mContext);
-    // String stored = mPandoraConfig.getLockPaternString();
-    // if (!stored.equals(null)) {
-    // return stored.equals(LockPatternUtils.patternToString(pattern));
-    // }
-    // return false;
-    // }
 
     private PanelSlideListener mSlideListener = new SimplePanelSlideListener() {
 
@@ -771,9 +708,6 @@ public class LockScreenManager {
         @Override
         public void onPanelCollapsed(View panel) {
             UmengCustomEventManager.statisticalUnLockTimes();
-            // if (!showGestureView()) {
-            // internalUnLock();
-            // }
         }
 
         @Override
@@ -787,10 +721,6 @@ public class LockScreenManager {
                 }
                 mLockArrow.setVisibility(View.VISIBLE);
             }
-            // if (mIsShowGesture) {
-            // mContentLayout.collapsePanel();
-            // mIsShowGesture = false;
-            // }
         }
 
         @Override
