@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <android.support.v4.widget.SlidingPaneLayout
+    <cn.zmdx.kaka.locker.widget.SlidingPaneLayout
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,6 +29,7 @@
             wallpaper:ShadowHeight="0dp" >
 
             <!-- MAIN CONTENT -->
+
             <cn.zmdx.kaka.locker.widget.PandoraPanelLayout
                 xmlns:sothree="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/locker_view"
@@ -197,6 +198,6 @@
                 </LinearLayout>
             </LinearLayout>
         </cn.zmdx.kaka.locker.widget.WallpaperPanelLayout>
-    </android.support.v4.widget.SlidingPaneLayout>
+    </cn.zmdx.kaka.locker.widget.SlidingPaneLayout>
 
 </FrameLayout>

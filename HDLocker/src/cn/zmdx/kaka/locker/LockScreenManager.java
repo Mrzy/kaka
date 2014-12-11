@@ -17,9 +17,8 @@ import android.graphics.PixelFormat;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
-import android.support.v4.widget.SlidingPaneLayout;
+import cn.zmdx.kaka.locker.widget.SlidingPaneLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -130,6 +129,8 @@ public class LockScreenManager {
     private LinearLayout mOnlineViewContainer;
 
     private View mTopOverlay, mBottomOverlay;
+
+    private boolean mNeedPassword = false;
 
     public interface ILockScreenListener {
         void onLock();
@@ -398,13 +399,14 @@ public class LockScreenManager {
     @SuppressLint("InflateParams")
     private void initLockScreenViews() {
         mEntireView = LayoutInflater.from(mContext).inflate(R.layout.pandora_lockscreen, null);
+        initSecurePanel();
         mSlidingPanelLayout = (SlidingPaneLayout) mEntireView.findViewById(R.id.sliding_layout);
         mSlidingPanelLayout.setPanelSlideListener(mSlideOutListener);
+        mSlidingPanelLayout.setOverhangVisiable(mNeedPassword);
         mSlidingBehindLayout = (FrameLayout) mEntireView.findViewById(R.id.sliding_behind_layout);
 
         mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
-        initSecurePanel();
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
         mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
@@ -423,7 +425,7 @@ public class LockScreenManager {
     /**
      * 向右侧滑的监听
      */
-    private android.support.v4.widget.SlidingPaneLayout.PanelSlideListener mSlideOutListener = new android.support.v4.widget.SlidingPaneLayout.PanelSlideListener() {
+    private SlidingPaneLayout.PanelSlideListener mSlideOutListener = new SlidingPaneLayout.PanelSlideListener() {
 
         @Override
         public void onPanelSlide(View panel, float slideOffset) {
@@ -437,7 +439,6 @@ public class LockScreenManager {
 
         @Override
         public void onPanelClosed(View panel) {
-
         }
 
     };
@@ -466,7 +467,7 @@ public class LockScreenManager {
         final View view = klm.getCurrentLockerView(new IUnlockListener() {
             @Override
             public void onSuccess() {
-                // TODO Auto-generated method stub
+                unLock();
             }
 
             @Override
@@ -479,6 +480,9 @@ public class LockScreenManager {
             mSlidingBehindLayout = (FrameLayout) mEntireView
                     .findViewById(R.id.sliding_behind_layout);
             mSlidingBehindLayout.addView(view);
+            mNeedPassword = true;
+        } else {
+            mNeedPassword = false;
         }
     }
 
