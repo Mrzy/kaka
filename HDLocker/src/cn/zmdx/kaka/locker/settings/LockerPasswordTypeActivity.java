@@ -172,9 +172,6 @@ public class LockerPasswordTypeActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        setResult(RESULT_CANCELED);
-        finish();
-        overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
-                R.anim.umeng_fb_slide_out_from_right);
+        finishWithResult();
     }
 }
