@@ -318,10 +318,12 @@ public class ServerImageDataModel {
         } else {
             selection = TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
                     + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
-                    + TableStructure.SERVER_IMAGE_READED + "=?";
+                    + TableStructure.SERVER_IMAGE_READED + "=? and "
+                    + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=?";
             selectionArgus = new String[] {
                     String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE),
-                    ServerDataMapping.S_DATATYPE_HTML, ServerImageDataModel.UN_READ
+                    ServerDataMapping.S_DATATYPE_HTML, ServerImageDataModel.UN_READ,
+                    ServerDataMapping.S_DATATYPE_MULTIIMG
             };
         }
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
@@ -357,7 +359,9 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
                 TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
-        }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {String.valueOf(id)}, null, null, null, null);
+        }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
+            String.valueOf(id)
+        }, null, null, null, null);
 
         try {
             while (cursor.moveToNext()) {
