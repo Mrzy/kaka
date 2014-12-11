@@ -2,8 +2,11 @@
 <resources>
 
     <declare-styleable name="LockPatternView">
-<!-- Aspect to use when drawing LockPatternView. Choices are "square"(default), "lock_width"
-             or "lock_height" -->
+
+        <!--
+     Aspect to use when drawing LockPatternView. Choices are "square"(default), "lock_width"
+             or "lock_height"
+        -->
         <attr name="aspect" format="string" />
         <!-- Color to use when drawing LockPatternView paths. -->
         <attr name="pathColor" format="color|reference" />
@@ -12,7 +15,7 @@
         <!-- The error color -->
         <attr name="errorColor" format="color|reference" />
         <!-- The success color -->
-        <attr name="successColor" format="color|reference"/>
+        <attr name="successColor" format="color|reference" />
     </declare-styleable>
     <declare-styleable name="PandoraPanelLayout">
         <attr name="panelHeight" format="dimension" />
@@ -53,7 +56,6 @@
         <attr name="aspectRatioY" format="integer" />
         <attr name="imageResource" format="reference" />
     </declare-styleable>
-
     <declare-styleable name="SlidingUpPanelLayout">
         <attr name="slidingPanelHeight" format="dimension" />
         <attr name="slidingShadowHeight" format="dimension" />
@@ -87,4 +89,40 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="KeyboardView">
+        <!-- Default KeyboardView style. -->
+        <attr name="keyboardViewStyle" format="reference" />
+
+        <!-- Image for the key. This image needs to be a StateListDrawable, with the following
+             possible states: normal, pressed, checkable, checkable+pressed, checkable+checked,
+             checkable+checked+pressed. -->
+        <attr name="keyBackground" format="reference" />
+
+        <!-- Size of the text for character keys. -->
+        <attr name="keyTextSize" format="dimension" />
+
+        <!-- Size of the text for custom keys with some text and no icon. -->
+        <attr name="labelTextSize" format="dimension" />
+
+        <!-- Color to use for the label in a key. -->
+        <attr name="keyTextColor" format="color" />
+
+        <!-- Layout resource for key press feedback.-->
+        <attr name="keyPreviewLayout" format="reference" />
+
+        <!-- Vertical offset of the key press feedback from the key. -->
+        <attr name="keyPreviewOffset" format="dimension" />
+
+        <!-- Height of the key press feedback popup. -->
+        <attr name="keyPreviewHeight" format="dimension" />
+
+        <!-- Amount to offset the touch Y coordinate by, for bias correction. -->
+        <attr name="verticalCorrection" format="dimension" />
+
+        <!-- Layout resource for popup keyboards. -->
+        <attr name="popupLayout" format="reference" />
+
+        <!-- <attr name="shadowColor" />
+        <attr name="shadowRadius" /> -->
+    </declare-styleable>
 </resources>

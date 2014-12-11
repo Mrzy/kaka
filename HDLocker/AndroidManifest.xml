@@ -25,7 +25,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".HDApplication"
@@ -44,12 +44,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".settings.LockPatternActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/gusture_dialog" >
         </activity>
         <activity
             android:name=".guide.GuideActivity"
@@ -94,6 +88,18 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".settings.LockerPasswordActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".settings.LockerPasswordTypeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/locker_password_dialog_theme" >
         </activity>
 
         <service android:name=".service.PandoraService" />
