@@ -142,6 +142,7 @@
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"点。"</string>
     
     <!-- number lock -->
+    <string name="number_lock_prompt">请输入密码</string>
     <string name="number_lock_confirmation_prompt">再次输入密码进行确认</string>
     <string name="number_lock_confirmation_fail_prompt">两次输入密码不一致，请重新输入</string>
     <string name="number_lock_success">已成功设置解锁密码</string>

@@ -153,12 +153,15 @@ public class LockerPasswordActivity extends Activity implements OnClickListener 
         switch (view.getId()) {
             case R.id.pandora_lock_type_none_layout:
                 setLockTypeNone();
+                setTypeViewState(KeyguardLockerManager.UNLOCKER_TYPE_NONE);
                 break;
             case R.id.pandora_lock_type_pattern_layout:
                 setLockTypePattern();
+                setTypeViewState(KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN);
                 break;
             case R.id.pandora_lock_type_number_layout:
                 setLockTypeNumber();
+                setTypeViewState(KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK);
                 break;
 
             default:

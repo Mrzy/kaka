@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:text="@string/number_lock_prompt"
         android:textColor="@color/lock_pattern_view_success_color"
         android:textSize="15sp" />
 

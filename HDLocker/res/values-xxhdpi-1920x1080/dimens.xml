@@ -83,5 +83,4 @@
     <dimen name="pandora_wallpaper_default_line_margin_top">21dp</dimen>
     <dimen name="init_setting_complete_button_margin_right">10dp</dimen>
     
-    <dimen name="pandora_number_lock_translation_x_displacement">4dp</dimen>
 </resources>

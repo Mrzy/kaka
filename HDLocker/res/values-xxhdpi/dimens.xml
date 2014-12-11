@@ -87,5 +87,5 @@
     <dimen name="init_setting_V5_allow_floating_window_prompt_margin_top">184dp</dimen>
     <dimen name="init_setting_V5_trust_prompt_margin_top">56dp</dimen>
     
-    
+    <dimen name="pandora_number_lock_translation_x_displacement">4dp</dimen>
 </resources>
