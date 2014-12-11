@@ -12,6 +12,7 @@ import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.CycleInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
@@ -58,6 +59,8 @@ public class PandoraNumberLockView extends LinearLayout implements OnClickListen
 
     private TypefaceTextView mPromptTextView;
 
+    private LinearLayout mNumberLayout;
+
     private ImageView mNumberOne;
 
     private ImageView mNumberTwo;
@@ -84,13 +87,9 @@ public class PandoraNumberLockView extends LinearLayout implements OnClickListen
 
     private static final int THREAD_SLEPPING_DELAY = 300;
 
-    private static final float TRANSLATION_X_LEFT_LOCATION = -20;
+    private static final int VERIFY_FAIL_ANIMATION_DURATION = 60;
 
-    private static final float TRANSLATION_X_RIGHT_LOCATION = 20;
-
-    private static final int VERIFY_FAIL_ANIMATION_DURATION = 50;
-
-    private static final int VERIFY_FAIL_ANIMATION_REPEAT_COUNT = 5;
+    private static final int VERIFY_FAIL_ANIMATION_REPEAT_COUNT = 4;
 
     private int onPatternDetectedTimes = 0;
 
@@ -104,6 +103,7 @@ public class PandoraNumberLockView extends LinearLayout implements OnClickListen
         mKeyboardView.setPreviewEnabled(false);
         mKeyboardView.setOnKeyboardActionListener(mKeyboardListener);
         mPromptTextView = (TypefaceTextView) mRootView.findViewById(R.id.number_lock_prompt);
+        mNumberLayout = (LinearLayout) findViewById(R.id.pandora_number_layout);
         mNumberOne = (ImageView) mRootView.findViewById(R.id.pandora_number_one);
         mNumberTwo = (ImageView) mRootView.findViewById(R.id.pandora_number_two);
         mNumberThree = (ImageView) mRootView.findViewById(R.id.pandora_number_three);
@@ -122,46 +122,20 @@ public class PandoraNumberLockView extends LinearLayout implements OnClickListen
     }
 
     private void createVerifyFailAnimations() {
-        ObjectAnimator numberOneX = ObjectAnimator.ofFloat(mNumberOne, "translationX",
-                TRANSLATION_X_LEFT_LOCATION, TRANSLATION_X_RIGHT_LOCATION);
+        int displacementPX = (int) mContext.getResources().getDimension(
+                R.dimen.pandora_number_lock_translation_x_displacement);
+        ObjectAnimator numberOneX = ObjectAnimator.ofFloat(mNumberLayout, "translationX",
+                displacementPX);
         numberOneX.setRepeatCount(VERIFY_FAIL_ANIMATION_REPEAT_COUNT);
+        numberOneX.setInterpolator(new CycleInterpolator(5));
         numberOneX.setDuration(VERIFY_FAIL_ANIMATION_DURATION);
-
-        ObjectAnimator numberTwoX = ObjectAnimator.ofFloat(mNumberTwo, "translationX",
-                TRANSLATION_X_LEFT_LOCATION, TRANSLATION_X_RIGHT_LOCATION);
-        numberTwoX.setRepeatCount(VERIFY_FAIL_ANIMATION_REPEAT_COUNT);
-        numberTwoX.setDuration(VERIFY_FAIL_ANIMATION_DURATION);
-
-        ObjectAnimator numberThreeX = ObjectAnimator.ofFloat(mNumberThree, "translationX",
-                TRANSLATION_X_LEFT_LOCATION, TRANSLATION_X_RIGHT_LOCATION);
-        numberThreeX.setRepeatCount(VERIFY_FAIL_ANIMATION_REPEAT_COUNT);
-        numberThreeX.setDuration(VERIFY_FAIL_ANIMATION_DURATION);
-
-        ObjectAnimator numberFourX = ObjectAnimator.ofFloat(mNumberFour, "translationX",
-                TRANSLATION_X_LEFT_LOCATION, TRANSLATION_X_RIGHT_LOCATION);
-        numberFourX.setRepeatCount(VERIFY_FAIL_ANIMATION_REPEAT_COUNT);
-        numberFourX.setDuration(VERIFY_FAIL_ANIMATION_DURATION);
-
-        AnimatorSet animatorSetLeft = new AnimatorSet();
-        animatorSetLeft.playTogether(numberOneX, numberTwoX, numberThreeX, numberFourX);
-        animatorSetLeft.addListener(new AnimatorListenerAdapter() {
+        numberOneX.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator anim) {
                 mPassword.delete(0, mPassword.length());
                 showPasswordStringBuffer(false);
-                ObjectAnimator numberOneX = ObjectAnimator.ofFloat(mNumberOne, "translationX", 0)
-                        .setDuration(0);
-                ObjectAnimator numberTwoX = ObjectAnimator.ofFloat(mNumberTwo, "translationX", 0)
-                        .setDuration(0);
-                ObjectAnimator numberThreeX = ObjectAnimator.ofFloat(mNumberThree, "translationX",
-                        0).setDuration(0);
-                ObjectAnimator numberFourX = ObjectAnimator.ofFloat(mNumberFour, "translationX", 0)
-                        .setDuration(0);
-                AnimatorSet animatorSetRight = new AnimatorSet();
-                animatorSetRight.playTogether(numberOneX, numberTwoX, numberThreeX, numberFourX);
-                animatorSetRight.start();
             }
         });
-        animatorSetLeft.start();
+        numberOneX.start();
     }
 
     protected void appendPasswordStringBuffer(String password) {
@@ -357,6 +331,7 @@ public class PandoraNumberLockView extends LinearLayout implements OnClickListen
             }
         } else {
             setPromptString(mContext.getResources().getString(R.string.number_lock_verify_fail));
+            clearPasswordStringBuffer(true);
         }
 
     }
@@ -424,8 +399,10 @@ public class PandoraNumberLockView extends LinearLayout implements OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.pandora_number_delete:
-                mPassword.delete(mPassword.length() - 1, mPassword.length());
-                showPasswordStringBuffer(false);
+                if (mPassword.length() > 0) {
+                    mPassword.delete(mPassword.length() - 1, mPassword.length());
+                    showPasswordStringBuffer(false);
+                }
                 break;
 
             default:
