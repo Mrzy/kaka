@@ -1,43 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <cn.zmdx.kaka.locker.widget.WallpaperPanelLayout
-        xmlns:wallpaper="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/locker_wallpaper_sliding"
+    <cn.zmdx.kaka.locker.widget.SlidingPaneLayout
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="top"
-        wallpaper:DragView="@+id/lock_wallpaper_dragview"
-        wallpaper:Overlay="true"
-        wallpaper:PanelHeight="@dimen/pandora_online_wallpaper_panelHeight"
-        wallpaper:ParalaxOffset="0dp"
-        wallpaper:ShadowHeight="0dp" >
+        android:background="#00000000" >
 
-        <!-- MAIN CONTENT -->
-
-        <cn.zmdx.kaka.locker.widget.PandoraPanelLayout
-            xmlns:sothree="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/locker_view"
+        <FrameLayout
+            android:id="@+id/sliding_behind_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom"
-            sothree:panelHeight="@dimen/panelHeight"
-            sothree:shadowHeight="8dp"
-            sothree:topSeekoutHeight="60dp" >
+            android:background="#000000"
+            android:gravity="bottom|center_horizontal" />
 
-            <cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout
-                xmlns:pandora="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/content"
+        <cn.zmdx.kaka.locker.widget.WallpaperPanelLayout
+            xmlns:wallpaper="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/locker_wallpaper_sliding"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            wallpaper:DragView="@+id/lock_wallpaper_dragview"
+            wallpaper:Overlay="true"
+            wallpaper:PanelHeight="@dimen/pandora_online_wallpaper_panelHeight"
+            wallpaper:ParalaxOffset="0dp"
+            wallpaper:ShadowHeight="0dp" >
+
+            <!-- MAIN CONTENT -->
+
+            <cn.zmdx.kaka.locker.widget.PandoraPanelLayout
+                xmlns:sothree="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/locker_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
-                pandora:slidingOverlay="true"
-                pandora:slidingPanelHeight="0dp"
-                pandora:slidingShadowHeight="0dp" >
+                sothree:panelHeight="@dimen/panelHeight"
+                sothree:shadowHeight="8dp"
+                sothree:topSeekoutHeight="60dp" >
 
                 <RelativeLayout
                     android:id="@+id/flipper_box"
@@ -46,163 +47,157 @@
                     android:background="@drawable/gesture_bg" >
                 </RelativeLayout>
 
-                <ViewStub
-                    android:id="@+id/gesture_stub"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout="@layout/pandora_secure_layout" >
-                </ViewStub>
-            </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:orientation="vertical" >
-
-                <LinearLayout
-                    android:id="@+id/lock_top"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/gradual_shadow_bg"
-                    android:orientation="vertical"
-                    android:paddingLeft="10dp" >
-
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        android:id="@+id/weather_summary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="55dp"
-                        android:paddingLeft="5dp"
-                        android:paddingRight="10dp"
-                        android:textColor="@color/white"
-                        android:textSize="19dp"
-                        android:visibility="invisible" />
-
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        android:id="@+id/lock_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center_horizontal"
-                        android:paddingLeft="5dp"
-                        android:textColor="#C9C9C9"
-                        android:textSize="13sp" />
-
-                    <cn.zmdx.kaka.locker.widget.DigitalClocks
-                        android:id="@+id/digitalClock"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-13dp"
-                        android:gravity="center_horizontal"
-                        android:textColor="@color/white"
-                        android:textSize="75sp"
-                        clock:format="24" />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/lock_top_overlay"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:alpha="0"
-                    android:focusable="false"
-                    android:background="#000000"
-                    android:focusableInTouchMode="false" />
-            </FrameLayout>
-
-            <RelativeLayout
-                android:id="@+id/lock_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:focusable="false" >
-
-                <View
-                    android:id="@+id/lock_bottom_overlay"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:alpha="0"
-                    android:background="#000000"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false" />
-
-                <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                    android:id="@+id/lock_prompt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <ImageView
-                    android:id="@+id/lock_arrow1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/lock_prompt"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/lock_arrow" />
-
-                <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                    android:id="@+id/batteryTip"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="30dp"
-                    android:gravity="center_horizontal"
-                    android:paddingLeft="5dp"
-                    android:textColor="#FAFAFA"
-                    android:textSize="13sp" />
-            </RelativeLayout>
-        </cn.zmdx.kaka.locker.widget.PandoraPanelLayout>
-
-        <!-- SLIDING LAYOUT -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:id="@+id/pandora_online_wallpaper"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/pandora_online_background"
-                android:orientation="vertical" >
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lock_wallpaper_dragview_all"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/pandora_online_wallpaper_panelHeight"
-                android:orientation="horizontal" >
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3" />
-
-                <LinearLayout
-                    android:id="@+id/lock_wallpaper_dragview"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
+                    android:clickable="true"
                     android:orientation="vertical" >
 
-                    <ImageView
-                        android:id="@+id/lock_wallpaper_view_im"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/lock_top"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:contentDescription="@string/contentDescription"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/pandora_online_paper_pull_button_normal" />
+                        android:background="@drawable/gradual_shadow_bg"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp" >
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            android:id="@+id/weather_summary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="55dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="10dp"
+                            android:textColor="@color/white"
+                            android:textSize="19dp"
+                            android:visibility="invisible" />
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            android:id="@+id/lock_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_horizontal"
+                            android:paddingLeft="5dp"
+                            android:textColor="#C9C9C9"
+                            android:textSize="13sp" />
+
+                        <cn.zmdx.kaka.locker.widget.DigitalClocks
+                            xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
+                            android:id="@+id/digitalClock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="-13dp"
+                            android:gravity="center_horizontal"
+                            android:textColor="@color/white"
+                            android:textSize="75sp"
+                            clock:format="24" />
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/lock_top_overlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0"
+                        android:background="#000000"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false" />
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:id="@+id/lock_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:focusable="false" >
+
+                    <View
+                        android:id="@+id/lock_bottom_overlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0"
+                        android:background="#000000"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false" />
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/lock_prompt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/lock_arrow1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/lock_prompt"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/lock_arrow" />
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/batteryTip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="30dp"
+                        android:gravity="center_horizontal"
+                        android:paddingLeft="5dp"
+                        android:textColor="#FAFAFA"
+                        android:textSize="13sp" />
+                </RelativeLayout>
+            </cn.zmdx.kaka.locker.widget.PandoraPanelLayout>
+
+            <!-- SLIDING LAYOUT -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/pandora_online_wallpaper"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/pandora_online_background"
+                    android:orientation="vertical" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lock_wallpaper_dragview_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/pandora_online_wallpaper_panelHeight"
+                    android:orientation="horizontal" >
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3" />
+
+                    <LinearLayout
+                        android:id="@+id/lock_wallpaper_dragview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:id="@+id/lock_wallpaper_view_im"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/contentDescription"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/pandora_online_paper_pull_button_normal" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </cn.zmdx.kaka.locker.widget.WallpaperPanelLayout>
+        </cn.zmdx.kaka.locker.widget.WallpaperPanelLayout>
+    </cn.zmdx.kaka.locker.widget.SlidingPaneLayout>
 
 </FrameLayout>
