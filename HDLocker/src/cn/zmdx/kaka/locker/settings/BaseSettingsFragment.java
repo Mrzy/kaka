@@ -89,17 +89,6 @@ public abstract class BaseSettingsFragment extends Fragment {
                 R.anim.umeng_fb_slide_out_from_left);
     }
 
-    protected void gotoGustureActivity(int type) {
-        Intent in = new Intent();
-        in.setClass(getActivity(), LockPatternActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", type);
-        in.putExtra("bundle", bundle);
-        startActivityForResult(in, MainSettingsFragment.GUSTURE_REQUEST_CODE_SUCCESS);
-        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                R.anim.umeng_fb_slide_out_from_left);
-    }
-
     protected void gotoInit() {
         Intent intent = new Intent();
         intent.setClass(getActivity(), InitSettingActivity.class);
@@ -115,9 +104,13 @@ public abstract class BaseSettingsFragment extends Fragment {
         getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                 R.anim.umeng_fb_slide_out_from_left);
     }
-
-    protected int getUnLockType() {
-        return mPandoraConfig.getUnLockType();
+    
+    protected void gotoLockerPassword() {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), LockerPasswordActivity.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
     }
 
     protected void gotoWallpaper() {
