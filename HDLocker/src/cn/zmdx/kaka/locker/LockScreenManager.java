@@ -57,6 +57,7 @@ import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaper;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
+import cn.zmdx.kaka.locker.widget.DigitalClocks;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
@@ -99,7 +100,7 @@ public class LockScreenManager {
 
     private TextView mDate, mBatteryTipView, mWeatherSummary;
 
-    private View mDigitalClockView;
+    private DigitalClocks mDigitalClockView;
 
     private KeyguardLock mKeyguard;
 
@@ -411,7 +412,7 @@ public class LockScreenManager {
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
         mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
         mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
-        mDigitalClockView = mEntireView.findViewById(R.id.digitalClock);
+        mDigitalClockView = (DigitalClocks) mEntireView.findViewById(R.id.digitalClock);
 
         mLockArrow = (ImageView) mEntireView.findViewById(R.id.lock_arrow1);
 
@@ -813,6 +814,9 @@ public class LockScreenManager {
         if (mSliderView != null && !mSliderView.isPanelExpanded()) {
             mSliderView.expandPanel();
         }
+        if (mDigitalClockView != null) {
+            mDigitalClockView.setTickerStoped(true);
+        }
     }
 
     public void onScreenOn() {
@@ -820,6 +824,9 @@ public class LockScreenManager {
             processAnimations();
             processWeatherInfo();
             refreshContent();
+            if (mDigitalClockView != null) {
+                mDigitalClockView.setTickerStoped(false);
+            }
         }
     }
 
