@@ -11,6 +11,7 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.locker.widget.LockPatternView.Cell;
@@ -151,6 +152,9 @@ public class PandoraLockPatternView extends LinearLayout {
         onPatternDetectedTimes = onPatternDetectedTimes + 1;
         if (isPatternDetectedForConfirmation(onPatternDetectedTimes)) {
             // TODO success to set lock pattern
+            String md5Pattern = HDBHashUtils
+                    .getStringMD5(LockPatternUtils.patternToString(pattern));
+            saveLockPattern(md5Pattern);
             setUnLockType(KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN);
             if (null != mLockPatternListener) {
                 mLockPatternListener.onPatternDetected(TYPE_LOCK_PATTERN_OPEN, true);
