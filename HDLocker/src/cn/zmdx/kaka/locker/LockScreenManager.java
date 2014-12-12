@@ -558,6 +558,7 @@ public class LockScreenManager {
 
     private void createPullButtonAnimation(View view, float fromDegress, float toDegress) {
         ObjectAnimator rotation = ObjectAnimator.ofFloat(view, "rotation", fromDegress, toDegress);
+        rotation.setInterpolator(new DecelerateInterpolator());
         rotation.setDuration(500);
         rotation.start();
     }

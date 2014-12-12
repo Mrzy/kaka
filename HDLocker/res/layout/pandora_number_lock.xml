@@ -18,11 +18,11 @@
 
     <android.inputmethodservice.KeyboardView
         android:id="@+id/pandora_keyboard_view"
-        android:layout_width="@dimen/gusture_pattern_lock_width"
-        android:layout_height="@dimen/gusture_pattern_lock_height"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
         android:layout_marginTop="@dimen/gusture_pattern_lock_margin_top"
         android:background="@android:color/transparent"
-        android:keyBackground="@drawable/key_board_keybackground" />
+        android:keyBackground="@drawable/pandora_number_lock_key_selector" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,7 +76,7 @@
             android:id="@+id/pandora_number_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="8dp"
             android:contentDescription="@string/contentDescription"
             android:src="@drawable/pandora_number_lock_delete_selector" />
     </LinearLayout>
