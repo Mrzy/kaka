@@ -109,6 +109,7 @@
                         app:stateDrawable="@drawable/switch_state_normal"
                         app:stateMaskDrawable="@drawable/switch_state_mask" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/setting_item_height"

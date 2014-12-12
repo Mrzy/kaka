@@ -1,3 +1,4 @@
+
 package cn.zmdx.kaka.locker.content;
 
 import it.gmariotti.cardslib.library.internal.Card;
@@ -30,7 +31,8 @@ public class FoldableCard extends Card {
     private ServerImageData mData;
 
     private IFoldableBox mBox;
- // px
+
+    // px
     protected static final int MAX_HEIGHT_IMAGE_VIEW = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 180);
 
@@ -112,7 +114,7 @@ public class FoldableCard extends Card {
             }
         }
     }
-    
+
     private Bitmap getCoverImageFromCache(String url) {
         return ImageLoaderManager.getImageMemCache().getBitmap(url);
     }

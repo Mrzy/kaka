@@ -218,6 +218,18 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         ServerImageDataModel.getInstance().markRead(id, true);
     }
 
+    /**
+     * 标记为收藏
+     * 
+     * @param card
+     */
+    public static void markFavorited(Card card) {
+        FoldableCard fCard = (FoldableCard) card;
+        ServerImageData data = fCard.getData();
+        int id = data.getId();
+        ServerImageDataModel.getInstance().markIsFavorited(id, true);
+    }
+
     public void openDetails(View coverView, ServerImageData data) {
         String type = data.getDataType();
         if (TextUtils.isEmpty(type)) {

@@ -18,7 +18,6 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -380,7 +379,7 @@ public class LockScreenManager {
             }
         }
 
-        mFoldableBox = PandoraBoxManager.newInstance(mContext).getFoldableBox();
+        mFoldableBox = PandoraBoxManager.newInstance(mContext).getFoldablePage();
 
         View contentView = mFoldableBox.getRenderedView();
         if (contentView == null) {
