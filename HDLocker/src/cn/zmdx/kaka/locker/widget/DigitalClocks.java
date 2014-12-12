@@ -101,7 +101,7 @@ public class DigitalClocks extends TextView {
                 setText(DateFormat.format(mFormat, mCalendar));
                 invalidate();
                 long now = SystemClock.uptimeMillis();
-                long next = now + (1000 - now % 1000);
+                long next = now + (25 * 1000 - now % 1000);
                 mHandler.postAtTime(mTicker, next);
             }
         };

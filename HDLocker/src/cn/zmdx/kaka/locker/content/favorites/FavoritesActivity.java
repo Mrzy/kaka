@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.content.box.FoldablePage;
 import cn.zmdx.kaka.locker.content.box.IFoldableBox;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -47,7 +48,10 @@ public class FavoritesActivity extends Activity {
         mRootView = this.findViewById(R.id.pandoraPageCards);
         PandoraBoxManager manager = PandoraBoxManager.newInstance(this);
         IFoldableBox foldablePage = manager.getFavoriteFoldablePage();
+
         View renderedView = foldablePage.getRenderedView();
+        final FoldablePage page = (FoldablePage) foldablePage;
+        page.setSwipeRefreshEnabled(false);
         if (null != renderedView) {
             layout.addView(renderedView);
         }

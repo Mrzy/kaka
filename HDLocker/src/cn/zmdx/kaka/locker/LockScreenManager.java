@@ -465,7 +465,7 @@ public class LockScreenManager {
         final View view = klm.getCurrentLockerView(new IUnlockListener() {
             @Override
             public void onSuccess() {
-                //delay 3s 是为了解决从windowmanager中将view立即移除时出现的残影bug
+                // delay 3s 是为了解决从windowmanager中将view立即移除时出现的残影bug
                 HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
                     @Override
@@ -561,7 +561,7 @@ public class LockScreenManager {
         rotation.setDuration(500);
         rotation.start();
     }
-    
+
     protected void initOnlinePaperPanelView() {
         if (null == mOnlineWallpaperView) {
             mOnlineWallpaperView = new OnlineWallpaperView(mContext);
@@ -837,21 +837,26 @@ public class LockScreenManager {
         return mSliderView != null ? mSliderView.getSlideState() : null;
     }
 
+    private static final int DATE_WIDGET_TRANSLATIONY_DISTANCE = -BaseInfoHelper.dip2px(
+            HDApplication.getContext(), 100);
+
     private void processAnimations() {
         ObjectAnimator digitalAlpha = ObjectAnimator.ofFloat(mDigitalClockView, "alpha", 0, 1);
         ObjectAnimator digitalTrans = ObjectAnimator.ofFloat(mDigitalClockView, "translationY",
-                -400, 0);
+                DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
         AnimatorSet digitalSet = new AnimatorSet();
         digitalSet.playTogether(digitalAlpha, digitalTrans);
 
         ObjectAnimator dateAlpha = ObjectAnimator.ofFloat(mDate, "alpha", 0, 1);
-        ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mDate, "translationY", -400, 0);
+        ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mDate, "translationY",
+                DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
         AnimatorSet dateSet = new AnimatorSet();
         dateSet.setStartDelay(100);
         dateSet.playTogether(dateAlpha, dateTrans);
 
         ObjectAnimator wsAlpha = ObjectAnimator.ofFloat(mWeatherSummary, "alpha", 0, 1);
-        ObjectAnimator wsTrans = ObjectAnimator.ofFloat(mWeatherSummary, "translationY", -400, 0);
+        ObjectAnimator wsTrans = ObjectAnimator.ofFloat(mWeatherSummary, "translationY",
+                DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
         AnimatorSet wsSet = new AnimatorSet();
         wsSet.setStartDelay(200);
         wsSet.playTogether(wsAlpha, wsTrans);

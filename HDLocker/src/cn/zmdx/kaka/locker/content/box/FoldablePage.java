@@ -118,6 +118,12 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         }
     }
 
+    public void setSwipeRefreshEnabled(boolean enabled) {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setEnabled(enabled);
+        }
+    }
+
     public void removeItemsByCategory(String category) {
         if (mAdapter == null || TextUtils.isEmpty(category)) {
             return;
