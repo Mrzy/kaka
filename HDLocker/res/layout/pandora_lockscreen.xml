@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="top"
-            wallpaper:DragView="@+id/lock_wallpaper_dragview"
+            wallpaper:DragView="@+id/lock_wallpaper_dragview_all"
             wallpaper:Overlay="true"
             wallpaper:PanelHeight="@dimen/pandora_online_wallpaper_panelHeight"
             wallpaper:ParalaxOffset="0dp"
@@ -190,7 +190,7 @@
                         <ImageView
                             android:id="@+id/lock_wallpaper_view_im"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:contentDescription="@string/contentDescription"
                             android:scaleType="fitXY"
                             android:src="@drawable/pandora_online_paper_pull_button_normal" />

@@ -18,7 +18,6 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -500,6 +499,11 @@ public class LockScreenManager {
                 .findViewById(R.id.pandora_online_wallpaper);
         final ImageView mPullImage = (ImageView) mEntireView
                 .findViewById(R.id.lock_wallpaper_view_im);
+        int statusBarHeight = PandoraUtils.getStatusBarHeight(mContext);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, statusBarHeight + 10, 0, 0);
+        mPullImage.setLayoutParams(lp);
         mOnlinePanel = (WallpaperPanelLayout) mEntireView
                 .findViewById(R.id.locker_wallpaper_sliding);
         mOnlinePanel
@@ -523,6 +527,7 @@ public class LockScreenManager {
                     public void onPanelExpanded(View panel) {
                         mSliderView.setEnabled(false);
                         if (null != mOnlineWallpaperView) {
+                            createPullButtonAnimation(mPullImage, 0, 180);
                             mOnlineWallpaperView.initContentView();
                             mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
 
@@ -545,6 +550,7 @@ public class LockScreenManager {
                         isInit = false;
                         mPullImage
                                 .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+                        createPullButtonAnimation(mPullImage, 180, 360);
                         mSliderView.setEnabled(true);
                     }
 
@@ -554,6 +560,12 @@ public class LockScreenManager {
                 });
     }
 
+    private void createPullButtonAnimation(View view, float fromDegress, float toDegress) {
+        ObjectAnimator rotation = ObjectAnimator.ofFloat(view, "rotation", fromDegress, toDegress);
+        rotation.setDuration(500);
+        rotation.start();
+    }
+    
     protected void initOnlinePaperPanelView() {
         if (null == mOnlineWallpaperView) {
             mOnlineWallpaperView = new OnlineWallpaperView(mContext);
