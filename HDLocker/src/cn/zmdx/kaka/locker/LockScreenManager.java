@@ -404,7 +404,7 @@ public class LockScreenManager {
         initSecurePanel();
         mSlidingPanelLayout = (SlidingPaneLayout) mEntireView.findViewById(R.id.sliding_layout);
         mSlidingPanelLayout.setPanelSlideListener(mSlideOutListener);
-        mSlidingPanelLayout.setSliderFadeColor(Color.parseColor("#cc000000"));
+        mSlidingPanelLayout.setSliderFadeColor(Color.parseColor("#a0000000"));
         mSlidingPanelLayout.setOverhangVisiable(mNeedPassword);
         mSlidingBehindLayout = (FrameLayout) mEntireView.findViewById(R.id.sliding_behind_layout);
 
