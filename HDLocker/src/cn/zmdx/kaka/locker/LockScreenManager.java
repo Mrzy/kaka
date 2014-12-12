@@ -98,7 +98,7 @@ public class LockScreenManager {
 
     private Vibrator mVibrator;
 
-    private TextView mDate, mBatteryTipView, mWeatherSummary;
+    private TextView mDate, mBatteryTipView, mWeatherSummary, mBatteryInfo;
 
     private DigitalClocks mDigitalClockView;
 
@@ -168,6 +168,7 @@ public class LockScreenManager {
         return INSTANCE;
     }
 
+    private boolean mIsNeedNotice = false;
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public void lock() {
         if (mIsLocked || PandoraService.isCalling())
@@ -184,7 +185,8 @@ public class LockScreenManager {
         mTextGuideTimes = pandoraConfig.getGuideTimesInt();
         mWinParams = new WindowManager.LayoutParams();
 
-        if (mPandoraConfig.isNeedNotice(mContext)) {
+        mIsNeedNotice = mPandoraConfig.isNeedNotice(mContext);
+        if (mIsNeedNotice) {
             mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         } else {
             mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
@@ -405,6 +407,7 @@ public class LockScreenManager {
         mSlidingBehindLayout = (FrameLayout) mEntireView.findViewById(R.id.sliding_behind_layout);
 
         mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
+        mBatteryInfo = (TextView) mEntireView.findViewById(R.id.battery_info);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
         mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
@@ -759,28 +762,38 @@ public class LockScreenManager {
     };
 
     public void onBatteryStatusChanged(int mStatus) {
-        if (isLocked() && mBatteryTipView != null) {
+        if (isLocked() && mBatteryTipView != null && mBatteryInfo != null) {
             final PandoraBatteryManager pbm = PandoraBatteryManager.getInstance();
             final Resources resource = mContext.getResources();
+            final int maxScale = pbm.getMaxScale();
+            final int curScale = pbm.getCurLevel();
+            final float rate = (float) curScale / (float) maxScale;
+            int percent = (int) (rate * 100.0);
             switch (mStatus) {
                 case BatteryManager.BATTERY_STATUS_CHARGING:
-                    final int maxScale = pbm.getMaxScale();
-                    final int curScale = pbm.getCurLevel();
-                    final float rate = (float) curScale / (float) maxScale;
-                    int percent = (int) (rate * 100.0);
                     mBatteryTipView.setVisibility(View.VISIBLE);
                     mBatteryTipView.setText(resource
                             .getString(R.string.pandora_box_battery_charging) + percent + "%");
+                    mBatteryInfo.setVisibility(View.INVISIBLE);
                     break;
                 case BatteryManager.BATTERY_STATUS_DISCHARGING:
                     mBatteryTipView.setVisibility(View.GONE);
+                    if (!mIsNeedNotice) {
+                        mBatteryInfo.setVisibility(View.VISIBLE);
+                        mBatteryInfo.setText(percent + "%");
+                    }
                     break;
                 case BatteryManager.BATTERY_STATUS_FULL:
                     mBatteryTipView.setVisibility(View.VISIBLE);
                     mBatteryTipView.setText(resource.getString(R.string.pandora_box_battery_full));
+                    mBatteryInfo.setVisibility(View.INVISIBLE);
                     break;
                 case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
                     mBatteryTipView.setVisibility(View.GONE);
+                    mBatteryInfo.setVisibility(View.VISIBLE);
+                    if (!mIsNeedNotice) {
+                        mBatteryInfo.setText(percent + "%");
+                    }
                 default:
                     break;
             }
