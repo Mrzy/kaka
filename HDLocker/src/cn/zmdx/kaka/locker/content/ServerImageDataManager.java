@@ -120,6 +120,19 @@ public class ServerImageDataManager {
 
         public int mIsImageDownloaded;
 
+        /**
+         * 图片或者说文章的收藏状态
+         */
+        public int mIsImageFavorited;
+
+        public int getmIsImageFavorited() {
+            return mIsImageFavorited;
+        }
+
+        public void setmIsImageFavorited(int mIsImageFavorited) {
+            this.mIsImageFavorited = mIsImageFavorited;
+        }
+
         public String getUrl() {
             return mUrl;
         }

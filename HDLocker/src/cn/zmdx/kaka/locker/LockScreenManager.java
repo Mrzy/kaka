@@ -376,7 +376,7 @@ public class LockScreenManager {
             }
         }
 
-        mFoldableBox = PandoraBoxManager.newInstance(mContext).getFoldableBox();
+        mFoldableBox = PandoraBoxManager.newInstance(mContext).getFoldablePage();
 
         View contentView = mFoldableBox.getRenderedView();
         if (contentView == null) {
