@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.BatteryManager;
 import android.os.Build;
@@ -404,6 +405,7 @@ public class LockScreenManager {
         initSecurePanel();
         mSlidingPanelLayout = (SlidingPaneLayout) mEntireView.findViewById(R.id.sliding_layout);
         mSlidingPanelLayout.setPanelSlideListener(mSlideOutListener);
+        mSlidingPanelLayout.setSliderFadeColor(Color.parseColor("#cc000000"));
         mSlidingPanelLayout.setOverhangVisiable(mNeedPassword);
         mSlidingBehindLayout = (FrameLayout) mEntireView.findViewById(R.id.sliding_behind_layout);
 
@@ -471,6 +473,7 @@ public class LockScreenManager {
         final View view = klm.getCurrentLockerView(new IUnlockListener() {
             @Override
             public void onSuccess() {
+                //delay 3s 是为了解决从windowmanager中将view立即移除时出现的残影bug
                 HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
                     @Override

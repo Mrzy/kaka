@@ -22,7 +22,7 @@
         android:layout_height="@dimen/gusture_pattern_lock_height"
         android:layout_marginTop="@dimen/gusture_pattern_lock_margin_top"
         android:background="@android:color/transparent"
-        android:keyBackground="@android:color/transparent" />
+        android:keyBackground="@drawable/key_board_keybackground" />
 
     <LinearLayout
         android:layout_width="match_parent"
