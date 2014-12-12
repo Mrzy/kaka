@@ -104,10 +104,6 @@ public class LockScreenManager {
 
     private KeyguardLock mKeyguard;
 
-    private TextView mLockPrompt;
-
-    private ImageView mLockArrow;
-
     private AnimatorSet mAnimatorSet;
 
     private ObjectAnimator mObjectAnimator;
@@ -411,11 +407,8 @@ public class LockScreenManager {
         mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
-        mLockPrompt = (TextView) mEntireView.findViewById(R.id.lock_prompt);
         mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
         mDigitalClockView = (DigitalClocks) mEntireView.findViewById(R.id.digitalClock);
-
-        mLockArrow = (ImageView) mEntireView.findViewById(R.id.lock_arrow1);
 
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
@@ -702,14 +695,6 @@ public class LockScreenManager {
 
         @Override
         public void onPanelSlide(View panel, float slideOffset) {
-            if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
-                if (slideOffset < 1 && slideOffset > 0) {
-                    if (null != mLockPrompt) {
-                        mLockPrompt.setText(mContext.getResources().getString(
-                                R.string.lock_guide_prompt_one));
-                    }
-                }
-            }
             setLockScreenDim(slideOffset);
         }
 
@@ -728,15 +713,6 @@ public class LockScreenManager {
 
         @Override
         public void onPanelExpanded(View panel) {
-            if (null != mLockPrompt) {
-                mLockPrompt.setText("");
-            }
-            if (null != mLockArrow) {
-                if (null != mAnimatorSet) {
-                    mAnimatorSet.start();
-                }
-                mLockArrow.setVisibility(View.VISIBLE);
-            }
         }
 
         @Override
@@ -751,12 +727,6 @@ public class LockScreenManager {
             }
             UmengCustomEventManager.statisticalFixedTimes();
             mVibrator.vibrate(30);
-            if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
-                if (null != mLockPrompt) {
-                    mLockPrompt.setText(mContext.getResources().getString(
-                            R.string.lock_guide_prompt_two));
-                }
-            }
         }
 
         @Override
@@ -773,12 +743,6 @@ public class LockScreenManager {
         public void onPanelStartDown(View view) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("onPanelStartDown");
-            }
-            if (null != mLockArrow) {
-                if (null != mAnimatorSet) {
-                    mAnimatorSet.end();
-                }
-                mLockArrow.setVisibility(View.GONE);
             }
         };
 
@@ -900,27 +864,6 @@ public class LockScreenManager {
         finalSet.setInterpolator(new DecelerateInterpolator());
         // finalSet.setInterpolator(new BounceInterpolator());
         finalSet.start();
-
-        mObjectAnimator = ObjectAnimator.ofFloat(mLockPrompt, "alpha", 1, 0.2f, 1);
-        mObjectAnimator.setDuration(2000);
-        mObjectAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        mObjectAnimator.setRepeatCount(-1);
-        mObjectAnimator.start();
-
-        int lenght = (int) mContext.getResources().getDimension(R.dimen.locker_arrow_move_lenght);
-        ObjectAnimator objectAnimatorAlpha = ObjectAnimator
-                .ofFloat(mLockArrow, "alpha", 0, 0.5f, 0);
-        objectAnimatorAlpha.setDuration(2000);
-        objectAnimatorAlpha.setRepeatMode(ValueAnimator.RESTART);
-        objectAnimatorAlpha.setRepeatCount(-1);
-        ObjectAnimator objectAnimatorTranslate = ObjectAnimator.ofFloat(mLockArrow, "translationY",
-                0, lenght);
-        objectAnimatorTranslate.setDuration(2000);
-        objectAnimatorTranslate.setRepeatMode(ValueAnimator.RESTART);
-        objectAnimatorTranslate.setRepeatCount(-1);
-        mAnimatorSet = new AnimatorSet();
-        mAnimatorSet.playTogether(objectAnimatorTranslate, objectAnimatorAlpha);
-        mAnimatorSet.start();
     }
 
     private Set<OnBackPressedListener> mBackPressedListeners = new HashSet<OnBackPressedListener>();

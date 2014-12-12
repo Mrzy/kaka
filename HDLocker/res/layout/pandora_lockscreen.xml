@@ -122,24 +122,6 @@
                         android:focusableInTouchMode="false" />
 
                     <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        android:id="@+id/lock_prompt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="15dp"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:id="@+id/lock_arrow1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/lock_prompt"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp"
-                        android:src="@drawable/lock_arrow" />
-
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
                         android:id="@+id/batteryTip"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
