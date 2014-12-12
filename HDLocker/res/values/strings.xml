@@ -97,7 +97,7 @@
     <string name="individualization_welcome_text_detail">锁屏页面，当天气信息无法获取时显示此欢迎语</string>
     <string name="pandora_box_guide_set_default_image_detail">锁屏页面，当没有信息时显示此默认图</string>
     <string name="individualization_welcome_text_hint">请输入欢迎语!</string>
-    <string name="share_image_news_from">&#160;&#160;&#160;&#160;来自：</string>
+    <string name="share_image_news_from">来自：</string>
     <string name="pandora_crop_image_rotate">旋转</string>
     <string name="pandora_box_html_back_text">点击此处返回</string>
     <string name="guide_item_title_one">下拉换一批猛料</string>

@@ -56,7 +56,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@+id/pandora_single_title"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="10dp"
                     android:orientation="horizontal" >
 
                     <LinearLayout
@@ -64,7 +64,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:orientation="horizontal"
-                        android:paddingRight="14dp" >
+                         >
 
                         <cn.zmdx.kaka.locker.widget.TypefaceTextView
                             android:id="@+id/label_title"
@@ -74,6 +74,14 @@
                             android:text="自媒体，美文"
                             android:textColor="#9b9b9b"
                             android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:orientation="horizontal"
+                        android:paddingRight="18dp" >
 
                         <cn.zmdx.kaka.locker.widget.TypefaceTextView
                             android:id="@+id/from_text"
