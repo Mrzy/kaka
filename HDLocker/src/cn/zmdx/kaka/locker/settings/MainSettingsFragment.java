@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.favorites.FavoritesActivity;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
@@ -58,8 +57,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     public static final int GUSTURE_REQUEST_CODE_FAIL = 38;
 
     private boolean isMeizu = false;
-
-    private TextView tvMyFavorite;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

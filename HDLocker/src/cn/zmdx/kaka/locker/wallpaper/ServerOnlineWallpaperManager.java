@@ -50,6 +50,8 @@ public class ServerOnlineWallpaperManager {
         private int mPosition = -1;
 
         private boolean isCurItem = false;
+        
+        private boolean isNewData = false;
 
         public void parseBaseJson(JSONObject jsonObject) {
             id = jsonObject.optString("id");
@@ -149,6 +151,14 @@ public class ServerOnlineWallpaperManager {
 
         public void setCurItem(boolean isCurItem) {
             this.isCurItem = isCurItem;
+        }
+
+        public boolean isNewData() {
+            return isNewData;
+        }
+
+        public void setNewData(boolean isNewData) {
+            this.isNewData = isNewData;
         }
 
     }

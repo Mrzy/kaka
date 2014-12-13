@@ -134,15 +134,14 @@ public class PandoraLockPatternView extends LinearLayout {
 
     private void openLockPattern(final List<Cell> pattern) {
         if (isLeastPointCount(pattern.size())) {
-            setPromptString(mContext.getResources()
-                    .getString(R.string.lock_pattern_limit_prompt));
+            setPromptString(mContext.getResources().getString(R.string.lock_pattern_limit_prompt));
             mLockPatternView.setDisplayMode(DisplayMode.Wrong);
             return;
         }
         if (isPatternDetectedOnce(onPatternDetectedTimes)) {
             if (checkPattern(pattern)) {
-                setPromptString(mContext.getResources().getString(
-                        R.string.lock_pattern_new_pattern));
+                setPromptString(mContext.getResources()
+                        .getString(R.string.lock_pattern_new_pattern));
             } else {
                 mLockPatternView.setDisplayMode(DisplayMode.Wrong);
                 setPromptString(mContext.getResources().getString(R.string.lock_pattern_error));
@@ -190,8 +189,30 @@ public class PandoraLockPatternView extends LinearLayout {
 
     private boolean checkPattern(List<Cell> pattern) {
         String stored = getLockPaternString();
-        if (!stored.equals(null)) {
-            return stored.equals(LockPatternUtils.patternToString(pattern)) ? true : false;
+        String patternString = LockPatternUtils.patternToString(pattern);
+        switch (mLockPatternType) {
+            case TYPE_LOCK_PATTERN_OPEN:
+                if (!stored.equals(null)) {
+                    return stored.equals(patternString) ? true : false;
+                }
+                break;
+            case TYPE_LOCK_PATTERN_CLOSE:
+                if (!stored.equals(null)) {
+                    return (stored.equals(patternString) ? true : false)
+                            || (stored.equals(HDBHashUtils.getStringMD5(patternString)) ? true
+                                    : false);
+                }
+                break;
+            case TYPE_LOCK_PATTERN_VERIFY:
+                if (!stored.equals(null)) {
+                    return (stored.equals(patternString) ? true : false)
+                            || (stored.equals(HDBHashUtils.getStringMD5(patternString)) ? true
+                                    : false);
+                }
+                break;
+
+            default:
+                break;
         }
         return false;
     }
