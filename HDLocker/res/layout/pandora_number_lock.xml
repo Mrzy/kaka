@@ -16,69 +16,51 @@
         android:textColor="@color/lock_pattern_view_success_color"
         android:textSize="15sp" />
 
-    <android.inputmethodservice.KeyboardView
-        android:id="@+id/pandora_keyboard_view"
-        android:layout_width="300dp"
-        android:layout_height="400dp"
-        android:layout_marginTop="@dimen/gusture_pattern_lock_margin_top"
-        android:background="@android:color/transparent"
-        android:keyBackground="@drawable/pandora_number_lock_key_selector" />
-
     <LinearLayout
+        android:id="@+id/pandora_number_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginTop="@dimen/gusture_pattern_lock_margin_top"
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <LinearLayout
-            android:id="@+id/pandora_number_layout"
+        <ImageView
+            android:id="@+id/pandora_number_one"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:id="@+id/pandora_number_one"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/pandora_number_lock_translation_x_displacement"
-                android:contentDescription="@string/contentDescription"
-                android:src="@drawable/pandora_number_lock_line" />
-
-            <ImageView
-                android:id="@+id/pandora_number_two"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:contentDescription="@string/contentDescription"
-                android:src="@drawable/pandora_number_lock_line" />
-
-            <ImageView
-                android:id="@+id/pandora_number_three"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:contentDescription="@string/contentDescription"
-                android:src="@drawable/pandora_number_lock_line" />
-
-            <ImageView
-                android:id="@+id/pandora_number_four"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="@dimen/pandora_number_lock_translation_x_displacement"
-                android:contentDescription="@string/contentDescription"
-                android:src="@drawable/pandora_number_lock_line" />
-        </LinearLayout>
+            android:contentDescription="@string/contentDescription"
+            android:src="@drawable/pandora_number_lock_line" />
 
         <ImageView
-            android:id="@+id/pandora_number_delete"
+            android:id="@+id/pandora_number_two"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
             android:contentDescription="@string/contentDescription"
-            android:src="@drawable/pandora_number_lock_delete_selector" />
+            android:src="@drawable/pandora_number_lock_line" />
+
+        <ImageView
+            android:id="@+id/pandora_number_three"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:contentDescription="@string/contentDescription"
+            android:src="@drawable/pandora_number_lock_line" />
+
+        <ImageView
+            android:id="@+id/pandora_number_four"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:contentDescription="@string/contentDescription"
+            android:src="@drawable/pandora_number_lock_line" />
     </LinearLayout>
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/pandora_keyboard_view"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:background="@android:color/transparent"
+        android:keyBackground="@drawable/pandora_number_lock_key_selector" />
 
 </LinearLayout>
