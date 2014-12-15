@@ -23,7 +23,8 @@
         <Key android:codes="57" android:keyLabel="9" />
     </Row>
 
-    <Row android:horizontalGap="96dp">
-        <Key android:codes="48" android:keyLabel="0" />
+    <Row >
+        <Key android:codes="48" android:keyLabel="0" android:horizontalGap="96dp"/>
+        <Key android:codes="-5" android:keyIcon="@drawable/pandora_number_lock_delete_normal" />
     </Row>
 </Keyboard>

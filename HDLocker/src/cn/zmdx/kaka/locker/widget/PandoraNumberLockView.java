@@ -11,7 +11,6 @@ import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.animation.CycleInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,7 +20,7 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
-public class PandoraNumberLockView extends LinearLayout implements OnClickListener {
+public class PandoraNumberLockView extends LinearLayout {
 
     public interface IVerifyListener {
         void onVerifySuccess();
@@ -69,8 +68,6 @@ public class PandoraNumberLockView extends LinearLayout implements OnClickListen
 
     private ImageView mNumberFour;
 
-    private ImageView mNumberDel;
-
     public static final int LOCK_NUMBER_TYPE_OPEN = 99;
 
     public static final int LOCK_NUMBER_TYPE_CLOSE = 98;
@@ -108,8 +105,6 @@ public class PandoraNumberLockView extends LinearLayout implements OnClickListen
         mNumberTwo = (ImageView) mRootView.findViewById(R.id.pandora_number_two);
         mNumberThree = (ImageView) mRootView.findViewById(R.id.pandora_number_three);
         mNumberFour = (ImageView) mRootView.findViewById(R.id.pandora_number_four);
-        mNumberDel = (ImageView) mRootView.findViewById(R.id.pandora_number_delete);
-        mNumberDel.setOnClickListener(this);
     }
 
     private void clearPasswordStringBuffer(boolean isNeedAnimation) {
@@ -221,10 +216,12 @@ public class PandoraNumberLockView extends LinearLayout implements OnClickListen
     private OnKeyboardActionListener mKeyboardListener = new OnKeyboardActionListener() {
         @Override
         public void onKey(int primaryCode, int[] keyCodes) {
-            if (primaryCode == 46 || primaryCode == 47) {
-                return;
-            }
-            if (mPassword.length() < NUMBER_LOCK_MAX_COUNT - 1) {
+            if (primaryCode == Keyboard.KEYCODE_DELETE) {
+                if (mPassword.length() > 0) {
+                    mPassword.delete(mPassword.length() - 1, mPassword.length());
+                    showPasswordStringBuffer(false);
+                }
+            } else if (mPassword.length() < NUMBER_LOCK_MAX_COUNT - 1) {
                 String password = Character.toString((char) primaryCode);
                 appendPasswordStringBuffer(password);
                 showPasswordStringBuffer(true);
@@ -393,21 +390,6 @@ public class PandoraNumberLockView extends LinearLayout implements OnClickListen
         ObjectAnimator animator = ObjectAnimator.ofFloat(mPromptTextView, "alpha", 0, 1f);
         animator.setDuration(500);
         animator.start();
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.pandora_number_delete:
-                if (mPassword.length() > 0) {
-                    mPassword.delete(mPassword.length() - 1, mPassword.length());
-                    showPasswordStringBuffer(false);
-                }
-                break;
-
-            default:
-                break;
-        }
     }
 
 }
