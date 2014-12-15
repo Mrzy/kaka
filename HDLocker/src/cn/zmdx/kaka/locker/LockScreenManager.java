@@ -67,7 +67,6 @@ import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.ValueAnimator;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
 
@@ -667,6 +666,7 @@ public class LockScreenManager {
         mSliderView.recycle();
         mEntireView = null;
         mIsLocked = false;
+        isInit = false;
 
         mOnlineWallpaperView = null;
         mOnlineViewContainer.removeAllViews();

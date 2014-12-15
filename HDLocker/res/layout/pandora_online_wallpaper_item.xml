@@ -17,4 +17,14 @@
         android:layout_height="@dimen/pandora_online_wallpaper_gridview_item_height"
         android:contentDescription="@string/contentDescription" />
 
+    <ImageView
+        android:id="@+id/pandora_online_wallpaper_item_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/contentDescription"
+        android:src="@drawable/ic_launcher"
+        android:visibility="gone" />
+
 </RelativeLayout>

@@ -230,6 +230,30 @@ public class OnlineWallpaperView extends LinearLayout {
                     showTextPrompt(false, promptString);
                     return;
                 }
+                if (!TextUtils.isEmpty(lastPullJson)) {
+                    try {
+                        ArrayList<ServerOnlineWallpaper> spJsonlist =  ServerOnlineWallpaperManager.parseJson(new JSONObject(lastPullJson));
+                        for (int i = 0; i < list.size(); i++) {
+                            String imageUrl = list.get(i).getImageURL();
+                            for (int j = 0; j < spJsonlist.size(); j++) {
+                                String  spImageUrl = spJsonlist.get(j).getImageURL();
+                                if (!imageUrl.equals(spImageUrl)) {
+                                    list.get(i).setNewData(true);
+                                }else {
+                                    list.get(i).setNewData(false);
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    for (int i = 0; i < list.size(); i++) {
+                        list.get(i).setNewData(true);
+                    }
+                }
+                
                 if (null == mWallpaperAdpter) {
                     mWallpaperAdpter = new WallpaperAdpter();
                     mGridView.setAdapter(mWallpaperAdpter);
@@ -309,6 +333,8 @@ public class OnlineWallpaperView extends LinearLayout {
             private ImageView mImageViewRl;
 
             private NetworkImageView mImageView;
+            
+            private ImageView mNewView;
 
         }
 
@@ -322,6 +348,8 @@ public class OnlineWallpaperView extends LinearLayout {
                         .findViewById(R.id.pandora_online_wallpaper_item_rl);
                 viewHolder.mImageView = (NetworkImageView) convertView
                         .findViewById(R.id.pandora_online_wallpaper_item_imageview);
+                viewHolder.mNewView = (ImageView) convertView
+                        .findViewById(R.id.pandora_online_wallpaper_item_new);
                 convertView.setTag(viewHolder);
 
             } else {
@@ -336,6 +364,12 @@ public class OnlineWallpaperView extends LinearLayout {
                 viewHolder.mImageViewRl.setBackgroundResource(0);
             }
 
+            if (item.isNewData()) {
+                viewHolder.mNewView.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.mNewView.setVisibility(View.GONE);
+            }
+            
             viewHolder.mImageView.setImageUrl(item.getThumbURL(),
                     ImageLoaderManager.getImageLoader());
             viewHolder.mImageView.setFadeInImage(true);
