@@ -298,6 +298,10 @@ public class SlidingPaneLayout extends ViewGroup {
     public void setOverhangSize(int size) {
         mOverhangSize = size;
     }
+    
+    public int getOverhangSize() {
+        return mOverhangSize;
+    }
 
     public void setOverhangVisiable(boolean visibility) {
         if (visibility) {

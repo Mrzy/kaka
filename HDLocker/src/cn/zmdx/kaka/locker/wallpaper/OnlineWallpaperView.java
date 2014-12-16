@@ -82,6 +82,8 @@ public class OnlineWallpaperView extends LinearLayout {
     private TypefaceTextView mWeatherView;
 
     private TypefaceTextView mDateView;
+    
+    private TypefaceTextView mTemperature;
 
     private IOnlineWallpaper mListener;
 
@@ -183,7 +185,8 @@ public class OnlineWallpaperView extends LinearLayout {
                 .findViewById(R.id.pandora_online_wallpaper_preview_weather);
         mDateView = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_date);
-
+        mTemperature = (TypefaceTextView) mRootView
+                .findViewById(R.id.pandora_online_wallpaper_preview_temperature);
         mGVPb = (ProgressBar) mRootView.findViewById(R.id.pandora_online_wallpaper_gridview_pb);
         mGridView = (GridView) mRootView.findViewById(R.id.pandora_online_wallpaper_gridview);
 
@@ -573,9 +576,9 @@ public class OnlineWallpaperView extends LinearLayout {
         }
     }
 
-    public void setDateAppend(String appendString) {
-        if (null != mDateView) {
-            mDateView.append(appendString);
+    public void setTemperature(String temperature) {
+        if (null != mTemperature) {
+            mTemperature.setText(temperature);
         }
     }
 

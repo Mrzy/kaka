@@ -69,6 +69,8 @@ public class PandoraConfig {
 
     private static final String KEY_NUMBER_LOCK = "t";
 
+    private static final String KEY_LOCK_SCREEN_GUIDE_TIMES = "u";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -335,6 +337,16 @@ public class PandoraConfig {
     public void saveNumberLockString(String md5Password) {
         Editor editor = mSp.edit();
         editor.putString(KEY_NUMBER_LOCK, md5Password);
+        editor.commit();
+    }
+
+    public int getLockScreenTimes() {
+        return mSp.getInt(KEY_LOCK_SCREEN_GUIDE_TIMES, 0);
+    }
+
+    public void saveLockScreenTimes(int times) {
+        Editor editor = mSp.edit();
+        editor.putInt(KEY_LOCK_SCREEN_GUIDE_TIMES, times);
         editor.commit();
     }
 
