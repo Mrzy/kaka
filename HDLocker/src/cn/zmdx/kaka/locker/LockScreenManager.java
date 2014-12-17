@@ -872,9 +872,11 @@ public class LockScreenManager {
                     break;
                 case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
                     mBatteryTipView.setVisibility(View.GONE);
-                    mBatteryInfo.setVisibility(View.VISIBLE);
                     if (!mIsNeedNotice) {
+                        mBatteryInfo.setVisibility(View.VISIBLE);
                         mBatteryInfo.setText(percent + "%");
+                    } else {
+                        mBatteryInfo.setVisibility(View.INVISIBLE);
                     }
                 default:
                     break;
