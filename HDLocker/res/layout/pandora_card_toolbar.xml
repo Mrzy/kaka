@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlFavorite"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="2dp" >
+
+    <ImageButton
+        android:id="@+id/toolbar_imgButtonBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="23dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/pandora_card_back_button_selector" />
+
+    <ImageButton
+        android:id="@+id/toolbar_imgButtonCollect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="23dp"
+        android:background="@drawable/pandora_card_collect_button_selector" />
+
+</RelativeLayout>

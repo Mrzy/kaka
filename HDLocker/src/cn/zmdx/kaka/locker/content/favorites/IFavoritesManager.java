@@ -10,4 +10,6 @@ public interface IFavoritesManager {
     public boolean addFavorite(String infoId);
 
     public boolean removeFavorite(String infoId);
+    
+    public boolean isFavorited(String infoId);
 }

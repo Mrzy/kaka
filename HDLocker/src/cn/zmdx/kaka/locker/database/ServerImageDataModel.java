@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -177,6 +178,19 @@ public class ServerImageDataModel {
                     String.valueOf(id)
                 });
         return favorite != 0;
+    }
+
+    public synchronized boolean isItFavorited(int id) {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED
+        }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
+            String.valueOf(id)
+        }, null, null, null);
+        cursor.moveToFirst();
+        int intFavorite = cursor.getInt(cursor.getColumnIndex(TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED));
+        cursor.close();
+        return intFavorite == FAVORITED;
     }
 
     public synchronized boolean deleteById(int id) {

@@ -1,9 +1,9 @@
 
 package cn.zmdx.kaka.locker.content.favorites;
 
-import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import android.content.Context;
 import android.database.Cursor;
+import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 
 public class FavoritesManager implements IFavoritesManager {
 
@@ -31,6 +31,13 @@ public class FavoritesManager implements IFavoritesManager {
         boolean markIsFavorited = ServerImageDataModel.getInstance().markIsFavorited(
                 Integer.parseInt(infoId), false);
         return markIsFavorited;
+    }
+
+    @Override
+    public boolean isFavorited(String infoId) {
+        boolean itFavorited = ServerImageDataModel.getInstance().isItFavorited(
+                Integer.parseInt(infoId));
+        return itFavorited;
     }
 
 }

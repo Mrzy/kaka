@@ -153,5 +153,6 @@
     <string name="lock_password_type_pattern">设置手势密码</string>
     <string name="lock_password_type_number">设置数字密码</string>
     <string name="pandora_favorite_title">我的收藏</string>
+    <string name="pandora_favorite_state_nodata">暂无收藏</string>
 
 </resources>
