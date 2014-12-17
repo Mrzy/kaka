@@ -50,7 +50,6 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="10dp"
             layout="@layout/pandora_card_toolbar" />
     </RelativeLayout>
 

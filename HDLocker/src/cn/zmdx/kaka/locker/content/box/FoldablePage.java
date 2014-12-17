@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
@@ -318,7 +317,8 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                 break;
             // 收藏按钮
             case R.id.toolbar_imgButtonCollect:
-                if (isOperating)return;
+                if (isOperating)
+                    return;
                 isOperating = true;
                 int id = (Integer) v.getTag();
                 boolean isFavorited = isFavoritedState(id);

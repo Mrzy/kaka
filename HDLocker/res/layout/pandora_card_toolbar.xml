@@ -11,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="23dp"
         android:layout_marginRight="5dp"
         android:background="@drawable/pandora_card_back_button_selector" />
 
@@ -21,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="23dp"
         android:background="@drawable/pandora_card_collect_button_selector" />
 
 </RelativeLayout>
