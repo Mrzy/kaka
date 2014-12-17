@@ -106,8 +106,6 @@ public class LockScreenManager {
 
     private Theme mCurTheme;
 
-    private Vibrator mVibrator;
-
     private TextView mDate, mTemperature, mBatteryTipView, mWeatherSummary, mBatteryInfo;
 
     private DigitalClocks mDigitalClockView;
@@ -157,7 +155,6 @@ public class LockScreenManager {
     private LockScreenManager() {
         mContext = HDApplication.getContext();
         mWinManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         KeyguardManager keyguard = (KeyguardManager) mContext
                 .getSystemService(Context.KEYGUARD_SERVICE);
         mKeyguard = keyguard.newKeyguardLock("pandora");
@@ -807,7 +804,6 @@ public class LockScreenManager {
                 HDBLOG.logD("onPanelFixed");
             }
             UmengCustomEventManager.statisticalFixedTimes();
-            mVibrator.vibrate(30);
         }
 
         @Override
