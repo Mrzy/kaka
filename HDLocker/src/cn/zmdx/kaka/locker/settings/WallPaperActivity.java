@@ -23,13 +23,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.HDApplication;
@@ -79,7 +82,9 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_wallpaper);
+        getWindow().getAttributes().flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         initView();
+        initTitleHeight();
         initWallpaper();
         mPandoraWallpaperList = PandoraWallpaperManager.getWallpaperList(WallPaperActivity.this,
                 mOnlineContainer, mCustomContainer, WallPaperActivity.this);
@@ -102,6 +107,13 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
         initTransition();
 
         initAddCustomButton();
+    }
+
+    private void initTitleHeight() {
+        int statusBarHeight = PandoraUtils.getStatusBarHeight(this);
+        LinearLayout titleLayout = (LinearLayout) mRootView
+                .findViewById(R.id.pandora_wallpaper_title);
+        titleLayout.setPadding(0, statusBarHeight, 0, 0);
     }
 
     private void initCustomContainer() {
@@ -286,7 +298,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     private void gotoCropActivity(Uri uri) {
         int mAspectRatioX = 0;
         int mAspectRatioY = 0;
-        int width = BaseInfoHelper.getWidth(this);
+        int width = BaseInfoHelper.getRealWidth(this);
         int height = Integer.parseInt(BaseInfoHelper.getHeight(this));
         if (width >= height) {
             mAspectRatioX = 100;

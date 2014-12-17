@@ -21,6 +21,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
@@ -29,25 +31,31 @@ import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.content.favorites.FavoritesManager;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SlideState;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.UnfoldableView.OnFoldingListener;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.nineoldandroids.animation.ObjectAnimator;
 
-public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnClickListener,
+public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnClickListener,
         OnRefreshListener {
     private Context mContext;
 
     private List<ServerImageData> mData;
 
     private CardListView mListView;
+
+    private TextView mTextViewEmpty;
+
+    private ImageButton mImageButtonBack;
+
+    private ImageButton mImageButtonCollect;
 
     private UnfoldableView mUnfoldableView;
 
@@ -77,9 +85,6 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     @Override
     public View getRenderedView() {
-        if (mData == null || mData.size() <= 0) {
-            return null;
-        }
         mContainerView = LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_flodable_box_layout, null);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mContainerView
@@ -100,12 +105,31 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         mListTouchInterceptor.setClickable(false);
         mListView.setAdapter(mAdapter);
         createGuidePageIfNeed();
+        mImageButtonBack = (ImageButton) mContainerView.findViewById(R.id.toolbar_imgButtonBack);
+        mImageButtonCollect = (ImageButton) mContainerView
+                .findViewById(R.id.toolbar_imgButtonCollect);
+        mImageButtonBack.setOnClickListener(this);
+        mImageButtonCollect.setOnClickListener(this);
+        if (mData == null || mData.size() <= 0) {
+            mTextViewEmpty = (TextView) mContainerView.findViewById(R.id.tvEmpty);
+            mTextViewEmpty.setText(R.string.pandora_favorite_state_nodata);
+            mListView.setEmptyView(mTextViewEmpty);
+        }
         return mContainerView;
+    }
+
+    private boolean mGuidePageVisibility = true;
+
+    public void setGuidePageVisibility(boolean visibility) {
+        mGuidePageVisibility = visibility;
     }
 
     private ObjectAnimator mFingerAnim;
 
     private void createGuidePageIfNeed() {
+        if (!mGuidePageVisibility) {
+            return;
+        }
         if (!PandoraConfig.newInstance(mContext).getFlagDisplayBoxGuide()) {
             final View guideView = mContainerView.findViewById(R.id.card_item_layout_guide_finger);
             guideView.setVisibility(View.VISIBLE);
@@ -116,6 +140,12 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                     PandoraConfig.newInstance(mContext).saveHasAlreadyDisplayBoxGuide();
                 }
             });
+        }
+    }
+
+    public void setSwipeRefreshEnabled(boolean enabled) {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setEnabled(enabled);
         }
     }
 
@@ -186,7 +216,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         }
     };
 
-    public boolean isTodayData() {
+    public boolean isDataValidate() {
         if (mData != null && mData.size() > 0) {
             int id = mData.get(0).getId();
             ServerImageData sid = ServerImageDataModel.getInstance().queryById(id);
@@ -224,15 +254,17 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         if (TextUtils.isEmpty(type)) {
             return;
         }
+        final int id = data.getId();
+
         if (type.equals(ServerDataMapping.S_DATATYPE_HTML)) {
             HtmlBox htmlBox = new HtmlBox(mContext, this, HtmlBox.convertFormServerImageData(data));
             View v = htmlBox.getRenderedView();
-            renderDetailView(v);
+            renderDetailView(v, id);
         } else if (type.equals(ServerDataMapping.S_DATATYPE_GIF)) {
             GifBox box = new GifBox(mContext, this, GifBox.convertFormServerImageData(data));
             View v = box.getRenderedView();
             if (v != null) {
-                renderDetailView(v);
+                renderDetailView(v, id);
                 box.startGif();
             }
         } else if (type.equals(ServerDataMapping.S_DATATYPE_NEWS)
@@ -242,14 +274,14 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                     SingleImageBox.convertFromServerData(data));
             View view = box.getRenderedView();
             if (view != null) {
-                renderDetailView(view);
+                renderDetailView(view, id);
             }
         } else if (type.equals(ServerDataMapping.S_DATATYPE_MULTIIMG)) {
             final MultiImgBox box = new MultiImgBox(mContext, this,
                     MultiImgBox.convertToMultiBox(data));
             View view = box.getRenderedView();
             if (view != null) {
-                renderDetailView(view);
+                renderDetailView(view, id);
             }
         }
         mUnfoldableView.unfold(coverView, mDetailLayout);
@@ -259,13 +291,56 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         mUnfoldableView.foldBack();
     }
 
-    private void renderDetailView(View contentView) {
+    public boolean isFoldBack() {
+        return mUnfoldableView.isUnfolded();
+    }
+
+    private void renderDetailView(View contentView, int id) {
         mContentContainerView.removeAllViews();
         mContentContainerView.addView(contentView, 0);
+        mImageButtonCollect.setTag(id);
+        boolean favoritedState = isFavoritedState(id);
+        setButtonCollectState(favoritedState);
     }
+
+    private boolean isFavoritedState(int id) {
+        boolean favorited = mFavoritesManager.isFavorited(String.valueOf(id));
+        return favorited;
+    }
+
+    private void setButtonCollectState(boolean favorited) {
+        if (favorited) {
+            mImageButtonCollect.setBackgroundResource(R.drawable.pandora_card_collected);
+        } else {
+            mImageButtonCollect
+                    .setBackgroundResource(R.drawable.pandora_card_collect_button_selector);
+        }
+    }
+
+    FavoritesManager mFavoritesManager = new FavoritesManager(mContext);
+
+    boolean isOperating = false;
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+        // 返回按钮
+            case R.id.toolbar_imgButtonBack:
+                foldBack();
+                break;
+            // 收藏按钮
+            case R.id.toolbar_imgButtonCollect:
+                if (isOperating)
+                    return;
+                isOperating = true;
+                int id = (Integer) v.getTag();
+                boolean isFavorited = isFavoritedState(id);
+                boolean result = !isFavorited;
+                ServerImageDataModel.getInstance().markIsFavorited(id, result);
+                setButtonCollectState(result);
+                isOperating = false;
+                break;
+        }
     }
 
     @Override

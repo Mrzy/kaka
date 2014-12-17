@@ -43,7 +43,6 @@ public class GifBox implements IPandoraBox {
         mImageView = (GifImageView) mEntireView.findViewById(R.id.gif_image);
         mTextView = (TextView) mEntireView.findViewById(R.id.gif_desc);
         mFromPlatformText = (TextView) mEntireView.findViewById(R.id.gif_from_platform_text);
-        mImageButton = (ImageButton) mEntireView.findViewById(R.id.pandora_box_gif_single_back_btn);
     }
 
     @Override

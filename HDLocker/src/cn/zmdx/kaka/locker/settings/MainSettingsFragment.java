@@ -15,8 +15,8 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.favorites.FavoritesActivity;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
-import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
@@ -44,11 +44,13 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private SwitchButton mPandoraLockerSButton;
 
-    private SwitchButton mLockerTypeSButton;
+    private LinearLayout mLockType;
+
+    private LinearLayout mPandoraFavorite;
 
     private View mSettingBackground;
 
-    private boolean mIsCurrentlyPressed = false;
+    // private boolean mIsCurrentlyPressed = false;
 
     public static final int GUSTURE_REQUEST_CODE_SUCCESS = 37;
 
@@ -88,6 +90,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             mInitSetting.setVisibility(View.VISIBLE);
         }
 
+        mPandoraFavorite = (LinearLayout) mRootView.findViewById(R.id.pandora_favorite);
+        mPandoraFavorite.setOnClickListener(this);
         mSettingBackground = mRootView.findViewById(R.id.setting_background);
 
         mSettingIndividualization = (LinearLayout) mRootView
@@ -98,9 +102,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 .findViewById(R.id.setting_pandoralocker_switch_button);
         mPandoraLockerSButton.setOnCheckedChangeListener(this);
 
-        mLockerTypeSButton = (SwitchButton) mRootView
-                .findViewById(R.id.setting_pandoralocker_password);
-        mLockerTypeSButton.setOnCheckedChangeListener(this);
+        mLockType = (LinearLayout) mRootView.findViewById(R.id.setting_lock_type_prompt);
+        mLockType.setOnClickListener(this);
 
         mFeedback = (LinearLayout) mRootView.findViewById(R.id.setting_feedback_prompt);
         mFeedback.setOnClickListener(this);
@@ -136,21 +139,24 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         if (theme.isDefaultTheme()) {
             mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            WallpaperUtils.loadBackgroundBitmap(getActivity(), theme.getFilePath(), new ILoadBitmapCallback() {
+            WallpaperUtils.loadBackgroundBitmap(getActivity(), theme.getFilePath(),
+                    new ILoadBitmapCallback() {
 
-                @SuppressWarnings("deprecation")
-                @Override
-                public void imageLoaded(Bitmap bitmap, String filePath) {
-                    mSettingBackground.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
-                }
-            });
+                        @SuppressWarnings("deprecation")
+                        @Override
+                        public void imageLoaded(Bitmap bitmap, String filePath) {
+                            mSettingBackground.setBackgroundDrawable(new BitmapDrawable(
+                                    getResources(), bitmap));
+                        }
+                    });
         }
     }
 
     private void initSwitchButtonState() {
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
-        mLockerTypeSButton.setChecked(getUnLockType() == PandoraConfig.UNLOCKER_TYPE_GUSTURE);
-        mIsCurrentlyPressed = true;
+        // mLockerTypeSButton.setChecked(getUnLockType() ==
+        // PandoraConfig.UNLOCKER_TYPE_GUSTURE);
+        // mIsCurrentlyPressed = true;
     }
 
     @Override
@@ -165,17 +171,17 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                     UmengCustomEventManager.statisticalPandoraSwitchCloseTimes();
                 }
                 break;
-            case R.id.setting_pandoralocker_password:
-                if (isChecked) {
-                    if (mIsCurrentlyPressed) {
-                        showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_OPEN);
-                    }
-                } else {
-                    if (mIsCurrentlyPressed) {
-                        showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_CLOSE);
-                    }
-                }
-                break;
+            // case R.id.setting_pandoralocker_password:
+            // if (isChecked) {
+            // if (mIsCurrentlyPressed) {
+            // showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_OPEN);
+            // }
+            // } else {
+            // if (mIsCurrentlyPressed) {
+            // showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_CLOSE);
+            // }
+            // }
+            // break;
 
             default:
                 break;
@@ -195,37 +201,38 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         MobclickAgent.onPageEnd("MainSettingsFragment");
     }
 
-    private void showGustureView(final int type) {
-        mLockerTypeSButton.setEnabled(false);
-        gotoGustureActivity(type);
+    // private void showGustureView(final int type) {
+    // mLockerTypeSButton.setEnabled(false);
+    // gotoGustureActivity(type);
+    //
+    // }
 
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mLockerTypeSButton.setEnabled(true);
-        switch (resultCode) {
-            case GUSTURE_REQUEST_CODE_FAIL:
-                int type = data.getExtras().getInt("type");
-                mIsCurrentlyPressed = false;
-                switch (type) {
-                    case LockPatternActivity.LOCK_PATTERN_TYPE_CLOSE:
-                        mLockerTypeSButton.setChecked(true);
-                        break;
-                    case LockPatternActivity.LOCK_PATTERN_TYPE_OPEN:
-                        mLockerTypeSButton.setChecked(false);
-                        break;
-
-                    default:
-                        break;
-                }
-                mIsCurrentlyPressed = true;
-                break;
-            default:
-                break;
-        }
-    }
+    // @Override
+    // public void onActivityResult(int requestCode, int resultCode, Intent
+    // data) {
+    // super.onActivityResult(requestCode, resultCode, data);
+    // mLockerTypeSButton.setEnabled(true);
+    // switch (resultCode) {
+    // case GUSTURE_REQUEST_CODE_FAIL:
+    // int type = data.getExtras().getInt("type");
+    // mIsCurrentlyPressed = false;
+    // switch (type) {
+    // case LockPatternActivity.LOCK_PATTERN_TYPE_CLOSE:
+    // mLockerTypeSButton.setChecked(true);
+    // break;
+    // case LockPatternActivity.LOCK_PATTERN_TYPE_OPEN:
+    // mLockerTypeSButton.setChecked(false);
+    // break;
+    //
+    // default:
+    // break;
+    // }
+    // mIsCurrentlyPressed = true;
+    // break;
+    // default:
+    // break;
+    // }
+    // }
 
     @Override
     public void onClick(View view) {
@@ -263,6 +270,15 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 break;
             case R.id.setting_individualization:
                 gotoIndividualization();
+                break;
+            case R.id.setting_lock_type_prompt:
+                gotoLockerPassword();
+                break;
+            case R.id.pandora_favorite:
+                Intent intent = new Intent(getActivity(), FavoritesActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
                 break;
             default:
                 break;

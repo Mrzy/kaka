@@ -111,7 +111,6 @@ public class DefaultBox implements IPandoraBox {
 
     @Override
     public View getContainer() {
-
         return mLayoutView;
     }
 

@@ -17,13 +17,13 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
-    <style name="gusture_dialog" parent="@android:style/Theme.Dialog">
+    <style name="locker_password_dialog_theme" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@android:color/transparent</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:backgroundDimAmount">0.85</item>
+        <item name="android:backgroundDimAmount">0.70</item>
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 

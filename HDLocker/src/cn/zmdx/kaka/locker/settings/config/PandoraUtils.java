@@ -23,6 +23,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.CropImageActivity;
 import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class PandoraUtils {
@@ -74,25 +76,29 @@ public class PandoraUtils {
 
     public static final int WARM_PROMPT_1 = 1;
 
-    public static Bitmap fastBlur(View decorView) {
-        decorView.setDrawingCacheEnabled(true);
-        decorView.buildDrawingCache();
-        Bitmap bitmap = decorView.getDrawingCache();
-        return mBlur(bitmap, decorView);
+//    public static Bitmap fastBlur(View decorView) {
+//        decorView.setDrawingCacheEnabled(true);
+//        decorView.buildDrawingCache();
+//        Bitmap bitmap = decorView.getDrawingCache();
+//        return doFastBlur(bitmap, decorView);
+//
+//    }
 
-    }
-
-    private static Bitmap mBlur(Bitmap bkg, View view) {
+    public static Bitmap doFastBlur(Context context, int overhangSize, Bitmap bkg, View view) {
         float scaleFactor = 8;
-        float radius = 20;
-        Bitmap overlay = Bitmap.createBitmap((int) (view.getMeasuredWidth() / scaleFactor),
-                (int) (view.getMeasuredHeight() / scaleFactor), Bitmap.Config.ARGB_8888);
+        float radius = 10;
+        int screenWidth = BaseInfoHelper.getRealWidth(context);
+        int screenHeight = BaseInfoHelper.getRealHeight(context);
+        int width = screenWidth - overhangSize;
+        Bitmap overlay = Bitmap.createBitmap((int) (width / scaleFactor),
+                (int) (screenHeight / scaleFactor), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(overlay);
         canvas.translate(-view.getLeft() / scaleFactor, -view.getTop() / scaleFactor);
         canvas.scale(1 / scaleFactor, 1 / scaleFactor);
         Paint paint = new Paint();
         paint.setFlags(Paint.FILTER_BITMAP_FLAG);
-        canvas.drawBitmap(bkg, 0, 0, paint);
+        canvas.drawBitmap(bkg, new Rect(0, 0, bkg.getWidth(), bkg.getHeight()), new Rect(0, 0, width, screenHeight), paint);
+//        canvas.drawBitmap(bkg, 0, 0, paint);
         return FastBlur.doBlur(overlay, (int) radius, true);
     }
 

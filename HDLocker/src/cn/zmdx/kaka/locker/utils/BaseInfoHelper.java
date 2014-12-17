@@ -74,9 +74,45 @@ public class BaseInfoHelper {
         return result;
     }
 
-    public static int dip2px(Context context, float dipValue){ 
-        final float scale = context.getResources().getDisplayMetrics().density; 
-        return (int)(dipValue * scale + 0.5f);
+    private static int sRealScreenWidth = -1;
+
+    @SuppressLint("NewApi")
+    public static int getRealWidth(Display display) {
+        if (sRealScreenWidth != -1) {
+            return sRealScreenWidth;
+        }
+        int orientation = display.getRotation();
+        boolean landscape = orientation == Surface.ROTATION_270
+                || orientation == Surface.ROTATION_90;
+        Point size = new Point();
+        int result = 0;
+        if (Build.VERSION.SDK_INT >= 17) {
+            display.getRealSize(size);
+            result = landscape ? size.y : size.x;
+        } else {
+            try {
+                Method getRawH = landscape ? Display.class.getMethod("getRawHeight")
+                        : Display.class.getMethod("getRawWidth");
+                result = (Integer) getRawH.invoke(display);
+            } catch (Exception e) {
+                display.getSize(size);
+                result = landscape ? size.y : size.x;
+            }
+        }
+        return result;
+    }
+
+    public static int getRealWidth(Context context) {
+        if (sRealScreenWidth != -1) {
+            return sRealScreenWidth;
+        }
+        final Display display = getDisplay(context);
+        return getRealWidth(display);
+    }
+
+    public static int dip2px(Context context, float dipValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * scale + 0.5f);
     }
 
     public static float mDensity = -1;
@@ -289,7 +325,12 @@ public class BaseInfoHelper {
 
     private static int sScreenHeight = 0;
 
-    public static int getWidth(Context context) {
+    /**
+     * @deprecated
+     * @param context
+     * @return
+     */
+    private static int getWidth(Context context) {
         if (sScreenHeight != 0) {
             return sScreenHeight;
         }

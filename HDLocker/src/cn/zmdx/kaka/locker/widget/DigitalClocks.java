@@ -86,6 +86,10 @@ public class DigitalClocks extends TextView {
         super.onAttachedToWindow();
         mHandler = new Handler();
 
+        startTicker();
+    }
+
+    private void startTicker() {
         /**
          * requests a tick on the next hard-second boundary
          */
@@ -97,11 +101,17 @@ public class DigitalClocks extends TextView {
                 setText(DateFormat.format(mFormat, mCalendar));
                 invalidate();
                 long now = SystemClock.uptimeMillis();
-                long next = now + (1000 - now % 1000);
+                long next = now + (25 * 1000 - now % 1000);
                 mHandler.postAtTime(mTicker, next);
             }
         };
         mTicker.run();
+    }
+    public void setTickerStoped(boolean tickerStopped) {
+        mTickerStopped = tickerStopped;
+        if (!mTickerStopped) {
+            startTicker();
+        }
     }
 
     @Override

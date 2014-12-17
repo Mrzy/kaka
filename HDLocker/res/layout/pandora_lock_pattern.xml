@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:baselineAligned="true"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/pandora_lock_pattern_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/lock_pattern_prompt"
+        android:textColor="@color/lock_pattern_view_success_color"
+        android:textSize="15sp" />
+
+    <cn.zmdx.kaka.locker.widget.LockPatternView
+        android:id="@+id/pandora_lock_pattern"
+        android:layout_width="@dimen/gusture_pattern_lock_width"
+        android:layout_height="@dimen/gusture_pattern_lock_height"
+        android:layout_marginTop="@dimen/gusture_pattern_lock_margin_top"
+        android:background="@android:color/transparent" />
+
+</LinearLayout>

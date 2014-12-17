@@ -24,15 +24,6 @@
                 android:layout_marginLeft="12dp"
                 android:orientation="horizontal" >
 
-                <ImageButton
-                    android:id="@+id/pandora_box_gif_single_back_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/pandora_single_box_image_selector"
-                    android:gravity="center_vertical" />
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

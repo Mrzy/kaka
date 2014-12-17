@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
@@ -509,7 +510,7 @@ public class PandoraPanelLayout extends ViewGroup {
     private void cutOffForegroundDrawable() {
         if (mIsForeBackgroundCutOff || mForegroundDrawable == null)
             return;
-        int width = BaseInfoHelper.getWidth(getContext());
+        int width = BaseInfoHelper.getRealWidth(getContext());
         int realHeight = BaseInfoHelper.getRealHeight(getContext());
         Bitmap srcBmp = ImageUtils.drawable2Bitmap(mForegroundDrawable);
         srcBmp = ImageUtils.getResizedBitmap(srcBmp, width, realHeight);
@@ -547,9 +548,11 @@ public class PandoraPanelLayout extends ViewGroup {
     public View getTopView() {
         return mTopView;
     }
+
     public View getBottomView() {
         return mSlideableView;
     }
+
     public Drawable getBottomPanelDrawable() {
         return mBottomPanelBgDrawable;
     }
@@ -666,11 +669,13 @@ public class PandoraPanelLayout extends ViewGroup {
      * 
      * @param fileName
      */
-    public void setForgroundFile(String fileName) {
-        int screenWidth = BaseInfoHelper.getWidth(mContext);
+    public Drawable setForgroundFile(String fileName) {
+        int screenWidth = BaseInfoHelper.getRealWidth(mContext);
         int screenHeight = BaseInfoHelper.getRealHeight(mContext);
         Bitmap bitmap = ImageUtils.getBitmapFromFile(fileName, screenWidth, screenHeight);
-        setForegroundDrawable(ImageUtils.bitmap2Drawable(mContext, bitmap));
+        BitmapDrawable drawable = ImageUtils.bitmap2Drawable(mContext, bitmap);
+        setForegroundDrawable(drawable);
+        return drawable;
     }
 
     public void setForegroundResource(int resId) {
