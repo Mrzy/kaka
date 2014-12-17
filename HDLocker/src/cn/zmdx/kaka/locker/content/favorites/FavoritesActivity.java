@@ -64,9 +64,11 @@ public class FavoritesActivity extends FragmentActivity {
     public void onBackPressed() {
         if (mFoldablePage != null && mFoldablePage.isFoldBack()) {
             mFoldablePage.foldBack();
-            return;
+        } else {
+            finish();
+            overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                    R.anim.umeng_fb_slide_out_from_right);
         }
-        super.onBackPressed();
     }
 
     private void initWallpaper() {
@@ -85,12 +87,5 @@ public class FavoritesActivity extends FragmentActivity {
                         }
                     });
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-        overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
-                R.anim.umeng_fb_slide_out_from_right);
     }
 }
