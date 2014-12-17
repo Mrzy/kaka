@@ -23,6 +23,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -96,7 +97,8 @@ public class PandoraUtils {
         canvas.scale(1 / scaleFactor, 1 / scaleFactor);
         Paint paint = new Paint();
         paint.setFlags(Paint.FILTER_BITMAP_FLAG);
-        canvas.drawBitmap(bkg, 0, 0, paint);
+        canvas.drawBitmap(bkg, new Rect(0, 0, bkg.getWidth(), bkg.getHeight()), new Rect(0, 0, width, screenHeight), paint);
+//        canvas.drawBitmap(bkg, 0, 0, paint);
         return FastBlur.doBlur(overlay, (int) radius, true);
     }
 

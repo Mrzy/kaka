@@ -72,6 +72,7 @@ import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.view.ViewHelper;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
 
@@ -87,6 +88,8 @@ public class LockScreenManager {
     private SlidingPaneLayout mSlidingPanelLayout;
 
     private FrameLayout mSlidingBehindLayout;
+    
+    private ImageView mSlidingBehindBlurView;
 
     private ViewGroup mBoxView;
 
@@ -411,8 +414,9 @@ public class LockScreenManager {
         mSlidingPanelLayout.setPanelSlideListener(mSlideOutListener);
         mSlidingPanelLayout.setSliderFadeColor(Color.parseColor("#a0000000"));
         mSlidingPanelLayout.setOverhangVisiable(mNeedPassword);
+        mSlidingPanelLayout.setShadowDrawableRight(mContext.getResources().getDrawable(R.drawable.sliding_panel_layout_shadow));
         mSlidingBehindLayout = (FrameLayout) mEntireView.findViewById(R.id.sliding_behind_layout);
-
+        mSlidingBehindBlurView = (ImageView) mEntireView.findViewById(R.id.sliding_behind_blur);
         mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
         mBatteryInfo = (TextView) mEntireView.findViewById(R.id.battery_info);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
@@ -437,8 +441,10 @@ public class LockScreenManager {
         }
         mGuide = (ImageView) mEntireView.findViewById(R.id.lock_guide);
         mGuide.setVisibility(View.VISIBLE);
+        ViewHelper.setAlpha(mGuide, 0);
+        mGuide.animate().alpha(1).setDuration(1000).setStartDelay(1000).start();
         mGuide.setOnTouchListener(new OnTouchListener() {
-            
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 mGuide.setVisibility(View.GONE);
@@ -448,10 +454,11 @@ public class LockScreenManager {
         if (lockScreenTime == 0) {
             mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_one);
             PandoraConfig.newInstance(mContext).saveLockScreenTimes(1);
-        }else if (lockScreenTime == 1) {
+        } else if (lockScreenTime == 1) {
             mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_two);
             PandoraConfig.newInstance(mContext).saveLockScreenTimes(2);
         }
+    
     }
 
     /**
@@ -636,14 +643,16 @@ public class LockScreenManager {
             }
         }
         if (mNeedPassword) {
-            doFastBlur(bgDrawable);
+            if (null!=bgDrawable) {
+                doFastBlur(bgDrawable);
+            }
         }
     }
 
     private void doFastBlur(Drawable bgDrawable) {
         Bitmap bitmap = PandoraUtils.doFastBlur(mContext, mSlidingPanelLayout.getOverhangSize(),
-                ImageUtils.drawable2Bitmap(bgDrawable), mSlidingBehindLayout);
-        mSlidingBehindLayout.setBackgroundDrawable(ImageUtils.bitmap2Drawable(mContext, bitmap));
+                ImageUtils.drawable2Bitmap(bgDrawable), mSlidingPanelLayout);
+        mSlidingBehindBlurView.setImageBitmap(bitmap);
     }
 
     public void onInitDefaultImage() {
