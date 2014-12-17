@@ -55,8 +55,6 @@ public class PandoraConfig {
 
     private static final String KEY_CURRENT_FONT = "m";
 
-    private static final String GUIDE_HTML_TIMES = "n";
-
     private static final String KEY_DISPLAY_BOX_GUIDE = "o";
 
     private static final String KEY_NEED_MOBILE_NETWORK = "p";
@@ -135,16 +133,6 @@ public class PandoraConfig {
 
     public int getGuideTimesInt() {
         return mSp.getInt(GUIDE_TIMES, 0);
-    }
-
-    public void saveHtmlTimes(int times) {
-        Editor editor = mSp.edit();
-        editor.putInt(GUIDE_HTML_TIMES, times);
-        editor.commit();
-    }
-
-    public int getGuideHtmlTimesInt() {
-        return mSp.getInt(GUIDE_HTML_TIMES, 0);
     }
 
     public void saveEventGuestureLockEnabledDaily(String time) {
