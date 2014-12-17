@@ -100,7 +100,6 @@
     <string name="individualization_welcome_text_hint">请输入欢迎语!</string>
     <string name="share_image_news_from">来自：</string>
     <string name="pandora_crop_image_rotate">旋转</string>
-    <string name="pandora_box_html_back_text">点击此处返回</string>
     <string name="guide_item_title_one">下拉换一批猛料</string>
     <string name="setting_individualization_open_3G_4G">允许3G/4G时缓存图文</string>
     <string name="warm_prompt_6_10_1">美好的一天开始了</string>
