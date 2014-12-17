@@ -413,4 +413,27 @@ public class ServerImageDataModel {
         }
         return data;
     }
+
+    public List<String> deleteExceptFavorited() {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
+        List<String> urls = new ArrayList<String>();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+            TableStructure.SERVER_IMAGE_URL
+        }, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED + "=?", new String[] {
+            String.valueOf(MySqlitDatabase.FAVORITE_FALSE)
+        }, null, null, null);
+        while (cursor.moveToNext()) {
+            urls.add(cursor.getString(0));
+        }
+        cursor.close();
+
+        int result = sqliteDatabase.delete(TableStructure.TABLE_NAME_SERVER_IMAGE,
+                TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED + "=?", new String[] {
+                    String.valueOf(MySqlitDatabase.FAVORITE_FALSE)
+                });
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("删除serverImageData表中的数据条数为：" + result);
+        }
+        return urls;
+    }
 }

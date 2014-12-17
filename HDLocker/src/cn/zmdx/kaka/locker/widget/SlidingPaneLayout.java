@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
@@ -126,7 +127,7 @@ public class SlidingPaneLayout extends ViewGroup {
     /**
      * The fade color used for the panel covered by the slider. 0 = no fading.
      */
-    private int mCoveredFadeColor;
+    private int mCoveredFadeColor = Color.WHITE;
 
     /**
      * Drawable used to draw the shadow between panes by default.
