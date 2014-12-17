@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
@@ -16,7 +17,6 @@ import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -548,9 +548,11 @@ public class PandoraPanelLayout extends ViewGroup {
     public View getTopView() {
         return mTopView;
     }
+
     public View getBottomView() {
         return mSlideableView;
     }
+
     public Drawable getBottomPanelDrawable() {
         return mBottomPanelBgDrawable;
     }
@@ -667,11 +669,13 @@ public class PandoraPanelLayout extends ViewGroup {
      * 
      * @param fileName
      */
-    public void setForgroundFile(String fileName) {
+    public Drawable setForgroundFile(String fileName) {
         int screenWidth = BaseInfoHelper.getRealWidth(mContext);
         int screenHeight = BaseInfoHelper.getRealHeight(mContext);
         Bitmap bitmap = ImageUtils.getBitmapFromFile(fileName, screenWidth, screenHeight);
-        setForegroundDrawable(ImageUtils.bitmap2Drawable(mContext, bitmap));
+        BitmapDrawable drawable = ImageUtils.bitmap2Drawable(mContext, bitmap);
+        setForegroundDrawable(drawable);
+        return drawable;
     }
 
     public void setForegroundResource(int resId) {

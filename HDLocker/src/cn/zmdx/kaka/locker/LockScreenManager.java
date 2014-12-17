@@ -13,8 +13,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
@@ -22,7 +24,9 @@ import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
@@ -52,6 +56,7 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaper;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
@@ -97,7 +102,7 @@ public class LockScreenManager {
 
     private Vibrator mVibrator;
 
-    private TextView mDate, mBatteryTipView, mWeatherSummary, mBatteryInfo;
+    private TextView mDate, mTemperature, mBatteryTipView, mWeatherSummary, mBatteryInfo;
 
     private DigitalClocks mDigitalClockView;
 
@@ -123,12 +128,14 @@ public class LockScreenManager {
 
     private OnlineWallpaperView mOnlineWallpaperView;
 
-    private LinearLayout mOnlineViewContainer;
+    private LinearLayout mOnlineViewContainer, mLockDataView;
 
     private View mTopOverlay, mBottomOverlay;
 
     private boolean mNeedPassword = false;
-
+    
+    private ImageView mGuide;
+    
     public interface ILockScreenListener {
         void onLock();
 
@@ -326,11 +333,11 @@ public class LockScreenManager {
                 } else {
                     int temp = pw.getTemp();
                     String summary = pw.getSummary();
-                    if (mDate != null) {
-                        if (mDate.getText() != null && !mDate.getText().toString().endsWith("ºC")) {
-                            mDate.append(" " + temp + "ºC");
+                    if (mTemperature != null) {
+                        if (mTemperature.getText() != null && !mTemperature.getText().toString().endsWith("ºC")) {
+                            mTemperature.append(" " + temp + "ºC");
                             if (null != mOnlineWallpaperView) {
-                                mOnlineWallpaperView.setDateAppend(" " + temp + "ºC");
+                                mOnlineWallpaperView.setTemperature(" " + temp + "ºC");
                             }
                         }
                     }
@@ -398,6 +405,7 @@ public class LockScreenManager {
     @SuppressLint("InflateParams")
     private void initLockScreenViews() {
         mEntireView = LayoutInflater.from(mContext).inflate(R.layout.pandora_lockscreen, null);
+        initGuideView();
         initSecurePanel();
         mSlidingPanelLayout = (SlidingPaneLayout) mEntireView.findViewById(R.id.sliding_layout);
         mSlidingPanelLayout.setPanelSlideListener(mSlideOutListener);
@@ -409,6 +417,8 @@ public class LockScreenManager {
         mBatteryInfo = (TextView) mEntireView.findViewById(R.id.battery_info);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
+        mTemperature = (TextView) mEntireView.findViewById(R.id.lock_temperature);
+        mLockDataView = (LinearLayout) mEntireView.findViewById(R.id.lock_date_view);
         mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
         mDigitalClockView = (DigitalClocks) mEntireView.findViewById(R.id.digitalClock);
 
@@ -418,6 +428,30 @@ public class LockScreenManager {
         mBottomOverlay = mEntireView.findViewById(R.id.lock_bottom_overlay);
         setDrawable();
         initOnlinePaperPanel();
+    }
+
+    private void initGuideView() {
+        int lockScreenTime = PandoraConfig.newInstance(mContext).getLockScreenTimes();
+        if (lockScreenTime == 2) {
+            return;
+        }
+        mGuide = (ImageView) mEntireView.findViewById(R.id.lock_guide);
+        mGuide.setVisibility(View.VISIBLE);
+        mGuide.setOnTouchListener(new OnTouchListener() {
+            
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mGuide.setVisibility(View.GONE);
+                return false;
+            }
+        });
+        if (lockScreenTime == 0) {
+            mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_one);
+            PandoraConfig.newInstance(mContext).saveLockScreenTimes(1);
+        }else if (lockScreenTime == 1) {
+            mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_two);
+            PandoraConfig.newInstance(mContext).saveLockScreenTimes(2);
+        }
     }
 
     /**
@@ -532,7 +566,10 @@ public class LockScreenManager {
                                 @Override
                                 public void applyOnlinePaper(String filePath) {
                                     if (null != mSliderView && !TextUtils.isEmpty(filePath)) {
-                                        mSliderView.setForgroundFile(filePath);
+                                        Drawable drawable =  mSliderView.setForgroundFile(filePath);
+                                        if (mNeedPassword) {
+                                            doFastBlur(drawable);
+                                        }
                                     }
                                     mOnlinePanel.collapsePanel();
                                 }
@@ -586,16 +623,27 @@ public class LockScreenManager {
     }
 
     private void setDrawable() {
+        Drawable bgDrawable= null;
         mCurTheme = ThemeManager.getCurrentTheme();
         if (mCurTheme.isDefaultTheme()) {
-            mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
+            bgDrawable = mContext.getResources().getDrawable(mCurTheme.getmForegroundResId());
+            mSliderView.setForegroundDrawable(bgDrawable);
         } else {
             if (TextUtils.isEmpty(mCurTheme.getFilePath())) {
                 mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
             } else {
-                mSliderView.setForgroundFile(mCurTheme.getFilePath());
+                bgDrawable = mSliderView.setForgroundFile(mCurTheme.getFilePath());
             }
         }
+        if (mNeedPassword) {
+            doFastBlur(bgDrawable);
+        }
+    }
+
+    private void doFastBlur(Drawable bgDrawable) {
+        Bitmap bitmap = PandoraUtils.doFastBlur(mContext, mSlidingPanelLayout.getOverhangSize(),
+                ImageUtils.drawable2Bitmap(bgDrawable), mSlidingBehindLayout);
+        mSlidingBehindLayout.setBackgroundDrawable(ImageUtils.bitmap2Drawable(mContext, bitmap));
     }
 
     public void onInitDefaultImage() {
@@ -802,7 +850,7 @@ public class LockScreenManager {
     }
 
     public void onScreenOff() {
-        invisiableViews(mDate, mWeatherSummary, mDigitalClockView);
+        invisiableViews(mLockDataView, mWeatherSummary, mDigitalClockView);
         cancelAnimatorIfNeeded();
         if (mSliderView != null && !mSliderView.isPanelExpanded()) {
             mSliderView.expandPanel();
@@ -861,12 +909,19 @@ public class LockScreenManager {
         AnimatorSet digitalSet = new AnimatorSet();
         digitalSet.playTogether(digitalAlpha, digitalTrans);
 
-        ObjectAnimator dateAlpha = ObjectAnimator.ofFloat(mDate, "alpha", 0, 1);
-        ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mDate, "translationY",
+        ObjectAnimator dateAlpha = ObjectAnimator.ofFloat(mLockDataView, "alpha", 0, 1);
+        ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mLockDataView, "translationY",
                 DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
         AnimatorSet dateSet = new AnimatorSet();
         dateSet.setStartDelay(100);
         dateSet.playTogether(dateAlpha, dateTrans);
+        
+//        ObjectAnimator temperatureAlpha = ObjectAnimator.ofFloat(mTemperature, "alpha", 0, 1);
+//        ObjectAnimator temperatureTrans = ObjectAnimator.ofFloat(mTemperature, "translationY",
+//                DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
+//        AnimatorSet temperatureSet = new AnimatorSet();
+//        temperatureSet.setStartDelay(100);
+//        temperatureSet.playTogether(temperatureAlpha, temperatureTrans);
 
         ObjectAnimator wsAlpha = ObjectAnimator.ofFloat(mWeatherSummary, "alpha", 0, 1);
         ObjectAnimator wsTrans = ObjectAnimator.ofFloat(mWeatherSummary, "translationY",
