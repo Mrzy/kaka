@@ -63,8 +63,9 @@ public class SingleImageBox implements IPandoraBox, View.OnClickListener {
         mDescView.getPaint().setFakeBoldText(true);
         mFromPlatformText = (TextView) mEntireView.findViewById(R.id.from_platform_text);
         mImageNewsContent = (TextView) mEntireView.findViewById(R.id.image_news_content);
-        mBackBtn = mEntireView.findViewById(R.id.pandora_box_single_back_btn);
-        mBackBtn.setOnClickListener(this);
+        // mBackBtn =
+        // mEntireView.findViewById(R.id.pandora_box_single_back_btn);
+        // mBackBtn.setOnClickListener(this);
     }
 
     private void setImageViewSize(ImageView iv) {
@@ -77,7 +78,7 @@ public class SingleImageBox implements IPandoraBox, View.OnClickListener {
         }
         ViewGroup.LayoutParams lp = iv.getLayoutParams();
         lp.width = LayoutParams.MATCH_PARENT;
-        int screenWidth = BaseInfoHelper.getWidth(mContext);
+        int screenWidth = BaseInfoHelper.getRealWidth(mContext);
         try {
             float rate = (float) screenWidth / (float) bmpWidth;
             lp.height = (int) (rate * bmpHeight);

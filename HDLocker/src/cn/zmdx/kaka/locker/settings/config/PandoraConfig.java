@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 
 public class PandoraConfig {
@@ -16,12 +17,6 @@ public class PandoraConfig {
     private Context mContext;
 
     private SharedPreferences mSp;
-
-    public static final int UNLOCKER_TYPE_DEFAULT = 0;
-
-    public static final int UNLOCKER_TYPE_GUSTURE = 1;
-
-    public static final int UNLOCKER_TYPE_NUMBER = 2;
 
     private static final String PANDORA_LOCKER_SP_NAME = "pandoraLockerName";
 
@@ -72,6 +67,10 @@ public class PandoraConfig {
 
     private static final String OPEN_LOCK_SCREEN_VOCIE = "s";
 
+    private static final String KEY_NUMBER_LOCK = "t";
+
+    private static final String KEY_LOCK_SCREEN_GUIDE_TIMES = "u";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -101,7 +100,7 @@ public class PandoraConfig {
     }
 
     public int getUnLockType() {
-        return mSp.getInt(UNLOCK_TYPE, UNLOCKER_TYPE_DEFAULT);
+        return mSp.getInt(UNLOCK_TYPE, KeyguardLockerManager.UNLOCKER_TYPE_NONE);
     }
 
     public int getCurrentThemeId() {
@@ -328,6 +327,26 @@ public class PandoraConfig {
     public void saveLastOnlineServerJsonData(String lastJsonString) {
         Editor editor = mSp.edit();
         editor.putString(KEY_ONLINE_SERVER_JSON_DATA, lastJsonString);
+        editor.commit();
+    }
+
+    public String getNumberLockString() {
+        return mSp.getString(KEY_NUMBER_LOCK, "");
+    }
+
+    public void saveNumberLockString(String md5Password) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_NUMBER_LOCK, md5Password);
+        editor.commit();
+    }
+
+    public int getLockScreenTimes() {
+        return mSp.getInt(KEY_LOCK_SCREEN_GUIDE_TIMES, 0);
+    }
+
+    public void saveLockScreenTimes(int times) {
+        Editor editor = mSp.edit();
+        editor.putInt(KEY_LOCK_SCREEN_GUIDE_TIMES, times);
         editor.commit();
     }
 

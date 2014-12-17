@@ -46,7 +46,7 @@ public class WallpaperUtils {
 
             @Override
             public void run() {
-                int width = BaseInfoHelper.getWidth(context);
+                int width = BaseInfoHelper.getRealWidth(context);
                 int realHeight = BaseInfoHelper.getRealHeight(context);
                 Bitmap bitamp = ImageUtils.getBitmapFromFile(filePath, width, realHeight);
                 if (null != bitamp) {

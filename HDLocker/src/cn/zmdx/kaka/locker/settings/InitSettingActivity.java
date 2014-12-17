@@ -11,9 +11,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -55,7 +57,9 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         mMIUIVersion = PandoraUtils.getSystemProperty();
         isMIUI = PandoraUtils.isMIUI(this);
         setContentView(R.layout.init_setting_fragment);
+        getWindow().getAttributes().flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         initView();
+        initTitleHeight();
         initWallpaper();
     }
 
@@ -77,19 +81,27 @@ public class InitSettingActivity extends Activity implements OnClickListener {
 
     }
 
+    private void initTitleHeight() {
+        int statusBarHeight = PandoraUtils.getStatusBarHeight(this);
+        LinearLayout titleLayout = (LinearLayout) mRootView.findViewById(R.id.init_setting_title);
+        titleLayout.setPadding(0, statusBarHeight, 0, 0);
+    }
+
     private void initWallpaper() {
         Theme theme = ThemeManager.getCurrentTheme();
         if (theme.isDefaultTheme()) {
             mRootView.setBackgroundResource(theme.getmBackgroundResId());
         } else {
-            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(), new ILoadBitmapCallback() {
+            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(),
+                    new ILoadBitmapCallback() {
 
-                @SuppressWarnings("deprecation")
-                @Override
-                public void imageLoaded(Bitmap bitmap, String filePath) {
-                    mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
-                }
-            });
+                        @SuppressWarnings("deprecation")
+                        @Override
+                        public void imageLoaded(Bitmap bitmap, String filePath) {
+                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
+                                    bitmap));
+                        }
+                    });
         }
     }
 

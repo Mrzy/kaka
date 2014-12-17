@@ -1,3 +1,4 @@
+
 package cn.zmdx.kaka.locker.content;
 
 import it.gmariotti.cardslib.library.internal.Card;
@@ -16,9 +17,11 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.IDownloadListener;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
 import cn.zmdx.kaka.locker.content.box.IFoldableBox;
+import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
@@ -30,7 +33,8 @@ public class FoldableCard extends Card {
     private ServerImageData mData;
 
     private IFoldableBox mBox;
- // px
+
+    // px
     protected static final int MAX_HEIGHT_IMAGE_VIEW = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 180);
 
@@ -88,16 +92,12 @@ public class FoldableCard extends Card {
 
     @Override
     public void setupInnerViewElements(ViewGroup parent, View view) {
-        Options opt = new Options();
-        opt.inJustDecodeBounds = true;
-        DiskImageHelper.getBitmapByUrl(mData.getUrl(), opt);
         ImageView imageView = null;
         TextView titleView = null;
         imageView = (ImageView) view.findViewById(R.id.card_item_large_imageview);
         titleView = (TextView) view.findViewById(R.id.card_item_large_title);
-        opt.inSampleSize = ImageUtils.calculateInSampleSize(opt, BaseInfoHelper.getWidth(mContext),
-                BaseInfoHelper.getWidth(mContext));
-        setImageViewSize(imageView, opt);
+
+        final Options opt = setImageViewSize(imageView, mData.getUrl());
 
         titleView.setText(mData.getTitle());
         opt.inJustDecodeBounds = false;
@@ -106,13 +106,13 @@ public class FoldableCard extends Card {
         } else {
             Bitmap cacheBmp = getCoverImageFromCache(mData.getUrl());
             if (cacheBmp == null) {
-                new ImageAsyncLoadTask(imageView, opt).execute(mData.getUrl());
+                new ImageAsyncLoadTask(imageView, opt, mData).execute(mData.getUrl());
             } else {
                 imageView.setImageBitmap(cacheBmp);
             }
         }
     }
-    
+
     private Bitmap getCoverImageFromCache(String url) {
         return ImageLoaderManager.getImageMemCache().getBitmap(url);
     }
@@ -123,9 +123,12 @@ public class FoldableCard extends Card {
 
         private Options mOpt;
 
-        public ImageAsyncLoadTask(ImageView imageView, Options opt) {
+        private ServerImageData mData;
+
+        public ImageAsyncLoadTask(ImageView imageView, Options opt, ServerImageData data) {
             mImageView = imageView;
             mOpt = opt;
+            mData = data;
         }
 
         // 获得封面图片的Bitmap。此方法会优先从内存缓存中寻找，如果没有，会从磁盘decode
@@ -133,19 +136,45 @@ public class FoldableCard extends Card {
         protected Bitmap doInBackground(String... params) {
             String imgUrl = params[0];
             Bitmap bmp = DiskImageHelper.getBitmapByUrl(imgUrl, mOpt);
-            ImageLoaderManager.getImageMemCache().putBitmap(imgUrl, bmp);
+            if (bmp != null) {
+                ImageLoaderManager.getImageMemCache().putBitmap(imgUrl, bmp);
+            } else {
+                // TODO download from web
+            }
             return bmp;
         }
 
         @Override
         protected void onPostExecute(Bitmap coverBmp) {
-            ViewHelper.setAlpha(mImageView, 0);
-            mImageView.setImageBitmap(coverBmp);
-            mImageView.animate().alpha(1).setDuration(200).start();
+            if (coverBmp == null) {
+                ServerImageDataManager.getInstance().downloadImage(mData, new IDownloadListener() {
+
+                    @Override
+                    public void onSuccess(String filePath) {
+                        Bitmap map = DiskImageHelper.getBitmapByUrl(mData.getUrl(), null);
+                        mImageView.setImageBitmap(map);
+                        ServerImageDataModel.getInstance().markAlreadyDownload(mData.getId());
+                    }
+
+                    @Override
+                    public void onFailed() {
+                    }
+                });
+            } else {
+                ViewHelper.setAlpha(mImageView, 0);
+                mImageView.setImageBitmap(coverBmp);
+                mImageView.animate().alpha(1).setDuration(200).start();
+            }
         }
     }
 
-    private void setImageViewSize(ImageView iv, Options opt) {
+    private Options setImageViewSize(ImageView iv, String url) {
+        Options opt = new Options();
+        opt.inJustDecodeBounds = true;
+        DiskImageHelper.getBitmapByUrl(url, opt);
+        opt.inSampleSize = ImageUtils.calculateInSampleSize(opt, BaseInfoHelper.getRealWidth(mContext),
+                BaseInfoHelper.getRealWidth(mContext));
+
         int bmpWidth = 0;
         int bmpHeight = 0;
         if (opt != null) {
@@ -154,7 +183,7 @@ public class FoldableCard extends Card {
         }
         ViewGroup.LayoutParams lp = iv.getLayoutParams();
         lp.width = LayoutParams.MATCH_PARENT;
-        int screenWidth = BaseInfoHelper.getWidth(mContext);
+        int screenWidth = BaseInfoHelper.getRealWidth(mContext);
         try {
             float rate = (float) screenWidth / (float) bmpWidth;
             lp.height = (int) (rate * bmpHeight);
@@ -167,5 +196,6 @@ public class FoldableCard extends Card {
             lp.height = MIN_HEIGHT_IMAGE_VIEW;
         }
         iv.setLayoutParams(lp);
+        return opt;
     }
 }

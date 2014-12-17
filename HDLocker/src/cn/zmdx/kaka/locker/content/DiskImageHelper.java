@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -67,7 +69,7 @@ public class DiskImageHelper {
 
     public static Bitmap getBitmapByUrl(String url, Options option) {
         File file = getFileByUrl(url);
-        if (file == null) {
+        if (file == null || !file.isFile() || !file.exists()) {
             return null;
         }
         if (option == null) {
@@ -75,7 +77,7 @@ public class DiskImageHelper {
             option.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(file.getAbsolutePath(), option);
             option.inSampleSize = ImageUtils.computeSampleSize(option,
-                    BaseInfoHelper.getWidth(HDApplication.getContext()));
+                    BaseInfoHelper.getRealWidth(HDApplication.getContext()));
             option.inJustDecodeBounds = false;
             option.inPreferredConfig = Bitmap.Config.RGB_565;
         }
@@ -109,6 +111,17 @@ public class DiskImageHelper {
         File[] files = mStorageDir.listFiles();
         for (File f : files) {
             f.delete();
+        }
+    }
+
+    /**
+     * 删除磁盘上的图片文件，除了已经收藏的数据
+     * 
+     * @param urls 必须为hash之前的url
+     */
+    public static void deleteByUrls(List<String> urls) {
+        for (String url : urls) {
+            remove(url);
         }
     }
 }

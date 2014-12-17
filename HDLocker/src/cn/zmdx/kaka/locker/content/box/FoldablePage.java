@@ -21,6 +21,9 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
@@ -29,12 +32,12 @@ import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.content.favorites.FavoritesManager;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SlideState;
 
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.UnfoldableView.OnFoldingListener;
@@ -49,6 +52,12 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     private CardListView mListView;
 
+    private TextView tvEmpty;
+
+    private ImageButton mImageButtonBack;
+
+    private ImageButton mImageButtonCollect;
+
     private UnfoldableView mUnfoldableView;
 
     private ViewGroup mDetailLayout, mContentContainerView, mFrameLayout;
@@ -58,6 +67,8 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
     private FoldableBoxAdapter mAdapter;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private int imgButtonCollectClickCount = 0;// 判断点击收藏按钮的次数
 
     public FoldablePage(Context context, List<ServerImageData> cards) {
         mContext = context;
@@ -77,9 +88,6 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     @Override
     public View getRenderedView() {
-        if (mData == null || mData.size() <= 0) {
-            return null;
-        }
         mContainerView = LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_flodable_box_layout, null);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mContainerView
@@ -100,6 +108,16 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         mListTouchInterceptor.setClickable(false);
         mListView.setAdapter(mAdapter);
         createGuidePageIfNeed();
+        mImageButtonBack = (ImageButton) mContainerView.findViewById(R.id.toolbar_imgButtonBack);
+        mImageButtonCollect = (ImageButton) mContainerView
+                .findViewById(R.id.toolbar_imgButtonCollect);
+        mImageButtonBack.setOnClickListener(this);
+        mImageButtonCollect.setOnClickListener(this);
+        if (mData == null || mData.size() <= 0) {
+            tvEmpty = (TextView) mContainerView.findViewById(R.id.tvEmpty);
+            tvEmpty.setText("暂无收藏");
+            mListView.setEmptyView(tvEmpty);
+        }
         return mContainerView;
     }
 
@@ -116,6 +134,12 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                     PandoraConfig.newInstance(mContext).saveHasAlreadyDisplayBoxGuide();
                 }
             });
+        }
+    }
+
+    public void setSwipeRefreshEnabled(boolean enabled) {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setEnabled(enabled);
         }
     }
 
@@ -224,15 +248,17 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         if (TextUtils.isEmpty(type)) {
             return;
         }
+        final int id = data.getId();
+
         if (type.equals(ServerDataMapping.S_DATATYPE_HTML)) {
             HtmlBox htmlBox = new HtmlBox(mContext, this, HtmlBox.convertFormServerImageData(data));
             View v = htmlBox.getRenderedView();
-            renderDetailView(v);
+            renderDetailView(v, id);
         } else if (type.equals(ServerDataMapping.S_DATATYPE_GIF)) {
             GifBox box = new GifBox(mContext, this, GifBox.convertFormServerImageData(data));
             View v = box.getRenderedView();
             if (v != null) {
-                renderDetailView(v);
+                renderDetailView(v, id);
                 box.startGif();
             }
         } else if (type.equals(ServerDataMapping.S_DATATYPE_NEWS)
@@ -242,14 +268,14 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                     SingleImageBox.convertFromServerData(data));
             View view = box.getRenderedView();
             if (view != null) {
-                renderDetailView(view);
+                renderDetailView(view, id);
             }
         } else if (type.equals(ServerDataMapping.S_DATATYPE_MULTIIMG)) {
             final MultiImgBox box = new MultiImgBox(mContext, this,
                     MultiImgBox.convertToMultiBox(data));
             View view = box.getRenderedView();
             if (view != null) {
-                renderDetailView(view);
+                renderDetailView(view, id);
             }
         }
         mUnfoldableView.unfold(coverView, mDetailLayout);
@@ -259,13 +285,73 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         mUnfoldableView.foldBack();
     }
 
-    private void renderDetailView(View contentView) {
+    private void renderDetailView(View contentView, int id) {
         mContentContainerView.removeAllViews();
         mContentContainerView.addView(contentView, 0);
+        mImageButtonCollect.setTag(id);
+        isFavoritedState(id);
     }
+
+    private boolean isFavoritedState(int id) {
+        boolean favorited = manager.isFavorited(String.valueOf(id));
+        if (favorited) {
+            mImageButtonCollect.setBackgroundResource(R.drawable.pandora_card_collected);
+            favorited = true;
+        } else {
+            mImageButtonCollect
+                    .setBackgroundResource(R.drawable.pandora_card_collect_button_selector);
+            favorited = false;
+        }
+        return favorited;
+    }
+
+    FavoritesManager manager = new FavoritesManager(mContext);
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+        // 返回按钮
+            case R.id.toolbar_imgButtonBack:
+                foldBack();
+                break;
+            // 收藏按钮
+            case R.id.toolbar_imgButtonCollect:
+                int id = (Integer) v.getTag();
+                boolean isFavorited = isFavoritedState(id);
+                ++imgButtonCollectClickCount;
+                judgeFavoriteButtonState(id, isFavorited);
+                break;
+        }
+    }
+
+    private void judgeFavoriteButtonState(int id, boolean isFavorited) {
+        if (isFavorited) {
+            mImageButtonCollect
+                    .setBackgroundResource(R.drawable.pandora_card_collect_button_selector);
+            boolean removeFavorite = manager.removeFavorite(String.valueOf(id));
+            if (removeFavorite) {
+                Toast.makeText(mContext, "取消收藏" + id, Toast.LENGTH_SHORT).show();
+            } else if (removeFavorite && imgButtonCollectClickCount % 2 == 0) {
+                mImageButtonCollect.setBackgroundResource(R.drawable.pandora_card_collected);
+                boolean addFavorite = manager.addFavorite(String.valueOf(id));
+                if (addFavorite) {
+                    Toast.makeText(mContext, "收藏成功" + id, Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else {
+            mImageButtonCollect.setBackgroundResource(R.drawable.pandora_card_collected);
+            boolean addFavorite = manager.addFavorite(String.valueOf(id));
+            if (addFavorite) {
+                Toast.makeText(mContext, "收藏成功" + id, Toast.LENGTH_SHORT).show();
+            } else if (addFavorite && imgButtonCollectClickCount % 2 == 0) {
+                mImageButtonCollect
+                        .setBackgroundResource(R.drawable.pandora_card_collect_button_selector);
+                boolean removeFavorite = manager.removeFavorite(String.valueOf(id));
+                if (removeFavorite) {
+                    Toast.makeText(mContext, "取消收藏" + id, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     @Override
