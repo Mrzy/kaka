@@ -66,6 +66,7 @@ public class SingleImageBox implements IPandoraBox, View.OnClickListener {
         // mBackBtn =
         // mEntireView.findViewById(R.id.pandora_box_single_back_btn);
         // mBackBtn.setOnClickListener(this);
+       
     }
 
     private void setImageViewSize(ImageView iv) {

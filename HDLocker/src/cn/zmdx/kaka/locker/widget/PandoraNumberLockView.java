@@ -56,7 +56,22 @@ public class PandoraNumberLockView extends LinearLayout {
 
     private KeyboardView mKeyboardView;
 
+    public View getKeyboardView() {
+        return mKeyboardView;
+    }
+
+    private LinearLayout mDownPassWordMark;
+
+    public LinearLayout getDownPasswordMark() {
+        return mDownPassWordMark;
+    }
+
     private TypefaceTextView mPromptTextView;
+
+    public TypefaceTextView getPromptTextView() {
+        return mPromptTextView;
+
+    }
 
     private LinearLayout mNumberLayout;
 
@@ -100,6 +115,7 @@ public class PandoraNumberLockView extends LinearLayout {
         mKeyboardView.setPreviewEnabled(false);
         mKeyboardView.setOnKeyboardActionListener(mKeyboardListener);
         mPromptTextView = (TypefaceTextView) mRootView.findViewById(R.id.number_lock_prompt);
+        mDownPassWordMark = (LinearLayout) mRootView.findViewById(R.id.pandora_number_layout);
         mNumberLayout = (LinearLayout) findViewById(R.id.pandora_number_layout);
         mNumberOne = (ImageView) mRootView.findViewById(R.id.pandora_number_one);
         mNumberTwo = (ImageView) mRootView.findViewById(R.id.pandora_number_two);
