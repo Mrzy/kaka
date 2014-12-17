@@ -26,6 +26,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -91,7 +92,7 @@ public class LockScreenManager {
     private SlidingPaneLayout mSlidingPanelLayout;
 
     private FrameLayout mSlidingBehindLayout;
-    
+
     private ImageView mSlidingBehindBlurView;
 
     private ViewGroup mBoxView;
@@ -137,9 +138,9 @@ public class LockScreenManager {
     private View mTopOverlay, mBottomOverlay;
 
     private boolean mNeedPassword = false;
-    
+
     private ImageView mGuide;
-    
+
     public interface ILockScreenListener {
         void onLock();
 
@@ -338,7 +339,8 @@ public class LockScreenManager {
                     int temp = pw.getTemp();
                     String summary = pw.getSummary();
                     if (mTemperature != null) {
-                        if (mTemperature.getText() != null && !mTemperature.getText().toString().endsWith("ºC")) {
+                        if (mTemperature.getText() != null
+                                && !mTemperature.getText().toString().endsWith("ºC")) {
                             mTemperature.append(" " + temp + "ºC");
                             if (null != mOnlineWallpaperView) {
                                 mOnlineWallpaperView.setTemperature(" " + temp + "ºC");
@@ -415,7 +417,8 @@ public class LockScreenManager {
         mSlidingPanelLayout.setPanelSlideListener(mSlideOutListener);
         mSlidingPanelLayout.setSliderFadeColor(Color.parseColor("#a0000000"));
         mSlidingPanelLayout.setOverhangVisiable(mNeedPassword);
-        mSlidingPanelLayout.setShadowDrawableRight(mContext.getResources().getDrawable(R.drawable.sliding_panel_layout_shadow));
+        mSlidingPanelLayout.setShadowDrawableRight(mContext.getResources().getDrawable(
+                R.drawable.sliding_panel_layout_shadow));
         mSlidingBehindLayout = (FrameLayout) mEntireView.findViewById(R.id.sliding_behind_layout);
         mSlidingBehindBlurView = (ImageView) mEntireView.findViewById(R.id.sliding_behind_blur);
         mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
@@ -429,6 +432,11 @@ public class LockScreenManager {
 
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
+        if (!ViewConfiguration.get(mContext).hasPermanentMenuKey()) {// 存在虚拟按键
+            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 100));
+        } else {
+            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 80));
+        }
         mTopOverlay = mEntireView.findViewById(R.id.lock_top_overlay);
         mBottomOverlay = mEntireView.findViewById(R.id.lock_bottom_overlay);
         setDrawable();
@@ -459,7 +467,7 @@ public class LockScreenManager {
             mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_two);
             PandoraConfig.newInstance(mContext).saveLockScreenTimes(2);
         }
-    
+
     }
 
     /**
@@ -590,7 +598,7 @@ public class LockScreenManager {
                                 @Override
                                 public void applyOnlinePaper(String filePath) {
                                     if (null != mSliderView && !TextUtils.isEmpty(filePath)) {
-                                        Drawable drawable =  mSliderView.setForgroundFile(filePath);
+                                        Drawable drawable = mSliderView.setForgroundFile(filePath);
                                         if (mNeedPassword) {
                                             doFastBlur(drawable);
                                         }
@@ -647,7 +655,7 @@ public class LockScreenManager {
     }
 
     private void setDrawable() {
-        Drawable bgDrawable= null;
+        Drawable bgDrawable = null;
         mCurTheme = ThemeManager.getCurrentTheme();
         if (mCurTheme.isDefaultTheme()) {
             bgDrawable = mContext.getResources().getDrawable(mCurTheme.getmForegroundResId());
@@ -660,7 +668,7 @@ public class LockScreenManager {
             }
         }
         if (mNeedPassword) {
-            if (null!=bgDrawable) {
+            if (null != bgDrawable) {
                 doFastBlur(bgDrawable);
             }
         }
@@ -940,13 +948,6 @@ public class LockScreenManager {
         AnimatorSet dateSet = new AnimatorSet();
         dateSet.setStartDelay(100);
         dateSet.playTogether(dateAlpha, dateTrans);
-        
-//        ObjectAnimator temperatureAlpha = ObjectAnimator.ofFloat(mTemperature, "alpha", 0, 1);
-//        ObjectAnimator temperatureTrans = ObjectAnimator.ofFloat(mTemperature, "translationY",
-//                DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
-//        AnimatorSet temperatureSet = new AnimatorSet();
-//        temperatureSet.setStartDelay(100);
-//        temperatureSet.playTogether(temperatureAlpha, temperatureTrans);
 
         ObjectAnimator wsAlpha = ObjectAnimator.ofFloat(mWeatherSummary, "alpha", 0, 1);
         ObjectAnimator wsTrans = ObjectAnimator.ofFloat(mWeatherSummary, "translationY",
