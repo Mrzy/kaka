@@ -27,35 +27,10 @@
                 android:layout_height="wrap_content" >
 
                 <RelativeLayout
-                    android:id="@+id/pandora_single_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginTop="8dp" >
-
-                    <ImageButton
-                        android:id="@+id/pandora_box_single_back_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/pandora_single_box_image_selector" />
-
-                    <ImageButton
-                        android:id="@+id/pandora_collect_imgbtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/not_collect_btn" />
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/pandora_single_title"
+                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
                     android:orientation="horizontal" >
 
@@ -64,6 +39,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                          >
 
                         <cn.zmdx.kaka.locker.widget.TypefaceTextView
@@ -116,6 +92,7 @@
                 android:id="@+id/single_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:layout_below="@+id/pandora_locker_title"
                 android:scaleType="centerCrop" />
 

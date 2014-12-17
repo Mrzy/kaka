@@ -287,4 +287,13 @@ public class PandoraLockPatternView extends LinearLayout {
         mPromptTextView.setText(prompt);
     }
 
+    public TextView getPromptTextView() {
+        // TODO Auto-generated method stub
+        return mPromptTextView;
+    }
+    public LockPatternView getLockPatternView(){
+        return mLockPatternView;
+        
+    }
+
 }

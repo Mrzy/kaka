@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -63,6 +64,8 @@ import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
 import cn.zmdx.kaka.locker.widget.DigitalClocks;
+import cn.zmdx.kaka.locker.widget.PandoraLockPatternView;
+import cn.zmdx.kaka.locker.widget.PandoraNumberLockView;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
@@ -178,6 +181,7 @@ public class LockScreenManager {
     }
 
     private boolean mIsNeedNotice = false;
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public void lock() {
         if (mIsLocked || PandoraService.isCalling())
@@ -526,6 +530,22 @@ public class LockScreenManager {
         if (view != null) {
             mSlidingBehindLayout = (FrameLayout) mEntireView
                     .findViewById(R.id.sliding_behind_layout);
+            if (view instanceof PandoraNumberLockView) {
+                ((PandoraNumberLockView) view).getKeyboardView().setAnimation(
+                        AnimationUtils.loadAnimation(mContext, R.anim.gesture_lock_in_from_right));
+                ((PandoraNumberLockView) view).getPromptTextView().setAnimation(
+                        AnimationUtils.loadAnimation(mContext,
+                                R.anim.gesture_lock_in_from_right_title));
+                ((PandoraNumberLockView) view).getDownPasswordMark().setAnimation(
+                        AnimationUtils.loadAnimation(mContext, R.anim.gesture_lock_in_from_right));
+            } else if (view instanceof PandoraLockPatternView) {
+                ((PandoraLockPatternView) view).getPromptTextView().setAnimation(
+                        AnimationUtils.loadAnimation(mContext,
+                                R.anim.gesture_lock_in_from_right_title));
+                ((PandoraLockPatternView) view).getLockPatternView().setAnimation(
+                        AnimationUtils.loadAnimation(mContext, R.anim.gesture_lock_in_from_right));
+            }
+
             mSlidingBehindLayout.addView(view);
             mNeedPassword = true;
         } else {
