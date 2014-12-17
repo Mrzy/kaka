@@ -44,9 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/setting_title_textview_margin_left"
-            android:paddingRight="@dimen/setting_title_textview_margin_left" >
+            android:orientation="vertical" >
         </LinearLayout>
     </LinearLayout>
 

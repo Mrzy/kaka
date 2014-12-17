@@ -1,10 +1,10 @@
 
 package cn.zmdx.kaka.locker.content.favorites;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,7 +19,7 @@ import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 
-public class FavoritesActivity extends Activity {
+public class FavoritesActivity extends FragmentActivity {
 
     private LinearLayout layout;
 
@@ -46,6 +46,7 @@ public class FavoritesActivity extends Activity {
     private void initViewFavorites() {
         layout = (LinearLayout) this.findViewById(R.id.llPandoraPageCards);
         mRootView = this.findViewById(R.id.pandoraPageCards);
+
         PandoraBoxManager manager = PandoraBoxManager.newInstance(this);
         IFoldableBox foldablePage = manager.getFavoriteFoldablePage();
 
