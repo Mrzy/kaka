@@ -86,7 +86,7 @@ public class PandoraUtils {
     public static Bitmap doFastBlur(Context context, int overhangSize, Bitmap bkg, View view) {
         float scaleFactor = 8;
         float radius = 10;
-        int screenWidth = BaseInfoHelper.getWidth(context);
+        int screenWidth = BaseInfoHelper.getRealWidth(context);
         int screenHeight = BaseInfoHelper.getRealHeight(context);
         int width = screenWidth - overhangSize;
         Bitmap overlay = Bitmap.createBitmap((int) (width / scaleFactor),
