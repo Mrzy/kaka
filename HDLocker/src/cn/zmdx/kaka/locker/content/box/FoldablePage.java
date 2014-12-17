@@ -52,7 +52,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     private CardListView mListView;
 
-    private TextView tvEmpty;
+    private TextView mTextViewEmpty;
 
     private ImageButton mImageButtonBack;
 
@@ -67,8 +67,6 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
     private FoldableBoxAdapter mAdapter;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    private int imgButtonCollectClickCount = 0;// 判断点击收藏按钮的次数
 
     public FoldablePage(Context context, List<ServerImageData> cards) {
         mContext = context;
@@ -114,9 +112,9 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         mImageButtonBack.setOnClickListener(this);
         mImageButtonCollect.setOnClickListener(this);
         if (mData == null || mData.size() <= 0) {
-            tvEmpty = (TextView) mContainerView.findViewById(R.id.tvEmpty);
-            tvEmpty.setText("暂无收藏");
-            mListView.setEmptyView(tvEmpty);
+            mTextViewEmpty = (TextView) mContainerView.findViewById(R.id.tvEmpty);
+            mTextViewEmpty.setText(R.string.pandora_favorite_state_nodata);
+            mListView.setEmptyView(mTextViewEmpty);
         }
         return mContainerView;
     }
@@ -289,23 +287,27 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         mContentContainerView.removeAllViews();
         mContentContainerView.addView(contentView, 0);
         mImageButtonCollect.setTag(id);
-        isFavoritedState(id);
+        boolean favoritedState = isFavoritedState(id);
+        setButtonCollectState(favoritedState);
     }
 
     private boolean isFavoritedState(int id) {
-        boolean favorited = manager.isFavorited(String.valueOf(id));
-        if (favorited) {
-            mImageButtonCollect.setBackgroundResource(R.drawable.pandora_card_collected);
-            favorited = true;
-        } else {
-            mImageButtonCollect
-                    .setBackgroundResource(R.drawable.pandora_card_collect_button_selector);
-            favorited = false;
-        }
+        boolean favorited = mFavoritesManager.isFavorited(String.valueOf(id));
         return favorited;
     }
 
-    FavoritesManager manager = new FavoritesManager(mContext);
+    private void setButtonCollectState(boolean favorited) {
+        if (favorited) {
+            mImageButtonCollect.setBackgroundResource(R.drawable.pandora_card_collected);
+        } else {
+            mImageButtonCollect
+                    .setBackgroundResource(R.drawable.pandora_card_collect_button_selector);
+        }
+    }
+
+    FavoritesManager mFavoritesManager = new FavoritesManager(mContext);
+
+    boolean isOperating = false;
 
     @Override
     public void onClick(View v) {
@@ -316,41 +318,15 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                 break;
             // 收藏按钮
             case R.id.toolbar_imgButtonCollect:
+                if (isOperating)return;
+                isOperating = true;
                 int id = (Integer) v.getTag();
                 boolean isFavorited = isFavoritedState(id);
-                ++imgButtonCollectClickCount;
-                judgeFavoriteButtonState(id, isFavorited);
+                boolean result = !isFavorited;
+                ServerImageDataModel.getInstance().markIsFavorited(id, result);
+                setButtonCollectState(result);
+                isOperating = false;
                 break;
-        }
-    }
-
-    private void judgeFavoriteButtonState(int id, boolean isFavorited) {
-        if (isFavorited) {
-            mImageButtonCollect
-                    .setBackgroundResource(R.drawable.pandora_card_collect_button_selector);
-            boolean removeFavorite = manager.removeFavorite(String.valueOf(id));
-            if (removeFavorite) {
-                Toast.makeText(mContext, "取消收藏" + id, Toast.LENGTH_SHORT).show();
-            } else if (removeFavorite && imgButtonCollectClickCount % 2 == 0) {
-                mImageButtonCollect.setBackgroundResource(R.drawable.pandora_card_collected);
-                boolean addFavorite = manager.addFavorite(String.valueOf(id));
-                if (addFavorite) {
-                    Toast.makeText(mContext, "收藏成功" + id, Toast.LENGTH_SHORT).show();
-                }
-            }
-        } else {
-            mImageButtonCollect.setBackgroundResource(R.drawable.pandora_card_collected);
-            boolean addFavorite = manager.addFavorite(String.valueOf(id));
-            if (addFavorite) {
-                Toast.makeText(mContext, "收藏成功" + id, Toast.LENGTH_SHORT).show();
-            } else if (addFavorite && imgButtonCollectClickCount % 2 == 0) {
-                mImageButtonCollect
-                        .setBackgroundResource(R.drawable.pandora_card_collect_button_selector);
-                boolean removeFavorite = manager.removeFavorite(String.valueOf(id));
-                if (removeFavorite) {
-                    Toast.makeText(mContext, "取消收藏" + id, Toast.LENGTH_SHORT).show();
-                }
-            }
         }
     }
 

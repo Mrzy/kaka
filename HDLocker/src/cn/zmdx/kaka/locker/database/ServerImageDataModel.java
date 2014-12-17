@@ -181,18 +181,16 @@ public class ServerImageDataModel {
     }
 
     public synchronized boolean isItFavorited(int id) {
-        Cursor favoritedCards = queryAllFavoritedCards();
-        favoritedCards.moveToFirst();
-        List<ServerImageData> list = new ArrayList<ServerImageData>();
-        PandoraBoxManager boxManager = PandoraBoxManager.newInstance(HDApplication.getContext());
-        List<ServerImageData> cursorToList = boxManager.cursorToList(favoritedCards, list);
-        for (ServerImageData serverImageData : cursorToList) {
-            int aimId = serverImageData.getId();
-            if (aimId == id) {
-                return true;
-            }
-        }
-        return false;
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED
+        }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
+            String.valueOf(id)
+        }, null, null, null);
+        cursor.moveToFirst();
+        int intFavorite = cursor.getInt(cursor.getColumnIndex(TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED));
+        cursor.close();
+        return intFavorite == FAVORITED;
     }
 
     public synchronized boolean deleteById(int id) {
