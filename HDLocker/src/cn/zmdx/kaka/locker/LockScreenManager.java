@@ -433,7 +433,7 @@ public class LockScreenManager {
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
         if (!ViewConfiguration.get(mContext).hasPermanentMenuKey()) {// 存在虚拟按键
-            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 100));
+            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 110));
         } else {
             mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 80));
         }

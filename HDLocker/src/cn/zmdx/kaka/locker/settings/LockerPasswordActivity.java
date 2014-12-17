@@ -180,4 +180,11 @@ public class LockerPasswordActivity extends Activity implements OnClickListener 
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                R.anim.umeng_fb_slide_out_from_right);
+    }
+
 }

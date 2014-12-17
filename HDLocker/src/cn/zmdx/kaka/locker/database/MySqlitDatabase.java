@@ -2,7 +2,6 @@
 package cn.zmdx.kaka.locker.database;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -71,29 +70,13 @@ public class MySqlitDatabase extends SQLiteOpenHelper {
         }
         switch (oldVersion) {
             case 1:
-                boolean checkColumnExists = checkColumnExists(db,
-                        TableStructure.TABLE_NAME_SERVER_IMAGE, "favorited");
-                if (!checkColumnExists) {
-                    String sql = "alter table " + TableStructure.TABLE_NAME_SERVER_IMAGE
-                            + " add column favorited integer";
-                    db.execSQL(sql);
-                }
+                String sql = "alter table " + TableStructure.TABLE_NAME_SERVER_IMAGE
+                        + " add column favorited integer";
+                db.execSQL(sql);
                 break;
 
             default:
                 break;
         }
     }
-
-    private boolean checkColumnExists(SQLiteDatabase db, String tableName, String columnName) {
-        boolean result = false;
-        Cursor cursor = null;
-        String sql = "select * from " + tableName + " where " + columnName + " = ?";
-        cursor = db.rawQuery(sql, null);
-        if (null != cursor) {
-            result = true;
-        }
-        return result;
-    }
-
 }
