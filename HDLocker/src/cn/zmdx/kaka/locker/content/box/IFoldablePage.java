@@ -6,7 +6,7 @@ import java.util.List;
 import android.view.View;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 
-public interface IFoldableBox {
+public interface IFoldablePage {
 
     public int getCategory();
 

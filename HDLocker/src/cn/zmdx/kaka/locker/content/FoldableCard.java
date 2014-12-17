@@ -20,7 +20,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.IDownloadListener;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
-import cn.zmdx.kaka.locker.content.box.IFoldableBox;
+import cn.zmdx.kaka.locker.content.box.IFoldablePage;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -32,7 +32,7 @@ public class FoldableCard extends Card {
 
     private ServerImageData mData;
 
-    private IFoldableBox mBox;
+    private IFoldablePage mBox;
 
     // px
     protected static final int MAX_HEIGHT_IMAGE_VIEW = BaseInfoHelper.dip2px(
@@ -46,7 +46,7 @@ public class FoldableCard extends Card {
         init();
     }
 
-    public FoldableCard(Context context, IFoldableBox box, ServerImageData data) {
+    public FoldableCard(Context context, IFoldablePage box, ServerImageData data) {
         this(context, R.layout.foldable_card_item_layout);
         mData = data;
         mBox = box;

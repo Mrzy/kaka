@@ -43,7 +43,7 @@ import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
-import cn.zmdx.kaka.locker.content.box.IFoldableBox;
+import cn.zmdx.kaka.locker.content.box.IFoldablePage;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
@@ -126,7 +126,7 @@ public class LockScreenManager {
 
     private ILockScreenListener mLockListener = null;
 
-    private IFoldableBox mFoldableBox;
+    private IFoldablePage mFoldablePage;
 
     private boolean isInit = false;
 
@@ -379,9 +379,9 @@ public class LockScreenManager {
 
     private void refreshContent() {
         if (mBoxView != null && mBoxView.getChildCount() > 0) {
-            if (mFoldableBox != null && mFoldableBox instanceof FoldablePage) {
-                FoldablePage page = (FoldablePage) mFoldableBox;
-                if (page.isTodayData()) {
+            if (mFoldablePage != null && mFoldablePage instanceof FoldablePage) {
+                FoldablePage page = (FoldablePage) mFoldablePage;
+                if (page.isDataValidate()) {
                     if (!HDBNetworkState.isWifiNetwork()) {
                         page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_HTML);
                         page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_MULTIIMG);
@@ -391,9 +391,9 @@ public class LockScreenManager {
             }
         }
 
-        mFoldableBox = PandoraBoxManager.newInstance(mContext).getFoldablePage();
+        mFoldablePage = PandoraBoxManager.newInstance(mContext).getFoldablePage();
 
-        View contentView = mFoldableBox.getRenderedView();
+        View contentView = mFoldablePage.getRenderedView();
         if (contentView == null) {
             initDefaultPhoto(false);
             return;
@@ -734,7 +734,7 @@ public class LockScreenManager {
             notifyUnLocked();
         cancelAnimatorIfNeeded();
 
-        mFoldableBox.onFinish();
+        mFoldablePage.onFinish();
         if (mUnLockRunnable != null) {
             mWinManager.removeView(mEntireView);
         } else {

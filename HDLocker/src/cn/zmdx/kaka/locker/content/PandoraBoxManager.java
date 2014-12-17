@@ -15,7 +15,7 @@ import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.FoldableBoxAdapter;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
-import cn.zmdx.kaka.locker.content.box.IFoldableBox;
+import cn.zmdx.kaka.locker.content.box.IFoldablePage;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.favorites.FavoritesManager;
@@ -43,7 +43,7 @@ public class PandoraBoxManager {
         return mPbManager;
     }
 
-    public IFoldableBox getFoldablePage() {
+    public IFoldablePage getFoldablePage() {
         List<ServerImageData> data = getDataFormLocalDB(PandoraPolicy.MIN_COUNT_FOLDABLE_BOX);
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("从本地取出数据条数：" + data.size());
@@ -54,7 +54,7 @@ public class PandoraBoxManager {
         return box;
     }
 
-    public IFoldableBox getFavoriteFoldablePage() {
+    public IFoldablePage getFavoriteFoldablePage() {
         FavoritesManager manager = new FavoritesManager(mContext);
         List<ServerImageData> listData = new ArrayList<ServerImageData>();
         Cursor cursor = manager.getFavoritesInfo();

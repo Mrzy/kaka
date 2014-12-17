@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
@@ -44,7 +43,7 @@ import com.alexvasilkov.foldablelayout.UnfoldableView.OnFoldingListener;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 import com.nineoldandroids.animation.ObjectAnimator;
 
-public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnClickListener,
+public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnClickListener,
         OnRefreshListener {
     private Context mContext;
 
@@ -119,9 +118,18 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         return mContainerView;
     }
 
+    private boolean mGuidePageVisibility = true;
+
+    public void setGuidePageVisibility(boolean visibility) {
+        mGuidePageVisibility = visibility;
+    }
+
     private ObjectAnimator mFingerAnim;
 
     private void createGuidePageIfNeed() {
+        if (!mGuidePageVisibility) {
+            return;
+        }
         if (!PandoraConfig.newInstance(mContext).getFlagDisplayBoxGuide()) {
             final View guideView = mContainerView.findViewById(R.id.card_item_layout_guide_finger);
             guideView.setVisibility(View.VISIBLE);
@@ -208,7 +216,7 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         }
     };
 
-    public boolean isTodayData() {
+    public boolean isDataValidate() {
         if (mData != null && mData.size() > 0) {
             int id = mData.get(0).getId();
             ServerImageData sid = ServerImageDataModel.getInstance().queryById(id);
@@ -283,6 +291,10 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
         mUnfoldableView.foldBack();
     }
 
+    public boolean isFoldBack() {
+        return mUnfoldableView.isUnfolded();
+    }
+
     private void renderDetailView(View contentView, int id) {
         mContentContainerView.removeAllViews();
         mContentContainerView.addView(contentView, 0);
@@ -318,7 +330,8 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
                 break;
             // 收藏按钮
             case R.id.toolbar_imgButtonCollect:
-                if (isOperating)return;
+                if (isOperating)
+                    return;
                 isOperating = true;
                 int id = (Integer) v.getTag();
                 boolean isFavorited = isFavoritedState(id);

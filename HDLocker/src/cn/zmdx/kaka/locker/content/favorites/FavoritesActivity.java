@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
-import cn.zmdx.kaka.locker.content.box.IFoldableBox;
+import cn.zmdx.kaka.locker.content.box.IFoldablePage;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
@@ -25,6 +25,7 @@ public class FavoritesActivity extends FragmentActivity {
 
     private View mRootView;
 
+    private FoldablePage mFoldablePage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,14 +49,24 @@ public class FavoritesActivity extends FragmentActivity {
         mRootView = this.findViewById(R.id.pandoraPageCards);
 
         PandoraBoxManager manager = PandoraBoxManager.newInstance(this);
-        IFoldableBox foldablePage = manager.getFavoriteFoldablePage();
+        IFoldablePage foldablePage = manager.getFavoriteFoldablePage();
 
         View renderedView = foldablePage.getRenderedView();
-        final FoldablePage page = (FoldablePage) foldablePage;
-        page.setSwipeRefreshEnabled(false);
+        mFoldablePage = (FoldablePage) foldablePage;
+        mFoldablePage.setGuidePageVisibility(false);
+        mFoldablePage.setSwipeRefreshEnabled(false);
         if (null != renderedView) {
             layout.addView(renderedView);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mFoldablePage != null && mFoldablePage.isFoldBack()) {
+            mFoldablePage.foldBack();
+            return;
+        }
+        super.onBackPressed();
     }
 
     private void initWallpaper() {
