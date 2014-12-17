@@ -72,7 +72,7 @@ public class ServerImageDataModel {
                 } else {
                     sqLiteStatement.bindLong(13, bd.isImageDownloaded());
                 }
-                sqLiteStatement.bindLong(12, FAVORITED);
+                sqLiteStatement.bindLong(12, UNFAVORITED);
                 sqLiteStatement.executeInsert();
             }
             mysql.setTransactionSuccessful();
