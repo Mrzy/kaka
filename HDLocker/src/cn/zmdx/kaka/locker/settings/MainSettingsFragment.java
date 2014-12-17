@@ -277,6 +277,8 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             case R.id.pandora_favorite:
                 Intent intent = new Intent(getActivity(), FavoritesActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
                 break;
             default:
                 break;
