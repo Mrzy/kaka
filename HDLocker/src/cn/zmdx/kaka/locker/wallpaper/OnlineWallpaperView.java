@@ -414,7 +414,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
                         @Override
                         public void onResponse(byte[] data) {
-                            mPreviewBitmap = doParse(data, BaseInfoHelper.getWidth(mContext),
+                            mPreviewBitmap = doParse(data, BaseInfoHelper.getRealWidth(mContext),
                                     BaseInfoHelper.getRealHeight(mContext));
                             if (null != mPreviewBitmap) {
                                 mCurrentItem = serverOnlineWallpaper;

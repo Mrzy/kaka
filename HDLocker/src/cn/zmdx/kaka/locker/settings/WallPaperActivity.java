@@ -298,7 +298,7 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     private void gotoCropActivity(Uri uri) {
         int mAspectRatioX = 0;
         int mAspectRatioY = 0;
-        int width = BaseInfoHelper.getWidth(this);
+        int width = BaseInfoHelper.getRealWidth(this);
         int height = Integer.parseInt(BaseInfoHelper.getHeight(this));
         if (width >= height) {
             mAspectRatioX = 100;

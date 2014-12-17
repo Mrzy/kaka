@@ -77,7 +77,7 @@ public class SingleImageBox implements IPandoraBox, View.OnClickListener {
         }
         ViewGroup.LayoutParams lp = iv.getLayoutParams();
         lp.width = LayoutParams.MATCH_PARENT;
-        int screenWidth = BaseInfoHelper.getWidth(mContext);
+        int screenWidth = BaseInfoHelper.getRealWidth(mContext);
         try {
             float rate = (float) screenWidth / (float) bmpWidth;
             lp.height = (int) (rate * bmpHeight);

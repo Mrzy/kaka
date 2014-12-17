@@ -97,8 +97,8 @@ public class FoldableCard extends Card {
         TextView titleView = null;
         imageView = (ImageView) view.findViewById(R.id.card_item_large_imageview);
         titleView = (TextView) view.findViewById(R.id.card_item_large_title);
-        opt.inSampleSize = ImageUtils.calculateInSampleSize(opt, BaseInfoHelper.getWidth(mContext),
-                BaseInfoHelper.getWidth(mContext));
+        opt.inSampleSize = ImageUtils.calculateInSampleSize(opt, BaseInfoHelper.getRealWidth(mContext),
+                BaseInfoHelper.getRealWidth(mContext));
         setImageViewSize(imageView, opt);
 
         titleView.setText(mData.getTitle());
@@ -156,7 +156,7 @@ public class FoldableCard extends Card {
         }
         ViewGroup.LayoutParams lp = iv.getLayoutParams();
         lp.width = LayoutParams.MATCH_PARENT;
-        int screenWidth = BaseInfoHelper.getWidth(mContext);
+        int screenWidth = BaseInfoHelper.getRealWidth(mContext);
         try {
             float rate = (float) screenWidth / (float) bmpWidth;
             lp.height = (int) (rate * bmpHeight);

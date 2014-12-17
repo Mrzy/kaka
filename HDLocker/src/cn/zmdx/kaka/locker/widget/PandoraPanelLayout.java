@@ -510,7 +510,7 @@ public class PandoraPanelLayout extends ViewGroup {
     private void cutOffForegroundDrawable() {
         if (mIsForeBackgroundCutOff || mForegroundDrawable == null)
             return;
-        int width = BaseInfoHelper.getWidth(getContext());
+        int width = BaseInfoHelper.getRealWidth(getContext());
         int realHeight = BaseInfoHelper.getRealHeight(getContext());
         Bitmap srcBmp = ImageUtils.drawable2Bitmap(mForegroundDrawable);
         srcBmp = ImageUtils.getResizedBitmap(srcBmp, width, realHeight);
@@ -668,7 +668,7 @@ public class PandoraPanelLayout extends ViewGroup {
      * @param fileName
      */
     public void setForgroundFile(String fileName) {
-        int screenWidth = BaseInfoHelper.getWidth(mContext);
+        int screenWidth = BaseInfoHelper.getRealWidth(mContext);
         int screenHeight = BaseInfoHelper.getRealHeight(mContext);
         Bitmap bitmap = ImageUtils.getBitmapFromFile(fileName, screenWidth, screenHeight);
         setForegroundDrawable(ImageUtils.bitmap2Drawable(mContext, bitmap));
