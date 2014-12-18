@@ -457,10 +457,10 @@ public class LockScreenManager {
             }
         });
         if (lockScreenTime == 0) {
-            mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_one);
+            mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_two);
             PandoraConfig.newInstance(mContext).saveLockScreenTimes(1);
         } else if (lockScreenTime == 1) {
-            mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_two);
+            mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_one);
             PandoraConfig.newInstance(mContext).saveLockScreenTimes(2);
         }
 
