@@ -26,6 +26,7 @@ public class FavoritesActivity extends FragmentActivity {
     private View mRootView;
 
     private FoldablePage mFoldablePage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,7 @@ public class FavoritesActivity extends FragmentActivity {
         mFoldablePage = (FoldablePage) foldablePage;
         mFoldablePage.setGuidePageVisibility(false);
         mFoldablePage.setSwipeRefreshEnabled(false);
+        mFoldablePage.setEmptyTextView(R.string.pandora_favorite_state_nodata);
         if (null != renderedView) {
             layout.addView(renderedView);
         }

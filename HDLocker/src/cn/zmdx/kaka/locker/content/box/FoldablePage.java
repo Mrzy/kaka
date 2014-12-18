@@ -110,12 +110,20 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
                 .findViewById(R.id.toolbar_imgButtonCollect);
         mImageButtonBack.setOnClickListener(this);
         mImageButtonCollect.setOnClickListener(this);
+        mTextViewEmpty = (TextView) mContainerView.findViewById(R.id.tvEmpty);
+        return mContainerView;
+    }
+
+    /**
+     * 设置TextViewEmpty的内容
+     * 
+     * @param msgStringResId
+     */
+    public void setEmptyTextView(int msgStringResId) {
         if (mData == null || mData.size() <= 0) {
-            mTextViewEmpty = (TextView) mContainerView.findViewById(R.id.tvEmpty);
-            mTextViewEmpty.setText(R.string.pandora_favorite_state_nodata);
+            mTextViewEmpty.setText(msgStringResId);
             mListView.setEmptyView(mTextViewEmpty);
         }
-        return mContainerView;
     }
 
     private boolean mGuidePageVisibility = true;
