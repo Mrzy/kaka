@@ -82,7 +82,7 @@ public class OnlineWallpaperView extends LinearLayout {
     private TypefaceTextView mWeatherView;
 
     private TypefaceTextView mDateView;
-    
+
     private TypefaceTextView mTemperature;
 
     private IOnlineWallpaper mListener;
@@ -205,10 +205,11 @@ public class OnlineWallpaperView extends LinearLayout {
             }
             if (!PandoraConfig.newInstance(mContext).isMobileNetwork()
                     && !HDBNetworkState.isWifiNetwork()) {
-                return;
+                pullWallpaperFromSP(lastPullJson);
+            } else {
+                mGVPb.setVisibility(View.VISIBLE);
+                pullWallpaperFromServer(lastPullJson);
             }
-            mGVPb.setVisibility(View.VISIBLE);
-            pullWallpaperFromServer(lastPullJson);
         } else {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("未满足获取数据条件，加载本地缓存数据");
@@ -235,14 +236,15 @@ public class OnlineWallpaperView extends LinearLayout {
                 }
                 if (!TextUtils.isEmpty(lastPullJson)) {
                     try {
-                        ArrayList<ServerOnlineWallpaper> spJsonlist =  ServerOnlineWallpaperManager.parseJson(new JSONObject(lastPullJson));
+                        ArrayList<ServerOnlineWallpaper> spJsonlist = ServerOnlineWallpaperManager.parseJson(new JSONObject(
+                                lastPullJson));
                         for (int i = 0; i < list.size(); i++) {
                             String imageUrl = list.get(i).getImageURL();
                             for (int j = 0; j < spJsonlist.size(); j++) {
-                                String  spImageUrl = spJsonlist.get(j).getImageURL();
+                                String spImageUrl = spJsonlist.get(j).getImageURL();
                                 if (!imageUrl.equals(spImageUrl)) {
                                     list.get(i).setNewData(true);
-                                }else {
+                                } else {
                                     list.get(i).setNewData(false);
                                     break;
                                 }
@@ -251,12 +253,12 @@ public class OnlineWallpaperView extends LinearLayout {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }else {
+                } else {
                     for (int i = 0; i < list.size(); i++) {
                         list.get(i).setNewData(true);
                     }
                 }
-                
+
                 if (null == mWallpaperAdpter) {
                     mWallpaperAdpter = new WallpaperAdpter();
                     mGridView.setAdapter(mWallpaperAdpter);
@@ -336,7 +338,7 @@ public class OnlineWallpaperView extends LinearLayout {
             private ImageView mImageViewRl;
 
             private NetworkImageView mImageView;
-            
+
             private ImageView mNewView;
 
         }
@@ -372,7 +374,7 @@ public class OnlineWallpaperView extends LinearLayout {
             } else {
                 viewHolder.mNewView.setVisibility(View.GONE);
             }
-            
+
             viewHolder.mImageView.setImageUrl(item.getThumbURL(),
                     ImageLoaderManager.getImageLoader());
             viewHolder.mImageView.setFadeInImage(true);
@@ -433,7 +435,9 @@ public class OnlineWallpaperView extends LinearLayout {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             mPreviewProgressBar.setVisibility(View.GONE);
-                            mListener.applyOnlinePaper("");
+                            String promptString = mContext.getResources().getString(
+                                    R.string.network_error);
+                            showTextPrompt(true, promptString);
                         }
                     });
             RequestManager.getRequestQueue().add(mRequest);
