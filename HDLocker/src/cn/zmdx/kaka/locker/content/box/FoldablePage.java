@@ -104,17 +104,18 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
         mListTouchInterceptor = mContainerView.findViewById(R.id.touch_interceptor_view);
         mListTouchInterceptor.setClickable(false);
         mListView.setAdapter(mAdapter);
+        if (mAdapter.getCount() <= 0) {
+            fadeInEmptyView();
+        }
         createGuidePageIfNeed();
         mImageButtonBack = (ImageButton) mContainerView.findViewById(R.id.toolbar_imgButtonBack);
         mImageButtonCollect = (ImageButton) mContainerView
                 .findViewById(R.id.toolbar_imgButtonCollect);
         mImageButtonBack.setOnClickListener(this);
         mImageButtonCollect.setOnClickListener(this);
-        if (mData == null || mData.size() <= 0) {
-            mTextViewEmpty = (TextView) mContainerView.findViewById(R.id.tvEmpty);
-            mTextViewEmpty.setText(R.string.pandora_favorite_state_nodata);
-            mListView.setEmptyView(mTextViewEmpty);
-        }
+        mTextViewEmpty = (TextView) mContainerView.findViewById(R.id.tvEmpty);
+        mTextViewEmpty.setText(R.string.pandora_lock_screen_card_empty_text);
+        mListView.setEmptyView(mTextViewEmpty);
         return mContainerView;
     }
 
@@ -141,6 +142,21 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
                 }
             });
         }
+    }
+
+    /**
+     * 当卡片列表为空时在屏幕中间显示此文字
+     * 
+     * @param emptyStr
+     */
+    public void setEmptyText(String emptyStr) {
+        if (TextUtils.isEmpty(emptyStr)) {
+            mTextViewEmpty.setText(emptyStr);
+        }
+    }
+
+    public void setEmptyText(int resId) {
+        mTextViewEmpty.setText(resId);
     }
 
     public void setSwipeRefreshEnabled(boolean enabled) {
