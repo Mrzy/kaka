@@ -78,7 +78,6 @@ public class PandoraBoxManager {
     public List<ServerImageData> cursorToList(Cursor cursor, List<ServerImageData> list) {
         if (null != cursor) {
             try {
-                cursor.moveToFirst();
                 while (cursor.moveToNext()) {
                     ServerImageData imgData = new ServerImageData();
                     imgData.setId(cursor.getInt(0));

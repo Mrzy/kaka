@@ -26,6 +26,7 @@ public class FavoritesActivity extends FragmentActivity {
     private View mRootView;
 
     private FoldablePage mFoldablePage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +51,9 @@ public class FavoritesActivity extends FragmentActivity {
 
         PandoraBoxManager manager = PandoraBoxManager.newInstance(this);
         IFoldablePage foldablePage = manager.getFavoriteFoldablePage();
-
-        View renderedView = foldablePage.getRenderedView();
         mFoldablePage = (FoldablePage) foldablePage;
         mFoldablePage.setGuidePageVisibility(false);
+        View renderedView = foldablePage.getRenderedView();
         mFoldablePage.setSwipeRefreshEnabled(false);
         if (null != renderedView) {
             layout.addView(renderedView);
