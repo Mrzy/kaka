@@ -174,7 +174,6 @@ public class LockerPasswordActivity extends Activity implements OnClickListener 
                 setLockTypeNumber();
                 setTypeViewState(KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK);
                 break;
-
             default:
                 break;
         }

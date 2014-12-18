@@ -19,20 +19,18 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Vibrator;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.View.OnTouchListener;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -65,8 +63,6 @@ import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
 import cn.zmdx.kaka.locker.widget.DigitalClocks;
-import cn.zmdx.kaka.locker.widget.PandoraLockPatternView;
-import cn.zmdx.kaka.locker.widget.PandoraNumberLockView;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
@@ -479,6 +475,11 @@ public class LockScreenManager {
         public void onPanelSlide(View panel, float slideOffset) {
             if (!mNeedPassword) {
                 mSlidingBehindLayout.setAlpha(1.0f - slideOffset);
+            } else {
+                View passView = mSlidingBehindLayout.findViewWithTag("passwordView");
+                if (passView != null) {
+                    passView.setTranslationX((1.0f - slideOffset) * passView.getMeasuredWidth());
+                }
             }
         }
 
@@ -535,22 +536,8 @@ public class LockScreenManager {
         if (view != null) {
             mSlidingBehindLayout = (FrameLayout) mEntireView
                     .findViewById(R.id.sliding_behind_layout);
-            if (view instanceof PandoraNumberLockView) {
-                ((PandoraNumberLockView) view).getKeyboardView().setAnimation(
-                        AnimationUtils.loadAnimation(mContext, R.anim.gesture_lock_in_from_right));
-                ((PandoraNumberLockView) view).getPromptTextView().setAnimation(
-                        AnimationUtils.loadAnimation(mContext,
-                                R.anim.gesture_lock_in_from_right_title));
-                ((PandoraNumberLockView) view).getDownPasswordMark().setAnimation(
-                        AnimationUtils.loadAnimation(mContext, R.anim.gesture_lock_in_from_right));
-            } else if (view instanceof PandoraLockPatternView) {
-                ((PandoraLockPatternView) view).getPromptTextView().setAnimation(
-                        AnimationUtils.loadAnimation(mContext,
-                                R.anim.gesture_lock_in_from_right_title));
-                ((PandoraLockPatternView) view).getLockPatternView().setAnimation(
-                        AnimationUtils.loadAnimation(mContext, R.anim.gesture_lock_in_from_right));
-            }
 
+            view.setTag("passwordView");
             mSlidingBehindLayout.addView(view);
             mNeedPassword = true;
         } else {
