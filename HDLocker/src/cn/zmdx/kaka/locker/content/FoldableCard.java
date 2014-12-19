@@ -61,16 +61,13 @@ public class FoldableCard extends Card {
                 if (mBox instanceof FoldablePage) {
                     FoldablePage box = (FoldablePage) mBox;
                     box.openDetails(view.findViewById(R.id.card_item_layout_large), mData);
-                    String id = String.valueOf(mData.getId());
-                    staticscalCloudId(id);
+                    if (null != mData) {
+                        String cloudId = mData.getCloudId();
+                        UmengCustomEventManager.statisticalSeeContentDetails(cloudId);
+                    }
                 }
             }
         });
-    }
-
-    public void staticscalCloudId(String id) {
-        String queryCloudId = ServerImageDataModel.getInstance().queryCloudId(String.valueOf(id));
-        UmengCustomEventManager.statisticalSeeContentDetails(queryCloudId);
     }
 
     public void doSwipeOut(boolean isRight, int duration, int delay, AnimatorListener listener) {

@@ -4,7 +4,6 @@ package cn.zmdx.kaka.locker.content.favorites;
 import android.content.Context;
 import android.database.Cursor;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
-import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 
 public class FavoritesManager implements IFavoritesManager {
 
@@ -39,11 +38,5 @@ public class FavoritesManager implements IFavoritesManager {
         boolean itFavorited = ServerImageDataModel.getInstance().isItFavorited(
                 Integer.parseInt(infoId));
         return itFavorited;
-    }
-
-    public void statiscalFavoritedCard(int id) {
-        String idStr = String.valueOf(id);
-        String queryCloudId = ServerImageDataModel.getInstance().queryCloudId(idStr);
-        UmengCustomEventManager.statisticalCardIsFavorited(queryCloudId);
     }
 }

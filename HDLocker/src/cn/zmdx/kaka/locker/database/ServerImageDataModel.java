@@ -231,25 +231,6 @@ public class ServerImageDataModel {
         return cursor;
     }
 
-    public String queryCloudId(String id) {
-        SQLiteDatabase sqLiteDatabase = mMySqlitDatabase.getReadableDatabase();
-        ServerImageData mServerImageData = new ServerImageData();
-        Cursor mCursor = sqLiteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
-            TableStructure.SERVER_IMAGE_CLOUD_ID
-        }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
-            id
-        }, null, null, null);
-        if (null != mCursor) {
-            while (mCursor.moveToNext()) {
-                int columnIndex = mCursor.getColumnIndex(TableStructure.SERVER_IMAGE_CLOUD_ID);
-                mServerImageData.setCloudId(mCursor.getString(columnIndex));
-                cloudId = mServerImageData.getCloudId();
-            }
-            mCursor.close();
-        }
-        return cloudId;
-    }
-
     public List<ServerImageData> queryWithoutImg(int count) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         List<ServerImageData> result = new ArrayList<ServerImageData>();
@@ -426,7 +407,8 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
-                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
+                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE,
+                TableStructure.SERVER_IMAGE_CLOUD_ID
         }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
             String.valueOf(id)
         }, null, null, null, null);
@@ -440,6 +422,7 @@ public class ServerImageDataModel {
                 data.setTitle(cursor.getString(3));
                 data.setDataType(cursor.getString(4));
                 data.setCollectWebsite(cursor.getString(5));
+                data.setCloudId(cursor.getString(6));
             }
         } catch (Exception e) {
             e.printStackTrace();
