@@ -1,7 +1,11 @@
 
 package cn.zmdx.kaka.locker.database;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -239,8 +243,8 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
 
         }, TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
-                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
-                ServerDataMapping.S_DATATYPE_HTML, String.valueOf(MySqlitDatabase.DOWNLOAD_FALSE)
+                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and " + TableStructure.SERVER_IMAGE_READED + "=?", new String[] {
+                ServerDataMapping.S_DATATYPE_HTML, String.valueOf(MySqlitDatabase.DOWNLOAD_FALSE), String.valueOf(ServerImageDataModel.UN_READ)
         }, null, null, null, String.valueOf(count));
 
         try {
@@ -449,5 +453,39 @@ public class ServerImageDataModel {
             HDBLOG.logD("删除serverImageData表中的数据条数为：" + result);
         }
         return urls;
+    }
+
+    /**
+     * 查询出今日零点之前的除去收藏的数据
+     * @return List<String> 集合里装的时图片的url
+     */
+    public List<String> queryOldDataExceptFavorited() {
+        long yesterday = getYesterday();
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        List<String> urls = new ArrayList<String>();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+            TableStructure.SERVER_IMAGE_URL
+        }, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED + "=? and "
+                + TableStructure.SERVER_IMAGE_COLLECT_TIME + "<?", new String[] {
+                String.valueOf(MySqlitDatabase.FAVORITE_FALSE), String.valueOf(yesterday)
+        }, null, null, null);
+        while (cursor.moveToNext()) {
+            urls.add(cursor.getString(0));
+        }
+        cursor.close();
+        return urls;
+    }
+
+    private long getYesterday() {
+        Calendar cal = Calendar.getInstance();// 使用日历类
+        int year = cal.get(Calendar.YEAR);// 得到年
+        int month = cal.get(Calendar.MONTH) + 1;// 得到月，因为从0开始的，所以要加1
+        int day = cal.get(Calendar.DAY_OF_MONTH);// 得到天
+        SimpleDateFormat myFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return myFormatter.parse(year + "-" + month + "-" + day).getTime();
+        } catch (ParseException e) {
+        }
+        return 0;
     }
 }

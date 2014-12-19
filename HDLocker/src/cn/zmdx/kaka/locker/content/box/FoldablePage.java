@@ -12,7 +12,6 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
@@ -50,8 +48,6 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
     private List<ServerImageData> mData;
 
     private CardListView mListView;
-
-    private TextView mTextViewEmpty;
 
     private ImageButton mImageButtonBack;
 
@@ -85,6 +81,9 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
 
     @Override
     public View getRenderedView() {
+        if (mAdapter.getCount() <= 0) {
+            return null;
+        }
         mContainerView = LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_flodable_box_layout, null);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mContainerView
@@ -104,18 +103,12 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
         mListTouchInterceptor = mContainerView.findViewById(R.id.touch_interceptor_view);
         mListTouchInterceptor.setClickable(false);
         mListView.setAdapter(mAdapter);
-        if (mAdapter.getCount() <= 0) {
-            fadeInEmptyView();
-        }
-        createGuidePageIfNeed();
         mImageButtonBack = (ImageButton) mContainerView.findViewById(R.id.toolbar_imgButtonBack);
         mImageButtonCollect = (ImageButton) mContainerView
                 .findViewById(R.id.toolbar_imgButtonCollect);
         mImageButtonBack.setOnClickListener(this);
         mImageButtonCollect.setOnClickListener(this);
-        mTextViewEmpty = (TextView) mContainerView.findViewById(R.id.tvEmpty);
-        mTextViewEmpty.setText(R.string.pandora_lock_screen_card_empty_text);
-        mListView.setEmptyView(mTextViewEmpty);
+        createGuidePageIfNeed();
         return mContainerView;
     }
 
@@ -142,21 +135,6 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
                 }
             });
         }
-    }
-
-    /**
-     * 当卡片列表为空时在屏幕中间显示此文字
-     * 
-     * @param emptyStr
-     */
-    public void setEmptyText(String emptyStr) {
-        if (TextUtils.isEmpty(emptyStr)) {
-            mTextViewEmpty.setText(emptyStr);
-        }
-    }
-
-    public void setEmptyText(int resId) {
-        mTextViewEmpty.setText(resId);
     }
 
     public void setSwipeRefreshEnabled(boolean enabled) {
@@ -195,14 +173,7 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
     }
 
     public void setAdapter(FoldableBoxAdapter adapter) {
-        if (mAdapter != null) {
-            try {
-                mAdapter.unregisterDataSetObserver(mObserver);
-            } catch (Exception e) {
-            }
-        }
         mAdapter = adapter;
-        mAdapter.registerDataSetObserver(mObserver);
     }
 
     public CardArrayAdapter getAdapter() {
@@ -212,7 +183,6 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
     @Override
     public void onFinish() {
         try {
-            mAdapter.unregisterDataSetObserver(mObserver);
             LockScreenManager.getInstance().unRegistBackPressedListener(mBackPressedListener);
         } catch (Exception e) {
         }
@@ -240,15 +210,6 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
         }
         return true;
     }
-
-    private DataSetObserver mObserver = new DataSetObserver() {
-        public void onChanged() {
-            int count = mAdapter.getCount();
-            if (count == 0) {
-                fadeInEmptyView();
-            }
-        };
-    };
 
     private void fadeInEmptyView() {
         IPandoraBox box = PandoraBoxManager.newInstance(mContext).getDefaultBox();
@@ -308,6 +269,9 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
     }
 
     public boolean isFoldBack() {
+        if (mUnfoldableView == null) {
+            return false;
+        }
         return mUnfoldableView.isUnfolded();
     }
 

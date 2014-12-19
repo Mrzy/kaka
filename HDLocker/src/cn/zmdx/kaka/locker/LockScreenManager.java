@@ -508,8 +508,7 @@ public class LockScreenManager {
                 mBoxView.addView(defaultView);
             }
         } else {
-            View defaultView = box.getRenderedView();
-            mBoxView.addView(defaultView);
+            mBoxView.addView(box.getRenderedView());
         }
     }
 

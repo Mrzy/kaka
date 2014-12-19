@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
@@ -55,9 +56,12 @@ public class FavoritesActivity extends FragmentActivity {
         mFoldablePage.setGuidePageVisibility(false);
         View renderedView = foldablePage.getRenderedView();
         mFoldablePage.setSwipeRefreshEnabled(false);
-        mFoldablePage.setEmptyText(R.string.pandora_favorite_state_nodata);
         if (null != renderedView) {
             layout.addView(renderedView);
+        } else {
+            TextView tv = (TextView) layout.findViewById(R.id.emptyView);
+            tv.setText(R.string.pandora_favorite_state_nodata);
+            tv.setVisibility(View.VISIBLE);
         }
     }
 
@@ -88,5 +92,10 @@ public class FavoritesActivity extends FragmentActivity {
                         }
                     });
         }
+    }
+    @Override
+    protected void onDestroy() {
+        mFoldablePage.onFinish();
+        super.onDestroy();
     }
 }

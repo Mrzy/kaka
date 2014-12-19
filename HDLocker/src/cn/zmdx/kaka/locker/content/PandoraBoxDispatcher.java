@@ -1,19 +1,15 @@
 
 package cn.zmdx.kaka.locker.content;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import android.database.Cursor;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
-import cn.zmdx.kaka.locker.content.favorites.FavoritesManager;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
-import cn.zmdx.kaka.locker.database.TableStructure;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -87,7 +83,7 @@ public class PandoraBoxDispatcher extends Handler {
                 }
 
                 //删除本地数据库中除了已经收藏的新闻的数据
-                List<String> delUrls = ServerImageDataModel.getInstance().deleteExceptFavorited();
+                List<String> delUrls = ServerImageDataModel.getInstance().queryOldDataExceptFavorited();
                 // 将今天的数据保存到本地数据库
                 ServerImageData.saveToDatabase(oriDataList);
                 deleteLocalImage(delUrls);
@@ -113,12 +109,6 @@ public class PandoraBoxDispatcher extends Handler {
             mLastSyncDataTime = curTime;
         }
     }
-
-//    private boolean checkFirstPullToday() {
-//        String date = mConfig.getTodayPullOriginalData();
-//        String currentDate = BaseInfoHelper.getCurrentDate();
-//        return !date.equals(currentDate);
-//    }
 
     private boolean checkOriginalDataPullable() {
         long lastTime = mConfig.getLastTimePullOriginalData();
@@ -172,10 +162,8 @@ public class PandoraBoxDispatcher extends Handler {
         if (count <= 0) {
             return;
         }
-        List<ServerImageData> list = new ArrayList<ServerImageData>();
         List<ServerImageData> tmpList = ServerImageDataModel.getInstance().queryWithoutImg(count);
-        list.addAll(tmpList);
-        ServerImageDataManager.getInstance().batchDownloadServerImage(list);
+        ServerImageDataManager.getInstance().batchDownloadServerImage(tmpList);
     }
 
     private void processPullOriginalData() {
