@@ -39,5 +39,4 @@ public class FavoritesManager implements IFavoritesManager {
                 Integer.parseInt(infoId));
         return itFavorited;
     }
-
 }

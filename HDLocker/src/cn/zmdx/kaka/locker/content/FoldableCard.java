@@ -61,7 +61,10 @@ public class FoldableCard extends Card {
                 if (mBox instanceof FoldablePage) {
                     FoldablePage box = (FoldablePage) mBox;
                     box.openDetails(view.findViewById(R.id.card_item_layout_large), mData);
-                    UmengCustomEventManager.statisticalSeeContentDetails();
+                    if (null != mData) {
+                        String cloudId = mData.getCloudId();
+                        UmengCustomEventManager.statisticalSeeContentDetails(cloudId);
+                    }
                 }
             }
         });
@@ -172,8 +175,8 @@ public class FoldableCard extends Card {
         Options opt = new Options();
         opt.inJustDecodeBounds = true;
         DiskImageHelper.getBitmapByUrl(url, opt);
-        opt.inSampleSize = ImageUtils.calculateInSampleSize(opt, BaseInfoHelper.getRealWidth(mContext),
-                BaseInfoHelper.getRealWidth(mContext));
+        opt.inSampleSize = ImageUtils.calculateInSampleSize(opt,
+                BaseInfoHelper.getRealWidth(mContext), BaseInfoHelper.getRealWidth(mContext));
 
         int bmpWidth = 0;
         int bmpHeight = 0;

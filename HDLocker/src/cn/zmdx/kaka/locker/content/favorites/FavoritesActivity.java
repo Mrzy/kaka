@@ -56,6 +56,7 @@ public class FavoritesActivity extends FragmentActivity {
         mFoldablePage.setGuidePageVisibility(false);
         View renderedView = foldablePage.getRenderedView();
         mFoldablePage.setSwipeRefreshEnabled(false);
+        mFoldablePage.setEmptyTextView(R.string.pandora_favorite_state_nodata);
         if (null != renderedView) {
             layout.addView(renderedView);
         } else {

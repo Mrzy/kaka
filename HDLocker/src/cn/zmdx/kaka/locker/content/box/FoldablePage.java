@@ -110,6 +110,7 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
         mImageButtonCollect.setOnClickListener(this);
         createGuidePageIfNeed();
         return mContainerView;
+
     }
 
     private boolean mGuidePageVisibility = true;
@@ -316,7 +317,13 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
                 int id = (Integer) v.getTag();
                 boolean isFavorited = isFavoritedState(id);
                 boolean result = !isFavorited;
-                ServerImageDataModel.getInstance().markIsFavorited(id, result);
+                ServerImageDataModel mServerImageDataModel = ServerImageDataModel.getInstance();
+                boolean markIsFavorited = mServerImageDataModel.markIsFavorited(id, result);
+                ServerImageData mServerImageData = mServerImageDataModel.queryById(id);
+                String cloudId = mServerImageData.getCloudId();
+                if (markIsFavorited) {
+                    UmengCustomEventManager.statisticalCardIsFavorited(cloudId);
+                }
                 setButtonCollectState(result);
                 isOperating = false;
                 break;
