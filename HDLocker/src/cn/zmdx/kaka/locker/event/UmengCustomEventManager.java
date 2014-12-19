@@ -54,12 +54,31 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_SEE_CONTENT_DETAILS = "seeContentDetails";// 查看新闻条目的详情
 
+    public static final String EVENT_CARD_IS_FAVORITED = "cardIsFavorited";// 卡片被收藏
+
+
+    /**
+     * 统计哪张卡片被收藏
+     * 
+     * @param mCloudId
+     */
+    public static void statisticalCardIsFavorited(String mCloudId) {
+        if (null != mCloudId) {
+            MobclickAgent.onEvent(HDApplication.getContext(),
+                    UmengCustomEventManager.EVENT_CARD_IS_FAVORITED, mCloudId);
+        }
+    }
+
     /**
      * 统计查看新闻条目的详情
+     * 
+     * @param mCloudId
      */
-    public static void statisticalSeeContentDetails() {
-        MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_SEE_CONTENT_DETAILS);
+    public static void statisticalSeeContentDetails(String mCloudId) {
+        if (null != mCloudId) {
+            MobclickAgent.onEvent(HDApplication.getContext(),
+                    UmengCustomEventManager.EVENT_SEE_CONTENT_DETAILS, mCloudId);
+        }
     }
 
     /**

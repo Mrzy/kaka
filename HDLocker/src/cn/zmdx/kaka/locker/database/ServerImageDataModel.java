@@ -1,7 +1,11 @@
 
 package cn.zmdx.kaka.locker.database;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -20,6 +24,10 @@ public class ServerImageDataModel {
     public static final String READ = "read";
 
     public static final String UN_READ = "unread";
+
+    public static final int FAVORITED = 1;
+
+    public static final int UNFAVORITED = 0;
 
     private MySqlitDatabase mMySqlitDatabase;
 
@@ -47,8 +55,9 @@ public class ServerImageDataModel {
         SQLiteDatabase mysql = mMySqlitDatabase.getWritableDatabase();
         try {
             mysql.beginTransaction();
-            SQLiteStatement sqLiteStatement = mysql.compileStatement("replace INTO "
-                    + TableStructure.TABLE_NAME_SERVER_IMAGE + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+            SQLiteStatement sqLiteStatement = mysql
+                    .compileStatement("replace INTO " + TableStructure.TABLE_NAME_SERVER_IMAGE
+                            + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
             for (ServerImageData bd : list) {
                 sqLiteStatement.clearBindings();
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_TWO, bd.getCloudId());
@@ -62,11 +71,11 @@ public class ServerImageDataModel {
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_TEN, bd.getReleaseTime());
                 sqLiteStatement.bindString(MySqlitDatabase.INDEX_ELEVEN, bd.getCollectWebsite());
                 if (bd.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML)) {// 如果类型为html，没有图片，默认情况下，是否已下载图片字段为true
-                    sqLiteStatement.bindLong(MySqlitDatabase.INDEX_TWELVE,
-                            MySqlitDatabase.DOWNLOAD_TRUE);
+                    sqLiteStatement.bindLong(13, MySqlitDatabase.DOWNLOAD_TRUE);
                 } else {
-                    sqLiteStatement.bindLong(MySqlitDatabase.INDEX_TWELVE, bd.isImageDownloaded());
+                    sqLiteStatement.bindLong(13, bd.isImageDownloaded());
                 }
+                sqLiteStatement.bindLong(12, UNFAVORITED);
                 sqLiteStatement.executeInsert();
             }
             mysql.setTransactionSuccessful();
@@ -162,6 +171,32 @@ public class ServerImageDataModel {
         return count != 0;
     }
 
+    public synchronized boolean markIsFavorited(int id, boolean isFavorited) {
+        SQLiteDatabase sqLiteDatabase = mMySqlitDatabase.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED, isFavorited ? FAVORITED
+                : UNFAVORITED);
+        int favorite = sqLiteDatabase.update(TableStructure.TABLE_NAME_SERVER_IMAGE, cv,
+                TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
+                    String.valueOf(id)
+                });
+        return favorite != 0;
+    }
+
+    public synchronized boolean isItFavorited(int id) {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED
+        }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
+            String.valueOf(id)
+        }, null, null, null);
+        cursor.moveToFirst();
+        int intFavorite = cursor.getInt(cursor
+                .getColumnIndex(TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED));
+        cursor.close();
+        return intFavorite == FAVORITED;
+    }
+
     public synchronized boolean deleteById(int id) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
         int count = sqliteDatabase.delete(TableStructure.TABLE_NAME_SERVER_IMAGE,
@@ -182,6 +217,22 @@ public class ServerImageDataModel {
         return result != 0;
     }
 
+    public Cursor queryAllFavoritedCards() {
+        SQLiteDatabase sqLiteDatabase = mMySqlitDatabase.getReadableDatabase();
+        String favorite = String.valueOf(FAVORITED);
+        Cursor cursor = sqLiteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+                TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_DESC,
+                TableStructure.SERVER_IMAGE_TITLE, TableStructure.SERVER_IMAGE_URL,
+                TableStructure.SERVER_IMAGE_COLLECT_TIME,
+                TableStructure.SERVER_IMAGE_COLLECT_WEBSITE,
+                TableStructure.SERVER_IMAGE_RELEASE_TIME, TableStructure.SERVER_IMAGE_CLOUD_ID,
+                TableStructure.SERVER_IMAGE_DATA_TYPE
+        }, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED + "=?", new String[] {
+            favorite
+        }, null, null, null);
+        return cursor;
+    }
+
     public List<ServerImageData> queryWithoutImg(int count) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         List<ServerImageData> result = new ArrayList<ServerImageData>();
@@ -192,8 +243,8 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
 
         }, TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
-                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=?", new String[] {
-                ServerDataMapping.S_DATATYPE_HTML, String.valueOf(MySqlitDatabase.DOWNLOAD_FALSE)
+                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and " + TableStructure.SERVER_IMAGE_READED + "=?", new String[] {
+                ServerDataMapping.S_DATATYPE_HTML, String.valueOf(MySqlitDatabase.DOWNLOAD_FALSE), String.valueOf(ServerImageDataModel.UN_READ)
         }, null, null, null, String.valueOf(count));
 
         try {
@@ -318,10 +369,12 @@ public class ServerImageDataModel {
         } else {
             selection = TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
                     + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
-                    + TableStructure.SERVER_IMAGE_READED + "=?";
+                    + TableStructure.SERVER_IMAGE_READED + "=? and "
+                    + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=?";
             selectionArgus = new String[] {
                     String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE),
-                    ServerDataMapping.S_DATATYPE_HTML, ServerImageDataModel.UN_READ
+                    ServerDataMapping.S_DATATYPE_HTML, ServerImageDataModel.UN_READ,
+                    ServerDataMapping.S_DATATYPE_MULTIIMG
             };
         }
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
@@ -356,8 +409,15 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
+<<<<<<< HEAD
                 TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
-        }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {String.valueOf(id)}, null, null, null, null);
+=======
+                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE,
+                TableStructure.SERVER_IMAGE_CLOUD_ID
+>>>>>>> origin/v1.4.0
+        }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
+            String.valueOf(id)
+        }, null, null, null, null);
 
         try {
             while (cursor.moveToNext()) {
@@ -368,6 +428,7 @@ public class ServerImageDataModel {
                 data.setTitle(cursor.getString(3));
                 data.setDataType(cursor.getString(4));
                 data.setCollectWebsite(cursor.getString(5));
+                data.setCloudId(cursor.getString(6));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -375,5 +436,62 @@ public class ServerImageDataModel {
             cursor.close();
         }
         return data;
+    }
+
+    public List<String> deleteExceptFavorited() {
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getWritableDatabase();
+        List<String> urls = new ArrayList<String>();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+            TableStructure.SERVER_IMAGE_URL
+        }, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED + "=?", new String[] {
+            String.valueOf(MySqlitDatabase.FAVORITE_FALSE)
+        }, null, null, null);
+        while (cursor.moveToNext()) {
+            urls.add(cursor.getString(0));
+        }
+        cursor.close();
+
+        int result = sqliteDatabase.delete(TableStructure.TABLE_NAME_SERVER_IMAGE,
+                TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED + "=?", new String[] {
+                    String.valueOf(MySqlitDatabase.FAVORITE_FALSE)
+                });
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("删除serverImageData表中的数据条数为：" + result);
+        }
+        return urls;
+    }
+
+    /**
+     * 查询出今日零点之前的除去收藏的数据
+     * @return List<String> 集合里装的时图片的url
+     */
+    public List<String> queryOldDataExceptFavorited() {
+        long yesterday = getYesterday();
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        List<String> urls = new ArrayList<String>();
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+            TableStructure.SERVER_IMAGE_URL
+        }, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED + "=? and "
+                + TableStructure.SERVER_IMAGE_COLLECT_TIME + "<?", new String[] {
+                String.valueOf(MySqlitDatabase.FAVORITE_FALSE), String.valueOf(yesterday)
+        }, null, null, null);
+        while (cursor.moveToNext()) {
+            urls.add(cursor.getString(0));
+        }
+        cursor.close();
+        return urls;
+    }
+
+    private long getYesterday() {
+        Calendar cal = Calendar.getInstance();// 使用日历类
+        int year = cal.get(Calendar.YEAR);// 得到年
+        int month = cal.get(Calendar.MONTH) + 1;// 得到月，因为从0开始的，所以要加1
+        int day = cal.get(Calendar.DAY_OF_MONTH);// 得到天
+        SimpleDateFormat myFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return myFormatter.parse(year + "-" + month + "-" + day).getTime();
+        } catch (ParseException e) {
+        }
+        return 0;
     }
 }

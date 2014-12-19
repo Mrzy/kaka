@@ -108,12 +108,26 @@
                                     android:textColor="@color/white"
                                     android:textSize="12sp" />
 
-                                <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                                    android:id="@+id/pandora_online_wallpaper_preview_date"
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/white"
-                                    android:textSize="11sp" />
+                                    android:orientation="horizontal" >
+
+                                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                                        android:id="@+id/pandora_online_wallpaper_preview_date"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/white"
+                                        android:textSize="11sp" />
+
+                                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                                        android:id="@+id/pandora_online_wallpaper_preview_temperature"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:textColor="@color/white"
+                                        android:textSize="15sp" />
+                                </LinearLayout>
 
                                 <cn.zmdx.kaka.locker.widget.DigitalClocks
                                     xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
@@ -165,14 +179,14 @@
                 <GridView
                     android:id="@+id/pandora_online_wallpaper_gridview"
                     android:layout_width="wrap_content"
-                    android:layout_marginRight="@dimen/setting_title_textview_margin_left"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/setting_title_textview_margin_left"
                     android:columnWidth="@dimen/pandora_online_wallpaper_gridview_item_width"
                     android:fadingEdge="vertical"
                     android:numColumns="2"
-                    android:scrollbars="none"
                     android:paddingBottom="8dp"
                     android:paddingTop="8dp"
+                    android:scrollbars="none"
                     android:verticalSpacing="@dimen/pandora_online_wallpaper_gridview_vertical_spacing" />
 
                 <ProgressBar

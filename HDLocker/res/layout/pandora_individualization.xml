@@ -14,7 +14,7 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/pandora_setting_title"
+            android:id="@+id/pandora_individualization_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
@@ -109,6 +109,7 @@
                         app:stateDrawable="@drawable/switch_state_normal"
                         app:stateMaskDrawable="@drawable/switch_state_mask" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/setting_item_height"

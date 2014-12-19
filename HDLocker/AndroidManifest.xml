@@ -25,7 +25,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".HDApplication"
@@ -41,15 +41,8 @@
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".settings.LockPatternActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/gusture_dialog" >
         </activity>
         <activity
             android:name=".guide.GuideActivity"
@@ -95,6 +88,18 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".settings.LockerPasswordActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".settings.LockerPasswordTypeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/locker_password_dialog_theme" >
+        </activity>
 
         <service android:name=".service.PandoraService" />
         <!-- umeng -->
@@ -128,6 +133,13 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="pandora" />
+
+        <activity
+            android:name=".content.favorites.FavoritesActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            >
+        </activity>
     </application>
 
 </manifest>

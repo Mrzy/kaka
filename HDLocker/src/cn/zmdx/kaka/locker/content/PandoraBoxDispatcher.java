@@ -1,7 +1,6 @@
 
 package cn.zmdx.kaka.locker.content;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Handler;
@@ -13,7 +12,6 @@ import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -80,26 +78,23 @@ public class PandoraBoxDispatcher extends Handler {
                 // 标记最后一次拉取原始数据的时间
                 mConfig.saveLastPullOriginalDataTime(System.currentTimeMillis());
 
-                // 如果这是今天第一次拉取，则删除当前库中的旧数据
-                if (checkFirstPullToday()) {
-                    if (BuildConfig.DEBUG) {
-                        HDBLOG.logD("今天第一次拉取到原始数据，删除以前的旧数据及sd卡上的图片缓存");
-                    }
-                    ServerImageDataModel.getInstance().deleteAll();
-                    DiskImageHelper.clear();
-                }
-                // 标记今天已经拉取过原始数据
-                mConfig.saveTodayPullOriginalDataTime(BaseInfoHelper.getCurrentDate());
-
                 if (oriDataList.size() <= 0) {
                     return;
                 }
+
+                //删除本地数据库中除了已经收藏的新闻的数据
+                List<String> delUrls = ServerImageDataModel.getInstance().queryOldDataExceptFavorited();
                 // 将今天的数据保存到本地数据库
                 ServerImageData.saveToDatabase(oriDataList);
+                deleteLocalImage(delUrls);
                 break;
         }
 
         super.handleMessage(msg);
+    }
+
+    private void deleteLocalImage(List<String> delUrls) {
+        DiskImageHelper.deleteByUrls(delUrls);
     }
 
     /**
@@ -113,12 +108,6 @@ public class PandoraBoxDispatcher extends Handler {
             sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 2000);
             mLastSyncDataTime = curTime;
         }
-    }
-
-    private boolean checkFirstPullToday() {
-        String date = mConfig.getTodayPullOriginalData();
-        String currentDate = BaseInfoHelper.getCurrentDate();
-        return !date.equals(currentDate);
     }
 
     private boolean checkOriginalDataPullable() {
@@ -173,20 +162,14 @@ public class PandoraBoxDispatcher extends Handler {
         if (count <= 0) {
             return;
         }
-        List<ServerImageData> list = new ArrayList<ServerImageData>();
         List<ServerImageData> tmpList = ServerImageDataModel.getInstance().queryWithoutImg(count);
-        list.addAll(tmpList);
-        ServerImageDataManager.getInstance().batchDownloadServerImage(list);
+        ServerImageDataManager.getInstance().batchDownloadServerImage(tmpList);
     }
 
     private void processPullOriginalData() {
-        boolean isFirstPull = checkFirstPullToday();
-        long lastModified = 0;
-        if (!isFirstPull) {
-            lastModified = ServerImageDataModel.getInstance().queryLastModifiedOfToday();
-        }
+        long lastModified = ServerImageDataModel.getInstance().queryLastModifiedOfToday();
         if (BuildConfig.DEBUG) {
-            HDBLOG.logD("isFirstPull:" + isFirstPull + ", lastModified:" + lastModified);
+            HDBLOG.logD("lastModified:" + lastModified);
         }
         ServerImageDataManager.getInstance().pullTodayData(lastModified);
     }

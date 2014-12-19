@@ -161,7 +161,7 @@ public class CropImageActivity extends Activity {
         opts.inJustDecodeBounds = true;// 设置为true时，BitmapFactory只会解析要加载的图片的边框的信息，但是不会为该图片分配内存
         BitmapFactory.decodeStream(inputStream, new Rect(), opts);
         int screenHeight = BaseInfoHelper.getRealHeight(this);
-        int screenWidth = BaseInfoHelper.getWidth(this);
+        int screenWidth = BaseInfoHelper.getRealWidth(this);
         BitmapFactory.Options realOpts = new Options();
         realOpts.inSampleSize = ImageUtils.computeSampleSize(opts, screenWidth, screenHeight);
         realOpts.inJustDecodeBounds = false;
@@ -179,7 +179,7 @@ public class CropImageActivity extends Activity {
      * @return
      */
     public Bitmap zoomBitmap() {
-        int thumbWidth = BaseInfoHelper.getWidth(this);
+        int thumbWidth = BaseInfoHelper.getRealWidth(this);
         int thumbHeight = (int) (thumbWidth / (LockScreenManager.getInstance()
                 .getBoxWidthHeightRate()));
         return ImageUtils.scaleTo(mCropImageView.getCroppedImage(), thumbWidth, thumbHeight, false);
