@@ -61,13 +61,10 @@ public class ServerImageDataManager {
             public void onErrorResponse(VolleyError error) {
                 // invalidate url
                 DiskImageHelper.remove(bd.mUrl);
-<<<<<<< HEAD
                 ServerImageDataModel.getInstance().markRead(bd.mId, true);
-=======
                 if (downloadListener != null) {
                     downloadListener.onFailed();
                 }
->>>>>>> origin/v1.4.0
             }
         });
         RequestManager.getRequestQueue().add(request);
