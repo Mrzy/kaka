@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Vibrator;
@@ -45,7 +44,6 @@ import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -142,6 +140,8 @@ public class LockScreenManager {
 
     private LinearLayout mOnlineViewContainer;
 
+    private View mTopOverlay, mBottomOverlay;
+
     public interface ILockScreenListener {
         void onLock();
 
@@ -236,7 +236,7 @@ public class LockScreenManager {
         notifyLocked();
         onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
 
-        //尝试拉取资讯数据及图片的预下载
+        // 尝试拉取资讯数据及图片的预下载
         PandoraBoxDispatcher.getInstance().pullData();
 
         checkNewVersion();
@@ -424,6 +424,8 @@ public class LockScreenManager {
 
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
+        mTopOverlay = mEntireView.findViewById(R.id.lock_top_overlay);
+        mBottomOverlay = mEntireView.findViewById(R.id.lock_bottom_overlay);
         setDrawable();
         initOnlinePaperPanel();
     }
@@ -728,6 +730,15 @@ public class LockScreenManager {
                                 R.string.lock_guide_prompt_one));
                     }
                 }
+            }
+            setLockScreenDim(slideOffset);
+        }
+
+        private void setLockScreenDim(float slideOffset) {
+            float localSlideOffset = 0.6f * (1.0f - slideOffset);
+            if (mTopOverlay != null && mBottomOverlay != null) {
+                mTopOverlay.setAlpha(localSlideOffset);
+                mBottomOverlay.setAlpha(localSlideOffset);
             }
         }
 

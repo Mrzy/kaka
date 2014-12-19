@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.RequestManager;
-import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;

@@ -297,13 +297,8 @@ public class FoldablePage implements IFoldableBox, OnFoldingListener, View.OnCli
 
     @Override
     public void onRefresh() {
-        SlideState state = LockScreenManager.getInstance().getLockPanelState();
-        if (state == SlideState.COLLAPSED) { // 只有在展开状态下才可以刷新
-            HDBThreadUtils.postOnUiDelayed(mUpdateCardRunnable, 1000);
-            UmengCustomEventManager.statisticalPullToRefreshTimes();
-        } else {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
+        HDBThreadUtils.postOnUiDelayed(mUpdateCardRunnable, 1000);
+        UmengCustomEventManager.statisticalPullToRefreshTimes();
     }
 
     private Runnable mUpdateCardRunnable = new Runnable() {

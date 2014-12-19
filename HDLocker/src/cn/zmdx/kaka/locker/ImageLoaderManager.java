@@ -2,9 +2,6 @@
 package cn.zmdx.kaka.locker;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.widget.ImageView;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.cache.DiskImageCache;
 
