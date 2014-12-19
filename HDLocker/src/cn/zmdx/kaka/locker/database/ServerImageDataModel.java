@@ -409,12 +409,8 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
-<<<<<<< HEAD
-                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
-=======
                 TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE,
                 TableStructure.SERVER_IMAGE_CLOUD_ID
->>>>>>> origin/v1.4.0
         }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
             String.valueOf(id)
         }, null, null, null, null);
