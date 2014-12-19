@@ -29,6 +29,8 @@ public class ServerImageDataModel {
 
     private static ServerImageDataModel sServerImageDataModel = null;
 
+    private String cloudId;
+
     private ServerImageDataModel() {
         mMySqlitDatabase = MySqlitDatabase.getInstance(HDApplication.getContext(),
                 PandoraConfig.DATABASE_NAME, null);
@@ -227,6 +229,25 @@ public class ServerImageDataModel {
             favorite
         }, null, null, null);
         return cursor;
+    }
+
+    public String queryCloudId(String id) {
+        SQLiteDatabase sqLiteDatabase = mMySqlitDatabase.getReadableDatabase();
+        ServerImageData mServerImageData = new ServerImageData();
+        Cursor mCursor = sqLiteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+            TableStructure.SERVER_IMAGE_CLOUD_ID
+        }, TableStructure.SERVER_IMAGE_ID + "=?", new String[] {
+            id
+        }, null, null, null);
+        if (null != mCursor) {
+            while (mCursor.moveToNext()) {
+                int columnIndex = mCursor.getColumnIndex(TableStructure.SERVER_IMAGE_CLOUD_ID);
+                mServerImageData.setCloudId(mCursor.getString(columnIndex));
+                cloudId = mServerImageData.getCloudId();
+            }
+            mCursor.close();
+        }
+        return cloudId;
     }
 
     public List<ServerImageData> queryWithoutImg(int count) {

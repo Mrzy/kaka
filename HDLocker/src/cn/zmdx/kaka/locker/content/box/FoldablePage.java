@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
@@ -344,7 +345,11 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
                 int id = (Integer) v.getTag();
                 boolean isFavorited = isFavoritedState(id);
                 boolean result = !isFavorited;
-                ServerImageDataModel.getInstance().markIsFavorited(id, result);
+                boolean markIsFavorited = ServerImageDataModel.getInstance().markIsFavorited(id,
+                        result);
+                if (markIsFavorited) {
+                    mFavoritesManager.statiscalFavoritedCard(id);
+                }
                 setButtonCollectState(result);
                 isOperating = false;
                 break;
