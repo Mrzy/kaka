@@ -56,6 +56,7 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_CARD_IS_FAVORITED = "cardIsFavorited";// 卡片被收藏
 
+
     /**
      * 统计哪张卡片被收藏
      * 

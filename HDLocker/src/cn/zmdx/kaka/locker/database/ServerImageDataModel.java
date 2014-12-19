@@ -29,8 +29,6 @@ public class ServerImageDataModel {
 
     private static ServerImageDataModel sServerImageDataModel = null;
 
-    private String cloudId;
-
     private ServerImageDataModel() {
         mMySqlitDatabase = MySqlitDatabase.getInstance(HDApplication.getContext(),
                 PandoraConfig.DATABASE_NAME, null);

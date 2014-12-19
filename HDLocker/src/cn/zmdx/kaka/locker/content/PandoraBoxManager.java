@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
@@ -28,6 +29,8 @@ public class PandoraBoxManager {
     private static PandoraBoxManager mPbManager;
 
     private Context mContext;
+
+    private TextView tvDefaultView;
 
     private PandoraBoxManager(Context context) {
         mContext = context;
