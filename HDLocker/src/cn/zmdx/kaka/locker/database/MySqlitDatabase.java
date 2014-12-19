@@ -10,7 +10,7 @@ import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class MySqlitDatabase extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final int INDEX_ONE = 1;
 
@@ -40,6 +40,10 @@ public class MySqlitDatabase extends SQLiteOpenHelper {
 
     public static final int DOWNLOAD_TRUE = 1;
 
+    public static final int FAVORITE_FALSE = 0;
+
+    public static final int FAVORITE_TRUE = 1;
+
     private static MySqlitDatabase sMySqlitDatabase = null;
 
     public MySqlitDatabase(Context context, String name, CursorFactory factory) {
@@ -66,12 +70,13 @@ public class MySqlitDatabase extends SQLiteOpenHelper {
         }
         switch (oldVersion) {
             case 1:
-
+                String sql = "alter table " + TableStructure.TABLE_NAME_SERVER_IMAGE
+                        + " add column favorited integer";
+                db.execSQL(sql);
                 break;
 
             default:
                 break;
         }
     }
-
 }

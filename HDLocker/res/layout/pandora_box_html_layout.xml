@@ -1,44 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <WebView
+    <WebView 
         android:id="@+id/pandora_box_html_context_show"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:scrollbars="none" />
-
-    <RelativeLayout
-        android:id="@+id/pandora_box_html_single_back_btn"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/pandora_box_html_back_selector" >
-
-        <TextView
-            android:id="@+id/pandora_box_html_back_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:shadowColor="#ffc3c2c2"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="1"
-            android:textColor="@android:color/white" 
-            android:textSize="15sp"/>
-
-        <!--
-             <ImageButton
-            android:id="@+id/pandora_box_html_single_back_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:background="@drawable/pandora_single_box_image_selector" />
-        -->
-    </RelativeLayout>
-
-</RelativeLayout>
+</FrameLayout>

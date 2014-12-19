@@ -48,7 +48,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
                 <LinearLayout
@@ -94,22 +94,11 @@
 
                     <cn.zmdx.kaka.locker.widget.TypefaceTextView
                         style="@style/setting_textview"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:clickable="false"
                         android:gravity="center_vertical"
                         android:text="@string/setting_lock_type" />
-
-                    <cn.zmdx.kaka.locker.widget.SwitchButton
-                        android:id="@+id/setting_pandoralocker_password"
-                        style="@style/setting_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:frameDrawable="@drawable/switch_frame"
-                        app:sliderDrawable="@drawable/switch_slider"
-                        app:stateDrawable="@drawable/switch_state_normal"
-                        app:stateMaskDrawable="@drawable/switch_state_mask" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -129,6 +118,26 @@
                         android:clickable="false"
                         android:gravity="center_vertical"
                         android:text="@string/pandora_wallpaper_title" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/pandora_favorite"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_item_height"
+                    android:background="@drawable/setting_item_selector"
+                    android:clickable="true"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/setting_title_textview_margin_left"
+                    android:paddingRight="@dimen/setting_title_textview_margin_left" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/tvMyFavorite"
+                        style="@style/setting_textview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:gravity="center_vertical"
+                        android:text="@string/pandora_favorite_title" />
                 </LinearLayout>
 
                 <LinearLayout

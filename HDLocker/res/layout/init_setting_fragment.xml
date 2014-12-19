@@ -17,6 +17,7 @@
         android:orientation="vertical" >
 
         <LinearLayout
+            android:id="@+id/init_setting_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/setting_title_textview_margin_left"

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
@@ -62,7 +63,9 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_individualization);
+        getWindow().getAttributes().flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         initView();
+        initTitleHeight();
         initWallpaper();
         initLockDefaultBitmap();
     }
@@ -89,6 +92,13 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         params.height = height;
         mLockerDefaultImageThumb.setLayoutParams(params);
 
+    }
+
+    private void initTitleHeight() {
+        int statusBarHeight = PandoraUtils.getStatusBarHeight(this);
+        LinearLayout titleLayout = (LinearLayout) mRootView
+                .findViewById(R.id.pandora_individualization_title);
+        titleLayout.setPadding(0, statusBarHeight, 0, 0);
     }
 
     @SuppressWarnings("deprecation")

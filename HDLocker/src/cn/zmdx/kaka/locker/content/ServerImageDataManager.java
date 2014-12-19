@@ -37,7 +37,13 @@ public class ServerImageDataManager {
         return INSTANCE;
     }
 
-    public void downloadImage(final ServerImageData bd) {
+    public interface IDownloadListener {
+        void onSuccess(String filePath);
+
+        void onFailed();
+    }
+
+    public void downloadImage(final ServerImageData bd, final IDownloadListener downloadListener) {
         Request<String> request = new ImageDownloadRequest(bd.mUrl, new Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -45,6 +51,9 @@ public class ServerImageDataManager {
                     HDBLOG.logD("download image finished,path=" + response);
                 }
                 ServerImageDataModel.getInstance().markAlreadyDownload(bd.mId);
+                if (downloadListener != null) {
+                    downloadListener.onSuccess(response);
+                }
             }
 
         }, new ErrorListener() {
@@ -52,7 +61,13 @@ public class ServerImageDataManager {
             public void onErrorResponse(VolleyError error) {
                 // invalidate url
                 DiskImageHelper.remove(bd.mUrl);
+<<<<<<< HEAD
                 ServerImageDataModel.getInstance().markRead(bd.mId, true);
+=======
+                if (downloadListener != null) {
+                    downloadListener.onFailed();
+                }
+>>>>>>> origin/v1.4.0
             }
         });
         RequestManager.getRequestQueue().add(request);
@@ -65,7 +80,7 @@ public class ServerImageDataManager {
         }
         for (int i = 0; i < size; i++) {
             ServerImageData bd = list.get(i);
-            downloadImage(bd);
+            downloadImage(bd, null);
         }
     }
 
@@ -120,6 +135,19 @@ public class ServerImageDataManager {
         private String mImageDesc;
 
         public int mIsImageDownloaded;
+
+        /**
+         * 图片或者说文章的收藏状态
+         */
+        public int mIsImageFavorited;
+
+        public int getmIsImageFavorited() {
+            return mIsImageFavorited;
+        }
+
+        public void setmIsImageFavorited(int mIsImageFavorited) {
+            this.mIsImageFavorited = mIsImageFavorited;
+        }
 
         public String getUrl() {
             return mUrl;
