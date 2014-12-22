@@ -797,18 +797,18 @@ public class LockScreenManager {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("onPanelFixed");
             }
-            UmengCustomEventManager.statisticalFixedTimes();
+//            UmengCustomEventManager.statisticalFixedTimes();
         }
 
         @Override
         public void onPanelClickedDuringFixed() {
-            UmengCustomEventManager.statisticalFixedUnLockTimes();
+//            UmengCustomEventManager.statisticalFixedUnLockTimes();
             // if (!showGestureView()) {
             // internalUnLock();
             // }
-            if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
-                mPandoraConfig.saveGuideTimes(mTextGuideTimes + 1);
-            }
+//            if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
+//                mPandoraConfig.saveGuideTimes(mTextGuideTimes + 1);
+//            }
         }
 
         public void onPanelStartDown(View view) {

@@ -8,11 +8,7 @@ import com.umeng.analytics.MobclickAgent;
 
 public class UmengCustomEventManager {
 
-    public static final String EVENT_FIXED_TIMES = "fixedTimes";// 拉开锁屏固定住，计数一次；
-
-    public static final String EVENT_CLICK_WHEN_FIXED = "clickWhenFixed";// 固定后，点击解锁计数一次；
-
-    public static final String EVENT_DIRECT_UNLOCK = "directUnlock";// 未固定，直接解锁，计数一次；
+    public static final String EVENT_PULL_DOWN = "pullDown";// 锁屏页下拉并成功展开；
 
     public static final String EVENT_GUESTURE_LOCK_ENABLED_DAILY = "guestureLockEnabledDaily";// 若用户开启了手势锁，每日上报一次；
 
@@ -209,23 +205,7 @@ public class UmengCustomEventManager {
      */
     public static void statisticalUnLockTimes() {
         MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_DIRECT_UNLOCK);
-    }
-
-    /**
-     * 统计固定的次数
-     */
-    public static void statisticalFixedTimes() {
-        MobclickAgent
-                .onEvent(HDApplication.getContext(), UmengCustomEventManager.EVENT_FIXED_TIMES);
-    }
-
-    /**
-     * 统计固定之后解锁次数
-     */
-    public static void statisticalFixedUnLockTimes() {
-        MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_CLICK_WHEN_FIXED);
+                UmengCustomEventManager.EVENT_PULL_DOWN);
     }
 
     /**
