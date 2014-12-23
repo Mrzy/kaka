@@ -332,13 +332,16 @@ public class PandoraUtils {
 
     public static BitmapDrawable getLockDefaultBitmap(Context context) {
         String fileName = PandoraConfig.newInstance(context).getLockDefaultFileName();
-        String path = IndividualizationActivity.LOCK_DEFAULT_SDCARD_LOCATION + fileName + ".jpg";
-        Bitmap bitmap = ImageUtils.getBitmapFromFile(path, null);
-        BitmapDrawable drawable = null;
-        if (null != bitmap) {
-            drawable = new BitmapDrawable(context.getResources(), bitmap);
+        if (!TextUtils.isEmpty(fileName)) {
+            String path = IndividualizationActivity.LOCK_DEFAULT_SDCARD_LOCATION + fileName + ".jpg";
+            Bitmap bitmap = ImageUtils.getBitmapFromFile(path, null);
+            BitmapDrawable drawable = null;
+            if (null != bitmap) {
+                drawable = new BitmapDrawable(context.getResources(), bitmap);
+            }
+            return drawable;
         }
-        return drawable;
+        return null;
     }
 
     private static int getTimeQuantum(int currentHour) {

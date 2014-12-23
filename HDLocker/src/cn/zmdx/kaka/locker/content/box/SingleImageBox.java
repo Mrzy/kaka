@@ -10,6 +10,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.DiskImageHelper;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
@@ -133,7 +134,11 @@ public class SingleImageBox implements IPandoraBox, View.OnClickListener {
         pd.setmFromWebSite(data.getCollectWebsite());
         pd.setmTitle(data.getTitle());
         pd.setmContent(data.getImageDesc());
-        pd.setmImage(DiskImageHelper.getBitmapByUrl(data.getUrl(), null));
+        Bitmap bmp = ImageLoaderManager.getImageMemCache().getBitmap(data.getUrl());
+        if (bmp == null) {
+            bmp = DiskImageHelper.getBitmapByUrl(data.getUrl(), null);
+        }
+        pd.setmImage(bmp);
         return pd;
     }
 

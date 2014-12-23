@@ -24,7 +24,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@string/contentDescription"
-        android:src="@drawable/pandora_online_wallpaper_item_new"
+        android:src="@drawable/pandora_christmas_new"
         android:visibility="gone" />
 
 </RelativeLayout>
