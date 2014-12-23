@@ -34,7 +34,7 @@
         android:label="@string/app_name"
         android:largeHeap="true" >
         <activity
-            android:name=".settings.MainSettingsActivity"
+            android:name=".splash.SplashActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -44,6 +44,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".settings.MainSettingsActivity"
+            android:theme="@android:style/Theme.NoTitleBar" 
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+        </activity>
+        
         <activity
             android:name=".guide.GuideActivity"
             android:exported="false"

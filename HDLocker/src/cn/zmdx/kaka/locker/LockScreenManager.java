@@ -550,10 +550,10 @@ public class LockScreenManager {
         final ImageView mPullImage = (ImageView) mEntireView
                 .findViewById(R.id.lock_wallpaper_view_im);
         int statusBarHeight = PandoraUtils.getStatusBarHeight(mContext);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0, statusBarHeight + 10, 0, 0);
-        mPullImage.setLayoutParams(lp);
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        lp.setMargins(0, statusBarHeight + 10, 0, 0);
+//        mPullImage.setLayoutParams(lp);
         mOnlinePanel = (WallpaperPanelLayout) mEntireView
                 .findViewById(R.id.locker_wallpaper_sliding);
         mOnlinePanel
@@ -563,8 +563,8 @@ public class LockScreenManager {
                     public void onPanelSlide(View panel, float slideOffset) {
                         if (!isInit) {
                             isInit = true;
-                            mPullImage
-                                    .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+//                            mPullImage
+//                                    .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
                             initOnlinePaperPanelView();
                         }
                     }
@@ -577,7 +577,7 @@ public class LockScreenManager {
                     public void onPanelExpanded(View panel) {
                         mSliderView.setEnabled(false);
                         if (null != mOnlineWallpaperView) {
-                            createPullButtonAnimation(mPullImage, 0, 180);
+//                            createPullButtonAnimation(mPullImage, 0, 180);
                             mOnlineWallpaperView.initContentView();
                             mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
 
@@ -601,9 +601,9 @@ public class LockScreenManager {
                     @Override
                     public void onPanelCollapsed(View panel) {
                         isInit = false;
-                        mPullImage
-                                .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
-                        createPullButtonAnimation(mPullImage, 180, 360);
+//                        mPullImage
+//                                .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+//                        createPullButtonAnimation(mPullImage, 180, 360);
                         mSliderView.setEnabled(true);
                     }
 
