@@ -244,8 +244,10 @@ public class ServerImageDataModel {
                 TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
 
         }, TableStructure.SERVER_IMAGE_DATA_TYPE + "!=? and "
-                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and " + TableStructure.SERVER_IMAGE_READED + "=?", new String[] {
-                ServerDataMapping.S_DATATYPE_HTML, String.valueOf(MySqlitDatabase.DOWNLOAD_FALSE), String.valueOf(ServerImageDataModel.UN_READ)
+                + TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
+                + TableStructure.SERVER_IMAGE_READED + "=?", new String[] {
+                ServerDataMapping.S_DATATYPE_HTML, String.valueOf(MySqlitDatabase.DOWNLOAD_FALSE),
+                String.valueOf(ServerImageDataModel.UN_READ)
         }, null, null, null, String.valueOf(count));
 
         try {
@@ -381,8 +383,10 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
-                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE
-        }, selection, selectionArgus, null, null, null, String.valueOf(count));
+                TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE,
+                TableStructure.SERVER_IMAGE_COLLECT_TIME, TableStructure.SERVER_IMAGE_CLOUD_ID
+        }, selection, selectionArgus, null, null, TableStructure.SERVER_IMAGE_COLLECT_TIME
+                + " DESC", String.valueOf(count));
 
         try {
             while (cursor.moveToNext()) {
@@ -393,6 +397,8 @@ public class ServerImageDataModel {
                 data.setTitle(cursor.getString(3));
                 data.setDataType(cursor.getString(4));
                 data.setCollectWebsite(cursor.getString(5));
+                data.setCollectTime(cursor.getString(6));
+                data.setCloudId(cursor.getString(7));
                 result.add(data);
             }
         } catch (Exception e) {
@@ -460,6 +466,7 @@ public class ServerImageDataModel {
 
     /**
      * 查询出今日零点之前的已读的除去收藏的数据
+     * 
      * @return List<String> 集合里装的时图片的url
      */
     public List<String> queryOldDataExceptFavorited() {
@@ -469,8 +476,10 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
             TableStructure.SERVER_IMAGE_URL
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED + "=? and "
-                + TableStructure.SERVER_IMAGE_COLLECT_TIME + "<? and " + TableStructure.SERVER_IMAGE_READED + "=?", new String[] {
-                String.valueOf(MySqlitDatabase.FAVORITE_FALSE), String.valueOf(yesterday), ServerImageDataModel.READ
+                + TableStructure.SERVER_IMAGE_COLLECT_TIME + "<? and "
+                + TableStructure.SERVER_IMAGE_READED + "=?", new String[] {
+                String.valueOf(MySqlitDatabase.FAVORITE_FALSE), String.valueOf(yesterday),
+                ServerImageDataModel.READ
         }, null, null, null);
         while (cursor.moveToNext()) {
             urls.add(cursor.getString(0));
