@@ -69,6 +69,8 @@ public class PandoraConfig {
 
     private static final String KEY_LOCK_SCREEN_GUIDE_TIMES = "u";
 
+    private static final String KEY_CHRISTMAS_FORCE = "v";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -335,6 +337,16 @@ public class PandoraConfig {
     public void saveLockScreenTimes(int times) {
         Editor editor = mSp.edit();
         editor.putInt(KEY_LOCK_SCREEN_GUIDE_TIMES, times);
+        editor.commit();
+    }
+
+    public boolean getChristmasForceTheme() {
+        return mSp.getBoolean(KEY_CHRISTMAS_FORCE, false);
+    }
+
+    public void saveChristmasForceTheme(boolean isForceTheme) {
+        Editor editor = mSp.edit();
+        editor.putBoolean(KEY_CHRISTMAS_FORCE, isForceTheme);
         editor.commit();
     }
 

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 public class SplashActivity extends Activity {
@@ -17,6 +19,12 @@ public class SplashActivity extends Activity {
             
             @Override
             public void run() {
+                boolean isForceTheme = PandoraConfig.newInstance(SplashActivity.this).getChristmasForceTheme();
+                if (!isForceTheme) {
+                    PandoraConfig.newInstance(SplashActivity.this).saveThemeId(ThemeManager.THEME_ID_DEFAULT);
+                    PandoraConfig.newInstance(SplashActivity.this).saveChristmasForceTheme(true);
+                }
+                
                 Intent in =new Intent();
                 in.setClass(SplashActivity.this, MainSettingsActivity.class);
                 startActivity(in);
