@@ -19,7 +19,7 @@ public class PandoraPolicy {
 
     public static final int MIN_DURATION_SYNC_DATA_TIME = 60 * 1000;
 
-    public static final long MIN_PULL_ORIGINAL_TIME = 15 * 60 * 1000;//30min
+    public static final long MIN_PULL_ORIGINAL_TIME = 15 * 60 * 1000;//15min
 
     public static final long MIN_PULL_WALLPAPER_ORIGINAL_TIME = 3 * 60 * 60 * 1000;// 3h
 

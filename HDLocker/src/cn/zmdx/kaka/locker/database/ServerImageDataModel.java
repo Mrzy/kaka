@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -458,7 +459,7 @@ public class ServerImageDataModel {
     }
 
     /**
-     * 查询出今日零点之前的除去收藏的数据
+     * 查询出今日零点之前的已读的除去收藏的数据
      * @return List<String> 集合里装的时图片的url
      */
     public List<String> queryOldDataExceptFavorited() {
@@ -468,8 +469,8 @@ public class ServerImageDataModel {
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
             TableStructure.SERVER_IMAGE_URL
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED + "=? and "
-                + TableStructure.SERVER_IMAGE_COLLECT_TIME + "<?", new String[] {
-                String.valueOf(MySqlitDatabase.FAVORITE_FALSE), String.valueOf(yesterday)
+                + TableStructure.SERVER_IMAGE_COLLECT_TIME + "<? and " + TableStructure.SERVER_IMAGE_READED + "=?", new String[] {
+                String.valueOf(MySqlitDatabase.FAVORITE_FALSE), String.valueOf(yesterday), ServerImageDataModel.READ
         }, null, null, null);
         while (cursor.moveToNext()) {
             urls.add(cursor.getString(0));
