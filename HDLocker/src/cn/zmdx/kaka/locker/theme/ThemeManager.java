@@ -25,8 +25,6 @@ public class ThemeManager {
 
     public static final int THEME_ID_DEFAULT_FOREGROUND_RESID = R.drawable.setting_background_road_fore;
 
-    public static final int THEME_ID_DEFAULT_SETTINGICON_RESID = R.drawable.ic_setting_common;
-
     public static Theme getCurrentTheme() {
         int themeId = PandoraConfig.newInstance(HDApplication.getContext()).getCurrentThemeId();
         if (themeId == THEME_ID_CUSTOM) {
@@ -46,7 +44,6 @@ public class ThemeManager {
             theme.setDefaultTheme(true);
             theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
             theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
-            theme.setmSettingsIconResId(THEME_ID_DEFAULT_SETTINGICON_RESID);
             theme.setmThemeId(THEME_ID_DEFAULT);
         } else {
             theme.setDefaultTheme(false);
@@ -78,7 +75,6 @@ public class ThemeManager {
             theme.setDefaultTheme(true);
             theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
             theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
-            theme.setmSettingsIconResId(THEME_ID_DEFAULT_SETTINGICON_RESID);
             theme.setmThemeId(THEME_ID_DEFAULT);
         } else {
             theme.setDefaultTheme(false);
@@ -94,13 +90,11 @@ public class ThemeManager {
             case THEME_ID_ROAD:
                 theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
                 theme.setmForegroundResId(R.drawable.setting_background_road_fore);
-                theme.setmSettingsIconResId(R.drawable.ic_setting_common);
                 theme.setmThemeId(THEME_ID_ROAD);
                 break;
             default:
                 theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
                 theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
-                theme.setmSettingsIconResId(THEME_ID_DEFAULT_SETTINGICON_RESID);
                 theme.setmThemeId(THEME_ID_DEFAULT);
                 break;
         }
@@ -113,7 +107,6 @@ public class ThemeManager {
         Theme theme = new Theme();
         theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
         theme.setmForegroundResId(R.drawable.setting_background_road_fore);
-        theme.setmSettingsIconResId(R.drawable.ic_setting_common);
         theme.setmThemeId(THEME_ID_ROAD);
         list.add(theme);
         return list;

@@ -27,8 +27,6 @@ public class DefaultBox implements IPandoraBox {
 
     private ImageView mCustomImageView;
 
-    private ImageView mCustomSetImageView;
-
     private boolean isCustomSetViewShow = false;
 
     private TextView mTextView3;
@@ -51,10 +49,6 @@ public class DefaultBox implements IPandoraBox {
         mCustomImageView = (ImageView) mLayoutView
                 .findViewById(R.id.pandora_box_nodata_custom_show_imageview);
         mCustomImageView.setOnClickListener(clickListener);
-
-        mCustomSetImageView = (ImageView) mLayoutView
-                .findViewById(R.id.pandora_box_custom_set_default_image);
-        mCustomSetImageView.setOnClickListener(clickListener);
         initDefaultImage(context);
     }
 
@@ -78,24 +72,14 @@ public class DefaultBox implements IPandoraBox {
 
         @Override
         public void onClick(View view) {
-            if (view.getId() == R.id.pandora_box_nodata_custom_show_imageview) {
-                isCustomSetViewShow = !isCustomSetViewShow;
-                if (isCustomSetViewShow) {
-                    mCustomSetImageView.setVisibility(View.VISIBLE);
-                } else {
-                    mCustomSetImageView.setVisibility(View.GONE);
-                }
-            } else {
                 UmengCustomEventManager.statisticalSetLockScreenWallpaperTimes();
                 LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
-
                     @Override
                     public void run() {
                         LockScreenManager.getInstance().onInitDefaultImage();
                     }
                 });
                 LockScreenManager.getInstance().unLock();
-            }
         }
     };
 
