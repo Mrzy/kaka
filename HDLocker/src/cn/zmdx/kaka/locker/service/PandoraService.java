@@ -11,7 +11,6 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
-import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class PandoraService extends Service {
@@ -67,12 +66,10 @@ public class PandoraService extends Service {
         filter.addAction(ALARMALERT_ACTION_ZX);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(mReceiver, filter);
-        PandoraBatteryManager.getInstance().registerListener();
     }
 
     private void unRegisterBroadcastReceiver() {
         unregisterReceiver(mReceiver);
-        PandoraBatteryManager.getInstance().unRegisterListener();
     }
 
     private static boolean isComingCall = false;

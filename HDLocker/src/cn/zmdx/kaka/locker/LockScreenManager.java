@@ -232,7 +232,6 @@ public class LockScreenManager {
         setDate();
 
         notifyLocked();
-        onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
 
         // 尝试拉取资讯数据及图片的预下载
         PandoraBoxDispatcher.getInstance().pullData();
@@ -828,47 +827,6 @@ public class LockScreenManager {
             return false;
         };
     };
-
-    public void onBatteryStatusChanged(int mStatus) {
-        if (isLocked() && mBatteryTipView != null && mBatteryInfo != null) {
-            final PandoraBatteryManager pbm = PandoraBatteryManager.getInstance();
-            final Resources resource = mContext.getResources();
-            final int maxScale = pbm.getMaxScale();
-            final int curScale = pbm.getCurLevel();
-            final float rate = (float) curScale / (float) maxScale;
-            int percent = (int) (rate * 100.0);
-            switch (mStatus) {
-                case BatteryManager.BATTERY_STATUS_CHARGING:
-                    mBatteryTipView.setVisibility(View.VISIBLE);
-                    mBatteryTipView.setText(resource
-                            .getString(R.string.pandora_box_battery_charging) + percent + "%");
-                    mBatteryInfo.setVisibility(View.INVISIBLE);
-                    break;
-                case BatteryManager.BATTERY_STATUS_DISCHARGING:
-                    mBatteryTipView.setVisibility(View.GONE);
-                    if (!mIsNeedNotice) {
-                        mBatteryInfo.setVisibility(View.VISIBLE);
-                        mBatteryInfo.setText(percent + "%");
-                    }
-                    break;
-                case BatteryManager.BATTERY_STATUS_FULL:
-                    mBatteryTipView.setVisibility(View.VISIBLE);
-                    mBatteryTipView.setText(resource.getString(R.string.pandora_box_battery_full));
-                    mBatteryInfo.setVisibility(View.INVISIBLE);
-                    break;
-                case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
-                    mBatteryTipView.setVisibility(View.GONE);
-                    if (!mIsNeedNotice) {
-                        mBatteryInfo.setVisibility(View.VISIBLE);
-                        mBatteryInfo.setText(percent + "%");
-                    } else {
-                        mBatteryInfo.setVisibility(View.INVISIBLE);
-                    }
-                default:
-                    break;
-            }
-        }
-    }
 
     public void onScreenOff() {
         invisiableViews(mLockDataView, mWeatherSummary, mDigitalClockView);
