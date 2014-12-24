@@ -108,6 +108,7 @@ public class PandoraWeatherManager {
                 callback.onFailed();
             }
         });
+        request.setShouldCache(false);
         RequestManager.getRequestQueue().add(request);
     }
 
