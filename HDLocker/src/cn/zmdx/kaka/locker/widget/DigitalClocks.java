@@ -19,6 +19,7 @@ import android.widget.DigitalClock;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.font.FontManager;
 
 public class DigitalClocks extends TextView {
     // FIXME: implement separate views for hours/minutes/seconds, so
@@ -47,8 +48,7 @@ public class DigitalClocks extends TextView {
     private final static String m24 = "k:mm";
 
     public DigitalClocks(Context context) {
-        super(context);
-        // initClock();
+        this(context, null);
     }
 
     public DigitalClocks(Context context, AttributeSet attrs) {
@@ -60,8 +60,7 @@ public class DigitalClocks extends TextView {
         if (mCalendar == null) {
             mCalendar = Calendar.getInstance();
         }
-        Typeface face = Typeface.createFromAsset(HDApplication.getContext().getAssets(),
-                "fonts/Roboto-Thin.ttf");
+        Typeface face = FontManager.getTypeface("fonts/Roboto-Thin.ttf");
         setTypeface(face);
         mFormatChangeObserver = new FormatChangeObserver();
         getContext().getContentResolver().registerContentObserver(Settings.System.CONTENT_URI,
@@ -107,6 +106,7 @@ public class DigitalClocks extends TextView {
         };
         mTicker.run();
     }
+
     public void setTickerStoped(boolean tickerStopped) {
         mTickerStopped = tickerStopped;
         if (!mTickerStopped) {
@@ -120,9 +120,7 @@ public class DigitalClocks extends TextView {
         mTickerStopped = true;
         if (mAttached) {
             unregisterObserver();
-
             getHandler().removeCallbacks(mTicker);
-
             mAttached = false;
         }
     }
