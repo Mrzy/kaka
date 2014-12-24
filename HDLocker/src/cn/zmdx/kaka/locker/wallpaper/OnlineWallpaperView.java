@@ -440,6 +440,7 @@ public class OnlineWallpaperView extends LinearLayout {
                             showTextPrompt(true, promptString);
                         }
                     });
+            mRequest.setShouldCache(false);
             RequestManager.getRequestQueue().add(mRequest);
         } else {
             mPreviewProgressBar.setVisibility(View.VISIBLE);

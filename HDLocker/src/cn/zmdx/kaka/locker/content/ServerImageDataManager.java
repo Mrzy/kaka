@@ -67,6 +67,7 @@ public class ServerImageDataManager {
                 }
             }
         });
+        request.setShouldCache(false);
         RequestManager.getRequestQueue().add(request);
     }
 
@@ -86,7 +87,8 @@ public class ServerImageDataManager {
      */
     public void pullTodayData(long lastModified) {
         JsonObjectRequest request = null;
-        request = new JsonObjectRequest(getUrl(lastModified), null, new Listener<JSONObject>() {
+        final String url = getUrl(lastModified);
+        request = new JsonObjectRequest(url, null, new Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -109,6 +111,7 @@ public class ServerImageDataManager {
                 }
             }
         });
+        request.setShouldCache(false);
         RequestManager.getRequestQueue().add(request);
     }
 

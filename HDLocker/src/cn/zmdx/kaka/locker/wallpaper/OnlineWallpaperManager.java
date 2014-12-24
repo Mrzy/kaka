@@ -94,6 +94,7 @@ public class OnlineWallpaperManager {
     public void pullWallpaperFromServer(Listener<JSONObject> listener, ErrorListener errorListener) {
         JsonObjectRequest request = null;
         request = new JsonObjectRequest(URL, null, listener, errorListener);
+        request.setShouldCache(false);
         RequestManager.getRequestQueue().add(request);
     }
 
