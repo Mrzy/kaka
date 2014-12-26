@@ -16,7 +16,6 @@
 
 package cn.zmdx.kaka.locker.battery;
 
-import android.R.integer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -49,7 +48,7 @@ public class BatteryView extends View {
 
     public static final int FULL = 96;
 
-    public static final int IS_NEED_CHARGE = 20;// ///
+    public static final int BATTERY_LOW = 20;// ///
 
     public static final int EMPTY = 4;
 
@@ -132,7 +131,9 @@ public class BatteryView extends View {
                 setContentDescription(context
                         .getString(R.string.accessibility_battery_level, level));
                 postInvalidate();
-
+                if (null != mCallBack) {
+                    mCallBack.onLevelChanged(level);
+                }
             } else if (action.equals(ACTION_LEVEL_TEST)) {
                 testmode = true;
                 post(new Runnable() {
@@ -198,7 +199,7 @@ public class BatteryView extends View {
     }
 
     public interface ILevelCallBack {
-        void setLevel(int level);
+        void onLevelChanged(int level);
     }
 
     @Override
@@ -292,8 +293,8 @@ public class BatteryView extends View {
         mWarningTextHeight = -mWarningTextPaint.getFontMetrics().ascent;
     }
 
-    private int setBaterryChargeColor(int percent) {
-        if (percent <= IS_NEED_CHARGE) {
+    private int getBatteryChargeColor(int percent) {
+        if (percent <= BATTERY_LOW) {
             mChargeColor = getResources().getColor(R.color.batterymeter_charge_color_low);
         } else {
             mChargeColor = getResources().getColor(R.color.batterymeter_charge_color_high);
@@ -301,8 +302,8 @@ public class BatteryView extends View {
         return mChargeColor;
     }
 
-    private int setBatteryColor(int percent) {
-        if (percent <= IS_NEED_CHARGE) {
+    private int getBatteryRegularColor(int percent) {
+        if (percent <= BATTERY_LOW) {
             mChargeColor = getResources().getColor(R.color.batterymeter_charge_color_low);
         } else {
             mChargeColor = getResources().getColor(R.color.batterymeter_regular_color);
@@ -316,9 +317,7 @@ public class BatteryView extends View {
         final int level = tracker.level;
         if (level == BatteryTracker.UNKNOWN_LEVEL)
             return;
-        if (null != mCallBack) {
-            mCallBack.setLevel(level);
-        }
+
         float drawFrac = (float) level / 100f;
         final int pt = getPaddingTop();
         final int pl = getPaddingLeft();
@@ -352,8 +351,8 @@ public class BatteryView extends View {
         c.drawRect(mFrame, mFramePaint);
 
         // fill 'er up
-        mBatteryPaint.setColor(tracker.plugged ? setBaterryChargeColor(level)
-                : setBatteryColor(level));
+        mBatteryPaint.setColor(tracker.plugged ? getBatteryChargeColor(level)
+                : getBatteryRegularColor(level));
 
         if (level >= FULL) {
             drawFrac = 1f;
@@ -407,28 +406,4 @@ public class BatteryView extends View {
             c.drawText(str, x, y, mTextPaint);
         }
     }
-    // private boolean mDemoMode;
-    // private BatteryTracker mDemoTracker = new BatteryTracker();
-
-    // @Override
-    // public void dispatchDemoCommand(String command, Bundle args) {
-    // if (!mDemoMode && command.equals(COMMAND_ENTER)) {
-    // mDemoMode = true;
-    // mDemoTracker.level = mTracker.level;
-    // mDemoTracker.plugged = mTracker.plugged;
-    // } else if (mDemoMode && command.equals(COMMAND_EXIT)) {
-    // mDemoMode = false;
-    // postInvalidate();
-    // } else if (mDemoMode && command.equals(COMMAND_BATTERY)) {
-    // String level = args.getString("level");
-    // String plugged = args.getString("plugged");
-    // if (level != null) {
-    // mDemoTracker.level = Math.min(Math.max(Integer.parseInt(level), 0), 100);
-    // }
-    // if (plugged != null) {
-    // mDemoTracker.plugged = Boolean.parseBoolean(plugged);
-    // }
-    // postInvalidate();
-    // }
-    // }
 }

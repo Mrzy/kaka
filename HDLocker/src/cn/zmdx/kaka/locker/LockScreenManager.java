@@ -432,7 +432,7 @@ public class LockScreenManager {
         batteryView.setLevelListener(new ILevelCallBack() {
 
             @Override
-            public void setLevel(int level) {
+            public void onLevelChanged(int level) {
                 mBatteryInfo.setText(level + "%");
             }
         });
