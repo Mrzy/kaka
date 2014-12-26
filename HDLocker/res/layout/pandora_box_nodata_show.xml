@@ -25,7 +25,7 @@
             android:layout_width="@dimen/pandora_box_nodata_show_image_width"
             android:layout_height="@dimen/pandora_box_nodata_show_image_height"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/pandora_box_nodata_show_image_width"
+            android:layout_marginTop="@dimen/pandora_box_nodata_show_image_top_height"
             android:src="@drawable/pandora_nodata_icon" />
 
         <cn.zmdx.kaka.locker.widget.TypefaceTextView
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/pandora_box_nodata_show_imageview"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:gravity="center_horizontal"
             android:text="@string/pandora_box_default_tip"
             android:textColor="@color/pandora_box_text_color"

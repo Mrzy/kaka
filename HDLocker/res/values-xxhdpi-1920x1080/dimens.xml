@@ -43,6 +43,7 @@
     
     <dimen name="pandora_box_nodata_show_image_width">100dp</dimen>
     <dimen name="pandora_box_nodata_show_image_height">100dp</dimen>
+    <dimen name="pandora_box_nodata_show_image_top_height">150dp</dimen>
 
     <dimen name="locker_key_padding_top">35dp</dimen>
     <dimen name="lockscreen_gusture_padding_top">25dp</dimen>
