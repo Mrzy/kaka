@@ -5,14 +5,11 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
@@ -26,8 +23,6 @@ public class DefaultBox implements IPandoraBox {
     private RelativeLayout mDefaultRl;
 
     private ImageView mCustomImageView;
-
-    private boolean isCustomSetViewShow = false;
 
     private TextView mTextView3;
 
@@ -48,7 +43,6 @@ public class DefaultBox implements IPandoraBox {
 
         mCustomImageView = (ImageView) mLayoutView
                 .findViewById(R.id.pandora_box_nodata_custom_show_imageview);
-        mCustomImageView.setOnClickListener(clickListener);
         initDefaultImage(context);
     }
 
@@ -67,21 +61,6 @@ public class DefaultBox implements IPandoraBox {
     public boolean isSetCustomImage() {
         return isSetCustomImage;
     }
-
-    private OnClickListener clickListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View view) {
-                UmengCustomEventManager.statisticalSetLockScreenWallpaperTimes();
-                LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
-                    @Override
-                    public void run() {
-                        LockScreenManager.getInstance().onInitDefaultImage();
-                    }
-                });
-                LockScreenManager.getInstance().unLock();
-        }
-    };
 
     @Override
     public int getCategory() {
