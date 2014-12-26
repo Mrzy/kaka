@@ -429,12 +429,11 @@ public class LockScreenManager {
         mDigitalClockView = (DigitalClocks) mEntireView.findViewById(R.id.digitalClock);
 
         batteryView = (BatteryView) mEntireView.findViewById(R.id.batteryView);
-        batteryPercentTextView = (TextView) mEntireView.findViewById(R.id.battery_percent);
         batteryView.setLevelListener(new ILevelCallBack() {
 
             @Override
             public void setLevel(int level) {
-                batteryPercentTextView.setText(level + "%");
+                mBatteryInfo.setText(level + "%");
             }
         });
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);

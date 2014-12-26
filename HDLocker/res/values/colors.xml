@@ -33,6 +33,7 @@
     <color name="batterymeter_frame_color">#66FFFFFF</color> <!-- 40% white -->
     <color name="batterymeter_charge_color_high">#FF69cd74</color>
     <color name="batterymeter_charge_color_low">#FFed4c4c </color>
+    <color name="batterymeter_regular_color">#FFfffefb </color>
     <color name="batterymeter_bolt_color">#B2000000</color> <!-- 70% black -->
 
 </resources>

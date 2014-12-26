@@ -16,6 +16,7 @@
 
 package cn.zmdx.kaka.locker.battery;
 
+import android.R.integer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -291,11 +292,20 @@ public class BatteryView extends View {
         mWarningTextHeight = -mWarningTextPaint.getFontMetrics().ascent;
     }
 
-    private int setBaterryColor(int percent) {
+    private int setBaterryChargeColor(int percent) {
         if (percent <= IS_NEED_CHARGE) {
             mChargeColor = getResources().getColor(R.color.batterymeter_charge_color_low);
         } else {
             mChargeColor = getResources().getColor(R.color.batterymeter_charge_color_high);
+        }
+        return mChargeColor;
+    }
+
+    private int setBatteryColor(int percent) {
+        if (percent <= IS_NEED_CHARGE) {
+            mChargeColor = getResources().getColor(R.color.batterymeter_charge_color_low);
+        } else {
+            mChargeColor = getResources().getColor(R.color.batterymeter_regular_color);
         }
         return mChargeColor;
     }
@@ -342,7 +352,8 @@ public class BatteryView extends View {
         c.drawRect(mFrame, mFramePaint);
 
         // fill 'er up
-        mBatteryPaint.setColor(setBaterryColor(level));
+        mBatteryPaint.setColor(tracker.plugged ? setBaterryChargeColor(level)
+                : setBatteryColor(level));
 
         if (level >= FULL) {
             drawFrac = 1f;
@@ -396,7 +407,6 @@ public class BatteryView extends View {
             c.drawText(str, x, y, mTextPaint);
         }
     }
-
     // private boolean mDemoMode;
     // private BatteryTracker mDemoTracker = new BatteryTracker();
 
