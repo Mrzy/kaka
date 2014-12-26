@@ -75,14 +75,26 @@
                         android:orientation="vertical"
                         android:paddingLeft="10dp" >
 
-                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                            android:id="@+id/battery_info"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_marginRight="6dp"
-                            android:layout_marginTop="5dp"
-                            android:textSize="12sp" />
+                            android:orientation="horizontal" >
+
+                            <cn.zmdx.kaka.locker.battery.BatteryView
+                                android:id="@+id/batteryView"
+                                android:layout_width="10dp"
+                                android:layout_height="15dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="6dp" />
+
+                            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                                android:id="@+id/battery_info"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginTop="5dp"
+                                android:textSize="12sp" />
+                        </LinearLayout>
 
                         <cn.zmdx.kaka.locker.widget.TypefaceTextView
                             android:id="@+id/weather_summary"
