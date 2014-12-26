@@ -16,7 +16,6 @@
 
 package cn.zmdx.kaka.locker.battery;
 
-import cn.zmdx.kaka.locker.R;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -32,40 +31,57 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.BatteryManager;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
+import cn.zmdx.kaka.locker.R;
 
 public class BatteryView extends View {
     public static final String TAG = BatteryView.class.getSimpleName();
+
     public static final String ACTION_LEVEL_TEST = "com.android.systemui.BATTERY_LEVEL_TEST";
 
     public static final boolean ENABLE_PERCENT = true;
-    public static final boolean SINGLE_DIGIT_PERCENT = false;
+
+    public static final boolean SINGLE_DIGIT_PERCENT = false;// /
+
     public static final boolean SHOW_100_PERCENT = false;
 
     public static final int FULL = 96;
+
+    public static final int IS_NEED_CHARGE = 20;// ///
+
     public static final int EMPTY = 4;
 
-    public static final float SUBPIXEL = 0.4f;  // inset rects for softer edges
+    public static final float SUBPIXEL = 0.4f; // inset rects for softer edges
 
     int[] mColors;
 
     boolean mShowPercent = true;
+
     Paint mFramePaint, mBatteryPaint, mWarningTextPaint, mTextPaint, mBoltPaint;
+
     int mButtonHeight;
+
     private float mTextHeight, mWarningTextHeight;
 
     private int mHeight;
+
     private int mWidth;
+
     private String mWarningString;
-    private final int mChargeColor;
+
+    private int mChargeColor;
+
     private final float[] mBoltPoints;
+
     private final Path mBoltPath = new Path();
 
     private final RectF mFrame = new RectF();
+
     private final RectF mButtonFrame = new RectF();
+
     private final RectF mClipFrame = new RectF();
+
     private final Rect mBoltFrame = new Rect();
 
     private class BatteryTracker extends BroadcastReceiver {
@@ -73,25 +89,34 @@ public class BatteryView extends View {
 
         // current battery status
         int level = UNKNOWN_LEVEL;
+
         String percentStr;
+
         int plugType;
+
         boolean plugged;
+
         int health;
+
         int status;
+
         String technology;
+
         int voltage;
+
         int temperature;
+
         boolean testmode = false;
 
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
-                if (testmode && ! intent.getBooleanExtra("testmode", false)) return;
+                if (testmode && !intent.getBooleanExtra("testmode", false))
+                    return;
 
-                level = (int)(100f
-                        * intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
-                        / intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
+                level = (int) (100f * intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0) / intent
+                        .getIntExtra(BatteryManager.EXTRA_SCALE, 100));
 
                 plugType = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
                 plugged = plugType != 0;
@@ -103,17 +128,23 @@ public class BatteryView extends View {
                 voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
                 temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
 
-                setContentDescription(
-                        context.getString(R.string.accessibility_battery_level, level));
+                setContentDescription(context
+                        .getString(R.string.accessibility_battery_level, level));
                 postInvalidate();
+
             } else if (action.equals(ACTION_LEVEL_TEST)) {
                 testmode = true;
                 post(new Runnable() {
                     int curLevel = 0;
+
                     int incr = 1;
+
                     int saveLevel = level;
+
                     int savePlugged = plugType;
+
                     Intent dummy = new Intent(Intent.ACTION_BATTERY_CHANGED);
+
                     @Override
                     public void run() {
                         if (curLevel < 0) {
@@ -123,12 +154,14 @@ public class BatteryView extends View {
                             dummy.putExtra("testmode", false);
                         } else {
                             dummy.putExtra("level", curLevel);
-                            dummy.putExtra("plugged", incr > 0 ? BatteryManager.BATTERY_PLUGGED_AC : 0);
+                            dummy.putExtra("plugged", incr > 0 ? BatteryManager.BATTERY_PLUGGED_AC
+                                    : 0);
                             dummy.putExtra("testmode", true);
                         }
                         getContext().sendBroadcast(dummy);
 
-                        if (!testmode) return;
+                        if (!testmode)
+                            return;
 
                         curLevel += incr;
                         if (curLevel == 100) {
@@ -157,6 +190,16 @@ public class BatteryView extends View {
         }
     }
 
+    private ILevelCallBack mCallBack;
+
+    public void setLevelListener(ILevelCallBack callBack) {
+        mCallBack = callBack;
+    }
+
+    public interface ILevelCallBack {
+        void setLevel(int level);
+    }
+
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -180,15 +223,17 @@ public class BatteryView extends View {
         TypedArray colors = res.obtainTypedArray(R.array.batterymeter_color_values);
 
         final int N = levels.length();
-        mColors = new int[2*N];
-        for (int i=0; i<N; i++) {
-            mColors[2*i] = levels.getInt(i, 0);
-            mColors[2*i+1] = colors.getColor(i, 0);
+        mColors = new int[2 * N];
+        for (int i = 0; i < N; i++) {
+            mColors[2 * i] = levels.getInt(i, 0);
+            mColors[2 * i + 1] = colors.getColor(i, 0);
         }
         levels.recycle();
         colors.recycle();
-        mShowPercent = ENABLE_PERCENT && 0 != Settings.System.getInt(
-                context.getContentResolver(), "status_bar_show_battery_percent", 0);
+        mShowPercent = false;// 设置为false避免重复显示电量百分比
+        // mShowPercent = ENABLE_PERCENT
+        // && 0 != Settings.System.getInt(context.getContentResolver(),
+        // "status_bar_show_battery_percent", 0);
 
         mWarningString = context.getString(R.string.battery_meter_very_low_overlay_symbol);
 
@@ -216,8 +261,6 @@ public class BatteryView extends View {
         mWarningTextPaint.setTypeface(font);
         mWarningTextPaint.setTextAlign(Paint.Align.CENTER);
 
-        mChargeColor = getResources().getColor(R.color.batterymeter_charge_color);
-
         mBoltPaint = new Paint();
         mBoltPaint.setAntiAlias(true);
         mBoltPaint.setColor(res.getColor(R.color.batterymeter_bolt_color));
@@ -234,8 +277,8 @@ public class BatteryView extends View {
         }
         final float[] ptsF = new float[pts.length];
         for (int i = 0; i < pts.length; i += 2) {
-            ptsF[i] = (float)pts[i] / maxX;
-            ptsF[i + 1] = (float)pts[i + 1] / maxY;
+            ptsF[i] = (float) pts[i] / maxX;
+            ptsF[i + 1] = (float) pts[i + 1] / maxY;
         }
         return ptsF;
     }
@@ -248,23 +291,24 @@ public class BatteryView extends View {
         mWarningTextHeight = -mWarningTextPaint.getFontMetrics().ascent;
     }
 
-    private int getColorForLevel(int percent) {
-        int thresh, color = 0;
-        for (int i=0; i<mColors.length; i+=2) {
-            thresh = mColors[i];
-            color = mColors[i+1];
-            if (percent <= thresh) return color;
+    private int setBaterryColor(int percent) {
+        if (percent <= IS_NEED_CHARGE) {
+            mChargeColor = getResources().getColor(R.color.batterymeter_charge_color_low);
+        } else {
+            mChargeColor = getResources().getColor(R.color.batterymeter_charge_color_high);
         }
-        return color;
+        return mChargeColor;
     }
 
     @Override
     public void draw(Canvas c) {
         BatteryTracker tracker = mTracker;
         final int level = tracker.level;
-
-        if (level == BatteryTracker.UNKNOWN_LEVEL) return;
-
+        if (level == BatteryTracker.UNKNOWN_LEVEL)
+            return;
+        if (null != mCallBack) {
+            mCallBack.setLevel(level);
+        }
         float drawFrac = (float) level / 100f;
         final int pt = getPaddingTop();
         final int pl = getPaddingLeft();
@@ -278,11 +322,11 @@ public class BatteryView extends View {
         mFrame.set(0, 0, width, height);
         mFrame.offset(pl, pt);
 
-        mButtonFrame.set(
-                mFrame.left + width * 0.25f,
-                mFrame.top,
-                mFrame.right - width * 0.25f,
-                mFrame.top + mButtonHeight + 5 /*cover frame border of intersecting area*/);
+        mButtonFrame.set(mFrame.left + width * 0.25f, mFrame.top, mFrame.right - width * 0.25f,
+                mFrame.top + mButtonHeight + 5 /*
+                                                * cover frame border of
+                                                * intersecting area
+                                                */);
 
         mButtonFrame.top += SUBPIXEL;
         mButtonFrame.left += SUBPIXEL;
@@ -298,8 +342,7 @@ public class BatteryView extends View {
         c.drawRect(mFrame, mFramePaint);
 
         // fill 'er up
-        final int color = tracker.plugged ? mChargeColor : getColorForLevel(level);
-        mBatteryPaint.setColor(color);
+        mBatteryPaint.setColor(setBaterryColor(level));
 
         if (level >= FULL) {
             drawFrac = 1f;
@@ -319,69 +362,63 @@ public class BatteryView extends View {
 
         if (tracker.plugged) {
             // draw the bolt
-            final int bl = (int)(mFrame.left + mFrame.width() / 4.5f);
-            final int bt = (int)(mFrame.top + mFrame.height() / 6f);
-            final int br = (int)(mFrame.right - mFrame.width() / 7f);
-            final int bb = (int)(mFrame.bottom - mFrame.height() / 10f);
-            if (mBoltFrame.left != bl || mBoltFrame.top != bt
-                    || mBoltFrame.right != br || mBoltFrame.bottom != bb) {
+            final int bl = (int) (mFrame.left + mFrame.width() / 4.5f);
+            final int bt = (int) (mFrame.top + mFrame.height() / 6f);
+            final int br = (int) (mFrame.right - mFrame.width() / 7f);
+            final int bb = (int) (mFrame.bottom - mFrame.height() / 10f);
+            if (mBoltFrame.left != bl || mBoltFrame.top != bt || mBoltFrame.right != br
+                    || mBoltFrame.bottom != bb) {
                 mBoltFrame.set(bl, bt, br, bb);
                 mBoltPath.reset();
-                mBoltPath.moveTo(
-                        mBoltFrame.left + mBoltPoints[0] * mBoltFrame.width(),
+                mBoltPath.moveTo(mBoltFrame.left + mBoltPoints[0] * mBoltFrame.width(),
                         mBoltFrame.top + mBoltPoints[1] * mBoltFrame.height());
                 for (int i = 2; i < mBoltPoints.length; i += 2) {
-                    mBoltPath.lineTo(
-                            mBoltFrame.left + mBoltPoints[i] * mBoltFrame.width(),
+                    mBoltPath.lineTo(mBoltFrame.left + mBoltPoints[i] * mBoltFrame.width(),
                             mBoltFrame.top + mBoltPoints[i + 1] * mBoltFrame.height());
                 }
-                mBoltPath.lineTo(
-                        mBoltFrame.left + mBoltPoints[0] * mBoltFrame.width(),
+                mBoltPath.lineTo(mBoltFrame.left + mBoltPoints[0] * mBoltFrame.width(),
                         mBoltFrame.top + mBoltPoints[1] * mBoltFrame.height());
             }
             c.drawPath(mBoltPath, mBoltPaint);
+
         } else if (level <= EMPTY) {
             final float x = mWidth * 0.5f;
             final float y = (mHeight + mWarningTextHeight) * 0.48f;
             c.drawText(mWarningString, x, y, mWarningTextPaint);
         } else if (mShowPercent && !(tracker.level == 100 && !SHOW_100_PERCENT)) {
-            mTextPaint.setTextSize(height *
-                    (SINGLE_DIGIT_PERCENT ? 0.75f
-                            : (tracker.level == 100 ? 0.38f : 0.5f)));
+            mTextPaint.setTextSize(height
+                    * (SINGLE_DIGIT_PERCENT ? 0.75f : (tracker.level == 100 ? 0.38f : 0.5f)));
             mTextHeight = -mTextPaint.getFontMetrics().ascent;
 
-            final String str = String.valueOf(SINGLE_DIGIT_PERCENT ? (level/10) : level);
+            final String str = String.valueOf(SINGLE_DIGIT_PERCENT ? (level / 10) : level);
             final float x = mWidth * 0.5f;
             final float y = (mHeight + mTextHeight) * 0.47f;
-            c.drawText(str,
-                    x,
-                    y,
-                    mTextPaint);
+            c.drawText(str, x, y, mTextPaint);
         }
     }
 
-//    private boolean mDemoMode;
-//    private BatteryTracker mDemoTracker = new BatteryTracker();
+    // private boolean mDemoMode;
+    // private BatteryTracker mDemoTracker = new BatteryTracker();
 
-//    @Override
-//    public void dispatchDemoCommand(String command, Bundle args) {
-//        if (!mDemoMode && command.equals(COMMAND_ENTER)) {
-//            mDemoMode = true;
-//            mDemoTracker.level = mTracker.level;
-//            mDemoTracker.plugged = mTracker.plugged;
-//        } else if (mDemoMode && command.equals(COMMAND_EXIT)) {
-//            mDemoMode = false;
-//            postInvalidate();
-//        } else if (mDemoMode && command.equals(COMMAND_BATTERY)) {
-//           String level = args.getString("level");
-//           String plugged = args.getString("plugged");
-//           if (level != null) {
-//               mDemoTracker.level = Math.min(Math.max(Integer.parseInt(level), 0), 100);
-//           }
-//           if (plugged != null) {
-//               mDemoTracker.plugged = Boolean.parseBoolean(plugged);
-//           }
-//           postInvalidate();
-//        }
-//    }
+    // @Override
+    // public void dispatchDemoCommand(String command, Bundle args) {
+    // if (!mDemoMode && command.equals(COMMAND_ENTER)) {
+    // mDemoMode = true;
+    // mDemoTracker.level = mTracker.level;
+    // mDemoTracker.plugged = mTracker.plugged;
+    // } else if (mDemoMode && command.equals(COMMAND_EXIT)) {
+    // mDemoMode = false;
+    // postInvalidate();
+    // } else if (mDemoMode && command.equals(COMMAND_BATTERY)) {
+    // String level = args.getString("level");
+    // String plugged = args.getString("plugged");
+    // if (level != null) {
+    // mDemoTracker.level = Math.min(Math.max(Integer.parseInt(level), 0), 100);
+    // }
+    // if (plugged != null) {
+    // mDemoTracker.plugged = Boolean.parseBoolean(plugged);
+    // }
+    // postInvalidate();
+    // }
+    // }
 }
