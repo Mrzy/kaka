@@ -21,10 +21,8 @@
     <color name="pandora_box_no_net_prompt">#fff3bb</color>
     <color name="pandora_box_text_color">#ccfffeff</color>
     <color name="pandora_box_text_color_no_net">#595757</color>
-    
     <color name="guide_button_background_press">#22ffffff</color>
     <color name="guide_button_background_normal">#500096ff</color>
-    
     <color name="online_wallpaper_translucent">#cc000000</color>
     <color name="online_wallpaper_preview_translucent">#22000000</color>
 
@@ -32,4 +30,9 @@
     <color name="lock_pattern_view_regular_color">#ffffffff</color>
     <color name="lock_pattern_view_success_color">#ffffffff</color>
     <color name="lock_pattern_view_error_color">#fff4511e</color>
+    <color name="batterymeter_frame_color">#66FFFFFF</color> <!-- 40% white -->
+    <color name="batterymeter_charge_color_high">#FF69cd74</color>
+    <color name="batterymeter_charge_color_low">#FFed4c4c </color>
+    <color name="batterymeter_bolt_color">#B2000000</color> <!-- 70% black -->
+
 </resources>

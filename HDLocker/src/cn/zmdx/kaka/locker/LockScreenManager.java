@@ -12,12 +12,10 @@ import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
-import android.os.BatteryManager;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.Display;
@@ -36,7 +34,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import cn.zmdx.kaka.locker.battery.PandoraBatteryManager;
+import cn.zmdx.kaka.locker.battery.BatteryView;
+import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
@@ -137,6 +136,10 @@ public class LockScreenManager {
 
     private ImageView mGuide;
 
+    private TextView batteryPercentTextView;
+
+    private BatteryView batteryView;
+
     public interface ILockScreenListener {
         void onLock();
 
@@ -232,7 +235,6 @@ public class LockScreenManager {
         setDate();
 
         notifyLocked();
-        onBatteryStatusChanged(PandoraBatteryManager.getInstance().getBatteryStatus());
 
         // 尝试拉取资讯数据及图片的预下载
         PandoraBoxDispatcher.getInstance().pullData();
@@ -426,6 +428,15 @@ public class LockScreenManager {
         mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
         mDigitalClockView = (DigitalClocks) mEntireView.findViewById(R.id.digitalClock);
 
+        batteryView = (BatteryView) mEntireView.findViewById(R.id.batteryView);
+        batteryPercentTextView = (TextView) mEntireView.findViewById(R.id.battery_percent);
+        batteryView.setLevelListener(new ILevelCallBack() {
+
+            @Override
+            public void setLevel(int level) {
+                batteryPercentTextView.setText(level + "%");
+            }
+        });
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
         if (!ViewConfiguration.get(mContext).hasPermanentMenuKey()) {// 存在虚拟按键
@@ -550,10 +561,11 @@ public class LockScreenManager {
         final ImageView mPullImage = (ImageView) mEntireView
                 .findViewById(R.id.lock_wallpaper_view_im);
         int statusBarHeight = PandoraUtils.getStatusBarHeight(mContext);
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        lp.setMargins(0, statusBarHeight + 10, 0, 0);
-//        mPullImage.setLayoutParams(lp);
+        // LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+        // LinearLayout.LayoutParams.WRAP_CONTENT,
+        // LinearLayout.LayoutParams.WRAP_CONTENT);
+        // lp.setMargins(0, statusBarHeight + 10, 0, 0);
+        // mPullImage.setLayoutParams(lp);
         mOnlinePanel = (WallpaperPanelLayout) mEntireView
                 .findViewById(R.id.locker_wallpaper_sliding);
         mOnlinePanel
@@ -563,8 +575,8 @@ public class LockScreenManager {
                     public void onPanelSlide(View panel, float slideOffset) {
                         if (!isInit) {
                             isInit = true;
-//                            mPullImage
-//                                    .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+                            // mPullImage
+                            // .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
                             initOnlinePaperPanelView();
                         }
                     }
@@ -577,7 +589,7 @@ public class LockScreenManager {
                     public void onPanelExpanded(View panel) {
                         mSliderView.setEnabled(false);
                         if (null != mOnlineWallpaperView) {
-//                            createPullButtonAnimation(mPullImage, 0, 180);
+                            // createPullButtonAnimation(mPullImage, 0, 180);
                             mOnlineWallpaperView.initContentView();
                             mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
 
@@ -601,9 +613,9 @@ public class LockScreenManager {
                     @Override
                     public void onPanelCollapsed(View panel) {
                         isInit = false;
-//                        mPullImage
-//                                .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
-//                        createPullButtonAnimation(mPullImage, 180, 360);
+                        // mPullImage
+                        // .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+                        // createPullButtonAnimation(mPullImage, 180, 360);
                         mSliderView.setEnabled(true);
                     }
 
@@ -797,18 +809,18 @@ public class LockScreenManager {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("onPanelFixed");
             }
-//            UmengCustomEventManager.statisticalFixedTimes();
+            // UmengCustomEventManager.statisticalFixedTimes();
         }
 
         @Override
         public void onPanelClickedDuringFixed() {
-//            UmengCustomEventManager.statisticalFixedUnLockTimes();
+            // UmengCustomEventManager.statisticalFixedUnLockTimes();
             // if (!showGestureView()) {
             // internalUnLock();
             // }
-//            if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
-//                mPandoraConfig.saveGuideTimes(mTextGuideTimes + 1);
-//            }
+            // if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
+            // mPandoraConfig.saveGuideTimes(mTextGuideTimes + 1);
+            // }
         }
 
         public void onPanelStartDown(View view) {
@@ -828,47 +840,6 @@ public class LockScreenManager {
             return false;
         };
     };
-
-    public void onBatteryStatusChanged(int mStatus) {
-        if (isLocked() && mBatteryTipView != null && mBatteryInfo != null) {
-            final PandoraBatteryManager pbm = PandoraBatteryManager.getInstance();
-            final Resources resource = mContext.getResources();
-            final int maxScale = pbm.getMaxScale();
-            final int curScale = pbm.getCurLevel();
-            final float rate = (float) curScale / (float) maxScale;
-            int percent = (int) (rate * 100.0);
-            switch (mStatus) {
-                case BatteryManager.BATTERY_STATUS_CHARGING:
-                    mBatteryTipView.setVisibility(View.VISIBLE);
-                    mBatteryTipView.setText(resource
-                            .getString(R.string.pandora_box_battery_charging) + percent + "%");
-                    mBatteryInfo.setVisibility(View.INVISIBLE);
-                    break;
-                case BatteryManager.BATTERY_STATUS_DISCHARGING:
-                    mBatteryTipView.setVisibility(View.GONE);
-                    if (!mIsNeedNotice) {
-                        mBatteryInfo.setVisibility(View.VISIBLE);
-                        mBatteryInfo.setText(percent + "%");
-                    }
-                    break;
-                case BatteryManager.BATTERY_STATUS_FULL:
-                    mBatteryTipView.setVisibility(View.VISIBLE);
-                    mBatteryTipView.setText(resource.getString(R.string.pandora_box_battery_full));
-                    mBatteryInfo.setVisibility(View.INVISIBLE);
-                    break;
-                case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
-                    mBatteryTipView.setVisibility(View.GONE);
-                    if (!mIsNeedNotice) {
-                        mBatteryInfo.setVisibility(View.VISIBLE);
-                        mBatteryInfo.setText(percent + "%");
-                    } else {
-                        mBatteryInfo.setVisibility(View.INVISIBLE);
-                    }
-                default:
-                    break;
-            }
-        }
-    }
 
     public void onScreenOff() {
         invisiableViews(mLockDataView, mWeatherSummary, mDigitalClockView);
