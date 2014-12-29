@@ -34,11 +34,10 @@ public class LockSoundManager {
      * @param soundId SOUND_ID_LOCK or SOUND_ID_UNLOCK
      */
     public static void play(int soundId) {
-        if (sPool != null) {
-            sPool.play(soundId, 1, 1, 0, 0, 1);
-        } else {
+        if (sPool == null) {
             initSoundPool();
         }
+        sPool.play(soundId, 1, 1, 0, 0, 1);
     }
 
     /**

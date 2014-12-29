@@ -202,13 +202,13 @@ public class LockScreenManager {
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 
-        if (!PandoraConfig.newInstance(mContext).isNeedNotice(mContext)) {
-            mWinParams.flags |= LayoutParams.FLAG_FULLSCREEN;
-        }
-        if (Build.VERSION.SDK_INT >= 19) {
-            mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS;
-            mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
-        }
+//        if (!PandoraConfig.newInstance(mContext).isNeedNotice(mContext)) {
+//            mWinParams.flags |= LayoutParams.FLAG_FULLSCREEN;
+//        }
+//        if (Build.VERSION.SDK_INT >= 19) {
+//            mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS;
+//            mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+//        }
         mWinParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 
         final Display display = mWinManager.getDefaultDisplay();
