@@ -48,8 +48,6 @@ public class DefaultBox implements IPandoraBox {
 
         mCustomImageView = (ImageView) mLayoutView
                 .findViewById(R.id.pandora_box_nodata_custom_show_imageview);
-        mCustomImageView.setOnClickListener(clickListener);
-        initDefaultImage(context);
     }
 
     private void initDefaultImage(Context context) {
