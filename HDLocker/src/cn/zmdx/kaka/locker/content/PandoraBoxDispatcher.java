@@ -105,8 +105,10 @@ public class PandoraBoxDispatcher extends Handler {
         long delta = curTime - mLastSyncDataTime;
         if (delta > PandoraPolicy.MIN_DURATION_SYNC_DATA_TIME) {
             sendEmptyMessage(PandoraBoxDispatcher.MSG_PULL_ORIGINAL_DATA);
-            sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 2000);
             mLastSyncDataTime = curTime;
+        }
+        if (!hasMessages(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES)) {
+            sendEmptyMessageDelayed(PandoraBoxDispatcher.MSG_DOWNLOAD_IMAGES, 3000);
         }
     }
 
