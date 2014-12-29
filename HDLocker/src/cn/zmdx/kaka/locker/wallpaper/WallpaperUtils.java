@@ -3,6 +3,8 @@ package cn.zmdx.kaka.locker.wallpaper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -65,6 +67,36 @@ public class WallpaperUtils {
                 }
             }
         });
+    }
 
+    /**
+     * 1. 读取系统桌面壁纸，处理为适合锁屏显示的图片 
+     * 2. 存储到手机内部存储的指定位置下
+     * @return 返回裁剪后并保存到磁盘上的文件完整路径
+     */
+    public static String initDefaultWallpaper() {
+        String path = getDefaultWallpaperPath();
+        if (TextUtils.isEmpty(path)) {
+            // TODO
+        }
+        return path;
+    }
+
+    /**
+     * 获得默认壁纸的文件路径
+     * 
+     * @return 如果文件不存在，返回null,否则返回文件完整路径
+     */
+    public static String getDefaultWallpaperPath() {
+        // TODO
+        return null;
+    }
+
+    public static Bitmap getDefaultWallpaperBitmap() {
+        final String path = getDefaultWallpaperPath();
+        if (!TextUtils.isEmpty(path)) {
+            return BitmapFactory.decodeFile(path, null);
+        }
+        return null;
     }
 }
