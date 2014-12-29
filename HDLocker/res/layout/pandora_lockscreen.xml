@@ -171,16 +171,15 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false" />
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        android:id="@+id/batteryTip"
+                    <cn.zmdx.kaka.locker.notification.view.NotificationLayout
+                        android:id="@+id/lock_bottom_notification_layout"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="30dp"
+                        android:paddingBottom="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="30dp"
-                        android:gravity="center_horizontal"
-                        android:paddingLeft="5dp"
-                        android:textColor="#FAFAFA"
-                        android:textSize="13sp" />
+                        android:layout_height="match_parent" >
+                    </cn.zmdx.kaka.locker.notification.view.NotificationLayout>
                 </RelativeLayout>
             </cn.zmdx.kaka.locker.widget.PandoraPanelLayout>
 

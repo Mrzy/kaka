@@ -203,7 +203,7 @@ public class UmengCustomEventManager {
     /**
      * 统计未固定，直接解锁次数
      */
-    public static void statisticalUnLockTimes() {
+    public static void statisticalPullDownTimes() {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_PULL_DOWN);
     }

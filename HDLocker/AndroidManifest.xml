@@ -41,18 +41,17 @@
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name=".settings.MainSettingsActivity"
-            android:theme="@android:style/Theme.NoTitleBar" 
             android:exported="false"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
-        
         <activity
             android:name=".guide.GuideActivity"
             android:exported="false"
@@ -116,6 +115,14 @@
             android:name="com.umeng.update.net.DownloadingService"
             android:process=":DownloadingService" >
         </service>
+        <service
+            android:name="cn.zmdx.kaka.locker.notification.PandoraNotificationService"
+            android:label="@string/notification_service_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
@@ -146,8 +153,7 @@
         <activity
             android:name=".content.favorites.FavoritesActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

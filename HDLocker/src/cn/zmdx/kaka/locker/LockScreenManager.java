@@ -102,7 +102,7 @@ public class LockScreenManager {
 
     private Theme mCurTheme;
 
-    private TextView mDate, mTemperature, mBatteryTipView, mWeatherSummary, mBatteryInfo;
+    private TextView mDate, mTemperature, mWeatherSummary, mBatteryInfo;
 
     private DigitalClocks mDigitalClockView;
 
@@ -111,8 +111,6 @@ public class LockScreenManager {
     private AnimatorSet mAnimatorSet;
 
     private ObjectAnimator mObjectAnimator;
-
-    private int mTextGuideTimes;
 
     private Context mContext;
 
@@ -135,8 +133,6 @@ public class LockScreenManager {
     private boolean mNeedPassword = false;
 
     private ImageView mGuide;
-
-    private TextView batteryPercentTextView;
 
     private BatteryView batteryView;
 
@@ -192,7 +188,6 @@ public class LockScreenManager {
 
         mIsLocked = true;
 
-        mTextGuideTimes = pandoraConfig.getGuideTimesInt();
         mWinParams = new WindowManager.LayoutParams();
 
         mIsNeedNotice = mPandoraConfig.isNeedNotice(mContext);
@@ -419,7 +414,6 @@ public class LockScreenManager {
                 R.drawable.sliding_panel_layout_shadow));
         mSlidingBehindLayout = (FrameLayout) mEntireView.findViewById(R.id.sliding_behind_layout);
         mSlidingBehindBlurView = (ImageView) mEntireView.findViewById(R.id.sliding_behind_blur);
-        mBatteryTipView = (TextView) mEntireView.findViewById(R.id.batteryTip);
         mBatteryInfo = (TextView) mEntireView.findViewById(R.id.battery_info);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
@@ -473,7 +467,6 @@ public class LockScreenManager {
             mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_one);
             PandoraConfig.newInstance(mContext).saveLockScreenTimes(2);
         }
-
     }
 
     /**
@@ -495,14 +488,57 @@ public class LockScreenManager {
 
         @Override
         public void onPanelOpened(View panel) {
+            dispatchMainPanelOpened();
             unLock(true, false);
         }
 
         @Override
         public void onPanelClosed(View panel) {
+            dispatchMainPanelClosed();
         }
-
     };
+
+    public interface IMainPanelListener {
+        void onMainPanelOpened();
+
+        void onMainPanelClosed();
+    }
+
+    private Set<IMainPanelListener> mMainPanelCallback = new HashSet<IMainPanelListener>();
+
+    public void registMainPanelListener(IMainPanelListener listener) {
+        if (listener == null) {
+            return;
+        }
+        synchronized (mMainPanelCallback) {
+            mMainPanelCallback.add(listener);
+        }
+    }
+
+    public void unRegistMainPanelListener(IMainPanelListener listener) {
+        if (listener == null) {
+            return;
+        }
+        synchronized (mMainPanelCallback) {
+            mMainPanelCallback.remove(listener);
+        }
+    }
+
+    private void dispatchMainPanelOpened() {
+        synchronized (mMainPanelCallback) {
+            for (IMainPanelListener listener : mMainPanelCallback) {
+                listener.onMainPanelOpened();
+            }
+        }
+    }
+
+    private void dispatchMainPanelClosed() {
+        synchronized (mMainPanelCallback) {
+            for (IMainPanelListener listener : mMainPanelCallback) {
+                listener.onMainPanelClosed();
+            }
+        }
+    }
 
     /**
      * 设置拉开后内容的背景图片，如果onlyDisplayCustomImage为true，则只有当设置了个性化背景时才会显示，否则不显示任何东西（
@@ -791,7 +827,7 @@ public class LockScreenManager {
 
         @Override
         public void onPanelCollapsed(View panel) {
-            UmengCustomEventManager.statisticalUnLockTimes();
+            UmengCustomEventManager.statisticalPullDownTimes();
         }
 
         @Override
@@ -805,27 +841,14 @@ public class LockScreenManager {
 
         @Override
         public void onPanelFixed(View panel) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("onPanelFixed");
-            }
-            // UmengCustomEventManager.statisticalFixedTimes();
         }
 
         @Override
         public void onPanelClickedDuringFixed() {
-            // UmengCustomEventManager.statisticalFixedUnLockTimes();
-            // if (!showGestureView()) {
-            // internalUnLock();
-            // }
-            // if (mTextGuideTimes < MAX_TIMES_SHOW_GUIDE) {
-            // mPandoraConfig.saveGuideTimes(mTextGuideTimes + 1);
-            // }
         }
 
         public void onPanelStartDown(View view) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("onPanelStartDown");
-            }
+            dispatchStartPullDownEvent();
         };
 
         public void onPanelHiddenEnd() {
@@ -839,6 +862,32 @@ public class LockScreenManager {
             return false;
         };
     };
+
+    public interface IPullDownListener {
+        void onStartPullDown();
+    }
+
+    private Set<IPullDownListener> mPullDownListener = new HashSet<IPullDownListener>();
+
+    private void dispatchStartPullDownEvent() {
+        synchronized (mPullDownListener) {
+            for (IPullDownListener listener : mPullDownListener) {
+                listener.onStartPullDown();
+            }
+        }
+    }
+
+    public void registPullDownListener(IPullDownListener listener) {
+        synchronized (mPullDownListener) {
+            mPullDownListener.add(listener);
+        }
+    }
+
+    public void unRegistPullDownListener(IPullDownListener listener) {
+        synchronized (mPullDownListener) {
+            mPullDownListener.remove(listener);
+        }
+    }
 
     public void onScreenOff() {
         invisiableViews(mLockDataView, mWeatherSummary, mDigitalClockView);

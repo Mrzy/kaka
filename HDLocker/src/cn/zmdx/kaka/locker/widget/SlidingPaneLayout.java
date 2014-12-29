@@ -854,9 +854,10 @@ public class SlidingPaneLayout extends ViewGroup {
                 final float x = ev.getX();
                 final float y = ev.getY();
                 final float adx = Math.abs(x - mInitialMotionX);
+                final float deltaX = x - mInitialMotionX;
                 final float ady = Math.abs(y - mInitialMotionY);
                 final int slop = mDragHelper.getTouchSlop();
-                if (adx > slop && ady > adx) {
+                if ((adx > slop && ady > adx) || deltaX < 0) {
                     mDragHelper.cancel();
                     mIsUnableToDrag = true;
                     return false;
