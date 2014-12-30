@@ -76,13 +76,13 @@ public class PandoraUtils {
 
     public static final int WARM_PROMPT_1 = 1;
 
-//    public static Bitmap fastBlur(View decorView) {
-//        decorView.setDrawingCacheEnabled(true);
-//        decorView.buildDrawingCache();
-//        Bitmap bitmap = decorView.getDrawingCache();
-//        return doFastBlur(bitmap, decorView);
-//
-//    }
+    // public static Bitmap fastBlur(View decorView) {
+    // decorView.setDrawingCacheEnabled(true);
+    // decorView.buildDrawingCache();
+    // Bitmap bitmap = decorView.getDrawingCache();
+    // return doFastBlur(bitmap, decorView);
+    //
+    // }
 
     public static Bitmap doFastBlur(Context context, int overhangSize, Bitmap bkg, View view) {
         float scaleFactor = 8;
@@ -97,8 +97,9 @@ public class PandoraUtils {
         canvas.scale(1 / scaleFactor, 1 / scaleFactor);
         Paint paint = new Paint();
         paint.setFlags(Paint.FILTER_BITMAP_FLAG);
-        canvas.drawBitmap(bkg, new Rect(0, 0, bkg.getWidth(), bkg.getHeight()), new Rect(0, 0, width, screenHeight), paint);
-//        canvas.drawBitmap(bkg, 0, 0, paint);
+        canvas.drawBitmap(bkg, new Rect(0, 0, bkg.getWidth(), bkg.getHeight()), new Rect(0, 0,
+                width, screenHeight), paint);
+        // canvas.drawBitmap(bkg, 0, 0, paint);
         return FastBlur.doBlur(overlay, (int) radius, true);
     }
 
@@ -198,6 +199,57 @@ public class PandoraUtils {
         }
     }
 
+    public static void setMiuiAllowReadNotification(Context mContext, String version) {
+        try {
+            if (version.equals(MUIU_V5)) {
+                Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                mContext.startActivity(intent);
+            } else if (version.equals(MUIU_V6)) {
+                Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                mContext.startActivity(i);
+            }
+        } catch (Exception e) {
+            Toast.makeText(mContext, R.string.error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void setMeizuAllowReadNotification(Context mContext) {
+        boolean meizu = isMeizu(mContext);
+        try {
+            if (meizu) {
+                if (Build.VERSION.SDK_INT >= 18) {
+                    Intent intent = new Intent(
+                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                    mContext.startActivity(intent);
+                } else {
+                    Intent intent = new Intent("android.settings.ACCESSIBILITY_SETTINGS");
+                    mContext.startActivity(intent);
+                }
+            }
+        } catch (Exception e) {
+            Toast.makeText(mContext, R.string.error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void setRegularAllowReadNotification(Context mContext) {
+        boolean meizu = isMeizu(mContext);
+        boolean miui = isMIUI(mContext);
+        try {
+            if (!meizu && !miui) {
+                if (Build.VERSION.SDK_INT >= 18) {
+                    Intent intent = new Intent(
+                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                    mContext.startActivity(intent);
+                } else {
+                    Intent intent = new Intent("android.settings.ACCESSIBILITY_SETTINGS");
+                    mContext.startActivity(intent);
+                }
+            }
+        } catch (Exception e) {
+            Toast.makeText(mContext, R.string.error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     /**
      * 获得程序版本号
      * 
@@ -212,7 +264,6 @@ public class PandoraUtils {
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
-
         return versionName;
     }
 
@@ -333,7 +384,8 @@ public class PandoraUtils {
     public static BitmapDrawable getLockDefaultBitmap(Context context) {
         String fileName = PandoraConfig.newInstance(context).getLockDefaultFileName();
         if (!TextUtils.isEmpty(fileName)) {
-            String path = IndividualizationActivity.LOCK_DEFAULT_SDCARD_LOCATION + fileName + ".jpg";
+            String path = IndividualizationActivity.LOCK_DEFAULT_SDCARD_LOCATION + fileName
+                    + ".jpg";
             Bitmap bitmap = ImageUtils.getBitmapFromFile(path, null);
             BitmapDrawable drawable = null;
             if (null != bitmap) {

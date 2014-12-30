@@ -23,11 +23,15 @@ public class InitPromptActivity extends Activity {
 
     private LinearLayout mV5TrustView;
 
+    private LinearLayout mV5ReadNotificationView;
+
     private LinearLayout mV6CloseSystemLockerView;
 
     private LinearLayout mV6AllowFloatWindowView;
 
     private LinearLayout mV6TrustView;
+
+    private LinearLayout mV6ReadNotificationView;
 
     private boolean isMIUI;
 
@@ -38,6 +42,8 @@ public class InitPromptActivity extends Activity {
     public static final int PROMPT_ALLOW_FLOAT_WINDOW = 2;
 
     public static final int PROMPT_TRRST = 3;
+
+    public static final int PROMPT_READ_NOTIFICATION = 4;
 
     private int mPromptType;
 
@@ -67,6 +73,7 @@ public class InitPromptActivity extends Activity {
                 mV6CloseSystemLockerView = (LinearLayout) findViewById(R.id.init_setting_V6_close_systemlocker_prompt);
                 mV6AllowFloatWindowView = (LinearLayout) findViewById(R.id.init_setting_V6_allow_floating_window_prompt);
                 mV6TrustView = (LinearLayout) findViewById(R.id.init_setting_V6_trust_prompt);
+                mV6ReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_V6_read_notification_prompt);
             } else {
                 findViewById(R.id.init_setting_close_systemlocker_prompt).setVisibility(View.GONE);
                 findViewById(R.id.init_setting_MIUI_V5).setVisibility(View.VISIBLE);
@@ -74,6 +81,7 @@ public class InitPromptActivity extends Activity {
                 mV5CloseSystemLockerView = (LinearLayout) findViewById(R.id.init_setting_V5_close_systemlocker_prompt_miui);
                 mV5AllowFloatWindowView = (LinearLayout) findViewById(R.id.init_setting_V5_allow_floating_window_prompt);
                 mV5TrustView = (LinearLayout) findViewById(R.id.init_setting_V5_trust_prompt);
+                mV5ReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_V5_read_notification_prompt);
             }
         } else {
             findViewById(R.id.init_setting_MIUI_V5).setVisibility(View.GONE);
@@ -96,7 +104,8 @@ public class InitPromptActivity extends Activity {
                     case PROMPT_TRRST:
                         mV6TrustView.setVisibility(View.VISIBLE);
                         break;
-
+                    case PROMPT_READ_NOTIFICATION:
+                        mV6ReadNotificationView.setVisibility(View.VISIBLE);
                     default:
                         break;
                 }
@@ -113,7 +122,9 @@ public class InitPromptActivity extends Activity {
                     case PROMPT_TRRST:
                         mV5TrustView.setVisibility(View.VISIBLE);
                         break;
-
+                    case PROMPT_READ_NOTIFICATION:
+                        mV5ReadNotificationView.setVisibility(View.VISIBLE);
+                        break;
                     default:
                         break;
                 }

@@ -131,6 +131,40 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/init_setting_V5_read_notification_prompt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/init_setting_V5_trust_prompt_margin_top"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/contentDescription"
+                android:src="@drawable/init_setting_prompt_trust" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
+                android:layout_marginTop="@dimen/init_setting_V5_textview_prompt_margin_top"
+                android:text="@string/init_setting_MIUI_read_notification_prompt_one"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
+                android:layout_marginTop="@dimen/init_setting_V5_textview_prompt_margin_top"
+                android:text="@string/init_setting_MIUI_read_notification_prompt_two"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -276,6 +310,41 @@
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:id="@+id/init_setting_V6_trust_prompt_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/init_setting_button_background"
+                android:gravity="center"
+                android:text="@string/determine"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/init_setting_V6_read_notification_prompt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/init_setting_prompt_background"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/setting_title_textview_margin_left"
+            android:paddingRight="@dimen/setting_title_textview_margin_left"
+            android:visibility="gone" >
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="@string/init_setting_V6_read_notification_prompt_one"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/init_setting_V6_read_notification_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

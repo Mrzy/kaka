@@ -11,9 +11,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
@@ -34,11 +34,19 @@ public class InitSettingActivity extends Activity implements OnClickListener {
 
     private Button mTrustBtn;
 
+    private Button mMiuiReadNotificationBtn;
+
+    private Button mMeizuReadNotificationBtn;
+
+    private Button mRegularReadNotificationBtn;
+
     private View mRootView;
 
     private TypefaceTextView mCompleteBtn;
 
     private static boolean isMIUI = false;
+
+    private static boolean isMeizu = false;
 
     private static String mMIUIVersion;
 
@@ -48,6 +56,8 @@ public class InitSettingActivity extends Activity implements OnClickListener {
 
     private static final int MSG_TRUST = 2;
 
+    private static final int MSG_READ_NOTIFICATION = 3;
+
     private static final int MSG_SETTING_DELAY = 500;
 
     @Override
@@ -56,6 +66,7 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         mMIUIVersion = PandoraUtils.getSystemProperty();
         isMIUI = PandoraUtils.isMIUI(this);
+        isMeizu = PandoraUtils.isMeizu(this);
         setContentView(R.layout.init_setting_fragment);
         getWindow().getAttributes().flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         initView();
@@ -68,6 +79,19 @@ public class InitSettingActivity extends Activity implements OnClickListener {
             findViewById(R.id.init_setting_MIUI_allow_floating_window_guide).setVisibility(
                     View.VISIBLE);
             findViewById(R.id.init_setting_MIUI_trust_guide).setVisibility(View.VISIBLE);
+            findViewById(R.id.init_setting_MIUI_read_notification_bar_guide).setVisibility(
+                    View.VISIBLE);
+            findViewById(R.id.init_setting_Regular_read_notification_bar_guide).setVisibility(
+                    View.GONE);
+        }
+        if (isMeizu) {
+            findViewById(R.id.init_setting_MIUI_close_systemlocker).setVisibility(View.GONE);
+            findViewById(R.id.init_setting_MEIZU_read_notification_bar_guide).setVisibility(
+                    View.VISIBLE);
+        }
+        if (!isMIUI && !isMeizu) {
+            findViewById(R.id.init_setting_Regular_read_notification_bar_guide).setVisibility(
+                    View.VISIBLE);
         }
         mRootView = findViewById(R.id.init_setting_background);
         mCloseSystemLockBtn = (Button) findViewById(R.id.init_setting_close_systemlocker_to_set);
@@ -78,7 +102,12 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         mTrustBtn.setOnClickListener(this);
         mCompleteBtn = (TypefaceTextView) findViewById(R.id.init_setting_miui_complete);
         mCompleteBtn.setOnClickListener(this);
-
+        mMiuiReadNotificationBtn = (Button) findViewById(R.id.init_setting_MIUI_read_notification_bar_to_set);
+        mMiuiReadNotificationBtn.setOnClickListener(this);
+        mMeizuReadNotificationBtn = (Button) findViewById(R.id.init_setting_MEIZU_read_notification_bar_to_set);
+        mMeizuReadNotificationBtn.setOnClickListener(this);
+        mRegularReadNotificationBtn = (Button) findViewById(R.id.init_setting_Regular_read_notification_bar_to_set);
+        mRegularReadNotificationBtn.setOnClickListener(this);
     }
 
     private void initTitleHeight() {
@@ -106,15 +135,16 @@ public class InitSettingActivity extends Activity implements OnClickListener {
     }
 
     private void showPromptActicity(boolean isMIUI, String mMIUIVersion, int type) {
-        Intent in = new Intent();
-        in.setClass(this, InitPromptActivity.class);
-        in.putExtra("isMIUI", isMIUI);
-        in.putExtra("mMIUIVersion", mMIUIVersion);
-        in.putExtra("type", type);
-        startActivity(in);
-        overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                R.anim.umeng_fb_slide_out_from_left);
-
+        if (isMIUI) {
+            Intent in = new Intent();
+            in.setClass(this, InitPromptActivity.class);
+            in.putExtra("isMIUI", isMIUI);
+            in.putExtra("mMIUIVersion", mMIUIVersion);
+            in.putExtra("type", type);
+            startActivity(in);
+            overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                    R.anim.umeng_fb_slide_out_from_left);
+        }
     }
 
     @Override
@@ -131,6 +161,7 @@ public class InitSettingActivity extends Activity implements OnClickListener {
                 closeSystemLocker.what = MSG_CLOSE_SYSTEM_LOCKER;
                 mHandler.sendMessageDelayed(closeSystemLocker, MSG_SETTING_DELAY);
                 break;
+
             case R.id.init_setting_MIUI_allow_floating_window_to_set:
                 PandoraUtils.setAllowFolatWindow(InitSettingActivity.this, mMIUIVersion);
                 mFolatfingWindowBtn.setBackgroundResource(R.drawable.base_button_pressed);
@@ -141,8 +172,8 @@ public class InitSettingActivity extends Activity implements OnClickListener {
                 Message allowFloatWindow = Message.obtain();
                 allowFloatWindow.what = MSG_ALLOW_FOLAT_WINDOW;
                 mHandler.sendMessageDelayed(allowFloatWindow, MSG_SETTING_DELAY);
-
                 break;
+
             case R.id.init_setting_MIUI_trust_to_set:
                 PandoraUtils.setTrust(InitSettingActivity.this, mMIUIVersion);
                 mTrustBtn.setBackgroundResource(R.drawable.base_button_pressed);
@@ -153,8 +184,42 @@ public class InitSettingActivity extends Activity implements OnClickListener {
                 setTrust.what = MSG_TRUST;
                 mHandler.sendMessageDelayed(setTrust, MSG_SETTING_DELAY);
                 break;
+
             case R.id.init_setting_miui_complete:
                 onBackPressed();
+                break;
+
+            case R.id.init_setting_MIUI_read_notification_bar_to_set:
+                PandoraUtils.setMiuiAllowReadNotification(InitSettingActivity.this, mMIUIVersion);
+                mMiuiReadNotificationBtn.setBackgroundResource(R.drawable.base_button_pressed);
+                if (mHandler.hasMessages(MSG_READ_NOTIFICATION)) {
+                    mHandler.removeMessages(MSG_READ_NOTIFICATION);
+                }
+                Message readNotification = Message.obtain();
+                readNotification.what = MSG_READ_NOTIFICATION;
+                mHandler.sendMessageDelayed(readNotification, MSG_SETTING_DELAY);
+                break;
+
+            case R.id.init_setting_MEIZU_read_notification_bar_to_set:
+                PandoraUtils.setMeizuAllowReadNotification(InitSettingActivity.this);
+                mMeizuReadNotificationBtn.setBackgroundResource(R.drawable.base_button_pressed);
+                if (mHandler.hasMessages(MSG_READ_NOTIFICATION)) {
+                    mHandler.removeMessages(MSG_READ_NOTIFICATION);
+                }
+                Message readMeizuNotification = Message.obtain();
+                readMeizuNotification.what = MSG_READ_NOTIFICATION;
+                mHandler.sendMessageDelayed(readMeizuNotification, MSG_SETTING_DELAY);
+                break;
+
+            case R.id.init_setting_Regular_read_notification_bar_to_set:
+                PandoraUtils.setRegularAllowReadNotification(InitSettingActivity.this);
+                mRegularReadNotificationBtn.setBackgroundResource(R.drawable.base_button_pressed);
+                if (mHandler.hasMessages(MSG_READ_NOTIFICATION)) {
+                    mHandler.removeMessages(MSG_READ_NOTIFICATION);
+                }
+                Message readRegularNotification = Message.obtain();
+                readRegularNotification.what = MSG_READ_NOTIFICATION;
+                mHandler.sendMessageDelayed(readRegularNotification, MSG_SETTING_DELAY);
                 break;
 
             default:
@@ -187,7 +252,10 @@ public class InitSettingActivity extends Activity implements OnClickListener {
                     ((InitSettingActivity) activity).showPromptActicity(isMIUI, mMIUIVersion,
                             InitPromptActivity.PROMPT_TRRST);
                     break;
-
+                case MSG_READ_NOTIFICATION:
+                    ((InitSettingActivity) activity).showPromptActicity(isMIUI, mMIUIVersion,
+                            InitPromptActivity.PROMPT_READ_NOTIFICATION);
+                    break;
             }
             super.handleMessage(msg);
         }

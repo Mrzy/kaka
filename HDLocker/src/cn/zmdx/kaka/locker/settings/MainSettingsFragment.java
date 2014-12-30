@@ -83,12 +83,12 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     private void initView() {
         mInitSetting = (LinearLayout) mRootView.findViewById(R.id.setting_init);
         mInitSetting.setOnClickListener(this);
-        if (isMeizu) {
-            enablePandoraLocker();
-            mInitSetting.setVisibility(View.GONE);
-        } else {
+//        if (isMeizu) {
+//            enablePandoraLocker();
+//            mInitSetting.setVisibility(View.GONE);
+//        } else {
             mInitSetting.setVisibility(View.VISIBLE);
-        }
+//        }
 
         mPandoraFavorite = (LinearLayout) mRootView.findViewById(R.id.pandora_favorite);
         mPandoraFavorite.setOnClickListener(this);
