@@ -3,7 +3,6 @@ package cn.zmdx.kaka.locker.settings;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,10 +17,6 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.favorites.FavoritesActivity;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -135,21 +130,22 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     }
 
     private void initWallpaper() {
-        Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isDefaultTheme()) {
-            mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
-        } else {
-            WallpaperUtils.loadBackgroundBitmap(getActivity(), theme.getFilePath(),
-                    new ILoadBitmapCallback() {
-
-                        @SuppressWarnings("deprecation")
-                        @Override
-                        public void imageLoaded(Bitmap bitmap, String filePath) {
-                            mSettingBackground.setBackgroundDrawable(new BitmapDrawable(
-                                    getResources(), bitmap));
-                        }
-                    });
-        }
+        mSettingBackground.setBackgroundResource(R.drawable.setting_background_road_fore);
+//        Theme theme = ThemeManager.getCurrentTheme();
+//        if (theme.isDefaultTheme()) {
+//            mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
+//        } else {
+//            WallpaperUtils.loadBackgroundBitmap(getActivity(), theme.getFilePath(),
+//                    new ILoadBitmapCallback() {
+//
+//                        @SuppressWarnings("deprecation")
+//                        @Override
+//                        public void imageLoaded(Bitmap bitmap, String filePath) {
+//                            mSettingBackground.setBackgroundDrawable(new BitmapDrawable(
+//                                    getResources(), bitmap));
+//                        }
+//                    });
+//        }
     }
 
     private void initSwitchButtonState() {

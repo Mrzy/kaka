@@ -58,7 +58,9 @@ import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaper;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
@@ -550,10 +552,10 @@ public class LockScreenManager {
         final ImageView mPullImage = (ImageView) mEntireView
                 .findViewById(R.id.lock_wallpaper_view_im);
         int statusBarHeight = PandoraUtils.getStatusBarHeight(mContext);
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        lp.setMargins(0, statusBarHeight + 10, 0, 0);
-//        mPullImage.setLayoutParams(lp);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, statusBarHeight + 10, 0, 0);
+        mPullImage.setLayoutParams(lp);
         mOnlinePanel = (WallpaperPanelLayout) mEntireView
                 .findViewById(R.id.locker_wallpaper_sliding);
         mOnlinePanel
@@ -563,8 +565,8 @@ public class LockScreenManager {
                     public void onPanelSlide(View panel, float slideOffset) {
                         if (!isInit) {
                             isInit = true;
-//                            mPullImage
-//                                    .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+                            mPullImage
+                                    .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
                             initOnlinePaperPanelView();
                         }
                     }
@@ -577,7 +579,7 @@ public class LockScreenManager {
                     public void onPanelExpanded(View panel) {
                         mSliderView.setEnabled(false);
                         if (null != mOnlineWallpaperView) {
-//                            createPullButtonAnimation(mPullImage, 0, 180);
+                            createPullButtonAnimation(mPullImage, 0, 180);
                             mOnlineWallpaperView.initContentView();
                             mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
 
@@ -601,9 +603,9 @@ public class LockScreenManager {
                     @Override
                     public void onPanelCollapsed(View panel) {
                         isInit = false;
-//                        mPullImage
-//                                .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
-//                        createPullButtonAnimation(mPullImage, 180, 360);
+                        mPullImage
+                                .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
+                        createPullButtonAnimation(mPullImage, 180, 360);
                         mSliderView.setEnabled(true);
                     }
 
@@ -644,8 +646,9 @@ public class LockScreenManager {
         Drawable bgDrawable = null;
         mCurTheme = ThemeManager.getCurrentTheme();
         if (mCurTheme.isDefaultTheme()) {
-            bgDrawable = mContext.getResources().getDrawable(mCurTheme.getmForegroundResId());
-            mSliderView.setForegroundDrawable(bgDrawable);
+//            bgDrawable = mContext.getResources().getDrawable(mCurTheme.getmForegroundResId());
+//            mSliderView.setForegroundDrawable(bgDrawable);
+            mSliderView.setForgroundFile(mCurTheme.getFilePath());
         } else {
             if (TextUtils.isEmpty(mCurTheme.getFilePath())) {
                 mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());

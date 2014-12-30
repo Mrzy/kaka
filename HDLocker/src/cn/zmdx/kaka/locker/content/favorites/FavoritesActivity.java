@@ -1,8 +1,6 @@
 
 package cn.zmdx.kaka.locker.content.favorites;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -15,10 +13,6 @@ import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
 import cn.zmdx.kaka.locker.content.box.IFoldablePage;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 
 public class FavoritesActivity extends FragmentActivity {
 
@@ -77,21 +71,22 @@ public class FavoritesActivity extends FragmentActivity {
     }
 
     private void initWallpaper() {
-        Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isDefaultTheme()) {
-            mRootView.setBackgroundResource(theme.getmBackgroundResId());
-        } else {
-            WallpaperUtils.loadBackgroundBitmap(FavoritesActivity.this, theme.getFilePath(),
-                    new ILoadBitmapCallback() {
-
-                        @SuppressWarnings("deprecation")
-                        @Override
-                        public void imageLoaded(Bitmap bitmap, String filePath) {
-                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
-                                    bitmap));
-                        }
-                    });
-        }
+        mRootView.setBackgroundResource(R.drawable.setting_background_road_fore);
+//        Theme theme = ThemeManager.getCurrentTheme();
+//        if (theme.isDefaultTheme()) {
+//            mRootView.setBackgroundResource(theme.getmBackgroundResId());
+//        } else {
+//            WallpaperUtils.loadBackgroundBitmap(FavoritesActivity.this, theme.getFilePath(),
+//                    new ILoadBitmapCallback() {
+//
+//                        @SuppressWarnings("deprecation")
+//                        @Override
+//                        public void imageLoaded(Bitmap bitmap, String filePath) {
+//                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
+//                                    bitmap));
+//                        }
+//                    });
+//        }
     }
     @Override
     protected void onDestroy() {

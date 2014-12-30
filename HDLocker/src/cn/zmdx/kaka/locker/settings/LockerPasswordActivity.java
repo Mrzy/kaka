@@ -3,23 +3,17 @@ package cn.zmdx.kaka.locker.settings;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 
 public class LockerPasswordActivity extends Activity implements OnClickListener {
 
@@ -74,22 +68,22 @@ public class LockerPasswordActivity extends Activity implements OnClickListener 
         titleLayout.setPadding(0, statusBarHeight, 0, 0);
     }
 
-    @SuppressWarnings("deprecation")
     private void initWallpaper() {
-        Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isDefaultTheme()) {
-            mRootView.setBackgroundResource(theme.getmBackgroundResId());
-        } else {
-            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(),
-                    new ILoadBitmapCallback() {
-
-                        @Override
-                        public void imageLoaded(Bitmap bitmap, String filePath) {
-                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
-                                    bitmap));
-                        }
-                    });
-        }
+        mRootView.setBackgroundResource(R.drawable.setting_background_road_fore);
+//        Theme theme = ThemeManager.getCurrentTheme();
+//        if (theme.isDefaultTheme()) {
+//            mRootView.setBackgroundResource(theme.getmBackgroundResId());
+//        } else {
+//            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(),
+//                    new ILoadBitmapCallback() {
+//
+//                        @Override
+//                        public void imageLoaded(Bitmap bitmap, String filePath) {
+//                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
+//                                    bitmap));
+//                        }
+//                    });
+//        }
     }
 
     private void initLockType() {

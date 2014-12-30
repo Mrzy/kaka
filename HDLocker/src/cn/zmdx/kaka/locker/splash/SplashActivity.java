@@ -14,22 +14,20 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pandora_splash);
-        HDBThreadUtils.postOnWorkerDelayed(new Runnable() {
-            
-            @Override
-            public void run() {
-                boolean isForceTheme = PandoraConfig.newInstance(SplashActivity.this).getChristmasForceTheme();
-                if (!isForceTheme) {
-                    PandoraConfig.newInstance(SplashActivity.this).saveThemeId(ThemeManager.THEME_ID_DEFAULT);
-                    PandoraConfig.newInstance(SplashActivity.this).saveChristmasForceTheme(true);
-                }
-                
-                Intent in =new Intent();
-                in.setClass(SplashActivity.this, MainSettingsActivity.class);
-                startActivity(in);
-                finish();
-            }
-        }, 1500);
+        Intent in = new Intent();
+        in.setClass(SplashActivity.this, MainSettingsActivity.class);
+        startActivity(in);
+        finish();
+        // setContentView(R.layout.pandora_splash);
+        // HDBThreadUtils.postOnWorkerDelayed(new Runnable() {
+        //
+        // @Override
+        // public void run() {
+        // Intent in =new Intent();
+        // in.setClass(SplashActivity.this, MainSettingsActivity.class);
+        // startActivity(in);
+        // finish();
+        // }
+        // }, 1500);
     }
 }

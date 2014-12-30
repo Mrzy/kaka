@@ -1,16 +1,28 @@
 
 package cn.zmdx.kaka.locker.wallpaper;
 
+import java.io.File;
+
+import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.text.TextUtils;
+import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class WallpaperUtils {
+
+    private static final String DESKTOP_WALLPAPER_FILE_PATH = Environment
+            .getExternalStorageDirectory().getPath() + "/.Pandora/wallpaper/desktop/";
+
+    private static final String DESKTOP_WALLPAPER_FILE_NAME = "desktop.jpg";
 
     public interface ILoadBitmapCallback {
         void imageLoaded(Bitmap bitmap, String filePath);
@@ -70,16 +82,33 @@ public class WallpaperUtils {
     }
 
     /**
-     * 1. 读取系统桌面壁纸，处理为适合锁屏显示的图片 
-     * 2. 存储到手机内部存储的指定位置下
+     * 1. 读取系统桌面壁纸，处理为适合锁屏显示的图片 2. 存储到手机内部存储的指定位置下
+     * 
      * @return 返回裁剪后并保存到磁盘上的文件完整路径
      */
     public static String initDefaultWallpaper() {
         String path = getDefaultWallpaperPath();
         if (TextUtils.isEmpty(path)) {
-            // TODO
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance(HDApplication
+                    .getContext());
+            Drawable wallpaperDrawable = wallpaperManager.getDrawable();
+            Bitmap bm = ((BitmapDrawable) wallpaperDrawable).getBitmap();
+            int screenWidth = BaseInfoHelper.getRealWidth(HDApplication.getContext());
+            int screenHeight = BaseInfoHelper.getRealHeight(HDApplication.getContext());
+            int X = (bm.getWidth() - screenWidth) / 2;
+            Bitmap aa = Bitmap.createBitmap(bm, X, 0, screenWidth, screenHeight);
+            mkDirs();
+            ImageUtils.saveImageToFile(aa, DESKTOP_WALLPAPER_FILE_PATH
+                    + DESKTOP_WALLPAPER_FILE_NAME);
         }
         return path;
+    }
+
+    private static void mkDirs() {
+        File dir = new File(DESKTOP_WALLPAPER_FILE_PATH);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
     }
 
     /**
@@ -88,7 +117,10 @@ public class WallpaperUtils {
      * @return 如果文件不存在，返回null,否则返回文件完整路径
      */
     public static String getDefaultWallpaperPath() {
-        // TODO
+        File file = new File(DESKTOP_WALLPAPER_FILE_PATH + DESKTOP_WALLPAPER_FILE_NAME);
+        if (file.exists()) {
+            return DESKTOP_WALLPAPER_FILE_PATH + DESKTOP_WALLPAPER_FILE_NAME;
+        }
         return null;
     }
 

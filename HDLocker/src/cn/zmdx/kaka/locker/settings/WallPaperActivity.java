@@ -23,14 +23,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -142,20 +141,21 @@ public class WallPaperActivity extends Activity implements IWallpaperClickListen
     }
 
     private void initWallpaper() {
-        Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isDefaultTheme()) {
-            mRootView.setBackgroundResource(theme.getmBackgroundResId());
-        } else {
-            WallpaperUtils.loadBackgroundBitmap(WallPaperActivity.this, theme.getFilePath(),
-                    new ILoadBitmapCallback() {
-
-                        @Override
-                        public void imageLoaded(Bitmap bitmap, String filePath) {
-                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
-                                    bitmap));
-                        }
-                    });
-        }
+        mRootView.setBackgroundResource(R.drawable.setting_background_road_fore);
+//        Theme theme = ThemeManager.getCurrentTheme();
+//        if (theme.isDefaultTheme()) {
+//            mRootView.setBackgroundResource(theme.getmBackgroundResId());
+//        } else {
+//            WallpaperUtils.loadBackgroundBitmap(WallPaperActivity.this, theme.getFilePath(),
+//                    new ILoadBitmapCallback() {
+//
+//                        @Override
+//                        public void imageLoaded(Bitmap bitmap, String filePath) {
+//                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
+//                                    bitmap));
+//                        }
+//                    });
+//        }
 
     }
 

@@ -302,9 +302,9 @@ public class OnlineWallpaperView extends LinearLayout {
     private void initPreview() {
         Theme curTheme = ThemeManager.getCurrentTheme();
         if (null != curTheme) {
-            if (curTheme.isDefaultTheme()) {
-                mPreview.setImageResource(curTheme.getmBackgroundResId());
-            } else {
+//            if (curTheme.isDefaultTheme()) {
+//                mPreview.setImageResource(curTheme.getmBackgroundResId());
+//            } else {
                 WallpaperUtils.loadBackgroundBitmap(mContext, curTheme.getFilePath(),
                         new ILoadBitmapCallback() {
 
@@ -313,7 +313,7 @@ public class OnlineWallpaperView extends LinearLayout {
                                 mPreview.setImageBitmap(bitmap);
                             }
                         });
-            }
+//            }
         } else {
             mPreview.setImageResource(R.drawable.online_wallpaper_default);
         }
