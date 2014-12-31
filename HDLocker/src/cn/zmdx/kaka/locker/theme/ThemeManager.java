@@ -11,7 +11,6 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 
 public class ThemeManager {
     public static final int THEME_ID_CUSTOM = -1;
@@ -85,25 +84,43 @@ public class ThemeManager {
         return theme;
     }
 
+    // public static Theme getThemeById(int themeId) {
+    // Theme theme = new Theme();
+    // switch (themeId) {
+    // case THEME_ID_DEFAULT:
+    // String path = WallpaperUtils.getDefaultWallpaperPath();
+    // if (TextUtils.isEmpty(path)) {
+    // path = WallpaperUtils.initDefaultWallpaper();
+    // }
+    // theme.setDefaultTheme(false);
+    // theme.setFilePath(path);
+    // theme.setmThemeId(THEME_ID_DEFAULT);
+    // break;
+    // default:
+    // String path1 = WallpaperUtils.getDefaultWallpaperPath();
+    // if (TextUtils.isEmpty(path1)) {
+    // path1 = WallpaperUtils.initDefaultWallpaper();
+    // }
+    // theme.setDefaultTheme(false);
+    // theme.setFilePath(path1);
+    // theme.setmThemeId(THEME_ID_DEFAULT);
+    // break;
+    // }
+    // theme.setDefaultTheme(true);
+    // return theme;
+    // }
+
     public static Theme getThemeById(int themeId) {
         Theme theme = new Theme();
         switch (themeId) {
-            case THEME_ID_DEFAULT:
-                String path = WallpaperUtils.getDefaultWallpaperPath();
-                if (TextUtils.isEmpty(path)) {
-                    path = WallpaperUtils.initDefaultWallpaper();
-                }
-                theme.setDefaultTheme(false);
-                theme.setFilePath(path);
-                theme.setmThemeId(THEME_ID_DEFAULT);
+            case THEME_ID_ROAD:
+                theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
+                theme.setmForegroundResId(R.drawable.setting_background_road_fore);
+                theme.setmThemeId(THEME_ID_ROAD);
                 break;
             default:
-                String path1 = WallpaperUtils.getDefaultWallpaperPath();
-                if (TextUtils.isEmpty(path1)) {
-                    path1 = WallpaperUtils.initDefaultWallpaper();
-                }
-                theme.setDefaultTheme(false);
-                theme.setFilePath(path1);
+                theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
+                theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
                 theme.setmThemeId(THEME_ID_DEFAULT);
                 break;
         }
