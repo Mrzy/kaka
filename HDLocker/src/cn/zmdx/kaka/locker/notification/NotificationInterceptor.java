@@ -38,6 +38,8 @@ public class NotificationInterceptor extends Handler {
 
     private INotificationListener mListener;
 
+    private NotificationPreferences mPreference;
+
     public interface INotificationListener {
         void onPosted(NotificationInfo info);
 
@@ -47,6 +49,7 @@ public class NotificationInterceptor extends Handler {
     private NotificationInterceptor(Context context, Looper looper) {
         super(looper);
         mContext = context;
+        mPreference = NotificationPreferences.getInstance(context);
     }
 
     public static NotificationInterceptor getInstance(Context context) {
@@ -100,13 +103,7 @@ public class NotificationInterceptor extends Handler {
                     }
                     ni.setType(NotificationInfo.NOTIFICATION_TYPE_SYSTEM);
                     ni.setPendingIntent(sbn.getNotification().contentIntent);
-                    HDBThreadUtils.runOnUi(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            mListener.onPosted(ni);
-                        }
-                    });
+                    dispatchNotificationPostedEvent(ni);
                 }
                 break;
             case MSG_NOTIFICATION_REMOVED:
@@ -114,33 +111,18 @@ public class NotificationInterceptor extends Handler {
                     return;
                 }
                 final StatusBarNotification sbn1 = (StatusBarNotification) msg.obj;
-                if (!checkIntercept(sbn1.getPackageName()) || sbn1 == null) {
+                if (sbn1 == null || !checkIntercept(sbn1.getPackageName())) {
                     return;
                 }
 
-                if (mListener != null) {
-                    HDBThreadUtils.runOnUi(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            mListener.onRemoved(sbn1.getId());
-                        }
-                    });
-                }
+                dispatchNotificationRemovedEvent(sbn1);
                 break;
             case MSG_CUSTOM_NOTIFICATION_POST:
                 if (!(msg.obj instanceof NotificationInfo)) {
                     return;
                 }
                 final NotificationInfo ni = (NotificationInfo) msg.obj;
-                HDBThreadUtils.runOnUi(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        mListener.onPosted(ni);
-                    }
-                });
-
+                dispatchNotificationPostedEvent(ni);
                 break;
             case MSG_CUSTOM_NOTIFICATION_REMOVED:
 
@@ -153,10 +135,36 @@ public class NotificationInterceptor extends Handler {
         }
     };
 
+    private void dispatchNotificationPostedEvent(final NotificationInfo ni) {
+        if (mListener != null) {
+            HDBThreadUtils.runOnUi(new Runnable() {
+
+                @Override
+                public void run() {
+                    mListener.onPosted(ni);
+                }
+            });
+        }
+    }
+
+    private void dispatchNotificationRemovedEvent(final StatusBarNotification sbn) {
+        if (mListener != null) {
+            HDBThreadUtils.runOnUi(new Runnable() {
+
+                @SuppressLint("NewApi")
+                @Override
+                public void run() {
+                    mListener.onRemoved(sbn.getId());
+                }
+            });
+        }
+    }
+
     public void sendCustomNotification(NotificationInfo sbn) {
         if (sbn == null || sbn.getType() != NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
             if (BuildConfig.DEBUG) {
-                throw new IllegalStateException("sbn must not be null, and sbn's type must be NOTIFICATION_TYPE_CUSTOM");
+                throw new IllegalStateException(
+                        "sbn must not be null, and sbn's type must be NOTIFICATION_TYPE_CUSTOM");
             }
             return;
         }
@@ -181,8 +189,8 @@ public class NotificationInterceptor extends Handler {
      * @return 如果pkgName是拦截的应用，返回true，否则返回false
      */
     private boolean checkIntercept(String pkgName) {
-        // TODO
-        return true;
+        Set<String> pkgNames = mPreference.getInterceptPkgNames();
+        return pkgNames.contains(pkgName);
     }
 
     /**

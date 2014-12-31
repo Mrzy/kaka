@@ -30,10 +30,20 @@ public final class PandoraNotificationService extends NotificationListenerServic
 
     @Override
     public void onCreate() {
+        initInterceptPackages();
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_CANCEL_NOTIFICATION);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
         super.onCreate();
+    }
+
+    private void initInterceptPackages() {
+        final NotificationPreferences np = NotificationPreferences.getInstance(getApplicationContext());
+        //TODO 将下面的参数修改为对应的包名
+        np.putInterceptPkgName("微信");
+        np.putInterceptPkgName("qq");
+        np.putInterceptPkgName("拨号");
+        np.putInterceptPkgName("短信");
     }
 
     @Override

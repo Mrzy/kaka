@@ -10,7 +10,9 @@ import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
@@ -28,6 +30,7 @@ import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+
 //import android.util.Log;
 
 public class NotificationLayout extends LinearLayout {
@@ -38,7 +41,7 @@ public class NotificationLayout extends LinearLayout {
 
     private View mCurrentTouchView;
 
-    private static final long ITEM_DOUBLE_TAP_DURATION = 500;
+    private static final long ITEM_DOUBLE_TAP_DURATION = 200;
 
     public NotificationLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -59,7 +62,6 @@ public class NotificationLayout extends LinearLayout {
         setOrientation(LinearLayout.VERTICAL);
         final LayoutTransition transitioner = new LayoutTransition();
         setLayoutTransition(transitioner);
-        setWillNotDraw(false);
     }
 
     private long mItemClickStartTime = 0;
@@ -169,9 +171,11 @@ public class NotificationLayout extends LinearLayout {
     private ObjectAnimator mRightArrowAnimator;
 
     private void startTapItemAnimation(View view) {
-        view.setBackgroundColor(Color.parseColor("#50000000"));
+        View rightArrowView = view.findViewById(R.id.rightArrow);
+        View contentLayout = view.findViewById(R.id.blackOverlay);
+        contentLayout.setBackgroundColor(Color.parseColor("#bb000000"));
         view.findViewById(R.id.rightArrow).setVisibility(View.VISIBLE);
-        mRightArrowAnimator = ObjectAnimator.ofFloat(view, "translationX",
+        mRightArrowAnimator = ObjectAnimator.ofFloat(rightArrowView, "translationX",
                 BaseInfoHelper.dip2px(getContext(), 40));
         mRightArrowAnimator.setDuration(1500);
         mRightArrowAnimator.setRepeatCount(-1);
@@ -192,9 +196,18 @@ public class NotificationLayout extends LinearLayout {
         final ImageView smallIcon = (ImageView) itemView.findViewById(R.id.smallIcon);
         final TextView title = (TextView) itemView.findViewById(R.id.title);
         final TextView content = (TextView) itemView.findViewById(R.id.content);
-        largeIcon.setImageBitmap(info.getLargeIcon());
-        if (info.getSmallIcon() != null) {
-            smallIcon.setImageDrawable(info.getSmallIcon());
+        Bitmap largeBmp = info.getLargeIcon();
+        Drawable smallDrawable = info.getSmallIcon();
+        if (largeBmp != null) {
+            largeIcon.setImageBitmap(largeBmp);
+            if (smallDrawable != null) {
+                smallIcon.setImageDrawable(smallDrawable);
+            }
+        } else {
+            if (smallDrawable != null) {
+                largeIcon.setImageDrawable(smallDrawable);
+            }
+            smallIcon.setVisibility(View.GONE);
         }
         title.setText(info.getTitle());
         content.setText(info.getContent());
@@ -250,8 +263,9 @@ public class NotificationLayout extends LinearLayout {
 
     private void resetState() {
         if (mCurrentTouchView != null) {
-            mCurrentTouchView.setBackgroundColor(Color.parseColor("#89000000"));
-            mCurrentTouchView.setTranslationX(0);
+            View contentLayout = mCurrentTouchView.findViewById(R.id.blackOverlay);
+            contentLayout.setBackgroundColor(Color.TRANSPARENT);
+            mCurrentTouchView.findViewById(R.id.rightArrow).setTranslationX(0);
             mCurrentTouchView.findViewById(R.id.rightArrow).setVisibility(View.INVISIBLE);
         }
         if (mRightArrowAnimator != null) {
