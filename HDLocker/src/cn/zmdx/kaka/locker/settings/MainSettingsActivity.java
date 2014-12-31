@@ -15,6 +15,7 @@ import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 import com.umeng.analytics.MobclickAgent;
+import com.yepstudio.android.library.feedback.uninstall.AppUninstall;
 
 public class MainSettingsActivity extends FragmentActivity {
 
@@ -51,6 +52,7 @@ public class MainSettingsActivity extends FragmentActivity {
         startService(mServiceIntent);
         init();
         super.onCreate(savedInstanceState);
+//        AppUninstall.openUrlWhenUninstall(this, "http://www.hdlocker.com");
         MobclickAgent.openActivityDurationTrack(false);
         // UmengUpdateAgent.silentUpdate(this);
         setContentView(R.layout.main_setting_activity);
