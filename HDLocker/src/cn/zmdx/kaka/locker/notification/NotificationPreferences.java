@@ -44,5 +44,4 @@ public class NotificationPreferences {
         // TODO
         return false;
     }
-
 }

@@ -35,26 +35,6 @@ public class NotificationInfo {
 
     private String key;
 
-    public static NotificationInfo createCustomNotificationInfo(String title, String content,
-            Bitmap largeIcon, Drawable smallIcon, String tag) {
-        if (TextUtils.isEmpty(title)) {
-            if (BuildConfig.DEBUG) {
-                throw new NullPointerException("title must not be null");
-            }
-        }
-
-        final NotificationInfo ni = new NotificationInfo();
-        ni.setPostTime(System.currentTimeMillis());
-        ni.setId(Long.valueOf(System.currentTimeMillis()).hashCode());
-        ni.setTag(tag);
-        ni.setTitle(title);
-        ni.setContent(content);
-        ni.setLargeIcon(largeIcon);
-        ni.setSmallIcon(smallIcon);
-        ni.setType(NOTIFICATION_TYPE_CUSTOM);
-        return ni;
-    }
-
     public String getKey() {
         return key;
     }

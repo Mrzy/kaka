@@ -238,11 +238,7 @@ public class PandoraConfig {
     }
 
     public boolean isNeedNotice(Context context) {
-        if (PandoraUtils.isMIUI(context) || PandoraUtils.isMeizu(context)) {
             return mSp.getBoolean(KEY_NEED_NOTICE, false);
-        } else {
-            return mSp.getBoolean(KEY_NEED_NOTICE, true);
-        }
     }
 
     public void saveLockDefaultFileName(String fileName) {
