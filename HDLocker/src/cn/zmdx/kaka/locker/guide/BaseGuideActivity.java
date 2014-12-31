@@ -33,7 +33,8 @@ public abstract class BaseGuideActivity extends Activity {
                     "You must implement abstract method getContentView() and getNextButton()");
         }
         if (isMeizu) {
-            nextButton.setText(getResources().getString(R.string.pandora_guide_start));
+            // nextButton.setText(getResources().getString(R.string.pandora_guide_start));
+            nextButton.setText(getResources().getString(R.string.init_setting_MEIZU_start_string));
         }
         setContentView(contentView);
 
@@ -42,12 +43,9 @@ public abstract class BaseGuideActivity extends Activity {
             @Override
             public void onClick(View v) {
                 setGuided();
-                if (!isMeizu) {
-                    goHome();
-                }else{
-                    finish();
-                    onFinish();
-                }
+                goHome();
+                finish();
+                onFinish();
                 PandoraConfig.newInstance(BaseGuideActivity.this).savePandolaLockerState(true);
             }
         });
