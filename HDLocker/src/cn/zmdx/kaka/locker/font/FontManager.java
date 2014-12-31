@@ -196,6 +196,7 @@ public class FontManager {
                         }
                     }
                 });
+        requset.setShouldCache(false);
         RequestManager.getRequestQueue().add(requset);
     }
 
@@ -212,6 +213,15 @@ public class FontManager {
             return files.length;
         }
         return 0;
+    }
+
+    public static Typeface sCacheTypeface;
+
+    public static Typeface getTypeface(String path) {
+        if (sCacheTypeface == null) {
+            sCacheTypeface = Typeface.createFromAsset(HDApplication.getContext().getAssets(), path);
+        }
+        return sCacheTypeface;
     }
 
     private static String getHash(String url) {

@@ -28,8 +28,6 @@ public class GifBox implements IPandoraBox {
 
     private TextView mFromPlatformText;
 
-    private ImageButton mImageButton;
-
     private TextView mTextView;
 
     private boolean mIsRendered = false;
@@ -47,7 +45,6 @@ public class GifBox implements IPandoraBox {
 
     @Override
     public int getCategory() {
-
         return IPandoraBox.CATEGORY_GIF;
     }
 
@@ -89,14 +86,6 @@ public class GifBox implements IPandoraBox {
         mFromPlatformText.setText(mData.getmFromWebSite());
         mTextView.setText(mData.getmTitle());
         mImageView.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                stopGif();
-                mPage.foldBack();
-            }
-        });
-        mImageButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
