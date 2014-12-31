@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:layout_marginTop="10dp"
+    android:layout_height="match_parent"
     android:background="#89000000"
     android:clickable="true"
     android:focusable="false"
@@ -53,26 +52,38 @@
         android:ellipsize="end"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:maxLines="2"
+        android:singleLine="true"
         android:textColor="#ffffff"
         android:textSize="13dp" />
 
     <View
         android:id="@+id/blackOverlay"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="match_parent"
         android:clickable="false" />
 
-    <TextView
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/rightArrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:layout_marginRight="45dp"
-        android:text="右划查看>>"
-        android:textColor="#ffffff"
+        android:layout_marginTop="5dp"
+        android:text="@string/notification_tip_rightArrow"
+        android:textColor="#FF7F00"
         android:textSize="16dp"
+        android:visibility="invisible" />
+
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/doubleTapDeleteTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:paddingRight="5dp"
+        android:text="@string/notification_tip_doubleTapDelete"
+        android:textColor="#a0FF7F00"
+        android:textSize="13dp"
         android:visibility="invisible" />
 
 </RelativeLayout>

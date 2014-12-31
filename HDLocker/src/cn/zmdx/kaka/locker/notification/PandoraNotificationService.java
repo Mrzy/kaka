@@ -18,6 +18,8 @@ public final class PandoraNotificationService extends NotificationListenerServic
 
     public static final String ACTION_CANCEL_NOTIFICATION = "action_cancel_notification";
 
+    public static final String ACTION_OBTAIN_ACTIVE_NOTIFICATIONS = "action_obtain_active_notification";
+
     @Override
     public IBinder onBind(Intent intent) {
         return super.onBind(intent);
@@ -33,13 +35,15 @@ public final class PandoraNotificationService extends NotificationListenerServic
         initInterceptPackages();
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_CANCEL_NOTIFICATION);
+        filter.addAction(ACTION_OBTAIN_ACTIVE_NOTIFICATIONS);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
         super.onCreate();
     }
 
     private void initInterceptPackages() {
-        final NotificationPreferences np = NotificationPreferences.getInstance(getApplicationContext());
-        //TODO 将下面的参数修改为对应的包名
+        final NotificationPreferences np = NotificationPreferences
+                .getInstance(getApplicationContext());
+        // TODO 将下面的参数修改为对应的包名
         np.putInterceptPkgName("微信");
         np.putInterceptPkgName("qq");
         np.putInterceptPkgName("拨号");
@@ -70,6 +74,14 @@ public final class PandoraNotificationService extends NotificationListenerServic
                 } else {
                     cancelNotification(key);
                 }
+            } else if (action.equals(ACTION_OBTAIN_ACTIVE_NOTIFICATIONS)) {
+                StatusBarNotification[] sbns = getActiveNotifications();
+                NotificationInterceptor interceptor = NotificationInterceptor
+                        .getInstance(getApplicationContext());
+                Message msg = interceptor.obtainMessage();
+                msg.obj = sbns;
+                msg.what = NotificationInterceptor.MSG_ACTIVE_NOTIFICATIONS_ARRIVED;
+                interceptor.sendMessage(msg);
             }
         }
     };

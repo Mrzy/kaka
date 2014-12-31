@@ -20,15 +20,17 @@ import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 public class NotificationInterceptor extends Handler {
 
-    protected static final int MSG_NOTIFICATION_POST = 0;
+    static final int MSG_NOTIFICATION_POST = 0;
 
-    protected static final int MSG_NOTIFICATION_REMOVED = 1;
+    static final int MSG_NOTIFICATION_REMOVED = 1;
 
     private static final int MSG_CUSTOM_NOTIFICATION_POST = 2;
 
     private static final int MSG_CUSTOM_NOTIFICATION_REMOVED = 3;
 
     private static final int MSG_PULL_CUSTOM_NOTIFICATION_DATA = 4;
+
+    static final int MSG_ACTIVE_NOTIFICATIONS_ARRIVED = 5;
 
     private static NotificationInterceptor INSTANCE;
 
@@ -130,6 +132,21 @@ public class NotificationInterceptor extends Handler {
             case MSG_PULL_CUSTOM_NOTIFICATION_DATA:
 
                 break;
+            case MSG_ACTIVE_NOTIFICATIONS_ARRIVED:
+                if (!(msg.obj instanceof StatusBarNotification[])) {
+                    return;
+                }
+
+                final StatusBarNotification[] sbns = (StatusBarNotification[]) msg.obj;
+                for (StatusBarNotification notify : sbns) {
+                    if (checkIntercept(notify.getPackageName())) {
+                        Message message = Message.obtain();
+                        message.what = MSG_NOTIFICATION_POST;
+                        message.obj = notify;
+                        sendMessageDelayed(message, 200);
+                    }
+                }
+                break;
             default:
 
         }
@@ -190,7 +207,8 @@ public class NotificationInterceptor extends Handler {
      */
     private boolean checkIntercept(String pkgName) {
         Set<String> pkgNames = mPreference.getInterceptPkgNames();
-        return pkgNames.contains(pkgName);
+        // return pkgNames != null && pkgNames.contains(pkgName);
+        return true;// test
     }
 
     /**

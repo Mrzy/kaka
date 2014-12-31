@@ -26,23 +26,23 @@ public class NotificationPreferences {
         }
         return INSTANCE;
     }
-    
+
     public void putInterceptPkgName(String pkgName) {
-        //TODO
+        // TODO
     }
-    
+
     public void removeInterceptPkgName(String pkgName) {
-        //TODO
+        // TODO
     }
-    
+
     public Set<String> getInterceptPkgNames() {
-        //TODO
+        // TODO
         return null;
     }
-    
+
     public boolean isIntercepted(String pkgName) {
-        //TODO
+        // TODO
         return false;
     }
-    
+
 }

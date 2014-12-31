@@ -7,10 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
+import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
+import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class PandoraService extends Service {
@@ -133,9 +136,16 @@ public class PandoraService extends Service {
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 LockScreenManager.getInstance().lock();
                 LockScreenManager.getInstance().onScreenOff();
+                sendObtainActiveNotificationMsg();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 LockScreenManager.getInstance().onScreenOn();
             }
         }
     };
+
+    private void sendObtainActiveNotificationMsg() {
+        Intent intent = new Intent();
+        intent.setAction(PandoraNotificationService.ACTION_OBTAIN_ACTIVE_NOTIFICATIONS);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
 }

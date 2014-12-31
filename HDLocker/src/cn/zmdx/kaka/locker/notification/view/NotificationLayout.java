@@ -22,6 +22,7 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.IMainPanelListener;
 import cn.zmdx.kaka.locker.LockScreenManager.IPullDownListener;
@@ -42,6 +43,12 @@ public class NotificationLayout extends LinearLayout {
     private View mCurrentTouchView;
 
     private static final long ITEM_DOUBLE_TAP_DURATION = 200;
+
+    protected static final int GAP_BETWEEN_NOTIFICATIONS = BaseInfoHelper.dip2px(
+            HDApplication.getContext(), 5);
+
+    protected static final int NOTIFICATION_ITEM_HEIGHT = BaseInfoHelper.dip2px(
+            HDApplication.getContext(), 60);
 
     public NotificationLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -94,10 +101,21 @@ public class NotificationLayout extends LinearLayout {
                         }
                     }
                 });
-                addView(itemView);
+                addNotificationItem(itemView);
             }
         }
     };
+
+    /**
+     * 创建ItemView，并添加到本容器的顶部
+     * 
+     * @param itemView
+     */
+    private void addNotificationItem(View itemView) {
+        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, NOTIFICATION_ITEM_HEIGHT);
+        lp.bottomMargin = GAP_BETWEEN_NOTIFICATIONS;
+        addView(itemView, 0, lp);
+    }
 
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
@@ -175,6 +193,7 @@ public class NotificationLayout extends LinearLayout {
         View contentLayout = view.findViewById(R.id.blackOverlay);
         contentLayout.setBackgroundColor(Color.parseColor("#bb000000"));
         view.findViewById(R.id.rightArrow).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.doubleTapDeleteTip).setVisibility(View.VISIBLE);
         mRightArrowAnimator = ObjectAnimator.ofFloat(rightArrowView, "translationX",
                 BaseInfoHelper.dip2px(getContext(), 40));
         mRightArrowAnimator.setDuration(1500);
@@ -265,6 +284,7 @@ public class NotificationLayout extends LinearLayout {
         if (mCurrentTouchView != null) {
             View contentLayout = mCurrentTouchView.findViewById(R.id.blackOverlay);
             contentLayout.setBackgroundColor(Color.TRANSPARENT);
+            mCurrentTouchView.findViewById(R.id.doubleTapDeleteTip).setVisibility(View.INVISIBLE);
             mCurrentTouchView.findViewById(R.id.rightArrow).setTranslationX(0);
             mCurrentTouchView.findViewById(R.id.rightArrow).setVisibility(View.INVISIBLE);
         }
