@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Binder;
 import android.os.IBinder;
 import android.os.Message;
 import android.service.notification.NotificationListenerService;
@@ -55,7 +54,9 @@ public final class PandoraNotificationService extends NotificationListenerServic
                     String pkg = intent.getStringExtra("pkgName");
                     String tag = intent.getStringExtra("tag");
                     int id = intent.getIntExtra("id", 0);
-                    cancelNotification(pkg, tag, id);
+                    if (!TextUtils.isEmpty(pkg)) {
+                        cancelNotification(pkg, tag, id);
+                    }
                 } else {
                     cancelNotification(key);
                 }

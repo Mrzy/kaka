@@ -7,13 +7,13 @@ import java.util.Map;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
-//import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -28,6 +28,7 @@ import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+//import android.util.Log;
 
 public class NotificationLayout extends LinearLayout {
 
@@ -142,7 +143,10 @@ public class NotificationLayout extends LinearLayout {
                         public void run() {
                             final NotificationInfo info = mActiveNotification.get(id);
                             try {
-                                info.getPendingIntent().send();
+                                PendingIntent pi = info.getPendingIntent();
+                                if (pi != null) {
+                                    pi.send();
+                                }
                             } catch (Exception e) {
                             }
                             removeNotification(id);
@@ -150,7 +154,6 @@ public class NotificationLayout extends LinearLayout {
                     });
                     return true;
                 case MotionEvent.ACTION_MOVE:
-                    // mItemView.setTranslationX(event.getX() - mInitX);
                     return true;
                 case MotionEvent.ACTION_UP:
                     resetState();
@@ -185,10 +188,10 @@ public class NotificationLayout extends LinearLayout {
     };
 
     private void updateNotificationItem(View itemView, NotificationInfo info) {
-        ImageView largeIcon = (ImageView) itemView.findViewById(R.id.largeIcon);
-        ImageView smallIcon = (ImageView) itemView.findViewById(R.id.smallIcon);
-        TextView title = (TextView) itemView.findViewById(R.id.title);
-        TextView content = (TextView) itemView.findViewById(R.id.content);
+        final ImageView largeIcon = (ImageView) itemView.findViewById(R.id.largeIcon);
+        final ImageView smallIcon = (ImageView) itemView.findViewById(R.id.smallIcon);
+        final TextView title = (TextView) itemView.findViewById(R.id.title);
+        final TextView content = (TextView) itemView.findViewById(R.id.content);
         largeIcon.setImageBitmap(info.getLargeIcon());
         if (info.getSmallIcon() != null) {
             smallIcon.setImageDrawable(info.getSmallIcon());
@@ -199,7 +202,7 @@ public class NotificationLayout extends LinearLayout {
     }
 
     private View createNotificationItemView(NotificationInfo info) {
-        View view = View.inflate(getContext(), R.layout.notification_item_layout, null);
+        final View view = View.inflate(getContext(), R.layout.notification_item_layout, null);
         updateNotificationItem(view, info);
         return view;
     }
@@ -218,6 +221,9 @@ public class NotificationLayout extends LinearLayout {
         super.onAttachedToWindow();
     }
 
+    /**
+     * 锁屏页右划解锁的监听器
+     */
     private IMainPanelListener mMainPanelListener = new IMainPanelListener() {
 
         @Override
@@ -231,6 +237,9 @@ public class NotificationLayout extends LinearLayout {
         }
     };
 
+    /**
+     * 锁屏页下拉抽屉的监听器
+     */
     private IPullDownListener mPullDownListener = new IPullDownListener() {
 
         @Override

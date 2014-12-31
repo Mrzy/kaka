@@ -4,8 +4,14 @@ package cn.zmdx.kaka.locker.notification;
 import android.app.PendingIntent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
+import cn.zmdx.kaka.locker.BuildConfig;
 
 public class NotificationInfo {
+
+    public static final int NOTIFICATION_TYPE_SYSTEM = 1;
+
+    public static final int NOTIFICATION_TYPE_CUSTOM = 2;
 
     private String pkg;
 
@@ -28,6 +34,26 @@ public class NotificationInfo {
     private PendingIntent pendingIntent;
 
     private String key;
+
+    public static NotificationInfo createCustomNotificationInfo(String title, String content,
+            Bitmap largeIcon, Drawable smallIcon, String tag) {
+        if (TextUtils.isEmpty(title)) {
+            if (BuildConfig.DEBUG) {
+                throw new NullPointerException("title must not be null");
+            }
+        }
+
+        final NotificationInfo ni = new NotificationInfo();
+        ni.setPostTime(System.currentTimeMillis());
+        ni.setId(Long.valueOf(System.currentTimeMillis()).hashCode());
+        ni.setTag(tag);
+        ni.setTitle(title);
+        ni.setContent(content);
+        ni.setLargeIcon(largeIcon);
+        ni.setSmallIcon(smallIcon);
+        ni.setType(NOTIFICATION_TYPE_CUSTOM);
+        return ni;
+    }
 
     public String getKey() {
         return key;
@@ -116,5 +142,4 @@ public class NotificationInfo {
     public void setType(int type) {
         this.type = type;
     }
-
 }

@@ -13,7 +13,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.service.notification.StatusBarNotification;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 public class NotificationInterceptor extends Handler {
@@ -35,10 +37,6 @@ public class NotificationInterceptor extends Handler {
     private Set<StatusBarNotification> mNotificationSet = new HashSet<StatusBarNotification>();
 
     private INotificationListener mListener;
-
-    public static final int NOTIFICATION_TYPE_SYSTEM = 1;
-
-    public static final int NOTIFICATION_TYPE_CUSTOM = 2;
 
     public interface INotificationListener {
         void onPosted(NotificationInfo info);
@@ -70,7 +68,7 @@ public class NotificationInterceptor extends Handler {
                     return;
                 }
                 final StatusBarNotification sbn = (StatusBarNotification) msg.obj;
-                if (!checkIntercept(sbn.getPackageName()) || sbn == null) {
+                if (sbn == null || !checkIntercept(sbn.getPackageName())) {
                     return;
                 }
 
@@ -100,7 +98,7 @@ public class NotificationInterceptor extends Handler {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         ni.setKey(sbn.getKey());
                     }
-                    ni.setType(NOTIFICATION_TYPE_SYSTEM);
+                    ni.setType(NotificationInfo.NOTIFICATION_TYPE_SYSTEM);
                     ni.setPendingIntent(sbn.getNotification().contentIntent);
                     HDBThreadUtils.runOnUi(new Runnable() {
 
@@ -131,6 +129,17 @@ public class NotificationInterceptor extends Handler {
                 }
                 break;
             case MSG_CUSTOM_NOTIFICATION_POST:
+                if (!(msg.obj instanceof NotificationInfo)) {
+                    return;
+                }
+                final NotificationInfo ni = (NotificationInfo) msg.obj;
+                HDBThreadUtils.runOnUi(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mListener.onPosted(ni);
+                    }
+                });
 
                 break;
             case MSG_CUSTOM_NOTIFICATION_REMOVED:
@@ -143,6 +152,27 @@ public class NotificationInterceptor extends Handler {
 
         }
     };
+
+    public void sendCustomNotification(NotificationInfo sbn) {
+        if (sbn == null || sbn.getType() != NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
+            if (BuildConfig.DEBUG) {
+                throw new IllegalStateException("sbn must not be null, and sbn's type must be NOTIFICATION_TYPE_CUSTOM");
+            }
+            return;
+        }
+        if (sbn.getId() == 0) {
+            if (BuildConfig.DEBUG) {
+                throw new IllegalStateException("sbn's id must not be zero");
+            }
+            return;
+        }
+        if (!hasMessages(MSG_CUSTOM_NOTIFICATION_POST)) {
+            Message msg = obtainMessage();
+            msg.what = MSG_CUSTOM_NOTIFICATION_POST;
+            msg.obj = sbn;
+            sendMessage(msg);
+        }
+    }
 
     /**
      * 检查是否拦截指定包名的应用
