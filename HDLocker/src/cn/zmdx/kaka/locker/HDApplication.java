@@ -7,6 +7,7 @@ import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.utils.HDBEventSource;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 
 public class HDApplication extends Application {
 
@@ -27,6 +28,7 @@ public class HDApplication extends Application {
             public void run() {
                 ImageLoaderManager.init(instance);
                 LockSoundManager.initSoundPool();
+                WallpaperUtils.initDefaultWallpaper();
             }
         });
         PandoraBoxDispatcher.getInstance().pullData();

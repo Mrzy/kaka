@@ -169,7 +169,16 @@
     <string name="accessibility_battery_level">Battery <xliff:g id="number">%d</xliff:g> percent.</string>
     <!-- Glyph to be overlaid atop the battery when the level is extremely low. Do not translate. -->
     <string name="battery_meter_very_low_overlay_symbol">!</string>
+
     <string name="notification_service_name">潘多拉通知服务</string>
     <string name="notification_tip_rightArrow">右划查看>></string>
     <string name="notification_tip_doubleTapDelete">双击移除</string>
+
+    <string name="pandora_share_sina_send">发送</string>
+    <string name="pandora_share_to_sina_title">分享到微博</string>
+    <string name="pandora_share_prompt">右滑解锁分享内容</string>
+    <string name="pandora_share_to_wechat_circle">分享到朋友圈</string>
+    <string name="pandora_share_to_wechat">分享到微信好友</string>
+    <string name="pandora_share_to_sina">分享到新浪微博</string>
+    <string name="pandora_share_to_qq">分享到QQ空间</string>
 </resources>

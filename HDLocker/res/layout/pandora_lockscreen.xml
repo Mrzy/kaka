@@ -224,7 +224,7 @@
                             android:layout_height="wrap_content"
                             android:contentDescription="@string/contentDescription"
                             android:scaleType="fitXY"
-                            android:src="@drawable/pandora_christmas_pull_button" />
+                            android:src="@drawable/pandora_online_paper_button_selector" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

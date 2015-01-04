@@ -28,13 +28,11 @@
     <dimen name="pandora_online_wallpaper_panelHeight">75dp</dimen>
     <dimen name="pandora_online_wallpaper_margin_top">30dp</dimen>
     <dimen name="pandora_online_wallpaper_margin_left">30dp</dimen>
-    <dimen name="pandora_online_wallpaper_margin_bottom">100dp</dimen>
+    <dimen name="pandora_online_wallpaper_margin_bottom">15dp</dimen>
     <dimen name="pandora_online_wallpaper_preview_imageview_width">220dp</dimen>
     <dimen name="pandora_online_wallpaper_preview_imageview_height">392dp</dimen>
     <dimen name="pandora_online_wallpaper_desc_textview_margin_top">10dp</dimen>
     <dimen name="pandora_online_wallpaper_desc_scrollview_height">90dp</dimen>
-    <dimen name="pandora_online_wallpaper_apply_button_width">57dp</dimen>
-    <dimen name="pandora_online_wallpaper_apply_button_height">28dp</dimen>
     <dimen name="pandora_online_wallpaper_apply_button_margin_top">10dp</dimen>
     <dimen name="pandora_online_wallpaper_gridview_margin_left">15dp</dimen>
     <dimen name="pandora_online_wallpaper_gridview_vertical_spacing">10dp</dimen>

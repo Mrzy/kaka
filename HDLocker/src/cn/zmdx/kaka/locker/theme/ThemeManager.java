@@ -84,6 +84,32 @@ public class ThemeManager {
         return theme;
     }
 
+    // public static Theme getThemeById(int themeId) {
+    // Theme theme = new Theme();
+    // switch (themeId) {
+    // case THEME_ID_DEFAULT:
+    // String path = WallpaperUtils.getDefaultWallpaperPath();
+    // if (TextUtils.isEmpty(path)) {
+    // path = WallpaperUtils.initDefaultWallpaper();
+    // }
+    // theme.setDefaultTheme(false);
+    // theme.setFilePath(path);
+    // theme.setmThemeId(THEME_ID_DEFAULT);
+    // break;
+    // default:
+    // String path1 = WallpaperUtils.getDefaultWallpaperPath();
+    // if (TextUtils.isEmpty(path1)) {
+    // path1 = WallpaperUtils.initDefaultWallpaper();
+    // }
+    // theme.setDefaultTheme(false);
+    // theme.setFilePath(path1);
+    // theme.setmThemeId(THEME_ID_DEFAULT);
+    // break;
+    // }
+    // theme.setDefaultTheme(true);
+    // return theme;
+    // }
+
     public static Theme getThemeById(int themeId) {
         Theme theme = new Theme();
         switch (themeId) {
