@@ -128,13 +128,13 @@ public class NotificationLayout extends LinearLayout {
         if (info != null) {
             Intent intent = new Intent();
             intent.setAction(PandoraNotificationService.ACTION_CANCEL_NOTIFICATION);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                intent.putExtra("key", info.getKey());
-            } else {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                intent.putExtra("key", info.getKey());
+//            } else {
                 intent.putExtra("pkgName", info.getPkg());
                 intent.putExtra("tag", info.getTag());
                 intent.putExtra("id", info.getId());
-            }
+//            }
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
             mActiveNotification.remove(notifyId);
         }

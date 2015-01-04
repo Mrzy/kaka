@@ -36,7 +36,7 @@ public class NotificationPreferences {
         return INSTANCE;
     }
 
-    //FIXME 需要将包名做hash后再存储
+    // FIXME 需要将包名做hash后再存储
     public void putInterceptPkgName(String pkgName) {
         if (mActiveNotificationCache.add(pkgName)) {
             write(mActiveNotificationCache);
@@ -65,6 +65,7 @@ public class NotificationPreferences {
                     new HashSet<String>());
         }
         return mActiveNotificationCache;
+
     }
 
     public boolean isIntercepted(String pkgName) {

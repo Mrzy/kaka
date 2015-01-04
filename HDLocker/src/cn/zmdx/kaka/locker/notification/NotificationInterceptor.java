@@ -100,9 +100,9 @@ public class NotificationInterceptor extends Handler {
                     ni.setId(sbn.getId());
                     ni.setPkg(sbn.getPackageName());
                     ni.setTag(sbn.getTag());
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        ni.setKey(sbn.getKey());
-                    }
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        ni.setKey(sbn.getKey());
+//                    }
                     ni.setType(NotificationInfo.NOTIFICATION_TYPE_SYSTEM);
                     ni.setPendingIntent(sbn.getNotification().contentIntent);
                     dispatchNotificationPostedEvent(ni);
