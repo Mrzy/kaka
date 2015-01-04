@@ -206,9 +206,7 @@ public class NotificationInterceptor extends Handler {
      * @return 如果pkgName是拦截的应用，返回true，否则返回false
      */
     private boolean checkIntercept(String pkgName) {
-        Set<String> pkgNames = mPreference.getInterceptPkgNames();
-        // return pkgNames != null && pkgNames.contains(pkgName);
-        return true;// test
+        return mPreference.isIntercepted(pkgName);
     }
 
     /**

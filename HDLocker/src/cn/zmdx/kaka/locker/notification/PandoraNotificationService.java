@@ -6,12 +6,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Message;
+import android.provider.Telephony;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 @SuppressLint("NewApi")
 public final class PandoraNotificationService extends NotificationListenerService {
@@ -43,11 +46,22 @@ public final class PandoraNotificationService extends NotificationListenerServic
     private void initInterceptPackages() {
         final NotificationPreferences np = NotificationPreferences
                 .getInstance(getApplicationContext());
-        // TODO 将下面的参数修改为对应的包名
-        np.putInterceptPkgName("微信");
-        np.putInterceptPkgName("qq");
-        np.putInterceptPkgName("拨号");
-        np.putInterceptPkgName("短信");
+        np.putInterceptPkgName("com.tencent.mm");// 微信
+        np.putInterceptPkgName("com.tencent.mobileqq");// qq
+        np.putInterceptPkgName("com.google.android.dialer");// 拨号
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            String defaultSmsPkg = Telephony.Sms.getDefaultSmsPackage(getApplicationContext());
+            if (defaultSmsPkg != null) {
+                np.putInterceptPkgName(defaultSmsPkg);
+            }
+        } else {
+            //4.4以下的手机，对于原生android系统，将环聊通知拦截
+            np.putInterceptPkgName("com.google.android.talk");//环聊
+            //TODO 确定4.0的设备是否使用环聊作为默认接收短信程序，如果不是，需要找到那个短信包名并设置拦截
+        }
+        // com.tencent.pb 微信电话本
+        // com.google.android.dialer 默认拨号
+        // com.google.android.talk 环聊
     }
 
     @Override
