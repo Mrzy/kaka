@@ -86,7 +86,7 @@ public final class PandoraNotificationService extends NotificationListenerServic
                         cancelNotification(pkg, tag, id);
                     }
                 } else {
-//                    cancelNotification(key);
+                    cancelNotification(key);
                 }
             } else if (action.equals(ACTION_OBTAIN_ACTIVE_NOTIFICATIONS)) {
                 StatusBarNotification[] sbns = getActiveNotifications();
