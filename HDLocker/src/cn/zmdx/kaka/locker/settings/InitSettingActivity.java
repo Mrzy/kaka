@@ -135,16 +135,14 @@ public class InitSettingActivity extends Activity implements OnClickListener {
     }
 
     private void showPromptActicity(boolean isMIUI, String mMIUIVersion, int type) {
-        if (isMIUI) {
-            Intent in = new Intent();
-            in.setClass(this, InitPromptActivity.class);
-            in.putExtra("isMIUI", isMIUI);
-            in.putExtra("mMIUIVersion", mMIUIVersion);
-            in.putExtra("type", type);
-            startActivity(in);
-            overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                    R.anim.umeng_fb_slide_out_from_left);
-        }
+        Intent in = new Intent();
+        in.setClass(this, InitPromptActivity.class);
+        in.putExtra("isMIUI", isMIUI);
+        in.putExtra("mMIUIVersion", mMIUIVersion);
+        in.putExtra("type", type);
+        startActivity(in);
+        overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
     }
 
     @Override
