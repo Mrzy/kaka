@@ -173,13 +173,32 @@
 
                     <cn.zmdx.kaka.locker.notification.view.NotificationLayout
                         android:id="@+id/lock_bottom_notification_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingBottom="10dp"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
-                        android:paddingTop="30dp"
-                        android:paddingBottom="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:paddingTop="30dp" >
                     </cn.zmdx.kaka.locker.notification.view.NotificationLayout>
+
+                    <FrameLayout
+                        android:id="@+id/camera_outline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="5dp"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="20dp"
+                         >
+
+                        <ImageView
+                            android:id="@+id/camera"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/camera_icon" />
+                    </FrameLayout>
                 </RelativeLayout>
             </cn.zmdx.kaka.locker.widget.PandoraPanelLayout>
 

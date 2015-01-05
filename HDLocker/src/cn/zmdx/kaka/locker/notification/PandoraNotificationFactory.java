@@ -29,4 +29,19 @@ public class PandoraNotificationFactory {
         ni.setPendingIntent(contentIntent);
         return ni;
     }
+
+    public static NotificationInfo createTestNotification() {
+        // TODO
+        return null;
+    }
+
+    public static NotificationInfo createGuideOpenNotifyPermissionNotification() {
+        // TODO
+        return null;
+    }
+
+    public static NotificationInfo createGuideOpenPandoraSettingsNotification() {
+        // TODO
+        return null;
+    }
 }
