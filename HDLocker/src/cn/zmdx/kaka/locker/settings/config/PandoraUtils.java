@@ -199,11 +199,16 @@ public class PandoraUtils {
         }
     }
 
-    public static void setMiuiAllowReadNotification(Context mContext, String version) {
+    public static void setMIUIAllowReadNotification(Context mContext, String version) {
         try {
             if (version.equals(MUIU_V5)) {
-                Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                mContext.startActivity(intent);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                    mContext.startActivity(i);
+                } else {
+                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    mContext.startActivity(intent);
+                }
             } else if (version.equals(MUIU_V6)) {
                 Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
                 mContext.startActivity(i);

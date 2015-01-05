@@ -34,11 +34,7 @@ public class InitSettingActivity extends Activity implements OnClickListener {
 
     private Button mTrustBtn;
 
-    private Button mMiuiReadNotificationBtn;
-
-    private Button mMeizuReadNotificationBtn;
-
-    private Button mRegularReadNotificationBtn;
+    private Button mReadNotificationBtn;
 
     private View mRootView;
 
@@ -79,19 +75,9 @@ public class InitSettingActivity extends Activity implements OnClickListener {
             findViewById(R.id.init_setting_MIUI_allow_floating_window_guide).setVisibility(
                     View.VISIBLE);
             findViewById(R.id.init_setting_MIUI_trust_guide).setVisibility(View.VISIBLE);
-            findViewById(R.id.init_setting_MIUI_read_notification_bar_guide).setVisibility(
-                    View.VISIBLE);
-            findViewById(R.id.init_setting_Regular_read_notification_bar_guide).setVisibility(
-                    View.GONE);
         }
         if (isMeizu) {
             findViewById(R.id.init_setting_MIUI_close_systemlocker).setVisibility(View.GONE);
-            findViewById(R.id.init_setting_MEIZU_read_notification_bar_guide).setVisibility(
-                    View.VISIBLE);
-        }
-        if (!isMIUI && !isMeizu) {
-            findViewById(R.id.init_setting_Regular_read_notification_bar_guide).setVisibility(
-                    View.VISIBLE);
         }
         mRootView = findViewById(R.id.init_setting_background);
         mCloseSystemLockBtn = (Button) findViewById(R.id.init_setting_close_systemlocker_to_set);
@@ -102,12 +88,8 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         mTrustBtn.setOnClickListener(this);
         mCompleteBtn = (TypefaceTextView) findViewById(R.id.init_setting_miui_complete);
         mCompleteBtn.setOnClickListener(this);
-        mMiuiReadNotificationBtn = (Button) findViewById(R.id.init_setting_MIUI_read_notification_bar_to_set);
-        mMiuiReadNotificationBtn.setOnClickListener(this);
-        mMeizuReadNotificationBtn = (Button) findViewById(R.id.init_setting_MEIZU_read_notification_bar_to_set);
-        mMeizuReadNotificationBtn.setOnClickListener(this);
-        mRegularReadNotificationBtn = (Button) findViewById(R.id.init_setting_Regular_read_notification_bar_to_set);
-        mRegularReadNotificationBtn.setOnClickListener(this);
+        mReadNotificationBtn = (Button) findViewById(R.id.init_setting_read_notification_bar_to_set);
+        mReadNotificationBtn.setOnClickListener(this);
     }
 
     private void initTitleHeight() {
@@ -187,37 +169,23 @@ public class InitSettingActivity extends Activity implements OnClickListener {
                 onBackPressed();
                 break;
 
-            case R.id.init_setting_MIUI_read_notification_bar_to_set:
-                PandoraUtils.setMiuiAllowReadNotification(InitSettingActivity.this, mMIUIVersion);
-                mMiuiReadNotificationBtn.setBackgroundResource(R.drawable.base_button_pressed);
+            case R.id.init_setting_read_notification_bar_to_set:
+                if (isMIUI) {
+                    PandoraUtils.setMIUIAllowReadNotification(InitSettingActivity.this,
+                            mMIUIVersion);
+                } else if (isMeizu) {
+                    PandoraUtils.setMeizuAllowReadNotification(InitSettingActivity.this);
+                } else {
+                    PandoraUtils.setRegularAllowReadNotification(InitSettingActivity.this);
+                }
+
+                mReadNotificationBtn.setBackgroundResource(R.drawable.base_button_pressed);
                 if (mHandler.hasMessages(MSG_READ_NOTIFICATION)) {
                     mHandler.removeMessages(MSG_READ_NOTIFICATION);
                 }
                 Message readNotification = Message.obtain();
                 readNotification.what = MSG_READ_NOTIFICATION;
                 mHandler.sendMessageDelayed(readNotification, MSG_SETTING_DELAY);
-                break;
-
-            case R.id.init_setting_MEIZU_read_notification_bar_to_set:
-                PandoraUtils.setMeizuAllowReadNotification(InitSettingActivity.this);
-                mMeizuReadNotificationBtn.setBackgroundResource(R.drawable.base_button_pressed);
-                if (mHandler.hasMessages(MSG_READ_NOTIFICATION)) {
-                    mHandler.removeMessages(MSG_READ_NOTIFICATION);
-                }
-                Message readMeizuNotification = Message.obtain();
-                readMeizuNotification.what = MSG_READ_NOTIFICATION;
-                mHandler.sendMessageDelayed(readMeizuNotification, MSG_SETTING_DELAY);
-                break;
-
-            case R.id.init_setting_Regular_read_notification_bar_to_set:
-                PandoraUtils.setRegularAllowReadNotification(InitSettingActivity.this);
-                mRegularReadNotificationBtn.setBackgroundResource(R.drawable.base_button_pressed);
-                if (mHandler.hasMessages(MSG_READ_NOTIFICATION)) {
-                    mHandler.removeMessages(MSG_READ_NOTIFICATION);
-                }
-                Message readRegularNotification = Message.obtain();
-                readRegularNotification.what = MSG_READ_NOTIFICATION;
-                mHandler.sendMessageDelayed(readRegularNotification, MSG_SETTING_DELAY);
                 break;
 
             default:

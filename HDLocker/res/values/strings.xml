@@ -56,15 +56,8 @@
     <string name="init_setting_MIUI_allow_floating_window_prompt">请开启『显示悬浮窗』开关</string>
     <string name="init_setting_MIUI_trust_prompt_one">开启『我信任该程序』</string>
     <string name="init_setting_MIUI_trust_prompt_two">和『自动启动』开关</string>
-    <string name="init_setting_MIUI_read_notification_bar">获取通知权限</string>
-    <string name="init_setting_MIUI_read_notification_bar_detail">呈现你感兴趣的通知</string>
-    <string name="init_setting_MIUI_read_notification_prompt_one">选择『潘多拉锁屏』</string>
-    <string name="init_setting_MIUI_read_notification_prompt_two">而后『开启服务』</string>
-    <string name="init_setting_MEIZU_read_notification_bar">读取通知权限</string>
-    <string name="init_setting_MEIZU_read_notification_bar_detail">呈现你感兴趣的通知</string>
-    <string name="init_setting_MEIZU_start_string">前去设置</string>
-    <string name="init_setting_Regular_read_notification_bar">读取通知权限</string>
-    <string name="init_setting_Regular_read_notification_bar_detail">呈现你感兴趣的通知</string>
+    <string name="init_setting_read_notification_title">打开通知权限</string>
+    <string name="init_setting_read_notification_prompt">开启消息通知后，即可在你的锁屏页面呈现你感兴趣的消息哦~</string>
     <string name="lock_week_monday">周一</string>
     <string name="lock_week_tuesday">周二</string>
     <string name="lock_week_wednesday">周三</string>
@@ -97,12 +90,19 @@
     <string name="setting_individualization">个性化设置</string>
     <string name="individualization_notice_switch_button">显示通知栏</string>
     <string name="individualization_locker_default_image">设置锁屏页面默认图片</string>
-    <string name="init_setting_V6_close_systemlocker_prompt">请按照以下方式关闭系统锁屏</string>
-    <string name="init_setting_V6_allow_floating_window_prompt">开启显示悬浮窗</string>
+    <string name="init_setting_V6_close_systemlocker_title">请按照以下方式关闭系统锁屏</string>
+    <string name="init_setting_V6_close_systemlocker_prompt">潘多拉锁屏已经经过测试，不会引起您的设备以及设备上应用的问题</string>
+    <string name="init_setting_V6_allow_floating_window_title">开启显示悬浮窗</string>
+    <string name="init_setting_V6_allow_floating_window_prompt">开启悬浮窗是为了防止按Home键跳出，潘多拉锁屏不会往您的桌面添加任何悬浮窗</string>
+    <string name="init_setting_V6_trust_title">设置信任列表&amp;自动启动</string>
     <string name="init_setting_V6_trust_prompt_one">1.进入『授权管理』</string>
     <string name="init_setting_V6_trust_prompt_two">2.进入『自启动管理』</string>
     <string name="init_setting_V6_trust_prompt_three">3.开启『潘多拉锁屏』开关</string>
-    <string name="init_setting_V6_read_notification_prompt_one">请选择『潘多拉锁屏』</string>
+    <string name="init_setting_V6_trust_prompt">潘多拉锁屏需要能够在您手机开机时自动启动，只需要一次设置，以后就不需要麻烦啦</string>
+    <string name="init_setting_V6_read_notification_title">请勾选『潘多拉锁屏』的读取通知权限</string>
+    <string name="init_setting_V6_read_notification_prompt">潘多拉锁屏严格保护您的隐私，只在本机使用这些权限，用以显示通知</string>
+    <string name="init_setting_MIUI_under_18_read_notification_title">请进入『潘多拉锁屏』开启服务</string>
+    <string name="init_setting_MIUI_under_18_read_notification_prompt_detail">打开</string>
     <string name="pandora_box_guide_set_default_image">立刻设置默认背景</string>
     <string name="individualization_welcome_text">设置欢迎语</string>
     <string name="individualization_welcome_text_detail">锁屏页面，当天气信息无法获取时显示此欢迎语</string>
@@ -170,7 +170,7 @@
     <!-- Glyph to be overlaid atop the battery when the level is extremely low. Do not translate. -->
     <string name="battery_meter_very_low_overlay_symbol">!</string>
 
-    <string name="notification_service_name">潘多拉通知服务</string>
+    <string name="notification_service_name">潘多拉锁屏</string>
     <string name="notification_tip_rightArrow">右划查看>></string>
     <string name="notification_tip_doubleTapDelete">双击移除</string>
 

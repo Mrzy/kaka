@@ -33,8 +33,7 @@ public abstract class BaseGuideActivity extends Activity {
                     "You must implement abstract method getContentView() and getNextButton()");
         }
         if (isMeizu) {
-            // nextButton.setText(getResources().getString(R.string.pandora_guide_start));
-            nextButton.setText(getResources().getString(R.string.init_setting_MEIZU_start_string));
+             nextButton.setText(getResources().getString(R.string.pandora_guide_start));
         }
         setContentView(contentView);
 
