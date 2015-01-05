@@ -10,7 +10,7 @@ import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class MySqlitDatabase extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public static final int INDEX_ONE = 1;
 
@@ -61,6 +61,7 @@ public class MySqlitDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         TableStructure.createServerImageTable(db);
+        TableStructure.createCustomNotificationTable(db);
     }
 
     @Override
@@ -73,8 +74,8 @@ public class MySqlitDatabase extends SQLiteOpenHelper {
                 String sql = "alter table " + TableStructure.TABLE_NAME_SERVER_IMAGE
                         + " add column favorited integer";
                 db.execSQL(sql);
-                break;
-
+            case 2:
+                TableStructure.createCustomNotificationTable(db);
             default:
                 break;
         }
