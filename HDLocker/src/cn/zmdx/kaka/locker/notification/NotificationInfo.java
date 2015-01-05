@@ -4,8 +4,6 @@ package cn.zmdx.kaka.locker.notification;
 import android.app.PendingIntent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
-import cn.zmdx.kaka.locker.BuildConfig;
 
 public class NotificationInfo {
 
@@ -34,6 +32,16 @@ public class NotificationInfo {
     private PendingIntent pendingIntent;
 
     private String key;
+
+    private int cloudId;
+
+    public int getCloudId() {
+        return cloudId;
+    }
+
+    public void setCloudId(int cloudId) {
+        this.cloudId = cloudId;
+    }
 
     public String getKey() {
         return key;
@@ -121,5 +129,21 @@ public class NotificationInfo {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("id:" + id);
+        sb.append(" pkg:" + pkg);
+        sb.append(" key:" + key);
+        sb.append(" postTime:" + postTime);
+        sb.append(" title:" + title);
+        sb.append(" content:" + content);
+        sb.append(" icon:" + smallIcon);
+        sb.append(" largeIcon:" + largeIcon);
+        sb.append(" tag" + tag);
+        sb.append(" type" + type);
+        return sb.toString();
     }
 }

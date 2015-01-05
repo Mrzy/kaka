@@ -45,6 +45,7 @@ import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
 import cn.zmdx.kaka.locker.content.box.IFoldablePage;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager.IUnlockListener;
@@ -235,6 +236,9 @@ public class LockScreenManager {
 
         // 尝试拉取资讯数据及图片的预下载
         PandoraBoxDispatcher.getInstance().pullData();
+
+        NotificationInterceptor.getInstance(mContext).tryDispatchCustomNotification();
+        NotificationInterceptor.getInstance(mContext).tryPullCustomNotificationData();
 
         checkNewVersion();
 
