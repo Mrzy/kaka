@@ -2,6 +2,7 @@
 package cn.zmdx.kaka.locker.settings;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,15 +24,15 @@ public class InitPromptActivity extends Activity {
 
     private LinearLayout mV5TrustView;
 
-    private LinearLayout mV5ReadNotificationView;
-
     private LinearLayout mV6CloseSystemLockerView;
 
     private LinearLayout mV6AllowFloatWindowView;
 
     private LinearLayout mV6TrustView;
 
-    private LinearLayout mV6ReadNotificationView;
+    private LinearLayout mReadNotificationView;
+
+    private LinearLayout mMIUIReadNotificationView;// 小米系统 android版面低于4.3
 
     private boolean isMIUI;
 
@@ -73,7 +74,7 @@ public class InitPromptActivity extends Activity {
                 mV6CloseSystemLockerView = (LinearLayout) findViewById(R.id.init_setting_V6_close_systemlocker_prompt);
                 mV6AllowFloatWindowView = (LinearLayout) findViewById(R.id.init_setting_V6_allow_floating_window_prompt);
                 mV6TrustView = (LinearLayout) findViewById(R.id.init_setting_V6_trust_prompt);
-                mV6ReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_V6_read_notification_prompt);
+                mReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt);
             } else {
                 findViewById(R.id.init_setting_close_systemlocker_prompt).setVisibility(View.GONE);
                 findViewById(R.id.init_setting_MIUI_V5).setVisibility(View.VISIBLE);
@@ -81,13 +82,19 @@ public class InitPromptActivity extends Activity {
                 mV5CloseSystemLockerView = (LinearLayout) findViewById(R.id.init_setting_V5_close_systemlocker_prompt_miui);
                 mV5AllowFloatWindowView = (LinearLayout) findViewById(R.id.init_setting_V5_allow_floating_window_prompt);
                 mV5TrustView = (LinearLayout) findViewById(R.id.init_setting_V5_trust_prompt);
-                mV5ReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_V5_read_notification_prompt);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    mReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt);
+                } else {
+                    mMIUIReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt_under_android_18);
+                }
             }
         } else {
             findViewById(R.id.init_setting_MIUI_V5).setVisibility(View.GONE);
             findViewById(R.id.init_setting_MIUI_V6).setVisibility(View.GONE);
             mCloseSystemLockerView = (LinearLayout) findViewById(R.id.init_setting_close_systemlocker_prompt);
+            mReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt);
         }
+
     }
 
     private void showView() {
@@ -105,7 +112,9 @@ public class InitPromptActivity extends Activity {
                         mV6TrustView.setVisibility(View.VISIBLE);
                         break;
                     case PROMPT_READ_NOTIFICATION:
-                        mV6ReadNotificationView.setVisibility(View.VISIBLE);
+                        mReadNotificationView.setVisibility(View.VISIBLE);
+                        break;
+
                     default:
                         break;
                 }
@@ -123,15 +132,30 @@ public class InitPromptActivity extends Activity {
                         mV5TrustView.setVisibility(View.VISIBLE);
                         break;
                     case PROMPT_READ_NOTIFICATION:
-                        mV5ReadNotificationView.setVisibility(View.VISIBLE);
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                            mReadNotificationView.setVisibility(View.VISIBLE);
+                        } else {
+                            mMIUIReadNotificationView.setVisibility(View.VISIBLE);
+                        }
                         break;
+
                     default:
                         break;
                 }
 
             }
         } else {
-            mCloseSystemLockerView.setVisibility(View.VISIBLE);
+            switch (mPromptType) {
+                case PROMPT_CLOSE_SYSTEM_LOCKER:
+                    mCloseSystemLockerView.setVisibility(View.VISIBLE);
+                    break;
+                case PROMPT_READ_NOTIFICATION:
+                    mReadNotificationView.setVisibility(View.VISIBLE);
+                    break;
+
+                default:
+                    break;
+            }
         }
 
     }
