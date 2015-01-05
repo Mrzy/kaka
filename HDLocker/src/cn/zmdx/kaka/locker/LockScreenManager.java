@@ -17,6 +17,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
@@ -29,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -440,7 +442,59 @@ public class LockScreenManager {
         mTopOverlay = mEntireView.findViewById(R.id.lock_top_overlay);
         mBottomOverlay = mEntireView.findViewById(R.id.lock_bottom_overlay);
         setDrawable();
+        initCamera();
         initOnlinePaperPanel();
+    }
+
+    private void initCamera() {
+        final View outerView = mEntireView.findViewById(R.id.camera_outline);
+        outerView.setOnTouchListener(new OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        setRunnableAfterUnLock(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                try {
+                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    mContext.startActivity(intent);
+                                } catch (Exception e) {
+                                }
+                            }
+                        });
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        setRunnableAfterUnLock(null);
+                        break;
+                }
+                return false;
+            }
+        });
+        final int distance = BaseInfoHelper.dip2px(mContext, 35);
+        outerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ObjectAnimator animator1 = ObjectAnimator.ofFloat(outerView, "translationX",
+                        distance);
+                animator1.setDuration(300);
+
+                ObjectAnimator animator = ObjectAnimator.ofFloat(outerView, "translationX", 0);
+                animator.setInterpolator(new BounceInterpolator());
+                animator.setDuration(700);
+
+                AnimatorSet set = new AnimatorSet();
+                set.playSequentially(animator1, animator);
+                set.start();
+            }
+        });
     }
 
     private void initGuideView() {
@@ -495,6 +549,8 @@ public class LockScreenManager {
         @Override
         public void onPanelClosed(View panel) {
             dispatchMainPanelClosed();
+            //取消侧滑展开操作，将解锁后的操作恢复
+            setRunnableAfterUnLock(null);
         }
     };
 
