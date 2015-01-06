@@ -2,7 +2,11 @@
 package cn.zmdx.kaka.locker.notification;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -57,14 +61,14 @@ public final class PandoraNotificationService extends NotificationListenerServic
         np.putInterceptPkgName("com.tencent.mm");// 微信
         np.putInterceptPkgName("com.tencent.mobileqq");// qq
         // 获取拨号的包名
-        String[] dialerPkgName = getDialerPkgName(mContext, Intent.ACTION_DIAL);
-        List<String> dialerPkgNameList = removeDuplicate(dialerPkgName);
+        Set<String> dialerPkgNameSet = getDialerPkgName(mContext, Intent.ACTION_DIAL);
 
-        for (int i = 0; i < dialerPkgNameList.size(); i++) {
-            boolean systemApp = isSystemApp(mContext, dialerPkgNameList.get(i));
+        for (Iterator<String> iterator = dialerPkgNameSet.iterator(); iterator.hasNext();) {
+            String nextPkgName = iterator.next();
+            boolean systemApp = isSystemApp(mContext, nextPkgName);
             if (systemApp) {
                 // 显示系统级别的拨号软件包名
-                np.putInterceptPkgName(dialerPkgNameList.get(i));
+                np.putInterceptPkgName(nextPkgName);
             }
         }
 
@@ -75,20 +79,19 @@ public final class PandoraNotificationService extends NotificationListenerServic
             }
         } else {
             // 4.4以下的手机，对于原生android系统，将环聊通知拦截
-            // TODO 确定4.0的设备是否使用环聊作为默认接收短信程序，如果不是，需要找到那个短信包名并设置拦截
             // 获取短信的包名
             String androidOrigin = "com.google.android.talk";
-            String[] smsPkgName = getSmsPkgName(mContext);
-            List<String> smsPkgNameList = removeDuplicate(smsPkgName);
+            Set<String> smsPkgNameSet = getSmsPkgName(mContext);
 
-            for (int i = 0; i < smsPkgNameList.size(); i++) {
-                boolean systemApp = isSystemApp(mContext, smsPkgNameList.get(i));
+            for (Iterator<String> iterator = smsPkgNameSet.iterator(); iterator.hasNext();) {
+                String nextPkgName = iterator.next();
+                boolean systemApp = isSystemApp(mContext, nextPkgName);
                 if (systemApp) {
-                    if (smsPkgNameList.contains(androidOrigin)) {
+                    if (smsPkgNameSet.contains(androidOrigin)) {
                         np.putInterceptPkgName(androidOrigin);
                         return;
                     } else {
-                        np.putInterceptPkgName(smsPkgNameList.get(i));
+                        np.putInterceptPkgName(nextPkgName);
                         return;
                     }
                 }
@@ -100,7 +103,7 @@ public final class PandoraNotificationService extends NotificationListenerServic
     }
 
     // 得到所有拨号程序的包名
-    private String[] getDialerPkgName(Context context, String intentStr) {
+    private Set<String> getDialerPkgName(Context context, String intentStr) {
         PackageManager sPackageManager = context.getPackageManager();
         Intent dialerIntent = new Intent(intentStr);
         List<ResolveInfo> intentResolveInfos = sPackageManager.queryIntentActivities(dialerIntent,
@@ -109,15 +112,16 @@ public final class PandoraNotificationService extends NotificationListenerServic
         if (size < 1) {
             return null;
         }
-        String[] result = new String[size];
+        Set<String> result = new HashSet<String>();
         for (int i = 0; i < size; i++) {
-            result[i] = intentResolveInfos.get(i).activityInfo.packageName;
+            String packageName = intentResolveInfos.get(i).activityInfo.packageName;
+            result.add(packageName);
         }
         return result;
     }
 
     // 得到所有信息程序的包名数组
-    private String[] getSmsPkgName(Context context) {
+    private Set<String> getSmsPkgName(Context context) {
         PackageManager sPackageManager = context.getPackageManager();
         Intent smsIntent = new Intent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -131,9 +135,10 @@ public final class PandoraNotificationService extends NotificationListenerServic
         if (size < 1) {
             return null;
         }
-        String[] result = new String[size];
+        Set<String> result = new HashSet<String>();
         for (int i = 0; i < size; i++) {
-            result[i] = resolveInfos.get(i).activityInfo.packageName;
+            String packageName = resolveInfos.get(i).activityInfo.packageName;
+            result.add(packageName);
         }
         return result;
     }
@@ -149,17 +154,6 @@ public final class PandoraNotificationService extends NotificationListenerServic
             e.printStackTrace();
         }
         return true;
-    }
-
-    // 去除数组中的重复
-    private List<String> removeDuplicate(String[] strings) {
-        List<String> result = new ArrayList<String>();
-        for (String str : strings) {
-            if (!result.contains(str)) {
-                result.add(str);
-            }
-        }
-        return result;
     }
 
     @Override
