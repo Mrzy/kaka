@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pandora_notification_hint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#89000000"
+    android:background="@drawable/pandora_notification_shape"
     android:clickable="true"
     android:focusable="false"
     android:focusableInTouchMode="false"
@@ -10,11 +11,11 @@
 
     <ImageView
         android:id="@+id/largeIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="10dp"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="11dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="11dp"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:scaleType="fitXY" />
@@ -33,6 +34,22 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/largeIcon"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:singleLine="true"
+        android:textColor="#ffffff"
+        android:textSize="12dp" />
+
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="7dp"
         android:layout_toRightOf="@id/largeIcon"
         android:ellipsize="end"
@@ -40,50 +57,29 @@
         android:focusableInTouchMode="false"
         android:singleLine="true"
         android:textColor="#ffffff"
-        android:textSize="17dp" />
-
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginTop="3dp"
-        android:layout_toRightOf="@id/largeIcon"
-        android:ellipsize="end"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:singleLine="true"
-        android:textColor="#ffffff"
-        android:textSize="13dp" />
-
-    <View
-        android:id="@+id/blackOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false" />
+        android:textSize="14dp" />
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/rightArrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="45dp"
-        android:layout_marginTop="5dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
         android:text="@string/notification_tip_rightArrow"
-        android:textColor="#FF7F00"
-        android:textSize="16dp"
+        android:textColor="#50ffffff"
+        android:textSize="12dp"
         android:visibility="invisible" />
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/doubleTapDeleteTip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:paddingRight="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
         android:text="@string/notification_tip_doubleTapDelete"
-        android:textColor="#a0FF7F00"
-        android:textSize="13dp"
+        android:textColor="#50ffffff"
+        android:textSize="12dp"
         android:visibility="invisible" />
 
 </RelativeLayout>
