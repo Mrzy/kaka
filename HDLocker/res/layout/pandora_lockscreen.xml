@@ -249,14 +249,4 @@
             </LinearLayout>
         </cn.zmdx.kaka.locker.widget.WallpaperPanelLayout>
     </cn.zmdx.kaka.locker.widget.SlidingPaneLayout>
-
-    <ImageView
-        android:id="@+id/lock_guide"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/setting_black_translucent"
-        android:contentDescription="@string/contentDescription"
-        android:scaleType="fitXY"
-        android:visibility="gone" />
-
 </FrameLayout>
