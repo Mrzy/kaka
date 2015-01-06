@@ -34,7 +34,7 @@
                 android:id="@+id/pandora_share_wechat_circle"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:background="@drawable/pandora_share_line_selector"
+                android:background="@drawable/pandora_share_line_normal"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:visibility="gone" >

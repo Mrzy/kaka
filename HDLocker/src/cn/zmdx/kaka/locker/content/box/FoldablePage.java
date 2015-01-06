@@ -28,6 +28,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.LockScreenManager;
+import cn.zmdx.kaka.locker.LockScreenManager.IMainPanelListener;
 import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.FoldableCard;
@@ -84,6 +85,7 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
         mContext = context;
         mData = cards;
         LockScreenManager.getInstance().registBackPressedListener(mBackPressedListener);
+        LockScreenManager.getInstance().registMainPanelListener(mMainPanelListener);
     }
 
     @Override
@@ -209,6 +211,7 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
     public void onFinish() {
         try {
             LockScreenManager.getInstance().unRegistBackPressedListener(mBackPressedListener);
+            LockScreenManager.getInstance().unRegistMainPanelListener(mMainPanelListener);
         } catch (Exception e) {
         }
         if (mFingerAnim != null) {
@@ -216,6 +219,23 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
             mFingerAnim = null;
         }
     }
+
+    /**
+     * 锁屏页右划解锁的监听器
+     */
+    private IMainPanelListener mMainPanelListener = new IMainPanelListener() {
+
+        @Override
+        public void onMainPanelOpened() {
+
+        }
+
+        @Override
+        public void onMainPanelClosed() {
+            resetState();
+        }
+
+    };
 
     private OnBackPressedListener mBackPressedListener = new OnBackPressedListener() {
 
@@ -385,6 +405,12 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
 
     private boolean isMenuVisible = false;
 
+    private void setShareViewGone() {
+        mImageButtonCollect.setVisibility(View.GONE);
+        mShareIcon.setVisibility(View.GONE);
+        mShareViewStub.setVisibility(View.GONE);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private void initShareView() {
         mShareViewLayout = mShareViewStub.inflate();
@@ -415,29 +441,48 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View view, MotionEvent event) {
-            switch (view.getId()) {
-                case R.id.pandora_share_wechat_circle:
-                    PandoraShareManager.shareContent(mContext, mCurCardData,
-                            PandoraShareManager.TYPE_SHARE_WECHAT_CIRCLE);
-                    break;
-                case R.id.pandora_share_wechat:
-                    PandoraShareManager.shareContent(mContext, mCurCardData,
-                            PandoraShareManager.TYPE_SHARE_WECHAT);
-                    break;
-                case R.id.pandora_share_sina:
-                    PandoraShareManager.shareContent(mContext, mCurCardData,
-                            PandoraShareManager.TYPE_SHARE_SINA);
-                    break;
-                case R.id.pandora_share_qq:
-                    PandoraShareManager.shareContent(mContext, mCurCardData,
-                            PandoraShareManager.TYPE_SHARE_QQ);
-                    break;
-                default:
-                    break;
+            view.performClick();
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                switch (view.getId()) {
+                    case R.id.pandora_share_wechat_circle:
+                        mShareWechatCircle
+                                .setBackgroundResource(R.drawable.pandora_share_line_press);
+                        PandoraShareManager.shareContent(mContext, mCurCardData,
+                                PandoraShareManager.TYPE_SHARE_WECHAT_CIRCLE);
+                        break;
+                    case R.id.pandora_share_wechat:
+                        mShareWechat.setBackgroundResource(R.drawable.pandora_share_line_press);
+                        PandoraShareManager.shareContent(mContext, mCurCardData,
+                                PandoraShareManager.TYPE_SHARE_WECHAT);
+                        break;
+                    case R.id.pandora_share_sina:
+                        mShareSina.setBackgroundResource(R.drawable.pandora_share_line_press);
+                        PandoraShareManager.shareContent(mContext, mCurCardData,
+                                PandoraShareManager.TYPE_SHARE_SINA);
+                        break;
+                    case R.id.pandora_share_qq:
+                        mShareQQ.setBackgroundResource(R.drawable.pandora_share_line_press);
+                        PandoraShareManager.shareContent(mContext, mCurCardData,
+                                PandoraShareManager.TYPE_SHARE_QQ);
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                resetState();
             }
-            return false;
+            return true;
         }
     };
+
+    private void resetState() {
+        mShareWechatCircle.setBackgroundResource(R.drawable.pandora_share_line_normal);
+        mShareWechat.setBackgroundResource(R.drawable.pandora_share_line_normal);
+        mShareSina.setBackgroundResource(R.drawable.pandora_share_line_normal);
+        mShareQQ.setBackgroundResource(R.drawable.pandora_share_line_normal);
+        LockScreenManager.getInstance().setRunnableAfterUnLock(null);
+    }
 
     @Override
     public void onUnfolding(UnfoldableView unfoldableView) {
@@ -448,12 +493,14 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
     @Override
     public void onUnfolded(UnfoldableView unfoldableView) {
         mListTouchInterceptor.setClickable(false);
-
     }
 
     @Override
     public void onFoldingBack(UnfoldableView unfoldableView) {
         mListTouchInterceptor.setClickable(true);
+        isMenuVisible = false;
+        isShareLayoutVisible = false;
+        setShareViewGone();
     }
 
     @Override
