@@ -71,10 +71,10 @@ public class CustomNotificationModel {
             cv.put(TableStructure.CUSNOTI_TIMES, ne.getTimes());
             cv.put(TableStructure.CUSNOTI_TITLE, ne.getTitle());
             cv.put(TableStructure.CUSNOTI_TYPE, ne.getType());
-            result = db.update(TableStructure.TABLE_NAME_NOTIFICATION, cv, TableStructure.CUSNOTI_CLOUDID
-                    + "=?", new String[] {
-                String.valueOf(ne.getCloudId())
-            });
+            result = db.update(TableStructure.TABLE_NAME_NOTIFICATION, cv,
+                    TableStructure.CUSNOTI_CLOUDID + "=?", new String[] {
+                        String.valueOf(ne.getCloudId())
+                    });
         }
 
         return result;
@@ -89,8 +89,19 @@ public class CustomNotificationModel {
     }
 
     public synchronized int deleteByCloudId(int cloudId) {
+        SQLiteDatabase db = mMySqlitDatabase.getWritableDatabase();
+        return db.delete(TableStructure.TABLE_NAME_NOTIFICATION, TableStructure.CUSNOTI_CLOUDID
+                + "=?", new String[] {
+            String.valueOf(cloudId)
+        });
+    }
 
-        return 0;
+    public synchronized int deleteById(int id) {
+        SQLiteDatabase db = mMySqlitDatabase.getWritableDatabase();
+        return db.delete(TableStructure.TABLE_NAME_NOTIFICATION, TableStructure.CUSNOTI_ID + "=?",
+                new String[] {
+                    String.valueOf(id)
+                });
     }
 
     public synchronized int update(NotificationInfo ni) {
@@ -188,45 +199,10 @@ public class CustomNotificationModel {
         }
         return entity;
     }
-    // public synchronized void saveServerImageData(List<ServerImageData> list)
-    // {
-    // SQLiteDatabase mysql = mMySqlitDatabase.getWritableDatabase();
-    // try {
-    // mysql.beginTransaction();
-    // SQLiteStatement sqLiteStatement = mysql
-    // .compileStatement("replace INTO " +
-    // TableStructure.TABLE_NAME_SERVER_IMAGE
-    // + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-    // for (ServerImageData bd : list) {
-    // sqLiteStatement.clearBindings();
-    // sqLiteStatement.bindString(MySqlitDatabase.INDEX_TWO, bd.getCloudId());
-    // sqLiteStatement.bindString(MySqlitDatabase.INDEX_THREE, bd.getTitle());
-    // sqLiteStatement.bindString(MySqlitDatabase.INDEX_FOUR, bd.getUrl());
-    // sqLiteStatement.bindString(MySqlitDatabase.INDEX_FIVE,
-    // bd.getImageDesc());
-    // sqLiteStatement.bindString(MySqlitDatabase.INDEX_SIX, bd.getDataType());
-    // sqLiteStatement.bindString(MySqlitDatabase.INDEX_SEVEN, bd.getTop());
-    // sqLiteStatement.bindString(MySqlitDatabase.INDEX_EIGHT, bd.getRead());
-    // sqLiteStatement.bindString(MySqlitDatabase.INDEX_NINE,
-    // bd.getCollectTime());
-    // sqLiteStatement.bindString(MySqlitDatabase.INDEX_TEN,
-    // bd.getReleaseTime());
-    // sqLiteStatement.bindString(MySqlitDatabase.INDEX_ELEVEN,
-    // bd.getCollectWebsite());
-    // if (bd.getDataType().equals(ServerDataMapping.S_DATATYPE_HTML)) {//
-    // 如果类型为html，没有图片，默认情况下，是否已下载图片字段为true
-    // sqLiteStatement.bindLong(13, MySqlitDatabase.DOWNLOAD_TRUE);
-    // } else {
-    // sqLiteStatement.bindLong(13, bd.isImageDownloaded());
-    // }
-    // sqLiteStatement.bindLong(12, UNFAVORITED);
-    // sqLiteStatement.executeInsert();
-    // }
-    // mysql.setTransactionSuccessful();
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // } finally {
-    // mysql.endTransaction();
-    // }
-    // }
+
+    public int deleteExpiredData() {
+        SQLiteDatabase db = mMySqlitDatabase.getWritableDatabase();
+        long current = System.currentTimeMillis();
+        return db.delete(TableStructure.TABLE_NAME_NOTIFICATION, current + ">?", new String[]{TableStructure.CUSNOTI_ENDTIME});
+    }
 }
