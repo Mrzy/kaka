@@ -54,8 +54,8 @@ public class PandoraNotificationFactory {
         ni.setCloudId(entity.getCloudId());
         ni.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
         ni.setPostTime(System.currentTimeMillis());
+        Intent intent = null;
         if (!TextUtils.isEmpty(entity.getTargetApp())) {
-            Intent intent;
             try {
                 intent = new Intent(HDApplication.getContext(),
                         Class.forName(entity.getTargetApp()));
@@ -67,9 +67,15 @@ public class PandoraNotificationFactory {
         } else {
             if (!TextUtils.isEmpty(entity.getTargetUrl())) {
                 Uri uri = Uri.parse(entity.getTargetUrl());
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 HDApplication.getContext().startActivity(intent);
             }
+        }
+        if (intent != null) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(HDApplication.getContext(),
+                    entity.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            ni.setPendingIntent(pendingIntent);
         }
         return ni;
     }
