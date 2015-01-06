@@ -64,7 +64,17 @@ public class PandoraWechatShareManager {
         realOpts.inPreferredConfig = Bitmap.Config.RGB_565;
         realOpts.inPurgeable = true;
         realOpts.inInputShareable = true;
-        return DiskImageHelper.getBitmapByUrl(imageUrl, realOpts);
+        Bitmap bitmap = DiskImageHelper.getBitmapByUrl(imageUrl, realOpts);
+        int bitmapWidth = bitmap.getWidth();
+        int bitmapHeight = bitmap.getHeight();
+        Bitmap finalBmp = null;
+        if (bitmapWidth > 80 || bitmapHeight > 120) {
+            finalBmp = Bitmap.createBitmap(bitmap, 0, 0, 80, 120);
+            bitmap.recycle();
+        } else {
+            finalBmp = bitmap;
+        }
+        return finalBmp;
     }
 
     public static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
