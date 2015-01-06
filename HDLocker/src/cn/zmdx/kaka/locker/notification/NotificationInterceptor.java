@@ -25,6 +25,7 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.database.CustomNotificationModel;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 import com.android.volley.Response.ErrorListener;
@@ -105,6 +106,10 @@ public class NotificationInterceptor extends Handler {
                     Bitmap largeIcon = (Bitmap) bundle.getParcelable("android.largeIcon");
                     long postTime = sbn.getPostTime();
 
+                    if (TextUtils.isEmpty(title) && TextUtils.isEmpty(content)) {
+                        return;
+                    }
+
                     final NotificationInfo ni = new NotificationInfo();
                     ni.setLargeIcon(largeIcon);
                     ni.setTitle(title);
@@ -183,6 +188,9 @@ public class NotificationInterceptor extends Handler {
     };
 
     private void handleDispatchCustomNotification() {
+        // 删除过期自定义通知
+        deleteExpiredNotificationDataFromDb();
+
         List<NotificationEntity> data = CustomNotificationModel.getInstance()
                 .queryValidNotification();
         if (data != null && data.size() > 0) {
@@ -193,6 +201,15 @@ public class NotificationInterceptor extends Handler {
                 final NotificationInfo ni = PandoraNotificationFactory
                         .createCustomNotification(entity);
                 if (ni != null) {
+                    // 如果此自定义通知类型是打开浏览器，则判断如果当前没有网络，则跳过
+                    if (!TextUtils.isEmpty(entity.getTargetUrl())) {
+                        if (!HDBNetworkState.isNetworkAvailable()) {
+                            if (BuildConfig.DEBUG) {
+                                HDBLOG.logD("----调度自定义通知：当前无网络，忽略本通知，通知数据体：" + ni.toString());
+                            }
+                            continue;
+                        }
+                    }
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("----调度自定义通知：发送显示自定义通知消息，通知数据体：" + ni.toString());
                     }
@@ -207,6 +224,16 @@ public class NotificationInterceptor extends Handler {
     }
 
     /**
+     * 删除本地数据库中过期的通知数据
+     */
+    private void deleteExpiredNotificationDataFromDb() {
+        int result = CustomNotificationModel.getInstance().deleteExpiredData();
+        if (result > 0 && BuildConfig.DEBUG) {
+            HDBLOG.logD("----调度自定义通知: 删除过期数据共" + result + "条");
+        }
+    }
+
+    /**
      * 用于获取拉取自定义通知的url
      * 
      * @param lastModified
@@ -217,6 +244,10 @@ public class NotificationInterceptor extends Handler {
     }
 
     private void handlePullCustomNotificationData() {
+        if (!HDBNetworkState.isNetworkAvailable()) {
+            return;
+        }
+
         final long lastModified = mPreference.getPullCustomNotificationLastModified();
         final String url = getUrl(lastModified);
         if (BuildConfig.DEBUG) {
@@ -341,7 +372,7 @@ public class NotificationInterceptor extends Handler {
         Message msg = obtainMessage();
         msg.what = MSG_CUSTOM_NOTIFICATION_POST;
         msg.obj = sbn;
-        sendMessage(msg);
+        sendMessageDelayed(msg, 300);
     }
 
     /**

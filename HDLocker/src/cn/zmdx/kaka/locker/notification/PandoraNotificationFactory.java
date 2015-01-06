@@ -60,7 +60,6 @@ public class PandoraNotificationFactory {
                 intent = new Intent(HDApplication.getContext(),
                         Class.forName(entity.getTargetApp()));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                HDApplication.getContext().startActivity(intent);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -69,7 +68,6 @@ public class PandoraNotificationFactory {
                 Uri uri = Uri.parse(entity.getTargetUrl());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                HDApplication.getContext().startActivity(intent);
             }
         }
         if (intent != null) {

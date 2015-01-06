@@ -27,6 +27,7 @@ import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.IMainPanelListener;
 import cn.zmdx.kaka.locker.LockScreenManager.IPullDownListener;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.database.CustomNotificationModel;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
@@ -120,22 +121,32 @@ public class NotificationLayout extends LinearLayout {
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
     private void removeNotification(String notifyId) {
+        //从view容器中将这个通知view移除
         View targetView = findViewWithTag(notifyId);
         if (targetView != null) {
             removeView(targetView);
         }
+
         NotificationInfo info = mActiveNotification.get(notifyId);
         if (info != null) {
-            Intent intent = new Intent();
-            intent.setAction(PandoraNotificationService.ACTION_CANCEL_NOTIFICATION);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                intent.putExtra("key", info.getKey());
-            } else {
-                intent.putExtra("pkgName", info.getPkg());
-                intent.putExtra("tag", info.getTag());
-                intent.putExtra("id", info.getId());
+            //如果是自定义通知，要从本地数据库删除通知
+            if (info.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
+                CustomNotificationModel.getInstance().deleteById(info.getId());
+            } else if (info.getType() == NotificationInfo.NOTIFICATION_TYPE_SYSTEM) {
+                //如果为系统通知，清除通知栏中的这个通知
+                Intent intent = new Intent();
+                intent.setAction(PandoraNotificationService.ACTION_CANCEL_NOTIFICATION);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    intent.putExtra("key", info.getKey());
+                } else {
+                    intent.putExtra("pkgName", info.getPkg());
+                    intent.putExtra("tag", info.getTag());
+                    intent.putExtra("id", info.getId());
+                }
+                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
             }
-            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+
+            //从内存中的通知集合中移除这个通知
             mActiveNotification.remove(notifyId);
         }
     }
