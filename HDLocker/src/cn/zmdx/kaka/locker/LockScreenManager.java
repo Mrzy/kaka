@@ -34,6 +34,7 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.BatteryView;
@@ -85,7 +86,7 @@ public class LockScreenManager {
 
     private PandoraPanelLayout mSliderView;
 
-    private View mEntireView;
+    private ViewGroup mEntireView;
 
     private SlidingPaneLayout mSlidingPanelLayout;
 
@@ -135,7 +136,7 @@ public class LockScreenManager {
 
     private boolean mNeedPassword = false;
 
-    private ImageView mGuide;
+//    private ImageView mGuide;
 
     private BatteryView batteryView;
 
@@ -409,7 +410,7 @@ public class LockScreenManager {
 
     @SuppressLint("InflateParams")
     private void initLockScreenViews() {
-        mEntireView = LayoutInflater.from(mContext).inflate(R.layout.pandora_lockscreen, null);
+        mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.pandora_lockscreen, null);
         initGuideView();
         initSecurePanel();
         mSlidingPanelLayout = (SlidingPaneLayout) mEntireView.findViewById(R.id.sliding_layout);
@@ -506,23 +507,24 @@ public class LockScreenManager {
         if (lockScreenTime == 2) {
             return;
         }
-        mGuide = (ImageView) mEntireView.findViewById(R.id.lock_guide);
-        mGuide.setVisibility(View.VISIBLE);
-        ViewHelper.setAlpha(mGuide, 0);
-        mGuide.animate().alpha(1).setDuration(1000).setStartDelay(1000).start();
-        mGuide.setOnTouchListener(new OnTouchListener() {
+        final ImageView guideView = new ImageView(mContext);
+        guideView.setScaleType(ScaleType.FIT_XY);
+        guideView.setVisibility(View.VISIBLE);
+        ViewHelper.setAlpha(guideView, 0);
+        mEntireView.addView(guideView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        guideView.animate().alpha(1).setDuration(1000).setStartDelay(700).start();
+        guideView.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                mGuide.setVisibility(View.GONE);
-                return false;
+            public void onClick(View v) {
+                mEntireView.removeView(guideView);
             }
         });
         if (lockScreenTime == 0) {
-            mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_two);
+            guideView.setImageResource(R.drawable.pandora_lock_screen_guide_two);
             PandoraConfig.newInstance(mContext).saveLockScreenTimes(1);
         } else if (lockScreenTime == 1) {
-            mGuide.setImageResource(R.drawable.pandora_lock_screen_guide_one);
+            guideView.setImageResource(R.drawable.pandora_lock_screen_guide_one);
             PandoraConfig.newInstance(mContext).saveLockScreenTimes(2);
         }
     }
