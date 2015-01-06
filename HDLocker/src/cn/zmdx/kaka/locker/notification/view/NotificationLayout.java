@@ -190,12 +190,12 @@ public class NotificationLayout extends LinearLayout {
 
     private void startTapItemAnimation(View view) {
         View rightArrowView = view.findViewById(R.id.rightArrow);
-        View contentLayout = view.findViewById(R.id.blackOverlay);
-        contentLayout.setBackgroundColor(Color.parseColor("#bb000000"));
+        View contentLayout = view.findViewById(R.id.pandora_notification_hint);
+        contentLayout.setBackgroundResource(R.drawable.pandora_notification_click_shape);
         view.findViewById(R.id.rightArrow).setVisibility(View.VISIBLE);
         view.findViewById(R.id.doubleTapDeleteTip).setVisibility(View.VISIBLE);
         mRightArrowAnimator = ObjectAnimator.ofFloat(rightArrowView, "translationX",
-                BaseInfoHelper.dip2px(getContext(), 40));
+                BaseInfoHelper.dip2px(getContext(), 15));
         mRightArrowAnimator.setDuration(1500);
         mRightArrowAnimator.setRepeatCount(-1);
         mRightArrowAnimator.setRepeatMode(Animation.RESTART);
@@ -282,8 +282,8 @@ public class NotificationLayout extends LinearLayout {
 
     private void resetState() {
         if (mCurrentTouchView != null) {
-            View contentLayout = mCurrentTouchView.findViewById(R.id.blackOverlay);
-            contentLayout.setBackgroundColor(Color.TRANSPARENT);
+            View contentLayout = mCurrentTouchView.findViewById(R.id.pandora_notification_hint);
+            contentLayout.setBackgroundResource(R.drawable.pandora_notification_shape);
             mCurrentTouchView.findViewById(R.id.doubleTapDeleteTip).setVisibility(View.INVISIBLE);
             mCurrentTouchView.findViewById(R.id.rightArrow).setTranslationX(0);
             mCurrentTouchView.findViewById(R.id.rightArrow).setVisibility(View.INVISIBLE);

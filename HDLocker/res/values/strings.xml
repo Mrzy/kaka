@@ -171,7 +171,7 @@
     <string name="battery_meter_very_low_overlay_symbol">!</string>
 
     <string name="notification_service_name">潘多拉锁屏</string>
-    <string name="notification_tip_rightArrow">右划查看>></string>
+    <string name="notification_tip_rightArrow">右划查看</string>
     <string name="notification_tip_doubleTapDelete">双击移除</string>
 
     <string name="pandora_share_sina_send">发送</string>
