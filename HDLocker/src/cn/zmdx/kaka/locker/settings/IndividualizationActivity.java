@@ -6,7 +6,6 @@ import java.lang.ref.WeakReference;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
@@ -28,17 +26,13 @@ import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.FileHelper;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class IndividualizationActivity extends Activity implements OnClickListener,
+public class IndividualizationActivity extends BaseActivity implements OnClickListener,
         OnCheckedChangeListener {
 
     private View mRootView;
@@ -63,15 +57,15 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_individualization);
-        getWindow().getAttributes().flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         initView();
-        initTitleHeight();
-        initWallpaper();
         initLockDefaultBitmap();
     }
 
     private void initView() {
         mRootView = findViewById(R.id.individualization_background);
+        LinearLayout titleView = (LinearLayout) findViewById(R.id.pandora_individualization_title);
+        initBackground(mRootView);
+        initTitleHeight(titleView);
         mNoticeSButton = (SwitchButton) findViewById(R.id.individualization_notice_switch_button);
         mNoticeSButton.setOnCheckedChangeListener(this);
         mNoticeSButton.setChecked(isNeedNotice());
@@ -92,31 +86,6 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         params.height = height;
         mLockerDefaultImageThumb.setLayoutParams(params);
 
-    }
-
-    private void initTitleHeight() {
-        int statusBarHeight = PandoraUtils.getStatusBarHeight(this);
-        LinearLayout titleLayout = (LinearLayout) mRootView
-                .findViewById(R.id.pandora_individualization_title);
-        titleLayout.setPadding(0, statusBarHeight, 0, 0);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void initWallpaper() {
-        Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isDefaultTheme()) {
-            mRootView.setBackgroundResource(theme.getmBackgroundResId());
-        } else {
-            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(),
-                    new ILoadBitmapCallback() {
-
-                        @Override
-                        public void imageLoaded(Bitmap bitmap, String filePath) {
-                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
-                                    bitmap));
-                        }
-                    });
-        }
     }
 
     private void initLockDefaultBitmap() {

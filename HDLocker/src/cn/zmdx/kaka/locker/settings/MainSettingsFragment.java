@@ -3,8 +3,6 @@ package cn.zmdx.kaka.locker.settings;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -15,13 +13,10 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.content.favorites.FavoritesActivity;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -49,8 +44,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     private LinearLayout mPandoraFavorite;
 
     private View mSettingBackground;
-
-    // private boolean mIsCurrentlyPressed = false;
 
     public static final int GUSTURE_REQUEST_CODE_SUCCESS = 37;
 
@@ -126,37 +119,12 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     @SuppressWarnings("deprecation")
     private void initBackground() {
-        if (null != PandoraUtils.sCropBitmap) {
-            BitmapDrawable drawable = new BitmapDrawable(getResources(), PandoraUtils.sCropBitmap);
-            mSettingBackground.setBackgroundDrawable(drawable);
-        } else {
-            initWallpaper();
-        }
-    }
-
-    private void initWallpaper() {
         Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isDefaultTheme()) {
-            mSettingBackground.setBackgroundResource(theme.getmBackgroundResId());
-        } else {
-            WallpaperUtils.loadBackgroundBitmap(getActivity(), theme.getFilePath(),
-                    new ILoadBitmapCallback() {
-
-                        @SuppressWarnings("deprecation")
-                        @Override
-                        public void imageLoaded(Bitmap bitmap, String filePath) {
-                            mSettingBackground.setBackgroundDrawable(new BitmapDrawable(
-                                    getResources(), bitmap));
-                        }
-                    });
-        }
+        mSettingBackground.setBackgroundDrawable(theme.getCurDrawable());
     }
 
     private void initSwitchButtonState() {
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
-        // mLockerTypeSButton.setChecked(getUnLockType() ==
-        // PandoraConfig.UNLOCKER_TYPE_GUSTURE);
-        // mIsCurrentlyPressed = true;
     }
 
     @Override
@@ -171,17 +139,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                     UmengCustomEventManager.statisticalPandoraSwitchCloseTimes();
                 }
                 break;
-            // case R.id.setting_pandoralocker_password:
-            // if (isChecked) {
-            // if (mIsCurrentlyPressed) {
-            // showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_OPEN);
-            // }
-            // } else {
-            // if (mIsCurrentlyPressed) {
-            // showGustureView(LockPatternActivity.LOCK_PATTERN_TYPE_CLOSE);
-            // }
-            // }
-            // break;
 
             default:
                 break;
@@ -201,39 +158,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         MobclickAgent.onPageEnd("MainSettingsFragment");
     }
 
-    // private void showGustureView(final int type) {
-    // mLockerTypeSButton.setEnabled(false);
-    // gotoGustureActivity(type);
-    //
-    // }
-
-    // @Override
-    // public void onActivityResult(int requestCode, int resultCode, Intent
-    // data) {
-    // super.onActivityResult(requestCode, resultCode, data);
-    // mLockerTypeSButton.setEnabled(true);
-    // switch (resultCode) {
-    // case GUSTURE_REQUEST_CODE_FAIL:
-    // int type = data.getExtras().getInt("type");
-    // mIsCurrentlyPressed = false;
-    // switch (type) {
-    // case LockPatternActivity.LOCK_PATTERN_TYPE_CLOSE:
-    // mLockerTypeSButton.setChecked(true);
-    // break;
-    // case LockPatternActivity.LOCK_PATTERN_TYPE_OPEN:
-    // mLockerTypeSButton.setChecked(false);
-    // break;
-    //
-    // default:
-    // break;
-    // }
-    // mIsCurrentlyPressed = true;
-    // break;
-    // default:
-    // break;
-    // }
-    // }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -248,22 +172,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 break;
             case R.id.setting_change_background:
                 gotoWallpaper();
-                // mIsWallpaperShow = !mIsWallpaperShow;
-                // int height = (int) getActivity().getResources().getDimension(
-                // R.dimen.setting_wallpaper_bg_height);
-                // if (mIsWallpaperShow) {
-                // ViewAnimation viewAnimation = new
-                // ViewAnimation(mPicScrollView, height,
-                // mIsWallpaperShow);
-                // viewAnimation.setDuration(VIEW_ANIMATION_DURATION);
-                // mPicScrollView.startAnimation(viewAnimation);
-                // } else {
-                // ViewAnimation viewAnimation = new
-                // ViewAnimation(mPicScrollView, height,
-                // mIsWallpaperShow);
-                // viewAnimation.setDuration(VIEW_ANIMATION_DURATION);
-                // mPicScrollView.startAnimation(viewAnimation);
-                // }
                 break;
             case R.id.setting_init:
                 gotoInit();
@@ -287,7 +195,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     @Override
     public void onDestroyView() {
-        PandoraUtils.sCropBitmap = null;
         PandoraUtils.sLockDefaultThumbBitmap = null;
         super.onDestroyView();
     }

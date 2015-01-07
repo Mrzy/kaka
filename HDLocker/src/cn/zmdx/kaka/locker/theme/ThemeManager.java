@@ -1,14 +1,17 @@
 
 package cn.zmdx.kaka.locker.theme;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager;
 
@@ -25,6 +28,8 @@ public class ThemeManager {
 
     public static final int THEME_ID_DEFAULT_FOREGROUND_RESID = R.drawable.setting_background_road_fore;
 
+    public static final String CURRENT_THEME_CACHE_KEY = "curThemeCacheKey";
+
     public static Theme getCurrentTheme() {
         int themeId = PandoraConfig.newInstance(HDApplication.getContext()).getCurrentThemeId();
         if (themeId == THEME_ID_CUSTOM) {
@@ -32,56 +37,103 @@ public class ThemeManager {
         } else if (themeId == THEME_ID_ONLINE) {
             return getOnlineTheme(HDApplication.getContext());
         } else {
-            return getThemeById(themeId);
+            return getDefauleTheme(HDApplication.getContext());
         }
     }
 
+    /**
+     * 获取当前网络壁纸主题
+     * 
+     * @param context
+     * @return
+     */
     private static Theme getOnlineTheme(Context context) {
-        String fileName = PandoraConfig.newInstance(context).getCurrentWallpaperFileName();
-        String filePath = OnlineWallpaperManager.getInstance().getFilePath(fileName);
-        Theme theme = new Theme();
-        if (TextUtils.isEmpty(fileName)) {
-            theme.setDefaultTheme(true);
-            theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
-            theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
-            theme.setmThemeId(THEME_ID_DEFAULT);
+        return getThemeByThemeId(context, THEME_ID_ONLINE);
+    }
+
+    /**
+     * 获取当前自定义壁纸主题
+     * 
+     * @param context
+     * @return
+     */
+    private static Theme getCustomTheme(Context context) {
+        return getThemeByThemeId(context, THEME_ID_CUSTOM);
+    }
+
+    private static Theme getThemeByThemeId(Context context, int themeId) {
+        Theme theme = null;
+        Bitmap cacheBmp = ImageLoaderManager.getImageMemCache().getBitmap(CURRENT_THEME_CACHE_KEY);
+        if (null == cacheBmp) {
+            String fileName = PandoraConfig.newInstance(context).getCurrentWallpaperFileName();
+            if (TextUtils.isEmpty(fileName)) {
+                theme = getDefauleTheme(context);
+            } else {
+                theme = new Theme();
+                int screenWidth = BaseInfoHelper.getRealWidth(context);
+                int screenHeight = BaseInfoHelper.getRealHeight(context);
+                String filePath = getFilePathByThemeId(themeId, fileName);
+                Bitmap bitmap = ImageUtils.getBitmapFromFile(filePath, screenWidth, screenHeight);
+                ImageLoaderManager.getImageMemCache().putBitmap(CURRENT_THEME_CACHE_KEY, bitmap);
+                BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, bitmap);
+                theme.setCurDrawable(drawable);
+                theme.setCurBitmap(ImageUtils.drawable2Bitmap(drawable));
+            }
         } else {
-            theme.setDefaultTheme(false);
-            theme.setFilePath(filePath);
-            theme.setThumbFilePath(filePath);
-            theme.setmThemeId(ThemeManager.THEME_ID_ONLINE);
+            theme = new Theme();
+            BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, cacheBmp);
+            theme.setCurDrawable(drawable);
+            theme.setCurBitmap(cacheBmp);
         }
+        return theme;
+
+    }
+
+    /**
+     * 获取当前默认主题
+     * 
+     * @param context
+     * @return
+     */
+    public static Theme getDefauleTheme(Context context) {
+        Theme theme = new Theme();
+        Drawable defaultDrawable = context.getResources().getDrawable(
+                THEME_ID_DEFAULT_BACKGROUND_RESID);
+        ImageLoaderManager.getImageMemCache().putBitmap(ThemeManager.CURRENT_THEME_CACHE_KEY, null);
+        ImageLoaderManager.getImageMemCache().putBitmap(CURRENT_THEME_CACHE_KEY,
+                ImageUtils.drawable2Bitmap(defaultDrawable));
+        theme.setCurDrawable(defaultDrawable);
+        theme.setCurBitmap(ImageUtils.drawable2Bitmap(defaultDrawable));
         return theme;
     }
 
-    public static int getCurrentThemeIdForStatistical() {
-        return PandoraConfig.newInstance(HDApplication.getContext())
-                .getCurrentThemeIdForStatistical();
+    private static String getFilePathByThemeId(int themeId, String fileName) {
+        String filePath = "";
+        switch (themeId) {
+            case THEME_ID_CUSTOM:
+                filePath = CustomWallpaperManager.getInstance().getFilePath(fileName);
+                break;
+            case THEME_ID_ONLINE:
+                filePath = OnlineWallpaperManager.getInstance().getFilePath(fileName);
+                break;
+
+            default:
+                break;
+        }
+        return filePath;
     }
 
     public static void saveTheme(int themeId) {
         PandoraConfig.newInstance(HDApplication.getContext()).saveThemeId(themeId);
     }
 
-    /**
-     * @param context
-     * @return
-     */
-    private static Theme getCustomTheme(Context context) {
-        String fileName = PandoraConfig.newInstance(context).getCurrentWallpaperFileName();
-        String filePath = CustomWallpaperManager.getInstance().getFilePath(fileName);
-        Theme theme = new Theme();
-        if (TextUtils.isEmpty(fileName)) {
-            theme.setDefaultTheme(true);
-            theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
-            theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
-            theme.setmThemeId(THEME_ID_DEFAULT);
-        } else {
-            theme.setDefaultTheme(false);
-            theme.setFilePath(filePath);
-            theme.setmThemeId(ThemeManager.THEME_ID_CUSTOM);
-        }
-        return theme;
+    public static int getCurrentThemeId() {
+        return PandoraConfig.newInstance(HDApplication.getContext()).getCurrentThemeId();
+    }
+
+    public static void addBitmapToCache(Bitmap bitmap) {
+        ImageLoaderManager.getImageMemCache().invalidateBitmap(CURRENT_THEME_CACHE_KEY);
+        ImageLoaderManager.getImageMemCache().putBitmap(CURRENT_THEME_CACHE_KEY, bitmap);
     }
 
     // public static Theme getThemeById(int themeId) {
@@ -110,152 +162,26 @@ public class ThemeManager {
     // return theme;
     // }
 
-    public static Theme getThemeById(int themeId) {
-        Theme theme = new Theme();
-        switch (themeId) {
-            case THEME_ID_ROAD:
-                theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
-                theme.setmForegroundResId(R.drawable.setting_background_road_fore);
-                theme.setmThemeId(THEME_ID_ROAD);
-                break;
-            default:
-                theme.setmBackgroundResId(THEME_ID_DEFAULT_BACKGROUND_RESID);
-                theme.setmForegroundResId(THEME_ID_DEFAULT_FOREGROUND_RESID);
-                theme.setmThemeId(THEME_ID_DEFAULT);
-                break;
-        }
-        theme.setDefaultTheme(true);
-        return theme;
-    }
-
-    public static List<Theme> getAllTheme() {
-        List<Theme> list = new ArrayList<Theme>();
-        Theme theme = new Theme();
-        theme.setmBackgroundResId(R.drawable.setting_background_road_fore);
-        theme.setmForegroundResId(R.drawable.setting_background_road_fore);
-        theme.setmThemeId(THEME_ID_ROAD);
-        list.add(theme);
-        return list;
-    }
-
     public static final class Theme {
-        /**
-         * 前景图resource id
-         */
-        private int mForegroundResId;
 
-        /**
-         * theme id
-         */
-        private int mThemeId;
+        private Drawable mCurDrawable;
 
-        /**
-         * 设置页缩略图resource id
-         */
-        private int mThumbnailResId;
+        private Bitmap mCurBitmap;
 
-        /**
-         * 下层背景图resource id
-         */
-        private int mBackgroundResId;
-
-        /**
-         * 设置页icon resource id
-         */
-        private int mSettingsIconResId;
-
-        /**
-         * 锁屏页钥匙图 resource id
-         */
-        // private int mDragViewIconResId;
-
-        /**
-         * 锁屏页孔图resource id
-         */
-        // private int mHoleIconResId;
-
-        /**
-         * 锁屏页钥匙插入孔图resource id
-         */
-        // private int mKeyholeIconResId;
-
-        /**
-         * true代表当前主题为默认主题，false代表当前主题为自定义或者网络主题
-         */
-        private boolean isDefaultTheme = true;
-
-        /**
-         * 自定义或者网络主题壁纸本地路径
-         */
-        private String mFilePath;
-
-        /**
-         * 自定义或者网络主题壁纸缩略图本地路径
-         */
-        private String mThumbFilePath;
-
-        public int getmThumbnailResId() {
-            return mThumbnailResId;
+        public Drawable getCurDrawable() {
+            return mCurDrawable;
         }
 
-        public void setmThumbnailResId(int mThumbnailResId) {
-            this.mThumbnailResId = mThumbnailResId;
+        public void setCurDrawable(Drawable mCurDrawable) {
+            this.mCurDrawable = mCurDrawable;
         }
 
-        public int getmThemeId() {
-            return mThemeId;
+        public Bitmap getCurBitmap() {
+            return mCurBitmap;
         }
 
-        public void setmThemeId(int mThemeId) {
-            this.mThemeId = mThemeId;
-        }
-
-        public int getmForegroundResId() {
-            return mForegroundResId;
-        }
-
-        public void setmForegroundResId(int mForegroundResId) {
-            this.mForegroundResId = mForegroundResId;
-        }
-
-        public int getmBackgroundResId() {
-            return mBackgroundResId;
-        }
-
-        public void setmBackgroundResId(int mBackgroundResId) {
-            this.mBackgroundResId = mBackgroundResId;
-        }
-
-        public int getmSettingsIconResId() {
-            return mSettingsIconResId;
-        }
-
-        public void setmSettingsIconResId(int mSettingsIconResId) {
-            this.mSettingsIconResId = mSettingsIconResId;
-        }
-
-        public boolean isDefaultTheme() {
-            return isDefaultTheme;
-        }
-
-        public void setDefaultTheme(boolean isDefaultTheme) {
-            this.isDefaultTheme = isDefaultTheme;
-        }
-
-        public String getFilePath() {
-            return mFilePath;
-        }
-
-        public void setFilePath(String mFilePath) {
-            this.mFilePath = mFilePath;
-        }
-
-        public String getThumbFilePath() {
-            return mThumbFilePath;
-        }
-
-        public void setThumbFilePath(String mThumbFilePath) {
-            this.mThumbFilePath = mThumbFilePath;
+        public void setCurBitmap(Bitmap mCurBitmap) {
+            this.mCurBitmap = mCurBitmap;
         }
 
     }

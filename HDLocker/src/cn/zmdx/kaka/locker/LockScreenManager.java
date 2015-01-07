@@ -688,7 +688,9 @@ public class LockScreenManager {
                                     if (null != mSliderView && !TextUtils.isEmpty(filePath)) {
                                         Drawable drawable = mSliderView.setForgroundFile(filePath);
                                         if (mNeedPassword) {
-                                            doFastBlur(drawable);
+                                            if (null != drawable) {
+                                                doFastBlur(drawable);
+                                            }
                                         }
                                     }
                                     mOnlinePanel.collapsePanel();
@@ -743,18 +745,9 @@ public class LockScreenManager {
     }
 
     private void setDrawable() {
-        Drawable bgDrawable = null;
         mCurTheme = ThemeManager.getCurrentTheme();
-        if (mCurTheme.isDefaultTheme()) {
-            bgDrawable = mContext.getResources().getDrawable(mCurTheme.getmForegroundResId());
-            mSliderView.setForegroundDrawable(bgDrawable);
-        } else {
-            if (TextUtils.isEmpty(mCurTheme.getFilePath())) {
-                mSliderView.setForegroundResource(mCurTheme.getmForegroundResId());
-            } else {
-                bgDrawable = mSliderView.setForgroundFile(mCurTheme.getFilePath());
-            }
-        }
+        Drawable bgDrawable = mCurTheme.getCurDrawable();
+        mSliderView.setForegroundDrawable(bgDrawable);
         if (mNeedPassword) {
             if (null != bgDrawable) {
                 doFastBlur(bgDrawable);

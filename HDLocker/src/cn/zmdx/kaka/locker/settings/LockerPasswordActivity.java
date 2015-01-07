@@ -1,13 +1,9 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageView;
@@ -15,13 +11,8 @@ import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 
-public class LockerPasswordActivity extends Activity implements OnClickListener {
+public class LockerPasswordActivity extends BaseActivity implements OnClickListener {
 
     public static final int REQUEST_LOCKER_PASSWORD_TYPE_CODE = 999;
 
@@ -44,16 +35,16 @@ public class LockerPasswordActivity extends Activity implements OnClickListener 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_lock_password);
-        getWindow().getAttributes().flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         initView();
-        initTitleHeight();
-        initWallpaper();
         initLockType();
     }
 
     private void initView() {
         mRootView = findViewById(R.id.pandora_lock_password_background);
-
+        LinearLayout titleLayout = (LinearLayout) mRootView
+                .findViewById(R.id.pandora_lock_password_title);
+        initBackground(mRootView);
+        initTitleHeight(titleLayout);
         mNoneTypeLayout = (LinearLayout) findViewById(R.id.pandora_lock_type_none_layout);
         mNoneType = (ImageView) findViewById(R.id.pandora_lock_type_none);
         mNoneTypeLayout.setOnClickListener(this);
@@ -65,31 +56,6 @@ public class LockerPasswordActivity extends Activity implements OnClickListener 
         mNumberTypeLayout = (LinearLayout) findViewById(R.id.pandora_lock_type_number_layout);
         mNumberType = (ImageView) findViewById(R.id.pandora_lock_type_number);
         mNumberTypeLayout.setOnClickListener(this);
-    }
-
-    private void initTitleHeight() {
-        int statusBarHeight = PandoraUtils.getStatusBarHeight(this);
-        LinearLayout titleLayout = (LinearLayout) mRootView
-                .findViewById(R.id.pandora_lock_password_title);
-        titleLayout.setPadding(0, statusBarHeight, 0, 0);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void initWallpaper() {
-        Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isDefaultTheme()) {
-            mRootView.setBackgroundResource(theme.getmBackgroundResId());
-        } else {
-            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(),
-                    new ILoadBitmapCallback() {
-
-                        @Override
-                        public void imageLoaded(Bitmap bitmap, String filePath) {
-                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
-                                    bitmap));
-                        }
-                    });
-        }
     }
 
     private void initLockType() {
