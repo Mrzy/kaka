@@ -74,7 +74,7 @@ public class ThemeManager {
                 int screenHeight = BaseInfoHelper.getRealHeight(context);
                 String filePath = getFilePathByThemeId(themeId, fileName);
                 Bitmap bitmap = ImageUtils.getBitmapFromFile(filePath, screenWidth, screenHeight);
-                ImageLoaderManager.getImageMemCache().putBitmap(CURRENT_THEME_CACHE_KEY, bitmap);
+                ThemeManager.addBitmapToCache(bitmap);
                 BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, bitmap);
                 theme.setCurDrawable(drawable);
                 theme.setCurBitmap(ImageUtils.drawable2Bitmap(drawable));
@@ -99,11 +99,10 @@ public class ThemeManager {
         Theme theme = new Theme();
         Drawable defaultDrawable = context.getResources().getDrawable(
                 THEME_ID_DEFAULT_BACKGROUND_RESID);
-        ImageLoaderManager.getImageMemCache().putBitmap(ThemeManager.CURRENT_THEME_CACHE_KEY, null);
-        ImageLoaderManager.getImageMemCache().putBitmap(CURRENT_THEME_CACHE_KEY,
-                ImageUtils.drawable2Bitmap(defaultDrawable));
+        Bitmap defaultBitmap = ImageUtils.drawable2Bitmap(defaultDrawable, true);
+        ThemeManager.addBitmapToCache(defaultBitmap);
         theme.setCurDrawable(defaultDrawable);
-        theme.setCurBitmap(ImageUtils.drawable2Bitmap(defaultDrawable));
+        theme.setCurBitmap(defaultBitmap);
         return theme;
     }
 

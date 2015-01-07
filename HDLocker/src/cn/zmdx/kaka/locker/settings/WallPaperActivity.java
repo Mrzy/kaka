@@ -191,8 +191,8 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
         }
         switch (requestCode) {
             case PandoraUtils.REQUEST_CODE_CROP_IMAGE:
-                Bitmap curBitmap = ThemeManager.getCurrentTheme().getCurBitmap();
-                setBackground(curBitmap);
+                Drawable curDrawable = ThemeManager.getCurrentTheme().getCurDrawable();
+                setBackground(curDrawable);
                 String fileName = PandoraUtils.getRandomString();
                 saveCurWallpaperFileName(fileName);
                 saveCustomWallpaperFile(fileName);
@@ -211,24 +211,21 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
      * @param bitmap
      * @param resId 资源文件ID
      */
-    private void setBackground(Bitmap bitmap) {
+    private void setBackground(Drawable drawable) {
         Drawable rootViewDrawable = mRootView.getBackground();
         if (null != rootViewDrawable) {
-            setAnimator(bitmap);
+            setAnimator(drawable);
         } else {
-            BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
             mRootView.setBackgroundDrawable(drawable);
         }
     }
 
-    private void setAnimator(final Bitmap bitmap) {
+    private void setAnimator(final Drawable drawable) {
         ObjectAnimator animatorAlphaInvisible = ObjectAnimator.ofInt(mRootView.getBackground(),
                 "alpha", 255, 100);
         animatorAlphaInvisible.setDuration(250);
         animatorAlphaInvisible.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator anim) {
-                Drawable drawable = null;
-                drawable = new BitmapDrawable(getResources(), bitmap);
                 mRootView.setBackgroundDrawable(drawable);
                 ObjectAnimator animatorAlphaVisible = ObjectAnimator.ofInt(drawable, "alpha", 100,
                         255);
@@ -430,7 +427,7 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
                 }
                 ThemeManager.addBitmapToCache(bitmap);
                 saveCurrentWallpaperFileName(fileName);
-                setBackground(bitmap);
+                setBackground(new BitmapDrawable(getResources(), bitmap));
             }
         });
     }
@@ -444,8 +441,7 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
             PandoraConfig.newInstance(this).saveThemeId(ThemeManager.THEME_ID_DEFAULT);
             markSelectState(fileName);
             Theme theme = ThemeManager.getDefauleTheme(WallPaperActivity.this);
-            ThemeManager.addBitmapToCache(theme.getCurBitmap());
-            setBackground(theme.getCurBitmap());
+            setBackground(theme.getCurDrawable());
         }
         HDBThreadUtils.runOnWorker(new Runnable() {
 
