@@ -42,7 +42,6 @@ import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.android.volley.Response.ErrorListener;
@@ -170,6 +169,7 @@ public class OnlineWallpaperView extends LinearLayout {
                 String md5ImageUrl = HDBHashUtils.getStringMD5(mCurrentItem.getImageURL());
                 OnlineWallpaperManager.getInstance().saveThemeId(mContext,
                         ThemeManager.THEME_ID_ONLINE);
+                ThemeManager.addBitmapToCache(mPreviewBitmap);
                 OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(mContext,
                         md5ImageUrl);
                 ImageUtils.saveImageToFile(mPreviewBitmap, OnlineWallpaperManager.getInstance()
@@ -301,22 +301,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private void initPreview() {
         Theme curTheme = ThemeManager.getCurrentTheme();
-        if (null != curTheme) {
-            if (curTheme.isDefaultTheme()) {
-                mPreview.setImageResource(curTheme.getmBackgroundResId());
-            } else {
-                WallpaperUtils.loadBackgroundBitmap(mContext, curTheme.getFilePath(),
-                        new ILoadBitmapCallback() {
-
-                            @Override
-                            public void imageLoaded(Bitmap bitmap, String filePath) {
-                                mPreview.setImageBitmap(bitmap);
-                            }
-                        });
-            }
-        } else {
-            mPreview.setImageResource(R.drawable.online_wallpaper_default);
-        }
+        mPreview.setImageDrawable(curTheme.getCurDrawable());
     }
 
     class WallpaperAdpter extends BaseAdapter {// 上下文对象

@@ -13,7 +13,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -185,7 +184,7 @@ public class OnlineWallpaperManager {
      * @return
      */
     private List<OnlineWallpaper> getOnlineWallpaper(Context context) {
-        int currentThemeId = ThemeManager.getCurrentTheme().getmThemeId();
+        int currentThemeId = ThemeManager.getCurrentThemeId();
         String currentThemeFileName = null;
         if (currentThemeId == ThemeManager.THEME_ID_ONLINE) {
             currentThemeFileName = PandoraConfig.newInstance(context).getCurrentWallpaperFileName();
