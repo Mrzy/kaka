@@ -13,6 +13,7 @@ import android.os.Parcelable;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.settings.ShareContentActivity;
 
 public class PandoraShareManager {
 

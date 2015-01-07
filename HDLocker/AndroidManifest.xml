@@ -129,7 +129,7 @@
             android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
-            android:name=".share.ShareContentActivity"
+            android:name="cn.zmdx.kaka.locker.settings.ShareContentActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:launchMode="singleTask"

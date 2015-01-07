@@ -1,10 +1,7 @@
 
-package cn.zmdx.kaka.locker.share;
+package cn.zmdx.kaka.locker.settings;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,14 +10,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.share.PandoraQQShareManager;
+import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.share.PandoraShareManager.PandoraShareData;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
+import cn.zmdx.kaka.locker.share.PandoraSinaShareManager;
+import cn.zmdx.kaka.locker.share.SinaAccessTokenKeeper;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -32,14 +30,14 @@ import com.sina.weibo.sdk.net.RequestListener;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 
-public class ShareContentActivity extends Activity implements TextWatcher, OnClickListener {
+public class ShareContentActivity extends BaseActivity implements TextWatcher, OnClickListener {
 
     private View mRootView;
 
     private EditText mSinaEdit;
 
     private TypefaceTextView mSinaSubmit;
-    
+
     private ProgressBar mSendPb;
 
     private TypefaceTextView mSinaContentCount;
@@ -107,7 +105,10 @@ public class ShareContentActivity extends Activity implements TextWatcher, OnCli
 
     private void initSinaView() {
         mRootView = findViewById(R.id.pandora_share_content);
-        initWallpaper();
+        LinearLayout titleLayout = (LinearLayout) mRootView
+                .findViewById(R.id.pandora_share_content_title);
+        initBackground(mRootView);
+        initTitleHeight(titleLayout);
         mSinaContentTitle = (TypefaceTextView) findViewById(R.id.pandora_share_sina_content_title);
         mSinaContentTitle.setText(mShareData.mTitle);
         mSinaContentCount = (TypefaceTextView) findViewById(R.id.pandora_share_sina_edit_text_count);
@@ -129,29 +130,9 @@ public class ShareContentActivity extends Activity implements TextWatcher, OnCli
 
     }
 
-    private void initWallpaper() {
-        Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isDefaultTheme()) {
-            mRootView.setBackgroundResource(theme.getmBackgroundResId());
-        } else {
-            WallpaperUtils.loadBackgroundBitmap(ShareContentActivity.this, theme.getFilePath(),
-                    new ILoadBitmapCallback() {
-
-                        @SuppressWarnings("deprecation")
-                        @Override
-                        public void imageLoaded(Bitmap bitmap, String filePath) {
-                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
-                                    bitmap));
-                        }
-                    });
-        }
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (null != mSsoHandler) {
             mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
@@ -199,7 +180,6 @@ public class ShareContentActivity extends Activity implements TextWatcher, OnCli
         }
     }
 
-    
     private RequestListener mRequestListener = new RequestListener() {
 
         @Override
@@ -240,7 +220,7 @@ public class ShareContentActivity extends Activity implements TextWatcher, OnCli
                 isSinaAuth = false;
                 mSendPb.setVisibility(View.GONE);
             }
-            
+
         }
 
         @Override
