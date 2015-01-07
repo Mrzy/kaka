@@ -439,8 +439,9 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
         if (fileName.equals(currentFileName)) {
             PandoraConfig.newInstance(this).saveCurrentWallpaperFileName("");
             PandoraConfig.newInstance(this).saveThemeId(ThemeManager.THEME_ID_DEFAULT);
+            ThemeManager.invalidateBitmapCache();
             markSelectState(fileName);
-            Theme theme = ThemeManager.getDefauleTheme(WallPaperActivity.this);
+            Theme theme = ThemeManager.getCurrentTheme();
             setBackground(theme.getCurDrawable());
         }
         HDBThreadUtils.runOnWorker(new Runnable() {

@@ -1,13 +1,13 @@
 
 package cn.zmdx.kaka.locker.guide;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.BaseActivity;
 import cn.zmdx.kaka.locker.settings.InitSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -17,7 +17,7 @@ import com.umeng.analytics.MobclickAgent;
 /**
  * 引导界面
  */
-public abstract class BaseGuideActivity extends Activity {
+public abstract class BaseGuideActivity extends BaseActivity {
 
     private boolean isMeizu = false;
 
