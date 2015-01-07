@@ -2,6 +2,7 @@
 package cn.zmdx.kaka.locker.notification;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,8 +12,17 @@ import android.text.TextUtils;
 import android.util.Base64;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 
 public class PandoraNotificationFactory {
+
+    public static final int ID_CUSTOM_NOTIFICATION_OPEN_PERMISSION = 83568;
+
+    public static final int ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL = 83569;
+
+    public static final int ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE = 83570;
 
     public static NotificationInfo createCustomNotification(String title, String content,
             Bitmap largeIcon, Drawable smallIcon, String tag, PendingIntent contentIntent) {
@@ -84,12 +94,52 @@ public class PandoraNotificationFactory {
     }
 
     public static NotificationInfo createGuideOpenNotifyPermissionNotification() {
-        // TODO
-        return null;
+        Context context = HDApplication.getContext();
+        final NotificationInfo ni = new NotificationInfo();
+        ni.setId(ID_CUSTOM_NOTIFICATION_OPEN_PERMISSION);
+        ni.setTitle(context.getString(R.string.notify_guide_openpermission_title));
+        ni.setContent(context.getString(R.string.notify_guide_openpermission_content));
+        ni.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
+        Intent intent = PandoraUtils.getReadNotificationPermissionIntent(context);
+        PendingIntent pi = PendingIntent.getActivity(context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        ni.setPendingIntent(pi);
+        ni.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.notification_custom_youhua_icon));
+        return ni;
+    }
+
+    public static NotificationInfo createGuideOpenNotificationDetail() {
+        Context context = HDApplication.getContext();
+        final NotificationInfo ni = new NotificationInfo();
+        ni.setId(ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL);
+        ni.setTitle(context.getString(R.string.notify_guide_opendetail_title));
+        ni.setContent(context.getString(R.string.notify_guide_opendetail_content));
+        ni.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
+        ni.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.notification_custom_youhua_icon));
+        Intent intent = new Intent(context, MainSettingsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pi = PendingIntent.getActivity(context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        ni.setPendingIntent(pi);
+        return ni;
+    }
+
+    public static NotificationInfo createGuideRemoveNotification() {
+        Context context = HDApplication.getContext();
+        final NotificationInfo ni = new NotificationInfo();
+        ni.setId(ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE);
+        ni.setTitle(context.getString(R.string.notify_guide_remove_title));
+        ni.setContent(context.getString(R.string.notify_guide_remove_content));
+        ni.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
+        ni.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.notification_custom_remove_icon));
+        return ni;
     }
 
     public static NotificationInfo createGuideOpenPandoraSettingsNotification() {
-        // TODO
+
         return null;
     }
 }

@@ -172,7 +172,7 @@ public class NotificationInterceptor extends Handler {
                         Message message = Message.obtain();
                         message.what = MSG_NOTIFICATION_POST;
                         message.obj = notify;
-                        sendMessageDelayed(message, 1000);
+                        sendMessageDelayed(message, 300);
                     }
                 }
                 break;

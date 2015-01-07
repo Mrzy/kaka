@@ -170,6 +170,11 @@
     <!-- Glyph to be overlaid atop the battery when the level is extremely low. Do not translate. -->
     <string name="battery_meter_very_low_overlay_symbol">!</string>
     <string name="notification_service_name">潘多拉锁屏</string>
-    <string name="notification_tip_rightArrow">右划查看</string>
-    <string name="notification_tip_doubleTapDelete">双击移除</string>
+    <string name="notify_guide_openpermission_title">右划解锁开启通知权限</string>
+    <string name="notify_guide_openpermission_content">打开权限后，可以在锁屏上直接显示微信消息、qq消息、未接来电及短信息</string>
+    <string name="notify_guide_opendetail_title">教学二: 右划解锁查看通知详情</string>
+    <string name="notify_guide_opendetail_content">右划解锁后，会跳转到潘多拉锁屏设置页</string>
+    <string name="notify_guide_remove_title">教学一: 这里是做什么的？</string>
+    <string name="notify_guide_remove_content">通知中心会显示您的微信、qq消息、未接来电及短信，不再错过重要通知。双击移除本通知。</string>
+
 </resources>
