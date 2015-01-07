@@ -41,8 +41,6 @@ public class DigitalClocks extends TextView {
 
     private int m24HourMode;
 
-    private boolean mAttached;
-
     private final static String m12 = "h:mm aa";
 
     private final static String m24 = "k:mm";
@@ -78,9 +76,6 @@ public class DigitalClocks extends TextView {
 
     @Override
     protected void onAttachedToWindow() {
-        if (!mAttached) {
-            mAttached = true;
-        }
         mTickerStopped = false;
         super.onAttachedToWindow();
         mHandler = new Handler();
@@ -96,6 +91,9 @@ public class DigitalClocks extends TextView {
             public void run() {
                 if (mTickerStopped)
                     return;
+                if (mCalendar == null) {
+                    mCalendar = Calendar.getInstance();
+                }
                 mCalendar.setTimeInMillis(System.currentTimeMillis());
                 setText(DateFormat.format(mFormat, mCalendar));
                 invalidate();
@@ -118,11 +116,8 @@ public class DigitalClocks extends TextView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mTickerStopped = true;
-        if (mAttached) {
-            unregisterObserver();
-            getHandler().removeCallbacks(mTicker);
-            mAttached = false;
-        }
+        unregisterObserver();
+        getHandler().removeCallbacks(mTicker);
     }
 
     private void unregisterObserver() {
