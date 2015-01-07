@@ -6,24 +6,26 @@
     android:background="@drawable/pandora_notification_shape"
     android:clickable="true"
     android:focusable="false"
+    android:paddingTop="3dp"
+    android:paddingBottom="3dp"
     android:focusableInTouchMode="false"
     android:gravity="center_vertical" >
 
     <ImageView
         android:id="@+id/largeIcon"
-        android:layout_width="37dp"
-        android:layout_height="37dp"
-        android:layout_marginBottom="11dp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="11dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="7dp"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:scaleType="fitXY" />
 
     <ImageView
         android:id="@+id/smallIcon"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
         android:layout_alignBottom="@id/largeIcon"
         android:layout_alignRight="@id/largeIcon"
         android:focusable="false"
@@ -42,7 +44,7 @@
         android:focusableInTouchMode="false"
         android:singleLine="true"
         android:textColor="#ffffff"
-        android:textSize="12dp" />
+        android:textSize="14dp" />
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/content"
@@ -50,36 +52,25 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/largeIcon"
         android:ellipsize="end"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:singleLine="true"
-        android:textColor="#ffffff"
-        android:textSize="14dp" />
+        android:maxLines="2"
+        android:textColor="#bbffffff"
+        android:textSize="12dp" />
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
-        android:id="@+id/rightArrow"
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="15dp"
-        android:text="@string/notification_tip_rightArrow"
-        android:textColor="#50ffffff"
+        android:layout_marginRight="5dp"
+        android:textColor="#90ffffff"
         android:textSize="12dp"
-        android:visibility="invisible" />
-
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-        android:id="@+id/doubleTapDeleteTip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"
-        android:text="@string/notification_tip_doubleTapDelete"
-        android:textColor="#50ffffff"
-        android:textSize="12dp"
-        android:visibility="invisible" />
+        />
 
 </RelativeLayout>

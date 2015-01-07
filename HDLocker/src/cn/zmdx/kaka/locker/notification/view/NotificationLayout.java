@@ -1,24 +1,23 @@
 
 package cn.zmdx.kaka.locker.notification.view;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,7 +29,9 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.database.CustomNotificationModel;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
+import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
+import cn.zmdx.kaka.locker.notification.guide.NotificationGuideHelper;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 //import android.util.Log;
@@ -48,8 +49,10 @@ public class NotificationLayout extends LinearLayout {
     protected static final int GAP_BETWEEN_NOTIFICATIONS = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 5);
 
-    protected static final int NOTIFICATION_ITEM_HEIGHT = BaseInfoHelper.dip2px(
-            HDApplication.getContext(), 60);
+//    protected static final int NOTIFICATION_ITEM_HEIGHT = BaseInfoHelper.dip2px(
+//            HDApplication.getContext(), 64);
+
+    private static final SimpleDateFormat sSdf = new SimpleDateFormat("dd日 HH:mm");
 
     public NotificationLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -96,7 +99,9 @@ public class NotificationLayout extends LinearLayout {
                     public void onClick(View v) {
                         long currentTime = System.currentTimeMillis();
                         if (currentTime - mItemClickStartTime < ITEM_DOUBLE_TAP_DURATION) {
-                            removeNotification(String.valueOf(v.getTag()));
+                            final String id = String.valueOf(v.getTag());
+                            recordGuideStateIfNeeded(id);
+                            removeNotification(id);
                         } else {
                             mItemClickStartTime = currentTime;
                         }
@@ -108,12 +113,28 @@ public class NotificationLayout extends LinearLayout {
     };
 
     /**
+     * 移除通知教学完成，记录状态
+     * 
+     * @param id 通知id
+     */
+    private void recordGuideStateIfNeeded(String id) {
+        final NotificationInfo ni = mActiveNotification.get(id);
+        int intId = Integer.valueOf(id);
+        if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE
+                && ni.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
+            NotificationGuideHelper.recordGuideProgress(getContext());
+        } else if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL) {
+            NotificationGuideHelper.recordGuideProgress(getContext());
+        }
+    }
+
+    /**
      * 创建ItemView，并添加到本容器的顶部
      * 
      * @param itemView
      */
     private void addNotificationItem(View itemView) {
-        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, NOTIFICATION_ITEM_HEIGHT);
+        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         lp.bottomMargin = GAP_BETWEEN_NOTIFICATIONS;
         addView(itemView, 0, lp);
     }
@@ -121,7 +142,7 @@ public class NotificationLayout extends LinearLayout {
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
     private void removeNotification(String notifyId) {
-        //从view容器中将这个通知view移除
+        // 从view容器中将这个通知view移除
         View targetView = findViewWithTag(notifyId);
         if (targetView != null) {
             removeView(targetView);
@@ -129,11 +150,11 @@ public class NotificationLayout extends LinearLayout {
 
         NotificationInfo info = mActiveNotification.get(notifyId);
         if (info != null) {
-            //如果是自定义通知，要从本地数据库删除通知
+            // 如果是自定义通知，要从本地数据库删除通知
             if (info.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
                 CustomNotificationModel.getInstance().deleteById(info.getId());
             } else if (info.getType() == NotificationInfo.NOTIFICATION_TYPE_SYSTEM) {
-                //如果为系统通知，清除通知栏中的这个通知
+                // 如果为系统通知，清除通知栏中的这个通知
                 Intent intent = new Intent();
                 intent.setAction(PandoraNotificationService.ACTION_CANCEL_NOTIFICATION);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -146,7 +167,7 @@ public class NotificationLayout extends LinearLayout {
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
             }
 
-            //从内存中的通知集合中移除这个通知
+            // 从内存中的通知集合中移除这个通知
             mActiveNotification.remove(notifyId);
         }
     }
@@ -165,8 +186,11 @@ public class NotificationLayout extends LinearLayout {
                 case MotionEvent.ACTION_DOWN:
                     v.performClick();
                     mCurrentTouchView = mItemView;
-                    startTapItemAnimation(mItemView);
+                    // startTapItemAnimation(mItemView);
                     // TODO 1. 变化view的背景色 2. 开始右划打开的提示动画
+                    View contentLayout = mItemView.findViewById(R.id.pandora_notification_hint);
+                    contentLayout
+                            .setBackgroundResource(R.drawable.pandora_notification_click_shape);
                     final String id = String.valueOf(v.getTag());
                     LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
 
@@ -180,6 +204,7 @@ public class NotificationLayout extends LinearLayout {
                                 }
                             } catch (Exception e) {
                             }
+                            recordGuideStateIfNeeded(id);
                             removeNotification(id);
                         }
                     });
@@ -197,22 +222,6 @@ public class NotificationLayout extends LinearLayout {
 
     };
 
-    private ObjectAnimator mRightArrowAnimator;
-
-    private void startTapItemAnimation(View view) {
-        View rightArrowView = view.findViewById(R.id.rightArrow);
-        View contentLayout = view.findViewById(R.id.pandora_notification_hint);
-        contentLayout.setBackgroundResource(R.drawable.pandora_notification_click_shape);
-        view.findViewById(R.id.rightArrow).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.doubleTapDeleteTip).setVisibility(View.VISIBLE);
-        mRightArrowAnimator = ObjectAnimator.ofFloat(rightArrowView, "translationX",
-                BaseInfoHelper.dip2px(getContext(), 15));
-        mRightArrowAnimator.setDuration(1500);
-        mRightArrowAnimator.setRepeatCount(-1);
-        mRightArrowAnimator.setRepeatMode(Animation.RESTART);
-        mRightArrowAnimator.start();
-    }
-
     public void clearAll() {
         // TODO
     }
@@ -226,6 +235,8 @@ public class NotificationLayout extends LinearLayout {
         final ImageView smallIcon = (ImageView) itemView.findViewById(R.id.smallIcon);
         final TextView title = (TextView) itemView.findViewById(R.id.title);
         final TextView content = (TextView) itemView.findViewById(R.id.content);
+        final TextView date = (TextView) itemView.findViewById(R.id.date);
+        date.setText(sSdf.format(new Date()));
         Bitmap largeBmp = info.getLargeIcon();
         Drawable smallDrawable = info.getSmallIcon();
         if (largeBmp != null) {
@@ -261,7 +272,15 @@ public class NotificationLayout extends LinearLayout {
     protected void onAttachedToWindow() {
         LockScreenManager.getInstance().registMainPanelListener(mMainPanelListener);
         LockScreenManager.getInstance().registPullDownListener(mPullDownListener);
+        sendOpenNotificationService();
         super.onAttachedToWindow();
+    }
+
+    private void sendOpenNotificationService() {
+        final NotificationInfo guideNi = NotificationGuideHelper.getNextGuide(getContext());
+        if (guideNi != null) {
+            NotificationInterceptor.getInstance(getContext()).sendCustomNotification(guideNi);
+        }
     }
 
     /**
@@ -295,13 +314,6 @@ public class NotificationLayout extends LinearLayout {
         if (mCurrentTouchView != null) {
             View contentLayout = mCurrentTouchView.findViewById(R.id.pandora_notification_hint);
             contentLayout.setBackgroundResource(R.drawable.pandora_notification_shape);
-            mCurrentTouchView.findViewById(R.id.doubleTapDeleteTip).setVisibility(View.INVISIBLE);
-            mCurrentTouchView.findViewById(R.id.rightArrow).setTranslationX(0);
-            mCurrentTouchView.findViewById(R.id.rightArrow).setVisibility(View.INVISIBLE);
-        }
-        if (mRightArrowAnimator != null) {
-            mRightArrowAnimator.cancel();
-            mRightArrowAnimator = null;
         }
         LockScreenManager.getInstance().setRunnableAfterUnLock(null);
     }

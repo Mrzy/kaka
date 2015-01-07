@@ -35,6 +35,7 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.CropImageActivity;
 import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
@@ -251,6 +252,45 @@ public class PandoraUtils {
         } catch (Exception e) {
             Toast.makeText(mContext, R.string.error, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static void launchReadNotificationPermissionActivity(Context context) {
+        Intent intent = getReadNotificationPermissionIntent(context);
+        context.startActivity(intent);
+    }
+
+    public static Intent getReadNotificationPermissionIntent(Context context) {
+        Intent intent = null;
+        final boolean meizu = isMeizu(context);
+        final boolean miui = isMIUI(context);
+        if (miui) {
+            String miuiVersion = PandoraUtils.getSystemProperty();
+            if (miuiVersion.equals(MUIU_V5)) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                } else {
+                    // TODO
+                    intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                }
+            } else if (miuiVersion.equals(MUIU_V6)) {
+                intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            }
+        } else if (meizu) {
+            if (Build.VERSION.SDK_INT >= 18) {
+                intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            } else {
+                intent = new Intent("android.settings.ACCESSIBILITY_SETTINGS");
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            } else {
+                if (BuildConfig.DEBUG) {
+                    throw new IllegalStateException("只有4.3及以上设备才具备读取通知的功能");
+                }
+            }
+        }
+        return intent;
     }
 
     /**

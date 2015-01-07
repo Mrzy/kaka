@@ -71,6 +71,8 @@ public class PandoraConfig {
 
     private static final String KEY_CHRISTMAS_FORCE = "v";
 
+    private static final String KEY_NOTIFICATION_GUIDE_PROGRESS = "w";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -238,7 +240,7 @@ public class PandoraConfig {
     }
 
     public boolean isNeedNotice(Context context) {
-            return mSp.getBoolean(KEY_NEED_NOTICE, false);
+        return mSp.getBoolean(KEY_NEED_NOTICE, false);
     }
 
     public void saveLockDefaultFileName(String fileName) {
@@ -346,4 +348,11 @@ public class PandoraConfig {
         editor.commit();
     }
 
+    public int getNotificationGuideProgress() {
+        return mSp.getInt(KEY_NOTIFICATION_GUIDE_PROGRESS, 0);
+    }
+
+    public void saveNotificationGuideProgress(int progress) {
+        mSp.edit().putInt(KEY_NOTIFICATION_GUIDE_PROGRESS, progress).commit();
+    }
 }
