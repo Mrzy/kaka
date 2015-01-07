@@ -53,6 +53,13 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
+            android:name=".settings.BaseActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
             android:name=".guide.GuideActivity"
             android:exported="false"
             android:screenOrientation="portrait" >
@@ -151,7 +158,7 @@
             android:value="pandora" />
 
         <activity
-            android:name=".content.favorites.FavoritesActivity"
+            android:name="cn.zmdx.kaka.locker.settings.FavoritesActivity"
             android:exported="false"
             android:screenOrientation="portrait" >
         </activity>

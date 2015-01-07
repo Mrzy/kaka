@@ -20,6 +20,7 @@ import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
@@ -120,7 +121,8 @@ public class CropImageActivity extends Activity {
             public void onClick(View v) {
                 if (isWallpaper) {
                     UmengCustomEventManager.statisticalSuccessSetCustomTimes();
-                    PandoraUtils.sCropBitmap = mCropImageView.getCroppedImage();
+                    ThemeManager.saveTheme(ThemeManager.THEME_ID_CUSTOM);
+                    ThemeManager.addBitmapToCache(mCropImageView.getCroppedImage());
                     setResult(Activity.RESULT_OK);
                 } else {
                     try {

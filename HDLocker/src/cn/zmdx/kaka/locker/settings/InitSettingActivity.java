@@ -5,28 +5,21 @@ import java.lang.ref.WeakReference;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class InitSettingActivity extends Activity implements OnClickListener {
+public class InitSettingActivity extends BaseActivity implements OnClickListener {
 
     private Button mCloseSystemLockBtn;
 
@@ -64,10 +57,7 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         isMIUI = PandoraUtils.isMIUI(this);
         isMeizu = PandoraUtils.isMeizu(this);
         setContentView(R.layout.init_setting_fragment);
-        getWindow().getAttributes().flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         initView();
-        initTitleHeight();
-        initWallpaper();
     }
 
     private void initView() {
@@ -80,6 +70,9 @@ public class InitSettingActivity extends Activity implements OnClickListener {
             findViewById(R.id.init_setting_MIUI_close_systemlocker).setVisibility(View.GONE);
         }
         mRootView = findViewById(R.id.init_setting_background);
+        LinearLayout titleView = (LinearLayout) findViewById(R.id.init_setting_title);
+        initBackground(mRootView);
+        initTitleHeight(titleView);
         mCloseSystemLockBtn = (Button) findViewById(R.id.init_setting_close_systemlocker_to_set);
         mCloseSystemLockBtn.setOnClickListener(this);
         mFolatfingWindowBtn = (Button) findViewById(R.id.init_setting_MIUI_allow_floating_window_to_set);
@@ -90,30 +83,6 @@ public class InitSettingActivity extends Activity implements OnClickListener {
         mCompleteBtn.setOnClickListener(this);
         mReadNotificationBtn = (Button) findViewById(R.id.init_setting_read_notification_bar_to_set);
         mReadNotificationBtn.setOnClickListener(this);
-    }
-
-    private void initTitleHeight() {
-        int statusBarHeight = PandoraUtils.getStatusBarHeight(this);
-        LinearLayout titleLayout = (LinearLayout) mRootView.findViewById(R.id.init_setting_title);
-        titleLayout.setPadding(0, statusBarHeight, 0, 0);
-    }
-
-    private void initWallpaper() {
-        Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isDefaultTheme()) {
-            mRootView.setBackgroundResource(theme.getmBackgroundResId());
-        } else {
-            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(),
-                    new ILoadBitmapCallback() {
-
-                        @SuppressWarnings("deprecation")
-                        @Override
-                        public void imageLoaded(Bitmap bitmap, String filePath) {
-                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
-                                    bitmap));
-                        }
-                    });
-        }
     }
 
     private void showPromptActicity(boolean isMIUI, String mMIUIVersion, int type) {

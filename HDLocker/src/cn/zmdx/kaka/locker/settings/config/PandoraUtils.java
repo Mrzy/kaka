@@ -50,8 +50,6 @@ public class PandoraUtils {
 
     public static final String MUIU_V6 = "V6";
 
-    public static Bitmap sCropBitmap;
-
     public static Bitmap sLockDefaultThumbBitmap;
 
     public static final int REQUEST_CODE_CROP_IMAGE = 0;
