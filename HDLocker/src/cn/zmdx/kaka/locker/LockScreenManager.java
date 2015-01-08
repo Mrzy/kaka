@@ -136,8 +136,6 @@ public class LockScreenManager {
 
     private boolean mNeedPassword = false;
 
-//    private ImageView mGuide;
-
     private BatteryView batteryView;
 
     public interface ILockScreenListener {
@@ -410,7 +408,8 @@ public class LockScreenManager {
 
     @SuppressLint("InflateParams")
     private void initLockScreenViews() {
-        mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.pandora_lockscreen, null);
+        mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
+                R.layout.pandora_lockscreen, null);
         initGuideView();
         initSecurePanel();
         mSlidingPanelLayout = (SlidingPaneLayout) mEntireView.findViewById(R.id.sliding_layout);
@@ -464,7 +463,8 @@ public class LockScreenManager {
                             @Override
                             public void run() {
                                 try {
-                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    Intent intent = new Intent(
+                                            MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA); // 启动照相机
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     mContext.startActivity(intent);
                                 } catch (Exception e) {
@@ -511,7 +511,8 @@ public class LockScreenManager {
         guideView.setScaleType(ScaleType.FIT_XY);
         guideView.setVisibility(View.VISIBLE);
         ViewHelper.setAlpha(guideView, 0);
-        mEntireView.addView(guideView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mEntireView.addView(guideView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
         guideView.animate().alpha(1).setDuration(1000).setStartDelay(700).start();
         guideView.setOnClickListener(new View.OnClickListener() {
 
@@ -658,10 +659,11 @@ public class LockScreenManager {
         final ImageView mPullImage = (ImageView) mEntireView
                 .findViewById(R.id.lock_wallpaper_view_im);
         int statusBarHeight = PandoraUtils.getStatusBarHeight(mContext);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0, statusBarHeight + 10, 0, 0);
-        mPullImage.setLayoutParams(lp);
+         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+         LinearLayout.LayoutParams.WRAP_CONTENT,
+         LinearLayout.LayoutParams.WRAP_CONTENT);
+         lp.setMargins(0, statusBarHeight + 10, 0, 0);
+         mPullImage.setLayoutParams(lp);
         mOnlinePanel = (WallpaperPanelLayout) mEntireView
                 .findViewById(R.id.locker_wallpaper_sliding);
         mOnlinePanel
@@ -671,8 +673,8 @@ public class LockScreenManager {
                     public void onPanelSlide(View panel, float slideOffset) {
                         if (!isInit) {
                             isInit = true;
-                            mPullImage
-                                    .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
+                             mPullImage
+                             .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
                             initOnlinePaperPanelView();
                         }
                     }
@@ -685,7 +687,7 @@ public class LockScreenManager {
                     public void onPanelExpanded(View panel) {
                         mSliderView.setEnabled(false);
                         if (null != mOnlineWallpaperView) {
-                            createPullButtonAnimation(mPullImage, 0, 180);
+                             createPullButtonAnimation(mPullImage, 0, 180);
                             mOnlineWallpaperView.initContentView();
                             mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
 

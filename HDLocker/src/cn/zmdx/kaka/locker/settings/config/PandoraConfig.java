@@ -69,9 +69,11 @@ public class PandoraConfig {
 
     private static final String KEY_LOCK_SCREEN_GUIDE_TIMES = "u";
 
-    private static final String KEY_CHRISTMAS_FORCE = "v";
-
     private static final String KEY_NOTIFICATION_GUIDE_PROGRESS = "w";
+
+    private static final String KEY_HAS_ALREADY_HIDE_NOTIFY_MSG = "x";
+
+    private static final String OPEN_MESSAGE_NOTIFICATION = "y";
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -243,6 +245,16 @@ public class PandoraConfig {
         return mSp.getBoolean(KEY_NEED_NOTICE, false);
     }
 
+    public void saveMessageNotification(boolean isMessage) {
+        Editor editor = mSp.edit();
+        editor.putBoolean(OPEN_MESSAGE_NOTIFICATION, isMessage);
+        editor.commit();
+    }
+
+    public boolean isMessageNotification() {
+        return mSp.getBoolean(OPEN_MESSAGE_NOTIFICATION, false);
+    }
+
     public void saveLockDefaultFileName(String fileName) {
         Editor editor = mSp.edit();
         editor.putString(KEY_LOCK_DEFAULT_, fileName);
@@ -338,21 +350,19 @@ public class PandoraConfig {
         editor.commit();
     }
 
-    public boolean getChristmasForceTheme() {
-        return mSp.getBoolean(KEY_CHRISTMAS_FORCE, false);
-    }
-
-    public void saveChristmasForceTheme(boolean isForceTheme) {
-        Editor editor = mSp.edit();
-        editor.putBoolean(KEY_CHRISTMAS_FORCE, isForceTheme);
-        editor.commit();
-    }
-
     public int getNotificationGuideProgress() {
         return mSp.getInt(KEY_NOTIFICATION_GUIDE_PROGRESS, 0);
     }
 
     public void saveNotificationGuideProgress(int progress) {
         mSp.edit().putInt(KEY_NOTIFICATION_GUIDE_PROGRESS, progress).commit();
+    }
+
+    public boolean hasAlreadyPromptHideNotificationMsg() {
+        return mSp.getBoolean(KEY_HAS_ALREADY_HIDE_NOTIFY_MSG, false);
+    }
+
+    public void markAlreadyPromptHideNotificationMsg() {
+        mSp.edit().putBoolean(KEY_HAS_ALREADY_HIDE_NOTIFY_MSG, true).commit();
     }
 }

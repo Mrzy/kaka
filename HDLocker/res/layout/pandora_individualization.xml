@@ -140,7 +140,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/individualization_locker_default_image"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/setting_item_height"
                     android:background="@drawable/setting_item_selector"
@@ -162,7 +161,7 @@
                             android:layout_height="wrap_content"
                             android:clickable="false"
                             android:gravity="center_vertical"
-                            android:text="@string/individualization_locker_default_image" />
+                            android:text="@string/individualization_message_notification" />
 
                         <cn.zmdx.kaka.locker.widget.TypefaceTextView
                             style="@style/init_setting_small_textview"
@@ -171,17 +170,20 @@
                             android:layout_marginTop="2dp"
                             android:clickable="false"
                             android:gravity="center_vertical"
-                            android:text="@string/pandora_box_guide_set_default_image_detail" />
+                            android:text="@string/pandora_individualization_message_notification_detail" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/individualization_locker_default_thumb_image"
+                    <cn.zmdx.kaka.locker.widget.SwitchButton
+                        android:id="@+id/individualization_open_message_notification_switch_button"
+                        style="@style/setting_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="11dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/pandora_box_default" />
+                        app:frameDrawable="@drawable/switch_frame"
+                        app:sliderDrawable="@drawable/switch_slider"
+                        app:stateDrawable="@drawable/switch_state_normal"
+                        app:stateMaskDrawable="@drawable/switch_state_mask" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

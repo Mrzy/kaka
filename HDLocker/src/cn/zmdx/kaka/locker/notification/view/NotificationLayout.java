@@ -27,6 +27,7 @@ import cn.zmdx.kaka.locker.LockScreenManager.IMainPanelListener;
 import cn.zmdx.kaka.locker.LockScreenManager.IPullDownListener;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.database.CustomNotificationModel;
+import cn.zmdx.kaka.locker.notification.Constants;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
@@ -98,9 +99,22 @@ public class NotificationLayout extends LinearLayout {
                     @Override
                     public void onClick(View v) {
                         long currentTime = System.currentTimeMillis();
-                        if (currentTime - mItemClickStartTime < ITEM_DOUBLE_TAP_DURATION) {
+                        if (currentTime - mItemClickStartTime < ITEM_DOUBLE_TAP_DURATION) {// 响应双击事件
                             final String id = String.valueOf(v.getTag());
-                            recordGuideStateIfNeeded(id);
+                            final NotificationInfo ni = mActiveNotification.get(id);
+                            if (ni.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
+                                final int intId = Integer.valueOf(id);
+                                if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE) {
+                                    NotificationGuideHelper
+                                            .markAlreadyPromptHideNotificationMsg(getContext());
+                                } else if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE) {
+                                    NotificationGuideHelper.recordGuideProgress(getContext());
+                                    NotificationInfo info = NotificationGuideHelper
+                                            .getNextGuide(getContext());
+                                    NotificationInterceptor.getInstance(getContext())
+                                            .sendCustomNotification(info);
+                                }
+                            }
                             removeNotification(id);
                         } else {
                             mItemClickStartTime = currentTime;
@@ -108,9 +122,28 @@ public class NotificationLayout extends LinearLayout {
                     }
                 });
                 addNotificationItem(itemView);
+                if (isWinxinOrQQ(info) && !hasAlreadyPromptHideNotificationMsg() /*
+                                                                                 * &&
+                                                                                 * (
+                                                                                 * 没有设置隐藏消息体
+                                                                                 * )
+                                                                                 */) {
+                    NotificationInfo ni = PandoraNotificationFactory
+                            .createGuideHideNotificationInfo();
+                    NotificationInterceptor.getInstance(getContext()).sendCustomNotification(ni);
+                }
             }
         }
     };
+
+    private boolean isWinxinOrQQ(NotificationInfo ni) {
+        return Constants.PKGNAME_QQ.equals(ni.getPkg())
+                || Constants.PKGNAME_WEIXIN.equals(ni.getPkg());
+    }
+
+    private boolean hasAlreadyPromptHideNotificationMsg() {
+        return NotificationGuideHelper.hasAlreadyPromptHideNotificationMsg(getContext());
+    }
 
     /**
      * 移除通知教学完成，记录状态
@@ -186,8 +219,6 @@ public class NotificationLayout extends LinearLayout {
                 case MotionEvent.ACTION_DOWN:
                     v.performClick();
                     mCurrentTouchView = mItemView;
-                    // startTapItemAnimation(mItemView);
-                    // TODO 1. 变化view的背景色 2. 开始右划打开的提示动画
                     View contentLayout = mItemView.findViewById(R.id.pandora_notification_hint);
                     contentLayout
                             .setBackgroundResource(R.drawable.pandora_notification_click_shape);
@@ -204,7 +235,12 @@ public class NotificationLayout extends LinearLayout {
                                 }
                             } catch (Exception e) {
                             }
-                            recordGuideStateIfNeeded(id);
+                            if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE) {
+                                NotificationGuideHelper
+                                        .markAlreadyPromptHideNotificationMsg(getContext());
+                            } else if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL) {
+                                NotificationGuideHelper.recordGuideProgress(getContext());
+                            }
                             removeNotification(id);
                         }
                     });

@@ -63,8 +63,8 @@ public final class PandoraNotificationService extends NotificationListenerServic
     private void initInterceptPackages() {
         final NotificationPreferences np = NotificationPreferences
                 .getInstance(getApplicationContext());
-        np.putInterceptPkgName("com.tencent.mm");// 微信
-        np.putInterceptPkgName("com.tencent.mobileqq");// qq
+        np.putInterceptPkgName(Constants.PKGNAME_WEIXIN);// 微信
+        np.putInterceptPkgName(Constants.PKGNAME_QQ);// qq
         // 获取拨号的包名
         Set<String> dialerPkgNameSet = getDialerPkgName(this, Intent.ACTION_DIAL);
 

@@ -45,4 +45,11 @@ public class NotificationGuideHelper {
     private static int getGuideProgress(Context context) {
         return PandoraConfig.newInstance(context).getNotificationGuideProgress();
     }
+
+    public static boolean hasAlreadyPromptHideNotificationMsg(Context context) {
+        return PandoraConfig.newInstance(context).hasAlreadyPromptHideNotificationMsg();
+    }
+    public static void markAlreadyPromptHideNotificationMsg(Context context) {
+        PandoraConfig.newInstance(context).markAlreadyPromptHideNotificationMsg();
+    }
 }

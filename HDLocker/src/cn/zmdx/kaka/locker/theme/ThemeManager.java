@@ -25,7 +25,7 @@ public class ThemeManager {
 
     public static final int DEFAULT_BACKGROUND_RES_ID = R.drawable.pandora_splash_background;
 
-    public static final String CURRENT_THEME_CACHE_KEY = "curThemeCacheKey";
+    private static final String CURRENT_THEME_CACHE_KEY = "curThemeCacheKey";
 
     public static Theme getCurrentTheme() {
         int themeId = PandoraConfig.newInstance(HDApplication.getContext()).getCurrentThemeId();
