@@ -82,11 +82,7 @@ public class InitPromptActivity extends Activity {
                 mV5CloseSystemLockerView = (LinearLayout) findViewById(R.id.init_setting_V5_close_systemlocker_prompt_miui);
                 mV5AllowFloatWindowView = (LinearLayout) findViewById(R.id.init_setting_V5_allow_floating_window_prompt);
                 mV5TrustView = (LinearLayout) findViewById(R.id.init_setting_V5_trust_prompt);
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    mReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt);
-                } else {
-                    mMIUIReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt_under_android_18);
-                }
+                mReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt);
             }
         } else {
             findViewById(R.id.init_setting_MIUI_V5).setVisibility(View.GONE);
@@ -132,11 +128,7 @@ public class InitPromptActivity extends Activity {
                         mV5TrustView.setVisibility(View.VISIBLE);
                         break;
                     case PROMPT_READ_NOTIFICATION:
-                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                            mReadNotificationView.setVisibility(View.VISIBLE);
-                        } else {
-                            mMIUIReadNotificationView.setVisibility(View.VISIBLE);
-                        }
+                        mReadNotificationView.setVisibility(View.VISIBLE);
                         break;
 
                     default:
