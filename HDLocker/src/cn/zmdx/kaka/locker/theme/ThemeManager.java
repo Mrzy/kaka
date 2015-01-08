@@ -98,7 +98,7 @@ public class ThemeManager {
         Theme theme = new Theme();
         Bitmap cacheBmp = ImageLoaderManager.getImageMemCache().getBitmap(CURRENT_THEME_CACHE_KEY);
         if (null == cacheBmp) {
-            WallpaperUtils.initDefaultWallpaper();
+//            WallpaperUtils.initDefaultWallpaper();
             Bitmap defaultBitmap = WallpaperUtils.getDefaultWallpaperBitmap();
             if (null == defaultBitmap) {
                 Drawable defaultDrawable = context.getResources().getDrawable(
