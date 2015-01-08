@@ -75,6 +75,8 @@ public class PandoraConfig {
 
     private static final String KEY_HAS_ALREADY_HIDE_NOTIFY_MSG = "x";
 
+    private static final String OPEN_MESSAGE_NOTIFICATION = "y";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -243,6 +245,16 @@ public class PandoraConfig {
 
     public boolean isNeedNotice(Context context) {
         return mSp.getBoolean(KEY_NEED_NOTICE, false);
+    }
+
+    public void saveMessageNotification(boolean isMessage) {
+        Editor editor = mSp.edit();
+        editor.putBoolean(OPEN_MESSAGE_NOTIFICATION, isMessage);
+        editor.commit();
+    }
+
+    public boolean isMessageNotification() {
+        return mSp.getBoolean(OPEN_MESSAGE_NOTIFICATION, false);
     }
 
     public void saveLockDefaultFileName(String fileName) {
