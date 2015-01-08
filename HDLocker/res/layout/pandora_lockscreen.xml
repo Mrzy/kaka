@@ -162,15 +162,6 @@
                     android:clickable="true"
                     android:focusable="false" >
 
-                    <View
-                        android:id="@+id/lock_bottom_overlay"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:alpha="0"
-                        android:background="#000000"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
-
                     <cn.zmdx.kaka.locker.notification.view.NotificationLayout
                         android:id="@+id/lock_bottom_notification_layout"
                         android:layout_width="match_parent"
@@ -187,11 +178,10 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
-                        android:paddingLeft="5dp"
                         android:paddingBottom="5dp"
-                        android:paddingTop="20dp"
+                        android:paddingLeft="5dp"
                         android:paddingRight="20dp"
-                         >
+                        android:paddingTop="20dp" >
 
                         <ImageView
                             android:id="@+id/camera"
@@ -199,6 +189,15 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/camera_icon" />
                     </FrameLayout>
+
+                    <View
+                        android:id="@+id/lock_bottom_overlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0"
+                        android:background="#000000"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false" />
                 </RelativeLayout>
             </cn.zmdx.kaka.locker.widget.PandoraPanelLayout>
 
@@ -249,4 +248,5 @@
             </LinearLayout>
         </cn.zmdx.kaka.locker.widget.WallpaperPanelLayout>
     </cn.zmdx.kaka.locker.widget.SlidingPaneLayout>
+
 </FrameLayout>

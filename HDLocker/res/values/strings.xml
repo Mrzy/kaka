@@ -172,11 +172,13 @@
     <string name="notification_service_name">潘多拉锁屏</string>
     <string name="notify_guide_openpermission_title">右划解锁开启通知权限</string>
     <string name="notify_guide_openpermission_content">打开权限后，可以在锁屏上直接显示微信消息、qq消息、未接来电及短信息</string>
-    <string name="notify_guide_opendetail_title">示例通知：右划解锁查看通知详情</string>
+    <string name="notify_guide_opendetail_title">右划此处解锁查看详情</string>
     <string name="notify_guide_opendetail_content">解锁后，会跳转到锁屏设置页面</string>
     <string name="notify_guide_remove_title">这是什么？</string>
     <string name="notify_guide_remove_content">这里会显示您的微信、qq等未读消息\n(双击移除通知)</string>
     <string name="notify_guide_hide_message_title">我要隐藏头像及消息内容</string>
     <string name="notify_guide_hide_message_content">右划此处解锁立即设置隐藏，如果暂时不设置双击移除此通知</string>
+    <string name="hide_message_tip">未读消息</string>
+    <string name="notification_item_handleTip">右划查看\n双击忽略</string>
 
 </resources>

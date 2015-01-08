@@ -251,8 +251,8 @@ public class PandoraConfig {
         editor.commit();
     }
 
-    public boolean isMessageNotification() {
-        return mSp.getBoolean(OPEN_MESSAGE_NOTIFICATION, false);
+    public boolean isShowNotificationMessage() {
+        return mSp.getBoolean(OPEN_MESSAGE_NOTIFICATION, true);
     }
 
     public void saveLockDefaultFileName(String fileName) {

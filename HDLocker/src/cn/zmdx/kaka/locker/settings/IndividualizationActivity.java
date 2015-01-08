@@ -207,7 +207,7 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
     }
 
     private boolean isMessageNotification() {
-        return PandoraConfig.newInstance(this).isMessageNotification();
+        return PandoraConfig.newInstance(this).isShowNotificationMessage();
     }
 
     @Override

@@ -33,6 +33,7 @@ import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.notification.guide.NotificationGuideHelper;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 //import android.util.Log;
@@ -123,15 +124,12 @@ public class NotificationLayout extends LinearLayout {
                     }
                 });
                 addNotificationItem(itemView);
-                if (isWinxinOrQQ(info) && !hasAlreadyPromptHideNotificationMsg() /*
-                                                                                 * &&
-                                                                                 * (
-                                                                                 * 没有设置隐藏消息体
-                                                                                 * )
-                                                                                 */) {
+                if (isWinxinOrQQ(info) && !hasAlreadyPromptHideNotificationMsg()
+                        && PandoraConfig.newInstance(getContext()).isShowNotificationMessage()) {
                     NotificationInfo ni = PandoraNotificationFactory
                             .createGuideHideNotificationInfo();
                     NotificationInterceptor.getInstance(getContext()).sendCustomNotification(ni);
+                    NotificationGuideHelper.markAlreadyPromptHideNotificationMsg(getContext());
                 }
             }
         }
@@ -207,6 +205,7 @@ public class NotificationLayout extends LinearLayout {
                     View contentLayout = mItemView.findViewById(R.id.pandora_notification_hint);
                     contentLayout
                             .setBackgroundResource(R.drawable.pandora_notification_click_shape);
+                    mItemView.findViewById(R.id.handleTip).setVisibility(View.VISIBLE);
                     final String id = String.valueOf(v.getTag());
                     LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
 
@@ -257,23 +256,31 @@ public class NotificationLayout extends LinearLayout {
         final TextView title = (TextView) itemView.findViewById(R.id.title);
         final TextView content = (TextView) itemView.findViewById(R.id.content);
         final TextView date = (TextView) itemView.findViewById(R.id.date);
-        date.setText(sSdf.format(new Date()));
+        long postTime = info.getPostTime() == 0 ? new Date().getTime() : info.getPostTime();
+        date.setText(sSdf.format(postTime));
+        boolean showMsg = PandoraConfig.newInstance(getContext()).isShowNotificationMessage();
         Bitmap largeBmp = info.getLargeIcon();
         Drawable smallDrawable = info.getSmallIcon();
-        if (largeBmp != null) {
-            largeIcon.setImageBitmap(largeBmp);
-            if (smallDrawable != null) {
-                smallIcon.setImageDrawable(smallDrawable);
-            }
-        } else {
-            if (smallDrawable != null) {
-                largeIcon.setImageDrawable(smallDrawable);
-            }
-            smallIcon.setVisibility(View.GONE);
-        }
         title.setText(info.getTitle());
-        content.setText(info.getContent());
         itemView.setTag(String.valueOf(info.getId()));
+        if (!showMsg && isWinxinOrQQ(info)) {
+            largeIcon.setImageDrawable(smallDrawable);
+            content.setText(getContext().getString(R.string.hide_message_tip));
+            smallIcon.setVisibility(View.GONE);
+        } else {
+            if (largeBmp != null) {
+                largeIcon.setImageBitmap(largeBmp);
+                if (smallDrawable != null) {
+                    smallIcon.setImageDrawable(smallDrawable);
+                }
+            } else {
+                if (smallDrawable != null) {
+                    largeIcon.setImageDrawable(smallDrawable);
+                }
+                smallIcon.setVisibility(View.GONE);
+            }
+            content.setText(info.getContent());
+        }
     }
 
     private View createNotificationItemView(NotificationInfo info) {
@@ -335,6 +342,7 @@ public class NotificationLayout extends LinearLayout {
         if (mCurrentTouchView != null) {
             View contentLayout = mCurrentTouchView.findViewById(R.id.pandora_notification_hint);
             contentLayout.setBackgroundResource(R.drawable.pandora_notification_shape);
+            mCurrentTouchView.findViewById(R.id.handleTip).setVisibility(View.GONE);
         }
         LockScreenManager.getInstance().setRunnableAfterUnLock(null);
     }
