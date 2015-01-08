@@ -89,7 +89,7 @@
     <string name="pandora_guide_start">开始体验</string>
     <string name="setting_individualization">个性化设置</string>
     <string name="individualization_notice_switch_button">显示通知栏</string>
-    <string name="individualization_locker_default_image">设置锁屏页面默认图片</string>
+    <string name="individualization_message_notification">通知中心隐私设置</string>
     <string name="init_setting_V6_close_systemlocker_title">请按照以下方式关闭系统锁屏</string>
     <string name="init_setting_V6_close_systemlocker_prompt">潘多拉锁屏已经经过测试，不会引起您的设备以及设备上应用的问题</string>
     <string name="init_setting_V6_allow_floating_window_title">开启显示悬浮窗</string>
@@ -106,7 +106,7 @@
     <string name="pandora_box_guide_set_default_image">立刻设置默认背景</string>
     <string name="individualization_welcome_text">设置欢迎语</string>
     <string name="individualization_welcome_text_detail">锁屏页面，当天气信息无法获取时显示此欢迎语</string>
-    <string name="pandora_box_guide_set_default_image_detail">锁屏页面，当没有信息时显示此默认图</string>
+    <string name="pandora_individualization_message_notification_detail">关闭开关，则隐藏消息头像和消息内容</string>
     <string name="individualization_welcome_text_hint">请输入欢迎语!</string>
     <string name="share_image_news_from">来自：</string>
     <string name="pandora_crop_image_rotate">旋转</string>
