@@ -3,7 +3,6 @@
     android:id="@+id/pandora_share_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/setting_background_road_fore"
     android:orientation="vertical" >
 
     <LinearLayout

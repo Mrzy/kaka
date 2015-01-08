@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.ImageLoaderManager;
+import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
@@ -20,13 +21,9 @@ public class ThemeManager {
 
     public static final int THEME_ID_ONLINE = -2;
 
-//    public static final int THEME_ID_ROAD = 4;
-
     public static final int THEME_ID_DEFAULT = 4;
 
-//    public static final int THEME_ID_DEFAULT_BACKGROUND_RESID = R.drawable.setting_background_road_fore;
-//
-//    public static final int THEME_ID_DEFAULT_FOREGROUND_RESID = R.drawable.setting_background_road_fore;
+    public static final int DEFAULT_BACKGROUND_RES_ID = R.drawable.pandora_splash_background;
 
     public static final String CURRENT_THEME_CACHE_KEY = "curThemeCacheKey";
 
@@ -74,16 +71,18 @@ public class ThemeManager {
                 int screenHeight = BaseInfoHelper.getRealHeight(context);
                 String filePath = getFilePathByThemeId(themeId, fileName);
                 Bitmap bitmap = ImageUtils.getBitmapFromFile(filePath, screenWidth, screenHeight);
-                addBitmapToCache(bitmap);
-                BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, bitmap);
-                theme.setCurDrawable(drawable);
-                theme.setCurBitmap(ImageUtils.drawable2Bitmap(drawable));
+                if (null == bitmap) {
+                    theme = getDefauleTheme(context);
+                } else {
+                    addBitmapToCache(bitmap);
+                    BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, bitmap);
+                    theme.setCurDrawable(drawable);
+                }
             }
         } else {
             theme = new Theme();
             BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, cacheBmp);
             theme.setCurDrawable(drawable);
-            theme.setCurBitmap(cacheBmp);
         }
         return theme;
 
@@ -95,21 +94,26 @@ public class ThemeManager {
      * @param context
      * @return
      */
-    public static Theme getDefauleTheme(Context context) {
+    private static Theme getDefauleTheme(Context context) {
         Theme theme = new Theme();
         Bitmap cacheBmp = ImageLoaderManager.getImageMemCache().getBitmap(CURRENT_THEME_CACHE_KEY);
         if (null == cacheBmp) {
             WallpaperUtils.initDefaultWallpaper();
             Bitmap defaultBitmap = WallpaperUtils.getDefaultWallpaperBitmap();
-            addBitmapToCache(defaultBitmap);
-            theme.setCurDrawable(new BitmapDrawable(HDApplication.getContext().getResources(),
-                    defaultBitmap));
-            theme.setCurBitmap(defaultBitmap);
+            if (null == defaultBitmap) {
+                Drawable defaultDrawable = context.getResources().getDrawable(
+                        DEFAULT_BACKGROUND_RES_ID);
+                addBitmapToCache(ImageUtils.drawable2Bitmap(defaultDrawable));
+                theme.setCurDrawable(defaultDrawable);
+            } else {
+                addBitmapToCache(defaultBitmap);
+                theme.setCurDrawable(new BitmapDrawable(context.getResources(), defaultBitmap));
+            }
+
         } else {
             theme = new Theme();
             BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, cacheBmp);
             theme.setCurDrawable(drawable);
-            theme.setCurBitmap(cacheBmp);
         }
         return theme;
     }
@@ -177,22 +181,12 @@ public class ThemeManager {
 
         private Drawable mCurDrawable;
 
-        private Bitmap mCurBitmap;
-
         public Drawable getCurDrawable() {
             return mCurDrawable;
         }
 
         public void setCurDrawable(Drawable mCurDrawable) {
             this.mCurDrawable = mCurDrawable;
-        }
-
-        public Bitmap getCurBitmap() {
-            return mCurBitmap;
-        }
-
-        public void setCurBitmap(Bitmap mCurBitmap) {
-            this.mCurBitmap = mCurBitmap;
         }
 
     }

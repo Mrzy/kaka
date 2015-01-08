@@ -8,7 +8,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
@@ -18,10 +17,7 @@ import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class WallpaperUtils {
 
-    private static final String DESKTOP_WALLPAPER_FILE_PATH = Environment
-            .getExternalStorageDirectory().getPath() + "/.Pandora/wallpaper/desktop/";
-
-    private static final String DESKTOP_WALLPAPER_FILE_NAME = "desktop.jpg";
+    private static final String DESKTOP_WALLPAPER_FILE_NAME = "/desktop";
 
     public interface ILoadBitmapCallback {
         void imageLoaded(Bitmap bitmap, String filePath);
@@ -86,7 +82,6 @@ public class WallpaperUtils {
     public static void initDefaultWallpaper() {
         String path = getDefaultWallpaperPath();
         if (!TextUtils.isEmpty(path)) {
-            mkDirs();
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(HDApplication
                     .getContext());
             Drawable wallpaperDrawable = wallpaperManager.getDrawable();
@@ -100,17 +95,19 @@ public class WallpaperUtils {
             if (resizeBitmap.getWidth() > screenWidth) {
                 x = ((resizeBitmap.getWidth() - screenWidth) / 2);
             }
-            if (bitmap != null && !bitmap.isRecycled()) {
-                bitmap.recycle();
+            if (bitmap != null) {
                 bitmap = null;
             }
-            Bitmap finalBitmap = null;
-            finalBitmap = Bitmap.createBitmap(resizeBitmap, x, 0, screenWidth, screenHeight);
-            if (resizeBitmap != null && !resizeBitmap.isRecycled()) {
-                resizeBitmap.recycle();
-                resizeBitmap = null;
+            try {
+                Bitmap finalBitmap = null;
+                finalBitmap = Bitmap.createBitmap(resizeBitmap, x, 0, screenWidth, screenHeight);
+                if (resizeBitmap != null) {
+                    resizeBitmap = null;
+                }
+                ImageUtils.saveImageToFile(finalBitmap, path);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            ImageUtils.saveImageToFile(finalBitmap, path);
         }
     }
 
@@ -120,7 +117,12 @@ public class WallpaperUtils {
      * @return 如果文件不存在，返回null,否则返回文件完整路径
      */
     private static String getDefaultWallpaperPath() {
-        return DESKTOP_WALLPAPER_FILE_PATH + DESKTOP_WALLPAPER_FILE_NAME;
+        File file = HDApplication.getContext().getCacheDir();
+        File cacheDir = new File(file.getPath() + File.separator + DESKTOP_WALLPAPER_FILE_NAME);
+        if (!cacheDir.exists()) {
+            cacheDir.mkdirs();
+        }
+        return cacheDir.getAbsolutePath() + DESKTOP_WALLPAPER_FILE_NAME;
     }
 
     public static Bitmap getDefaultWallpaperBitmap() {
@@ -131,10 +133,4 @@ public class WallpaperUtils {
         return null;
     }
 
-    private static void mkDirs() {
-        File dir = new File(DESKTOP_WALLPAPER_FILE_PATH);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-    }
 }

@@ -242,9 +242,9 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
             @Override
             public void run() {
                 CustomWallpaperManager.getInstance().mkDirs();
-                Bitmap curBitmap = ThemeManager.getCurrentTheme().getCurBitmap();
-                ImageUtils.saveImageToFile(curBitmap, CustomWallpaperManager.getInstance()
-                        .getFilePath(fileName));
+                Drawable curDrawable = ThemeManager.getCurrentTheme().getCurDrawable();
+                ImageUtils.saveImageToFile(ImageUtils.drawable2Bitmap(curDrawable),
+                        CustomWallpaperManager.getInstance().getFilePath(fileName));
                 if (mHandler.hasMessages(MSG_INSERT_WALLPAPER_ITEM)) {
                     mHandler.removeMessages(MSG_INSERT_WALLPAPER_ITEM);
                 }
