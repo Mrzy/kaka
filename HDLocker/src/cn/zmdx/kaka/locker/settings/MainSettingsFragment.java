@@ -49,8 +49,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     public static final int GUSTURE_REQUEST_CODE_FAIL = 38;
 
-    private boolean isMeizu = false;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +64,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     ViewGroup container, @Nullable
     Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.pandora_setting, container, false);
-        isMeizu = PandoraUtils.isMeizu(getActivity());
         initView();
         initTitleHeight();
         initSwitchButtonState();
@@ -76,12 +73,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     private void initView() {
         mInitSetting = (LinearLayout) mRootView.findViewById(R.id.setting_init);
         mInitSetting.setOnClickListener(this);
-//        if (isMeizu) {
-//            enablePandoraLocker();
-//            mInitSetting.setVisibility(View.GONE);
-//        } else {
-            mInitSetting.setVisibility(View.VISIBLE);
-//        }
+        mInitSetting.setVisibility(View.VISIBLE);
 
         mPandoraFavorite = (LinearLayout) mRootView.findViewById(R.id.pandora_favorite);
         mPandoraFavorite.setOnClickListener(this);

@@ -14,19 +14,16 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 
 public class ThemeManager {
     public static final int THEME_ID_CUSTOM = -1;
 
     public static final int THEME_ID_ONLINE = -2;
 
-    public static final int THEME_ID_ROAD = 4;
+    public static final int THEME_ID_DEFAULT = 4;
 
-    public static final int THEME_ID_DEFAULT = THEME_ID_ROAD;
-
-    public static final int THEME_ID_DEFAULT_BACKGROUND_RESID = R.drawable.setting_background_road_fore;
-
-    public static final int THEME_ID_DEFAULT_FOREGROUND_RESID = R.drawable.setting_background_road_fore;
+    public static final int DEFAULT_BACKGROUND_RES_ID = R.drawable.pandora_splash_background;
 
     public static final String CURRENT_THEME_CACHE_KEY = "curThemeCacheKey";
 
@@ -74,16 +71,18 @@ public class ThemeManager {
                 int screenHeight = BaseInfoHelper.getRealHeight(context);
                 String filePath = getFilePathByThemeId(themeId, fileName);
                 Bitmap bitmap = ImageUtils.getBitmapFromFile(filePath, screenWidth, screenHeight);
-                ThemeManager.addBitmapToCache(bitmap);
-                BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, bitmap);
-                theme.setCurDrawable(drawable);
-                theme.setCurBitmap(ImageUtils.drawable2Bitmap(drawable));
+                if (null == bitmap) {
+                    theme = getDefauleTheme(context);
+                } else {
+                    addBitmapToCache(bitmap);
+                    BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, bitmap);
+                    theme.setCurDrawable(drawable);
+                }
             }
         } else {
             theme = new Theme();
             BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, cacheBmp);
             theme.setCurDrawable(drawable);
-            theme.setCurBitmap(cacheBmp);
         }
         return theme;
 
@@ -95,14 +94,27 @@ public class ThemeManager {
      * @param context
      * @return
      */
-    public static Theme getDefauleTheme(Context context) {
+    private static Theme getDefauleTheme(Context context) {
         Theme theme = new Theme();
-        Drawable defaultDrawable = context.getResources().getDrawable(
-                THEME_ID_DEFAULT_BACKGROUND_RESID);
-        Bitmap defaultBitmap = ImageUtils.drawable2Bitmap(defaultDrawable, true);
-        ThemeManager.addBitmapToCache(defaultBitmap);
-        theme.setCurDrawable(defaultDrawable);
-        theme.setCurBitmap(defaultBitmap);
+        Bitmap cacheBmp = ImageLoaderManager.getImageMemCache().getBitmap(CURRENT_THEME_CACHE_KEY);
+        if (null == cacheBmp) {
+            WallpaperUtils.initDefaultWallpaper();
+            Bitmap defaultBitmap = WallpaperUtils.getDefaultWallpaperBitmap();
+            if (null == defaultBitmap) {
+                Drawable defaultDrawable = context.getResources().getDrawable(
+                        DEFAULT_BACKGROUND_RES_ID);
+                addBitmapToCache(ImageUtils.drawable2Bitmap(defaultDrawable));
+                theme.setCurDrawable(defaultDrawable);
+            } else {
+                addBitmapToCache(defaultBitmap);
+                theme.setCurDrawable(new BitmapDrawable(context.getResources(), defaultBitmap));
+            }
+
+        } else {
+            theme = new Theme();
+            BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, cacheBmp);
+            theme.setCurDrawable(drawable);
+        }
         return theme;
     }
 
@@ -131,8 +143,12 @@ public class ThemeManager {
     }
 
     public static void addBitmapToCache(Bitmap bitmap) {
-        ImageLoaderManager.getImageMemCache().invalidateBitmap(CURRENT_THEME_CACHE_KEY);
+        invalidateBitmapCache();
         ImageLoaderManager.getImageMemCache().putBitmap(CURRENT_THEME_CACHE_KEY, bitmap);
+    }
+
+    public static void invalidateBitmapCache() {
+        ImageLoaderManager.getImageMemCache().invalidateBitmap(CURRENT_THEME_CACHE_KEY);
     }
 
     // public static Theme getThemeById(int themeId) {
@@ -165,22 +181,12 @@ public class ThemeManager {
 
         private Drawable mCurDrawable;
 
-        private Bitmap mCurBitmap;
-
         public Drawable getCurDrawable() {
             return mCurDrawable;
         }
 
         public void setCurDrawable(Drawable mCurDrawable) {
             this.mCurDrawable = mCurDrawable;
-        }
-
-        public Bitmap getCurBitmap() {
-            return mCurBitmap;
-        }
-
-        public void setCurBitmap(Bitmap mCurBitmap) {
-            this.mCurBitmap = mCurBitmap;
         }
 
     }
