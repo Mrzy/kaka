@@ -179,5 +179,4 @@
     <string name="notify_guide_hide_message_title">我要隐藏头像及消息内容</string>
     <string name="notify_guide_hide_message_content">右划此处解锁立即设置隐藏，如果暂时不设置双击移除此通知</string>
 
-    <string name="pandora_splash_init">程序正在初始化，请稍候!</string>
 </resources>
