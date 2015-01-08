@@ -136,7 +136,7 @@ public class LockScreenManager {
 
     private boolean mNeedPassword = false;
 
-//    private ImageView mGuide;
+    // private ImageView mGuide;
 
     private BatteryView batteryView;
 
@@ -410,7 +410,8 @@ public class LockScreenManager {
 
     @SuppressLint("InflateParams")
     private void initLockScreenViews() {
-        mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.pandora_lockscreen, null);
+        mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
+                R.layout.pandora_lockscreen, null);
         initGuideView();
         initSecurePanel();
         mSlidingPanelLayout = (SlidingPaneLayout) mEntireView.findViewById(R.id.sliding_layout);
@@ -464,7 +465,8 @@ public class LockScreenManager {
                             @Override
                             public void run() {
                                 try {
-                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    Intent intent = new Intent(
+                                            MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA); // 启动照相机
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     mContext.startActivity(intent);
                                 } catch (Exception e) {
@@ -511,7 +513,8 @@ public class LockScreenManager {
         guideView.setScaleType(ScaleType.FIT_XY);
         guideView.setVisibility(View.VISIBLE);
         ViewHelper.setAlpha(guideView, 0);
-        mEntireView.addView(guideView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mEntireView.addView(guideView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
         guideView.animate().alpha(1).setDuration(1000).setStartDelay(700).start();
         guideView.setOnClickListener(new View.OnClickListener() {
 
@@ -555,7 +558,7 @@ public class LockScreenManager {
         @Override
         public void onPanelClosed(View panel) {
             dispatchMainPanelClosed();
-            //取消侧滑展开操作，将解锁后的操作恢复
+            // 取消侧滑展开操作，将解锁后的操作恢复
             setRunnableAfterUnLock(null);
         }
     };
