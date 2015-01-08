@@ -27,6 +27,7 @@ import cn.zmdx.kaka.locker.LockScreenManager.IMainPanelListener;
 import cn.zmdx.kaka.locker.LockScreenManager.IPullDownListener;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.database.CustomNotificationModel;
+import cn.zmdx.kaka.locker.notification.Constants;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
@@ -49,8 +50,9 @@ public class NotificationLayout extends LinearLayout {
     protected static final int GAP_BETWEEN_NOTIFICATIONS = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 5);
 
-//    protected static final int NOTIFICATION_ITEM_HEIGHT = BaseInfoHelper.dip2px(
-//            HDApplication.getContext(), 64);
+    // protected static final int NOTIFICATION_ITEM_HEIGHT =
+    // BaseInfoHelper.dip2px(
+    // HDApplication.getContext(), 64);
 
     private static final SimpleDateFormat sSdf = new SimpleDateFormat("dd日 HH:mm");
 
@@ -98,9 +100,22 @@ public class NotificationLayout extends LinearLayout {
                     @Override
                     public void onClick(View v) {
                         long currentTime = System.currentTimeMillis();
-                        if (currentTime - mItemClickStartTime < ITEM_DOUBLE_TAP_DURATION) {
+                        if (currentTime - mItemClickStartTime < ITEM_DOUBLE_TAP_DURATION) {// 响应双击事件
                             final String id = String.valueOf(v.getTag());
-                            recordGuideStateIfNeeded(id);
+                            final NotificationInfo ni = mActiveNotification.get(id);
+                            if (ni.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
+                                final int intId = Integer.valueOf(id);
+                                if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE) {
+                                    NotificationGuideHelper
+                                            .markAlreadyPromptHideNotificationMsg(getContext());
+                                } else if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE) {
+                                    NotificationGuideHelper.recordGuideProgress(getContext());
+                                    NotificationInfo info = NotificationGuideHelper
+                                            .getNextGuide(getContext());
+                                    NotificationInterceptor.getInstance(getContext())
+                                            .sendCustomNotification(info);
+                                }
+                            }
                             removeNotification(id);
                         } else {
                             mItemClickStartTime = currentTime;
@@ -108,24 +123,27 @@ public class NotificationLayout extends LinearLayout {
                     }
                 });
                 addNotificationItem(itemView);
+                if (isWinxinOrQQ(info) && !hasAlreadyPromptHideNotificationMsg() /*
+                                                                                 * &&
+                                                                                 * (
+                                                                                 * 没有设置隐藏消息体
+                                                                                 * )
+                                                                                 */) {
+                    NotificationInfo ni = PandoraNotificationFactory
+                            .createGuideHideNotificationInfo();
+                    NotificationInterceptor.getInstance(getContext()).sendCustomNotification(ni);
+                }
             }
         }
     };
 
-    /**
-     * 移除通知教学完成，记录状态
-     * 
-     * @param id 通知id
-     */
-    private void recordGuideStateIfNeeded(String id) {
-        final NotificationInfo ni = mActiveNotification.get(id);
-        int intId = Integer.valueOf(id);
-        if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE
-                && ni.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
-            NotificationGuideHelper.recordGuideProgress(getContext());
-        } else if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL) {
-            NotificationGuideHelper.recordGuideProgress(getContext());
-        }
+    private boolean isWinxinOrQQ(NotificationInfo ni) {
+        return Constants.PKGNAME_QQ.equals(ni.getPkg())
+                || Constants.PKGNAME_WEIXIN.equals(ni.getPkg());
+    }
+
+    private boolean hasAlreadyPromptHideNotificationMsg() {
+        return NotificationGuideHelper.hasAlreadyPromptHideNotificationMsg(getContext());
     }
 
     /**
@@ -186,8 +204,6 @@ public class NotificationLayout extends LinearLayout {
                 case MotionEvent.ACTION_DOWN:
                     v.performClick();
                     mCurrentTouchView = mItemView;
-                    // startTapItemAnimation(mItemView);
-                    // TODO 1. 变化view的背景色 2. 开始右划打开的提示动画
                     View contentLayout = mItemView.findViewById(R.id.pandora_notification_hint);
                     contentLayout
                             .setBackgroundResource(R.drawable.pandora_notification_click_shape);
@@ -204,7 +220,12 @@ public class NotificationLayout extends LinearLayout {
                                 }
                             } catch (Exception e) {
                             }
-                            recordGuideStateIfNeeded(id);
+                            if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE) {
+                                NotificationGuideHelper
+                                        .markAlreadyPromptHideNotificationMsg(getContext());
+                            } else if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL) {
+                                NotificationGuideHelper.recordGuideProgress(getContext());
+                            }
                             removeNotification(id);
                         }
                     });

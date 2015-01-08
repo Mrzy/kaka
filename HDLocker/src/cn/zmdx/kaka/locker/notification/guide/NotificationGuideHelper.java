@@ -7,7 +7,6 @@ import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 
 public class NotificationGuideHelper {
 
@@ -44,5 +43,12 @@ public class NotificationGuideHelper {
 
     private static int getGuideProgress(Context context) {
         return PandoraConfig.newInstance(context).getNotificationGuideProgress();
+    }
+
+    public static boolean hasAlreadyPromptHideNotificationMsg(Context context) {
+        return PandoraConfig.newInstance(context).hasAlreadyPromptHideNotificationMsg();
+    }
+    public static void markAlreadyPromptHideNotificationMsg(Context context) {
+        PandoraConfig.newInstance(context).markAlreadyPromptHideNotificationMsg();
     }
 }

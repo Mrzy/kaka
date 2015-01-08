@@ -73,6 +73,8 @@ public class PandoraConfig {
 
     private static final String KEY_NOTIFICATION_GUIDE_PROGRESS = "w";
 
+    private static final String KEY_HAS_ALREADY_HIDE_NOTIFY_MSG = "x";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -354,5 +356,13 @@ public class PandoraConfig {
 
     public void saveNotificationGuideProgress(int progress) {
         mSp.edit().putInt(KEY_NOTIFICATION_GUIDE_PROGRESS, progress).commit();
+    }
+
+    public boolean hasAlreadyPromptHideNotificationMsg() {
+        return mSp.getBoolean(KEY_HAS_ALREADY_HIDE_NOTIFY_MSG, false);
+    }
+
+    public void markAlreadyPromptHideNotificationMsg() {
+        mSp.edit().putBoolean(KEY_HAS_ALREADY_HIDE_NOTIFY_MSG, true).commit();
     }
 }

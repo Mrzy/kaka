@@ -13,6 +13,7 @@ import android.util.Base64;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
 import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 
@@ -23,6 +24,8 @@ public class PandoraNotificationFactory {
     public static final int ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL = 83569;
 
     public static final int ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE = 83570;
+
+    public static final int ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE = 83571;
 
     public static NotificationInfo createCustomNotification(String title, String content,
             Bitmap largeIcon, Drawable smallIcon, String tag, PendingIntent contentIntent) {
@@ -138,6 +141,22 @@ public class PandoraNotificationFactory {
         return ni;
     }
 
+    public static NotificationInfo createGuideHideNotificationInfo() {
+        Context context = HDApplication.getContext();
+        final NotificationInfo ni = new NotificationInfo();
+        ni.setId(ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE);
+        ni.setTitle(context.getString(R.string.notify_guide_hide_message_title));
+        ni.setContent(context.getString(R.string.notify_guide_hide_message_content));
+        ni.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
+        ni.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.notification_custom_remove_icon));
+        Intent intent = new Intent(context, IndividualizationActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pi = PendingIntent.getActivity(context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        ni.setPendingIntent(pi);
+        return ni;
+    }
     public static NotificationInfo createGuideOpenPandoraSettingsNotification() {
 
         return null;
