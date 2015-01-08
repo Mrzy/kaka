@@ -101,10 +101,17 @@ public class ThemeManager {
             WallpaperUtils.initDefaultWallpaper();
             Bitmap defaultBitmap = WallpaperUtils.getDefaultWallpaperBitmap();
             if (null == defaultBitmap) {
-                Drawable defaultDrawable = context.getResources().getDrawable(
-                        DEFAULT_BACKGROUND_RES_ID);
-                addBitmapToCache(ImageUtils.drawable2Bitmap(defaultDrawable));
-                theme.setCurDrawable(defaultDrawable);
+                WallpaperUtils.initDefaultWallpaper();
+                Bitmap bmp = WallpaperUtils.getDefaultWallpaperBitmap();
+                if (null == bmp) {
+                    Drawable defaultDrawable = context.getResources().getDrawable(
+                            DEFAULT_BACKGROUND_RES_ID);
+                    addBitmapToCache(ImageUtils.drawable2Bitmap(defaultDrawable));
+                    theme.setCurDrawable(defaultDrawable);
+                } else {
+                    addBitmapToCache(defaultBitmap);
+                    theme.setCurDrawable(new BitmapDrawable(context.getResources(), defaultBitmap));
+                }
             } else {
                 addBitmapToCache(defaultBitmap);
                 theme.setCurDrawable(new BitmapDrawable(context.getResources(), defaultBitmap));

@@ -1,6 +1,10 @@
 
 package cn.zmdx.kaka.locker.splash;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,12 +19,8 @@ import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.Animator.AnimatorListener;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
-
 public class SplashActivity extends Activity {
+
     private TypefaceTextView mVersion;
 
     private ImageView mIcon;
@@ -31,6 +31,7 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_splash);
+        initDesktopDrawable();
         mIcon = (ImageView) findViewById(R.id.pandora_splash_icon);
         mAppName = (TypefaceTextView) findViewById(R.id.pandora_splash_app_name);
         mVersion = (TypefaceTextView) findViewById(R.id.pandora_splash_version);
@@ -60,34 +61,32 @@ public class SplashActivity extends Activity {
         AnimatorSet versionSet = new AnimatorSet();
         versionSet.setStartDelay(500);
         versionSet.playTogether(versionAlpha, versionTrans);
-        
+
         AnimatorSet finalSet = new AnimatorSet();
         finalSet.playTogether(iconSet, appNameSet, versionSet);
         finalSet.setDuration(800);
         finalSet.setInterpolator(new DecelerateInterpolator());
         finalSet.start();
-        finalSet.addListener(new AnimatorListener() {
-            
-            @Override
-            public void onAnimationStart(Animator animation) {
-                
-            }
-            
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-                
-            }
-            
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                initDesktopDrawable();
-            }
-            
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                
+        finalSet.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator anim) {
+                goToMainSettingsActivity();
             }
         });
+    }
+
+    private void goToMainSettingsActivity() {
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                Intent in = new Intent();
+                in.setClass(SplashActivity.this, MainSettingsActivity.class);
+                startActivity(in);
+                overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                        R.anim.umeng_fb_slide_out_from_left);
+                finish();
+            }
+        }, 500);
     }
 
     private void invisiableViews(View... views) {
@@ -99,8 +98,10 @@ public class SplashActivity extends Activity {
 
     private static final int DATE_WIDGET_TRANSLATIONY_DISTANCE = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 100);
+
     private static final int DATE_WIDGET_TRANSLATIONY_DISTANCE_1 = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 90);
+
     private static final int DATE_WIDGET_TRANSLATIONY_DISTANCE_2 = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 80);
 
@@ -115,12 +116,6 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 WallpaperUtils.initDefaultWallpaper();
-                Intent in = new Intent();
-                in.setClass(SplashActivity.this, MainSettingsActivity.class);
-                startActivity(in);
-                overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                        R.anim.umeng_fb_slide_out_from_left);
-                finish();
             }
         });
     }
