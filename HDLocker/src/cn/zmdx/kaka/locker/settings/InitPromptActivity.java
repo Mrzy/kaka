@@ -2,7 +2,6 @@
 package cn.zmdx.kaka.locker.settings;
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,8 +30,6 @@ public class InitPromptActivity extends Activity {
     private LinearLayout mV6TrustView;
 
     private LinearLayout mReadNotificationView;
-
-    private LinearLayout mMIUIReadNotificationView;// 小米系统 android版面低于4.3
 
     private boolean isMIUI;
 
@@ -74,7 +71,6 @@ public class InitPromptActivity extends Activity {
                 mV6CloseSystemLockerView = (LinearLayout) findViewById(R.id.init_setting_V6_close_systemlocker_prompt);
                 mV6AllowFloatWindowView = (LinearLayout) findViewById(R.id.init_setting_V6_allow_floating_window_prompt);
                 mV6TrustView = (LinearLayout) findViewById(R.id.init_setting_V6_trust_prompt);
-                mReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt);
             } else {
                 findViewById(R.id.init_setting_close_systemlocker_prompt).setVisibility(View.GONE);
                 findViewById(R.id.init_setting_MIUI_V5).setVisibility(View.VISIBLE);
@@ -82,15 +78,14 @@ public class InitPromptActivity extends Activity {
                 mV5CloseSystemLockerView = (LinearLayout) findViewById(R.id.init_setting_V5_close_systemlocker_prompt_miui);
                 mV5AllowFloatWindowView = (LinearLayout) findViewById(R.id.init_setting_V5_allow_floating_window_prompt);
                 mV5TrustView = (LinearLayout) findViewById(R.id.init_setting_V5_trust_prompt);
-                mReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt);
             }
         } else {
             findViewById(R.id.init_setting_MIUI_V5).setVisibility(View.GONE);
             findViewById(R.id.init_setting_MIUI_V6).setVisibility(View.GONE);
             mCloseSystemLockerView = (LinearLayout) findViewById(R.id.init_setting_close_systemlocker_prompt);
-            mReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt);
         }
-
+        
+        mReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt);
     }
 
     private void showView() {

@@ -477,10 +477,18 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
     };
 
     private void resetState() {
-        mShareWechatCircle.setBackgroundResource(R.drawable.pandora_share_line_normal);
-        mShareWechat.setBackgroundResource(R.drawable.pandora_share_line_normal);
-        mShareSina.setBackgroundResource(R.drawable.pandora_share_line_normal);
-        mShareQQ.setBackgroundResource(R.drawable.pandora_share_line_normal);
+        if (null != mShareWechatCircle) {
+            mShareWechatCircle.setBackgroundResource(R.drawable.pandora_share_line_normal);
+        }
+        if (null != mShareWechat) {
+            mShareWechat.setBackgroundResource(R.drawable.pandora_share_line_normal);
+        }
+        if (null != mShareSina) {
+            mShareSina.setBackgroundResource(R.drawable.pandora_share_line_normal);
+        }
+        if (null != mShareQQ) {
+            mShareQQ.setBackgroundResource(R.drawable.pandora_share_line_normal);
+        }
         LockScreenManager.getInstance().setRunnableAfterUnLock(null);
     }
 
