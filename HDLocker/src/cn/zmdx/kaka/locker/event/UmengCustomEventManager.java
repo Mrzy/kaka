@@ -52,13 +52,13 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_CARD_IS_FAVORITED = "cardIsFavorited";// 卡片被收藏
 
-    public static final String EVENT_ENTER_CAMERA_FROM_LOCKER = "enterCamera";// 卡片被收藏
+    public static final String EVENT_ENTER_CAMERA_FROM_LOCKER = "enterCamera";// 进入相机
 
-    public static final String EVENT_POST_NOTIFICATION = "postNotification";// 卡片被收藏
+    public static final String EVENT_POST_NOTIFICATION = "postNotification";// 锁屏页弹出一个通知
 
-    public static final String EVENT_REMOVE_NOTIFICATION = "removeNotification";// 卡片被收藏
+    public static final String EVENT_REMOVE_NOTIFICATION = "removeNotification";// 双击移除一个通知
 
-    public static final String EVENT_OPEN_NOTIFICATION = "openNotification";// 卡片被收藏
+    public static final String EVENT_OPEN_NOTIFICATION = "openNotification";// 右划打开一个通知
 
     public static void statisticalEnterCamera() {
         MobclickAgent.onEvent(HDApplication.getContext(),

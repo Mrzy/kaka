@@ -26,9 +26,13 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.Shader;
+import android.graphics.Shader.TileMode;
 import android.os.Build;
 import android.os.Debug;
 import android.os.Parcel;
@@ -135,15 +139,17 @@ public class LockPatternView extends View {
 
     private int mAspect;
 
-    private int mRegularColor;
-
-    private int mErrorColor;
-
-    private int mSuccessColor;
+//    private int mRegularColor;
+//
+//    private int mErrorColor;
+//
+//    private int mSuccessColor;
 
     private Interpolator mFastOutSlowInInterpolator;
 
     private Interpolator mLinearOutSlowInInterpolator;
+
+    private int[][] mRegularDotColor = new int[3][3];
 
     /**
      * Represents a cell in the 3 X 3 matrix of the unlock pattern view.
@@ -205,6 +211,8 @@ public class LockPatternView extends View {
     }
 
     public static class CellState {
+        public int color = -1;
+
         public float scale = 1.0f;
 
         public float translateY = 0.0f;
@@ -296,15 +304,17 @@ public class LockPatternView extends View {
         mPathPaint.setAntiAlias(true);
         mPathPaint.setDither(true);
 
-        mRegularColor = getResources().getColor(R.color.lock_pattern_view_regular_color);
-        mErrorColor = getResources().getColor(R.color.lock_pattern_view_error_color);
-        mSuccessColor = getResources().getColor(R.color.lock_pattern_view_success_color);
-        mRegularColor = a.getColor(R.styleable.LockPatternView_regularColor, mRegularColor);
-        mErrorColor = a.getColor(R.styleable.LockPatternView_errorColor, mErrorColor);
-        mSuccessColor = a.getColor(R.styleable.LockPatternView_successColor, mSuccessColor);
+//        mRegularColor = getResources().getColor(R.color.lock_pattern_view_regular_color);
+//        mErrorColor = getResources().getColor(R.color.lock_pattern_view_error_color);
+//        mSuccessColor = getResources().getColor(R.color.lock_pattern_view_success_color);
+//        mRegularColor = a.getColor(R.styleable.LockPatternView_regularColor, mRegularColor);
+//        mErrorColor = a.getColor(R.styleable.LockPatternView_errorColor, mErrorColor);
+//        mSuccessColor = a.getColor(R.styleable.LockPatternView_successColor, mSuccessColor);
 
-        int pathColor = a.getColor(R.styleable.LockPatternView_pathColor, mRegularColor);
-        mPathPaint.setColor(pathColor);
+//        int pathColor = a.getColor(R.styleable.LockPatternView_pathColor, mRegularColor);
+        a.recycle();
+        initRegularDotColor();
+//        mPathPaint.setColor(pathColor);
 
         mPathPaint.setStyle(Paint.Style.STROKE);
         mPathPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -325,6 +335,7 @@ public class LockPatternView extends View {
             for (int j = 0; j < 3; j++) {
                 mCellStates[i][j] = new CellState();
                 mCellStates[i][j].size = mDotSize;
+                mCellStates[i][j].color = mRegularDotColor [i][j];
             }
         }
 
@@ -337,6 +348,18 @@ public class LockPatternView extends View {
                 android.R.interpolator.linear);
         mLinearOutSlowInInterpolator = AnimationUtils.loadInterpolator(context,
                 android.R.interpolator.linear);
+    }
+
+    private void initRegularDotColor() {
+        mRegularDotColor[0][0] = Color.WHITE;
+        mRegularDotColor[0][1] = Color.RED;
+        mRegularDotColor[0][2] = Color.BLACK;
+        mRegularDotColor[1][0] = Color.CYAN;
+        mRegularDotColor[1][1] = Color.GRAY;
+        mRegularDotColor[1][2] = Color.GREEN;
+        mRegularDotColor[2][0] = Color.MAGENTA;
+        mRegularDotColor[2][1] = Color.YELLOW;
+        mRegularDotColor[2][2] = Color.BLUE;
     }
 
     public CellState[][] getCellStates() {
@@ -729,22 +752,24 @@ public class LockPatternView extends View {
 
     @Override
     public boolean onHoverEvent(MotionEvent event) {
-//        if (AccessibilityManager.getInstance(mContext).isTouchExplorationEnabled()) {
-//            final int action = event.getAction();
-//            switch (action) {
-//                case MotionEvent.ACTION_HOVER_ENTER:
-//                    event.setAction(MotionEvent.ACTION_DOWN);
-//                    break;
-//                case MotionEvent.ACTION_HOVER_MOVE:
-//                    event.setAction(MotionEvent.ACTION_MOVE);
-//                    break;
-//                case MotionEvent.ACTION_HOVER_EXIT:
-//                    event.setAction(MotionEvent.ACTION_UP);
-//                    break;
-//            }
-//            onTouchEvent(event);
-//            event.setAction(action);
-//        }
+        // if
+        // (AccessibilityManager.getInstance(mContext).isTouchExplorationEnabled())
+        // {
+        // final int action = event.getAction();
+        // switch (action) {
+        // case MotionEvent.ACTION_HOVER_ENTER:
+        // event.setAction(MotionEvent.ACTION_DOWN);
+        // break;
+        // case MotionEvent.ACTION_HOVER_MOVE:
+        // event.setAction(MotionEvent.ACTION_MOVE);
+        // break;
+        // case MotionEvent.ACTION_HOVER_EXIT:
+        // event.setAction(MotionEvent.ACTION_UP);
+        // break;
+        // }
+        // onTouchEvent(event);
+        // event.setAction(action);
+        // }
         return super.onHoverEvent(event);
     }
 
@@ -849,7 +874,7 @@ public class LockPatternView extends View {
             mInvalidate.set(mTmpInvalidateRect);
         }
     }
- 
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void sendAccessEvent(int resId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -927,6 +952,7 @@ public class LockPatternView extends View {
         return getPaddingTop() + row * mSquareHeight + mSquareHeight / 2f;
     }
 
+    private Shader mPathShader = null;
     @Override
     protected void onDraw(Canvas canvas) {
         final ArrayList<Cell> pattern = mPattern;
@@ -985,7 +1011,7 @@ public class LockPatternView extends View {
                 float size = cellState.size * cellState.scale;
                 float translationY = cellState.translateY;
                 drawCircle(canvas, (int) centerX, (int) centerY + translationY, size,
-                        drawLookup[i][j], cellState.alpha);
+                        drawLookup[i][j], cellState.alpha, cellState.color);
             }
         }
 
@@ -996,11 +1022,14 @@ public class LockPatternView extends View {
         final boolean drawPath = !mInStealthMode;
 
         if (drawPath) {
-            mPathPaint.setColor(getCurrentColor(true /* partOfPattern */));
+//            mPathPaint.setColor(getCurrentColor(true /* partOfPattern */));
+            mPathPaint.setColor(Color.RED);
+            mPathPaint.setShader(mPathShader);
 
             boolean anyCircles = false;
             float lastX = 0f;
             float lastY = 0f;
+            CellState lastCellState = null;
             for (int i = 0; i < count; i++) {
                 Cell cell = pattern.get(i);
 
@@ -1014,19 +1043,23 @@ public class LockPatternView extends View {
 
                 float centerX = getCenterXForColumn(cell.column);
                 float centerY = getCenterYForRow(cell.row);
+                CellState state = mCellStates[cell.row][cell.column];
                 if (i != 0) {
-                    CellState state = mCellStates[cell.row][cell.column];
                     currentPath.rewind();
                     currentPath.moveTo(lastX, lastY);
                     if (state.lineEndX != Float.MIN_VALUE && state.lineEndY != Float.MIN_VALUE) {
                         currentPath.lineTo(state.lineEndX, state.lineEndY);
+                        mPathShader = new LinearGradient(lastX, lastY, state.lineEndX, state.lineEndY, new int[]{lastCellState.color, state.color}, new float[]{0, 1.0f}, TileMode.MIRROR);
                     } else {
                         currentPath.lineTo(centerX, centerY);
+                        mPathShader = new LinearGradient(lastX, lastY, centerX, centerY, new int[]{lastCellState.color, state.color}, new float[]{0, 1.0f}, TileMode.MIRROR);
                     }
+                    mPathPaint.setShader(mPathShader);
                     canvas.drawPath(currentPath, mPathPaint);
                 }
                 lastX = centerX;
                 lastY = centerY;
+                lastCellState = state;
             }
 
             // draw last in progress section
@@ -1050,27 +1083,28 @@ public class LockPatternView extends View {
         return Math.min(1f, Math.max(0f, (frac - 0.3f) * 4f));
     }
 
-    private int getCurrentColor(boolean partOfPattern) {
-        if (!partOfPattern || mInStealthMode || mPatternInProgress) {
-            // unselected circle
-            return mRegularColor;
-        } else if (mPatternDisplayMode == DisplayMode.Wrong) {
-            // the pattern is wrong
-            return mErrorColor;
-        } else if (mPatternDisplayMode == DisplayMode.Correct
-                || mPatternDisplayMode == DisplayMode.Animate) {
-            return mSuccessColor;
-        } else {
-            throw new IllegalStateException("unknown display mode " + mPatternDisplayMode);
-        }
-    }
+//    private int getCurrentColor(boolean partOfPattern) {
+//        if (!partOfPattern || mInStealthMode || mPatternInProgress) {
+//            // unselected circle
+//            return mRegularColor;
+//        } else if (mPatternDisplayMode == DisplayMode.Wrong) {
+//            // the pattern is wrong
+//            return mErrorColor;
+//        } else if (mPatternDisplayMode == DisplayMode.Correct
+//                || mPatternDisplayMode == DisplayMode.Animate) {
+//            return mSuccessColor;
+//        } else {
+//            throw new IllegalStateException("unknown display mode " + mPatternDisplayMode);
+//        }
+//    }
 
     /**
      * @param partOfPattern Whether this circle is part of the pattern.
      */
     private void drawCircle(Canvas canvas, float centerX, float centerY, float size,
-            boolean partOfPattern, float alpha) {
-        mPaint.setColor(getCurrentColor(partOfPattern));
+            boolean partOfPattern, float alpha, int color) {
+//        mPaint.setColor(getCurrentColor(partOfPattern));
+        mPaint.setColor(color);
         mPaint.setAlpha((int) (alpha * 255));
         canvas.drawCircle(centerX, centerY, size / 2, mPaint);
     }
