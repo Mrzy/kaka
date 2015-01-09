@@ -27,6 +27,7 @@ import cn.zmdx.kaka.locker.LockScreenManager.IMainPanelListener;
 import cn.zmdx.kaka.locker.LockScreenManager.IPullDownListener;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.database.CustomNotificationModel;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.Constants;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
@@ -119,6 +120,7 @@ public class NotificationLayout extends LinearLayout {
                                 }
                             }
                             removeNotification(id);
+                            UmengCustomEventManager.statisticalRemoveNotification(info.getId(), info.getPkg(), info.getType());
                         } else {
                             mItemClickStartTime = currentTime;
                         }
@@ -132,6 +134,7 @@ public class NotificationLayout extends LinearLayout {
                     NotificationInterceptor.getInstance(getContext()).sendCustomNotification(ni);
                     NotificationGuideHelper.markAlreadyPromptHideNotificationMsg(getContext());
                 }
+                UmengCustomEventManager.statisticalPostNotification(info.getId(), info.getPkg(), info.getType());
             }
         }
     };
@@ -252,6 +255,7 @@ public class NotificationLayout extends LinearLayout {
                                 getContext().startActivity(in);
                             }
                             removeNotification(id);
+                            UmengCustomEventManager.statisticalOpenNotification(info.getId(), info.getPkg(), info.getType());
                         }
                     });
                     return true;

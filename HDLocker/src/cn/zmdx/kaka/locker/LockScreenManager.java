@@ -467,6 +467,7 @@ public class LockScreenManager {
                                             MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA); // 启动照相机
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     mContext.startActivity(intent);
+                                    UmengCustomEventManager.statisticalEnterCamera();
                                 } catch (Exception e) {
                                 }
                             }
