@@ -29,7 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.meiwen.Res;
 
 import com.edmodo.cropper.cropwindow.CropOverlayView;
 import com.edmodo.cropper.cropwindow.edge.Edge;
@@ -92,17 +92,17 @@ public class CropImageView extends FrameLayout {
     public CropImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CropImageView, 0, 0);
+        TypedArray ta = context.obtainStyledAttributes(attrs, Res.styleable.CropImageView, 0, 0);
 
         try {
-            mGuidelines = ta.getInteger(R.styleable.CropImageView_guidelines, DEFAULT_GUIDELINES);
-            mFixAspectRatio = ta.getBoolean(R.styleable.CropImageView_fixAspectRatio,
+            mGuidelines = ta.getInteger(Res.styleable.CropImageView_guidelines, DEFAULT_GUIDELINES);
+            mFixAspectRatio = ta.getBoolean(Res.styleable.CropImageView_fixAspectRatio,
                     DEFAULT_FIXED_ASPECT_RATIO);
-            mAspectRatioX = ta.getInteger(R.styleable.CropImageView_aspectRatioX,
+            mAspectRatioX = ta.getInteger(Res.styleable.CropImageView_aspectRatioX,
                     DEFAULT_ASPECT_RATIO_X);
-            mAspectRatioY = ta.getInteger(R.styleable.CropImageView_aspectRatioY,
+            mAspectRatioY = ta.getInteger(Res.styleable.CropImageView_aspectRatioY,
                     DEFAULT_ASPECT_RATIO_Y);
-            mImageResource = ta.getResourceId(R.styleable.CropImageView_imageResource,
+            mImageResource = ta.getResourceId(Res.styleable.CropImageView_imageResource,
                     DEFAULT_IMAGE_RESOURCE);
         } finally {
             ta.recycle();
@@ -477,12 +477,12 @@ public class CropImageView extends FrameLayout {
     private void init(Context context) {
 
         final LayoutInflater inflater = LayoutInflater.from(context);
-        final View v = inflater.inflate(R.layout.crop_image_view, this, true);
+        final View v = inflater.inflate(Res.layout.crop_image_view, this, true);
 
-        mImageView = (ImageView) v.findViewById(R.id.ImageView_image);
+        mImageView = (ImageView) v.findViewById(Res.id.ImageView_image);
 
         setImageResource(mImageResource);
-        mCropOverlayView = (CropOverlayView) v.findViewById(R.id.CropOverlayView);
+        mCropOverlayView = (CropOverlayView) v.findViewById(Res.id.CropOverlayView);
         mCropOverlayView.setInitialAttributeValues(mGuidelines, mFixAspectRatio, mAspectRatioX,
                 mAspectRatioY);
     }

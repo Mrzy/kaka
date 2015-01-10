@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:visibility="gone" >
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -36,7 +36,7 @@
             android:background="@drawable/init_prompt_notification_shape"
             android:orientation="vertical" >
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
@@ -47,7 +47,7 @@
                 android:textStyle="normal" />
         </LinearLayout>
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -75,7 +75,7 @@
             android:background="@drawable/init_setting_prompt_background"
             android:orientation="vertical" >
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -96,7 +96,7 @@
                 android:background="@drawable/init_prompt_notification_shape"
                 android:orientation="horizontal" >
 
-                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
@@ -115,7 +115,7 @@
                     android:src="@drawable/init_prompt_notification" />
             </LinearLayout>
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -127,7 +127,7 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:id="@+id/init_setting_V6_read_notification_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
                 android:contentDescription="@string/contentDescription"
                 android:src="@drawable/init_setting_allow_floating_window" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
@@ -181,7 +181,7 @@
                 android:contentDescription="@string/contentDescription"
                 android:src="@drawable/init_setting_close_systemlocker" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
@@ -190,7 +190,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
@@ -216,7 +216,7 @@
                 android:contentDescription="@string/contentDescription"
                 android:src="@drawable/init_setting_allow_floating_window" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
@@ -225,7 +225,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
@@ -251,7 +251,7 @@
                 android:contentDescription="@string/contentDescription"
                 android:src="@drawable/init_setting_prompt_trust" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
@@ -260,7 +260,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
@@ -269,7 +269,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/init_setting_V5_textview_prompt_margin_left"
@@ -298,7 +298,7 @@
             android:paddingRight="@dimen/setting_title_textview_margin_left"
             android:visibility="gone" >
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -322,7 +322,7 @@
                 android:contentDescription="@string/contentDescription"
                 android:src="@drawable/init_setting_close_sysytem_locker_step_two" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -333,7 +333,7 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:id="@+id/init_setting_V6_close_systemlocker_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -357,7 +357,7 @@
             android:paddingRight="@dimen/setting_title_textview_margin_left"
             android:visibility="gone" >
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -375,7 +375,7 @@
                 android:contentDescription="@string/contentDescription"
                 android:src="@drawable/init_setting_allow_float_window" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -386,7 +386,7 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:id="@+id/init_setting_V6_allow_floating_window_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -410,7 +410,7 @@
             android:paddingRight="@dimen/setting_title_textview_margin_left"
             android:visibility="gone" >
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -422,7 +422,7 @@
                 android:textSize="20sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -432,7 +432,7 @@
                 android:textSize="16sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -443,7 +443,7 @@
                 android:textSize="16sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -454,7 +454,7 @@
                 android:textSize="16sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -464,7 +464,7 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:id="@+id/init_setting_V6_trust_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

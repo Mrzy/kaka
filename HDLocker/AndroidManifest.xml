@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.zmdx.kaka.locker"
+    package="cn.zmdx.kaka.locker.meiwen"
     android:versionCode="91"
     android:versionName="1.4.2" >
 

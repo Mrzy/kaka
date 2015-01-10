@@ -31,7 +31,7 @@
                     android:orientation="horizontal"
                     android:paddingRight="14dp" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         android:id="@+id/from_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -40,7 +40,7 @@
                         android:textColor="#ccfffeff"
                         android:textSize="15sp" />
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         android:id="@+id/gif_from_platform_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -75,7 +75,7 @@
                 android:layout_weight="1"
                 android:scaleType="fitCenter" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:id="@+id/gif_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

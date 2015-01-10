@@ -31,7 +31,7 @@
                     android:layout_marginBottom="5dp"
                     android:orientation="horizontal" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         style="@style/init_setting_big_textview"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -56,7 +56,7 @@
                             android:layout_gravity="center_vertical"
                             android:visibility="gone" />
 
-                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                             android:id="@+id/pandora_share_sina_submit"
                             style="@style/init_setting_button"
                             android:layout_width="wrap_content"
@@ -96,7 +96,7 @@
                     android:textColor="@color/white"
                     android:textSize="13sp" />
 
-                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                     android:id="@+id/pandora_share_sina_edit_text_count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                         android:background="@color/setting_divider_line"
                         android:contentDescription="@string/contentDescription" />
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         android:id="@+id/pandora_share_sina_content_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

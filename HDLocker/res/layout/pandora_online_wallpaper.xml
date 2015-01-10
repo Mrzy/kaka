@@ -19,7 +19,7 @@
             android:layout_marginRight="@dimen/setting_title_textview_margin_left"
             android:orientation="vertical" >
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 style="@style/init_setting_big_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                                 android:layout_marginTop="10dp"
                                 android:orientation="vertical" >
 
-                                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                                <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                                     android:id="@+id/pandora_online_wallpaper_preview_weather"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -113,14 +113,14 @@
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal" >
 
-                                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                                         android:id="@+id/pandora_online_wallpaper_preview_date"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:textColor="@color/white"
                                         android:textSize="11sp" />
 
-                                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                                         android:id="@+id/pandora_online_wallpaper_preview_temperature"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
@@ -129,8 +129,8 @@
                                         android:textSize="15sp" />
                                 </LinearLayout>
 
-                                <cn.zmdx.kaka.locker.widget.DigitalClocks
-                                    xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
+                                <cn.zmdx.kaka.locker.meiwen.widget.DigitalClocks
+                                    xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker.meiwen"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/white"
@@ -139,7 +139,7 @@
                             </LinearLayout>
                         </FrameLayout>
 
-                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                             android:id="@+id/pandora_online_wallpaper_preview_desc"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
                             android:paddingLeft="5dp"
                             android:textSize="14sp" />
 
-                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                             android:id="@+id/pandora_online_wallpaper_preview_author"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -219,7 +219,7 @@
         android:layout_gravity="center"
         android:visibility="visible" />
 
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/pandora_online_wallpaper_prompt_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

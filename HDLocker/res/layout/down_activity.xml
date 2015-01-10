@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context=".DemoActivity" >
 
-    <cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout
+    <cn.zmdx.kaka.locker.meiwen.widget.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
@@ -93,6 +93,6 @@
                 -->
             </LinearLayout>
         </LinearLayout>
-    </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
+    </cn.zmdx.kaka.locker.meiwen.widget.SlidingUpPanelLayout>
 
 </RelativeLayout>

@@ -17,7 +17,7 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
             android:id="@+id/pandora_crop_cancle"
             style="@style/setting_textview"
             android:layout_width="0dp"
@@ -27,7 +27,7 @@
             android:gravity="center"
             android:text="@string/pandora_dialog_cancle" />
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
             android:id="@+id/pandora_crop_sure"
             style="@style/setting_textview"
             android:layout_width="0dp"
@@ -37,7 +37,7 @@
             android:gravity="center"
             android:text="@string/determine" />
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
             android:id="@+id/pandora_rotate_btn"
             style="@style/setting_textview"
             android:layout_width="0dp"

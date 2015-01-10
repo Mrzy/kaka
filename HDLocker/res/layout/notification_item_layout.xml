@@ -32,7 +32,7 @@
         android:focusableInTouchMode="false"
         android:scaleType="fitXY" />
 
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
         android:textColor="#ffffff"
         android:textSize="14dp" />
 
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
         android:textColor="#bbffffff"
         android:textSize="12dp" />
 
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
         android:layout_marginTop="4dp"
         />
 
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/handleTip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

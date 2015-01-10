@@ -25,7 +25,7 @@
             android:contentDescription="@string/contentDescription"
             android:src="@drawable/pandora_splash_icon" />
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
             android:id="@+id/pandora_splash_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
             android:id="@+id/pandora_splash_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/setting_title_textview_margin_left"
     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/pandora_dialog_title"
         style="@style/init_setting_big_textview"
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
 
         <!-- style="@style/pandora_dialog_edit_text_style" -->
 
-        <cn.zmdx.kaka.locker.widget.BaseEditText
+        <cn.zmdx.kaka.locker.meiwen.widget.BaseEditText
             android:id="@+id/pandora_dialog_individualization_edit_text"
             android:layout_width="fill_parent"
             android:layout_height="40dp"
@@ -53,7 +53,7 @@
             android:paddingLeft="@dimen/setting_title_textview_margin_left"
             android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:id="@+id/pandora_dialog_individualization_button_cancle"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -64,7 +64,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                 android:id="@+id/pandora_dialog_individualization_button_sure"
                 android:layout_width="0dp"
                 android:layout_height="40dp"

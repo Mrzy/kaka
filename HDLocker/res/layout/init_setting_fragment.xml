@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
-                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                     style="@style/init_setting_big_textview"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                     android:gravity="left"
                     android:text="@string/init_setting_title" />
 
-                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                     android:id="@+id/init_setting_miui_complete"
                     style="@style/init_setting_button"
                     android:layout_width="wrap_content"
@@ -88,19 +88,19 @@
                     android:orientation="vertical"
                     android:visibility="gone" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         style="@style/init_setting_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_MIUI_allow_floating_window" />
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         style="@style/init_setting_small_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_MIUI_allow_floating_window_detail" />
 
-                    <cn.zmdx.kaka.locker.widget.BaseButton
+                    <cn.zmdx.kaka.locker.meiwen.widget.BaseButton
                         android:id="@+id/init_setting_MIUI_allow_floating_window_to_set"
                         style="@style/init_setting_button"
                         android:layout_width="match_parent"
@@ -119,19 +119,19 @@
                     android:layout_marginTop="@dimen/init_setting_item_margin_top"
                     android:orientation="vertical" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         style="@style/init_setting_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_close_systemlocker" />
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         style="@style/init_setting_small_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_close_systemlocker_detail" />
 
-                    <cn.zmdx.kaka.locker.widget.BaseButton
+                    <cn.zmdx.kaka.locker.meiwen.widget.BaseButton
                         android:id="@+id/init_setting_close_systemlocker_to_set"
                         style="@style/init_setting_button"
                         android:layout_width="match_parent"
@@ -151,19 +151,19 @@
                     android:orientation="vertical"
                     android:visibility="gone" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         style="@style/init_setting_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_MIUI_trust" />
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         style="@style/init_setting_small_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_MIUI_trust_detail" />
 
-                    <cn.zmdx.kaka.locker.widget.BaseButton
+                    <cn.zmdx.kaka.locker.meiwen.widget.BaseButton
                         android:id="@+id/init_setting_MIUI_trust_to_set"
                         style="@style/init_setting_button"
                         android:layout_width="match_parent"
@@ -183,19 +183,19 @@
                     android:layout_marginTop="@dimen/init_setting_item_margin_top"
                     android:orientation="vertical" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         style="@style/init_setting_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_read_notification_title" />
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         style="@style/init_setting_small_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_read_notification_prompt" />
 
-                    <cn.zmdx.kaka.locker.widget.BaseButton
+                    <cn.zmdx.kaka.locker.meiwen.widget.BaseButton
                         android:id="@+id/init_setting_read_notification_bar_to_set"
                         style="@style/init_setting_button"
                         android:layout_width="match_parent"

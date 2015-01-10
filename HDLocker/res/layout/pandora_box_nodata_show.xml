@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
             android:id="@+id/pandora_box_no_net_prompt"
             android:layout_width="match_parent"
             android:layout_height="@dimen/setting_about_us_textview_height"
@@ -28,7 +28,7 @@
             android:layout_marginTop="@dimen/pandora_box_nodata_show_image_top_height"
             android:src="@drawable/pandora_nodata_icon" />
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
             android:id="@+id/pandora_box_nodata_show_tip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

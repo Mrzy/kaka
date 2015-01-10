@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.meiwen.BuildConfig;
 
 /**
  * An {@link ImageView} which tries treating background and src as
