@@ -38,6 +38,7 @@ import cn.zmdx.kaka.locker.settings.InitPromptActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 //import android.util.Log;
 
@@ -245,14 +246,20 @@ public class NotificationLayout extends LinearLayout {
                             } else if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL) {
                                 NotificationGuideHelper.recordGuideProgress(getContext());
                             } else if (Integer.parseInt(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_OPEN_PERMISSION) {
-                                //启动设置通知权限引导界面
-                                Intent in = new Intent();
-                                in.setClass(getContext(), InitPromptActivity.class);
-                                in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                in.putExtra("isMIUI", false);
-                                in.putExtra("mMIUIVersion", PandoraUtils.MUIU_V5);
-                                in.putExtra("type", InitPromptActivity.PROMPT_READ_NOTIFICATION);
-                                getContext().startActivity(in);
+                                // 启动设置通知权限引导界面
+                                HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        Intent in = new Intent();
+                                        in.setClass(getContext(), InitPromptActivity.class);
+                                        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        in.putExtra("isMIUI", false);
+                                        in.putExtra("mMIUIVersion", PandoraUtils.MUIU_V5);
+                                        in.putExtra("type", InitPromptActivity.PROMPT_READ_NOTIFICATION);
+                                        getContext().startActivity(in);
+                                    }
+                                }, 200);
                             }
                             removeNotification(id);
                             UmengCustomEventManager.statisticalOpenNotification(info.getId(), info.getPkg(), info.getType());
