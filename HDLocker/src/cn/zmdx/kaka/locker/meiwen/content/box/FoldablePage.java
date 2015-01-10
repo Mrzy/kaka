@@ -338,7 +338,7 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
 
     private void setButtonCollectState(boolean favorited) {
         if (favorited) {
-            mImageButtonCollect.setBackgroundResource(Res.drawable.pandora_share_icon_clllected);
+            mImageButtonCollect.setBackgroundResource(Res.drawable.pandora_share_icon_collected);
         } else {
             mImageButtonCollect
                     .setBackgroundResource(Res.drawable.pandora_card_collect_button_selector);

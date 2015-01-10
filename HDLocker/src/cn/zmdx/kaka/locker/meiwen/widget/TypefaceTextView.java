@@ -23,7 +23,7 @@ public class TypefaceTextView extends TextView {
     }
 
     private void setTypeFace() {
-        Typeface typeface = FontManager.getCurrentTypeface(getContext());
+        Typeface typeface = FontManager.getTypefaceFromAssets("fonts/FZ-XiYuan-J.ttf");
         if (null != typeface) {
             setTypeface(typeface);
         }

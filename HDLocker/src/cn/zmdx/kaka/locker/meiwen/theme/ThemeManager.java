@@ -23,7 +23,7 @@ public class ThemeManager {
 
     public static final int THEME_ID_DEFAULT = 4;
 
-    public static final int DEFAULT_BACKGROUND_RES_ID = Res.drawable.pandora_splash_background;
+    public static final int DEFAULT_BACKGROUND_RES_ID = Res.drawable.pandora_locker_default_wallpaper_new;
 
     private static final String CURRENT_THEME_CACHE_KEY = "curThemeCacheKey";
 
@@ -98,25 +98,10 @@ public class ThemeManager {
         Theme theme = new Theme();
         Bitmap cacheBmp = ImageLoaderManager.getImageMemCache().getBitmap(CURRENT_THEME_CACHE_KEY);
         if (null == cacheBmp) {
-            WallpaperUtils.initDefaultWallpaper();
-            Bitmap defaultBitmap = WallpaperUtils.getDefaultWallpaperBitmap();
-            if (null == defaultBitmap) {
-                WallpaperUtils.initDefaultWallpaper();
-                Bitmap bmp = WallpaperUtils.getDefaultWallpaperBitmap();
-                if (null == bmp) {
-                    Drawable defaultDrawable = context.getResources().getDrawable(
-                            DEFAULT_BACKGROUND_RES_ID);
-                    addBitmapToCache(ImageUtils.drawable2Bitmap(defaultDrawable));
-                    theme.setCurDrawable(defaultDrawable);
-                } else {
-                    addBitmapToCache(defaultBitmap);
-                    theme.setCurDrawable(new BitmapDrawable(context.getResources(), defaultBitmap));
-                }
-            } else {
-                addBitmapToCache(defaultBitmap);
-                theme.setCurDrawable(new BitmapDrawable(context.getResources(), defaultBitmap));
-            }
-
+            Drawable drawable = context.getResources().getDrawable(DEFAULT_BACKGROUND_RES_ID);
+            Bitmap defaultBitmap = ImageUtils.drawable2Bitmap(drawable);
+            ThemeManager.addBitmapToCache(defaultBitmap);
+            theme.setCurDrawable(drawable);
         } else {
             theme = new Theme();
             BitmapDrawable drawable = ImageUtils.bitmap2Drawable(context, cacheBmp);

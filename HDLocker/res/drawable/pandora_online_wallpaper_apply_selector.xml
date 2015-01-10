@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/pandora_online_wallpaper_apply_press" android:state_pressed="true"/>
-    <item android:drawable="@drawable/pandora_online_wallpaper_apply_normal"/>
+    <item android:drawable="@drawable/pandora_online_wallpaper_apply_new_press" android:state_pressed="true"/>
+    <item android:drawable="@drawable/pandora_online_wallpaper_apply_new_normal"/>
 
 </selector>

@@ -31,7 +31,7 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(Res.layout.pandora_splash);
-        initDesktopDrawable();
+//        initDesktopDrawable();
         mIcon = (ImageView) findViewById(Res.id.pandora_splash_icon);
         mAppName = (TypefaceTextView) findViewById(Res.id.pandora_splash_app_name);
         mVersion = (TypefaceTextView) findViewById(Res.id.pandora_splash_version);

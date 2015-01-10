@@ -24,6 +24,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -304,21 +305,6 @@ public class LockPatternView extends View {
         mPathPaint.setAntiAlias(true);
         mPathPaint.setDither(true);
 
-        // mRegularColor =
-        // getResources().getColor(Res.color.lock_pattern_view_regular_color);
-        // mErrorColor =
-        // getResources().getColor(Res.color.lock_pattern_view_error_color);
-        // mSuccessColor =
-        // getResources().getColor(Res.color.lock_pattern_view_success_color);
-        // mRegularColor = a.getColor(Res.styleable.LockPatternView_regularColor,
-        // mRegularColor);
-        // mErrorColor = a.getColor(Res.styleable.LockPatternView_errorColor,
-        // mErrorColor);
-        // mSuccessColor = a.getColor(Res.styleable.LockPatternView_successColor,
-        // mSuccessColor);
-
-        // int pathColor = a.getColor(Res.styleable.LockPatternView_pathColor,
-        // mRegularColor);
         a.recycle();
         initRegularDotColor();
         // mPathPaint.setColor(pathColor);
@@ -358,15 +344,16 @@ public class LockPatternView extends View {
     }
 
     private void initRegularDotColor() {
-        mRegularDotColor[0][0] = Color.WHITE;
-        mRegularDotColor[0][1] = Color.WHITE;
-        mRegularDotColor[0][2] = Color.WHITE;
-        mRegularDotColor[1][0] = Color.WHITE;
-        mRegularDotColor[1][1] = Color.WHITE;
-        mRegularDotColor[1][2] = Color.WHITE;
-        mRegularDotColor[2][0] = Color.WHITE;
-        mRegularDotColor[2][1] = Color.WHITE;
-        mRegularDotColor[2][2] = Color.WHITE;
+        final Resources res = getResources();
+        mRegularDotColor[0][0] = res.getColor(Res.color.unlock_regular_dot_colors_one);
+        mRegularDotColor[0][1] = res.getColor(Res.color.unlock_regular_dot_colors_two);
+        mRegularDotColor[0][2] = res.getColor(Res.color.unlock_regular_dot_colors_three);
+        mRegularDotColor[1][0] = res.getColor(Res.color.unlock_regular_dot_colors_four);
+        mRegularDotColor[1][1] = res.getColor(Res.color.unlock_regular_dot_colors_five);
+        mRegularDotColor[1][2] = res.getColor(Res.color.unlock_regular_dot_colors_six);
+        mRegularDotColor[2][0] = res.getColor(Res.color.unlock_regular_dot_colors_seven);
+        mRegularDotColor[2][1] = res.getColor(Res.color.unlock_regular_dot_colors_eight);
+        mRegularDotColor[2][2] = res.getColor(Res.color.unlock_regular_dot_colors_nine);
     }
 
     public CellState[][] getCellStates() {

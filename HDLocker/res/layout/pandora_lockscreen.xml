@@ -187,6 +187,8 @@
                             android:id="@+id/camera"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="5dp"
                             android:background="@drawable/camera_icon" />
                     </FrameLayout>
 
@@ -240,9 +242,10 @@
                             android:id="@+id/lock_wallpaper_view_im"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="-5dp"
                             android:contentDescription="@string/contentDescription"
                             android:scaleType="fitXY"
-                            android:src="@drawable/pandora_online_paper_button_selector" />
+                            android:src="@drawable/pandora_online_paper_pull_button_new" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

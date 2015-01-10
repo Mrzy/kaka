@@ -19,6 +19,7 @@ import android.widget.DigitalClock;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.meiwen.Res;
 import cn.zmdx.kaka.locker.meiwen.font.FontManager;
+import cn.zmdx.kaka.locker.meiwen.HDApplication;
 
 public class DigitalClocks extends TextView {
     // FIXME: implement separate views for hours/minutes/seconds, so
@@ -53,12 +54,23 @@ public class DigitalClocks extends TextView {
         initClock(attrs);
     }
 
+    public static Typeface sCacheTypeface;
+
+    private Typeface getTypefaceFromAssets(String path) {
+        if (sCacheTypeface == null) {
+            sCacheTypeface = Typeface.createFromAsset(HDApplication.getContext().getAssets(), path);
+        }
+        return sCacheTypeface;
+    }
+
     private void initClock(AttributeSet attrs) {
         if (mCalendar == null) {
             mCalendar = Calendar.getInstance();
         }
-        Typeface face = FontManager.getTypeface("fonts/Roboto-Thin.ttf");
-        setTypeface(face);
+        Typeface face = getTypefaceFromAssets("fonts/Roboto-Thin.ttf");
+        if (null != face) {
+            setTypeface(face);
+        }
         mFormatChangeObserver = new FormatChangeObserver();
         getContext().getContentResolver().registerContentObserver(Settings.System.CONTENT_URI,
                 true, mFormatChangeObserver);

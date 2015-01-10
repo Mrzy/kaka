@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.meiwen.notification.view;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.animation.LayoutTransition;
@@ -11,6 +12,8 @@ import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -55,8 +58,9 @@ public class NotificationLayout extends LinearLayout {
     protected static final int GAP_BETWEEN_NOTIFICATIONS = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 5);
 
-//    protected static final int NOTIFICATION_ITEM_HEIGHT = BaseInfoHelper.dip2px(
-//            HDApplication.getContext(), 64);
+    // protected static final int NOTIFICATION_ITEM_HEIGHT =
+    // BaseInfoHelper.dip2px(
+    // HDApplication.getContext(), 64);
 
     private static final SimpleDateFormat sSdf = new SimpleDateFormat("dd日 HH:mm");
 
@@ -121,7 +125,8 @@ public class NotificationLayout extends LinearLayout {
                                 }
                             }
                             removeNotification(id);
-                            UmengCustomEventManager.statisticalRemoveNotification(info.getId(), info.getPkg(), info.getType());
+                            UmengCustomEventManager.statisticalRemoveNotification(info.getId(),
+                                    info.getPkg(), info.getType());
                         } else {
                             mItemClickStartTime = currentTime;
                         }
@@ -135,7 +140,8 @@ public class NotificationLayout extends LinearLayout {
                     NotificationInterceptor.getInstance(getContext()).sendCustomNotification(ni);
                     NotificationGuideHelper.markAlreadyPromptHideNotificationMsg(getContext());
                 }
-                UmengCustomEventManager.statisticalPostNotification(info.getId(), info.getPkg(), info.getType());
+                UmengCustomEventManager.statisticalPostNotification(info.getId(), info.getPkg(),
+                        info.getType());
             }
         }
     };
@@ -262,7 +268,8 @@ public class NotificationLayout extends LinearLayout {
                                 }, 200);
                             }
                             removeNotification(id);
-                            UmengCustomEventManager.statisticalOpenNotification(info.getId(), info.getPkg(), info.getType());
+                            UmengCustomEventManager.statisticalOpenNotification(info.getId(),
+                                    info.getPkg(), info.getType());
                         }
                     });
                     return true;
@@ -300,13 +307,28 @@ public class NotificationLayout extends LinearLayout {
         Drawable smallDrawable = info.getSmallIcon();
         title.setText(info.getTitle());
         itemView.setTag(String.valueOf(info.getId()));
-        if (!showMsg && isWinxinOrQQ(info)) {
+        if (!showMsg) {
             largeIcon.setImageDrawable(smallDrawable);
             content.setText(getContext().getString(Res.string.hide_message_tip));
             smallIcon.setVisibility(View.GONE);
         } else {
             if (largeBmp != null) {
-                largeIcon.setImageBitmap(largeBmp);
+                // largeIcon.setImageBitmap(largeBmp);
+                String pkgName = info.getPkg();
+                if (pkgName == null) {
+                    return;
+                }
+                boolean isCallNotification = isCallNotification(getContext(), pkgName);
+                boolean isSmsNotification = isSmsNotification(getContext(), pkgName);
+                if (pkgName.equals(Constants.PKGNAME_WEIXIN)) {
+                    largeIcon.setImageResource(Res.drawable.notification_wechat);
+                } else if (pkgName.equals(Constants.PKGNAME_QQ)) {
+                    largeIcon.setImageResource(Res.drawable.notification_qq);
+                } else if (isCallNotification) {
+                    largeIcon.setImageResource(Res.drawable.notification_missed_call);
+                } else if (isSmsNotification) {
+                    largeIcon.setImageResource(Res.drawable.notification_message);
+                }
                 if (smallDrawable != null) {
                     smallIcon.setImageDrawable(smallDrawable);
                 }
@@ -318,6 +340,30 @@ public class NotificationLayout extends LinearLayout {
             }
             content.setText(info.getContent());
         }
+    }
+
+    private boolean isCallNotification(Context mContext, String pkgName) {
+        PackageManager sPackageManager = mContext.getPackageManager();
+        Intent dialerIntent = new Intent(Intent.ACTION_DIAL);
+        List<ResolveInfo> intentResolveInfos = sPackageManager.queryIntentActivities(dialerIntent,
+                PackageManager.GET_RECEIVERS);
+        if (intentResolveInfos.size() < 1) {
+            return false;
+        }
+        return intentResolveInfos.contains(pkgName);
+    }
+
+    private boolean isSmsNotification(Context context, String pkgName) {
+        PackageManager sPackageManager = context.getPackageManager();
+        Intent smsIntent = new Intent();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            smsIntent.setAction("android.provider.Telephony.SMS_DELIVER");// 4.4以上
+        } else {
+            smsIntent.setAction("android.provider.Telephony.SMS_RECEIVED");
+        }
+        List<ResolveInfo> resolveInfos = sPackageManager.queryBroadcastReceivers(smsIntent,
+                PackageManager.GET_RECEIVERS);
+        return resolveInfos.contains(pkgName);
     }
 
     private View createNotificationItemView(NotificationInfo info) {

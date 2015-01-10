@@ -217,7 +217,7 @@ public class FontManager {
 
     public static Typeface sCacheTypeface;
 
-    public static Typeface getTypeface(String path) {
+    public static Typeface getTypefaceFromAssets(String path) {
         if (sCacheTypeface == null) {
             sCacheTypeface = Typeface.createFromAsset(HDApplication.getContext().getAssets(), path);
         }

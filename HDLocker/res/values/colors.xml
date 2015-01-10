@@ -35,8 +35,19 @@
     <color name="batterymeter_charge_color_low">#FFed4c4c </color>
     <color name="batterymeter_regular_color">#FFfffefb </color>
     <color name="batterymeter_bolt_color">#B2000000</color> <!-- 70% black -->
-    
+
     <color name="init_prompt_v5_text_prompt_color">#aaffffff</color>
     <color name="init_prompt_v6_text_prompt_color">#636363</color>
+    <!-- unlock colors -->
+
+    <color name="unlock_regular_dot_colors_one">#fffe9f9b</color>
+    <color name="unlock_regular_dot_colors_two">#fffeba33</color>
+    <color name="unlock_regular_dot_colors_three">#ffffeb7b</color>
+    <color name="unlock_regular_dot_colors_four">#ff9dd3ff</color>
+    <color name="unlock_regular_dot_colors_five">#ff9cfffd</color>
+    <color name="unlock_regular_dot_colors_six">#ffccff7c</color>
+    <color name="unlock_regular_dot_colors_seven">#ffe1b5ff</color>
+    <color name="unlock_regular_dot_colors_eight">#ffff9cd3</color>
+    <color name="unlock_regular_dot_colors_nine">#ff7affe0</color>
 
 </resources>
