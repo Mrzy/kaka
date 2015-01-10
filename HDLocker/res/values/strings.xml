@@ -139,6 +139,7 @@
     <string name="network_error">网络出现异常，请稍候再试</string>
     <string name="data_error">服务器出现异常，请稍候再试</string>
     <string name="setting_individualization_open_lockscreen_voice">开启锁屏声音</string>
+    <string name="setting_individualization_open_gesture_lock">开启手势锁震动</string>
 
     <!-- keyboardview -->
     <string name="keyboardview_keycode_alt" msgid="4856868820040051939">"Alt"</string>

@@ -33,6 +33,8 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
 
     private SwitchButton mNotificationSButton;
 
+    private SwitchButton mGestureLockerSButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -59,6 +61,8 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
         mNotificationSButton = (SwitchButton) findViewById(R.id.individualization_open_message_notification_switch_button);
         mNotificationSButton.setOnCheckedChangeListener(this);
         mNotificationSButton.setChecked(isMessageNotification());
+        mGestureLockerSButton = (SwitchButton) findViewById(R.id.individualization_open_gesture_lock_switch_button);
+        mGestureLockerSButton.setOnCheckedChangeListener(this);
 
         // LayoutParams params = mLockerDefaultImageThumb.getLayoutParams();
         // int height = (int)
@@ -107,6 +111,13 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
                     openMessageNotification();
                 } else {
                     closeMessageNotification();
+                }
+                break;
+            case R.id.individualization_open_gesture_lock_switch_button:
+                if (isChecked) {
+                    openGestureLock();
+                } else {
+                    closeGestureLock();
                 }
                 break;
             default:
@@ -208,6 +219,18 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
 
     private boolean isMessageNotification() {
         return PandoraConfig.newInstance(this).isShowNotificationMessage();
+    }
+
+    private void closeGestureLock() {
+        PandoraConfig.newInstance(this).saveOpenGestureLock(false);
+    }
+
+    private void openGestureLock() {
+        PandoraConfig.newInstance(this).saveOpenGestureLock(true);
+    }
+
+    private boolean isGestureLock() {
+        return PandoraConfig.newInstance(this).isMessageNotification();
     }
 
     @Override

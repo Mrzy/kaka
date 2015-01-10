@@ -75,6 +75,8 @@ public class PandoraConfig {
 
     private static final String OPEN_MESSAGE_NOTIFICATION = "y";
 
+    private static final String OPEN_GESTURE_LOCK = "x";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -253,6 +255,17 @@ public class PandoraConfig {
 
     public boolean isShowNotificationMessage() {
         return mSp.getBoolean(OPEN_MESSAGE_NOTIFICATION, true);
+    }
+
+    public void saveOpenGestureLock(boolean isGestureLock) {
+        Editor editor = mSp.edit();
+        editor.putBoolean(OPEN_GESTURE_LOCK, isGestureLock);
+        editor.commit();
+    }
+
+    public boolean isOpenGestureLock() {
+        return mSp.getBoolean(OPEN_GESTURE_LOCK, false);
+
     }
 
     public void saveLockDefaultFileName(String fileName) {
