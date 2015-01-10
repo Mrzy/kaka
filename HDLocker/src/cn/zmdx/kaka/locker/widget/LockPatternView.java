@@ -359,14 +359,14 @@ public class LockPatternView extends View {
 
     private void initRegularDotColor() {
         mRegularDotColor[0][0] = Color.WHITE;
-        mRegularDotColor[0][1] = Color.RED;
-        mRegularDotColor[0][2] = Color.BLACK;
-        mRegularDotColor[1][0] = Color.CYAN;
-        mRegularDotColor[1][1] = Color.GRAY;
-        mRegularDotColor[1][2] = Color.GREEN;
-        mRegularDotColor[2][0] = Color.MAGENTA;
-        mRegularDotColor[2][1] = Color.YELLOW;
-        mRegularDotColor[2][2] = Color.BLUE;
+        mRegularDotColor[0][1] = Color.WHITE;
+        mRegularDotColor[0][2] = Color.WHITE;
+        mRegularDotColor[1][0] = Color.WHITE;
+        mRegularDotColor[1][1] = Color.WHITE;
+        mRegularDotColor[1][2] = Color.WHITE;
+        mRegularDotColor[2][0] = Color.WHITE;
+        mRegularDotColor[2][1] = Color.WHITE;
+        mRegularDotColor[2][2] = Color.WHITE;
     }
 
     public CellState[][] getCellStates() {
