@@ -139,11 +139,11 @@ public class LockPatternView extends View {
 
     private int mAspect;
 
-//    private int mRegularColor;
-//
-//    private int mErrorColor;
-//
-//    private int mSuccessColor;
+    // private int mRegularColor;
+    //
+    // private int mErrorColor;
+    //
+    // private int mSuccessColor;
 
     private Interpolator mFastOutSlowInInterpolator;
 
@@ -304,17 +304,24 @@ public class LockPatternView extends View {
         mPathPaint.setAntiAlias(true);
         mPathPaint.setDither(true);
 
-//        mRegularColor = getResources().getColor(R.color.lock_pattern_view_regular_color);
-//        mErrorColor = getResources().getColor(R.color.lock_pattern_view_error_color);
-//        mSuccessColor = getResources().getColor(R.color.lock_pattern_view_success_color);
-//        mRegularColor = a.getColor(R.styleable.LockPatternView_regularColor, mRegularColor);
-//        mErrorColor = a.getColor(R.styleable.LockPatternView_errorColor, mErrorColor);
-//        mSuccessColor = a.getColor(R.styleable.LockPatternView_successColor, mSuccessColor);
+        // mRegularColor =
+        // getResources().getColor(R.color.lock_pattern_view_regular_color);
+        // mErrorColor =
+        // getResources().getColor(R.color.lock_pattern_view_error_color);
+        // mSuccessColor =
+        // getResources().getColor(R.color.lock_pattern_view_success_color);
+        // mRegularColor = a.getColor(R.styleable.LockPatternView_regularColor,
+        // mRegularColor);
+        // mErrorColor = a.getColor(R.styleable.LockPatternView_errorColor,
+        // mErrorColor);
+        // mSuccessColor = a.getColor(R.styleable.LockPatternView_successColor,
+        // mSuccessColor);
 
-//        int pathColor = a.getColor(R.styleable.LockPatternView_pathColor, mRegularColor);
+        // int pathColor = a.getColor(R.styleable.LockPatternView_pathColor,
+        // mRegularColor);
         a.recycle();
         initRegularDotColor();
-//        mPathPaint.setColor(pathColor);
+        // mPathPaint.setColor(pathColor);
 
         mPathPaint.setStyle(Paint.Style.STROKE);
         mPathPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -335,7 +342,7 @@ public class LockPatternView extends View {
             for (int j = 0; j < 3; j++) {
                 mCellStates[i][j] = new CellState();
                 mCellStates[i][j].size = mDotSize;
-                mCellStates[i][j].color = mRegularDotColor [i][j];
+                mCellStates[i][j].color = mRegularDotColor[i][j];
             }
         }
 
@@ -610,9 +617,7 @@ public class LockPatternView extends View {
             }
             addCellToPattern(cell);
             if (mEnableHapticFeedback) {
-                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,
-                        HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
-                                | HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             }
             return cell;
         }
@@ -953,6 +958,7 @@ public class LockPatternView extends View {
     }
 
     private Shader mPathShader = null;
+
     @Override
     protected void onDraw(Canvas canvas) {
         final ArrayList<Cell> pattern = mPattern;
@@ -1022,7 +1028,7 @@ public class LockPatternView extends View {
         final boolean drawPath = !mInStealthMode;
 
         if (drawPath) {
-//            mPathPaint.setColor(getCurrentColor(true /* partOfPattern */));
+            // mPathPaint.setColor(getCurrentColor(true /* partOfPattern */));
             mPathPaint.setColor(Color.RED);
             mPathPaint.setShader(mPathShader);
 
@@ -1049,10 +1055,19 @@ public class LockPatternView extends View {
                     currentPath.moveTo(lastX, lastY);
                     if (state.lineEndX != Float.MIN_VALUE && state.lineEndY != Float.MIN_VALUE) {
                         currentPath.lineTo(state.lineEndX, state.lineEndY);
-                        mPathShader = new LinearGradient(lastX, lastY, state.lineEndX, state.lineEndY, new int[]{lastCellState.color, state.color}, new float[]{0, 1.0f}, TileMode.MIRROR);
+                        mPathShader = new LinearGradient(lastX, lastY, state.lineEndX,
+                                state.lineEndY, new int[] {
+                                        lastCellState.color, state.color
+                                }, new float[] {
+                                        0, 1.0f
+                                }, TileMode.MIRROR);
                     } else {
                         currentPath.lineTo(centerX, centerY);
-                        mPathShader = new LinearGradient(lastX, lastY, centerX, centerY, new int[]{lastCellState.color, state.color}, new float[]{0, 1.0f}, TileMode.MIRROR);
+                        mPathShader = new LinearGradient(lastX, lastY, centerX, centerY, new int[] {
+                                lastCellState.color, state.color
+                        }, new float[] {
+                                0, 1.0f
+                        }, TileMode.MIRROR);
                     }
                     mPathPaint.setShader(mPathShader);
                     canvas.drawPath(currentPath, mPathPaint);
@@ -1083,27 +1098,28 @@ public class LockPatternView extends View {
         return Math.min(1f, Math.max(0f, (frac - 0.3f) * 4f));
     }
 
-//    private int getCurrentColor(boolean partOfPattern) {
-//        if (!partOfPattern || mInStealthMode || mPatternInProgress) {
-//            // unselected circle
-//            return mRegularColor;
-//        } else if (mPatternDisplayMode == DisplayMode.Wrong) {
-//            // the pattern is wrong
-//            return mErrorColor;
-//        } else if (mPatternDisplayMode == DisplayMode.Correct
-//                || mPatternDisplayMode == DisplayMode.Animate) {
-//            return mSuccessColor;
-//        } else {
-//            throw new IllegalStateException("unknown display mode " + mPatternDisplayMode);
-//        }
-//    }
+    // private int getCurrentColor(boolean partOfPattern) {
+    // if (!partOfPattern || mInStealthMode || mPatternInProgress) {
+    // // unselected circle
+    // return mRegularColor;
+    // } else if (mPatternDisplayMode == DisplayMode.Wrong) {
+    // // the pattern is wrong
+    // return mErrorColor;
+    // } else if (mPatternDisplayMode == DisplayMode.Correct
+    // || mPatternDisplayMode == DisplayMode.Animate) {
+    // return mSuccessColor;
+    // } else {
+    // throw new IllegalStateException("unknown display mode " +
+    // mPatternDisplayMode);
+    // }
+    // }
 
     /**
      * @param partOfPattern Whether this circle is part of the pattern.
      */
     private void drawCircle(Canvas canvas, float centerX, float centerY, float size,
             boolean partOfPattern, float alpha, int color) {
-//        mPaint.setColor(getCurrentColor(partOfPattern));
+        // mPaint.setColor(getCurrentColor(partOfPattern));
         mPaint.setColor(color);
         mPaint.setAlpha((int) (alpha * 255));
         canvas.drawCircle(centerX, centerY, size / 2, mPaint);
