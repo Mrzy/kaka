@@ -80,7 +80,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal" >
 
-                            <cn.zmdx.kaka.locker.battery.BatteryView
+                            <cn.zmdx.kaka.locker.meiwen.battery.BatteryView
                                 android:id="@+id/batteryView"
                                 android:layout_width="10dp"
                                 android:layout_height="15dp"
@@ -162,7 +162,7 @@
                     android:clickable="true"
                     android:focusable="false" >
 
-                    <cn.zmdx.kaka.locker.notification.view.NotificationLayout
+                    <cn.zmdx.kaka.locker.meiwen.notification.view.NotificationLayout
                         android:id="@+id/lock_bottom_notification_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -170,7 +170,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:paddingTop="30dp" >
-                    </cn.zmdx.kaka.locker.notification.view.NotificationLayout>
+                    </cn.zmdx.kaka.locker.meiwen.notification.view.NotificationLayout>
 
                     <FrameLayout
                         android:id="@+id/camera_outline"
