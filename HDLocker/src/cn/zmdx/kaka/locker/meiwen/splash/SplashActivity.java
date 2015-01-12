@@ -31,13 +31,14 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(Res.layout.pandora_splash);
-//        initDesktopDrawable();
+        // initDesktopDrawable();
         mIcon = (ImageView) findViewById(Res.id.pandora_splash_icon);
         mAppName = (TypefaceTextView) findViewById(Res.id.pandora_splash_app_name);
         mVersion = (TypefaceTextView) findViewById(Res.id.pandora_splash_version);
-        invisiableViews(mIcon, mAppName, mVersion);
+        // invisiableViews(mIcon, mAppName, mVersion);
         initVersion();
-        processAnimations();
+        // processAnimations();
+        goToMainSettingsActivity();
     }
 
     private void processAnimations() {
@@ -86,7 +87,7 @@ public class SplashActivity extends Activity {
                         Res.anim.umeng_fb_slide_out_from_left);
                 finish();
             }
-        }, 500);
+        }, 1000);
     }
 
     private void invisiableViews(View... views) {
@@ -107,16 +108,7 @@ public class SplashActivity extends Activity {
 
     private void initVersion() {
         String version = BaseInfoHelper.getPkgVersionName(this);
-        mVersion.setText("V " + version);
+        mVersion.setText(version+"版本");
     }
 
-    private void initDesktopDrawable() {
-        HDBThreadUtils.runOnWorker(new Runnable() {
-
-            @Override
-            public void run() {
-                WallpaperUtils.initDefaultWallpaper();
-            }
-        });
-    }
 }

@@ -7,7 +7,7 @@
         <!-- 描边 -->
         <!-- <stroke android:dashGap="30dp" android:dashWidth="5dp" android:width="2dp" android:color="#dcdcdc" /> -->
         <!-- 圆角 -->
-        <corners android:radius="2dp" />
+        <corners android:radius="40dp" />
 
-        <solid android:color="#0096ff" />
+        <solid android:color="#45add9" />
 </shape>

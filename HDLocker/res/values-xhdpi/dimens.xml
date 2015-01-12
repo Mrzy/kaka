@@ -20,7 +20,7 @@
     <dimen name="init_setting_V5_allow_floating_window_prompt_margin_top">207dp</dimen>
     <dimen name="init_setting_V5_trust_prompt_margin_top">70dp</dimen>
     <!-- onlinePaper -->
-    <dimen name="pandora_online_wallpaper_panelHeight">68dp</dimen>
+    <dimen name="pandora_online_wallpaper_panelHeight">78dp</dimen>
     <dimen name="pandora_online_wallpaper_margin_top">20dp</dimen>
     <dimen name="pandora_online_wallpaper_margin_left">18dp</dimen>
     <dimen name="pandora_online_wallpaper_margin_bottom">15dp</dimen>

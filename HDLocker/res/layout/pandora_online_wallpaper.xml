@@ -157,13 +157,15 @@
                     </LinearLayout>
                 </ScrollView>
 
-                <Button
+                <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                     android:id="@+id/pandora_online_wallpaper_apply_button"
                     android:layout_width="@dimen/pandora_online_wallpaper_apply_button_width"
                     android:layout_height="@dimen/pandora_online_wallpaper_apply_button_height"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center_horizontal|bottom"
+                    android:gravity="center"
+                    android:text="@string/pandora_online_wallpaper_apple"
                     android:layout_marginBottom="@dimen/pandora_online_wallpaper_apply_button_margin_bottom"
                     android:layout_marginTop="@dimen/pandora_online_wallpaper_apply_button_margin_top"
                     android:background="@drawable/pandora_online_wallpaper_apply_selector" />

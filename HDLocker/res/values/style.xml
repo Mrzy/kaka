@@ -61,7 +61,7 @@
     </style>
 
     <style name="init_setting_button">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="pandora_dialog_style" parent="@android:style/Theme.Dialog">

@@ -13,7 +13,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop" />
 
-    <TextView
+    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/card_item_large_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

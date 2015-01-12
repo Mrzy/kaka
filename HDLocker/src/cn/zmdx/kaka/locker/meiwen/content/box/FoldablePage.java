@@ -380,7 +380,7 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
                 mShareIcon.setVisibility(View.VISIBLE);
             }
             isShareLayoutVisible = !isShareLayoutVisible;
-        } else if (v == mShareSina) {
+        } else if (v == mShareIcon) {
             if (isMenuVisible) {
                 mShareViewStub.setVisibility(View.GONE);
             } else {

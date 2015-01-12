@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
-import android.widget.TextView;
 import cn.zmdx.kaka.locker.meiwen.HDApplication;
 import cn.zmdx.kaka.locker.meiwen.ImageLoaderManager;
 import cn.zmdx.kaka.locker.meiwen.Res;
@@ -24,6 +23,7 @@ import cn.zmdx.kaka.locker.meiwen.content.box.IFoldablePage;
 import cn.zmdx.kaka.locker.meiwen.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.meiwen.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.meiwen.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView;
 
 import com.android.volley.misc.ImageUtils;
 import com.nineoldandroids.view.ViewHelper;
@@ -96,9 +96,9 @@ public class FoldableCard extends Card {
     @Override
     public void setupInnerViewElements(ViewGroup parent, View view) {
         ImageView imageView = null;
-        TextView titleView = null;
+        TypefaceTextView titleView = null;
         imageView = (ImageView) view.findViewById(Res.id.card_item_large_imageview);
-        titleView = (TextView) view.findViewById(Res.id.card_item_large_title);
+        titleView = (TypefaceTextView) view.findViewById(Res.id.card_item_large_title);
 
         final Options opt = setImageViewSize(imageView, mData.getUrl());
 

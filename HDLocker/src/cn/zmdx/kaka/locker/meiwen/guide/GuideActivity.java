@@ -16,7 +16,6 @@ public class GuideActivity extends BaseGuideActivity {
         View rootView = view.findViewById(Res.id.guide_lock_top);
         initBackground(rootView);
         btn = (Button) view.findViewById(Res.id.go_setting);
-        btn.setBackgroundResource(Res.drawable.guide_button_background_selector);
         return view;
     }
 

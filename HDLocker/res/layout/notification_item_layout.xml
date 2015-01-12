@@ -6,10 +6,10 @@
     android:background="@drawable/pandora_notification_shape"
     android:clickable="true"
     android:focusable="false"
-    android:paddingTop="3dp"
-    android:paddingBottom="3dp"
     android:focusableInTouchMode="false"
-    android:gravity="center_vertical" >
+    android:gravity="center_vertical"
+    android:paddingBottom="3dp"
+    android:paddingTop="3dp" >
 
     <ImageView
         android:id="@+id/largeIcon"
@@ -30,7 +30,8 @@
         android:layout_alignRight="@id/largeIcon"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:visibility="gone" />
 
     <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/title"
@@ -66,24 +67,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="5dp"
-        android:textColor="#90ffffff"
-        android:textSize="12dp"
         android:layout_alignParentTop="true"
+        android:layout_marginRight="25dp"
         android:layout_marginTop="4dp"
-        />
+        android:textColor="#90ffffff"
+        android:textSize="12dp" />
 
     <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/handleTip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="5dp"
+        android:layout_below="@id/date"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/notification_item_handleTip"
         android:textColor="#60ffffff"
         android:textSize="10dp"
-        android:text="@string/notification_item_handleTip"
-        android:layout_below="@id/date"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
+
 </RelativeLayout>

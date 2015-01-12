@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/pandora_logo"
+            android:background="@drawable/ic_launcher"
             android:contentDescription="@string/contentDescription" />
 
         <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
@@ -64,7 +64,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/setting_about_pandora_margin_one"
             android:gravity="center_horizontal"
-            android:text="@string/setting_about_text"
+            android:text="@string/splash_prompt"
             android:textColor="#7b7c7e"
             android:textSize="13sp" />
     </LinearLayout>

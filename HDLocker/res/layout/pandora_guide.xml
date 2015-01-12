@@ -36,15 +36,18 @@
             android:layout_below="@id/appName"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="@string/setting_about_text"
+            android:text="@string/splash_prompt"
             android:textColor="#ffffff"
-            android:textSize="14dp" />
+            android:textSize="12dp" />
 
         <cn.zmdx.kaka.locker.meiwen.widget.BaseButton
             android:id="@+id/go_setting"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/init_setting_basebutton_height"
             android:layout_below="@id/explore_text"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textSize="15sp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="90dp"
             android:text="@string/guide_button_text" />

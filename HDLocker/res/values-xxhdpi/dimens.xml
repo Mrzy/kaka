@@ -59,7 +59,7 @@
     <dimen name="pandora_box_nodata_show_image_top_height">150dp</dimen>
     
     <!-- onlinePaper -->
-    <dimen name="pandora_online_wallpaper_panelHeight">68dp</dimen>
+    <dimen name="pandora_online_wallpaper_panelHeight">78dp</dimen>
     <dimen name="pandora_online_wallpaper_margin_top">20dp</dimen>
     <dimen name="pandora_online_wallpaper_margin_left">18dp</dimen>
     <dimen name="pandora_online_wallpaper_margin_bottom">15dp</dimen>
@@ -93,5 +93,8 @@
     <dimen name="pandora_number_lock_translation_x_displacement">4dp</dimen>
     
     <dimen name="init_prompt_layout_margin_left">5dp</dimen>
+    
+    <dimen name="init_setting_textview_margin_left">45dp</dimen>
+    <dimen name="init_setting_basebutton_height">40dp</dimen>
     
 </resources>

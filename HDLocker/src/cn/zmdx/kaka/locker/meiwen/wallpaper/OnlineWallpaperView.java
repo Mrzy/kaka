@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -68,7 +67,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private TypefaceTextView mAuthor;
 
-    private Button mApplyButton;
+    private TypefaceTextView mApplyButton;
 
     private ProgressBar mPreviewProgressBar;
 
@@ -157,7 +156,7 @@ public class OnlineWallpaperView extends LinearLayout {
                 .findViewById(Res.id.pandora_online_wallpaper_preview_author);
         mPreviewProgressBar = (ProgressBar) mRootView
                 .findViewById(Res.id.pandora_online_wallpaper_preview_progress);
-        mApplyButton = (Button) mRootView.findViewById(Res.id.pandora_online_wallpaper_apply_button);
+        mApplyButton = (TypefaceTextView) mRootView.findViewById(Res.id.pandora_online_wallpaper_apply_button);
         mApplyButton.setOnClickListener(new OnClickListener() {
 
             @Override
