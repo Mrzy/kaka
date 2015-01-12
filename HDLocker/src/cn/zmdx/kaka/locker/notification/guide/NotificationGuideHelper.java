@@ -15,6 +15,11 @@ public class NotificationGuideHelper {
             return null;
         }
 
+        //如果是第一次打开锁屏，会提示解锁及下拉的引导，避免过多引导，这里先不显示通知引导
+        if (PandoraConfig.newInstance(context).getLockScreenTimes() < 1) {
+            return null;
+        }
+
         int preProgress = getGuideProgress(context);
         switch (preProgress) {
             case 0:// 通知功能说明，提示双击移除
