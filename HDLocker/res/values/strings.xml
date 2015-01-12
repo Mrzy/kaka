@@ -180,5 +180,6 @@
     <string name="notify_guide_hide_message_content">右划此处解锁立即设置隐藏，如果暂时不设置双击移除此通知</string>
     <string name="hide_message_tip">未读消息</string>
     <string name="notification_item_handleTip">右划查看\n双击忽略</string>
+    <string name="tip_open_notification_permission">请勾选【潘多拉锁屏】</string>
 
 </resources>

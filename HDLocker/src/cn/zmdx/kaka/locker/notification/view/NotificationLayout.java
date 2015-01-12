@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.IMainPanelListener;
@@ -243,14 +244,7 @@ public class NotificationLayout extends LinearLayout {
 
                                     @Override
                                     public void run() {
-                                        Intent in = new Intent();
-                                        in.setClass(getContext(), InitPromptActivity.class);
-                                        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        in.putExtra("isMIUI", false);
-                                        in.putExtra("mMIUIVersion", PandoraUtils.MUIU_V5);
-                                        in.putExtra("type",
-                                                InitPromptActivity.PROMPT_READ_NOTIFICATION);
-                                        getContext().startActivity(in);
+                                        Toast.makeText(getContext(), getResources().getString(R.string.tip_open_notification_permission), Toast.LENGTH_LONG).show();
                                     }
                                 }, 200);
                             }

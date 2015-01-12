@@ -88,7 +88,7 @@ public class PandoraConfig {
     }
 
     public boolean isPandolaLockerOn() {
-        return mSp.getBoolean(PANDORA_LOCKER_SP_NAME, false);
+        return mSp.getBoolean(PANDORA_LOCKER_SP_NAME, true);
     }
 
     public void savePandolaLockerState(boolean isOn) {
