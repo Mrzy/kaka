@@ -15,12 +15,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.IMainPanelListener;
@@ -59,6 +61,8 @@ public class NotificationLayout extends LinearLayout {
 //            HDApplication.getContext(), 64);
 
     private static final SimpleDateFormat sSdf = new SimpleDateFormat("dd日 HH:mm");
+
+    protected static final float ITEM_RIGHT_ANIMATOR_DISTANCE = BaseInfoHelper.dip2px(HDApplication.getContext(), 50);
 
     public NotificationLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -121,7 +125,8 @@ public class NotificationLayout extends LinearLayout {
                                 }
                             }
                             removeNotification(id);
-                            UmengCustomEventManager.statisticalRemoveNotification(info.getId(), info.getPkg(), info.getType());
+                            UmengCustomEventManager.statisticalRemoveNotification(info.getId(),
+                                    info.getPkg(), info.getType());
                         } else {
                             mItemClickStartTime = currentTime;
                         }
@@ -129,13 +134,16 @@ public class NotificationLayout extends LinearLayout {
                 });
                 addNotificationItem(itemView);
                 if (isWinxinOrQQ(info) && !hasAlreadyPromptHideNotificationMsg()
-                        && PandoraConfig.newInstance(getContext()).isShowNotificationMessage()) {
+                        && PandoraConfig.newInstance(getContext()).isShowNotificationMessage()
+                        && !TextUtils.isEmpty(info.getTitle())
+                        && !TextUtils.isEmpty(info.getContent())) {
                     NotificationInfo ni = PandoraNotificationFactory
                             .createGuideHideNotificationInfo();
                     NotificationInterceptor.getInstance(getContext()).sendCustomNotification(ni);
                     NotificationGuideHelper.markAlreadyPromptHideNotificationMsg(getContext());
                 }
-                UmengCustomEventManager.statisticalPostNotification(info.getId(), info.getPkg(), info.getType());
+                UmengCustomEventManager.statisticalPostNotification(info.getId(), info.getPkg(),
+                        info.getType());
             }
         }
     };
@@ -221,8 +229,8 @@ public class NotificationLayout extends LinearLayout {
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    v.performClick();
                     mCurrentTouchView = mItemView;
+                    v.performClick();
                     View contentLayout = mItemView.findViewById(R.id.pandora_notification_hint);
                     contentLayout
                             .setBackgroundResource(R.drawable.pandora_notification_click_shape);
@@ -251,18 +259,13 @@ public class NotificationLayout extends LinearLayout {
 
                                     @Override
                                     public void run() {
-                                        Intent in = new Intent();
-                                        in.setClass(getContext(), InitPromptActivity.class);
-                                        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        in.putExtra("isMIUI", false);
-                                        in.putExtra("mMIUIVersion", PandoraUtils.MUIU_V5);
-                                        in.putExtra("type", InitPromptActivity.PROMPT_READ_NOTIFICATION);
-                                        getContext().startActivity(in);
+                                        Toast.makeText(getContext(), getResources().getString(R.string.tip_open_notification_permission), Toast.LENGTH_LONG).show();
                                     }
                                 }, 200);
                             }
                             removeNotification(id);
-                            UmengCustomEventManager.statisticalOpenNotification(info.getId(), info.getPkg(), info.getType());
+                            UmengCustomEventManager.statisticalOpenNotification(info.getId(),
+                                    info.getPkg(), info.getType());
                         }
                     });
                     return true;
@@ -337,17 +340,18 @@ public class NotificationLayout extends LinearLayout {
     protected void onAttachedToWindow() {
         LockScreenManager.getInstance().registMainPanelListener(mMainPanelListener);
         LockScreenManager.getInstance().registPullDownListener(mPullDownListener);
-        sendOpenNotificationService();
+        sendGuideNotificationIfNeeded();
         super.onAttachedToWindow();
     }
 
-    private void sendOpenNotificationService() {
+    private void sendGuideNotificationIfNeeded() {
         final NotificationInfo guideNi = NotificationGuideHelper.getNextGuide(getContext());
         if (guideNi != null) {
             NotificationInterceptor.getInstance(getContext()).sendCustomNotification(guideNi);
         }
     }
 
+    private boolean mIsRunRightArrowAnimator = false;
     /**
      * 锁屏页右划解锁的监听器
      */
@@ -361,6 +365,17 @@ public class NotificationLayout extends LinearLayout {
         @Override
         public void onMainPanelClosed() {
             resetState();
+        }
+
+        @Override
+        public void onMainPanelSlide(View panel, float slideOffset) {
+            // 为通知view执行一个向右的偏移动画
+            if (!mIsRunRightArrowAnimator) {
+                if (mCurrentTouchView != null) {
+                    mIsRunRightArrowAnimator = true;
+                    mCurrentTouchView.animate().translationX(ITEM_RIGHT_ANIMATOR_DISTANCE).setDuration(300).start();
+                }
+            }
         }
     };
 
@@ -379,7 +394,14 @@ public class NotificationLayout extends LinearLayout {
         if (mCurrentTouchView != null) {
             View contentLayout = mCurrentTouchView.findViewById(R.id.pandora_notification_hint);
             contentLayout.setBackgroundResource(R.drawable.pandora_notification_shape);
-            mCurrentTouchView.findViewById(R.id.handleTip).setVisibility(View.GONE);
+            mCurrentTouchView.findViewById(R.id.handleTip).setVisibility(View.INVISIBLE);
+
+            //如果通知view执行了向右的偏移动画，将其恢复原位
+            if (mIsRunRightArrowAnimator) {
+                mCurrentTouchView.animate().translationX(0).setDuration(300).start();
+                mIsRunRightArrowAnimator = false;
+            }
+            mCurrentTouchView = null;
         }
         LockScreenManager.getInstance().setRunnableAfterUnLock(null);
     }

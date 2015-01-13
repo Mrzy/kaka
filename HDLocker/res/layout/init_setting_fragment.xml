@@ -202,6 +202,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/init_setting_button_margin_top"
                         android:gravity="center"
+                        android:visibility="gone"
                         android:text="@string/init_setting_to_set" />
                 </LinearLayout>
             </LinearLayout>

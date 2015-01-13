@@ -1029,7 +1029,7 @@ public class LockPatternView extends View {
 
         if (drawPath) {
             // mPathPaint.setColor(getCurrentColor(true /* partOfPattern */));
-            mPathPaint.setColor(Color.RED);
+            mPathPaint.setColor(Color.WHITE);
             mPathPaint.setShader(mPathShader);
 
             boolean anyCircles = false;

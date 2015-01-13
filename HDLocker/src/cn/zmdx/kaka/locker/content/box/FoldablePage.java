@@ -235,6 +235,11 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
             resetState();
         }
 
+        @Override
+        public void onMainPanelSlide(View panel, float slideOffset) {
+            
+        }
+
     };
 
     private OnBackPressedListener mBackPressedListener = new OnBackPressedListener() {

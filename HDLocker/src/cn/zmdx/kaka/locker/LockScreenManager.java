@@ -520,10 +520,10 @@ public class LockScreenManager {
             @Override
             public void onClick(View v) {
                 mEntireView.removeView(guideView);
+                PandoraConfig.newInstance(mContext).saveLockScreenTimes(1);
             }
         });
         guideView.setImageResource(R.drawable.pandora_lock_screen_guide);
-        PandoraConfig.newInstance(mContext).saveLockScreenTimes(1);
     }
 
     /**
@@ -541,6 +541,7 @@ public class LockScreenManager {
                     passView.setTranslationX((1.0f - slideOffset) * passView.getMeasuredWidth());
                 }
             }
+            dispatchMainPanelSlide(panel, slideOffset);
         }
 
         @Override
@@ -561,6 +562,8 @@ public class LockScreenManager {
         void onMainPanelOpened();
 
         void onMainPanelClosed();
+
+        void onMainPanelSlide(View panel, float slideOffset);
     }
 
     private Set<IMainPanelListener> mMainPanelCallback = new HashSet<IMainPanelListener>();
@@ -580,6 +583,14 @@ public class LockScreenManager {
         }
         synchronized (mMainPanelCallback) {
             mMainPanelCallback.remove(listener);
+        }
+    }
+
+    private void dispatchMainPanelSlide(View panel, float slideOffset) {
+        synchronized (mMainPanelCallback) {
+            for (IMainPanelListener listener : mMainPanelCallback) {
+                listener.onMainPanelSlide(panel, slideOffset);
+            }
         }
     }
 
@@ -652,13 +663,6 @@ public class LockScreenManager {
     private void initOnlinePaperPanel() {
         mOnlineViewContainer = (LinearLayout) mEntireView
                 .findViewById(R.id.pandora_online_wallpaper);
-        final ImageView mPullImage = (ImageView) mEntireView
-                .findViewById(R.id.lock_wallpaper_view_im);
-        int statusBarHeight = PandoraUtils.getStatusBarHeight(mContext);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0, statusBarHeight + 10, 0, 0);
-        mPullImage.setLayoutParams(lp);
         mOnlinePanel = (WallpaperPanelLayout) mEntireView
                 .findViewById(R.id.locker_wallpaper_sliding);
         mOnlinePanel
@@ -668,8 +672,6 @@ public class LockScreenManager {
                     public void onPanelSlide(View panel, float slideOffset) {
                         if (!isInit) {
                             isInit = true;
-                            mPullImage
-                                    .setImageResource(R.drawable.pandora_online_paper_pull_button_press);
                             initOnlinePaperPanelView();
                         }
                     }
@@ -682,7 +684,6 @@ public class LockScreenManager {
                     public void onPanelExpanded(View panel) {
                         mSliderView.setEnabled(false);
                         if (null != mOnlineWallpaperView) {
-                            createPullButtonAnimation(mPullImage, 0, 180);
                             mOnlineWallpaperView.initContentView();
                             mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
 
@@ -708,9 +709,6 @@ public class LockScreenManager {
                     @Override
                     public void onPanelCollapsed(View panel) {
                         isInit = false;
-                        mPullImage
-                                .setImageResource(R.drawable.pandora_online_paper_pull_button_normal);
-                        createPullButtonAnimation(mPullImage, 180, 360);
                         mSliderView.setEnabled(true);
                     }
 
@@ -718,13 +716,6 @@ public class LockScreenManager {
                     public void onPanelAnchored(View panel) {
                     }
                 });
-    }
-
-    private void createPullButtonAnimation(View view, float fromDegress, float toDegress) {
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(view, "rotation", fromDegress, toDegress);
-        rotation.setInterpolator(new DecelerateInterpolator());
-        rotation.setDuration(500);
-        rotation.start();
     }
 
     protected void initOnlinePaperPanelView() {

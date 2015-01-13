@@ -75,6 +75,8 @@ public class PandoraConfig {
 
     private static final String OPEN_MESSAGE_NOTIFICATION = "y";
 
+    private static final String ONLINE_WALLPAPER_DESC = "awd";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -88,7 +90,7 @@ public class PandoraConfig {
     }
 
     public boolean isPandolaLockerOn() {
-        return mSp.getBoolean(PANDORA_LOCKER_SP_NAME, false);
+        return mSp.getBoolean(PANDORA_LOCKER_SP_NAME, true);
     }
 
     public void savePandolaLockerState(boolean isOn) {
@@ -365,4 +367,13 @@ public class PandoraConfig {
     public void markAlreadyPromptHideNotificationMsg() {
         mSp.edit().putBoolean(KEY_HAS_ALREADY_HIDE_NOTIFY_MSG, true).commit();
     }
+
+    public String getOnlineWallPaperDesc(String fileName) {
+        return mSp.getString(ONLINE_WALLPAPER_DESC + fileName, "");
+    }
+
+    public void saveOnlineWallPaperDesc(String fileName, String desc) {
+        mSp.edit().putString(ONLINE_WALLPAPER_DESC + fileName, desc).commit();
+    }
+
 }
