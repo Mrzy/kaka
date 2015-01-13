@@ -6,7 +6,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.animation.Animator;
 import android.animation.LayoutTransition;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -17,6 +20,7 @@ import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,9 +40,7 @@ import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.notification.guide.NotificationGuideHelper;
-import cn.zmdx.kaka.locker.settings.InitPromptActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
@@ -63,7 +65,8 @@ public class NotificationLayout extends LinearLayout {
 
     private static final SimpleDateFormat sSdf = new SimpleDateFormat("dd日 HH:mm");
 
-    protected static final float ITEM_RIGHT_ANIMATOR_DISTANCE = BaseInfoHelper.dip2px(HDApplication.getContext(), 50);
+    protected static final float ITEM_RIGHT_ANIMATOR_DISTANCE = BaseInfoHelper.dip2px(
+            HDApplication.getContext(), 50);
 
     public NotificationLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -84,6 +87,26 @@ public class NotificationLayout extends LinearLayout {
         setOrientation(LinearLayout.VERTICAL);
         final LayoutTransition transitioner = new LayoutTransition();
         setLayoutTransition(transitioner);
+        initLayoutAnimation(transitioner);
+    }
+
+    private void initLayoutAnimation(LayoutTransition transition) {
+        Animator addAnimator = null;
+        Animator removeAnimator = null;
+        Animator changingAddAnimator = null;
+        Animator changingRemoveAnimator = null;
+
+        PropertyValuesHolder pvhScaleX = PropertyValuesHolder.ofFloat("scaleX", 0f, 1f);
+        PropertyValuesHolder pvhScaleY = PropertyValuesHolder.ofFloat("scaleY", 0f, 1f);
+        addAnimator = ObjectAnimator.ofPropertyValuesHolder(this, pvhScaleX, pvhScaleY)
+                .setDuration(transition.getDuration(LayoutTransition.APPEARING));
+        transition.setAnimator(LayoutTransition.APPEARING, addAnimator);
+
+        PropertyValuesHolder rmScaleX = PropertyValuesHolder.ofFloat("scaleX", 1f, 0);
+        PropertyValuesHolder rmScaleY = PropertyValuesHolder.ofFloat("scaleY", 1f, 0);
+        removeAnimator = ObjectAnimator.ofPropertyValuesHolder(this, rmScaleX, rmScaleY)
+                .setDuration(transition.getDuration(LayoutTransition.DISAPPEARING));
+        transition.setAnimator(LayoutTransition.DISAPPEARING, removeAnimator);
     }
 
     private long mItemClickStartTime = 0;
@@ -91,6 +114,7 @@ public class NotificationLayout extends LinearLayout {
     private NotificationInterceptor.INotificationListener mNotificationListener = new NotificationInterceptor.INotificationListener() {
         @Override
         public void onRemoved(int notifyId) {
+            Log.e("zy", "onRemoved,notifyId:" + notifyId);
             removeNotification(String.valueOf(notifyId));
         }
 
@@ -244,7 +268,11 @@ public class NotificationLayout extends LinearLayout {
 
                                     @Override
                                     public void run() {
-                                        Toast.makeText(getContext(), getResources().getString(R.string.tip_open_notification_permission), Toast.LENGTH_LONG).show();
+                                        Toast.makeText(
+                                                getContext(),
+                                                getResources().getString(
+                                                        R.string.tip_open_notification_permission),
+                                                Toast.LENGTH_LONG).show();
                                     }
                                 }, 200);
                             }
@@ -337,6 +365,7 @@ public class NotificationLayout extends LinearLayout {
     }
 
     private boolean mIsRunRightArrowAnimator = false;
+
     /**
      * 锁屏页右划解锁的监听器
      */
@@ -358,7 +387,8 @@ public class NotificationLayout extends LinearLayout {
             if (!mIsRunRightArrowAnimator) {
                 if (mCurrentTouchView != null) {
                     mIsRunRightArrowAnimator = true;
-                    mCurrentTouchView.animate().translationX(ITEM_RIGHT_ANIMATOR_DISTANCE).setDuration(300).start();
+                    mCurrentTouchView.animate().translationX(ITEM_RIGHT_ANIMATOR_DISTANCE)
+                            .setDuration(300).start();
                 }
             }
         }
@@ -381,7 +411,7 @@ public class NotificationLayout extends LinearLayout {
             contentLayout.setBackgroundResource(R.drawable.pandora_notification_shape);
             mCurrentTouchView.findViewById(R.id.handleTip).setVisibility(View.INVISIBLE);
 
-            //如果通知view执行了向右的偏移动画，将其恢复原位
+            // 如果通知view执行了向右的偏移动画，将其恢复原位
             if (mIsRunRightArrowAnimator) {
                 mCurrentTouchView.animate().translationX(0).setDuration(300).start();
                 mIsRunRightArrowAnimator = false;

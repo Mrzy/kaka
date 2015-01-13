@@ -6,9 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import cn.zmdx.kaka.locker.BuildConfig;
-import cn.zmdx.kaka.locker.utils.HDBLOG;
-
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,6 +23,8 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 @SuppressLint("NewApi")
 public final class PandoraNotificationService extends NotificationListenerService {
@@ -207,7 +206,12 @@ public final class PandoraNotificationService extends NotificationListenerServic
         Message msg = interceptor.obtainMessage();
         msg.what = NotificationInterceptor.MSG_NOTIFICATION_POST;
         msg.obj = sbn;
-        interceptor.sendMessage(msg);
+        // 如果是qq，延迟200ms，以解决连续收到qq消息时会remove两次导致消息被移除的问题
+        if (sbn.getPackageName().equals(Constants.PKGNAME_QQ)) {
+            interceptor.sendMessageDelayed(msg, 200);
+        } else {
+            interceptor.sendMessage(msg);
+        }
     }
 
     @Override
