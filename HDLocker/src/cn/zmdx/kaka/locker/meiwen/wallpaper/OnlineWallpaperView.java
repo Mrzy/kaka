@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,9 +125,11 @@ public class OnlineWallpaperView extends LinearLayout {
     }
 
     private void initRootView() {
-        mRootView = LayoutInflater.from(mContext).inflate(Res.layout.pandora_online_wallpaper, null);
+        mRootView = LayoutInflater.from(mContext)
+                .inflate(Res.layout.pandora_online_wallpaper, null);
         addView(mRootView);
-        mContentView = (LinearLayout) mRootView.findViewById(Res.id.pandora_online_wallpaper_content);
+        mContentView = (LinearLayout) mRootView
+                .findViewById(Res.id.pandora_online_wallpaper_content);
         mPromptPb = (ProgressBar) mRootView.findViewById(Res.id.pandora_online_wallpaper_prompt_pb);
         mPromptTextView = (TypefaceTextView) mRootView
                 .findViewById(Res.id.pandora_online_wallpaper_prompt_text_view);
@@ -152,11 +155,21 @@ public class OnlineWallpaperView extends LinearLayout {
         UmengCustomEventManager.statisticalClickOrDragRopeTimes();
         mDesc = (TypefaceTextView) mRootView
                 .findViewById(Res.id.pandora_online_wallpaper_preview_desc);
+        mDesc.setMovementMethod(new ScrollingMovementMethod());
+        int themeId = ThemeManager.getCurrentThemeId();
+        if (themeId == ThemeManager.THEME_ID_ONLINE) {
+            String fileName = OnlineWallpaperManager.getInstance().getCurrentWallpaperFileName(
+                    mContext);
+            String curWallpaperDesc = PandoraConfig.newInstance(mContext).getOnlineWallPaperDesc(
+                    fileName);
+            mDesc.setText(curWallpaperDesc);
+        }
         mAuthor = (TypefaceTextView) mRootView
                 .findViewById(Res.id.pandora_online_wallpaper_preview_author);
         mPreviewProgressBar = (ProgressBar) mRootView
                 .findViewById(Res.id.pandora_online_wallpaper_preview_progress);
-        mApplyButton = (TypefaceTextView) mRootView.findViewById(Res.id.pandora_online_wallpaper_apply_button);
+        mApplyButton = (TypefaceTextView) mRootView
+                .findViewById(Res.id.pandora_online_wallpaper_apply_button);
         mApplyButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -171,6 +184,8 @@ public class OnlineWallpaperView extends LinearLayout {
                 ThemeManager.addBitmapToCache(mPreviewBitmap);
                 OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(mContext,
                         md5ImageUrl);
+                PandoraConfig.newInstance(mContext).saveOnlineWallPaperDesc(md5ImageUrl,
+                        mCurrentItem.getDesc());
                 ImageUtils.saveImageToFile(mPreviewBitmap, OnlineWallpaperManager.getInstance()
                         .getFilePath(md5ImageUrl));
                 mListener.applyOnlinePaper(OnlineWallpaperManager.getInstance().getFilePath(
@@ -348,7 +363,8 @@ public class OnlineWallpaperView extends LinearLayout {
             item.setPosition(position);
 
             if (item.isCurItem()) {
-                viewHolder.mImageViewRl.setBackgroundResource(Res.drawable.setting_wallpaper_border);
+                viewHolder.mImageViewRl
+                        .setBackgroundResource(Res.drawable.setting_wallpaper_border);
             } else {
                 viewHolder.mImageViewRl.setBackgroundResource(0);
             }
