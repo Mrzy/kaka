@@ -6,21 +6,17 @@
     android:background="@drawable/pandora_notification_shape"
     android:clickable="true"
     android:focusable="false"
+    android:padding="1.5dp"
     android:focusableInTouchMode="false"
-    android:gravity="center_vertical"
-    android:paddingBottom="3dp"
-    android:paddingTop="3dp" >
+    android:gravity="center_vertical" >
 
     <ImageView
         android:id="@+id/largeIcon"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginBottom="7dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="7dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:scaleType="fitXY" />
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:id="@+id/smallIcon"
@@ -38,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/largeIcon"
         android:ellipsize="end"
         android:focusable="false"
@@ -46,21 +42,6 @@
         android:singleLine="true"
         android:textColor="#ffffff"
         android:textSize="14dp" />
-
-    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@id/largeIcon"
-        android:ellipsize="end"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:maxLines="2"
-        android:textColor="#bbffffff"
-        android:textSize="12dp" />
 
     <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/date"
@@ -74,12 +55,28 @@
         android:textSize="12dp" />
 
     <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@id/largeIcon"
+        android:layout_toLeftOf="@id/date"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:maxLines="2"
+        android:textColor="#bbffffff"
+        android:textSize="12dp" />
+
+    <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/handleTip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/date"
-        android:layout_marginRight="25dp"
+        android:layout_marginRight="22dp"
         android:layout_marginTop="8dp"
         android:text="@string/notification_item_handleTip"
         android:textColor="#60ffffff"
