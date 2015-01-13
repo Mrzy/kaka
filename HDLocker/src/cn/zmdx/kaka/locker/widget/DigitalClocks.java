@@ -99,7 +99,9 @@ public class DigitalClocks extends TextView {
                 invalidate();
                 long now = SystemClock.uptimeMillis();
                 long next = now + (25 * 1000 - now % 1000);
-                mHandler.postAtTime(mTicker, next);
+                if (mHandler != null) {
+                    mHandler.postAtTime(mTicker, next);
+                }
             }
         };
         mTicker.run();
