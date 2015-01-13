@@ -60,6 +60,10 @@ public class NotificationLayout extends LinearLayout {
 
     protected static final int GAP_BETWEEN_NOTIFICATIONS = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 5);
+    protected static final int GAP_ITEM_LEFT_MARGIN = BaseInfoHelper.dip2px(
+            HDApplication.getContext(), 15);
+    protected static final int GAP_ITEM_RIGHT_MARGIN = BaseInfoHelper.dip2px(
+            HDApplication.getContext(), 15);
 
     // protected static final int NOTIFICATION_ITEM_HEIGHT =
     // BaseInfoHelper.dip2px(
@@ -194,8 +198,8 @@ public class NotificationLayout extends LinearLayout {
     private void addNotificationItem(View itemView) {
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         lp.bottomMargin = GAP_BETWEEN_NOTIFICATIONS;
-        lp.leftMargin = 45;
-        lp.rightMargin = 45;
+        lp.leftMargin = GAP_ITEM_LEFT_MARGIN;
+        lp.rightMargin = GAP_ITEM_RIGHT_MARGIN;
         addView(itemView, 0, lp);
     }
 
