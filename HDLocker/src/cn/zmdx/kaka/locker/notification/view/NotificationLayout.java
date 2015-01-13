@@ -20,12 +20,10 @@ import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -121,7 +119,6 @@ public class NotificationLayout extends LinearLayout {
     private NotificationInterceptor.INotificationListener mNotificationListener = new NotificationInterceptor.INotificationListener() {
         @Override
         public void onRemoved(int notifyId) {
-            Log.e("zy", "onRemoved,notifyId:" + notifyId);
             removeNotification(String.valueOf(notifyId));
         }
 
