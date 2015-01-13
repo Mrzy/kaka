@@ -137,6 +137,8 @@ public class LockScreenManager {
     private boolean mNeedPassword = false;
 
     private BatteryView batteryView;
+    
+    private ImageView mCameraIcon;
 
     public interface ILockScreenListener {
         void onLock();
@@ -452,12 +454,14 @@ public class LockScreenManager {
 
     private void initCamera() {
         final View outerView = mEntireView.findViewById(R.id.camera_outline);
+        mCameraIcon = (ImageView) mEntireView.findViewById(R.id.camera);
         outerView.setOnTouchListener(new OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        mCameraIcon.setImageResource(R.drawable.camera_press_icon);
                         setRunnableAfterUnLock(new Runnable() {
 
                             @Override
@@ -479,6 +483,7 @@ public class LockScreenManager {
                         break;
                     case MotionEvent.ACTION_UP:
                         setRunnableAfterUnLock(null);
+                        mCameraIcon.setImageResource(R.drawable.camera_icon);
                         break;
                 }
                 return false;
@@ -603,6 +608,9 @@ public class LockScreenManager {
     }
 
     private void dispatchMainPanelClosed() {
+        if (null != mCameraIcon) {
+            mCameraIcon.setImageResource(R.drawable.camera_icon);
+        }
         synchronized (mMainPanelCallback) {
             for (IMainPanelListener listener : mMainPanelCallback) {
                 listener.onMainPanelClosed();
@@ -661,10 +669,8 @@ public class LockScreenManager {
     }
 
     private void initOnlinePaperPanel() {
-        mOnlineViewContainer = (LinearLayout) mEntireView
-                .findViewById(R.id.pandora_online_wallpaper);
-        mOnlinePanel = (WallpaperPanelLayout) mEntireView
-                .findViewById(R.id.locker_wallpaper_sliding);
+        mOnlineViewContainer = (LinearLayout) mEntireView.findViewById(R.id.pandora_online_wallpaper);
+        mOnlinePanel = (WallpaperPanelLayout) mEntireView.findViewById(R.id.locker_wallpaper_sliding);
         mOnlinePanel
                 .setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
 
