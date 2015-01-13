@@ -8,8 +8,8 @@
     android:focusable="false"
     android:focusableInTouchMode="false"
     android:gravity="center_vertical"
-    android:paddingBottom="3dp"
-    android:paddingTop="3dp" >
+    android:paddingBottom="1dp"
+    android:paddingTop="1dp" >
 
     <ImageView
         android:id="@+id/largeIcon"
@@ -33,20 +33,6 @@
         android:scaleType="fitXY" />
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="8dp"
-        android:layout_toRightOf="@id/largeIcon"
-        android:ellipsize="end"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:singleLine="true"
-        android:textColor="#ffffff"
-        android:textSize="14dp" />
-
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,6 +42,21 @@
         android:layout_marginTop="4dp"
         android:textColor="#90ffffff"
         android:textSize="12dp" />
+
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/largeIcon"
+        android:layout_toLeftOf="@id/date"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:singleLine="true"
+        android:textColor="#ffffff"
+        android:textSize="14dp" />
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/handleTip"
@@ -76,8 +77,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
         android:layout_marginLeft="20dp"
-        android:layout_toLeftOf="@id/handleTip"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="4dp"
+        android:layout_toLeftOf="@id/date"
         android:layout_toRightOf="@id/largeIcon"
         android:ellipsize="end"
         android:focusable="false"
