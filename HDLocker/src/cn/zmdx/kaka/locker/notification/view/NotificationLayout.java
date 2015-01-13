@@ -21,8 +21,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -85,6 +89,7 @@ public class NotificationLayout extends LinearLayout {
         mInterceptor = NotificationInterceptor.getInstance(getContext());
         mInterceptor.setNotificationListener(mNotificationListener);
         setOrientation(LinearLayout.VERTICAL);
+        setGravity(Gravity.CENTER_HORIZONTAL);
         final LayoutTransition transitioner = new LayoutTransition();
         setLayoutTransition(transitioner);
         initLayoutAnimation(transitioner);
@@ -100,12 +105,14 @@ public class NotificationLayout extends LinearLayout {
         PropertyValuesHolder pvhScaleY = PropertyValuesHolder.ofFloat("scaleY", 0f, 1f);
         addAnimator = ObjectAnimator.ofPropertyValuesHolder(this, pvhScaleX, pvhScaleY)
                 .setDuration(transition.getDuration(LayoutTransition.APPEARING));
+        addAnimator.setInterpolator(new OvershootInterpolator());
         transition.setAnimator(LayoutTransition.APPEARING, addAnimator);
 
         PropertyValuesHolder rmScaleX = PropertyValuesHolder.ofFloat("scaleX", 1f, 0);
         PropertyValuesHolder rmScaleY = PropertyValuesHolder.ofFloat("scaleY", 1f, 0);
         removeAnimator = ObjectAnimator.ofPropertyValuesHolder(this, rmScaleX, rmScaleY)
                 .setDuration(transition.getDuration(LayoutTransition.DISAPPEARING));
+        removeAnimator.setInterpolator(new AccelerateInterpolator());
         transition.setAnimator(LayoutTransition.DISAPPEARING, removeAnimator);
     }
 
@@ -190,6 +197,8 @@ public class NotificationLayout extends LinearLayout {
     private void addNotificationItem(View itemView) {
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         lp.bottomMargin = GAP_BETWEEN_NOTIFICATIONS;
+        lp.leftMargin = 45;
+        lp.rightMargin = 45;
         addView(itemView, 0, lp);
     }
 

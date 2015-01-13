@@ -178,8 +178,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:paddingBottom="10dp"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
                         android:paddingTop="30dp" >
                     </cn.zmdx.kaka.locker.notification.view.NotificationLayout>
 
