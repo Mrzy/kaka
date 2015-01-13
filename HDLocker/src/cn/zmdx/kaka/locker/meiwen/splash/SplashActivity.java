@@ -16,7 +16,6 @@ import cn.zmdx.kaka.locker.meiwen.Res;
 import cn.zmdx.kaka.locker.meiwen.settings.MainSettingsActivity;
 import cn.zmdx.kaka.locker.meiwen.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.meiwen.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.meiwen.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView;
 
 public class SplashActivity extends Activity {
@@ -26,6 +25,8 @@ public class SplashActivity extends Activity {
     private ImageView mIcon;
 
     private TypefaceTextView mAppName;
+    
+    private TypefaceTextView mPrompt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +36,10 @@ public class SplashActivity extends Activity {
         mIcon = (ImageView) findViewById(Res.id.pandora_splash_icon);
         mAppName = (TypefaceTextView) findViewById(Res.id.pandora_splash_app_name);
         mVersion = (TypefaceTextView) findViewById(Res.id.pandora_splash_version);
-        // invisiableViews(mIcon, mAppName, mVersion);
+        mPrompt = (TypefaceTextView) findViewById(Res.id.pandora_splash_prompt);
+        invisiableViews(mIcon, mAppName, mVersion, mPrompt);
         initVersion();
-        // processAnimations();
-        goToMainSettingsActivity();
+        processAnimations();
     }
 
     private void processAnimations() {
@@ -62,9 +63,17 @@ public class SplashActivity extends Activity {
         AnimatorSet versionSet = new AnimatorSet();
         versionSet.setStartDelay(500);
         versionSet.playTogether(versionAlpha, versionTrans);
+        
+        ObjectAnimator promptAlpha = ObjectAnimator.ofFloat(mPrompt, "alpha", 0, 1);
+        ObjectAnimator promptTrans = ObjectAnimator.ofFloat(mPrompt, "translationY",
+                DATE_WIDGET_TRANSLATIONY_DISTANCE_3, 0);
+        AnimatorSet promptSet = new AnimatorSet();
+        promptSet.setStartDelay(700);
+        promptSet.playTogether(promptAlpha, promptTrans);
+        
 
         AnimatorSet finalSet = new AnimatorSet();
-        finalSet.playTogether(iconSet, appNameSet, versionSet);
+        finalSet.playTogether(iconSet, appNameSet, versionSet, promptSet);
         finalSet.setDuration(800);
         finalSet.setInterpolator(new DecelerateInterpolator());
         finalSet.start();
@@ -105,10 +114,13 @@ public class SplashActivity extends Activity {
 
     private static final int DATE_WIDGET_TRANSLATIONY_DISTANCE_2 = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 80);
+    
+    private static final int DATE_WIDGET_TRANSLATIONY_DISTANCE_3 = BaseInfoHelper.dip2px(
+            HDApplication.getContext(), 70);
 
     private void initVersion() {
         String version = BaseInfoHelper.getPkgVersionName(this);
-        mVersion.setText(version+"版本");
+        mVersion.setText(version + "版本");
     }
 
 }
