@@ -71,7 +71,7 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private ImageView mMenuIcon, mShareIcon;
+//    private ImageView mMenuIcon, mShareIcon;
 
     private ViewStub mShareViewStub;
 
@@ -130,10 +130,10 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
 
         mShareViewStub = (ViewStub) mContainerView
                 .findViewById(Res.id.pandora_card_share_view_stub);
-        mMenuIcon = (ImageView) mContainerView.findViewById(Res.id.pandora_function_menu);
-        mMenuIcon.setOnClickListener(this);
-        mShareIcon = (ImageView) mContainerView.findViewById(Res.id.pandora_share);
-        mShareIcon.setOnClickListener(this);
+//        mMenuIcon = (ImageView) mContainerView.findViewById(Res.id.pandora_function_menu);
+//        mMenuIcon.setOnClickListener(this);
+//        mShareIcon = (ImageView) mContainerView.findViewById(Res.id.pandora_share);
+//        mShareIcon.setOnClickListener(this);
 
         createGuidePageIfNeed();
         return mContainerView;
@@ -234,7 +234,7 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
 
         @Override
         public void onMainPanelClosed() {
-            resetState();
+//            resetState();
         }
 
     };
@@ -369,39 +369,40 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
             }
             setButtonCollectState(result);
             isOperating = false;
-        } else if (v == mMenuIcon) {
-            if (isShareLayoutVisible) {
-                mImageButtonCollect.setVisibility(View.GONE);
-                mShareIcon.setVisibility(View.GONE);
-                mShareViewStub.setVisibility(View.GONE);
-                isMenuVisible = false;
-            } else {
-                mImageButtonCollect.setVisibility(View.VISIBLE);
-                mShareIcon.setVisibility(View.VISIBLE);
-            }
-            isShareLayoutVisible = !isShareLayoutVisible;
-        } else if (v == mShareIcon) {
-            if (isMenuVisible) {
-                mShareViewStub.setVisibility(View.GONE);
-            } else {
-                if (null == mShareViewLayout) {
-                    initShareView();
-                }
-                mShareViewStub.setVisibility(View.VISIBLE);
-            }
-            isMenuVisible = !isMenuVisible;
-        }
+        } 
+//        else if (v == mMenuIcon) {
+//            if (isShareLayoutVisible) {
+//                mImageButtonCollect.setVisibility(View.GONE);
+//                mShareIcon.setVisibility(View.GONE);
+//                mShareViewStub.setVisibility(View.GONE);
+//                isMenuVisible = false;
+//            } else {
+//                mImageButtonCollect.setVisibility(View.VISIBLE);
+//                mShareIcon.setVisibility(View.VISIBLE);
+//            }
+//            isShareLayoutVisible = !isShareLayoutVisible;
+//        } else if (v == mShareIcon) {
+//            if (isMenuVisible) {
+//                mShareViewStub.setVisibility(View.GONE);
+//            } else {
+//                if (null == mShareViewLayout) {
+//                    initShareView();
+//                }
+//                mShareViewStub.setVisibility(View.VISIBLE);
+//            }
+//            isMenuVisible = !isMenuVisible;
+//        }
     }
 
     private boolean isShareLayoutVisible = false;
 
     private boolean isMenuVisible = false;
 
-    private void setShareViewGone() {
-        mImageButtonCollect.setVisibility(View.GONE);
-        mShareIcon.setVisibility(View.GONE);
-        mShareViewStub.setVisibility(View.GONE);
-    }
+//    private void setShareViewGone() {
+//        mImageButtonCollect.setVisibility(View.GONE);
+//        mShareIcon.setVisibility(View.GONE);
+//        mShareViewStub.setVisibility(View.GONE);
+//    }
 
     @SuppressLint("ClickableViewAccessibility")
     private void initShareView() {
@@ -491,9 +492,9 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
     @Override
     public void onFoldingBack(UnfoldableView unfoldableView) {
         mListTouchInterceptor.setClickable(true);
-        isMenuVisible = false;
-        isShareLayoutVisible = false;
-        setShareViewGone();
+//        isMenuVisible = false;
+//        isShareLayoutVisible = false;
+//        setShareViewGone();
     }
 
     @Override

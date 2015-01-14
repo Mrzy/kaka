@@ -20,7 +20,7 @@
         android:layout_marginRight="5dp"
         android:background="@drawable/pandora_card_back_button_selector" />
 
-    <ImageButton
+    <!-- <ImageButton
         android:id="@+id/toolbar_imgButtonCollect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,9 +28,9 @@
         android:layout_marginRight="-2dp"
         android:layout_toLeftOf="@+id/pandora_function_menu"
         android:background="@drawable/pandora_card_collect_button_selector"
-        android:visibility="gone" />
+        android:visibility="gone" /> -->
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/pandora_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,14 +39,22 @@
         android:layout_marginRight="6dp"
         android:layout_marginBottom="-6dp"
         android:background="@drawable/pandora_share_icon_selector"
-        android:visibility="gone" />
+        android:visibility="gone" /> -->
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/pandora_function_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/pandora_function_menu_selector" />
+        android:background="@drawable/pandora_function_menu_selector" /> -->
+    
+    <ImageButton
+        android:id="@+id/toolbar_imgButtonCollect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/pandora_card_collect_button_selector" />
 
 </RelativeLayout>
