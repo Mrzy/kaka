@@ -110,6 +110,9 @@ public class NotificationInterceptor extends Handler {
                         return;
                     }
 
+                    if (!checkMessageValid(sbn.getPackageName(), title, content)) {
+                        return;
+                    }
                     final NotificationInfo ni = new NotificationInfo();
                     ni.setLargeIcon(largeIcon);
                     ni.setTitle(title);
@@ -186,6 +189,24 @@ public class NotificationInterceptor extends Handler {
 
         }
     };
+
+    /**
+     * 拦截的应用有些通知(一般为非未读消息的，比如下载，正在运行的通知等)不适合显示到锁屏上，这里做统一排查
+     * 
+     * @param pkg
+     * @param title
+     * @param content
+     * @return
+     */
+    private boolean checkMessageValid(String pkg, String title, String content) {
+        // 如果为qq且title包含正在运行
+        if (pkg.equals(Constants.PKGNAME_QQ)
+                && ((title.contains("正在运行") && content.equals("触摸即可了解详情或停止应用")) || content
+                        .equals("QQ正在后台运行"))) {
+            return false;
+        }
+        return true;
+    }
 
     private void handleDispatchCustomNotification() {
         // 删除过期自定义通知
