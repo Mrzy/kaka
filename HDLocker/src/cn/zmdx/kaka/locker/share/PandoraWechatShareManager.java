@@ -69,7 +69,7 @@ public class PandoraWechatShareManager {
         int bitmapHeight = bitmap.getHeight();
         Bitmap finalBmp = null;
         if (bitmapWidth > 80 || bitmapHeight > 120) {
-            finalBmp = Bitmap.createBitmap(bitmap, 0, 0, 80, 120);
+            finalBmp = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmapWidth, 80), Math.min(bitmapHeight, 120));
             bitmap.recycle();
         } else {
             finalBmp = bitmap;
