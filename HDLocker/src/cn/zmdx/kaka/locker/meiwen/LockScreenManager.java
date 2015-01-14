@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -536,6 +537,7 @@ public class LockScreenManager {
         public void onPanelSlide(View panel, float slideOffset) {
             if (!mNeedPassword) {
                 mSlidingBehindLayout.setAlpha(1.0f - slideOffset);
+                mSlidingPanelLayout.setAlpha(1.0f - 0.3f * slideOffset);
             } else {
                 View passView = mSlidingBehindLayout.findViewWithTag("passwordView");
                 if (passView != null) {
