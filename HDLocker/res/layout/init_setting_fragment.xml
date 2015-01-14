@@ -181,7 +181,8 @@
                     android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
                     android:layout_marginRight="@dimen/setting_title_textview_margin_left"
                     android:layout_marginTop="@dimen/init_setting_item_margin_top"
-                    android:orientation="vertical" >
+                    android:orientation="vertical"
+                    android:visibility="gone" >
 
                     <cn.zmdx.kaka.locker.widget.TypefaceTextView
                         style="@style/init_setting_button"
@@ -202,7 +203,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/init_setting_button_margin_top"
                         android:gravity="center"
-                        android:visibility="gone"
                         android:text="@string/init_setting_to_set" />
                 </LinearLayout>
             </LinearLayout>

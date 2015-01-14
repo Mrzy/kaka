@@ -83,9 +83,9 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
         mCompleteBtn = (TypefaceTextView) findViewById(R.id.init_setting_miui_complete);
         mCompleteBtn.setOnClickListener(this);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            findViewById(R.id.init_setting_read_notification_bar_guide).setVisibility(View.VISIBLE);
             mReadNotificationBtn = (Button) findViewById(R.id.init_setting_read_notification_bar_to_set);
             mReadNotificationBtn.setOnClickListener(this);
-            mReadNotificationBtn.setVisibility(View.VISIBLE);
         }
     }
 
