@@ -201,7 +201,7 @@ public class NotificationInterceptor extends Handler {
     private boolean checkMessageValid(String pkg, String title, String content) {
         // 如果为qq且title包含正在运行
         if (pkg.equals(Constants.PKGNAME_QQ)
-                && ((title.contains("正在运行") && content.equals("触摸即可了解详情或停止应用")) || content
+                && ((title.contains("正在运行") && content.contains("触摸即可了解详情或停止应用")) || content
                         .equals("QQ正在后台运行"))) {
             return false;
         }
