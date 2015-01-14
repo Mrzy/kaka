@@ -11,23 +11,18 @@ public class UrlBuilder {
 
     private static String sBaseDebugUrl = "http://nb.hdlocker.com:8080/essay/locker!";
 
-    private static String sBaseOldProdUrl = "http://pandora.hdlocker.com:8080/essay/locker!";
-
     private static String sBaseProdUrl = "http://pandora.hdlocker.com:8080/essay/locker!";
 
     public static String getBaseUrl() {
         if (BuildConfig.DEBUG) {
             return sBaseDebugUrl;
         } else {
-            if (BaseInfoHelper.getPkgVersionCode(HDApplication.getContext()) <= 85) {
-                return sBaseOldProdUrl;
-            } else {
-                return sBaseProdUrl;
-            }
+            return sBaseProdUrl;
         }
     }
 
-    /**@deprecated
+    /**
+     * @deprecated
      * @param params url参数
      * @return
      */
