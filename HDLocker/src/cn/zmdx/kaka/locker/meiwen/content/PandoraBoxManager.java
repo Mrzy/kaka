@@ -97,10 +97,19 @@ public class PandoraBoxManager {
         return list;
     }
 
+    /**
+     * 优先取未读的，如果所有的都已经读过，则查询已读的并可用的数据返回
+     * @param count
+     * @return
+     */
     public List<ServerImageData> getDataFormLocalDB(int count) {
         boolean containHtml = HDBNetworkState.isNetworkAvailable()
                 && HDBNetworkState.isWifiNetwork();
-        return ServerImageDataModel.getInstance().queryByRandom(count, containHtml);
+        List<ServerImageData> data = ServerImageDataModel.getInstance().queryByRandom(count, containHtml, false, false);
+        if (data.size() <= 0) {
+            return ServerImageDataModel.getInstance().queryByRandom(count, containHtml, true, true);
+        }
+        return data;
     }
 
     public IPandoraBox getDefaultBox() {

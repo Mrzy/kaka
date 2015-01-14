@@ -355,7 +355,8 @@ public class ServerImageDataModel {
         return lastTime;
     }
 
-    public List<ServerImageData> queryByRandom(int count, boolean containHtml) {
+    public List<ServerImageData> queryByRandom(int count, boolean containHtml, boolean isReaded,
+            boolean random) {
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         List<ServerImageData> result = new ArrayList<ServerImageData>();
 
@@ -365,7 +366,8 @@ public class ServerImageDataModel {
             selection = TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
                     + TableStructure.SERVER_IMAGE_READED + "=?";
             selectionArgus = new String[] {
-                    String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE), ServerImageDataModel.UN_READ
+                    String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE),
+                    isReaded ? ServerImageDataModel.READ : ServerImageDataModel.UN_READ
             };
         } else {
             selection = TableStructure.SERVER_IMAGE_IS_IMAGE_DOWNLOADED + "=? and "
@@ -374,17 +376,18 @@ public class ServerImageDataModel {
                     + TableStructure.SERVER_IMAGE_DATA_TYPE + "!=?";
             selectionArgus = new String[] {
                     String.valueOf(MySqlitDatabase.DOWNLOAD_TRUE),
-                    ServerDataMapping.S_DATATYPE_HTML, ServerImageDataModel.UN_READ,
+                    ServerDataMapping.S_DATATYPE_HTML,
+                    isReaded ? ServerImageDataModel.READ : ServerImageDataModel.UN_READ,
                     ServerDataMapping.S_DATATYPE_MULTIIMG
             };
         }
+        final String orderBy = random ? "RANDOM()" : TableStructure.SERVER_IMAGE_COLLECT_TIME + " DESC";
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
                 TableStructure.SERVER_IMAGE_DATA_TYPE, TableStructure.SERVER_IMAGE_COLLECT_WEBSITE,
                 TableStructure.SERVER_IMAGE_COLLECT_TIME, TableStructure.SERVER_IMAGE_CLOUD_ID
-        }, selection, selectionArgus, null, null, TableStructure.SERVER_IMAGE_COLLECT_TIME
-                + " DESC", String.valueOf(count));
+        }, selection, selectionArgus, null, null, orderBy, String.valueOf(count));
 
         try {
             while (cursor.moveToNext()) {
@@ -467,26 +470,33 @@ public class ServerImageDataModel {
      * 
      * @return List<String> 集合里装的时图片的url
      */
-    public List<String> queryOldDataExceptFavorited() {
-        long yesterday = getYesterday();
+    public List<String> deleteOldDataExceptFavorited() {
+        long oldTime = System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000;
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         List<String> urls = new ArrayList<String>();
+        List<String> ids = new ArrayList<String>();
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
-            TableStructure.SERVER_IMAGE_URL
+                TableStructure.SERVER_IMAGE_URL, TableStructure.SERVER_IMAGE_ID
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED + "=? and "
                 + TableStructure.SERVER_IMAGE_COLLECT_TIME + "<? and "
                 + TableStructure.SERVER_IMAGE_READED + "=?", new String[] {
-                String.valueOf(MySqlitDatabase.FAVORITE_FALSE), String.valueOf(yesterday),
+                String.valueOf(MySqlitDatabase.FAVORITE_FALSE), String.valueOf(oldTime),
                 ServerImageDataModel.READ
         }, null, null, null);
         while (cursor.moveToNext()) {
             urls.add(cursor.getString(0));
+            ids.add(cursor.getString(1));
         }
         cursor.close();
+
+        // delete the data
+        for (String id : ids) {
+            deleteById(Integer.parseInt(id));
+        }
         return urls;
     }
 
-    private long getYesterday() {
+    private long getTheDayBeforeYesterday() {
         Calendar cal = Calendar.getInstance();// 使用日历类
         int year = cal.get(Calendar.YEAR);// 得到年
         int month = cal.get(Calendar.MONTH) + 1;// 得到月，因为从0开始的，所以要加1

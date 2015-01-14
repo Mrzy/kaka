@@ -83,7 +83,7 @@ public class PandoraBoxDispatcher extends Handler {
                 }
 
                 //删除本地数据库中除了已经收藏的新闻的数据
-                List<String> delUrls = ServerImageDataModel.getInstance().queryOldDataExceptFavorited();
+                List<String> delUrls = ServerImageDataModel.getInstance().deleteOldDataExceptFavorited();
                 // 将今天的数据保存到本地数据库
                 ServerImageData.saveToDatabase(oriDataList);
                 deleteLocalImage(delUrls);
