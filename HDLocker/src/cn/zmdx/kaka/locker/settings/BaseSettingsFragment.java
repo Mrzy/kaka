@@ -9,7 +9,6 @@ import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
-import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
@@ -65,8 +64,9 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
 
     protected void startFeedback() {
-        FeedbackAgent agent = new FeedbackAgent(mContext);
-        agent.startFeedbackActivity();
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), FeedbackActivity.class);
+        startActivity(intent);
     }
 
     protected void enablePandoraLocker() {
@@ -104,7 +104,7 @@ public abstract class BaseSettingsFragment extends Fragment {
         getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                 R.anim.umeng_fb_slide_out_from_left);
     }
-    
+
     protected void gotoLockerPassword() {
         Intent intent = new Intent();
         intent.setClass(getActivity(), LockerPasswordActivity.class);

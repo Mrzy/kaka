@@ -155,6 +155,10 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".settings.FeedbackActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.PandoraService" />
         <!-- umeng -->
