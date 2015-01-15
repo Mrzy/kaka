@@ -1,8 +1,6 @@
 
 package cn.zmdx.kaka.locker.splash;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -38,6 +36,7 @@ public class SplashActivity extends Activity {
         invisiableViews(mIcon, mAppName, mVersion);
         initVersion();
         processAnimations();
+        goToMainSettingsActivity();
     }
 
     private void processAnimations() {
@@ -67,11 +66,6 @@ public class SplashActivity extends Activity {
         finalSet.setDuration(800);
         finalSet.setInterpolator(new DecelerateInterpolator());
         finalSet.start();
-        finalSet.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator anim) {
-                goToMainSettingsActivity();
-            }
-        });
     }
 
     private void goToMainSettingsActivity() {
@@ -86,7 +80,7 @@ public class SplashActivity extends Activity {
                         R.anim.umeng_fb_slide_out_from_left);
                 finish();
             }
-        }, 500);
+        }, 2000);
     }
 
     private void invisiableViews(View... views) {
