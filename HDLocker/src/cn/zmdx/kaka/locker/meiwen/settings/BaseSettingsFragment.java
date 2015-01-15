@@ -9,7 +9,6 @@ import android.widget.Toast;
 import cn.zmdx.kaka.locker.meiwen.Res;
 import cn.zmdx.kaka.locker.meiwen.settings.config.PandoraConfig;
 
-import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
@@ -44,11 +43,13 @@ public abstract class BaseSettingsFragment extends Fragment {
                     case 1: // has no update
                         Toast.makeText(
                                 mContext,
-                                mContext.getResources().getString(Res.string.update_prompt_no_update),
-                                Toast.LENGTH_LONG).show();
+                                mContext.getResources().getString(
+                                        Res.string.update_prompt_no_update), Toast.LENGTH_LONG)
+                                .show();
                         break;
                     case 2: // none wifi
-                        Toast.makeText(mContext,
+                        Toast.makeText(
+                                mContext,
                                 mContext.getResources().getString(Res.string.update_prompt_no_wify),
                                 Toast.LENGTH_LONG).show();
                         break;
@@ -65,8 +66,11 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
 
     protected void startFeedback() {
-        FeedbackAgent agent = new FeedbackAgent(mContext);
-        agent.startFeedbackActivity();
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), FeedbackActivity.class);
+        startActivity(intent);
+        getActivity().overridePendingTransition(Res.anim.umeng_fb_slide_in_from_right,
+                Res.anim.umeng_fb_slide_out_from_left);
     }
 
     protected void enablePandoraLocker() {
@@ -104,7 +108,7 @@ public abstract class BaseSettingsFragment extends Fragment {
         getActivity().overridePendingTransition(Res.anim.umeng_fb_slide_in_from_right,
                 Res.anim.umeng_fb_slide_out_from_left);
     }
-    
+
     protected void gotoLockerPassword() {
         Intent intent = new Intent();
         intent.setClass(getActivity(), LockerPasswordActivity.class);
