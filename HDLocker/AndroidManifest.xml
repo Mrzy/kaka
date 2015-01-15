@@ -179,12 +179,6 @@
             android:name="com.umeng.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
-        <activity
-            android:name="com.umeng.fb.ConversationActivity"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name="com.umeng.fb.ContactActivity"
-            android:theme="@android:style/Theme.NoTitleBar" />
 
         <receiver android:name=".receiver.PandoraReceiver" >
             <intent-filter android:priority="1000" >
