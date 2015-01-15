@@ -175,25 +175,34 @@ public class ServerImageDataManager {
 
         public static List<ServerImageData> parseJson(JSONObject jsonObj) {
             List<ServerImageData> sdList = new ArrayList<ServerImageData>();
+            if (jsonObj == null) {
+                return sdList;
+            }
+
             String state = jsonObj.optString("state");
             if (state.equals("success")) {
                 JSONArray jsonArray = jsonObj.optJSONArray("data");
+                if (jsonArray == null) {
+                    return sdList;
+                }
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.optJSONObject(i);
-                    ServerImageData serverImageData = new ServerImageData();
-                    serverImageData.parseBaseJson(jsonObject);
-                    String url = jsonObject.optString("url");
-                    String imgUrl = jsonObject.optString("imgUrl");
-                    serverImageData.setUrl(url);
-                    serverImageData.setImageDesc(imgUrl);
-                    String dataType = serverImageData.getDataType();
-                    if (!TextUtils.isEmpty(dataType)
-                            && dataType.equals(ServerDataMapping.S_DATATYPE_HTML)) {
-                        serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_TRUE);
-                    } else {
-                        serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_FALSE);
+                    if (jsonObject != null) {
+                        ServerImageData serverImageData = new ServerImageData();
+                        serverImageData.parseBaseJson(jsonObject);
+                        String url = jsonObject.optString("url");
+                        String imgUrl = jsonObject.optString("imgUrl");
+                        serverImageData.setUrl(url);
+                        serverImageData.setImageDesc(imgUrl);
+                        String dataType = serverImageData.getDataType();
+                        if (!TextUtils.isEmpty(dataType)
+                                && dataType.equals(ServerDataMapping.S_DATATYPE_HTML)) {
+                            serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_TRUE);
+                        } else {
+                            serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_FALSE);
+                        }
+                        sdList.add(serverImageData);
                     }
-                    sdList.add(serverImageData);
                 }
             }
             return sdList;

@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.zmdx.kaka.locker.meiwen.HDApplication;
 import cn.zmdx.kaka.locker.meiwen.LockScreenManager;
 import cn.zmdx.kaka.locker.meiwen.LockScreenManager.IMainPanelListener;
@@ -55,14 +56,18 @@ public class NotificationLayout extends LinearLayout {
     protected static final int GAP_BETWEEN_NOTIFICATIONS = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 5);
 
-//    protected static final int NOTIFICATION_ITEM_HEIGHT = BaseInfoHelper.dip2px(
-//            HDApplication.getContext(), 64);
+    // protected static final int NOTIFICATION_ITEM_HEIGHT =
+    // BaseInfoHelper.dip2px(
+    // HDApplication.mContext, 64);
 
     private static final SimpleDateFormat sSdf = new SimpleDateFormat("dd日 HH:mm");
+
+    private Context mContext;
 
     public NotificationLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
+        mContext = context;
     }
 
     public NotificationLayout(Context context, AttributeSet attrs) {
@@ -74,7 +79,7 @@ public class NotificationLayout extends LinearLayout {
     }
 
     private void init() {
-        mInterceptor = NotificationInterceptor.getInstance(getContext());
+        mInterceptor = NotificationInterceptor.getInstance(mContext);
         mInterceptor.setNotificationListener(mNotificationListener);
         setOrientation(LinearLayout.VERTICAL);
         final LayoutTransition transitioner = new LayoutTransition();
@@ -111,12 +116,12 @@ public class NotificationLayout extends LinearLayout {
                                 final int intId = Integer.valueOf(id);
                                 if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE) {
                                     NotificationGuideHelper
-                                            .markAlreadyPromptHideNotificationMsg(getContext());
+                                            .markAlreadyPromptHideNotificationMsg(mContext);
                                 } else if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE) {
-                                    NotificationGuideHelper.recordGuideProgress(getContext());
+                                    NotificationGuideHelper.recordGuideProgress(mContext);
                                     NotificationInfo info = NotificationGuideHelper
-                                            .getNextGuide(getContext());
-                                    NotificationInterceptor.getInstance(getContext())
+                                            .getNextGuide(mContext);
+                                    NotificationInterceptor.getInstance(mContext)
                                             .sendCustomNotification(info);
                                 }
                             }
@@ -130,11 +135,11 @@ public class NotificationLayout extends LinearLayout {
                 });
                 addNotificationItem(itemView);
                 if (isWinxinOrQQ(info) && !hasAlreadyPromptHideNotificationMsg()
-                        && PandoraConfig.newInstance(getContext()).isShowNotificationMessage()) {
+                        && PandoraConfig.newInstance(mContext).isShowNotificationMessage()) {
                     NotificationInfo ni = PandoraNotificationFactory
                             .createGuideHideNotificationInfo();
-                    NotificationInterceptor.getInstance(getContext()).sendCustomNotification(ni);
-                    NotificationGuideHelper.markAlreadyPromptHideNotificationMsg(getContext());
+                    NotificationInterceptor.getInstance(mContext).sendCustomNotification(ni);
+                    NotificationGuideHelper.markAlreadyPromptHideNotificationMsg(mContext);
                 }
                 UmengCustomEventManager.statisticalPostNotification(info.getId(), info.getPkg(),
                         info.getType());
@@ -148,7 +153,7 @@ public class NotificationLayout extends LinearLayout {
     }
 
     private boolean hasAlreadyPromptHideNotificationMsg() {
-        return NotificationGuideHelper.hasAlreadyPromptHideNotificationMsg(getContext());
+        return NotificationGuideHelper.hasAlreadyPromptHideNotificationMsg(mContext);
     }
 
     /**
@@ -161,9 +166,9 @@ public class NotificationLayout extends LinearLayout {
         int intId = Integer.valueOf(id);
         if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE
                 && ni.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
-            NotificationGuideHelper.recordGuideProgress(getContext());
+            NotificationGuideHelper.recordGuideProgress(mContext);
         } else if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL) {
-            NotificationGuideHelper.recordGuideProgress(getContext());
+            NotificationGuideHelper.recordGuideProgress(mContext);
         }
     }
 
@@ -173,7 +178,7 @@ public class NotificationLayout extends LinearLayout {
      * @param itemView
      */
     private void addNotificationItem(View itemView) {
-        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
+        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         lp.bottomMargin = GAP_BETWEEN_NOTIFICATIONS;
         addView(itemView, 0, lp);
     }
@@ -203,7 +208,7 @@ public class NotificationLayout extends LinearLayout {
                     intent.putExtra("tag", info.getTag());
                     intent.putExtra("id", info.getId());
                 }
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
             }
 
             // 从内存中的通知集合中移除这个通知
@@ -244,25 +249,16 @@ public class NotificationLayout extends LinearLayout {
                             }
                             if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE) {
                                 NotificationGuideHelper
-                                        .markAlreadyPromptHideNotificationMsg(getContext());
+                                        .markAlreadyPromptHideNotificationMsg(mContext);
                             } else if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL) {
-                                NotificationGuideHelper.recordGuideProgress(getContext());
+                                NotificationGuideHelper.recordGuideProgress(mContext);
                             } else if (Integer.parseInt(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_OPEN_PERMISSION) {
                                 // 启动设置通知权限引导界面
-                                HDBThreadUtils.postOnUiDelayed(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        Intent in = new Intent();
-                                        in.setClass(getContext(), InitPromptActivity.class);
-                                        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        in.putExtra("isMIUI", false);
-                                        in.putExtra("mMIUIVersion", PandoraUtils.MUIU_V5);
-                                        in.putExtra("type",
-                                                InitPromptActivity.PROMPT_READ_NOTIFICATION);
-                                        getContext().startActivity(in);
-                                    }
-                                }, 200);
+                                Toast.makeText(
+                                        mContext,
+                                        getResources().getString(
+                                                Res.string.open_notification_permission_toast),
+                                        Toast.LENGTH_LONG).show();
                             }
                             removeNotification(id);
                             UmengCustomEventManager.statisticalOpenNotification(info.getId(),
@@ -299,7 +295,7 @@ public class NotificationLayout extends LinearLayout {
         final TextView date = (TextView) itemView.findViewById(Res.id.date);
         long postTime = info.getPostTime() == 0 ? new Date().getTime() : info.getPostTime();
         date.setText(sSdf.format(postTime));
-        boolean showMsg = PandoraConfig.newInstance(getContext()).isShowNotificationMessage();
+        boolean showMsg = PandoraConfig.newInstance(mContext).isShowNotificationMessage();
         // Bitmap largeBmp = info.getLargeIcon();
         // Drawable smallDrawable = info.getSmallIcon();
         title.setText(info.getTitle());
@@ -318,10 +314,10 @@ public class NotificationLayout extends LinearLayout {
                 String msg = showMsg ? info.getContent() : "微信:"
                         + res.getString(Res.string.hide_message_tip);
                 content.setText(msg);
-            } else if (isCallNotification(getContext(), pkgName)) {
+            } else if (isCallNotification(mContext, pkgName)) {
                 largeIcon.setImageResource(Res.drawable.notification_missed_call);
                 content.setText(info.getContent());
-            } else if (isSmsNotification(getContext(), pkgName)) {
+            } else if (isSmsNotification(mContext, pkgName)) {
                 largeIcon.setImageResource(Res.drawable.notification_message);
                 content.setText(info.getContent());
             }
@@ -366,7 +362,7 @@ public class NotificationLayout extends LinearLayout {
     }
 
     private View createNotificationItemView(NotificationInfo info) {
-        final View view = View.inflate(getContext(), Res.layout.notification_item_layout, null);
+        final View view = View.inflate(mContext, Res.layout.notification_item_layout, null);
         updateNotificationItem(view, info);
         return view;
     }
@@ -387,9 +383,9 @@ public class NotificationLayout extends LinearLayout {
     }
 
     private void sendOpenNotificationService() {
-        final NotificationInfo guideNi = NotificationGuideHelper.getNextGuide(getContext());
+        final NotificationInfo guideNi = NotificationGuideHelper.getNextGuide(mContext);
         if (guideNi != null) {
-            NotificationInterceptor.getInstance(getContext()).sendCustomNotification(guideNi);
+            NotificationInterceptor.getInstance(mContext).sendCustomNotification(guideNi);
         }
     }
 
