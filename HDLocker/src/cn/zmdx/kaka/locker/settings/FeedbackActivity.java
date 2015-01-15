@@ -241,4 +241,10 @@ public class FeedbackActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                R.anim.umeng_fb_slide_out_from_right);
+    }
 }
