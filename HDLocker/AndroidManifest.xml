@@ -115,6 +115,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/locker_password_dialog_theme" >
         </activity>
+        <activity
+            android:name=".settings.FeedbackActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.PandoraService" />
         <!-- umeng -->

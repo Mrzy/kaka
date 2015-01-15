@@ -181,5 +181,8 @@
     <string name="hide_message_tip">未读消息</string>
     <string name="notification_item_handleTip">右划查看\n双击忽略</string>
     <string name="tip_open_notification_permission">请勾选【潘多拉锁屏】</string>
+    
+    <string name="pandora_feedback_send">发送</string>
+    <string name="pandora_feedback_title">意见反馈</string>
 
 </resources>
