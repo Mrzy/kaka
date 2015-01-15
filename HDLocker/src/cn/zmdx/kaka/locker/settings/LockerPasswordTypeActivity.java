@@ -1,7 +1,6 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -14,7 +13,7 @@ import cn.zmdx.kaka.locker.widget.PandoraLockPatternView;
 import cn.zmdx.kaka.locker.widget.PandoraLockPatternView.ILockPatternListener;
 import cn.zmdx.kaka.locker.widget.PandoraNumberLockView;
 
-public class LockerPasswordTypeActivity extends Activity {
+public class LockerPasswordTypeActivity extends BaseActivity {
 
     private LinearLayout mLockPatternLayout;
 
@@ -32,7 +31,7 @@ public class LockerPasswordTypeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_locker_password_type);
-        getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+//        getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         targetType = getIntent()
                 .getIntExtra("targetType", KeyguardLockerManager.UNLOCKER_TYPE_NONE);
         curType = PandoraConfig.newInstance(this).getUnLockType();
