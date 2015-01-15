@@ -195,7 +195,7 @@
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="pandora" />
+            android:value="meiwen" />
 
         <activity
             android:name=".settings.FavoritesActivity"

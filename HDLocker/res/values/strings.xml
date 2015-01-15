@@ -186,7 +186,7 @@
     <string name="hide_message_tip">未读消息</string>
     <string name="notification_item_handleTip">右划查看\n双击忽略</string>
     <string name="splash_prompt">春曰甘霖，夏曰凉风，秋曰硕果，冬曰暖阳</string>
-    <string name="open_notification_permission_toast">请勾选【潘多拉锁屏】</string>
+    <string name="open_notification_permission_toast">请勾选【美文锁屏】</string>
     <string name="sunday">星期日</string>
     <string name="monday">星期一</string>
     <string name="tuesday">星期二</string>
