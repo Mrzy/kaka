@@ -13,6 +13,33 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
+         >
+
+        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
+            android:id="@+id/card_date_day"
+            android:textColor="#ffffff"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="30dp" />
+
+        <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
+            android:textColor="#ffffff"
+            android:id="@+id/card_date_month"
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent"
+            android:textSize="11dp" />
+    </LinearLayout>
+
     <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
         android:id="@+id/card_item_large_title"
         android:layout_width="match_parent"

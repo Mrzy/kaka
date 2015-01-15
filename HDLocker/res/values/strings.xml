@@ -167,7 +167,6 @@
     <string name="accessibility_battery_level">Battery <xliff:g id="number">%d</xliff:g> percent.</string>
     <!-- Glyph to be overlaid atop the battery when the level is extremely low. Do not translate. -->
     <string name="battery_meter_very_low_overlay_symbol">!</string>
-
     <string name="pandora_share_sina_send">发送</string>
     <string name="pandora_share_to_sina_title">分享到微博</string>
     <string name="pandora_share_prompt">右滑解锁分享内容</string>
@@ -186,8 +185,14 @@
     <string name="notify_guide_hide_message_content">右划此处解锁立即设置，如果暂时不设置双击忽略</string>
     <string name="hide_message_tip">未读消息</string>
     <string name="notification_item_handleTip">右划查看\n双击忽略</string>
-
     <string name="splash_prompt">春曰甘霖，夏曰凉风，秋曰硕果，冬曰暖阳</string>
-
     <string name="open_notification_permission_toast">请勾选【潘多拉锁屏】</string>
+    <string name="sunday">星期日</string>
+    <string name="monday">星期一</string>
+    <string name="tuesday">星期二</string>
+    <string name="wednesday">星期三</string>
+    <string name="thursday">星期四</string>
+    <string name="friday">星期五</string>
+    <string name="saturday">星期六</string>
+
 </resources>

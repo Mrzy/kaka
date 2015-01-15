@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker.meiwen.content;
 
+import java.util.Calendar;
+
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.view.CardView;
 import android.animation.Animator.AnimatorListener;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
+import android.widget.TextView;
 import cn.zmdx.kaka.locker.meiwen.HDApplication;
 import cn.zmdx.kaka.locker.meiwen.ImageLoaderManager;
 import cn.zmdx.kaka.locker.meiwen.Res;
@@ -99,7 +102,20 @@ public class FoldableCard extends Card {
         TypefaceTextView titleView = null;
         imageView = (ImageView) view.findViewById(Res.id.card_item_large_imageview);
         titleView = (TypefaceTextView) view.findViewById(Res.id.card_item_large_title);
+        TextView dayView = (TextView) view.findViewById(Res.id.card_date_day);
+        TextView monthView = (TextView) view.findViewById(Res.id.card_date_month);
 
+        long collectTime = 0;
+        try {
+            collectTime = Long.valueOf(mData.getCollectTime());
+        } catch (Exception e) {
+            collectTime = System.currentTimeMillis();
+        }
+        dayView.setText("" + getDayByTime(collectTime, Calendar.DAY_OF_MONTH));
+        int month = getDayByTime(collectTime, Calendar.MONTH) + 1;
+        int xq = getDayByTime(collectTime, Calendar.DAY_OF_WEEK);
+
+        monthView.setText(month + "月\n" + getWeekStr(xq));
         final Options opt = setImageViewSize(imageView, mData.getUrl());
 
         titleView.setText(mData.getTitle());
@@ -114,6 +130,34 @@ public class FoldableCard extends Card {
                 imageView.setImageBitmap(cacheBmp);
             }
         }
+    }
+
+    private String getWeekStr(int xq) {
+        if (xq == 1) {
+            return mContext.getString(Res.string.sunday);
+        } else if (xq == 2) {
+            return mContext.getString(Res.string.monday);
+        } else if (xq == 3) {
+            return mContext.getString(Res.string.tuesday);
+        } else if (xq == 4) {
+            return mContext.getString(Res.string.wednesday);
+        } else if (xq == 5) {
+            return mContext.getString(Res.string.thursday);
+        } else if (xq == 6) {
+            return mContext.getString(Res.string.friday);
+        } else if (xq == 7) {
+            return mContext.getString(Res.string.saturday);
+        } else {
+            return "";
+        }
+    }
+
+    private int getDayByTime(long time, int field) {
+        Calendar cal = Calendar.getInstance();
+        if (time > 0) {
+            cal.setTimeInMillis(time);
+        }
+        return cal.get(field);
     }
 
     private Bitmap getCoverImageFromCache(String url) {
