@@ -21,7 +21,7 @@ import com.tencent.mm.sdk.openapi.WXWebpageObject;
 
 public class PandoraWechatShareManager {
 
-    private static final String WECHAT_APPID = "wx5fa094ca2b1994ba";
+    private static final String WECHAT_APPID = "wx84cfcaef64551667";
 
     private static PandoraWechatShareManager mInstance;
 

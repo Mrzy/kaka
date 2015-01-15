@@ -20,7 +20,7 @@ import com.sina.weibo.sdk.net.WeiboParameters;
 
 public class PandoraSinaShareManager {
 
-    public static final String SINA_APPID = "1331388942";
+    public static final String SINA_APPID = "2681542019";
 
     public static final String REDIRECT_URL = "https://www.hdlocker.com";
 

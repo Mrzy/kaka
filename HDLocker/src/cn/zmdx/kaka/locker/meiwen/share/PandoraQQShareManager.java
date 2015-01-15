@@ -13,7 +13,7 @@ import com.tencent.tauth.Tencent;
 
 public class PandoraQQShareManager {
 
-    private static final String QQ_APPID = "1103193086";
+    private static final String QQ_APPID = "1104061754";
 
     private static PandoraQQShareManager mInstance;
 

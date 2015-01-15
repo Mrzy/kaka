@@ -406,11 +406,11 @@ public class FoldablePage implements IFoldablePage, OnFoldingListener, View.OnCl
     @SuppressLint("ClickableViewAccessibility")
     private void initShareView() {
         mShareViewLayout = mShareViewStub.inflate();
-        if (PandoraShareManager.isAvilible(mContext, PandoraShareManager.PACKAGE_SINA_STRING)) {
-            mShareSina = (LinearLayout) mShareViewLayout.findViewById(Res.id.pandora_share_sina);
-            mShareSina.setOnTouchListener(mShareTouchListener);
-            mShareSina.setVisibility(View.VISIBLE);
-        }
+//        if (PandoraShareManager.isAvilible(mContext, PandoraShareManager.PACKAGE_SINA_STRING)) {
+//            mShareSina = (LinearLayout) mShareViewLayout.findViewById(Res.id.pandora_share_sina);
+//            mShareSina.setOnTouchListener(mShareTouchListener);
+//            mShareSina.setVisibility(View.VISIBLE);
+//        }
         if (PandoraShareManager.isAvilible(mContext, PandoraShareManager.PACKAGE_WECHAR_STRING)) {
             mShareWechatCircle = (LinearLayout) mShareViewLayout
                     .findViewById(Res.id.pandora_share_wechat_circle);
