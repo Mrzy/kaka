@@ -32,8 +32,6 @@
 -dontoptimize
 -dontwarn com.umeng.**
 
--libraryjars libs/SocialSDK_QQZone_2.jar
-
 -keep public interface com.umeng.socialize.**
 -keep public interface com.umeng.socialize.sensor.**
 -keep public interface com.umeng.scrshot.**
