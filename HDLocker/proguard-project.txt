@@ -32,3 +32,19 @@
 -keep public class com.tencent.** {*;}
 -keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
 -keep class com.tencent.mm.sdk.modelmsg.** implements com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
+
+-dontshrink
+-dontoptimize
+-dontwarn com.umeng.**
+
+-keep public interface com.umeng.socialize.**
+-keep public interface com.umeng.socialize.sensor.**
+-keep public interface com.umeng.scrshot.**
+
+-keep public class com.umeng.socialize.* {*;}
+
+-keep class com.umeng.socialize.sensor.**
+
+-keep public class [cn.zmdx.kaka.locker].R$*{
+    public static final int *;
+}
