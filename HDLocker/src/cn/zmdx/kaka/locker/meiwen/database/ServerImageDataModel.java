@@ -1,10 +1,7 @@
 
 package cn.zmdx.kaka.locker.meiwen.database;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -338,7 +335,7 @@ public class ServerImageDataModel {
         return data;
     }
 
-    public long queryLastModifiedOfToday() {
+    public long queryLastModified() {
         long lastTime = 0;
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
@@ -381,7 +378,8 @@ public class ServerImageDataModel {
                     ServerDataMapping.S_DATATYPE_MULTIIMG
             };
         }
-        final String orderBy = random ? "RANDOM()" : TableStructure.SERVER_IMAGE_COLLECT_TIME + " DESC";
+        final String orderBy = random ? "RANDOM()" : TableStructure.SERVER_IMAGE_COLLECT_TIME
+                + " DESC";
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
                 TableStructure.SERVER_IMAGE_ID, TableStructure.SERVER_IMAGE_URL,
                 TableStructure.SERVER_IMAGE_DESC, TableStructure.SERVER_IMAGE_TITLE,
@@ -471,18 +469,23 @@ public class ServerImageDataModel {
      * @return List<String> 集合里装的时图片的url
      */
     public List<String> deleteOldDataExceptFavorited() {
-        long oldTime = System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000;
         SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
         List<String> urls = new ArrayList<String>();
         List<String> ids = new ArrayList<String>();
         Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
-                TableStructure.SERVER_IMAGE_URL, TableStructure.SERVER_IMAGE_ID
+                TableStructure.SERVER_IMAGE_URL, TableStructure.SERVER_IMAGE_ID,
+                TableStructure.SERVER_IMAGE_COLLECT_TIME
         }, TableStructure.SERVER_IMAGE_IS_IMAGE_FAVORITED + "=? and "
-                + TableStructure.SERVER_IMAGE_COLLECT_TIME + "<? and "
                 + TableStructure.SERVER_IMAGE_READED + "=?", new String[] {
-                String.valueOf(MySqlitDatabase.FAVORITE_FALSE), String.valueOf(oldTime),
-                ServerImageDataModel.READ
-        }, null, null, null);
+                String.valueOf(MySqlitDatabase.FAVORITE_FALSE), ServerImageDataModel.READ
+        }, null, null, TableStructure.SERVER_IMAGE_COLLECT_TIME + " DESC");
+
+        //
+        if (cursor.getCount() > 40) {
+            cursor.moveToPosition(40);
+        } else {
+            return urls;
+        }
         while (cursor.moveToNext()) {
             urls.add(cursor.getString(0));
             ids.add(cursor.getString(1));
@@ -496,16 +499,27 @@ public class ServerImageDataModel {
         return urls;
     }
 
-    private long getTheDayBeforeYesterday() {
-        Calendar cal = Calendar.getInstance();// 使用日历类
-        int year = cal.get(Calendar.YEAR);// 得到年
-        int month = cal.get(Calendar.MONTH) + 1;// 得到月，因为从0开始的，所以要加1
-        int day = cal.get(Calendar.DAY_OF_MONTH);// 得到天
-        SimpleDateFormat myFormatter = new SimpleDateFormat("yyyy-MM-dd");
+    public int getCountUnRead() {
+        String selection = null;
+        String[] selectionArgu = null;
+        selection = TableStructure.SERVER_IMAGE_READED + "=?";
+        selectionArgu = new String[] {
+            ServerImageDataModel.UN_READ
+        };
+        SQLiteDatabase sqliteDatabase = mMySqlitDatabase.getReadableDatabase();
+        int count = 0;
+        Cursor cursor = sqliteDatabase.query(TableStructure.TABLE_NAME_SERVER_IMAGE, new String[] {
+            TableStructure.SERVER_IMAGE_ID
+        }, selection, selectionArgu, null, null, null, null);
+
         try {
-            return myFormatter.parse(year + "-" + month + "-" + day).getTime();
-        } catch (ParseException e) {
+            count = cursor.getCount();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
         }
-        return 0;
+        return count;
     }
+
 }
