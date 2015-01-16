@@ -27,3 +27,23 @@
     public static ** valueOf(java.lang.String);
 }
 -keep public class pl.droidsonroids.gif.GifIOException{*;}
+
+-dontshrink
+-dontoptimize
+-dontwarn com.umeng.**
+
+-libraryjars libs/SocialSDK_QQZone_2.jar
+
+-keep public interface com.umeng.socialize.**
+-keep public interface com.umeng.socialize.sensor.**
+-keep public interface com.umeng.scrshot.**
+
+-keep public class com.umeng.socialize.* {*;}
+
+-keep class com.umeng.scrshot.**
+-keep class com.umeng.socialize.sensor.**
+
+
+-keep public class [cn.zmdx.kaka.locker].R$*{
+    public static final int *;
+}
