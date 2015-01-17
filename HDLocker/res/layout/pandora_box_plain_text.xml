@@ -14,7 +14,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             android:id="@+id/text1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             android:textColor="#008d5a"
             android:textSize="22sp" />
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             android:id="@+id/text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

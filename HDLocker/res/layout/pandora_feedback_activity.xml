@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white" >
 
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
         android:id="@+id/pandora_feedback_title"
         android:layout_width="fill_parent"
         android:layout_height="58dp"
@@ -38,7 +38,7 @@
             android:paddingRight="15dp"
             android:paddingTop="8dp" >
 
-            <cn.zmdx.kaka.locker.widget.BaseButton
+            <cn.zmdx.kaka.fast.locker.widget.BaseButton
                 android:id="@+id/fb_send_btn"
                 android:layout_width="70dp"
                 android:layout_height="35dp"

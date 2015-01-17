@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.zmdx.kaka.locker"
+    package="cn.zmdx.kaka.fast.locker"
     android:versionCode="90"
     android:versionName="1.4.1" >
 
@@ -127,7 +127,7 @@
             android:process=":DownloadingService" >
         </service>
         <service
-            android:name="cn.zmdx.kaka.locker.notification.PandoraNotificationService"
+            android:name=".notification.PandoraNotificationService"
             android:label="@string/notification_service_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
             <intent-filter>
@@ -156,7 +156,7 @@
             android:value="pandora" />
 
         <activity
-            android:name="cn.zmdx.kaka.locker.settings.FavoritesActivity"
+            android:name=".settings.FavoritesActivity"
             android:exported="false"
             android:screenOrientation="portrait" >
         </activity>

@@ -18,7 +18,7 @@
         android:gravity="center"
         android:padding="@dimen/lockscreen_gusture_padding_top" >
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             android:id="@+id/gusture_prompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             android:textColor="@color/lock_pattern_view_error_color"
             android:textSize="18sp" />
 
-        <cn.zmdx.kaka.locker.widget.LockPatternView
+        <cn.zmdx.kaka.fast.locker.widget.LockPatternView
             android:id="@+id/gusture"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

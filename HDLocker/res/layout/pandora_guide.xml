@@ -18,7 +18,7 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_launcher" />
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             android:id="@+id/appName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             android:textColor="#ffffff"
             android:textSize="25dp" />
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             android:id="@+id/explore_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
             android:textColor="#ffffff"
             android:textSize="14dp" />
 
-        <cn.zmdx.kaka.locker.widget.BaseButton
+        <cn.zmdx.kaka.fast.locker.widget.BaseButton
             android:id="@+id/go_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

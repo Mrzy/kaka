@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
+    xmlns:app="http://schemas.android.com/apk/res/cn.zmdx.kaka.fast.locker"
     android:id="@+id/setting_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,7 +21,7 @@
             android:layout_marginRight="@dimen/setting_title_textview_margin_left"
             android:orientation="vertical" >
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                 style="@style/init_setting_big_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                     android:paddingLeft="@dimen/setting_title_textview_margin_left"
                     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/setting_textview"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -71,7 +71,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/setting_open_pandoralocker" />
 
-                    <cn.zmdx.kaka.locker.widget.SwitchButton
+                    <cn.zmdx.kaka.fast.locker.widget.SwitchButton
                         android:id="@+id/setting_pandoralocker_switch_button"
                         style="@style/setting_switch"
                         android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
                     android:paddingLeft="@dimen/setting_title_textview_margin_left"
                     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/setting_textview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -111,7 +111,7 @@
                     android:paddingLeft="@dimen/setting_title_textview_margin_left"
                     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/setting_textview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -130,7 +130,7 @@
                     android:paddingLeft="@dimen/setting_title_textview_margin_left"
                     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         android:id="@+id/tvMyFavorite"
                         style="@style/setting_textview"
                         android:layout_width="match_parent"
@@ -150,7 +150,7 @@
                     android:paddingLeft="@dimen/setting_title_textview_margin_left"
                     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/setting_textview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -174,7 +174,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical" >
 
-                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                             android:id="@+id/setting_init_tv"
                             style="@style/setting_textview"
                             android:layout_width="match_parent"
@@ -184,7 +184,7 @@
                             android:gravity="center_vertical"
                             android:text="@string/init_setting_title" />
 
-                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/setting_init_tv"
@@ -207,7 +207,7 @@
                     android:paddingLeft="@dimen/setting_title_textview_margin_left"
                     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/setting_textview"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -227,7 +227,7 @@
                     android:paddingLeft="@dimen/setting_title_textview_margin_left"
                     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/setting_textview"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -247,7 +247,7 @@
                     android:paddingLeft="@dimen/setting_title_textview_margin_left"
                     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/setting_textview"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -263,7 +263,7 @@
             </LinearLayout>
         </ScrollView>
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

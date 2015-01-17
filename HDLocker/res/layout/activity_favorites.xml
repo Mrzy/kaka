@@ -20,7 +20,7 @@
             android:layout_marginRight="@dimen/setting_title_textview_margin_left"
             android:orientation="vertical" >
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                 android:id="@+id/pandora_favorites_title"
                 style="@style/init_setting_big_textview"
                 android:layout_width="wrap_content"
