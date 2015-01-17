@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.meiwen.Res;
 import cn.zmdx.kaka.locker.meiwen.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.meiwen.widget.BaseButton;
 import cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
@@ -28,7 +29,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
 
     private Button mTrustBtn;
 
-    private Button mReadNotificationBtn;
+    private BaseButton mReadNotificationBtn;
 
     private View mRootView;
 
@@ -84,9 +85,9 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
         mCompleteBtn.setOnClickListener(this);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            mReadNotificationBtn = (Button) findViewById(Res.id.init_setting_read_notification_bar_to_set);
+            findViewById(Res.id.init_setting_read_notification_bar_guide).setVisibility(View.VISIBLE);
+            mReadNotificationBtn = (BaseButton) findViewById(Res.id.init_setting_read_notification_bar_guide);
             mReadNotificationBtn.setOnClickListener(this);
-            mReadNotificationBtn.setVisibility(View.VISIBLE);
         }
     }
 

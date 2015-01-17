@@ -182,7 +182,8 @@
                     android:layout_marginLeft="@dimen/init_setting_textview_margin_left"
                     android:layout_marginRight="@dimen/init_setting_textview_margin_left"
                     android:layout_marginTop="@dimen/init_setting_item_margin_top"
-                    android:orientation="vertical" >
+                    android:orientation="vertical"
+                    android:visibility="gone" >
 
                     <cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView
                         style="@style/init_setting_button"
@@ -203,8 +204,7 @@
                         android:layout_height="@dimen/init_setting_basebutton_height"
                         android:layout_marginTop="@dimen/init_setting_button_margin_top"
                         android:gravity="center"
-                        android:text="@string/init_setting_to_set"
-                        android:visibility="gone" />
+                        android:text="@string/init_setting_to_set" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
