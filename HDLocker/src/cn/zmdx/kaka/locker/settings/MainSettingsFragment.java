@@ -41,8 +41,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private LinearLayout mLockType;
 
-    private LinearLayout mPandoraFavorite;
-
     private View mSettingBackground;
 
     public static final int GUSTURE_REQUEST_CODE_SUCCESS = 37;
@@ -75,8 +73,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mInitSetting.setOnClickListener(this);
         mInitSetting.setVisibility(View.VISIBLE);
 
-        mPandoraFavorite = (LinearLayout) mRootView.findViewById(R.id.pandora_favorite);
-        mPandoraFavorite.setOnClickListener(this);
         mSettingBackground = mRootView.findViewById(R.id.setting_background);
 
         mSettingIndividualization = (LinearLayout) mRootView
@@ -173,12 +169,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 break;
             case R.id.setting_lock_type_prompt:
                 gotoLockerPassword();
-                break;
-            case R.id.pandora_favorite:
-                Intent intent = new Intent(getActivity(), FavoritesActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                R.anim.umeng_fb_slide_out_from_left);
                 break;
             default:
                 break;
