@@ -49,6 +49,7 @@ import cn.zmdx.kaka.fast.locker.security.KeyguardLockerManager.IUnlockListener;
 import cn.zmdx.kaka.fast.locker.service.PandoraService;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.fast.locker.shortcut.ShortcutManager;
 import cn.zmdx.kaka.fast.locker.theme.ThemeManager;
 import cn.zmdx.kaka.fast.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
@@ -222,6 +223,7 @@ public class LockScreenManager {
         mWinManager.addView(mEntireView, mWinParams);
         startFakeActivity();
 
+        initShortcutApps();
         setDate();
 
         notifyLocked();
@@ -364,37 +366,48 @@ public class LockScreenManager {
         config.setFlagCheckNewVersionTime(today);
     }
 
-//    private void refreshContent() {
-//        if (mBoxView != null && mBoxView.getChildCount() > 0) {
-//            if (mFoldablePage != null && mFoldablePage instanceof FoldablePage) {
-//                FoldablePage page = (FoldablePage) mFoldablePage;
-//                if (page.isDataValidate()) {
-//                    if (!HDBNetworkState.isWifiNetwork()) {
-//                        page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_HTML);
-//                        page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_MULTIIMG);
-//                    }
-//                    return;
-//                }
-//            }
-//        }
-//
-//        mFoldablePage = PandoraBoxManager.newInstance(mContext).getFoldablePage();
-//
-//        View contentView = mFoldablePage.getRenderedView();
-//        if (contentView == null) {
-//            initDefaultPhoto(false);
-//            return;
-//        }
-//        ViewParent parent = contentView.getParent();
-//        if (parent != null) {
-//            ((ViewGroup) parent).removeView(contentView);
-//        }
-//        ViewGroup.LayoutParams lp = mBoxView.getLayoutParams();
-//        lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
-//        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-//        mBoxView.removeAllViews();
-//        mBoxView.addView(contentView, mBoxView.getChildCount(), lp);
-//    }
+    private void initShortcutApps() {
+        View view = ShortcutManager.getInstance(mContext).createShortcutAppsView();
+
+        ViewGroup.LayoutParams lp = mBoxView.getLayoutParams();
+        lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        mBoxView.removeAllViews();
+        mBoxView.addView(view, mBoxView.getChildCount(), lp);
+    }
+
+    // private void refreshContent() {
+    // if (mBoxView != null && mBoxView.getChildCount() > 0) {
+    // if (mFoldablePage != null && mFoldablePage instanceof FoldablePage) {
+    // FoldablePage page = (FoldablePage) mFoldablePage;
+    // if (page.isDataValidate()) {
+    // if (!HDBNetworkState.isWifiNetwork()) {
+    // page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_HTML);
+    // page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_MULTIIMG);
+    // }
+    // return;
+    // }
+    // }
+    // }
+    //
+    // mFoldablePage =
+    // PandoraBoxManager.newInstance(mContext).getFoldablePage();
+    //
+    // View contentView = mFoldablePage.getRenderedView();
+    // if (contentView == null) {
+    // initDefaultPhoto(false);
+    // return;
+    // }
+    // ViewParent parent = contentView.getParent();
+    // if (parent != null) {
+    // ((ViewGroup) parent).removeView(contentView);
+    // }
+    // ViewGroup.LayoutParams lp = mBoxView.getLayoutParams();
+    // lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+    // lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+    // mBoxView.removeAllViews();
+    // mBoxView.addView(contentView, mBoxView.getChildCount(), lp);
+    // }
 
     @SuppressLint("InflateParams")
     private void initLockScreenViews() {
@@ -612,17 +625,18 @@ public class LockScreenManager {
      * 
      * @param onlyDisplayCustomImage
      */
-//    private void initDefaultPhoto(boolean onlyDisplayCustomImage) {
-//        final DefaultBox box = (DefaultBox) PandoraBoxManager.newInstance(mContext).getDefaultBox();
-//        if (onlyDisplayCustomImage) {
-//            if (box.isSetCustomImage()) {
-//                View defaultView = box.getRenderedView();
-//                mBoxView.addView(defaultView);
-//            }
-//        } else {
-//            mBoxView.addView(box.getRenderedView());
-//        }
-//    }
+    // private void initDefaultPhoto(boolean onlyDisplayCustomImage) {
+    // final DefaultBox box = (DefaultBox)
+    // PandoraBoxManager.newInstance(mContext).getDefaultBox();
+    // if (onlyDisplayCustomImage) {
+    // if (box.isSetCustomImage()) {
+    // View defaultView = box.getRenderedView();
+    // mBoxView.addView(defaultView);
+    // }
+    // } else {
+    // mBoxView.addView(box.getRenderedView());
+    // }
+    // }
 
     private void initSecurePanel() {
         final KeyguardLockerManager klm = new KeyguardLockerManager(mContext);
