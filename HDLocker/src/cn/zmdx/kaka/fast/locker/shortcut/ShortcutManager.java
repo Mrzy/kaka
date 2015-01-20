@@ -6,9 +6,12 @@ import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
+import cn.zmdx.kaka.fast.locker.LockScreenManager;
 import cn.zmdx.kaka.fast.locker.database.ShortcutModel;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid;
+import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid.OnItemClickListener;
 
 public class ShortcutManager {
 
@@ -100,10 +103,28 @@ public class ShortcutManager {
     public View createShortcutAppsView() {
         mGridView = new DragDropGrid(mContext);
 //        mGridView.setOnClickListener(mGridClickListener);
+        List<AppInfo> data = getShortcutInfo();
         final ShortcutAppAdapter adapter = new ShortcutAppAdapter(mContext, mGridView,
-                getShortcutInfo());
+                data);
         mGridView.setAdapter(adapter);
+        mGridView.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View clickedView, int index) {
+                final AppInfo ai = adapter.getData().get(index);
+                startTarget(ai);
+            }
+        });
         return mGridView;
+    }
+
+    private void startTarget(AppInfo ai) {
+        Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(
+                ai.getPkgName());
+        if (intent != null) {
+            mContext.startActivity(intent);
+            LockScreenManager.getInstance().unLock();
+        }
     }
 
     private View.OnClickListener mGridClickListener = new View.OnClickListener() {

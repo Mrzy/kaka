@@ -1,3 +1,4 @@
+
 package cn.zmdx.kaka.fast.locker.shortcut;
 
 import java.util.ArrayList;
@@ -9,7 +10,9 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import cn.zmdx.kaka.fast.locker.BuildConfig;
 import cn.zmdx.kaka.fast.locker.LockScreenManager;
+import cn.zmdx.kaka.fast.locker.utils.HDBLOG;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.PagedDragDropGridAdapter;
 
@@ -22,10 +25,60 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
     private List<AppInfo> mData = new ArrayList<AppInfo>();
 
     private boolean mOrderChanged = false;
+
+    public static final int MODE_33 = 1;
+
+    public static final int MODE_24 = 2;
+
+    public static final int MODE_23 = 3;
+
+    public static final int MODE_22 = 4;
+
+    private int mCurMode = MODE_23;
+
     public ShortcutAppAdapter(Context context, DragDropGrid grid, List<AppInfo> data) {
         mContext = context;
         mGrid = grid;
         mData = data;
+    }
+
+    public List<AppInfo> getData() {
+        return mData;
+    }
+
+    private int getRowCountByMode(int mode) {
+        if (mode == MODE_33) {
+            return 3;
+        } else if (mode == MODE_24 || mode == MODE_23 || mode == MODE_22) {
+            return 2;
+        } else {
+            // default
+            return 2;
+        }
+    }
+
+    public void setMode(int mode) {
+        if (mode >= 1 && mode <= 3) {
+            mCurMode = mode;
+        } else {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logE("error mode，use default mode MODE_33");
+            }
+        }
+
+    }
+
+    private int getColumnCountByMode(int mode) {
+        if (mode == MODE_33 || mode == MODE_23) {
+            return 3;
+        } else if (mode == MODE_24) {
+            return 4;
+        } else if (mode == MODE_22) {
+            return 2;
+        } else {
+            // default
+            return 3;
+        }
     }
 
     @Override
@@ -42,20 +95,8 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
     public View view(int page, final int index) {
         ImageView iv = new ImageView(mContext);
         iv.setImageDrawable(mData.get(index).getDefaultIcon());
-        iv.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                final AppInfo ai = mData.get(index);
-                Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(ai.getPkgName());
-                if (intent != null) {
-                    mContext.startActivity(intent);
-                    LockScreenManager.getInstance().unLock();
-                }
-            }
-        });
         iv.setOnLongClickListener(new View.OnLongClickListener() {
-            
+
             @Override
             public boolean onLongClick(View v) {
                 return mGrid.onLongClick(v);
@@ -66,12 +107,12 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
 
     @Override
     public int rowCount() {
-        return 2;
+        return getRowCountByMode(mCurMode);
     }
 
     @Override
     public int columnCount() {
-        return 3;
+        return getColumnCountByMode(mCurMode);
     }
 
     @Override
@@ -81,6 +122,7 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
 
     @Override
     public void swapItems(int pageIndex, int itemIndexA, int itemIndexB) {
+        //swap position
         int posiA = mData.get(itemIndexA).getPosition();
         mData.get(itemIndexA).setPosition(mData.get(itemIndexB).getPosition());
         mData.get(itemIndexB).setPosition(posiA);
@@ -132,7 +174,7 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
 
     @Override
     public void onFinish() {
-        //如果应用顺序被改变，需要将其保存
+        // 如果应用顺序被改变，需要将其保存
         if (mOrderChanged) {
             ShortcutManager.getInstance(mContext).saveShortcutInfo(mData);
         }

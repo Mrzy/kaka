@@ -40,7 +40,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Display;
@@ -65,7 +64,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
     private PagedDragDropGridAdapter adapter;
 
-    private OnClickListener onClickListener = null;
+    private OnItemClickListener mItemClickListener = null;
 
     private List<View> views = new ArrayList<View>();
 
@@ -108,6 +107,10 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
     private int gridPageHeight;
 
     private DeleteDropZoneView deleteZone;
+
+    public interface OnItemClickListener {
+        void onItemClick(View clickedView, int index);
+    }
 
     public DragDropGrid(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -251,8 +254,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
         addChildViews();
     }
 
-    public void setOnClickListener(OnClickListener l) {
-        onClickListener = l;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mItemClickListener = listener;
     }
 
     private void addChildViews() {
@@ -346,11 +349,12 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
     private void touchUp(MotionEvent event) {
         if (!aViewIsDragged()) {
-            if (onClickListener != null) {
-                View clickedView = getChildAt(getTargetAtCoor((int) event.getX(),
-                        (int) event.getY()));
+            if (mItemClickListener != null) {
+                int index = getTargetAtCoor((int) event.getX(),
+                        (int) event.getY());
+                View clickedView = getChildAt(index);
                 if (clickedView != null)
-                    onClickListener.onClick(clickedView);
+                    mItemClickListener.onItemClick(clickedView, index);
             }
         } else {
             cancelAnimations();
