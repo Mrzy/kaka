@@ -10,7 +10,7 @@ import cn.zmdx.kaka.fast.locker.BuildConfig;
 
 public class MySqlitDatabase extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 1;
 
     public static final int INDEX_ONE = 1;
 
@@ -62,22 +62,10 @@ public class MySqlitDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         TableStructure.createServerImageTable(db);
         TableStructure.createCustomNotificationTable(db);
+        TableStructure.createShortcutTable(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (BuildConfig.DEBUG) {
-            HDBLOG.logD("oldVersion : " + oldVersion + "newVersion : " + newVersion);
-        }
-        switch (oldVersion) {
-            case 1:
-                String sql = "alter table " + TableStructure.TABLE_NAME_SERVER_IMAGE
-                        + " add column favorited integer";
-                db.execSQL(sql);
-            case 2:
-                TableStructure.createCustomNotificationTable(db);
-            default:
-                break;
-        }
     }
 }

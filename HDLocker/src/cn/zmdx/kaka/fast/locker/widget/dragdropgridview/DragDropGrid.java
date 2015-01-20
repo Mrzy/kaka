@@ -40,6 +40,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Display;
@@ -154,6 +155,12 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
         createDeleteZone();
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        this.adapter.onFinish();
+        super.onDetachedFromWindow();
+    }
+
     private void useEditModeAdapter() {
         adapter = new PagedDragDropGridAdapter() {
 
@@ -232,6 +239,10 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
                 return false;
             }
 
+            @Override
+            public void onFinish() {
+
+            }
         };
     }
 
@@ -540,26 +551,26 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
     private boolean canScrollToEitherSide(final boolean onRightEdge, final boolean onLeftEdge) {
         return false;
-//        return (onLeftEdge && container.canScrollToPreviousPage())
-//                || (onRightEdge && container.canScrollToNextPage());
+        // return (onLeftEdge && container.canScrollToPreviousPage())
+        // || (onRightEdge && container.canScrollToNextPage());
     }
 
     private void scroll(boolean onRightEdge, boolean onLeftEdge) {
-//        cancelEdgeTimer();
-//
-//        if (onLeftEdge && container.canScrollToPreviousPage()) {
-//            scrollToPreviousPage();
-//        } else if (onRightEdge && container.canScrollToNextPage()) {
-//            scrollToNextPage();
-//        }
-//        wasOnEdgeJustNow = false;
+        // cancelEdgeTimer();
+        //
+        // if (onLeftEdge && container.canScrollToPreviousPage()) {
+        // scrollToPreviousPage();
+        // } else if (onRightEdge && container.canScrollToNextPage()) {
+        // scrollToNextPage();
+        // }
+        // wasOnEdgeJustNow = false;
     }
 
     private void scrollToNextPage() {
         tellAdapterToMoveItemToNextPage(dragged);
         moveDraggedToNextPage();
 
-//        container.scrollRight();
+        // container.scrollRight();
         int currentPage = currentPage();
         int lastItem = adapter.itemCountInPage(currentPage) - 1;
         dragged = positionOfItem(currentPage, lastItem);
@@ -573,7 +584,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
         tellAdapterToMoveItemToPreviousPage(dragged);
         moveDraggedToPreviousPage();
 
-//        container.scrollLeft();
+        // container.scrollLeft();
         int currentPage = currentPage();
         int lastItem = adapter.itemCountInPage(currentPage) - 1;
         dragged = positionOfItem(currentPage, lastItem);
@@ -658,21 +669,21 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
     }
 
     private boolean onLeftEdgeOfScreen(int x) {
-//        int currentPage = container.currentPage();
-//
-//        int leftEdgeXCoor = currentPage * gridPageWidth;
-//        int distanceFromEdge = x - leftEdgeXCoor;
-//        return (x > 0 && distanceFromEdge <= EGDE_DETECTION_MARGIN);
+        // int currentPage = container.currentPage();
+        //
+        // int leftEdgeXCoor = currentPage * gridPageWidth;
+        // int distanceFromEdge = x - leftEdgeXCoor;
+        // return (x > 0 && distanceFromEdge <= EGDE_DETECTION_MARGIN);
         return false;
     }
 
     private boolean onRightEdgeOfScreen(int x) {
-//        int currentPage = container.currentPage();
-//
-//        int rightEdgeXCoor = (currentPage * gridPageWidth) + gridPageWidth;
-//        int distanceFromEdge = rightEdgeXCoor - x;
-//        return (x > (rightEdgeXCoor - EGDE_DETECTION_MARGIN))
-//                && (distanceFromEdge < EGDE_DETECTION_MARGIN);
+        // int currentPage = container.currentPage();
+        //
+        // int rightEdgeXCoor = (currentPage * gridPageWidth) + gridPageWidth;
+        // int distanceFromEdge = rightEdgeXCoor - x;
+        // return (x > (rightEdgeXCoor - EGDE_DETECTION_MARGIN))
+        // && (distanceFromEdge < EGDE_DETECTION_MARGIN);
         return false;
     }
 
@@ -1068,7 +1079,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
     @Override
     public boolean onLongClick(View v) {
         if (positionForView(v) != -1) {
-//            container.disableScroll();
+            // container.disableScroll();
 
             movingView = true;
             dragged = positionForView(v);
@@ -1197,7 +1208,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
     }
 
     public void setContainer(PagedDragDropGrid container) {
-//        this.container = container;
+        // this.container = container;
     }
 
     private int positionOfItem(int pageIndex, int childIndex) {

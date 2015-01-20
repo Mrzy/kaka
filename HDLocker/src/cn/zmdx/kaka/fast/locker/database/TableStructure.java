@@ -62,6 +62,20 @@ public class TableStructure {
 
     public static final String CUSNOTI_EXTRA = "extra";
 
+    public final static String TABLE_NAME_SHORTCUT = "scut"; // server_image表
+
+    public static final String SCUT_ID = "_id";
+
+    public static final String SCUT_PKG = "pkg";
+
+    public static final String SCUT_APPNAME = "appName";
+
+    public static final String SCUT_DISGUISE = "disguise";
+
+    public static final String SCUT_DISGUISE_DRAWABLE = "disgDrawable";
+
+    public static final String SCUT_POSITION = "disPos";
+
     public static synchronized void createServerImageTable(SQLiteDatabase db) {
         String str_sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_SERVER_IMAGE + " ("
                 + SERVER_IMAGE_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
@@ -83,6 +97,14 @@ public class TableStructure {
                 + CUSNOTI_TIMES + " INTEGER," + CUSNOTI_TYPE + " TEXT," + CUSNOTI_TARGETURL
                 + " TEXT," + CUSNOTI_TARGETAPP + " TEXT," + CUSNOTI_LEVEL + " INTEGER,"
                 + CUSNOTI_EXTRA + " TEXT)";
+        db.execSQL(sql);
+    }
+
+    public static synchronized void createShortcutTable(SQLiteDatabase db) {
+        String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_SHORTCUT + "(" + SCUT_ID
+                + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," + SCUT_PKG + " TEXT,"
+                + SCUT_POSITION + " INTEGER," + SCUT_APPNAME + " TEXT," + SCUT_DISGUISE
+                + " INTEGER," + SCUT_DISGUISE_DRAWABLE + " BLOB)";
         db.execSQL(sql);
     }
 }

@@ -1,9 +1,23 @@
 
 package cn.zmdx.kaka.fast.locker.shortcut;
 
+import java.io.Serializable;
+
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 
-public class AppInfo {
+public class AppInfo implements Serializable, Comparable<AppInfo> {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -7000227766462632344L;
+
+    public static final int DISGUISE = 1;
+
+    public static final int UNDISGUISE = 0;
 
     private String pkgName;
 
@@ -16,6 +30,26 @@ public class AppInfo {
     private boolean isDisguise;
 
     private Drawable disguiseDrawable;
+
+    private int id;
+
+    private Integer position;
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
+    }
 
     public String getPkgName() {
         return pkgName;
@@ -65,4 +99,35 @@ public class AppInfo {
         this.disguiseDrawable = disguiseDrawable;
     }
 
+    public static AppInfo createAppInfo(Context context, String pkgName, boolean disguise,
+            Drawable disguiseDrawable, int position) {
+        final AppInfo ai = new AppInfo();
+        ai.setPkgName(pkgName);
+        String appName = null;
+        final PackageManager pm = context.getPackageManager();
+        try {
+            appName = pm.getApplicationLabel(pm.getApplicationInfo(pkgName, 0)).toString();
+        } catch (Exception e) {
+        }
+        ai.setAppName(appName);
+        ai.setDefaultIcon(getIconByPkgName(context, pkgName));
+        ai.setDisguise(disguise);
+        ai.setDisguiseDrawable(disguiseDrawable);
+        ai.setPosition(position);
+        ai.setShortcut(true);
+        return ai;
+    }
+
+    public static Drawable getIconByPkgName(Context context, String pkgName) {
+        try {
+            return context.getPackageManager().getApplicationIcon(pkgName);
+        } catch (NameNotFoundException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public int compareTo(AppInfo another) {
+        return this.position.compareTo(another.getPosition());
+    }
 }

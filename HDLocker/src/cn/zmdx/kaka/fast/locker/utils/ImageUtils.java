@@ -42,7 +42,21 @@ public class ImageUtils {
         opts.inSampleSize = computeSampleSize(filePath, reqWidth, reqHeight);
         return getBitmapFromFile(filePath, opts);
     }
-    
+
+    public static byte[] drawable2ByteArray(Drawable drawable, Bitmap.CompressFormat format) {
+        if (drawable == null) {
+            return null;
+        }
+
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        if (bitmap != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(format, 100, stream);
+            return stream.toByteArray();
+        }
+        return null;
+    }
+
     /**
      * Create a bitmap object from a drawable object.
      * 

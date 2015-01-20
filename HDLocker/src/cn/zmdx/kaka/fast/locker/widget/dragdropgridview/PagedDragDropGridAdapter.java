@@ -150,6 +150,7 @@ public interface PagedDragDropGridAdapter {
      */
      public boolean disableZoomAnimationsOnChangePage();
 
+     public void onFinish();
 
 
 }
