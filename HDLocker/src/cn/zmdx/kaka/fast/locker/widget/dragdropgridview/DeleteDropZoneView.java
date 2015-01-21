@@ -95,24 +95,24 @@ public class DeleteDropZoneView extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		int measuredHeight = getMeasuredHeight();
-		int measuredWidth = getMeasuredWidth();
-		String removeString = getResources().getString(R.string.removeItem);
-
-		initTrashIcon();
-
-		textPaintStraight.getTextBounds(removeString, 0, 6, bounds);
-
-		int proportion = 3 * measuredHeight / 4;
-		if (straight) {
-			textPaintStraight.setTextSize(proportion);
-			canvas.drawText(removeString, (measuredWidth / 2) + (trash.getWidth() / 2) + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , textPaintStraight);
-			canvas.drawBitmap(trash, (measuredWidth / 2) - (bounds.width() / 2) - (trash.getWidth() / 2) - 10, 0, bitmapPaint);
-		} else {
-			textPaintRed.setTextSize(proportion);
-			canvas.drawText(removeString, (measuredWidth / 2) + (trash.getWidth() / 2) + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , textPaintRed);
-			canvas.drawBitmap(trash, (measuredWidth / 2) - (bounds.width() / 2) - (trash.getWidth() / 2) - 10, 0, bitmapPaintRed);
-		}
+//		int measuredHeight = getMeasuredHeight();
+//		int measuredWidth = getMeasuredWidth();
+//		String removeString = getResources().getString(R.string.removeItem);
+//
+//		initTrashIcon();
+//
+//		textPaintStraight.getTextBounds(removeString, 0, 6, bounds);
+//
+//		int proportion = 3 * measuredHeight / 4;
+//		if (straight) {
+//			textPaintStraight.setTextSize(proportion);
+//			canvas.drawText(removeString, (measuredWidth / 2) + (trash.getWidth() / 2) + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , textPaintStraight);
+//			canvas.drawBitmap(trash, (measuredWidth / 2) - (bounds.width() / 2) - (trash.getWidth() / 2) - 10, 0, bitmapPaint);
+//		} else {
+//			textPaintRed.setTextSize(proportion);
+//			canvas.drawText(removeString, (measuredWidth / 2) + (trash.getWidth() / 2) + 5, measuredHeight - ((measuredHeight - bounds.height()) / 2) , textPaintRed);
+//			canvas.drawBitmap(trash, (measuredWidth / 2) - (bounds.width() / 2) - (trash.getWidth() / 2) - 10, 0, bitmapPaintRed);
+//		}
 	}
 
 	private void initTrashIcon() {

@@ -52,13 +52,12 @@
                 android:gravity="bottom"
                 sothree:panelHeight="@dimen/panelHeight"
                 sothree:shadowHeight="8dp"
-                sothree:topSeekoutHeight="60dp" >
+                sothree:topSeekoutHeight="120dp" >
 
                 <RelativeLayout
                     android:id="@+id/flipper_box"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/gesture_bg" >
+                    android:layout_height="match_parent">
                 </RelativeLayout>
 
                 <FrameLayout

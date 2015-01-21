@@ -574,6 +574,11 @@ public class PandoraPanelLayout extends ViewGroup {
         requestLayout();
     }
 
+    public void setTopPanelHeight(int val) {
+        mTopViewSeekOutHeight = val;
+        requestLayout();
+    }
+
     /**
      * @return The current collapsed panel height
      */
@@ -1264,7 +1269,7 @@ public class PandoraPanelLayout extends ViewGroup {
         // Update the parallax based on the new slide offset
         if (mParallaxOffset > 0 && mSlideOffset >= 0) {
             int mainViewOffset = getCurrentParalaxOffset();
-                mMainView.setTranslationY(mainViewOffset);
+            mMainView.setTranslationY(mainViewOffset);
         }
         // Dispatch the slide event
         dispatchOnPanelSlide(mSlideableView);

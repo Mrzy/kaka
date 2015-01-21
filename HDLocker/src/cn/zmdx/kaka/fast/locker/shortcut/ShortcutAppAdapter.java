@@ -6,9 +6,12 @@ import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import cn.zmdx.kaka.fast.locker.BuildConfig;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.utils.HDBLOG;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.PagedDragDropGridAdapter;
@@ -33,6 +36,7 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
 
     private int mCurMode = MODE_23;
 
+    private LayoutInflater mInflater;
     public ShortcutAppAdapter(Context context, DragDropGrid grid, List<AppInfo> data) {
         this(context, grid, data, MODE_23);
     }
@@ -42,6 +46,7 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
         mGrid = grid;
         mData = data;
         mCurMode = mode;
+        mInflater = LayoutInflater.from(context);
     }
 
     public List<AppInfo> getData() {
@@ -98,16 +103,17 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
 
     @Override
     public View view(int page, final int index) {
-        ImageView iv = new ImageView(mContext);
+        View view = mInflater.inflate(R.layout.shortcut_item_layout, null);
+        ImageView iv = (ImageView) view.findViewById(R.id.shortcut_icon);
         iv.setImageDrawable(mData.get(index).getDefaultIcon());
-        iv.setOnLongClickListener(new View.OnLongClickListener() {
+        view.setOnLongClickListener(new View.OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View v) {
                 return mGrid.onLongClick(v);
             }
         });
-        return iv;
+        return view;
     }
 
     @Override

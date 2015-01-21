@@ -7,9 +7,17 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import cn.zmdx.kaka.fast.locker.LockScreenManager;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.database.ShortcutModel;
+import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.fast.locker.widget.RippleView;
+import cn.zmdx.kaka.fast.locker.widget.RippleView.Callback;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid.OnItemClickListener;
 
@@ -21,8 +29,11 @@ public class ShortcutManager {
 
     private static ShortcutManager INSTANCE;
 
+    private LayoutInflater mInflater;
+
     private ShortcutManager(Context context) {
         mContext = context;
+        mInflater = LayoutInflater.from(context);
         // test
         initTestData();
     }
@@ -90,16 +101,6 @@ public class ShortcutManager {
         ai5.setPosition(5);
         ai5.setShortcut(true);
         data.add(ai5);
-
-//        AppInfo ai6 = new AppInfo();
-//        ai6.setAppName("Libraries");
-//        String pkgName6 = "com.desarrollodroide.repos";
-//        ai6.setPkgName(pkgName6);
-//        ai6.setDefaultIcon(AppInfo.getIconByPkgName(mContext, pkgName5));
-//        ai6.setDisguise(false);
-//        ai6.setPosition(6);
-//        ai6.setShortcut(true);
-//        data.add(ai6);
         saveShortcutInfo(data);
     }
 
@@ -111,25 +112,39 @@ public class ShortcutManager {
     }
 
     public View createShortcutAppsView() {
-        mGridView = new DragDropGrid(mContext);
+        View view = mInflater.inflate(R.layout.tool_box_layout, null);
+        mGridView = (DragDropGrid) view.findViewById(R.id.gridView);
+        ViewGroup.LayoutParams lp = mGridView.getLayoutParams();
+        lp.height = BaseInfoHelper.getRealWidth(mContext) / 3 * 2;
         List<AppInfo> data = getShortcutInfo();
-        final ShortcutAppAdapter adapter = new ShortcutAppAdapter(mContext, mGridView,
-                data);
+        final ShortcutAppAdapter adapter = new ShortcutAppAdapter(mContext, mGridView, data);
         mGridView.setAdapter(adapter);
         mGridView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
-            public void onItemClick(View clickedView, int index) {
-                final AppInfo ai = adapter.getData().get(index);
-                startTarget(ai);
+            public void onItemClick(View clickedView, Object data, MotionEvent event) {
+                if (data instanceof AppInfo) {
+                    final AppInfo ai = (AppInfo) data;
+                    if (clickedView instanceof RippleView) {
+                        RippleView rv = (RippleView) clickedView;
+                        rv.animateRipple(event, new Callback() {
+
+                            @Override
+                            public void onFinish(View v) {
+                                startTarget(ai);
+                            }
+                        });
+                        return;
+                    }
+                    startTarget(ai);
+                }
             }
         });
-        return mGridView;
+        return view;
     }
 
     private void startTarget(AppInfo ai) {
-        Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(
-                ai.getPkgName());
+        Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(ai.getPkgName());
         if (intent != null) {
             mContext.startActivity(intent);
             LockScreenManager.getInstance().unLock();

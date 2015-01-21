@@ -823,7 +823,7 @@ public class SlidingPaneLayout extends ViewGroup {
             }
         }
 
-        if (!mCanSlide || (mIsUnableToDrag && action != MotionEvent.ACTION_DOWN)) {
+        if (!mCanSlide || (mIsUnableToDrag && action != MotionEvent.ACTION_DOWN) || !isEnabled()) {
             mDragHelper.cancel();
             return super.onInterceptTouchEvent(ev);
         }

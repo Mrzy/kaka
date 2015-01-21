@@ -47,7 +47,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
@@ -55,8 +54,9 @@ import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 
-public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongClickListener {
+public class DragDropGrid extends FrameLayout implements OnTouchListener, OnLongClickListener {
 
     private static int ANIMATION_DURATION = 250;
 
@@ -109,7 +109,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
     private DeleteDropZoneView deleteZone;
 
     public interface OnItemClickListener {
-        void onItemClick(View clickedView, int index);
+        void onItemClick(View clickedView, Object index, MotionEvent event);
     }
 
     public DragDropGrid(Context context, AttributeSet attrs, int defStyle) {
@@ -354,7 +354,7 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
                         (int) event.getY());
                 View clickedView = getChildAt(index);
                 if (clickedView != null)
-                    mItemClickListener.onItemClick(clickedView, index);
+                    mItemClickListener.onItemClick(clickedView, adapter.getItemAt(1, index), event);
             }
         } else {
             cancelAnimations();
@@ -758,16 +758,16 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
     }
 
     private void animateMoveToNewPosition(View targetView, Point oldOffset, Point newOffset) {
-        AnimationSet set = new AnimationSet(true);
+//        AnimationSet set = new AnimationSet(true);
 
-        Animation rotate = createFastRotateAnimation();
+//        Animation rotate = createFastRotateAnimation();
         Animation translate = createTranslateAnimation(oldOffset, newOffset);
 
-        set.addAnimation(rotate);
-        set.addAnimation(translate);
+//        set.addAnimation(rotate);
+//        set.addAnimation(translate);
 
         targetView.clearAnimation();
-        targetView.startAnimation(set);
+        targetView.startAnimation(translate);
     }
 
     private TranslateAnimation createTranslateAnimation(Point oldOffset, Point newOffset) {
@@ -935,7 +935,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
     private void computeColumnsAndRowsSizes(int widthSize, int heightSize) {
         columnWidthSize = widthSize / computedColumnCount;
-        rowHeightSize = heightSize / computedRowCount;
+//        rowHeightSize = heightSize / computedRowCount;
+        rowHeightSize = columnWidthSize;
     }
 
     private void computeGridMatrixSize(int widthSize, int heightSize) {
@@ -1082,16 +1083,17 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
     @Override
     public boolean onLongClick(View v) {
-        if (positionForView(v) != -1) {
+        int index = positionForView(v);
+        if (index != -1) {
             // container.disableScroll();
 
             movingView = true;
-            dragged = positionForView(v);
+            dragged = index;
+
+
+//            animateMoveAllItems();
 
             bringDraggedToFront();
-
-            animateMoveAllItems();
-
             animateDragged();
             popDeleteView();
 
@@ -1103,7 +1105,8 @@ public class DragDropGrid extends ViewGroup implements OnTouchListener, OnLongCl
 
     private void bringDraggedToFront() {
         View draggedView = getChildAt(dragged);
-        draggedView.bringToFront();
+//        draggedView.bringToFront();
+        bringChildToFront(draggedView);
         deleteZone.bringToFront();
     }
 

@@ -39,4 +39,5 @@
     <color name="init_prompt_v5_text_prompt_color">#aaffffff</color>
     <color name="init_prompt_v6_text_prompt_color">#636363</color>
 
+    <color name="rippelColor">#FFFFFF</color>
 </resources>

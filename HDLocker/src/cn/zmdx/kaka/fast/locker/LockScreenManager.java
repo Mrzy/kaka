@@ -373,7 +373,7 @@ public class LockScreenManager {
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
         mBoxView.removeAllViews();
-        mBoxView.addView(view, mBoxView.getChildCount(), lp);
+        mBoxView.addView(view, lp);
     }
 
     // private void refreshContent() {
@@ -441,16 +441,28 @@ public class LockScreenManager {
         });
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
-        if (!ViewConfiguration.get(mContext).hasPermanentMenuKey()) {// 存在虚拟按键
-            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 110));
-        } else {
-            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 80));
-        }
+        initSliderViewHeight(mSliderView);
+//        if (!ViewConfiguration.get(mContext).hasPermanentMenuKey()) {// 存在虚拟按键
+//            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 220));
+//        } else {
+//            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 80));
+//        }
         mTopOverlay = mEntireView.findViewById(R.id.lock_top_overlay);
         mBottomOverlay = mEntireView.findViewById(R.id.lock_bottom_overlay);
         setDrawable();
         initCamera();
         initOnlinePaperPanel();
+    }
+
+    private void initSliderViewHeight(PandoraPanelLayout mSliderView2) {
+        int screenHeight = BaseInfoHelper.getRealHeight(mContext);
+        int shortcutHeight = BaseInfoHelper.getRealWidth(mContext) / 3 * 2;
+        int toolBarHeight = BaseInfoHelper.dip2px(mContext, 60);
+        int totalHeight = screenHeight - shortcutHeight - toolBarHeight;
+        int panelHeight = (int) (totalHeight * 0.6f);
+        int topPanelHeight = totalHeight - panelHeight;
+        mSliderView.setPanelHeight(panelHeight);
+        mSliderView.setTopPanelHeight(topPanelHeight);
     }
 
     private void initCamera() {
@@ -878,10 +890,12 @@ public class LockScreenManager {
         @Override
         public void onPanelCollapsed(View panel) {
             UmengCustomEventManager.statisticalPullDownTimes();
+            mSlidingPanelLayout.setEnabled(false);
         }
 
         @Override
         public void onPanelExpanded(View panel) {
+            mSlidingPanelLayout.setEnabled(true);
         }
 
         @Override

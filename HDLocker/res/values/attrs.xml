@@ -88,14 +88,16 @@
             <enum name="hidden" value="3" />
         </attr>
     </declare-styleable>
-
     <declare-styleable name="KeyboardView">
+
         <!-- Default KeyboardView style. -->
         <attr name="keyboardViewStyle" format="reference" />
 
-        <!-- Image for the key. This image needs to be a StateListDrawable, with the following
+        <!--
+             Image for the key. This image needs to be a StateListDrawable, with the following
              possible states: normal, pressed, checkable, checkable+pressed, checkable+checked,
-             checkable+checked+pressed. -->
+             checkable+checked+pressed.
+        -->
         <attr name="keyBackground" format="reference" />
 
         <!-- Size of the text for character keys. -->
@@ -107,7 +109,7 @@
         <!-- Color to use for the label in a key. -->
         <attr name="keyTextColor" format="color" />
 
-        <!-- Layout resource for key press feedback.-->
+        <!-- Layout resource for key press feedback. -->
         <attr name="keyPreviewLayout" format="reference" />
 
         <!-- Vertical offset of the key press feedback from the key. -->
@@ -122,7 +124,26 @@
         <!-- Layout resource for popup keyboards. -->
         <attr name="popupLayout" format="reference" />
 
-        <!-- <attr name="shadowColor" />
-        <attr name="shadowRadius" /> -->
+        <!--
+        <attr name="shadowColor" />
+        <attr name="shadowRadius" />
+        -->
     </declare-styleable>
+    <declare-styleable name="RippleView">
+        <attr name="rv_alpha" format="integer" />
+        <attr name="rv_framerate" format="integer" />
+        <attr name="rv_rippleDuration" format="integer" />
+        <attr name="rv_zoomDuration" format="integer" />
+        <attr name="rv_color" format="color" />
+        <attr name="rv_centered" format="boolean" />
+        <attr name="rv_type" format="enum">
+            <enum name="simpleRipple" value="0" />
+            <enum name="doubleRipple" value="1" />
+            <enum name="rectangle" value="2" />
+        </attr>
+        <attr name="rv_ripplePadding" format="dimension" />
+        <attr name="rv_zoom" format="boolean" />
+        <attr name="rv_zoomScale" format="float" />
+    </declare-styleable>
+
 </resources>
