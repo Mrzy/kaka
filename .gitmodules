@@ -7,3 +7,6 @@
 [submodule "HDLocker/submodules/CardLibrary"]
 	path = HDLocker/submodules/CardLibrary
 	url = git@github.com:Mrzy/CardLibrary.git
+[submodule "HDLocker/submodules/support-v7-appcompat"]
+	path = HDLocker/submodules/support-v7-appcompat
+	url = git@github.com:Mrzy/appcompat.git

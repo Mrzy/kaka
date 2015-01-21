@@ -90,6 +90,16 @@ public class ShortcutManager {
         ai5.setPosition(5);
         ai5.setShortcut(true);
         data.add(ai5);
+
+//        AppInfo ai6 = new AppInfo();
+//        ai6.setAppName("Libraries");
+//        String pkgName6 = "com.desarrollodroide.repos";
+//        ai6.setPkgName(pkgName6);
+//        ai6.setDefaultIcon(AppInfo.getIconByPkgName(mContext, pkgName5));
+//        ai6.setDisguise(false);
+//        ai6.setPosition(6);
+//        ai6.setShortcut(true);
+//        data.add(ai6);
         saveShortcutInfo(data);
     }
 
@@ -102,7 +112,6 @@ public class ShortcutManager {
 
     public View createShortcutAppsView() {
         mGridView = new DragDropGrid(mContext);
-//        mGridView.setOnClickListener(mGridClickListener);
         List<AppInfo> data = getShortcutInfo();
         final ShortcutAppAdapter adapter = new ShortcutAppAdapter(mContext, mGridView,
                 data);
@@ -126,15 +135,6 @@ public class ShortcutManager {
             LockScreenManager.getInstance().unLock();
         }
     }
-
-    private View.OnClickListener mGridClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            // Toast.makeText(mContext, "click,v=" + v,
-            // Toast.LENGTH_SHORT).show();
-        }
-    };
 
     @SuppressWarnings("unchecked")
     public List<AppInfo> getShortcutInfo() {
