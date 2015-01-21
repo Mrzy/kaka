@@ -1,30 +1,30 @@
 
 package cn.zmdx.kaka.fast.locker.guide;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import cn.zmdx.kaka.fast.locker.settings.BaseActivity;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.settings.InitSettingActivity;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.fast.locker.R;
 
 import com.umeng.analytics.MobclickAgent;
 
 /**
  * 引导界面
  */
-public abstract class BaseGuideActivity extends BaseActivity {
+public abstract class BaseGuideActivity extends Activity {
 
     private boolean isMeizu = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        super.onCreate(savedInstanceState);
         isMeizu = PandoraUtils.isMeizu(this);
         View contentView = getContentView();
         Button nextButton = getNextButton();

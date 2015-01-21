@@ -3,16 +3,17 @@ package cn.zmdx.kaka.fast.locker.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.fast.locker.R;
 
-public class LockerPasswordActivity extends BaseActivity implements OnClickListener {
+public class LockerPasswordActivity extends ActionBarActivity implements OnClickListener {
 
     public static final int REQUEST_LOCKER_PASSWORD_TYPE_CODE = 999;
 
@@ -43,8 +44,8 @@ public class LockerPasswordActivity extends BaseActivity implements OnClickListe
         mRootView = findViewById(R.id.pandora_lock_password_background);
         LinearLayout titleLayout = (LinearLayout) mRootView
                 .findViewById(R.id.pandora_lock_password_title);
-        initBackground(mRootView);
-        initTitleHeight(titleLayout);
+//        initBackground(mRootView);
+//        initTitleHeight(titleLayout);
         mNoneTypeLayout = (LinearLayout) findViewById(R.id.pandora_lock_type_none_layout);
         mNoneType = (ImageView) findViewById(R.id.pandora_lock_type_none);
         mNoneTypeLayout.setOnClickListener(this);

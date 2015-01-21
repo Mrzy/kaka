@@ -1,6 +1,7 @@
 
 package cn.zmdx.kaka.fast.locker.settings;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -12,7 +13,7 @@ import cn.zmdx.kaka.fast.locker.widget.PandoraLockPatternView;
 import cn.zmdx.kaka.fast.locker.widget.PandoraLockPatternView.ILockPatternListener;
 import cn.zmdx.kaka.fast.locker.widget.PandoraNumberLockView;
 
-public class LockerPasswordTypeActivity extends BaseActivity {
+public class LockerPasswordTypeActivity extends Activity {
 
     private LinearLayout mLockPatternLayout;
 

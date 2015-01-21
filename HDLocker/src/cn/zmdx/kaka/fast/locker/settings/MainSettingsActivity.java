@@ -9,7 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import cn.zmdx.kaka.fast.locker.R;
@@ -19,7 +19,7 @@ import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class MainSettingsActivity extends FragmentActivity {
+public class MainSettingsActivity extends BaseActivity {
 
     private Intent mServiceIntent = null;
 
@@ -53,10 +53,10 @@ public class MainSettingsActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT >= 19) {
             Window window = getWindow();
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
         mServiceIntent = new Intent(getApplicationContext(), PandoraService.class);
         startService(mServiceIntent);

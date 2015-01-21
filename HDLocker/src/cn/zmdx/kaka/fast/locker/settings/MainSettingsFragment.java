@@ -62,7 +62,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.pandora_setting, container, false);
         initView();
-        initTitleHeight();
+//        initTitleHeight();
         initSwitchButtonState();
         return mRootView;
     }
@@ -137,7 +137,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
         super.onResume();
         MobclickAgent.onPageStart("MainSettingsFragment"); // 统计页面
-        initBackground();
+//        initBackground();
     }
 
     public void onPause() {
