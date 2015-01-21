@@ -176,6 +176,7 @@
         </activity>
         <activity
             android:name="cn.zmdx.kaka.fast.locker.MainSettingsActivity"
+            android:label="@string/pandora_actionbar_title"
             android:screenOrientation="portrait"
             android:theme="@style/TransparentTheme" >
         </activity>
