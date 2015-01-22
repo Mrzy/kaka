@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/cn.zmdx.kaka.fast.locker"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/activity_notification_center_start_remind"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_item_height"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/setting_item_selector"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/setting_title_textview_margin_left"
+        android:paddingRight="@dimen/setting_title_textview_margin_left" >
+
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
+            style="@style/setting_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:text="@string/activity_notification_center_start_remind" />
+
+        <cn.zmdx.kaka.fast.locker.widget.SwitchButton
+            android:id="@+id/activity_notification_center_start_remind_switch_button"
+            style="@style/setting_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:frameDrawable="@drawable/switch_frame"
+            app:sliderDrawable="@drawable/switch_slider"
+            app:stateDrawable="@drawable/switch_state_normal"
+            app:stateMaskDrawable="@drawable/switch_state_mask" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_notification_center_start_privacy"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_item_height"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/setting_item_selector"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/setting_title_textview_margin_left"
+        android:paddingRight="@dimen/setting_title_textview_margin_left" >
+
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
+            style="@style/setting_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:text="@string/activity_notification_center_start_privacy" />
+
+        <cn.zmdx.kaka.fast.locker.widget.SwitchButton
+            android:id="@+id/activity_notification_center_start_privacy_switch_button"
+            style="@style/setting_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:frameDrawable="@drawable/switch_frame"
+            app:sliderDrawable="@drawable/switch_slider"
+            app:stateDrawable="@drawable/switch_state_normal"
+            app:stateMaskDrawable="@drawable/switch_state_mask" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_notification_center_filter"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_item_height"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/setting_item_selector"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/setting_title_textview_margin_left"
+        android:paddingRight="@dimen/setting_title_textview_margin_left" >
+
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
+            style="@style/setting_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:text="@string/activity_notification_center_filter" />
+    </LinearLayout>
+
+</LinearLayout>

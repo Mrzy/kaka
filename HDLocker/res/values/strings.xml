@@ -186,4 +186,11 @@
     <string name="pandora_feedback_title">意见反馈</string>
 
     <string name="removeItem">删除</string>
+    
+    <!--通知中心  -->
+    <string name="activity_notification_center_title">通知中心</string>
+    <string name="activity_notification_center_start_remind">开启应用通知提醒</string>
+    <string name="activity_notification_center_start_privacy">开启通知隐私显示</string>
+    <string name="activity_notification_center_filter">筛选通知应用</string>
+    
 </resources>

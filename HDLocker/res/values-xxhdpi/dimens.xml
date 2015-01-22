@@ -92,4 +92,9 @@
     
     <dimen name="init_prompt_layout_margin_left">5dp</dimen>
     
+    
+    <dimen name="local_alphabet_width">18dip</dimen>
+    <dimen name="local_alphabet_font_size">13sp</dimen>
+    <dimen name="local_alphabet_top_offset">10dip</dimen>
+    
 </resources>

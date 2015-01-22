@@ -38,6 +38,14 @@
     
     <color name="init_prompt_v5_text_prompt_color">#aaffffff</color>
     <color name="init_prompt_v6_text_prompt_color">#636363</color>
+    
+    
+    <color name="alphabet_letter_color">#ffffff</color>
+    <color name="alphabet_letter_color_select">#ffffff</color>
+    <color name="alphabet_color">#313131</color>
+    <color name="alphabet_invalid_color">#9a9a9a</color>
+    <color name="alphabet_color_select">#000000</color>
+    <color name="alphabet_click_bg_color">#757575</color>
 
     <color name="rippelColor">#FFFFFF</color>
 </resources>
