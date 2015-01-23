@@ -24,6 +24,7 @@ import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.database.CustomNotificationModel;
+import cn.zmdx.kaka.locker.network.UrlBuilder;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -49,8 +50,6 @@ public class NotificationInterceptor extends Handler {
 
     private static final int DURATION_PULL_CUSTOM_NOTIFICATION_DATA = BuildConfig.DEBUG ? 30 * 1000
             : 2 * 60 * 60 * 1000;
-
-    private static final String BASE_URL = "http://nb.hdlocker.com/pandora/notify!queryNotifyList.action";
 
     private static final int MSG_DISPATCH_CUSTOM_NOTIFICATION = 6;
 
@@ -261,7 +260,7 @@ public class NotificationInterceptor extends Handler {
      * @return
      */
     private String getUrl(long lastModified) {
-        return BASE_URL + "?lastModified=" + lastModified;
+        return UrlBuilder.getBaseUrl() + "queryNotifyList.action" + "?lastModified=" + lastModified;
     }
 
     private void handlePullCustomNotificationData() {
