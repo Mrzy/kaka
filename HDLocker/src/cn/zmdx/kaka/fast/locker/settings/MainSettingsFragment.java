@@ -2,7 +2,6 @@
 package cn.zmdx.kaka.fast.locker.settings;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
-import cn.zmdx.kaka.fast.locker.CustomActivity;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
@@ -20,8 +18,8 @@ import cn.zmdx.kaka.fast.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class MainSettingsFragment extends BaseSettingsFragment implements
-        OnCheckedChangeListener, OnClickListener {
+public class MainSettingsFragment extends BaseSettingsFragment implements OnCheckedChangeListener,
+        OnClickListener {
     private View mRootView;
 
     private LinearLayout mInitSetting;

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.fast.locker.CustomActivity;
+import cn.zmdx.kaka.fast.locker.MainSettingsActivity;
 import cn.zmdx.kaka.fast.locker.R;
 
 import com.umeng.update.UmengUpdateAgent;
@@ -126,7 +126,7 @@ public abstract class BaseSettingsFragment extends Fragment {
     }
     protected void gotoCustom() {
         Intent intent = new Intent();
-        intent.setClass(getActivity(), CustomActivity.class);
+        intent.setClass(getActivity(), MainSettingsActivity.class);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                 R.anim.umeng_fb_slide_out_from_left);

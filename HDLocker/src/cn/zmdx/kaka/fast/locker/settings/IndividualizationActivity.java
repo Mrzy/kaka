@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import cn.zmdx.kaka.fast.locker.MainSettingsActivity;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;

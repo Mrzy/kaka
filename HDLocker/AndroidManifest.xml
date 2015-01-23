@@ -175,7 +175,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="cn.zmdx.kaka.fast.locker.CustomActivity"
+            android:name="cn.zmdx.kaka.fast.locker.MainSettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TransparentTheme" >
         </activity>
