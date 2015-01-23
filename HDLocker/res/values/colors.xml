@@ -51,4 +51,8 @@
     
     <color name="number_lock_item_press">#03a9f4</color>
     <drawable name="action_bar_background">#03a9f4</drawable>
+    <!-- actionbar -->
+    <color name="pandora_actionbar_title_color">@android:color/white</color>
+    <color name="dxfast_widget_item_press_color">#1c1a3f</color>
+
 </resources>

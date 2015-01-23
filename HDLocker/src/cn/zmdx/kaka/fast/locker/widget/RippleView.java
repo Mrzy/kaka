@@ -154,7 +154,7 @@ public class RippleView extends LinearLayout {
                     }
 
                     @Override
-                    public boolean onSingleTapUp(MotionEvent e) {
+                    public boolean onSingleTapUp(final MotionEvent e) {
                         animateRipple(e, null);
                         postDelayed(new Runnable() {
 

@@ -26,6 +26,8 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 
     <application
         android:name=".HDApplication"
@@ -96,6 +98,11 @@
             android:name=".settings.ShortcutSettingsActivity"
             android:exported="false"
             android:label="@string/fast_setting_item_shortcut"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".shortcut.sevenkey.BrightnessSettingsActivity"
+            android:exported="false"
             android:screenOrientation="portrait" >
         </activity>
         <activity

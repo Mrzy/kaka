@@ -6,16 +6,18 @@ import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import cn.zmdx.kaka.fast.locker.LockScreenManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.database.ShortcutModel;
-import cn.zmdx.kaka.fast.locker.settings.ShortcutSettingsActivity;
+import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.QuickHelperItem;
+import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.ToolbarAdapter;
+import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.WidgetConfig;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid;
 
@@ -25,13 +27,20 @@ public class ShortcutManager {
 
     private DragDropGrid mGridView;
 
+    private GridView mToolbarView;
+
     private static ShortcutManager INSTANCE;
 
     private LayoutInflater mInflater;
 
+    private ToolbarAdapter mAdapter;
+
+    private List<QuickHelperItem> mSwitchList = new ArrayList<QuickHelperItem>();
+
     private ShortcutManager(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
+        initToolbarData();
         // test
         // initTestData();
     }
@@ -111,24 +120,57 @@ public class ShortcutManager {
 
     public View createShortcutAppsView() {
         View view = mInflater.inflate(R.layout.tool_box_layout, null);
-        // test
-        view.findViewById(R.id.settings).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(mContext, ShortcutSettingsActivity.class);
-                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(in);
-                LockScreenManager.getInstance().unLock();
-            }
-        });
         mGridView = (DragDropGrid) view.findViewById(R.id.gridView);
         ViewGroup.LayoutParams lp = mGridView.getLayoutParams();
         lp.height = BaseInfoHelper.getRealWidth(mContext) / 3 * 2;
         List<AppInfo> data = getShortcutInfo();
         final ShortcutAppAdapter adapter = new ShortcutAppAdapter(mContext, mGridView, data);
         mGridView.setAdapter(adapter);
+
+        initToolbar(view);
         return view;
+    }
+
+    private void initToolbar(View view) {
+        mToolbarView = (GridView) view.findViewById(R.id.tool_bar);
+        mAdapter = new ToolbarAdapter(mContext, mSwitchList);
+        mToolbarView.setAdapter(mAdapter);
+//        mToolbarView.setOnItemClickListener(mToolbarItemClickListener);
+    }
+
+    private OnItemClickListener mToolbarItemClickListener = new OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            final QuickHelperItem item = (QuickHelperItem) mAdapter.getItem(position);
+            if (item == null) {
+                return;
+            }
+            switch (item.type) {
+                case QuickHelperItem.TYPE_SWITCH:
+                    updateQuickSwitch(item);
+                    break;
+            }
+        }
+    };
+
+    private void updateQuickSwitch(QuickHelperItem item) {
+        item.tracker.toggleState(mContext, null, null);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void initToolbarData() {
+        mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
+                WidgetConfig.SWITCH_ID_WIFI));
+        // mSwitchList
+        // .add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
+        // WidgetConfig.SWITCH_ID_APN));
+        mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
+                WidgetConfig.SWITCH_ID_SOUND));
+        mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
+                WidgetConfig.SWITCH_ID_BRIGHTNESS));
+        mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
+                WidgetConfig.SWITCH_ID_AIRPLANE));
     }
 
     /**
