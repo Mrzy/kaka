@@ -9,12 +9,11 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.LinearLayout;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.fast.locker.widget.SwitchButton;
-import cn.zmdx.kaka.fast.locker.R;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -44,9 +43,7 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
 
     private void initView() {
         mRootView = findViewById(R.id.individualization_background);
-        LinearLayout titleView = (LinearLayout) findViewById(R.id.pandora_individualization_title);
         initBackground(mRootView);
-        initTitleHeight(titleView);
         mNoticeSButton = (SwitchButton) findViewById(R.id.individualization_notice_switch_button);
         mNoticeSButton.setOnCheckedChangeListener(this);
         mNoticeSButton.setChecked(isNeedNotice());

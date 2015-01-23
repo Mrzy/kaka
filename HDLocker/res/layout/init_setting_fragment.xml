@@ -16,55 +16,6 @@
         android:background="@color/setting_black_translucent"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/init_setting_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
-            android:layout_marginRight="@dimen/setting_title_textview_margin_left"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
-                    style="@style/init_setting_big_textview"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/setting_title_textview_margin_bottom"
-                    android:layout_marginTop="@dimen/setting_title_textview_margin_top"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/init_setting_title" />
-
-                <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
-                    android:id="@+id/init_setting_miui_complete"
-                    style="@style/init_setting_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/init_setting_complete_button_margin_right"
-                    android:layout_marginTop="@dimen/setting_title_textview_margin_top"
-                    android:background="@drawable/setting_item_selector"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:padding="@dimen/init_setting_complete_button_margin_right"
-                    android:paddingBottom="3dp"
-                    android:paddingLeft="@dimen/init_setting_complete_button_margin_right"
-                    android:paddingRight="@dimen/init_setting_complete_button_margin_right"
-                    android:paddingTop="@dimen/init_setting_complete_button_margin_right"
-                    android:text="@string/init_setting_complete_to_set"
-                    android:textColor="@color/white" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/init_setting_title_line_height"
-                android:background="@color/setting_divider_line"
-                android:contentDescription="@string/contentDescription" />
-        </LinearLayout>
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

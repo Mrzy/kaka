@@ -13,10 +13,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -31,8 +29,6 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
     private Button mReadNotificationBtn;
 
     private View mRootView;
-
-    private TypefaceTextView mCompleteBtn;
 
     private static boolean isMIUI = false;
 
@@ -71,17 +67,15 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
             findViewById(R.id.init_setting_MIUI_close_systemlocker).setVisibility(View.GONE);
         }
         mRootView = findViewById(R.id.init_setting_background);
-        LinearLayout titleView = (LinearLayout) findViewById(R.id.init_setting_title);
         initBackground(mRootView);
-        initTitleHeight(titleView);
+
         mCloseSystemLockBtn = (Button) findViewById(R.id.init_setting_close_systemlocker_to_set);
         mCloseSystemLockBtn.setOnClickListener(this);
         mFolatfingWindowBtn = (Button) findViewById(R.id.init_setting_MIUI_allow_floating_window_to_set);
         mFolatfingWindowBtn.setOnClickListener(this);
         mTrustBtn = (Button) findViewById(R.id.init_setting_MIUI_trust_to_set);
         mTrustBtn.setOnClickListener(this);
-        mCompleteBtn = (TypefaceTextView) findViewById(R.id.init_setting_miui_complete);
-        mCompleteBtn.setOnClickListener(this);
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             findViewById(R.id.init_setting_read_notification_bar_guide).setVisibility(View.VISIBLE);
             mReadNotificationBtn = (Button) findViewById(R.id.init_setting_read_notification_bar_to_set);
@@ -138,9 +132,9 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
                 mHandler.sendMessageDelayed(setTrust, MSG_SETTING_DELAY);
                 break;
 
-            case R.id.init_setting_miui_complete:
-                onBackPressed();
-                break;
+            // case R.id.init_setting_miui_complete:
+            // onBackPressed();
+            // break;
 
             case R.id.init_setting_read_notification_bar_to_set:
                 if (isMIUI) {

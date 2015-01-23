@@ -16,10 +16,10 @@
             android:id="@+id/pandora_setting_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
             android:layout_marginRight="@dimen/setting_title_textview_margin_left"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:visibility="gone" >
 
             <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                 style="@style/init_setting_big_textview"
@@ -215,6 +215,27 @@
                         android:clickable="false"
                         android:gravity="center_vertical"
                         android:text="@string/setting_feedback" />
+                </LinearLayout>
+                <!-- actionbar -->
+
+                <LinearLayout
+                    android:id="@+id/goto_actionbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_item_height"
+                    android:background="@drawable/setting_item_selector"
+                    android:clickable="true"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/setting_title_textview_margin_left"
+                    android:paddingRight="@dimen/setting_title_textview_margin_left" >
+
+                    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
+                        style="@style/setting_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:clickable="false"
+                        android:gravity="center_vertical"
+                        android:text="ActionbarActivity" />
                 </LinearLayout>
 
                 <LinearLayout

@@ -9,9 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
-import android.view.WindowManager;
+import cn.zmdx.kaka.fast.locker.CustomActivity;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.guide.GuideActivity;
 import cn.zmdx.kaka.fast.locker.service.PandoraService;
@@ -53,10 +52,10 @@ public class MainSettingsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT >= 19) {
             Window window = getWindow();
-//            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            // window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+            // WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+            // WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
         mServiceIntent = new Intent(getApplicationContext(), PandoraService.class);
         startService(mServiceIntent);
@@ -66,9 +65,10 @@ public class MainSettingsActivity extends BaseActivity {
         MobclickAgent.openActivityDurationTrack(false);
         // UmengUpdateAgent.silentUpdate(this);
         setContentView(R.layout.main_setting_activity);
-//        getWindow().getAttributes().flags |= LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        // getWindow().getAttributes().flags |=
+        // LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.content, new MainSettingsFragment()).commit();
+                .add(R.id.content, new CustomActivity()).commit();
     }
 
     private void init() {

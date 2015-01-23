@@ -16,12 +16,12 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import cn.zmdx.kaka.fast.locker.HDApplication;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.settings.MainSettingsActivity;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.fast.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
-import cn.zmdx.kaka.fast.locker.R;
 
 public class SplashActivity extends Activity {
 

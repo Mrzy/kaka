@@ -42,10 +42,6 @@ public class LockerPasswordActivity extends ActionBarActivity implements OnClick
 
     private void initView() {
         mRootView = findViewById(R.id.pandora_lock_password_background);
-        LinearLayout titleLayout = (LinearLayout) mRootView
-                .findViewById(R.id.pandora_lock_password_title);
-//        initBackground(mRootView);
-//        initTitleHeight(titleLayout);
         mNoneTypeLayout = (LinearLayout) findViewById(R.id.pandora_lock_type_none_layout);
         mNoneType = (ImageView) findViewById(R.id.pandora_lock_type_none);
         mNoneTypeLayout.setOnClickListener(this);

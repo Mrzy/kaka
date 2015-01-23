@@ -15,5 +15,8 @@
     <dimen name="pandora_online_wallpaper_gridview_item_height">162dp</dimen>
     <dimen name="pandora_online_wallpaper_gridview_margin_left">20dp</dimen>
     <dimen name="pandora_online_wallpaper_margin_bottom">18dp</dimen>
-    
+    <!-- actionbar -->
+    <dimen name="pandora_actionbar_header_height">250dp</dimen>
+    <dimen name="pandora_actionbar_header_logo">100dp</dimen>
+
 </resources>
