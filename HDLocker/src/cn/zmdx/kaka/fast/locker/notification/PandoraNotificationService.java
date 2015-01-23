@@ -67,12 +67,11 @@ public final class PandoraNotificationService extends NotificationListenerServic
         // 获取拨号的包名
         Set<String> dialerPkgNameSet = getDialerPkgName(this, Intent.ACTION_DIAL);
 
-        for (Iterator<String> iterator = dialerPkgNameSet.iterator(); iterator.hasNext();) {
-            String nextPkgName = iterator.next();
-            boolean systemApp = isSystemApp(this, nextPkgName);
+        for (String str : dialerPkgNameSet) {
+            boolean systemApp = isSystemApp(this, str);
             if (systemApp) {
                 // 显示系统级别的拨号软件包名
-                np.putInterceptPkgName(nextPkgName);
+                np.putInterceptPkgName(str);
             }
         }
 
@@ -87,15 +86,14 @@ public final class PandoraNotificationService extends NotificationListenerServic
             String androidOrigin = "com.google.android.talk";
             Set<String> smsPkgNameSet = getSmsPkgName(this);
 
-            for (Iterator<String> iterator = smsPkgNameSet.iterator(); iterator.hasNext();) {
-                String nextPkgName = iterator.next();
-                boolean systemApp = isSystemApp(this, nextPkgName);
+            for (String str : smsPkgNameSet) {
+                boolean systemApp = isSystemApp(this, str);
                 if (systemApp) {
                     if (smsPkgNameSet.contains(androidOrigin)) {
                         np.putInterceptPkgName(androidOrigin);
                         return;
                     } else {
-                        np.putInterceptPkgName(nextPkgName);
+                        np.putInterceptPkgName(str);
                         return;
                     }
                 }

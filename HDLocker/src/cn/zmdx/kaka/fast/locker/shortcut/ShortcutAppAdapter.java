@@ -6,11 +6,13 @@ import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import cn.zmdx.kaka.fast.locker.BuildConfig;
+import cn.zmdx.kaka.fast.locker.LockScreenManager;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.utils.HDBLOG;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid;
@@ -37,6 +39,7 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
     private int mCurMode = MODE_23;
 
     private LayoutInflater mInflater;
+
     public ShortcutAppAdapter(Context context, DragDropGrid grid, List<AppInfo> data) {
         this(context, grid, data, MODE_23);
     }
@@ -101,16 +104,33 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
         return mData.size();
     }
 
+    private void startTarget(String pkgName) {
+        if (TextUtils.isEmpty(pkgName)) {
+            return;
+        }
+        Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(pkgName);
+        if (intent != null) {
+            mContext.startActivity(intent);
+            LockScreenManager.getInstance().unLock();
+        }
+    }
+
     @Override
     public View view(int page, final int index) {
         View view = mInflater.inflate(R.layout.shortcut_item_layout, null);
         ImageView iv = (ImageView) view.findViewById(R.id.shortcut_icon);
-        iv.setImageDrawable(mData.get(index).getDefaultIcon());
-        view.setOnLongClickListener(new View.OnLongClickListener() {
+        if (index == mData.get(index).getPosition()) {
+            iv.setImageDrawable(mData.get(index).getDefaultIcon());
+        }
+        view.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public boolean onLongClick(View v) {
-                return mGrid.onLongClick(v);
+            public void onClick(View v) {
+                if (v.getTag() instanceof AppInfo) {
+                    AppInfo ai = (AppInfo) v.getTag();
+                    String pkgName = ai.getPkgName();
+                    startTarget(pkgName);
+                }
             }
         });
         return view;

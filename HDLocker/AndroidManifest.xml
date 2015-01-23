@@ -89,6 +89,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".settings.ShortcutSettingsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".FakeActivity"
             android:excludeFromRecents="true"
             android:exported="false"

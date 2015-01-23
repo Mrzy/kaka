@@ -50,7 +50,6 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
@@ -109,7 +108,7 @@ public class DragDropGrid extends FrameLayout implements OnTouchListener, OnLong
     private DeleteDropZoneView deleteZone;
 
     public interface OnItemClickListener {
-        void onItemClick(View clickedView, Object index, MotionEvent event);
+        void onItemClick(View clickedView, int index, MotionEvent event);
     }
 
     public DragDropGrid(Context context, AttributeSet attrs, int defStyle) {
@@ -154,7 +153,7 @@ public class DragDropGrid extends FrameLayout implements OnTouchListener, OnLong
         }
 
         setOnTouchListener(this);
-        setOnLongClickListener(this);
+        // setOnLongClickListener(this);
         createDeleteZone();
     }
 
@@ -350,11 +349,11 @@ public class DragDropGrid extends FrameLayout implements OnTouchListener, OnLong
     private void touchUp(MotionEvent event) {
         if (!aViewIsDragged()) {
             if (mItemClickListener != null) {
-                int index = getTargetAtCoor((int) event.getX(),
-                        (int) event.getY());
+                int index = getTargetAtCoor((int) event.getX(), (int) event.getY());
                 View clickedView = getChildAt(index);
-                if (clickedView != null)
-                    mItemClickListener.onItemClick(clickedView, adapter.getItemAt(1, index), event);
+                if (clickedView != null) {
+                    mItemClickListener.onItemClick(clickedView, index, event);
+                }
             }
         } else {
             cancelAnimations();
@@ -758,13 +757,13 @@ public class DragDropGrid extends FrameLayout implements OnTouchListener, OnLong
     }
 
     private void animateMoveToNewPosition(View targetView, Point oldOffset, Point newOffset) {
-//        AnimationSet set = new AnimationSet(true);
+        // AnimationSet set = new AnimationSet(true);
 
-//        Animation rotate = createFastRotateAnimation();
+        // Animation rotate = createFastRotateAnimation();
         Animation translate = createTranslateAnimation(oldOffset, newOffset);
 
-//        set.addAnimation(rotate);
-//        set.addAnimation(translate);
+        // set.addAnimation(rotate);
+        // set.addAnimation(translate);
 
         targetView.clearAnimation();
         targetView.startAnimation(translate);
@@ -817,7 +816,7 @@ public class DragDropGrid extends FrameLayout implements OnTouchListener, OnLong
         return new Point(x, y);
     }
 
-    private int getTargetAtCoor(int x, int y) {
+    public int getTargetAtCoor(int x, int y) {
         int page = currentPage();
 
         int col = getColumnOfCoordinate(x, page);
@@ -935,7 +934,7 @@ public class DragDropGrid extends FrameLayout implements OnTouchListener, OnLong
 
     private void computeColumnsAndRowsSizes(int widthSize, int heightSize) {
         columnWidthSize = widthSize / computedColumnCount;
-//        rowHeightSize = heightSize / computedRowCount;
+        // rowHeightSize = heightSize / computedRowCount;
         rowHeightSize = columnWidthSize;
     }
 
@@ -1090,8 +1089,7 @@ public class DragDropGrid extends FrameLayout implements OnTouchListener, OnLong
             movingView = true;
             dragged = index;
 
-
-//            animateMoveAllItems();
+            // animateMoveAllItems();
 
             bringDraggedToFront();
             animateDragged();
@@ -1105,7 +1103,7 @@ public class DragDropGrid extends FrameLayout implements OnTouchListener, OnLong
 
     private void bringDraggedToFront() {
         View draggedView = getChildAt(dragged);
-//        draggedView.bringToFront();
+        // draggedView.bringToFront();
         bringChildToFront(draggedView);
         deleteZone.bringToFront();
     }
@@ -1275,5 +1273,15 @@ public class DragDropGrid extends FrameLayout implements OnTouchListener, OnLong
             this.pageIndex = pageIndex;
             this.itemIndex = itemIndex;
         }
+    }
+
+    private boolean allowLongClick = true;
+
+    public boolean allowLongClick() {
+        return allowLongClick;
+    }
+
+    public void setAllowLongClick(boolean allow) {
+        allowLongClick = allow;
     }
 }

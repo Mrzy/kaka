@@ -26,7 +26,6 @@ package cn.zmdx.kaka.fast.locker.widget;
  */
 
 import android.content.Context;
-import android.content.pm.LauncherApps.Callback;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -47,6 +46,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid;
 
 /**
  * Author : Chutaux Robin Date : 10/8/2014
@@ -134,10 +134,18 @@ public class RippleView extends LinearLayout {
         gestureDetector = new GestureDetector(context,
                 new GestureDetector.SimpleOnGestureListener() {
                     @Override
+                    public boolean onDown(MotionEvent e) {
+                        return true;
+                    }
+
+                    @Override
                     public void onLongPress(MotionEvent event) {
-                        super.onLongPress(event);
-                        // animateRipple(event);
-                        // sendClickEvent(true);
+                        if (getParent() instanceof DragDropGrid) {
+                            DragDropGrid ddg = (DragDropGrid) getParent();
+                            if (ddg.allowLongClick()) {
+                                ddg.onLongClick(RippleView.this);
+                            }
+                        }
                     }
 
                     @Override
@@ -147,12 +155,19 @@ public class RippleView extends LinearLayout {
 
                     @Override
                     public boolean onSingleTapUp(MotionEvent e) {
+                        animateRipple(e, null);
+                        postDelayed(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                performClick();
+                            }
+                        }, DURATION);
                         return true;
                     }
                 });
-
         this.setDrawingCacheEnabled(true);
-        this.setClickable(true);
+        this.setClickable(false);
     }
 
     private long startRippleTime;
@@ -194,6 +209,7 @@ public class RippleView extends LinearLayout {
     public interface Callback {
         void onFinish(View v);
     }
+
     public void animateRipple(MotionEvent event, Callback call) {
         createAnimation(event.getRawX(), event.getRawY(), call);
     }
@@ -234,7 +250,9 @@ public class RippleView extends LinearLayout {
 
                 @Override
                 public void run() {
-                    call.onFinish(RippleView.this);
+                    if (call != null) {
+                        call.onFinish(RippleView.this);
+                    }
                 }
             }, DURATION);
             invalidate();
@@ -244,31 +262,13 @@ public class RippleView extends LinearLayout {
     // FIXME 更改为点击事件触发
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-//                animateRipple(event);
-
-                break;
-            case MotionEvent.ACTION_MOVE:
-
-                break;
-            case MotionEvent.ACTION_UP:
-
-            case MotionEvent.ACTION_CANCEL:
-
-                break;
-        }
-
-//        if (gestureDetector.onTouchEvent(event)) {
-//            animateRipple(event);
-//            sendClickEvent(false);
-//        }
-        return super.onTouchEvent(event);
+        return gestureDetector.onTouchEvent(event);
+        // return super.onTouchEvent(event);
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        this.onTouchEvent(event);
+        // this.onTouchEvent(event);
         return super.onInterceptTouchEvent(event);
     }
 

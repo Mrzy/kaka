@@ -12,9 +12,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
+import cn.zmdx.kaka.fast.locker.BuildConfig;
 import cn.zmdx.kaka.fast.locker.HDApplication;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.shortcut.AppInfo;
+import cn.zmdx.kaka.fast.locker.utils.HDBLOG;
 import cn.zmdx.kaka.fast.locker.utils.ImageUtils;
 
 public class ShortcutModel {
@@ -41,6 +43,11 @@ public class ShortcutModel {
     public boolean insert(AppInfo ai) {
         SQLiteDatabase db = mMySqlitDatabase.getWritableDatabase();
         if (!TextUtils.isEmpty(ai.getPkgName())) {
+            if (deleteByPostionIfExsit(ai.getPosition()) > 0) {
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("position已经存在，删除position为" + ai.getPosition() + "成功");
+                }
+            }
             ContentValues cv = new ContentValues();
             cv.put(TableStructure.SCUT_PKG, ai.getPkgName());
             cv.put(TableStructure.SCUT_APPNAME, ai.getAppName());
@@ -54,6 +61,14 @@ public class ShortcutModel {
             return db.insert(TableStructure.TABLE_NAME_SHORTCUT, null, cv) != -1;
         }
         return false;
+    }
+
+    private int deleteByPostionIfExsit(Integer position) {
+        SQLiteDatabase db = mMySqlitDatabase.getWritableDatabase();
+        return db.delete(TableStructure.TABLE_NAME_SHORTCUT, TableStructure.SCUT_POSITION + "=?",
+                new String[] {
+                    String.valueOf(position)
+                });
     }
 
     @SuppressWarnings("deprecation")

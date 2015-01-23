@@ -419,17 +419,4 @@ public class NotificationInterceptor extends Handler {
     public Set<StatusBarNotification> getActiveNotifications() {
         return mNotificationSet;
     }
-
-    public Set<String> getInterceptPackages() {
-        // TODO
-        return null;
-    }
-
-    public void cancelIntercept(String pkgName) {
-        // TODO
-    }
-
-    public void addIntercept(String pkgName) {
-
-    }
 }

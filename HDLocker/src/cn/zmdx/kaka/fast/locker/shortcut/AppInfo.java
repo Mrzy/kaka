@@ -130,4 +130,12 @@ public class AppInfo implements Serializable, Comparable<AppInfo> {
     public int compareTo(AppInfo another) {
         return this.position.compareTo(another.getPosition());
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("pkgName:" + pkgName + ", appName:" + appName + ", postion:" + position
+                + ", drawable:" + defaultIcon);
+        return sb.toString();
+    }
 }
