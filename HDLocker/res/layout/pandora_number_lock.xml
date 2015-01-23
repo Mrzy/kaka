@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
+    android:layout_width="284dp"
+    android:layout_height="245dp"
     android:baselineAligned="true"
-    android:gravity="center"
     android:orientation="vertical" >
 
     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
         android:id="@+id/number_lock_prompt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         android:text="@string/number_lock_prompt"
-        android:textColor="@color/lock_pattern_view_success_color"
-        android:textSize="15sp" />
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:id="@+id/pandora_number_layout"
@@ -55,12 +54,15 @@
             android:contentDescription="@string/contentDescription"
             android:src="@drawable/pandora_number_lock_line" />
     </LinearLayout>
+    <!-- 284  245 -->
 
     <android.inputmethodservice.KeyboardView
         android:id="@+id/pandora_keyboard_view"
-        android:layout_width="300dp"
-        android:layout_height="400dp"
+        android:layout_width="284dp"
+        android:layout_height="245dp"
         android:background="@android:color/transparent"
-        android:keyBackground="@drawable/pandora_number_lock_key_selector" />
+        android:keyBackground="@drawable/pandora_number_lock_key_selector"
+        android:keyTextColor="@android:color/black" 
+        android:keyTextSize="20sp"/>
 
 </LinearLayout>

@@ -67,7 +67,6 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
             findViewById(R.id.init_setting_MIUI_close_systemlocker).setVisibility(View.GONE);
         }
         mRootView = findViewById(R.id.init_setting_background);
-        initBackground(mRootView);
 
         mCloseSystemLockBtn = (Button) findViewById(R.id.init_setting_close_systemlocker_to_set);
         mCloseSystemLockBtn.setOnClickListener(this);

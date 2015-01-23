@@ -65,8 +65,8 @@
         </activity>
         <activity
             android:name=".settings.InitSettingActivity"
-            android:label="@string/fast_setting_item_init"
             android:exported="false"
+            android:label="@string/fast_setting_item_init"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -118,12 +118,6 @@
             android:label="@string/fast_setting_item_set_password"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".settings.LockerPasswordTypeActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/locker_password_dialog_theme" >
         </activity>
         <activity
             android:name=".settings.FeedbackActivity"

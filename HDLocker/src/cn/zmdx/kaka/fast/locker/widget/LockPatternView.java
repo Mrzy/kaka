@@ -358,15 +358,15 @@ public class LockPatternView extends View {
     }
 
     private void initRegularDotColor() {
-        mRegularDotColor[0][0] = Color.WHITE;
-        mRegularDotColor[0][1] = Color.WHITE;
-        mRegularDotColor[0][2] = Color.WHITE;
-        mRegularDotColor[1][0] = Color.WHITE;
-        mRegularDotColor[1][1] = Color.WHITE;
-        mRegularDotColor[1][2] = Color.WHITE;
-        mRegularDotColor[2][0] = Color.WHITE;
-        mRegularDotColor[2][1] = Color.WHITE;
-        mRegularDotColor[2][2] = Color.WHITE;
+        mRegularDotColor[0][0] = Color.BLACK;
+        mRegularDotColor[0][1] = Color.BLACK;
+        mRegularDotColor[0][2] = Color.BLACK;
+        mRegularDotColor[1][0] = Color.BLACK;
+        mRegularDotColor[1][1] = Color.BLACK;
+        mRegularDotColor[1][2] = Color.BLACK;
+        mRegularDotColor[2][0] = Color.BLACK;
+        mRegularDotColor[2][1] = Color.BLACK;
+        mRegularDotColor[2][2] = Color.BLACK;
     }
 
     public CellState[][] getCellStates() {
@@ -1029,7 +1029,7 @@ public class LockPatternView extends View {
 
         if (drawPath) {
             // mPathPaint.setColor(getCurrentColor(true /* partOfPattern */));
-            mPathPaint.setColor(Color.WHITE);
+            mPathPaint.setColor(Color.BLACK);
             mPathPaint.setShader(mPathShader);
 
             boolean anyCircles = false;

@@ -5,7 +5,7 @@
     <color name="setting_item_press_color">#22ffffff</color>
     <color name="gusture_textview_color">#a5ffffff</color>
     <color name="gusture_button_color">#aaffffff</color>
-    <color name="setting_textview_color">#88000000</color>
+    <color name="setting_textview_color">#000000</color>
     <color name="gusture_button_unpress_color">#30ffffff</color>
     <color name="setting_background">#ffffff</color>
     <color name="setting_about_us_text_color">#ffffff</color>
@@ -48,5 +48,7 @@
     <color name="fast_actionbar_title_color">@android:color/white</color>
     <color name="fast_setting_text_color">#212121</color>
     <color name="rippelColor">#FFFFFF</color>
-
+    
+    <color name="number_lock_item_press">#03a9f4</color>
+    <drawable name="action_bar_background">#03a9f4</drawable>
 </resources>

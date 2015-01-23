@@ -11,10 +11,11 @@
         android:id="@+id/pandora_lock_pattern_prompt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="@string/lock_pattern_prompt"
-        android:textColor="@color/lock_pattern_view_success_color"
-        android:textSize="15sp" />
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
 
     <cn.zmdx.kaka.fast.locker.widget.LockPatternView
         android:id="@+id/pandora_lock_pattern"

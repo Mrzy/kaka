@@ -17,9 +17,9 @@
     <dimen name="pandora_wallpaper_width">122.5dp</dimen>
     <dimen name="pandora_wallpaper_height">181dp</dimen>
     <dimen name="setting_fb_contact_height">52dp</dimen>
-    <dimen name="gusture_pattern_lock_width">400dp</dimen>
-    <dimen name="gusture_pattern_lock_height">400dp</dimen>
-    <dimen name="gusture_pattern_lock_margin_top">20dp</dimen>
+    <dimen name="gusture_pattern_lock_width">380dp</dimen>
+    <dimen name="gusture_pattern_lock_height">380dp</dimen>
+    <dimen name="gusture_pattern_lock_margin_top">40dp</dimen>
     <dimen name="setting_about_pandora_height">100dp</dimen>
     <dimen name="pandora_update_dialog_width">350dp</dimen>
     <dimen name="pandora_box_nodata_show_image_top_height">108dp</dimen>

@@ -84,6 +84,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         mPosition = getIntent().getIntExtra("position", -1);
         initView();
         new LoadDataTask().execute();
+
     }
 
     private void initView() {
@@ -91,7 +92,8 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         mLoadingView = (ProgressBar) findViewById(R.id.notify_loading);
 
         mNotifyGridView = (StickyGridHeadersGridView) findViewById(R.id.notify_grid_view);
-        mNotifyGridView = (StickyGridHeadersGridView) findViewById(R.id.notify_grid_view);
+        mNotifyGridView.setHeadersIgnorePadding(true);
+        mNotifyGridView.setAreHeadersSticky(false);
 
         mAlphabetView = (AlphabetScrollerView) findViewById(R.id.notify_alphabetView);
         mAlphabetView.init(mNotifyGridView, this);
@@ -339,6 +341,14 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
             case TYPE_FILTER:
                 if (itme.isSelect()) {
                     itme.setSelect(false);
+                    NotifyFilterEntity needRemove = new NotifyFilterEntity();
+                    for (NotifyFilterEntity entity : mNotifyDataList) {
+                        if (entity.getPkgName().equals(itme.getPkgName())) {
+                            needRemove = entity;
+                            break;
+                        }
+                    }
+                    mNotifyInterceptList.remove(needRemove);
                     removeInterceptPkgName(itme.getPkgName());
                 } else {
                     itme.setSelect(true);

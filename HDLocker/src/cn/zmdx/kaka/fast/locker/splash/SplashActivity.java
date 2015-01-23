@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import cn.zmdx.kaka.fast.locker.HDApplication;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.settings.MainSettingsActivity;
-import cn.zmdx.kaka.fast.locker.settings.MainSettingsActivityOld;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.fast.locker.wallpaper.WallpaperUtils;

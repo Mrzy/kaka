@@ -97,8 +97,6 @@ public class PandoraNumberLockView extends LinearLayout {
 
     private static final int TIMES_SET_NUMBER_LOCK_AGAIN = 2;
 
-    private static final int THREAD_SLEPPING_DELAY = 300;
-
     private static final int VERIFY_FAIL_ANIMATION_DURATION = 60;
 
     private static final int VERIFY_FAIL_ANIMATION_REPEAT_COUNT = 4;
@@ -318,16 +316,10 @@ public class PandoraNumberLockView extends LinearLayout {
         onPatternDetectedTimes = onPatternDetectedTimes + 1;
         if (isPatternDetectedForConfirmation(onPatternDetectedTimes)) {
             // TODO   success to set munber lock
-            HDBThreadUtils.postOnUiDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    setUnLockType(KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK);
-                    if (null != mNumberLockListener) {
-                        mNumberLockListener.onSetNumberLock(LOCK_NUMBER_TYPE_OPEN, true);
-                    }
-                }
-            }, THREAD_SLEPPING_DELAY);
+            setUnLockType(KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK);
+            if (null != mNumberLockListener) {
+                mNumberLockListener.onSetNumberLock(LOCK_NUMBER_TYPE_OPEN, true);
+            }
             return;
         }
         setPromptString(mContext.getResources().getString(R.string.number_lock_confirmation_prompt));

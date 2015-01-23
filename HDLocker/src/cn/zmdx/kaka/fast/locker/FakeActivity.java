@@ -13,7 +13,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import cn.zmdx.kaka.fast.locker.LockScreenManager.ILockScreenListener;
 import cn.zmdx.kaka.fast.locker.settings.MainSettingsActivity;
-import cn.zmdx.kaka.fast.locker.settings.MainSettingsActivityOld;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.fast.locker.weather.PandoraLocationManager;

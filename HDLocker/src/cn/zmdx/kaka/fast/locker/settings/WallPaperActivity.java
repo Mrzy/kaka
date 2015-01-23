@@ -92,7 +92,6 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
 
     private void initView() {
         mRootView = findViewById(R.id.pandora_wallpaper);
-        initBackground(mRootView);
         initCustomContainer();
         initDefaultContainer();
 

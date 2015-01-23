@@ -46,6 +46,7 @@ public class NotificationCenterActivity extends BaseActivity implements OnChecke
         if (view == mNotifyFilterLayout) {
             Intent in = new Intent();
             in.setClass(this, NotifyFilterActivity.class);
+            in.putExtra("type", NotifyFilterActivity.TYPE_FILTER);
             startActivity(in);
             overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                     R.anim.umeng_fb_slide_out_from_left);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-    android:keyHeight="84dp"
-    android:keyWidth="96dp" 
+    android:keyHeight="61dp"
+    android:keyWidth="94dp" 
     android:horizontalGap="0px"
     android:verticalGap="0px" >
 
@@ -24,7 +24,7 @@
     </Row>
 
     <Row >
-        <Key android:codes="48" android:keyLabel="0" android:horizontalGap="96dp"/>
+        <Key android:codes="48" android:keyLabel="0" android:horizontalGap="94dp"/>
         <Key android:codes="-5" android:keyIcon="@drawable/pandora_number_lock_delete_normal" />
     </Row>
 </Keyboard>

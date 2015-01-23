@@ -18,6 +18,7 @@
             <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
                 android:text="选择通知项目" />
 
             <GridView
@@ -26,17 +27,17 @@
                 android:layout_height="match_parent"
                 android:background="@android:color/white"
                 android:choiceMode="singleChoice"
-                android:drawSelectorOnTop="true"
                 android:fillViewport="true"
                 android:focusable="false"
                 android:gravity="center"
                 android:horizontalSpacing="0dp"
+                android:listSelector="@android:color/transparent"
                 android:numColumns="4"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
                 android:paddingTop="10dp"
                 android:scrollbarStyle="outsideOverlay"
-                android:stretchMode="columnWidth"
-                android:verticalSpacing="5dp" >
-            </GridView>
+                android:verticalSpacing="5dp" />
         </LinearLayout>
 
         <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
@@ -46,15 +47,16 @@
             android:layout_below="@+id/notify_list_layout"
             android:background="@android:color/white"
             android:choiceMode="singleChoice"
-            android:drawSelectorOnTop="true"
             android:fillViewport="true"
             android:focusable="false"
             android:gravity="center"
             android:horizontalSpacing="0dp"
+            android:listSelector="@android:color/transparent"
             android:numColumns="4"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             android:paddingTop="10dp"
             android:scrollbarStyle="outsideOverlay"
-            android:stretchMode="columnWidth"
             android:verticalSpacing="5dp" />
 
         <cn.zmdx.kaka.fast.locker.notify.filter.AlphabetScrollerView

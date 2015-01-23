@@ -21,9 +21,9 @@
     <dimen name="setting_MIUI_item_height">120dp</dimen>
     
     <dimen name="gusture_view_padding_top">125dp</dimen>
-    <dimen name="gusture_pattern_lock_width">300dp</dimen>
-    <dimen name="gusture_pattern_lock_height">300dp</dimen>
-    <dimen name="gusture_pattern_lock_margin_top">10dp</dimen>
+    <dimen name="gusture_pattern_lock_width">260dp</dimen>
+    <dimen name="gusture_pattern_lock_height">260dp</dimen>
+    <dimen name="gusture_pattern_lock_margin_top">30dp</dimen>
     <dimen name="gusture_view_button_view_width">253dp</dimen>
     <dimen name="gusture_view_button_margin_top">10dp</dimen>
     <dimen name="gusture_view_button_height">44dp</dimen>

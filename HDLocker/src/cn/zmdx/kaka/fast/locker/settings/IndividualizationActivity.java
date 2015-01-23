@@ -39,7 +39,6 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
 
     private void initView() {
         mRootView = findViewById(R.id.individualization_background);
-        initBackground(mRootView);
         mNoticeSButton = (SwitchView) findViewById(R.id.individualization_notice_switch_button);
 //        mNoticeSButton.setOnCheckedChangeListener(this);
         mNoticeSButton.setChecked(isNeedNotice());
