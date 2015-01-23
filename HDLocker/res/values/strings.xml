@@ -183,29 +183,24 @@
     <string name="tip_open_notification_permission">请勾选【潘多拉锁屏】</string>
     <string name="pandora_feedback_send">发送</string>
     <string name="pandora_feedback_title">意见反馈</string>
-    <!-- actionbar -->
-    <string name="pandora_actionbar_title">Fast Locker</string>
-
-    <string name="removeItem">删除</string>
     
-    <!--通知中心  -->
+    <string name="removeItem">删除</string>
+
+    <!-- 通知中心 -->
     <string name="activity_notification_center_title">通知中心</string>
     <string name="activity_notification_center_start_remind">开启应用通知提醒</string>
     <string name="activity_notification_center_start_privacy">开启通知隐私显示</string>
     <string name="activity_notification_center_filter">筛选通知应用</string>
-    
-
     <string name="fast_setting_item_open_fastlocker">是否启用锁屏</string>
-
     <string name="fast_setting_item_set_password">设置锁屏密码</string>
-
     <string name="fast_setting_item_manage_wallpaper">管理壁纸</string>
-
+    <string name="fast_setting_item_init">初始设置</string>
     <string name="fast_setting_item_notification_center">通知中心</string>
-
     <string name="fast_setting_item_shortcut">添加快捷应用</string>
-
     <string name="fast_setting_item_individual">个性化设置</string>
-
     <string name="fast_setting_item_about">关于</string>
+    <string name="fast_setting_item_about_fast">关于Fast锁屏</string>
+    <string name="fast_locker_name_zh">Fast快锁屏</string>
+    <string name="fast_locker_name_en">Fast Locker</string>
+    <string name="fast_setting_text_color">#212121</string>
 </resources>

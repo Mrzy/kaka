@@ -4,16 +4,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white" >
 
-    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
-        android:id="@+id/pandora_feedback_title"
-        android:layout_width="fill_parent"
-        android:layout_height="58dp"
-        android:background="#2f3035"
-        android:gravity="center"
-        android:text="@string/pandora_feedback_title"
-        android:textColor="#ffffff"
-        android:textSize="22sp" />
-
     <LinearLayout
         android:id="@+id/fb_input_layout"
         android:layout_width="fill_parent"

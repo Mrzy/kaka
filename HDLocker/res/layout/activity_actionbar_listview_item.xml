@@ -8,30 +8,39 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1" >
 
         <ImageView
             android:id="@+id/fastlocker_setting_item_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="centerInside"
-            android:src="@drawable/fastlocker_setting_item_secure" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="10dp"
+            android:scaleType="fitXY" />
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             android:id="@+id/fastlocker_setting_item_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColor="@color/fast_setting_text_color"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <cn.zmdx.kaka.fast.locker.widget.SwitchView
         android:id="@+id/fastlocker_lockscreen_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_gravity="end|center_vertical"
         android:visibility="invisible" />
 
 </LinearLayout>

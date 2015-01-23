@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,6 +36,7 @@ public class ShortcutSettingsActivity extends BaseActivity {
     private ShortcutSettingsAdapter mAdapter;
 
     private ViewGroup mOuterView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,18 +61,18 @@ public class ShortcutSettingsActivity extends BaseActivity {
 
             @Override
             public void onItemClick(View clickedView, final int index, MotionEvent event) {
-                    if (clickedView instanceof RippleView) {
-                        RippleView rv = (RippleView) clickedView;
-                        rv.animateRipple(event, new Callback() {
+                if (clickedView instanceof RippleView) {
+                    RippleView rv = (RippleView) clickedView;
+                    rv.animateRipple(event, new Callback() {
 
-                            @Override
-                            public void onFinish(View v) {
-                                startSettingsActivity(index);
-                            }
-                        });
-                        return;
-                    }
-                    startSettingsActivity(index);
+                        @Override
+                        public void onFinish(View v) {
+                            startSettingsActivity(index);
+                        }
+                    });
+                    return;
+                }
+                startSettingsActivity(index);
             }
         });
     }
@@ -82,10 +82,10 @@ public class ShortcutSettingsActivity extends BaseActivity {
     }
 
     private void startSettingsActivity(int position) {
-         Intent intent = new Intent(this, NotifyFilterActivity.class);
-         intent.putExtra("position", position);
-         intent.putExtra("type", NotifyFilterActivity.TYPE_SELECT);
-         startActivityForResult(intent, 1);
+        Intent intent = new Intent(this, NotifyFilterActivity.class);
+        intent.putExtra("position", position);
+        intent.putExtra("type", NotifyFilterActivity.TYPE_SELECT);
+        startActivityForResult(intent, 1);
     }
 
     @Override

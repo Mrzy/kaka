@@ -49,7 +49,8 @@
             android:name=".settings.MainSettingsActivity"
             android:exported="false"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/TransparentTheme" >
         </activity>
         <activity
             android:name=".settings.BaseActivity"
@@ -64,6 +65,7 @@
         </activity>
         <activity
             android:name=".settings.InitSettingActivity"
+            android:label="@string/fast_setting_item_init"
             android:exported="false"
             android:screenOrientation="portrait" >
         </activity>
@@ -75,6 +77,7 @@
         <activity
             android:name=".settings.WallPaperActivity"
             android:exported="false"
+            android:label="@string/fast_setting_item_manage_wallpaper"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -86,11 +89,13 @@
         <activity
             android:name=".settings.MAboutActivity"
             android:exported="false"
+            android:label="@string/fast_setting_item_about_fast"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".settings.ShortcutSettingsActivity"
             android:exported="false"
+            android:label="@string/fast_setting_item_shortcut"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -103,12 +108,14 @@
         <activity
             android:name=".settings.IndividualizationActivity"
             android:exported="false"
+            android:label="@string/fast_setting_item_individual"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".settings.LockerPasswordActivity"
             android:exported="false"
+            android:label="@string/fast_setting_item_set_password"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
@@ -121,6 +128,7 @@
         <activity
             android:name=".settings.FeedbackActivity"
             android:exported="false"
+            android:label="@string/setting_feedback"
             android:screenOrientation="portrait" />
         <activity
             android:name=".settings.NotificationCenterActivity"
@@ -175,10 +183,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="cn.zmdx.kaka.fast.locker.MainSettingsActivity"
-            android:label="@string/pandora_actionbar_title"
-            android:screenOrientation="portrait"
-            android:theme="@style/TransparentTheme" >
+            android:name=".settings.MainSettingAboutActivity"
+            android:exported="false"
+            android:label="@string/fast_setting_item_about"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

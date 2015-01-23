@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/fast_setting_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_item_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/setting_title_textview_margin_left" >
+
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
+            style="@style/setting_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:text="@string/setting_feedback" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fast_setting_update"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_item_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/setting_title_textview_margin_left" >
+
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
+            style="@style/setting_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:text="@string/setting_check_new_version" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fast_setting_about"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_item_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/setting_title_textview_margin_left" >
+
+        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
+            style="@style/setting_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:text="@string/fast_setting_item_about_fast" />
+    </LinearLayout>
+
+</LinearLayout>

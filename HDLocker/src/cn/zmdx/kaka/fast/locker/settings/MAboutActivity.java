@@ -1,16 +1,15 @@
 
 package cn.zmdx.kaka.fast.locker.settings;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
-import cn.zmdx.kaka.fast.locker.R;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class MAboutActivity extends Activity {
+public class MAboutActivity extends BaseActivity {
 
     private TypefaceTextView mVersion;
 

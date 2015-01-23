@@ -9,12 +9,11 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import cn.zmdx.kaka.fast.locker.MainSettingsActivity;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.sound.LockSoundManager;
-import cn.zmdx.kaka.fast.locker.widget.SwitchButton;
+import cn.zmdx.kaka.fast.locker.widget.SwitchView;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -25,13 +24,9 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
 
     private View mRootView;
 
-    private SwitchButton mNoticeSButton;
+    private SwitchView mNoticeSButton;
 
-    private SwitchButton mNoticeMobileNetworkSButton;
-
-    private SwitchButton mLockScreenVoiceSButton;
-
-    private SwitchButton mNotificationSButton;
+    private SwitchView mLockScreenVoiceSButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,18 +40,12 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
     private void initView() {
         mRootView = findViewById(R.id.individualization_background);
         initBackground(mRootView);
-        mNoticeSButton = (SwitchButton) findViewById(R.id.individualization_notice_switch_button);
-        mNoticeSButton.setOnCheckedChangeListener(this);
+        mNoticeSButton = (SwitchView) findViewById(R.id.individualization_notice_switch_button);
+//        mNoticeSButton.setOnCheckedChangeListener(this);
         mNoticeSButton.setChecked(isNeedNotice());
-        mNoticeMobileNetworkSButton = (SwitchButton) findViewById(R.id.individualization_3G_4G_switch_button);
-        mNoticeMobileNetworkSButton.setOnCheckedChangeListener(this);
-        mNoticeMobileNetworkSButton.setChecked(isMobileNetwork());
-        mLockScreenVoiceSButton = (SwitchButton) findViewById(R.id.individualization_open_lockscreen_voice_switch_button);
-        mLockScreenVoiceSButton.setOnCheckedChangeListener(this);
+        mLockScreenVoiceSButton = (SwitchView) findViewById(R.id.individualization_open_lockscreen_voice_switch_button);
+//        mLockScreenVoiceSButton.setOnCheckedChangeListener(this);
         mLockScreenVoiceSButton.setChecked(isLockScreenVoice());
-        mNotificationSButton = (SwitchButton) findViewById(R.id.individualization_open_message_notification_switch_button);
-        mNotificationSButton.setOnCheckedChangeListener(this);
-        mNotificationSButton.setChecked(isMessageNotification());
 
         // LayoutParams params = mLockerDefaultImageThumb.getLayoutParams();
         // int height = (int)
@@ -82,15 +71,6 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
                     UmengCustomEventManager.statisticalCloseNotifyTimes();
                 }
                 break;
-            case R.id.individualization_3G_4G_switch_button:
-                if (isChecked) {
-                    openMobileNetwork();
-                    UmengCustomEventManager.statisticalAllowAutoDownload();
-                } else {
-                    closeMobileNetwork();
-                    UmengCustomEventManager.statisticalDisallowAutoDownload();
-                }
-                break;
             case R.id.individualization_open_lockscreen_voice_switch_button:
                 if (isChecked) {
                     openLockScreenVoice();
@@ -98,13 +78,6 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
                 } else {
                     closeLocksScreenVoice();
                     UmengCustomEventManager.statisticalDisableLockScreenSound();
-                }
-                break;
-            case R.id.individualization_open_message_notification_switch_button:
-                if (isChecked) {
-                    openMessageNotification();
-                } else {
-                    closeMessageNotification();
                 }
                 break;
             default:
@@ -170,18 +143,6 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
         return PandoraConfig.newInstance(this).isNeedNotice(this);
     }
 
-    private void closeMobileNetwork() {
-        PandoraConfig.newInstance(this).saveMobileNetwork(false);
-    }
-
-    private void openMobileNetwork() {
-        PandoraConfig.newInstance(this).saveMobileNetwork(true);
-    }
-
-    private boolean isMobileNetwork() {
-        return PandoraConfig.newInstance(this).isMobileNetwork();
-    }
-
     private void closeLocksScreenVoice() {
         PandoraConfig.newInstance(this).saveLockScreenVoice(false);
         LockSoundManager.release();
@@ -194,18 +155,6 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
 
     private boolean isLockScreenVoice() {
         return PandoraConfig.newInstance(this).isLockScreenVoice();
-    }
-
-    private void closeMessageNotification() {
-        PandoraConfig.newInstance(this).saveMessageNotification(false);
-    }
-
-    private void openMessageNotification() {
-        PandoraConfig.newInstance(this).saveMessageNotification(true);
-    }
-
-    private boolean isMessageNotification() {
-        return PandoraConfig.newInstance(this).isShowNotificationMessage();
     }
 
     @Override

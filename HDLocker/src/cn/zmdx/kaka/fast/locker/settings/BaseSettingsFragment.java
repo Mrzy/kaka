@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.fast.locker.MainSettingsActivity;
 import cn.zmdx.kaka.fast.locker.R;
 
 import com.umeng.update.UmengUpdateAgent;

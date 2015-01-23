@@ -59,10 +59,37 @@ public class SettingItemsAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.settingItemIcon.setImageResource(R.drawable.fastlocker_setting_item_secure);
+
         holder.settingItemText.setText(list.get(position));
-        if (position == 0) {
-            holder.lockScreenSwitch.setVisibility(View.VISIBLE);
+        switch (position) {
+            case 0:
+                holder.lockScreenSwitch.setVisibility(View.VISIBLE);
+                holder.settingItemIcon.setImageResource(R.drawable.fast_setting_secure);
+                break;
+            case 1:
+                holder.settingItemIcon.setImageResource(R.drawable.fast_setting_password);
+                break;
+            case 2:
+                holder.settingItemIcon.setImageResource(R.drawable.fast_setting_manage_wallpaper);
+                break;
+            case 3:
+                holder.settingItemIcon
+                        .setImageResource(R.drawable.fast_setting_notification_center);
+                break;
+            case 4:
+                holder.settingItemIcon.setImageResource(R.drawable.fast_setting_shortcut);
+                break;
+            case 5:
+                holder.settingItemIcon.setImageResource(R.drawable.fast_setting_init);
+                break;
+            case 6:
+                holder.settingItemIcon.setImageResource(R.drawable.fast_setting_individual);
+                break;
+            case 7:
+                holder.settingItemIcon.setImageResource(R.drawable.fast_setting_about);
+                break;
+            default:
+                break;
         }
         return convertView;
     }

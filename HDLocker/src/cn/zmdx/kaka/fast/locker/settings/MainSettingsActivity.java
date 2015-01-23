@@ -1,106 +1,339 @@
 
 package cn.zmdx.kaka.fast.locker.settings;
 
-import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.RectF;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.Window;
-import cn.zmdx.kaka.fast.locker.CustomActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.R;
-import cn.zmdx.kaka.fast.locker.guide.GuideActivity;
-import cn.zmdx.kaka.fast.locker.service.PandoraService;
-import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.fast.locker.SettingItemsAdapter;
+import cn.zmdx.kaka.fast.locker.widget.AlphaForegroundColorSpan;
+import cn.zmdx.kaka.fast.locker.widget.KenBurnsView;
 
-import com.umeng.analytics.MobclickAgent;
+public class MainSettingsActivity extends Activity implements OnClickListener {
 
-public class MainSettingsActivity extends BaseActivity {
+    private int mActionBarTitleColor;
 
-    private Intent mServiceIntent = null;
+    private int mActionBarHeight;
 
-    boolean isFirstIn = false;
+    private int mHeaderHeight;
 
-    private static final int GO_GUIDE = 1001;
+    private int mMinHeaderTranslation;
 
-    private MyHandler mHandler = new MyHandler(this);
+    private ListView mListView;
 
-    private static class MyHandler extends Handler {
-        WeakReference<MainSettingsActivity> mActivity;
+    private KenBurnsView mHeaderPicture;
 
-        public MyHandler(MainSettingsActivity activity) {
-            mActivity = new WeakReference<MainSettingsActivity>(activity);
-        }
+    private ImageView mHeaderLogo;
 
-        @Override
-        public void handleMessage(Message msg) {
-            MainSettingsActivity activity = mActivity.get();
-            switch (msg.what) {
-                case GO_GUIDE:
-                    activity.goGuide();
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    }
+    private ImageView mCommentImageView;
 
-    @SuppressLint("InlinedApi")
+    private View mHeader;
+
+    private View mPlaceHolderView;
+
+    private View mSpaceView;
+
+    private TextView mLockScreenName;
+
+    private FrameLayout mRootViewFrameLayout;// unused
+
+    private AccelerateDecelerateInterpolator mSmoothInterpolator;
+
+    private RectF mRect1 = new RectF();
+
+    private RectF mRect2 = new RectF();
+
+    private AlphaForegroundColorSpan mAlphaForegroundColorSpan;
+
+    private SpannableString mSpannableString;
+
+    private TypedValue mTypedValue = new TypedValue();
+
+    private String[] settingItems;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= 19) {
-            Window window = getWindow();
-            // window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-            // WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-            // WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
-        mServiceIntent = new Intent(getApplicationContext(), PandoraService.class);
-        startService(mServiceIntent);
-        init();
         super.onCreate(savedInstanceState);
-        // AppUninstall.openUrlWhenUninstall(this, "http://www.hdlocker.com");
-        MobclickAgent.openActivityDurationTrack(false);
-        // UmengUpdateAgent.silentUpdate(this);
-        setContentView(R.layout.main_setting_activity);
-        // getWindow().getAttributes().flags |=
-        // LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.content, new CustomActivity()).commit();
+
+        mSmoothInterpolator = new AccelerateDecelerateInterpolator();
+        mHeaderHeight = getResources().getDimensionPixelSize(R.dimen.fast_actionbar_header_height);
+        mMinHeaderTranslation = -mHeaderHeight + getActionBarHeight();
+
+        setContentView(R.layout.activity_actionbar);
+
+        settingItems = new String[] {
+                getString(R.string.fast_setting_item_open_fastlocker),
+                getString(R.string.fast_setting_item_set_password),
+                getString(R.string.fast_setting_item_manage_wallpaper),
+                getString(R.string.fast_setting_item_notification_center),
+                getString(R.string.fast_setting_item_shortcut),
+                getString(R.string.fast_setting_item_init),
+                getString(R.string.fast_setting_item_individual),
+                getString(R.string.fast_setting_item_about),
+        };
+        initView();
+        setupActionBar();
+        setupListView();
     }
 
-    private void init() {
-        // 读取SharedPreferences中需要的数据
-        // 使用SharedPreferences来记录程序的使用次数
+    private void initView() {
+        mRootViewFrameLayout = (FrameLayout) findViewById(R.id.actionbar_rootview);
+        mLockScreenName = (TextView) findViewById(R.id.fastlocker_name);
+        mListView = (ListView) findViewById(R.id.listview);
+        mHeader = this.findViewById(R.id.header);
+        mHeaderPicture = (KenBurnsView) findViewById(R.id.header_picture);
+        mHeaderPicture.setResourceIds(R.drawable.picture0, R.drawable.picture1);
+        mHeaderLogo = (ImageView) findViewById(R.id.header_logo);
+        mCommentImageView = (ImageView) findViewById(R.id.fast_comment);
+        mCommentImageView.setOnClickListener(this);
+        mActionBarTitleColor = getResources().getColor(R.color.fast_actionbar_title_color);
 
-        // 取得相应的值，如果没有该值，说明还未写入，用true作为默认值
-        isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
+        mSpannableString = new SpannableString(getString(R.string.fast_locker_name_zh));
+        mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(mActionBarTitleColor);
+    }
 
-        // 判断程序与第几次运行，如果是第一次运行则跳转到引导界面，否则跳转到主界面
-        if (isFirstIn) {
-            mHandler.sendEmptyMessage(GO_GUIDE);
+    private void setupListView() {
+        ArrayList<String> FAKES = new ArrayList<String>();
+        for (int i = 0; i < settingItems.length; i++) {
+            FAKES.add(settingItems[i]);
         }
+        SettingItemsAdapter settingItemsAdapter = new SettingItemsAdapter(this, FAKES);
+        mPlaceHolderView = getLayoutInflater().inflate(R.layout.view_header_placeholder, mListView,
+                false);
+        // 增加ListView下面的空白，使上方能够折叠。
+        mSpaceView = getLayoutInflater().inflate(R.layout.activity_actionbar_listview_space,
+                mListView, false);
+        mListView.addHeaderView(mPlaceHolderView);
+        mListView.addFooterView(mSpaceView);
+
+        mListView.setAdapter(settingItemsAdapter);
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            /**
+             * 通过计算ListView滑动时的距离来动态改变
+             */
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                    int totalItemCount) {
+                int scrollY = getScrollY();
+                // sticky actionbar
+                mHeader.setTranslationY(Math.max(-scrollY, mMinHeaderTranslation));
+                // header_logo --> actionbar icon
+                float ratio = clamp(mHeader.getTranslationY() / mMinHeaderTranslation, 0.0f, 1.0f);
+                interpolate(mHeaderLogo, getActionBarIconView(),
+                        mSmoothInterpolator.getInterpolation(ratio));
+                setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
+            }
+        });
+        /**
+         * 界面跳转
+         */
+        mListView.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 1:
+                        break;
+                    // 设置锁屏密码
+                    case 2:
+                        gotoLockerPasswordActivity();
+                        break;
+                    // 管理壁纸
+                    case 3:
+                        gotoWallpaperActivity();
+                        break;
+                    // 通知中心
+                    case 4:
+                        gotoNotificationCenterActivity();
+                        break;
+                    // 添加快捷应用
+                    case 5:
+                        gotoShortcutActivity();
+                        break;
+                    // 初始设置
+                    case 6:
+                        gotoInitSettingActivity();
+                        break;
+                    // 个性化设置
+                    case 7:
+                        gotoIndividualizationActivity();
+                        break;
+                    // 关于
+                    case 8:
+                        gotoMainSettingAboutActivity();
+                        break;
+
+                }
+            }
+        });
     }
 
-    private void goGuide() {
-        Intent intent = new Intent(this, GuideActivity.class);
-        startActivity(intent);
+    private void setTitleAlpha(float alpha) {
+        mAlphaForegroundColorSpan.setAlpha(alpha);
+        mSpannableString.setSpan(mAlphaForegroundColorSpan, 0, mSpannableString.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        getActionBar().setTitle(mSpannableString);
+        // getActionBar().setTitle("");
     }
 
-    public void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart("MainSettingsActivity"); // 统计页面
-        MobclickAgent.onResume(this); // 统计时长
+    private void gotoLockerPasswordActivity() {
+        Intent intentLocker = new Intent(MainSettingsActivity.this, LockerPasswordActivity.class);
+        startActivity(intentLocker);
+        this.overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
     }
 
-    public void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd("MainSettingsActivity"); // 保证 onPageEnd
-                                                         // 在onPause
-        // 之前调用,因为 onPause 中会保存信息
-        MobclickAgent.onPause(this);
+    private void gotoWallpaperActivity() {
+        Intent intentWallpaper = new Intent(MainSettingsActivity.this, WallPaperActivity.class);
+        startActivity(intentWallpaper);
+        this.overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+    }
+
+    private void gotoIndividualizationActivity() {
+        Intent intentIndividual = new Intent(MainSettingsActivity.this,
+                IndividualizationActivity.class);
+        startActivity(intentIndividual);
+        this.overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+    }
+
+    private void gotoNotificationCenterActivity() {
+        Intent in = new Intent();
+        in.setClass(MainSettingsActivity.this, NotificationCenterActivity.class);
+        startActivity(in);
+        this.overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+    }
+
+    private void gotoShortcutActivity() {
+        Intent in = new Intent();
+        in.setClass(MainSettingsActivity.this, ShortcutSettingsActivity.class);
+        startActivity(in);
+        this.overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+    }
+
+    private void gotoMainSettingAboutActivity() {
+        Intent in = new Intent();
+        in.setClass(MainSettingsActivity.this, MainSettingAboutActivity.class);
+        startActivity(in);
+        this.overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+    }
+
+    private void gotoInitSettingActivity() {
+        Intent in = new Intent();
+        in.setClass(MainSettingsActivity.this, InitSettingActivity.class);
+        startActivity(in);
+        this.overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
+    }
+
+    /**
+     * 做LockerName的动画，暂未使用
+     */
+    private void setLockerNameAnimator() {
+        ObjectAnimator lockerNameAnimator = ObjectAnimator.ofFloat(mLockScreenName, "alpha", 1.0f,
+                0.0f);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setDuration(500);
+        animatorSet.play(lockerNameAnimator);
+    }
+
+    public static float clamp(float value, float min, float max) {
+        return Math.max(min, Math.min(value, max));
+    }
+
+    private void interpolate(View view1, View view2, float interpolation) {
+        getOnScreenRect(mRect1, view1);
+        getOnScreenRect(mRect2, view2);
+
+        float scaleX = 1.0F + interpolation * (mRect2.width() / mRect1.width() - 1.0F);
+        float scaleY = 1.0F + interpolation * (mRect2.height() / mRect1.height() - 1.0F);
+        float translationX = 0.5F * (interpolation * (mRect2.left + mRect2.right - mRect1.left - mRect1.right));
+        float translationY = 0.5F * (interpolation * (mRect2.top + mRect2.bottom - mRect1.top - mRect1.bottom));
+
+        view1.setTranslationX(translationX);
+        view1.setTranslationY(translationY - mHeader.getTranslationY());
+        view1.setScaleX(scaleX);
+        view1.setScaleY(scaleY);
+    }
+
+    private RectF getOnScreenRect(RectF rect, View view) {
+        rect.set(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
+        return rect;
+    }
+
+    public int getScrollY() {
+        View c = mListView.getChildAt(0);
+        if (c == null) {
+            return 0;
+        }
+
+        int firstVisiblePosition = mListView.getFirstVisiblePosition();
+        int top = c.getTop();
+
+        int headerHeight = 0;
+        if (firstVisiblePosition >= 1) {
+            headerHeight = mPlaceHolderView.getHeight();
+        }
+
+        return -top + firstVisiblePosition * c.getHeight() + headerHeight;
+    }
+
+    /**
+     * 简单设置ActionBar
+     */
+    private void setupActionBar() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setIcon(R.drawable.ic_transparent);
+    }
+
+    private ImageView getActionBarIconView() {
+        return (ImageView) findViewById(android.R.id.home);
+    }
+
+    public int getActionBarHeight() {
+        if (mActionBarHeight != 0) {
+            return mActionBarHeight;
+        }
+        getTheme().resolveAttribute(android.R.attr.actionBarSize, mTypedValue, true);
+        mActionBarHeight = TypedValue.complexToDimensionPixelSize(mTypedValue.data, getResources()
+                .getDisplayMetrics());
+        return mActionBarHeight;
+    }
+
+    /**
+     * 处理评价按钮点击事件
+     */
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(this, "我想去点赞", Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -10,14 +10,15 @@
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
         android:background="@android:color/white"
+        android:divider="@null"
         android:scrollbars="none" />
 
     <FrameLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/pandora_actionbar_header_height" >
+        android:layout_height="@dimen/fast_actionbar_header_height"
+        android:layout_gravity="top" >
 
         <cn.zmdx.kaka.fast.locker.widget.KenBurnsView
             android:id="@+id/header_picture"
@@ -27,27 +28,38 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp" >
+            android:layout_height="match_parent" >
 
             <ImageView
                 android:id="@+id/header_logo"
-                android:layout_width="@dimen/pandora_actionbar_header_logo"
-                android:layout_height="@dimen/pandora_actionbar_header_logo"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_launcher" />
+                android:layout_width="@dimen/fast_actionbar_header_logo"
+                android:layout_height="@dimen/fast_actionbar_header_logo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/fast_locker_logo" />
 
             <TextView
                 android:id="@+id/fastlocker_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/header_logo"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="5dp"
-                android:text="Fast快锁屏"
+                android:layout_marginTop="20dp"
+                android:text="@string/fast_locker_name_zh"
                 android:textColor="#ffffff"
-                android:textSize="30sp" />
+                android:textSize="22sp" />
         </RelativeLayout>
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/fast_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/round_button"
+        android:src="@drawable/fast_comment" />
 
 </FrameLayout>

@@ -7,22 +7,6 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/setting_about_top"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_us_height"
-        android:layout_alignParentTop="true"
-        android:background="#2f3035" >
-
-        <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/setting_about_us"
-            android:textColor="@color/setting_about_us_text_color"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/setting_anout_middle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/pandora_logo"
+            android:background="@drawable/fast_locker_logo"
             android:contentDescription="@string/contentDescription" />
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
@@ -43,7 +27,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/setting_about_pandora_margin"
             android:gravity="center_horizontal"
-            android:text="@string/app_name"
+            android:text="@string/fast_locker_name_zh"
             android:textColor="@color/setting_about_pandora_color"
             android:textSize="19sp"
             android:typeface="sans" />
