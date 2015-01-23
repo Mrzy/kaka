@@ -6,10 +6,7 @@ import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.fast.locker.theme.ThemeManager;
-import cn.zmdx.kaka.fast.locker.theme.ThemeManager.Theme;
 
 /**
  * 
@@ -20,9 +17,10 @@ public class BaseActivity extends ActionBarActivity {
     @SuppressLint("InlinedApi")
     @SuppressWarnings("deprecation")
     protected void initBackground(final View rootView) {
-//        getWindow().getAttributes().flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-//        Theme theme = ThemeManager.getCurrentTheme();
-//        rootView.setBackgroundDrawable(theme.getCurDrawable());
+        // getWindow().getAttributes().flags =
+        // WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        // Theme theme = ThemeManager.getCurrentTheme();
+        // rootView.setBackgroundDrawable(theme.getCurDrawable());
         // if (theme.isDefaultTheme()) {
         // rootView.setBackgroundResource(theme.getmBackgroundResId());
         // } else {
@@ -39,10 +37,10 @@ public class BaseActivity extends ActionBarActivity {
         // }
         if (Build.VERSION.SDK_INT >= 19) {
             Window window = getWindow();
-//            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            // window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+            // WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+            // WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
     }
 

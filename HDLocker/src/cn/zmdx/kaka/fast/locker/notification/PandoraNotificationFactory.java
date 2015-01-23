@@ -12,7 +12,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import cn.zmdx.kaka.fast.locker.HDApplication;
 import cn.zmdx.kaka.fast.locker.settings.IndividualizationActivity;
-import cn.zmdx.kaka.fast.locker.settings.MainSettingsActivity;
+import cn.zmdx.kaka.fast.locker.settings.MainSettingsActivityOld;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.fast.locker.BuildConfig;
 import cn.zmdx.kaka.fast.locker.R;
@@ -121,7 +121,7 @@ public class PandoraNotificationFactory {
         ni.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
         ni.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                 R.drawable.notification_custom_youhua_icon));
-        Intent intent = new Intent(context, MainSettingsActivity.class);
+        Intent intent = new Intent(context, MainSettingsActivityOld.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pi = PendingIntent.getActivity(context, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);

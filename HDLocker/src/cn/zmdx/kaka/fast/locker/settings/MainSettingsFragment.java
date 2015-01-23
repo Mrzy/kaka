@@ -14,8 +14,6 @@ import android.widget.LinearLayout;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.fast.locker.theme.ThemeManager;
-import cn.zmdx.kaka.fast.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.fast.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -46,6 +44,9 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     public static final int GUSTURE_REQUEST_CODE_FAIL = 38;
 
+    // actionbar
+    private LinearLayout textViewActionbar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +63,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.pandora_setting, container, false);
         initView();
-//        initTitleHeight();
         initSwitchButtonState();
         return mRootView;
     }
@@ -95,20 +95,23 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mConcernTeam.setOnClickListener(this);
         mChangeBackground = (LinearLayout) mRootView.findViewById(R.id.setting_change_background);
         mChangeBackground.setOnClickListener(this);
+        // actionbar
+        textViewActionbar = (LinearLayout) mRootView.findViewById(R.id.goto_actionbar);
+        textViewActionbar.setOnClickListener(this);
     }
 
-    private void initTitleHeight() {
-        int statusBarHeight = PandoraUtils.getStatusBarHeight(getActivity());
-        LinearLayout titleLayout = (LinearLayout) mRootView
-                .findViewById(R.id.pandora_setting_title);
-        titleLayout.setPadding(0, statusBarHeight, 0, 0);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void initBackground() {
-        Theme theme = ThemeManager.getCurrentTheme();
-        mSettingBackground.setBackgroundDrawable(theme.getCurDrawable());
-    }
+    // private void initTitleHeight() {
+    // int statusBarHeight = PandoraUtils.getStatusBarHeight(getActivity());
+    // LinearLayout titleLayout = (LinearLayout) mRootView
+    // .findViewById(R.id.pandora_setting_title);
+    // titleLayout.setPadding(0, statusBarHeight, 0, 0);
+    // }
+    //
+    // @SuppressWarnings("deprecation")
+    // private void initBackground() {
+    // Theme theme = ThemeManager.getCurrentTheme();
+    // mSettingBackground.setBackgroundDrawable(theme.getCurDrawable());
+    // }
 
     private void initSwitchButtonState() {
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
@@ -137,7 +140,7 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
         super.onResume();
         MobclickAgent.onPageStart("MainSettingsFragment"); // 统计页面
-//        initBackground();
+        // initBackground();
     }
 
     public void onPause() {
@@ -168,6 +171,9 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 break;
             case R.id.setting_lock_type_prompt:
                 gotoLockerPassword();
+                break;
+            case R.id.goto_actionbar:
+                gotoCustom();
                 break;
             default:
                 break;

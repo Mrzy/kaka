@@ -30,10 +30,10 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.HDApplication;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
@@ -45,11 +45,10 @@ import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.fast.locker.utils.ImageUtils;
 import cn.zmdx.kaka.fast.locker.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.fast.locker.wallpaper.PandoraWallpaperManager;
-import cn.zmdx.kaka.fast.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.fast.locker.wallpaper.PandoraWallpaperManager.IWallpaperClickListener;
 import cn.zmdx.kaka.fast.locker.wallpaper.PandoraWallpaperManager.PandoraWallpaper;
+import cn.zmdx.kaka.fast.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.fast.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
-import cn.zmdx.kaka.fast.locker.R;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -93,10 +92,7 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
 
     private void initView() {
         mRootView = findViewById(R.id.pandora_wallpaper);
-        LinearLayout titleLayout = (LinearLayout) mRootView
-                .findViewById(R.id.pandora_wallpaper_title);
         initBackground(mRootView);
-        initTitleHeight(titleLayout);
         initCustomContainer();
         initDefaultContainer();
 
@@ -191,7 +187,7 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
         }
         switch (requestCode) {
             case PandoraUtils.REQUEST_CODE_CROP_IMAGE:
-                Drawable cuDrawable= ThemeManager.getCurrentTheme().getCurDrawable();
+                Drawable cuDrawable = ThemeManager.getCurrentTheme().getCurDrawable();
                 setBackground(cuDrawable);
                 String fileName = PandoraUtils.getRandomString();
                 saveCurWallpaperFileName(fileName);

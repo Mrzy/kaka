@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Window;
-import cn.zmdx.kaka.fast.locker.CustomActivity;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.guide.GuideActivity;
 import cn.zmdx.kaka.fast.locker.service.PandoraService;
@@ -18,7 +17,7 @@ import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class MainSettingsActivity extends BaseActivity {
+public class MainSettingsActivityOld extends BaseActivity {
 
     private Intent mServiceIntent = null;
 
@@ -29,15 +28,15 @@ public class MainSettingsActivity extends BaseActivity {
     private MyHandler mHandler = new MyHandler(this);
 
     private static class MyHandler extends Handler {
-        WeakReference<MainSettingsActivity> mActivity;
+        WeakReference<MainSettingsActivityOld> mActivity;
 
-        public MyHandler(MainSettingsActivity activity) {
-            mActivity = new WeakReference<MainSettingsActivity>(activity);
+        public MyHandler(MainSettingsActivityOld activity) {
+            mActivity = new WeakReference<MainSettingsActivityOld>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            MainSettingsActivity activity = mActivity.get();
+            MainSettingsActivityOld activity = mActivity.get();
             switch (msg.what) {
                 case GO_GUIDE:
                     activity.goGuide();
@@ -68,7 +67,7 @@ public class MainSettingsActivity extends BaseActivity {
         // getWindow().getAttributes().flags |=
         // LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.content, new CustomActivity()).commit();
+                .add(R.id.content, new MainSettingsFragment()).commit();
     }
 
     private void init() {

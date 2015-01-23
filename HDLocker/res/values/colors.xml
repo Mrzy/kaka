@@ -35,17 +35,17 @@
     <color name="batterymeter_charge_color_low">#FFed4c4c </color>
     <color name="batterymeter_regular_color">#FFfffefb </color>
     <color name="batterymeter_bolt_color">#B2000000</color> <!-- 70% black -->
-    
+
     <color name="init_prompt_v5_text_prompt_color">#aaffffff</color>
     <color name="init_prompt_v6_text_prompt_color">#636363</color>
-    
-    
     <color name="alphabet_letter_color">#ffffff</color>
     <color name="alphabet_letter_color_select">#ffffff</color>
     <color name="alphabet_color">#313131</color>
     <color name="alphabet_invalid_color">#9a9a9a</color>
     <color name="alphabet_color_select">#000000</color>
     <color name="alphabet_click_bg_color">#757575</color>
+    <!-- actionbar -->
+    <color name="pandora_actionbar_title_color">@android:color/white</color>
 
     <color name="rippelColor">#FFFFFF</color>
 </resources>
