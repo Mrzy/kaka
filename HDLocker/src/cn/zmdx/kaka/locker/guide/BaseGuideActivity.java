@@ -1,13 +1,13 @@
 
 package cn.zmdx.kaka.locker.guide;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.BaseActivity;
 import cn.zmdx.kaka.locker.settings.InitSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -17,7 +17,7 @@ import com.umeng.analytics.MobclickAgent;
 /**
  * 引导界面
  */
-public abstract class BaseGuideActivity extends Activity {
+public abstract class BaseGuideActivity extends BaseActivity {
 
     private boolean isMeizu = false;
 
@@ -33,7 +33,7 @@ public abstract class BaseGuideActivity extends Activity {
                     "You must implement abstract method getContentView() and getNextButton()");
         }
         if (isMeizu) {
-            nextButton.setText(getResources().getString(R.string.pandora_guide_start));
+             nextButton.setText(getResources().getString(R.string.pandora_guide_start));
         }
         setContentView(contentView);
 
@@ -42,12 +42,9 @@ public abstract class BaseGuideActivity extends Activity {
             @Override
             public void onClick(View v) {
                 setGuided();
-                if (!isMeizu) {
-                    goHome();
-                }else{
-                    finish();
-                    onFinish();
-                }
+                goHome();
+                finish();
+                onFinish();
                 PandoraConfig.newInstance(BaseGuideActivity.this).savePandolaLockerState(true);
             }
         });

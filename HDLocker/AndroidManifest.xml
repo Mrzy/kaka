@@ -41,18 +41,24 @@
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name=".settings.MainSettingsActivity"
-            android:theme="@android:style/Theme.NoTitleBar" 
             android:exported="false"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
-        
+        <activity
+            android:name=".settings.BaseActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
         <activity
             android:name=".guide.GuideActivity"
             android:exported="false"
@@ -109,6 +115,50 @@
             android:screenOrientation="portrait"
             android:theme="@style/locker_password_dialog_theme" >
         </activity>
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
+            android:configChanges="keyboardHidden|orientation"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name="cn.zmdx.kaka.locker.settings.ShareContentActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent1103193086" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".settings.FeedbackActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.PandoraService" />
         <!-- umeng -->
@@ -116,17 +166,19 @@
             android:name="com.umeng.update.net.DownloadingService"
             android:process=":DownloadingService" >
         </service>
+        <service
+            android:name="cn.zmdx.kaka.locker.notification.PandoraNotificationService"
+            android:label="@string/notification_service_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name="com.umeng.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
-        <activity
-            android:name="com.umeng.fb.ConversationActivity"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name="com.umeng.fb.ContactActivity"
-            android:theme="@android:style/Theme.NoTitleBar" />
 
         <receiver android:name=".receiver.PandoraReceiver" >
             <intent-filter android:priority="1000" >
@@ -144,10 +196,9 @@
             android:value="pandora" />
 
         <activity
-            android:name=".content.favorites.FavoritesActivity"
+            android:name="cn.zmdx.kaka.locker.settings.FavoritesActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

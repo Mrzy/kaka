@@ -75,26 +75,49 @@
                         android:orientation="vertical"
                         android:paddingLeft="10dp" >
 
-                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                            android:id="@+id/battery_info"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_marginRight="6dp"
-                            android:layout_marginTop="5dp"
-                            android:textSize="12sp" />
+                            android:orientation="horizontal" >
 
-                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                            android:id="@+id/weather_summary"
-                            android:layout_width="wrap_content"
+                            <cn.zmdx.kaka.locker.battery.BatteryView
+                                android:id="@+id/batteryView"
+                                android:layout_width="10dp"
+                                android:layout_height="15dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="6dp" />
+
+                            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                                android:id="@+id/battery_info"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginTop="5dp"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginTop="20dp"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="10dp"
-                            android:textColor="@color/white"
-                            android:textSize="19dp"
-                            android:visibility="invisible" />
+                            android:orientation="horizontal" >
+
+                            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                                android:id="@+id/weather_summary"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="2dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_weight="3.4"
+                                android:paddingLeft="5dp"
+                                android:textColor="@color/white"
+                                android:textSize="19dp"
+                                android:visibility="invisible" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.6" />
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/lock_date_view"
@@ -150,6 +173,28 @@
                     android:clickable="true"
                     android:focusable="false" >
 
+                    <cn.zmdx.kaka.locker.notification.view.NotificationLayout
+                        android:id="@+id/lock_bottom_notification_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="30dp" >
+                    </cn.zmdx.kaka.locker.notification.view.NotificationLayout>
+
+                    <FrameLayout
+                        android:id="@+id/camera_outline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true" >
+
+                        <ImageView
+                            android:id="@+id/camera"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/camera_icon" />
+                    </FrameLayout>
+
                     <View
                         android:id="@+id/lock_bottom_overlay"
                         android:layout_width="match_parent"
@@ -158,17 +203,6 @@
                         android:background="#000000"
                         android:focusable="false"
                         android:focusableInTouchMode="false" />
-
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        android:id="@+id/batteryTip"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="30dp"
-                        android:gravity="center_horizontal"
-                        android:paddingLeft="5dp"
-                        android:textColor="#FAFAFA"
-                        android:textSize="13sp" />
                 </RelativeLayout>
             </cn.zmdx.kaka.locker.widget.PandoraPanelLayout>
 
@@ -219,14 +253,5 @@
             </LinearLayout>
         </cn.zmdx.kaka.locker.widget.WallpaperPanelLayout>
     </cn.zmdx.kaka.locker.widget.SlidingPaneLayout>
-
-    <ImageView
-        android:id="@+id/lock_guide"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/setting_black_translucent"
-        android:contentDescription="@string/contentDescription"
-        android:scaleType="fitXY"
-        android:visibility="gone" />
 
 </FrameLayout>

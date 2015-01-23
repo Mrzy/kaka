@@ -8,8 +8,8 @@
 <!-- ############################################################################################## -->
 <resources>
 
-    <dimen name="pandora_box_nodata_show_image_width">75dp</dimen>
-    <dimen name="pandora_box_nodata_show_image_height">75dp</dimen>
+    <dimen name="pandora_box_nodata_show_image_width">150dp</dimen>
+    <dimen name="pandora_box_nodata_show_image_height">150dp</dimen>
     <dimen name="panelHeight">200dp</dimen>
     <dimen name="pandora_wallpaper_layout_width">150dp</dimen>
     <dimen name="pandora_wallpaper_layout_height">208.5dp</dimen>
@@ -21,6 +21,7 @@
     <dimen name="gusture_pattern_lock_margin_top">20dp</dimen>
     <dimen name="setting_about_pandora_height">100dp</dimen>
     <dimen name="pandora_update_dialog_width">350dp</dimen>
+    <dimen name="pandora_box_nodata_show_image_top_height">108dp</dimen>
     
     <!-- onlinePaper -->
     <dimen name="pandora_online_wallpaper_panelHeight">75dp</dimen>

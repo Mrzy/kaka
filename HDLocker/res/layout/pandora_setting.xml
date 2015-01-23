@@ -256,6 +256,10 @@
                         android:gravity="center_vertical"
                         android:text="@string/setting_about_us" />
                 </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_item_height" />
             </LinearLayout>
         </ScrollView>
 

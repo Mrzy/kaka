@@ -6,8 +6,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.LockScreenManager;
 
+/**
+ * @deprecated 已废弃，使用BatteryView代替
+ * @author zhangyan
+ *
+ */
 public class PandoraBatteryManager {
 
     private static PandoraBatteryManager INSTANCE = null;
@@ -55,7 +59,7 @@ public class PandoraBatteryManager {
             mStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
             mMaxScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
             mCurLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-            LockScreenManager.getInstance().onBatteryStatusChanged(mStatus);
+//            LockScreenManager.getInstance().onBatteryStatusChanged(mStatus);
         };
     };
 }

@@ -56,6 +56,7 @@
     <dimen name="pandora_setting_guide_logo_layout_marginTop">125dp</dimen>
     <dimen name="pandora_update_dialog_width">280dp</dimen>
     <dimen name="card_detail_toolbar_height">40dp</dimen>
+    <dimen name="pandora_box_nodata_show_image_top_height">150dp</dimen>
     
     <!-- onlinePaper -->
     <dimen name="pandora_online_wallpaper_panelHeight">68dp</dimen>
@@ -84,10 +85,13 @@
     <dimen name="init_setting_V5_close_systemlocker_prompt_margin_top">56dp</dimen>
     <dimen name="init_setting_V5_close_systemlocker_prompt_imageview_margin_top">6dp</dimen>
     <dimen name="init_setting_V5_textview_prompt_margin_top">3dp</dimen>
-    <dimen name="init_setting_V5_textview_prompt_margin_left">21dp</dimen>
+    <dimen name="init_setting_V5_textview_prompt_margin_left">10dp</dimen>
     
     <dimen name="init_setting_V5_allow_floating_window_prompt_margin_top">184dp</dimen>
     <dimen name="init_setting_V5_trust_prompt_margin_top">56dp</dimen>
     
     <dimen name="pandora_number_lock_translation_x_displacement">4dp</dimen>
+    
+    <dimen name="init_prompt_layout_margin_left">5dp</dimen>
+    
 </resources>

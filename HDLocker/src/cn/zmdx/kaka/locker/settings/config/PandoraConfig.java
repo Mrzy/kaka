@@ -69,7 +69,13 @@ public class PandoraConfig {
 
     private static final String KEY_LOCK_SCREEN_GUIDE_TIMES = "u";
 
-    private static final String KEY_CHRISTMAS_FORCE = "v";
+    private static final String KEY_NOTIFICATION_GUIDE_PROGRESS = "w";
+
+    private static final String KEY_HAS_ALREADY_HIDE_NOTIFY_MSG = "x";
+
+    private static final String OPEN_MESSAGE_NOTIFICATION = "y";
+
+    private static final String ONLINE_WALLPAPER_DESC = "awd";
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -84,7 +90,7 @@ public class PandoraConfig {
     }
 
     public boolean isPandolaLockerOn() {
-        return mSp.getBoolean(PANDORA_LOCKER_SP_NAME, false);
+        return mSp.getBoolean(PANDORA_LOCKER_SP_NAME, true);
     }
 
     public void savePandolaLockerState(boolean isOn) {
@@ -238,11 +244,17 @@ public class PandoraConfig {
     }
 
     public boolean isNeedNotice(Context context) {
-        if (PandoraUtils.isMIUI(context) || PandoraUtils.isMeizu(context)) {
-            return mSp.getBoolean(KEY_NEED_NOTICE, false);
-        } else {
-            return mSp.getBoolean(KEY_NEED_NOTICE, true);
-        }
+        return mSp.getBoolean(KEY_NEED_NOTICE, false);
+    }
+
+    public void saveMessageNotification(boolean isMessage) {
+        Editor editor = mSp.edit();
+        editor.putBoolean(OPEN_MESSAGE_NOTIFICATION, isMessage);
+        editor.commit();
+    }
+
+    public boolean isShowNotificationMessage() {
+        return mSp.getBoolean(OPEN_MESSAGE_NOTIFICATION, true);
     }
 
     public void saveLockDefaultFileName(String fileName) {
@@ -340,14 +352,28 @@ public class PandoraConfig {
         editor.commit();
     }
 
-    public boolean getChristmasForceTheme() {
-        return mSp.getBoolean(KEY_CHRISTMAS_FORCE, false);
+    public int getNotificationGuideProgress() {
+        return mSp.getInt(KEY_NOTIFICATION_GUIDE_PROGRESS, 0);
     }
 
-    public void saveChristmasForceTheme(boolean isForceTheme) {
-        Editor editor = mSp.edit();
-        editor.putBoolean(KEY_CHRISTMAS_FORCE, isForceTheme);
-        editor.commit();
+    public void saveNotificationGuideProgress(int progress) {
+        mSp.edit().putInt(KEY_NOTIFICATION_GUIDE_PROGRESS, progress).commit();
+    }
+
+    public boolean hasAlreadyPromptHideNotificationMsg() {
+        return mSp.getBoolean(KEY_HAS_ALREADY_HIDE_NOTIFY_MSG, false);
+    }
+
+    public void markAlreadyPromptHideNotificationMsg() {
+        mSp.edit().putBoolean(KEY_HAS_ALREADY_HIDE_NOTIFY_MSG, true).commit();
+    }
+
+    public String getOnlineWallPaperDesc(String fileName) {
+        return mSp.getString(ONLINE_WALLPAPER_DESC + fileName, "");
+    }
+
+    public void saveOnlineWallPaperDesc(String fileName, String desc) {
+        mSp.edit().putString(ONLINE_WALLPAPER_DESC + fileName, desc).commit();
     }
 
 }

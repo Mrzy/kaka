@@ -52,6 +52,33 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_CARD_IS_FAVORITED = "cardIsFavorited";// 卡片被收藏
 
+    public static final String EVENT_ENTER_CAMERA_FROM_LOCKER = "enterCamera";// 进入相机
+
+    public static final String EVENT_POST_NOTIFICATION = "postNotification";// 锁屏页弹出一个通知
+
+    public static final String EVENT_REMOVE_NOTIFICATION = "removeNotification";// 双击移除一个通知
+
+    public static final String EVENT_OPEN_NOTIFICATION = "openNotification";// 右划打开一个通知
+
+    public static void statisticalEnterCamera() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_ENTER_CAMERA_FROM_LOCKER);
+    }
+
+    public static void statisticalPostNotification(int id, String pkgName, int type) {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_POST_NOTIFICATION, id + "|" + pkgName + "|" + type);
+    }
+
+    public static void statisticalRemoveNotification(int id, String pkgName, int type) {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_REMOVE_NOTIFICATION, id + "|" + pkgName + "|" + type);
+    }
+
+    public static void statisticalOpenNotification(int id, String pkgName, int type) {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_OPEN_NOTIFICATION, id + "|" + pkgName + "|" + type);
+    }
 
     /**
      * 统计哪张卡片被收藏
@@ -203,9 +230,8 @@ public class UmengCustomEventManager {
     /**
      * 统计未固定，直接解锁次数
      */
-    public static void statisticalUnLockTimes() {
-        MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_PULL_DOWN);
+    public static void statisticalPullDownTimes() {
+        MobclickAgent.onEvent(HDApplication.getContext(), UmengCustomEventManager.EVENT_PULL_DOWN);
     }
 
     /**

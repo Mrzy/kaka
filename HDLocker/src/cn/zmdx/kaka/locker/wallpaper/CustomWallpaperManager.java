@@ -53,7 +53,7 @@ public class CustomWallpaperManager {
     }
 
     public List<CustomWallpaper> getCustomWallpaper(Context context) {
-        int currentThemeId = ThemeManager.getCurrentTheme().getmThemeId();
+        int currentThemeId = ThemeManager.getCurrentThemeId();
         String currentThemeFileName = null;
         if (currentThemeId == ThemeManager.THEME_ID_CUSTOM) {
             currentThemeFileName = PandoraConfig.newInstance(context).getCurrentWallpaperFileName();

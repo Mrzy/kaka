@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <string name="app_name">潘多拉锁屏</string>
     <!-- Accessibility description sent when user starts drawing a lock pattern. [CHAR LIMIT=NONE] -->
@@ -56,6 +56,8 @@
     <string name="init_setting_MIUI_allow_floating_window_prompt">请开启『显示悬浮窗』开关</string>
     <string name="init_setting_MIUI_trust_prompt_one">开启『我信任该程序』</string>
     <string name="init_setting_MIUI_trust_prompt_two">和『自动启动』开关</string>
+    <string name="init_setting_read_notification_title">打开通知权限</string>
+    <string name="init_setting_read_notification_prompt">开启消息通知后，即可在你的锁屏页面呈现你感兴趣的消息哦~</string>
     <string name="lock_week_monday">周一</string>
     <string name="lock_week_tuesday">周二</string>
     <string name="lock_week_wednesday">周三</string>
@@ -87,16 +89,24 @@
     <string name="pandora_guide_start">开始体验</string>
     <string name="setting_individualization">个性化设置</string>
     <string name="individualization_notice_switch_button">显示通知栏</string>
-    <string name="individualization_locker_default_image">设置锁屏页面默认图片</string>
-    <string name="init_setting_V6_close_systemlocker_prompt">请按照以下方式关闭系统锁屏</string>
-    <string name="init_setting_V6_allow_floating_window_prompt">开启显示悬浮窗</string>
+    <string name="individualization_message_notification">通知中心隐私设置</string>
+    <string name="init_setting_V6_close_systemlocker_title">请按照以下方式关闭系统锁屏</string>
+    <string name="init_setting_V6_close_systemlocker_prompt">潘多拉锁屏已经经过测试，不会引起您的设备以及设备上应用的问题</string>
+    <string name="init_setting_V6_allow_floating_window_title">开启显示悬浮窗</string>
+    <string name="init_setting_V6_allow_floating_window_prompt">开启悬浮窗是为了防止按Home键跳出，潘多拉锁屏不会往您的桌面添加任何悬浮窗</string>
+    <string name="init_setting_V6_trust_title">设置信任列表&amp;自动启动</string>
     <string name="init_setting_V6_trust_prompt_one">1.进入『授权管理』</string>
     <string name="init_setting_V6_trust_prompt_two">2.进入『自启动管理』</string>
     <string name="init_setting_V6_trust_prompt_three">3.开启『潘多拉锁屏』开关</string>
+    <string name="init_setting_V6_trust_prompt">潘多拉锁屏需要能够在您手机开机时自动启动，只需要一次设置，以后就不需要麻烦啦</string>
+    <string name="init_setting_V6_read_notification_title">请勾选『潘多拉锁屏』的读取通知权限</string>
+    <string name="init_setting_V6_read_notification_prompt">潘多拉锁屏严格保护您的隐私，只在本机使用这些权限，用以显示通知</string>
+    <string name="init_setting_MIUI_under_18_read_notification_title">请进入『潘多拉锁屏』开启服务</string>
+    <string name="init_setting_MIUI_under_18_read_notification_prompt_detail">打开</string>
     <string name="pandora_box_guide_set_default_image">立刻设置默认背景</string>
     <string name="individualization_welcome_text">设置欢迎语</string>
     <string name="individualization_welcome_text_detail">锁屏页面，当天气信息无法获取时显示此欢迎语</string>
-    <string name="pandora_box_guide_set_default_image_detail">锁屏页面，当没有信息时显示此默认图</string>
+    <string name="pandora_individualization_message_notification_detail">关闭开关，则隐藏消息头像和消息内容</string>
     <string name="individualization_welcome_text_hint">请输入欢迎语!</string>
     <string name="share_image_news_from">来自：</string>
     <string name="pandora_crop_image_rotate">旋转</string>
@@ -154,5 +164,33 @@
     <string name="pandora_favorite_title">我的收藏</string>
     <string name="pandora_favorite_state_nodata">暂无收藏</string>
     <string name="pandora_lock_screen_card_empty_text">没有猛料</string>
+
+    <!-- Content description of the battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_battery_level">Battery <xliff:g id="number">%d</xliff:g> percent.</string>
+    <!-- Glyph to be overlaid atop the battery when the level is extremely low. Do not translate. -->
+    <string name="battery_meter_very_low_overlay_symbol">!</string>
+
+    <string name="pandora_share_sina_send">发送</string>
+    <string name="pandora_share_to_sina_title">分享到微博</string>
+    <string name="pandora_share_prompt">右滑解锁分享内容</string>
+    <string name="pandora_share_to_wechat_circle">分享到朋友圈</string>
+    <string name="pandora_share_to_wechat">分享到微信好友</string>
+    <string name="pandora_share_to_sina">分享到新浪微博</string>
+    <string name="pandora_share_to_qq">分享到QQ空间</string>
+    <string name="notification_service_name">潘多拉锁屏</string>
+    <string name="notify_guide_openpermission_title">请开启通知权限！</string>
+    <string name="notify_guide_openpermission_content">开启通知权限后，这里才会显示您qq、微信的未读消息</string>
+    <string name="notify_guide_opendetail_title">右划查看通知详情</string>
+    <string name="notify_guide_opendetail_content">这是一个示例通知，打开后会帮您跳转到潘多拉设置页面</string>
+    <string name="notify_guide_remove_title">这是什么？</string>
+    <string name="notify_guide_remove_content">这里会显示您的微信、qq等未读消息\n(双击移除通知)</string>
+    <string name="notify_guide_hide_message_title">我要隐藏头像及消息内容</string>
+    <string name="notify_guide_hide_message_content">右划此处解锁立即设置隐藏，如果暂时不设置双击移除此通知</string>
+    <string name="hide_message_tip">未读消息</string>
+    <string name="notification_item_handleTip">右划查看\n双击忽略</string>
+    <string name="tip_open_notification_permission">请勾选【潘多拉锁屏】</string>
+    
+    <string name="pandora_feedback_send">发送</string>
+    <string name="pandora_feedback_title">意见反馈</string>
 
 </resources>

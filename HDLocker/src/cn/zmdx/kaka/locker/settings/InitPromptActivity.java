@@ -29,6 +29,8 @@ public class InitPromptActivity extends Activity {
 
     private LinearLayout mV6TrustView;
 
+    private LinearLayout mReadNotificationView;
+
     private boolean isMIUI;
 
     private String mMIUIVersion;
@@ -38,6 +40,8 @@ public class InitPromptActivity extends Activity {
     public static final int PROMPT_ALLOW_FLOAT_WINDOW = 2;
 
     public static final int PROMPT_TRRST = 3;
+
+    public static final int PROMPT_READ_NOTIFICATION = 4;
 
     private int mPromptType;
 
@@ -80,6 +84,8 @@ public class InitPromptActivity extends Activity {
             findViewById(R.id.init_setting_MIUI_V6).setVisibility(View.GONE);
             mCloseSystemLockerView = (LinearLayout) findViewById(R.id.init_setting_close_systemlocker_prompt);
         }
+        
+        mReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt);
     }
 
     private void showView() {
@@ -95,6 +101,9 @@ public class InitPromptActivity extends Activity {
                         break;
                     case PROMPT_TRRST:
                         mV6TrustView.setVisibility(View.VISIBLE);
+                        break;
+                    case PROMPT_READ_NOTIFICATION:
+                        mReadNotificationView.setVisibility(View.VISIBLE);
                         break;
 
                     default:
@@ -113,6 +122,9 @@ public class InitPromptActivity extends Activity {
                     case PROMPT_TRRST:
                         mV5TrustView.setVisibility(View.VISIBLE);
                         break;
+                    case PROMPT_READ_NOTIFICATION:
+                        mReadNotificationView.setVisibility(View.VISIBLE);
+                        break;
 
                     default:
                         break;
@@ -120,7 +132,17 @@ public class InitPromptActivity extends Activity {
 
             }
         } else {
-            mCloseSystemLockerView.setVisibility(View.VISIBLE);
+            switch (mPromptType) {
+                case PROMPT_CLOSE_SYSTEM_LOCKER:
+                    mCloseSystemLockerView.setVisibility(View.VISIBLE);
+                    break;
+                case PROMPT_READ_NOTIFICATION:
+                    mReadNotificationView.setVisibility(View.VISIBLE);
+                    break;
+
+                default:
+                    break;
+            }
         }
 
     }

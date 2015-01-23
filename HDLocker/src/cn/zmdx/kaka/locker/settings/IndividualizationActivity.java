@@ -1,45 +1,27 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import java.io.File;
-import java.lang.ref.WeakReference;
-
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
-import cn.zmdx.kaka.locker.utils.FileHelper;
-import cn.zmdx.kaka.locker.utils.ImageUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class IndividualizationActivity extends Activity implements OnClickListener,
+public class IndividualizationActivity extends BaseActivity implements OnClickListener,
         OnCheckedChangeListener {
+    public static String LOCK_DEFAULT_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
+            .getPath() + "/.Pandora/lockDefault/";
 
     private View mRootView;
 
@@ -47,31 +29,23 @@ public class IndividualizationActivity extends Activity implements OnClickListen
 
     private SwitchButton mNoticeMobileNetworkSButton;
 
-    private LinearLayout mLockerDefaultImage;
-
-    private ImageView mLockerDefaultImageThumb;
-
     private SwitchButton mLockScreenVoiceSButton;
 
-    public static String LOCK_DEFAULT_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
-            .getPath() + "/.Pandora/lockDefault/";
-
-    private static final int MSG_SAVE_LOCK_DEFAULT = 11;
+    private SwitchButton mNotificationSButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_individualization);
-        getWindow().getAttributes().flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         initView();
-        initTitleHeight();
-        initWallpaper();
-        initLockDefaultBitmap();
     }
 
     private void initView() {
         mRootView = findViewById(R.id.individualization_background);
+        LinearLayout titleView = (LinearLayout) findViewById(R.id.pandora_individualization_title);
+        initBackground(mRootView);
+        initTitleHeight(titleView);
         mNoticeSButton = (SwitchButton) findViewById(R.id.individualization_notice_switch_button);
         mNoticeSButton.setOnCheckedChangeListener(this);
         mNoticeSButton.setChecked(isNeedNotice());
@@ -81,51 +55,9 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         mLockScreenVoiceSButton = (SwitchButton) findViewById(R.id.individualization_open_lockscreen_voice_switch_button);
         mLockScreenVoiceSButton.setOnCheckedChangeListener(this);
         mLockScreenVoiceSButton.setChecked(isLockScreenVoice());
-        mLockerDefaultImage = (LinearLayout) findViewById(R.id.individualization_locker_default_image);
-        mLockerDefaultImage.setOnClickListener(this);
-        mLockerDefaultImageThumb = (ImageView) findViewById(R.id.individualization_locker_default_thumb_image);
-
-        LayoutParams params = mLockerDefaultImageThumb.getLayoutParams();
-        int height = (int) getResources().getDimension(R.dimen.individualization_image_height);
-        int width = (int) getResources().getDimension(R.dimen.individualization_image_height);
-        params.width = width;
-        params.height = height;
-        mLockerDefaultImageThumb.setLayoutParams(params);
-
-    }
-
-    private void initTitleHeight() {
-        int statusBarHeight = PandoraUtils.getStatusBarHeight(this);
-        LinearLayout titleLayout = (LinearLayout) mRootView
-                .findViewById(R.id.pandora_individualization_title);
-        titleLayout.setPadding(0, statusBarHeight, 0, 0);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void initWallpaper() {
-        Theme theme = ThemeManager.getCurrentTheme();
-        if (theme.isDefaultTheme()) {
-            mRootView.setBackgroundResource(theme.getmBackgroundResId());
-        } else {
-            WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(),
-                    new ILoadBitmapCallback() {
-
-                        @Override
-                        public void imageLoaded(Bitmap bitmap, String filePath) {
-                            mRootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
-                                    bitmap));
-                        }
-                    });
-        }
-    }
-
-    private void initLockDefaultBitmap() {
-        BitmapDrawable drawable = PandoraUtils.getLockDefaultBitmap(this);
-        if (drawable == null) {
-            mLockerDefaultImageThumb.setImageResource(R.drawable.ic_launcher);
-        } else {
-            mLockerDefaultImageThumb.setImageDrawable(drawable);
-        }
+        mNotificationSButton = (SwitchButton) findViewById(R.id.individualization_open_message_notification_switch_button);
+        mNotificationSButton.setOnCheckedChangeListener(this);
+        mNotificationSButton.setChecked(isMessageNotification());
     }
 
     @Override
@@ -157,6 +89,13 @@ public class IndividualizationActivity extends Activity implements OnClickListen
                 } else {
                     closeLocksScreenVoice();
                     UmengCustomEventManager.statisticalDisableLockScreenSound();
+                }
+                break;
+            case R.id.individualization_open_message_notification_switch_button:
+                if (isChecked) {
+                    openMessageNotification();
+                } else {
+                    closeMessageNotification();
                 }
                 break;
             default:
@@ -248,117 +187,20 @@ public class IndividualizationActivity extends Activity implements OnClickListen
         return PandoraConfig.newInstance(this).isLockScreenVoice();
     }
 
+    private void closeMessageNotification() {
+        PandoraConfig.newInstance(this).saveMessageNotification(false);
+    }
+
+    private void openMessageNotification() {
+        PandoraConfig.newInstance(this).saveMessageNotification(true);
+    }
+
+    private boolean isMessageNotification() {
+        return PandoraConfig.newInstance(this).isShowNotificationMessage();
+    }
+
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.individualization_locker_default_image:
-                PandoraUtils.gotoGalleryActivity(IndividualizationActivity.this,
-                        PandoraUtils.REQUEST_CODE_GALLERY);
-                UmengCustomEventManager.statisticalClickCustomButtonTimes();
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
-        switch (requestCode) {
-            case PandoraUtils.REQUEST_CODE_CROP_IMAGE:
-                String fileName = PandoraUtils.getRandomString();
-                setBitmap();
-                saveWallpaperFile(fileName);
-                break;
-            case PandoraUtils.REQUEST_CODE_GALLERY: {
-                gotoCropActivity(data.getData());
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }
-
-    private void gotoCropActivity(Uri uri) {
-        int mAspectRatioX = 0;
-        int mAspectRatioY = 0;
-        float rate = LockScreenManager.getInstance().getBoxWidthHeightRate();
-        if (rate >= 1) {
-            mAspectRatioX = 100;
-            mAspectRatioY = (int) (mAspectRatioX / rate);
-        }
-        if (rate <= 1) {
-            mAspectRatioY = 100;
-            mAspectRatioX = (int) (mAspectRatioY * rate);
-        }
-        PandoraUtils.gotoCropActivity(this, uri, mAspectRatioX, mAspectRatioY, false);
-    }
-
-    private void setBitmap() {
-        mLockerDefaultImageThumb.setImageBitmap(PandoraUtils.sLockDefaultThumbBitmap);
-    }
-
-    private void saveWallpaperFile(final String fileName) {
-        if (null != PandoraUtils.sLockDefaultThumbBitmap) {
-            mkDirs();
-            FileHelper.clearFolderFiles(new File(LOCK_DEFAULT_SDCARD_LOCATION));
-            ImageUtils.saveImageToFile(PandoraUtils.sLockDefaultThumbBitmap,
-                    getLockDefaultFilePath(fileName));
-            saveLockDefaultSP(fileName);
-        }
-    }
-
-    private String getLockDefaultFilePath(String fileName) {
-        return LOCK_DEFAULT_SDCARD_LOCATION + fileName + ".jpg";
-    }
-
-    public void mkDirs() {
-        File tmpDir = new File(LOCK_DEFAULT_SDCARD_LOCATION);
-        if (!tmpDir.exists()) {
-            tmpDir.mkdirs();
-        }
-    }
-
-    private void saveLockDefaultSP(String fileName) {
-        if (mHandler.hasMessages(MSG_SAVE_LOCK_DEFAULT)) {
-            mHandler.removeMessages(MSG_SAVE_LOCK_DEFAULT);
-        }
-        Message message = Message.obtain();
-        message.what = MSG_SAVE_LOCK_DEFAULT;
-        message.obj = fileName;
-        mHandler.sendMessage(message);
-    }
-
-    private MyHandler mHandler = new MyHandler(this);
-
-    private static class MyHandler extends Handler {
-        WeakReference<Activity> mActicity;
-
-        public MyHandler(Activity activity) {
-            mActicity = new WeakReference<Activity>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            Activity activity = mActicity.get();
-            switch (msg.what) {
-                case MSG_SAVE_LOCK_DEFAULT:
-                    String fileName = (String) msg.obj;
-                    ((IndividualizationActivity) activity).saveLockDefaultFileName(fileName);
-                    break;
-
-            }
-            super.handleMessage(msg);
-        }
-    }
-
-    public void saveLockDefaultFileName(String fileName) {
-        PandoraConfig.newInstance(this).saveLockDefaultFileName(fileName);
     }
 
     @Override

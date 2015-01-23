@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,6 @@ import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.android.volley.Response.ErrorListener;
@@ -154,6 +154,13 @@ public class OnlineWallpaperView extends LinearLayout {
         UmengCustomEventManager.statisticalClickOrDragRopeTimes();
         mDesc = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_desc);
+        mDesc.setMovementMethod(new ScrollingMovementMethod());
+        int themeId = ThemeManager.getCurrentThemeId();
+        if (themeId == ThemeManager.THEME_ID_ONLINE) {
+            String fileName = OnlineWallpaperManager.getInstance().getCurrentWallpaperFileName(mContext);
+            String curWallpaperDesc = PandoraConfig.newInstance(mContext).getOnlineWallPaperDesc(fileName);
+            mDesc.setText(curWallpaperDesc);
+        }
         mAuthor = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_author);
         mPreviewProgressBar = (ProgressBar) mRootView
@@ -170,8 +177,11 @@ public class OnlineWallpaperView extends LinearLayout {
                 String md5ImageUrl = HDBHashUtils.getStringMD5(mCurrentItem.getImageURL());
                 OnlineWallpaperManager.getInstance().saveThemeId(mContext,
                         ThemeManager.THEME_ID_ONLINE);
+                ThemeManager.addBitmapToCache(mPreviewBitmap);
                 OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(mContext,
                         md5ImageUrl);
+                PandoraConfig.newInstance(mContext).saveOnlineWallPaperDesc(md5ImageUrl,
+                        mCurrentItem.getDesc());
                 ImageUtils.saveImageToFile(mPreviewBitmap, OnlineWallpaperManager.getInstance()
                         .getFilePath(md5ImageUrl));
                 mListener.applyOnlinePaper(OnlineWallpaperManager.getInstance().getFilePath(
@@ -301,22 +311,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private void initPreview() {
         Theme curTheme = ThemeManager.getCurrentTheme();
-        if (null != curTheme) {
-            if (curTheme.isDefaultTheme()) {
-                mPreview.setImageResource(curTheme.getmBackgroundResId());
-            } else {
-                WallpaperUtils.loadBackgroundBitmap(mContext, curTheme.getFilePath(),
-                        new ILoadBitmapCallback() {
-
-                            @Override
-                            public void imageLoaded(Bitmap bitmap, String filePath) {
-                                mPreview.setImageBitmap(bitmap);
-                            }
-                        });
-            }
-        } else {
-            mPreview.setImageResource(R.drawable.online_wallpaper_default);
-        }
+        mPreview.setImageDrawable(curTheme.getCurDrawable());
     }
 
     class WallpaperAdpter extends BaseAdapter {// 上下文对象

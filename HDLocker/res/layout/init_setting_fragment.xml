@@ -111,6 +111,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/init_setting_MIUI_close_systemlocker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
@@ -164,6 +165,39 @@
 
                     <cn.zmdx.kaka.locker.widget.BaseButton
                         android:id="@+id/init_setting_MIUI_trust_to_set"
+                        style="@style/init_setting_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/init_setting_button_margin_top"
+                        android:gravity="center"
+                        android:text="@string/init_setting_to_set" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/init_setting_read_notification_bar_guide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/init_setting_item_margin_top"
+                    android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
+                    android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+                    android:layout_marginTop="@dimen/init_setting_item_margin_top"
+                    android:orientation="vertical"
+                    android:visibility="gone" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/init_setting_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_read_notification_title" />
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/init_setting_small_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/init_setting_read_notification_prompt" />
+
+                    <cn.zmdx.kaka.locker.widget.BaseButton
+                        android:id="@+id/init_setting_read_notification_bar_to_set"
                         style="@style/init_setting_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
