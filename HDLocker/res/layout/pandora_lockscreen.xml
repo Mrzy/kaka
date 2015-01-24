@@ -70,9 +70,9 @@
                         android:id="@+id/lock_top"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/gradual_shadow_bg"
                         android:orientation="vertical"
-                        android:paddingLeft="10dp" >
+                        android:gravity="right"
+                        android:paddingRight="10dp" >
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -95,12 +95,27 @@
                                 android:textSize="12sp" />
                         </LinearLayout>
 
+                        <cn.zmdx.kaka.fast.locker.widget.DigitalClocks
+                            xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.fast.locker"
+                            android:id="@+id/digitalClock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:gravity="center_horizontal"
+                            android:shadowColor="#30000000"
+                            android:shadowDx="0"
+                            android:shadowDy="2"
+                            android:shadowRadius="1"
+                            android:textColor="@color/white"
+                            android:textSize="70sp"
+                            clock:format="24" />
+
                         <LinearLayout
                             android:id="@+id/lock_date_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:gravity="center_horizontal"
+                            android:layout_marginTop="-5dp"
+                            android:paddingRight="8dp"
                             android:orientation="horizontal" >
 
                             <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
@@ -108,7 +123,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingLeft="5dp"
-                                android:textColor="#C9C9C9"
+                                android:shadowColor="#30000000"
+                                android:shadowDx="0"
+                                android:shadowDy="2"
+                                android:shadowRadius="1"
+                                android:textColor="@color/white"
                                 android:textSize="13sp" />
 
                             <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
@@ -117,19 +136,9 @@
                                 android:layout_height="wrap_content"
                                 android:paddingLeft="5dp"
                                 android:textColor="#eeffffff"
-                                android:textSize="17sp" />
+                                android:textSize="17sp"
+                                android:visibility="gone" />
                         </LinearLayout>
-
-                        <cn.zmdx.kaka.fast.locker.widget.DigitalClocks
-                            xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.fast.locker"
-                            android:id="@+id/digitalClock"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="-13dp"
-                            android:gravity="center_horizontal"
-                            android:textColor="@color/white"
-                            android:textSize="75sp"
-                            clock:format="24" />
                     </LinearLayout>
 
                     <View

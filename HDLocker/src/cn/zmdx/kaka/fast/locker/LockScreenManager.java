@@ -32,7 +32,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.BounceInterpolator;
-import android.view.animation.OvershootInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -866,7 +866,8 @@ public class LockScreenManager {
 
     private void setTranslationXForDateView(View ...views) {
         for (View v : views) {
-            v.setTranslationX(DATE_WIDGET_TRANSLATIONY_DISTANCE);
+            v.setAlpha(0);
+//            v.setTranslationX(DATE_WIDGET_TRANSLATIONY_DISTANCE);
         }
     }
 
@@ -905,35 +906,18 @@ public class LockScreenManager {
             HDApplication.getContext(), 300);
 
     private void processAnimations() {
-//        ObjectAnimator digitalAlpha = ObjectAnimator.ofFloat(mDigitalClockView, "alpha", 0, 1);
-        ObjectAnimator digitalTrans = ObjectAnimator.ofFloat(mDigitalClockView, "translationX",
-                DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
-        digitalTrans.setDuration(700);
-        digitalTrans.setInterpolator(new OvershootInterpolator());
-        digitalTrans.setStartDelay(50);
-//        AnimatorSet digitalSet = new AnimatorSet();
-//        digitalSet.playTogether(digitalAlpha, digitalTrans);
-
-//        ObjectAnimator dateAlpha = ObjectAnimator.ofFloat(mLockDataView, "alpha", 0, 1);
-        ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mLockDataView, "translationX",
-                DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
-        dateTrans.setDuration(700);
-        dateTrans.setInterpolator(new OvershootInterpolator());
-        dateTrans.setStartDelay(150);
-//        AnimatorSet dateSet = new AnimatorSet();
-//        dateSet.setStartDelay(100);
-//        dateSet.playTogether(dateAlpha, dateTrans);
+        ObjectAnimator digitalTrans = ObjectAnimator.ofFloat(mDigitalClockView, "alpha",
+                0, 1);
+        digitalTrans.setDuration(1500);
+        digitalTrans.setStartDelay(100);
+        digitalTrans.setInterpolator(new DecelerateInterpolator());
+        ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mLockDataView, "alpha",
+                0, 1);
+        dateTrans.setDuration(1500);
+        dateTrans.setInterpolator(new DecelerateInterpolator());
+        digitalTrans.setStartDelay(100);
         digitalTrans.start();
         dateTrans.start();
-
-//        AnimatorSet finalSet = new AnimatorSet();
-//        finalSet.playTogether(digitalTrans, dateTrans);
-//        finalSet.setDuration(700);
-//        finalSet.setStartDelay(20);
-        // finalSet.setInterpolator(new OvershootInterpolator());
-//        finalSet.setInterpolator(new DecelerateInterpolator());
-        // finalSet.setInterpolator(new BounceInterpolator());
-//        finalSet.start();
     }
 
     private Set<OnBackPressedListener> mBackPressedListeners = new HashSet<OnBackPressedListener>();
