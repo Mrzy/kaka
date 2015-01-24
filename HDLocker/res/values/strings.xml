@@ -202,5 +202,4 @@
     <string name="fast_setting_item_about_fast">关于Fast锁屏</string>
     <string name="fast_locker_name_zh">Fast快锁屏</string>
     <string name="fast_locker_name_en">Fast Locker</string>
-    <string name="fast_setting_text_color">#212121</string>
 </resources>

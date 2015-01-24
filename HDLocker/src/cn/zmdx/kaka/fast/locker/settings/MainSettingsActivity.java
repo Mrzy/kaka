@@ -76,10 +76,11 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
 
         mSmoothInterpolator = new AccelerateDecelerateInterpolator();
-        mHeaderHeight = getResources().getDimensionPixelSize(R.dimen.fast_actionbar_header_height);
+        mHeaderHeight = getResources()
+                .getDimensionPixelSize(R.dimen.fast_mainsetting_header_height);
         mMinHeaderTranslation = -mHeaderHeight + getActionBarHeight();
 
-        setContentView(R.layout.activity_actionbar);
+        setContentView(R.layout.activity_mainsetting);
 
         settingItems = new String[] {
                 getString(R.string.fast_setting_item_open_fastlocker),
@@ -121,7 +122,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         mPlaceHolderView = getLayoutInflater().inflate(R.layout.view_header_placeholder, mListView,
                 false);
         // 增加ListView下面的空白，使上方能够折叠。
-        mSpaceView = getLayoutInflater().inflate(R.layout.activity_actionbar_listview_space,
+        mSpaceView = getLayoutInflater().inflate(R.layout.activity_mainsetting_listview_space,
                 mListView, false);
         mListView.addHeaderView(mPlaceHolderView);
         mListView.addFooterView(mSpaceView);
@@ -146,6 +147,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
                 interpolate(mHeaderLogo, getActionBarIconView(),
                         mSmoothInterpolator.getInterpolation(ratio));
                 setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
+                showLockerNameAnimator(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
             }
         });
         /**
@@ -257,11 +259,10 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
     /**
      * 做LockerName的动画，暂未使用
      */
-    private void setLockerNameAnimator() {
-        ObjectAnimator lockerNameAnimator = ObjectAnimator.ofFloat(mLockScreenName, "alpha", 1.0f,
+    private void showLockerNameAnimator(float alpha) {
+        ObjectAnimator lockerNameAnimator = ObjectAnimator.ofFloat(mLockScreenName, "alpha", alpha,
                 0.0f);
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.setDuration(500);
         animatorSet.play(lockerNameAnimator);
     }
 
@@ -312,6 +313,8 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
     private void setupActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.ic_transparent);
+        // 隐藏ActionBar图标
+        actionBar.setDisplayHomeAsUpEnabled(false);
     }
 
     private ImageView getActionBarIconView() {
@@ -335,5 +338,4 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
     public void onClick(View v) {
         Toast.makeText(this, "我想去点赞", Toast.LENGTH_SHORT).show();
     }
-
 }

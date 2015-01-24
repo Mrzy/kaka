@@ -47,8 +47,9 @@ public class SettingItemsAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
 
-            convertView = mInflater.inflate(R.layout.activity_actionbar_listview_item, parent,
+            convertView = mInflater.inflate(R.layout.activity_mainsetting_listview_item, parent,
                     false);
+
             holder.settingItemIcon = (ImageView) convertView
                     .findViewById(R.id.fastlocker_setting_item_icon);
             holder.settingItemText = (TextView) convertView

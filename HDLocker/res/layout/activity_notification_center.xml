@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/cn.zmdx.kaka.fast.locker"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <cn.zmdx.kaka.fast.locker.widget.RippleView
         android:id="@+id/activity_notification_center_start_remind"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_item_height"
@@ -14,7 +16,8 @@
         android:clickable="true"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/setting_title_textview_margin_left"
-        android:paddingRight="@dimen/setting_title_textview_margin_left" >
+        android:paddingRight="@dimen/setting_title_textview_margin_left"
+        ripple:rv_type="rectangle" >
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             style="@style/setting_textview"
@@ -34,9 +37,9 @@
             app:sliderDrawable="@drawable/switch_slider"
             app:stateDrawable="@drawable/switch_state_normal"
             app:stateMaskDrawable="@drawable/switch_state_mask" />
-    </LinearLayout>
+    </cn.zmdx.kaka.fast.locker.widget.RippleView>
 
-    <LinearLayout
+    <cn.zmdx.kaka.fast.locker.widget.RippleView
         android:id="@+id/activity_notification_center_start_privacy"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_item_height"
@@ -45,7 +48,8 @@
         android:clickable="true"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/setting_title_textview_margin_left"
-        android:paddingRight="@dimen/setting_title_textview_margin_left" >
+        android:paddingRight="@dimen/setting_title_textview_margin_left"
+        ripple:rv_type="rectangle" >
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             style="@style/setting_textview"
@@ -65,9 +69,9 @@
             app:sliderDrawable="@drawable/switch_slider"
             app:stateDrawable="@drawable/switch_state_normal"
             app:stateMaskDrawable="@drawable/switch_state_mask" />
-    </LinearLayout>
+    </cn.zmdx.kaka.fast.locker.widget.RippleView>
 
-    <LinearLayout
+    <cn.zmdx.kaka.fast.locker.widget.RippleView
         android:id="@+id/activity_notification_center_filter"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_item_height"
@@ -76,7 +80,8 @@
         android:clickable="true"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/setting_title_textview_margin_left"
-        android:paddingRight="@dimen/setting_title_textview_margin_left" >
+        android:paddingRight="@dimen/setting_title_textview_margin_left"
+        ripple:rv_type="rectangle" >
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             style="@style/setting_textview"
@@ -86,6 +91,6 @@
             android:clickable="false"
             android:gravity="center_vertical"
             android:text="@string/activity_notification_center_filter" />
-    </LinearLayout>
+    </cn.zmdx.kaka.fast.locker.widget.RippleView>
 
 </LinearLayout>
