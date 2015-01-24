@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="5dp" >
+    android:padding="@dimen/fast_mainsetting_listview_item_padding" >
 
     <LinearLayout
         android:layout_width="0dp"
@@ -16,10 +16,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginEnd="@dimen/fast_mainsetting_listview_imageview_margin_right"
+            android:layout_marginLeft="@dimen/fast_mainsetting_listview_imageview_margin_left"
+            android:layout_marginRight="@dimen/fast_mainsetting_listview_imageview_margin_right"
+            android:layout_marginStart="@dimen/fast_mainsetting_listview_imageview_margin_left"
             android:scaleType="fitXY" />
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
@@ -27,20 +27,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginLeft="@dimen/fast_mainsetting_listview_imageview_margin_left"
+            android:layout_marginStart="@dimen/fast_mainsetting_listview_imageview_margin_left"
             android:gravity="center"
             android:textColor="@color/fast_setting_text_color"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
     </LinearLayout>
 
     <cn.zmdx.kaka.fast.locker.widget.SwitchView
         android:id="@+id/fastlocker_lockscreen_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:layout_marginEnd="15dp"
         android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="@dimen/fast_mainsetting_listview_imageview_margin_right_bigger"
+        android:layout_marginRight="@dimen/fast_mainsetting_listview_imageview_margin_right_bigger"
         android:visibility="invisible" />
 
 </LinearLayout>

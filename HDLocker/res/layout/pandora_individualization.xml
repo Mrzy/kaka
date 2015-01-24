@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/cn.zmdx.kaka.fast.locker"
+     xmlns:ripple="http://schemas.android.com/apk/res-auto"
     android:id="@+id/individualization_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:baselineAligned="true"
     android:clickable="false" >
 
@@ -26,13 +28,14 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical" >
 
-                <LinearLayout
+                <cn.zmdx.kaka.fast.locker.widget.RippleView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/setting_item_height"
                     android:layout_marginTop="11dp"
                     android:background="@drawable/setting_item_selector"
                     android:clickable="true"
                     android:orientation="horizontal"
+                    ripple:rv_type="rectangle"
                     android:paddingLeft="@dimen/setting_title_textview_margin_left"
                     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
@@ -54,14 +57,15 @@
                         app:sliderDrawable="@drawable/switch_slider"
                         app:stateDrawable="@drawable/switch_state_normal"
                         app:stateMaskDrawable="@drawable/switch_state_mask" />
-                </LinearLayout>
+                </cn.zmdx.kaka.fast.locker.widget.RippleView>
 
-                <LinearLayout
+                <cn.zmdx.kaka.fast.locker.widget.RippleView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/setting_item_height"
                     android:background="@drawable/setting_item_selector"
                     android:clickable="true"
                     android:orientation="horizontal"
+                    ripple:rv_type="rectangle"
                     android:paddingLeft="@dimen/setting_title_textview_margin_left"
                     android:paddingRight="@dimen/setting_title_textview_margin_left" >
 
@@ -83,7 +87,7 @@
                         app:sliderDrawable="@drawable/switch_slider"
                         app:stateDrawable="@drawable/switch_state_normal"
                         app:stateMaskDrawable="@drawable/switch_state_mask" />
-                </LinearLayout>
+                </cn.zmdx.kaka.fast.locker.widget.RippleView>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

@@ -32,8 +32,16 @@
     <dimen name="init_setting_V5_close_systemlocker_prompt_imageview_margin_top">40dp</dimen>
     <dimen name="init_setting_V5_allow_floating_window_prompt_margin_top">196dp</dimen>
     <dimen name="init_setting_V5_trust_prompt_margin_top">64dp</dimen>
-    <!-- fast-->
-    <dimen name="fast_actionbar_header_height">250dp</dimen>
-    <dimen name="fast_actionbar_header_logo">100dp</dimen>
+    <!-- fast setting -->
+    <dimen name="fast_mainsetting_header_height">250dp</dimen>
+    <dimen name="fast_mainsetting_header_logo">100dp</dimen>
+    <dimen name="fast_mainsetting_listview_imageview_margin_right">5dp</dimen>
+    <dimen name="fast_mainsetting_listview_imageview_margin_right_bigger">15dp</dimen>
+    <dimen name="fast_mainsetting_listview_imageview_margin_left">10dp</dimen>
+    <dimen name="fast_mainsetting_listview_item_padding">5dp</dimen>
+    <dimen name="fast_mainsetting_imageview_headlogo_margin_top">40dp</dimen>
+    <dimen name="fast_mainsetting_imageview_comment_margin_right">10dp</dimen>
+    <dimen name="fast_mainsetting_imageview_comment_margin_bottom">15dp</dimen>
+    <dimen name="fast_mainsetting_textview_lockname_margin_top">20dp</dimen>
 
 </resources>
