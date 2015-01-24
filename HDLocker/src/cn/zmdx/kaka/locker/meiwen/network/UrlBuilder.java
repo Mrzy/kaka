@@ -9,9 +9,9 @@ import cn.zmdx.kaka.locker.meiwen.utils.BaseInfoHelper;
 
 public class UrlBuilder {
 
-    private static String sBaseDebugUrl = "http://nb.hdlocker.com:8080/essay/locker!";
+    private static String sBaseDebugUrl = "http://nb.hdlocker.com:8080/essay/";
 
-    private static String sBaseProdUrl = "http://pandora.hdlocker.com:8080/essay/locker!";
+    private static String sBaseProdUrl = "http://pandora.hdlocker.com:8080/essay/";
 
     public static String getBaseUrl() {
         if (BuildConfig.DEBUG) {

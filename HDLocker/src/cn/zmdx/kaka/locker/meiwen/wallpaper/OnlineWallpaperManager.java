@@ -41,7 +41,7 @@ import com.android.volley.request.JsonObjectRequest;
 @SuppressLint("InflateParams")
 public class OnlineWallpaperManager {
 
-    private static String URL = UrlBuilder.getBaseUrl() + "queryWallPaper.action";
+    private static String URL = UrlBuilder.getBaseUrl() + "locker!queryWallPaper.action";
 
     public static String ONLINE_WALLPAPER_SDCARD_LOCATION = Environment
             .getExternalStorageDirectory().getPath() + "/.Essay/onlineWallpaper/background/";

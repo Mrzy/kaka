@@ -27,6 +27,17 @@ public class PandoraNotificationFactory {
 
     public static final int ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE = 83571;
 
+    /**
+     * @deprecated 暂时不推荐使用
+     * 自定义通知，id为当前时间的hashcode
+     * @param title
+     * @param content
+     * @param largeIcon
+     * @param smallIcon
+     * @param tag
+     * @param contentIntent
+     * @return
+     */
     public static NotificationInfo createCustomNotification(String title, String content,
             Bitmap largeIcon, Drawable smallIcon, String tag, PendingIntent contentIntent) {
         if (TextUtils.isEmpty(title)) {
@@ -48,6 +59,11 @@ public class PandoraNotificationFactory {
         return ni;
     }
 
+    /**
+     * 构建自定义的服务端配置的通知,id为cloudId,此id会上报到服务器以定位是哪个通知
+     * @param entity
+     * @return
+     */
     public static NotificationInfo createCustomNotification(NotificationEntity entity) {
         NotificationInfo ni = new NotificationInfo();
         String iconStr = entity.getIcon();
@@ -63,7 +79,7 @@ public class PandoraNotificationFactory {
         }
         ni.setTitle(entity.getTitle());
         ni.setContent(entity.getContent());
-        ni.setId(entity.getId());
+        ni.setId(entity.getCloudId());//上报数据使用这个id，为了确保服务端可以定位是哪个通知，所以使用cloudId
         ni.setCloudId(entity.getCloudId());
         ni.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
         ni.setPostTime(System.currentTimeMillis());
