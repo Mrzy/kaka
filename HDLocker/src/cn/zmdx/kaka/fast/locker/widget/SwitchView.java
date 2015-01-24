@@ -192,6 +192,7 @@ public class SwitchView extends CustomView {
     public void setChecked(boolean check) {
         invalidate();
         this.check = check;
+        this.eventCheck = check;
         ball.animateCheck();
     }
 

@@ -18,6 +18,7 @@ import android.widget.Adapter;
 import android.widget.ExpandableListView;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SectionIndexer;
 import cn.zmdx.kaka.fast.locker.R;
 
@@ -62,6 +63,8 @@ public class AlphabetScrollerView extends View {
     private int mTopOffset;
 
     private OnEventListener mOnEventListener = null;
+    
+    private View mLayout;
 
     public void setOnEventListener(OnEventListener onEventListener) {
         mOnEventListener = onEventListener;
@@ -95,7 +98,8 @@ public class AlphabetScrollerView extends View {
         mTopOffset = (int) context.getResources().getDimension(R.dimen.local_alphabet_top_offset);
     }
 
-    public void init(AbsListView list, Activity activity) {
+    public void init(RelativeLayout mContentLayout, AbsListView list, Activity activity) {
+        mLayout = mContentLayout;
         mList = list;
         isDown = false;
         getSectionsFromIndexer();
@@ -354,7 +358,7 @@ public class AlphabetScrollerView extends View {
 
         if (mList.getHeight() > 0) {
             mAlphabetOffsetX = getWidth() / 2;
-            mAplhabetSpace = (mList.getHeight() - mTopOffset - mAlphabetFontSize * ALPHABET.length)
+            mAplhabetSpace = (mLayout.getHeight() - mTopOffset - mAlphabetFontSize * ALPHABET.length)
                     / ((ALPHABET.length - 1) * 1.0f);
         }
 
@@ -362,7 +366,7 @@ public class AlphabetScrollerView extends View {
             mAplhabetSpace = mAlphabetFontSize * 2;
         }
 
-        mAlphabetOffsetY = (int) (mList.getHeight() - mAlphabetFontSize * ALPHABET.length - (ALPHABET.length - 1)
+        mAlphabetOffsetY = (int) (mLayout.getHeight() - mAlphabetFontSize * ALPHABET.length - (ALPHABET.length - 1)
                 * mAplhabetSpace)
                 / 2 + mTopOffset;
 

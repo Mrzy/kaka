@@ -96,7 +96,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         mNotifyGridView.setAreHeadersSticky(false);
 
         mAlphabetView = (AlphabetScrollerView) findViewById(R.id.notify_alphabetView);
-        mAlphabetView.init(mNotifyGridView, this);
+        mAlphabetView.init(mContentLayout,mNotifyGridView, this);
         mAlphabetView.setOnEventListener(new OnEventListener() {
 
             @Override
@@ -113,6 +113,8 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
             mInterceptGridView = (GridView) findViewById(R.id.notify_list_grid_view);
         } else {
             mInterceptLayout.setVisibility(View.GONE);
+            getSupportActionBar()
+                    .setTitle(getResources().getString(R.string.notify_title_shortcut));
         }
 
     }
@@ -124,6 +126,11 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu
                 .findItem(R.id.action_search));
         searchView.setOnQueryTextListener(mOnQueryTextListener);
+        if (mCurType == TYPE_SELECT) {
+            menu.findItem(R.id.action_edit).setVisible(false);
+        } else {
+            menu.findItem(R.id.action_edit).setVisible(true);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -166,9 +173,9 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
             if (mCurType == TYPE_FILTER) {
                 mNotifyInterceptList = NotifyFilterManager.prepareInterceptList(mContext,
                         pkgNameSet);
-                mNotifyDataList = NotifyFilterManager.prepareAppList(mContext, pkgNameSet);
+                mNotifyDataList = NotifyFilterManager.prepareAppList(mContext, pkgNameSet, true);
             } else {
-                mNotifyDataList = NotifyFilterManager.prepareAppList(mContext, pkgNameSet);
+                mNotifyDataList = NotifyFilterManager.prepareAppList(mContext, pkgNameSet, false);
             }
             return mNotifyDataList;
         }

@@ -9,7 +9,7 @@
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_edit"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@drawable/ic_edit"
         android:title="edit"
         app:showAsAction="always"/>
 

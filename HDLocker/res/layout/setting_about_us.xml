@@ -10,7 +10,6 @@
         android:id="@+id/setting_anout_middle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/setting_about_top"
         android:orientation="vertical"
         android:paddingTop="@dimen/setting_about_pandora_height" >
 

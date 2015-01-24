@@ -202,4 +202,6 @@
     <string name="fast_setting_item_about_fast">关于Fast锁屏</string>
     <string name="fast_locker_name_zh">Fast快锁屏</string>
     <string name="fast_locker_name_en">Fast Locker</string>
+    
+    <string name="notify_title_shortcut">选择快捷应用</string>
 </resources>

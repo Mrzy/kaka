@@ -3,10 +3,8 @@
 
     <color name="white">#ffffff</color>
     <color name="setting_item_press_color">#22ffffff</color>
-    <color name="gusture_textview_color">#a5ffffff</color>
     <color name="gusture_button_color">#aaffffff</color>
     <color name="setting_textview_color">#000000</color>
-    <color name="gusture_button_unpress_color">#30ffffff</color>
     <color name="setting_background">#ffffff</color>
     <color name="setting_about_us_text_color">#ffffff</color>
     <color name="setting_about_pandora_color">#2f3035</color>
@@ -54,5 +52,7 @@
     <!-- actionbar -->
     <color name="pandora_actionbar_title_color">@android:color/white</color>
     <color name="dxfast_widget_item_press_color">#1c1a3f</color>
+    
+    <color name="material_design_color">#03a9f4</color>
 
 </resources>

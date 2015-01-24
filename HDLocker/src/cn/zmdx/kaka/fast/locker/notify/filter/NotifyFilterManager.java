@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.umeng.analytics.f;
+
 import android.app.ActivityManager;
 import android.app.ActivityManager.RecentTaskInfo;
 import android.content.Context;
@@ -51,7 +53,7 @@ public class NotifyFilterManager {
     }
 
     public static ArrayList<NotifyFilterEntity> prepareAppList(Context mContext,
-            Set<String> pkgNameSet) {
+            Set<String> pkgNameSet, boolean isNeedSelect) {
         List<PackageInfo> packageInfos = mContext.getPackageManager().getInstalledPackages(
                 PackageManager.GET_UNINSTALLED_PACKAGES);
         ArrayList<NotifyFilterEntity> list = new ArrayList<NotifyFilterEntity>();
@@ -64,15 +66,16 @@ public class NotifyFilterManager {
             myAppInfo.setNotifyUSName(NotifyFilterUtil.getChinesePinyinStr(appName));
             myAppInfo.setPkgName(appInfo.packageName);
             myAppInfo.setNotifyIcon(icon);
-            myAppInfo.setSelect(pkgNameSet.contains(appInfo.packageName));
+            myAppInfo.setSelect(isNeedSelect == true ? pkgNameSet.contains(appInfo.packageName)
+                    : false);
             list.add(myAppInfo);
         }
-        list.addAll(prepareRecentTaskInfo(mContext, pkgNameSet));
+        list.addAll(prepareRecentTaskInfo(mContext, pkgNameSet, isNeedSelect));
         return list;
     }
 
     private static ArrayList<NotifyFilterEntity> prepareRecentTaskInfo(Context mContext,
-            Set<String> pkgNameSet) {
+            Set<String> pkgNameSet, boolean isNeedSelect) {
         ActivityManager activityManager = (ActivityManager) mContext
                 .getSystemService(Context.ACTIVITY_SERVICE);
         @SuppressWarnings("deprecation")
@@ -91,7 +94,8 @@ public class NotifyFilterManager {
                 recentEntity.setNotifyUSName(RECENT_TASK_MARK
                         + NotifyFilterUtil.getChinesePinyinStr(labelString));
                 recentEntity.setPkgName(resolveInfo.activityInfo.packageName);
-                recentEntity.setSelect(pkgNameSet.contains(resolveInfo.activityInfo.packageName));
+                recentEntity.setSelect(isNeedSelect == true ? pkgNameSet
+                        .contains(resolveInfo.activityInfo.packageName) : false);
                 list.add(recentEntity);
             }
         }

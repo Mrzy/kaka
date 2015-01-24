@@ -48,12 +48,13 @@
                         android:gravity="center_vertical"
                         android:text="@string/individualization_notice_switch_button" />
 
-                    <cn.zmdx.kaka.fast.locker.widget.SwitchView
+                    <cn.zmdx.kaka.fast.locker.widget.SwitchButton
                         android:id="@+id/individualization_notice_switch_button"
                         style="@style/setting_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:frameDrawable="@drawable/switch_frame"
+                        app:sliderCloseDrawable="@drawable/switch_slider_close"
                         app:sliderDrawable="@drawable/switch_slider"
                         app:stateDrawable="@drawable/switch_state_normal"
                         app:stateMaskDrawable="@drawable/switch_state_mask" />
@@ -78,12 +79,13 @@
                         android:gravity="center_vertical"
                         android:text="@string/setting_individualization_open_lockscreen_voice" />
 
-                    <cn.zmdx.kaka.fast.locker.widget.SwitchView
+                    <cn.zmdx.kaka.fast.locker.widget.SwitchButton
                         android:id="@+id/individualization_open_lockscreen_voice_switch_button"
                         style="@style/setting_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:frameDrawable="@drawable/switch_frame"
+                        app:sliderCloseDrawable="@drawable/switch_slider_close"
                         app:sliderDrawable="@drawable/switch_slider"
                         app:stateDrawable="@drawable/switch_state_normal"
                         app:stateMaskDrawable="@drawable/switch_state_mask" />

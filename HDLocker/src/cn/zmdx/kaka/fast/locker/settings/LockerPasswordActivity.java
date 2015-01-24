@@ -6,34 +6,27 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.fast.locker.widget.CheckBox;
+import cn.zmdx.kaka.fast.locker.widget.CheckBox.OnCheckListener;
 import cn.zmdx.kaka.fast.locker.widget.PandoraLockPatternView;
 import cn.zmdx.kaka.fast.locker.widget.PandoraLockPatternView.ILockPatternListener;
 import cn.zmdx.kaka.fast.locker.widget.PandoraNumberLockView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-public class LockerPasswordActivity extends BaseActivity implements OnClickListener {
+public class LockerPasswordActivity extends BaseActivity implements OnCheckListener {
 
     public static final int REQUEST_LOCKER_PASSWORD_TYPE_CODE = 999;
 
-    private LinearLayout mNoneTypeLayout;
+    private CheckBox mNoneType;
 
-    private LinearLayout mNumberTypeLayout;
+    private CheckBox mNumberType;
 
-    private LinearLayout mPatternTypeLayout;
-
-    private ImageView mNoneType;
-
-    private ImageView mNumberType;
-
-    private ImageView mPatternType;
+    private CheckBox mPatternType;
 
     private MaterialDialog mNumberLockDialog;
 
@@ -49,17 +42,14 @@ public class LockerPasswordActivity extends BaseActivity implements OnClickListe
     }
 
     private void initView() {
-        mNoneTypeLayout = (LinearLayout) findViewById(R.id.pandora_lock_type_none_layout);
-        mNoneType = (ImageView) findViewById(R.id.pandora_lock_type_none);
-        mNoneTypeLayout.setOnClickListener(this);
+        mNoneType = (CheckBox) findViewById(R.id.pandora_lock_type_none);
+        mNoneType.setOncheckListener(this);
 
-        mPatternTypeLayout = (LinearLayout) findViewById(R.id.pandora_lock_type_pattern_layout);
-        mPatternType = (ImageView) findViewById(R.id.pandora_lock_type_pattern);
-        mPatternTypeLayout.setOnClickListener(this);
+        mPatternType = (CheckBox) findViewById(R.id.pandora_lock_type_pattern);
+        mPatternType.setOncheckListener(this);
 
-        mNumberTypeLayout = (LinearLayout) findViewById(R.id.pandora_lock_type_number_layout);
-        mNumberType = (ImageView) findViewById(R.id.pandora_lock_type_number);
-        mNumberTypeLayout.setOnClickListener(this);
+        mNumberType = (CheckBox) findViewById(R.id.pandora_lock_type_number);
+        mNumberType.setOncheckListener(this);
     }
 
     private void initLockType() {
@@ -70,19 +60,19 @@ public class LockerPasswordActivity extends BaseActivity implements OnClickListe
     private void setTypeViewState(int type) {
         switch (type) {
             case KeyguardLockerManager.UNLOCKER_TYPE_NONE:
-                mNoneType.setImageResource(R.drawable.pandora_lock_password_radio_checked);
-                mPatternType.setImageResource(R.drawable.pandora_lock_password_radio_normal);
-                mNumberType.setImageResource(R.drawable.pandora_lock_password_radio_normal);
+                mNoneType.setChecked(true);
+                mPatternType.setChecked(false);
+                mNumberType.setChecked(false);
                 break;
             case KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN:
-                mNoneType.setImageResource(R.drawable.pandora_lock_password_radio_normal);
-                mPatternType.setImageResource(R.drawable.pandora_lock_password_radio_checked);
-                mNumberType.setImageResource(R.drawable.pandora_lock_password_radio_normal);
+                mNoneType.setChecked(false);
+                mPatternType.setChecked(true);
+                mNumberType.setChecked(false);
                 break;
             case KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK:
-                mNoneType.setImageResource(R.drawable.pandora_lock_password_radio_normal);
-                mPatternType.setImageResource(R.drawable.pandora_lock_password_radio_normal);
-                mNumberType.setImageResource(R.drawable.pandora_lock_password_radio_checked);
+                mNoneType.setChecked(false);
+                mPatternType.setChecked(false);
+                mNumberType.setChecked(true);
                 break;
 
             default:
@@ -254,17 +244,17 @@ public class LockerPasswordActivity extends BaseActivity implements OnClickListe
     }
 
     @Override
-    public void onClick(View view) {
+    public void onCheck(boolean check, View view) {
         switch (view.getId()) {
-            case R.id.pandora_lock_type_none_layout:
+            case R.id.pandora_lock_type_none:
                 setLockTypeNone();
                 setTypeViewState(KeyguardLockerManager.UNLOCKER_TYPE_NONE);
                 break;
-            case R.id.pandora_lock_type_pattern_layout:
+            case R.id.pandora_lock_type_pattern:
                 setLockTypePattern();
                 setTypeViewState(KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN);
                 break;
-            case R.id.pandora_lock_type_number_layout:
+            case R.id.pandora_lock_type_number:
                 setLockTypeNumber();
                 setTypeViewState(KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK);
                 break;
