@@ -69,12 +69,12 @@
                         android:scaleType="fitXY"
                         android:src="@color/online_wallpaper_preview_translucent" />
 
-                    <ProgressBar
+                    <cn.zmdx.kaka.fast.locker.widget.material.design.ProgressBarCircularIndeterminate
                         android:id="@+id/pandora_online_wallpaper_preview_progress"
-                        style="@android:style/Widget.ProgressBar.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
                         android:layout_gravity="center"
+                        android:background="@color/material_design_color"
                         android:visibility="gone" />
 
                     <LinearLayout
@@ -144,15 +144,16 @@
                     android:paddingRight="5dp"
                     android:textSize="14sp" />
 
-                <Button
+                <cn.zmdx.kaka.fast.locker.widget.material.design.ButtonRectangle
                     android:id="@+id/pandora_online_wallpaper_apply_button"
                     android:layout_width="@dimen/pandora_online_wallpaper_apply_button_width"
                     android:layout_height="@dimen/pandora_online_wallpaper_apply_button_height"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="8dp"
-                    android:background="@drawable/pandora_online_wallpaper_apply_selector"
+                    android:background="@color/material_design_color"
                     android:text="@string/pandora_online_wallpaper_apple" />
+
             </RelativeLayout>
 
             <FrameLayout
@@ -174,12 +175,12 @@
                     android:scrollbars="none"
                     android:verticalSpacing="@dimen/pandora_online_wallpaper_gridview_vertical_spacing" />
 
-                <ProgressBar
+                <cn.zmdx.kaka.fast.locker.widget.material.design.ProgressBarCircularIndeterminate
                     android:id="@+id/pandora_online_wallpaper_gridview_pb"
-                    style="@android:style/Widget.ProgressBar.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_gravity="center"
+                    android:background="@color/material_design_color"
                     android:visibility="gone" />
             </FrameLayout>
         </LinearLayout>
@@ -196,12 +197,12 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <ProgressBar
+    <cn.zmdx.kaka.fast.locker.widget.material.design.ProgressBarCircularIndeterminate
         android:id="@+id/pandora_online_wallpaper_prompt_pb"
-        style="@android:style/Widget.ProgressBar.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_gravity="center"
+        android:background="@color/material_design_color"
         android:visibility="visible" />
 
     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView

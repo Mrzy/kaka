@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import cn.zmdx.kaka.fast.locker.widget.SwitchView;
+import cn.zmdx.kaka.fast.locker.widget.SwitchButton;
 
 public class SettingItemsAdapter extends BaseAdapter {
 
@@ -54,7 +54,7 @@ public class SettingItemsAdapter extends BaseAdapter {
                     .findViewById(R.id.fastlocker_setting_item_icon);
             holder.settingItemText = (TextView) convertView
                     .findViewById(R.id.fastlocker_setting_item_text);
-            holder.lockScreenSwitch = (SwitchView) convertView
+            holder.lockScreenSwitch = (SwitchButton) convertView
                     .findViewById(R.id.fastlocker_lockscreen_switch);
             convertView.setTag(holder);
         } else {
@@ -103,7 +103,7 @@ public class SettingItemsAdapter extends BaseAdapter {
         public ImageView settingItemIcon;
 
         // 设置项的SwitchView
-        public SwitchView lockScreenSwitch;
+        public SwitchButton lockScreenSwitch;
 
     }
 }

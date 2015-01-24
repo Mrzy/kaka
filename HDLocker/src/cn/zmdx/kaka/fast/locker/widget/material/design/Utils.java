@@ -1,4 +1,4 @@
-package cn.zmdx.kaka.fast.locker.widget;
+package cn.zmdx.kaka.fast.locker.widget.material.design;
 
 import android.content.res.Resources;
 import android.util.TypedValue;

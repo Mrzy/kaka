@@ -36,6 +36,7 @@ import cn.zmdx.kaka.fast.locker.notify.filter.ListCompare;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterManager;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterManager.NotifyFilterEntity;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterUtil;
+import cn.zmdx.kaka.fast.locker.widget.material.design.ProgressBarCircularIndeterminate;
 
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersSimpleArrayAdapter;
@@ -48,7 +49,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
 
     private RelativeLayout mContentLayout;
 
-    private ProgressBar mLoadingView;
+    private ProgressBarCircularIndeterminate mLoadingView;
 
     private StickyGridHeadersGridView mNotifyGridView;
 
@@ -89,7 +90,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
 
     private void initView() {
         mContentLayout = (RelativeLayout) findViewById(R.id.notify_content);
-        mLoadingView = (ProgressBar) findViewById(R.id.notify_loading);
+        mLoadingView = (ProgressBarCircularIndeterminate) findViewById(R.id.notify_loading);
 
         mNotifyGridView = (StickyGridHeadersGridView) findViewById(R.id.notify_grid_view);
         mNotifyGridView.setHeadersIgnorePadding(true);

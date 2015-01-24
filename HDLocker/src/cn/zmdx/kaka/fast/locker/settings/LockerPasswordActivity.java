@@ -10,11 +10,11 @@ import android.view.Window;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.fast.locker.widget.CheckBox;
-import cn.zmdx.kaka.fast.locker.widget.CheckBox.OnCheckListener;
 import cn.zmdx.kaka.fast.locker.widget.PandoraLockPatternView;
 import cn.zmdx.kaka.fast.locker.widget.PandoraLockPatternView.ILockPatternListener;
 import cn.zmdx.kaka.fast.locker.widget.PandoraNumberLockView;
+import cn.zmdx.kaka.fast.locker.widget.material.design.CheckBox;
+import cn.zmdx.kaka.fast.locker.widget.material.design.CheckBox.OnCheckListener;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 

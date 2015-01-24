@@ -51,15 +51,16 @@
         </RelativeLayout>
     </FrameLayout>
 
-    <ImageView
+    <cn.zmdx.kaka.fast.locker.widget.material.design.ButtonFloat
+        xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fast_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_marginBottom="@dimen/fast_mainsetting_imageview_comment_margin_bottom"
-        android:layout_marginEnd="@dimen/fast_mainsetting_imageview_comment_margin_right"
-        android:layout_marginRight="@dimen/fast_mainsetting_imageview_comment_margin_right"
-        android:background="@drawable/round_button"
-        android:src="@drawable/fast_comment" />
+        android:layout_marginRight="24dp"
+        android:background="@color/material_design_color"
+        materialdesign:animate="true"
+        materialdesign:iconDrawable="@drawable/ic_action_new"
+        materialdesign:rippleColor="@color/material_design_color_click" />
 
 </FrameLayout>

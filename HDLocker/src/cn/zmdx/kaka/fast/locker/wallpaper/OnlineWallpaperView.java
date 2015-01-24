@@ -25,8 +25,9 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import cn.zmdx.kaka.fast.locker.BuildConfig;
 import cn.zmdx.kaka.fast.locker.ImageLoaderManager;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.RequestManager;
 import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.network.ByteArrayRequest;
@@ -42,8 +43,8 @@ import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.fast.locker.utils.ImageUtils;
 import cn.zmdx.kaka.fast.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
-import cn.zmdx.kaka.fast.locker.BuildConfig;
-import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.widget.material.design.ButtonRectangle;
+import cn.zmdx.kaka.fast.locker.widget.material.design.ProgressBarCircularIndeterminate;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -59,7 +60,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private GridView mGridView;
 
-    private ProgressBar mGVPb;
+    private ProgressBarCircularIndeterminate mGVPb;
 
     private WallpaperAdpter mWallpaperAdpter;
 
@@ -69,9 +70,9 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private TypefaceTextView mAuthor;
 
-    private Button mApplyButton;
+    private ButtonRectangle mApplyButton;
 
-    private ProgressBar mPreviewProgressBar;
+    private ProgressBarCircularIndeterminate mPreviewProgressBar;
 
     private ArrayList<ServerOnlineWallpaper> list;
 
@@ -91,7 +92,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private TypefaceTextView mPromptTextView;
 
-    private ProgressBar mPromptPb;
+    private ProgressBarCircularIndeterminate mPromptPb;
 
     private static final boolean PREFER_QUALITY_OVER_SPEED = false;
 
@@ -129,7 +130,8 @@ public class OnlineWallpaperView extends LinearLayout {
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.pandora_online_wallpaper, null);
         addView(mRootView);
         mContentView = (LinearLayout) mRootView.findViewById(R.id.pandora_online_wallpaper_content);
-        mPromptPb = (ProgressBar) mRootView.findViewById(R.id.pandora_online_wallpaper_prompt_pb);
+        mPromptPb = (ProgressBarCircularIndeterminate) mRootView
+                .findViewById(R.id.pandora_online_wallpaper_prompt_pb);
         mPromptTextView = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_prompt_text_view);
         mPreview = (ImageView) mRootView
@@ -157,15 +159,17 @@ public class OnlineWallpaperView extends LinearLayout {
         mDesc.setMovementMethod(new ScrollingMovementMethod());
         int themeId = ThemeManager.getCurrentThemeId();
         if (themeId == ThemeManager.THEME_ID_ONLINE) {
-            String fileName = OnlineWallpaperManager.getInstance().getCurrentWallpaperFileName(mContext);
-            String curWallpaperDesc = PandoraConfig.newInstance(mContext).getOnlineWallPaperDesc(fileName);
+            String fileName = OnlineWallpaperManager.getInstance().getCurrentWallpaperFileName(
+                    mContext);
+            String curWallpaperDesc = PandoraConfig.newInstance(mContext).getOnlineWallPaperDesc(
+                    fileName);
             mDesc.setText(curWallpaperDesc);
         }
         mAuthor = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_author);
-        mPreviewProgressBar = (ProgressBar) mRootView
+        mPreviewProgressBar = (ProgressBarCircularIndeterminate) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_progress);
-        mApplyButton = (Button) mRootView.findViewById(R.id.pandora_online_wallpaper_apply_button);
+        mApplyButton = (ButtonRectangle) mRootView.findViewById(R.id.pandora_online_wallpaper_apply_button);
         mApplyButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -197,7 +201,8 @@ public class OnlineWallpaperView extends LinearLayout {
                 .findViewById(R.id.pandora_online_wallpaper_preview_date);
         mTemperature = (TypefaceTextView) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_temperature);
-        mGVPb = (ProgressBar) mRootView.findViewById(R.id.pandora_online_wallpaper_gridview_pb);
+        mGVPb = (ProgressBarCircularIndeterminate) mRootView
+                .findViewById(R.id.pandora_online_wallpaper_gridview_pb);
         mGridView = (GridView) mRootView.findViewById(R.id.pandora_online_wallpaper_gridview);
 
         readyPullWallpaperFromServer();

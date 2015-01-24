@@ -34,13 +34,20 @@
             android:textSize="17sp" />
     </LinearLayout>
 
-    <cn.zmdx.kaka.fast.locker.widget.SwitchView
+    <cn.zmdx.kaka.fast.locker.widget.SwitchButton
+        xmlns:app="http://schemas.android.com/apk/res/cn.zmdx.kaka.fast.locker"
         android:id="@+id/fastlocker_lockscreen_switch"
+        style="@style/setting_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|center_vertical"
         android:layout_marginEnd="@dimen/fast_mainsetting_listview_imageview_margin_right_bigger"
         android:layout_marginRight="@dimen/fast_mainsetting_listview_imageview_margin_right_bigger"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        app:frameDrawable="@drawable/switch_frame"
+        app:sliderCloseDrawable="@drawable/switch_slider_close"
+        app:sliderDrawable="@drawable/switch_slider"
+        app:stateDrawable="@drawable/switch_state_normal"
+        app:stateMaskDrawable="@drawable/switch_state_mask" />
 
 </LinearLayout>

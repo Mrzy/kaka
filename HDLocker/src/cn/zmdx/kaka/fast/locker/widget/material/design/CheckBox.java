@@ -1,5 +1,5 @@
 
-package cn.zmdx.kaka.fast.locker.widget;
+package cn.zmdx.kaka.fast.locker.widget.material.design;
 
 import android.content.Context;
 import android.graphics.Bitmap;

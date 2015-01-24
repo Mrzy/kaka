@@ -54,5 +54,6 @@
     <color name="dxfast_widget_item_press_color">#1c1a3f</color>
     
     <color name="material_design_color">#03a9f4</color>
+    <color name="material_design_color_click">#1E88E5</color>
 
 </resources>

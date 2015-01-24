@@ -28,6 +28,7 @@ import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.SettingItemsAdapter;
 import cn.zmdx.kaka.fast.locker.widget.AlphaForegroundColorSpan;
 import cn.zmdx.kaka.fast.locker.widget.KenBurnsView;
+import cn.zmdx.kaka.fast.locker.widget.material.design.ButtonFloat;
 
 public class MainSettingsActivity extends Activity implements OnClickListener {
 
@@ -45,7 +46,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
 
     private ImageView mHeaderLogo;
 
-    private ImageView mCommentImageView;
+    private ButtonFloat mCommentImageView;
 
     private View mHeader;
 
@@ -105,7 +106,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         mHeaderPicture = (KenBurnsView) findViewById(R.id.header_picture);
         mHeaderPicture.setResourceIds(R.drawable.picture0, R.drawable.picture1);
         mHeaderLogo = (ImageView) findViewById(R.id.header_logo);
-        mCommentImageView = (ImageView) findViewById(R.id.fast_comment);
+        mCommentImageView = (ButtonFloat) findViewById(R.id.fast_comment);
         mCommentImageView.setOnClickListener(this);
         mActionBarTitleColor = getResources().getColor(R.color.fast_actionbar_title_color);
 
