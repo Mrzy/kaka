@@ -9,11 +9,11 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 public class UrlBuilder {
 
-    private static String sBaseDebugUrl = "http://nb.hdlocker.com/pandora/locker!";
+    private static String sBaseDebugUrl = "http://nb.hdlocker.com/pandora/";
 
-    private static String sBaseOldProdUrl = "http://pandora.hdlocker.com:8080/pandora/locker!";
+    private static String sBaseOldProdUrl = "http://pandora.hdlocker.com:8080/pandora/";
 
-    private static String sBaseProdUrl = "http://pandora.hdlocker.com/pandora/locker!";
+    private static String sBaseProdUrl = "http://pandora.hdlocker.com/pandora/";
 
     public static String getBaseUrl() {
         if (BuildConfig.DEBUG) {

@@ -117,7 +117,7 @@ public class ServerImageDataManager {
 
     public String getUrl(long lastModified) {
         StringBuilder sb = new StringBuilder(UrlBuilder.getBaseUrl());
-        sb.append("queryDataImgTable.action?");
+        sb.append("locker!queryDataImgTable.action?");
         sb.append("lastModified=" + lastModified);
         return sb.toString();
     }

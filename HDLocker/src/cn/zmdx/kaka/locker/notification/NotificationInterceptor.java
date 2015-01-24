@@ -260,7 +260,7 @@ public class NotificationInterceptor extends Handler {
      * @return
      */
     private String getUrl(long lastModified) {
-        return UrlBuilder.getBaseUrl() + "queryNotifyList.action" + "?lastModified=" + lastModified;
+        return UrlBuilder.getBaseUrl() + "notify!queryNotifyList.action" + "?lastModified=" + lastModified;
     }
 
     private void handlePullCustomNotificationData() {
