@@ -28,12 +28,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.BounceInterpolator;
-import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -53,21 +52,17 @@ import cn.zmdx.kaka.fast.locker.shortcut.ShortcutManager;
 import cn.zmdx.kaka.fast.locker.theme.ThemeManager;
 import cn.zmdx.kaka.fast.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
-import cn.zmdx.kaka.fast.locker.utils.HDBLOG;
 import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.fast.locker.utils.ImageUtils;
 import cn.zmdx.kaka.fast.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.fast.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaper;
-import cn.zmdx.kaka.fast.locker.weather.PandoraWeatherManager;
-import cn.zmdx.kaka.fast.locker.weather.PandoraWeatherManager.IWeatherCallback;
-import cn.zmdx.kaka.fast.locker.weather.PandoraWeatherManager.PandoraWeather;
 import cn.zmdx.kaka.fast.locker.widget.DigitalClocks;
 import cn.zmdx.kaka.fast.locker.widget.PandoraPanelLayout;
-import cn.zmdx.kaka.fast.locker.widget.SlidingPaneLayout;
-import cn.zmdx.kaka.fast.locker.widget.WallpaperPanelLayout;
 import cn.zmdx.kaka.fast.locker.widget.PandoraPanelLayout.PanelSlideListener;
 import cn.zmdx.kaka.fast.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
 import cn.zmdx.kaka.fast.locker.widget.PandoraPanelLayout.SlideState;
+import cn.zmdx.kaka.fast.locker.widget.SlidingPaneLayout;
+import cn.zmdx.kaka.fast.locker.widget.WallpaperPanelLayout;
 
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
@@ -99,7 +94,7 @@ public class LockScreenManager {
 
     private Theme mCurTheme;
 
-    private TextView mDate, mTemperature, mWeatherSummary, mBatteryInfo;
+    private TextView mDate, mBatteryInfo;
 
     private DigitalClocks mDigitalClockView;
 
@@ -260,97 +255,6 @@ public class LockScreenManager {
         mContext.startActivity(intent);
     }
 
-    private void processWeatherInfo() {
-        final long lastCheckTime = mPandoraConfig.getLastCheckWeatherTime();
-        if (System.currentTimeMillis() - lastCheckTime < PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("检查天气条件不满足,使用缓存数据");
-            }
-            final String info = mPandoraConfig.getLastWeatherInfo();
-            if (!TextUtils.isEmpty(info)) {
-                try {
-                    String[] wi = info.split("#");
-                    PandoraWeather pw = new PandoraWeather();
-                    pw.setTemp(Integer.parseInt(wi[0]));
-                    pw.setSummary(wi[1]);
-                    updateWeatherInfo(pw);
-                } catch (Exception e) {
-                    updateWeatherInfo(null);
-                }
-            } else {
-                updateWeatherInfo(null);
-            }
-            return;
-        }
-        // TODO
-        String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar.getInstance()
-                .get(Calendar.HOUR_OF_DAY));
-        mWeatherSummary.setText(promptString);
-        mWeatherSummary.setVisibility(View.VISIBLE);
-        if (null != mOnlineWallpaperView) {
-            mOnlineWallpaperView.setWeatherString(promptString);
-        }
-        PandoraWeatherManager.getInstance().getCurrentWeather(new IWeatherCallback() {
-
-            @Override
-            public void onSuccess(PandoraWeather pw) {
-                final int temp = pw.getTemp();
-                final String summary = pw.getSummary();
-                mPandoraConfig.saveLastWeatherInfo(temp + "#" + summary);
-                updateWeatherInfo(pw);
-                mPandoraConfig.saveLastCheckWeatherTime(System.currentTimeMillis());
-            }
-
-            @Override
-            public void onFailed() {
-                updateWeatherInfo(null);
-            }
-        });
-
-    }
-
-    private void updateWeatherInfo(final PandoraWeather pw) {
-        HDBThreadUtils.runOnUi(new Runnable() {
-
-            @Override
-            public void run() {
-                if (mWeatherSummary == null) {
-                    return;
-                }
-                if (pw == null) {
-                    String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
-                            .getInstance().get(Calendar.HOUR_OF_DAY));
-                    mWeatherSummary.setText(promptString);
-                    mWeatherSummary.setVisibility(View.VISIBLE);
-                    if (null != mOnlineWallpaperView) {
-                        mOnlineWallpaperView.setWeatherString(promptString);
-                    }
-                } else {
-                    int temp = pw.getTemp();
-                    String summary = pw.getSummary();
-                    if (mTemperature != null) {
-                        if (mTemperature.getText() != null
-                                && !mTemperature.getText().toString().endsWith("ºC")) {
-                            mTemperature.append(" " + temp + "ºC");
-                            if (null != mOnlineWallpaperView) {
-                                mOnlineWallpaperView.setTemperature(" " + temp + "ºC");
-                            }
-                        }
-                    }
-                    if (mWeatherSummary == null) {
-                        return;
-                    }
-                    mWeatherSummary.setVisibility(View.VISIBLE);
-                    mWeatherSummary.setText(summary);
-                    if (null != mOnlineWallpaperView) {
-                        mOnlineWallpaperView.setWeatherString(summary);
-                    }
-                }
-            }
-        });
-
-    }
-
     /**
      * 检查新版本
      */
@@ -426,9 +330,7 @@ public class LockScreenManager {
         mBatteryInfo = (TextView) mEntireView.findViewById(R.id.battery_info);
         mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
         mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
-        mTemperature = (TextView) mEntireView.findViewById(R.id.lock_temperature);
         mLockDataView = (LinearLayout) mEntireView.findViewById(R.id.lock_date_view);
-        mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
         mDigitalClockView = (DigitalClocks) mEntireView.findViewById(R.id.digitalClock);
 
         batteryView = (BatteryView) mEntireView.findViewById(R.id.batteryView);
@@ -722,8 +624,6 @@ public class LockScreenManager {
                                     mOnlinePanel.collapsePanel();
                                 }
                             });
-                            mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText()
-                                    .toString());
                             mOnlineWallpaperView.setDate(mDate.getText().toString());
                         }
                     }
@@ -954,7 +854,7 @@ public class LockScreenManager {
     }
 
     public void onScreenOff() {
-        invisiableViews(mLockDataView, mWeatherSummary, mDigitalClockView);
+        setTranslationXForDateView(mLockDataView, mDigitalClockView);
         cancelAnimatorIfNeeded();
         if (mSliderView != null && !mSliderView.isPanelExpanded()) {
             mSliderView.expandPanel();
@@ -964,20 +864,19 @@ public class LockScreenManager {
         }
     }
 
-    public void onScreenOn() {
-        if (mIsLocked) {
-            processAnimations();
-            processWeatherInfo();
-            if (mDigitalClockView != null) {
-                mDigitalClockView.setTickerStoped(false);
-            }
+    private void setTranslationXForDateView(View ...views) {
+        for (View v : views) {
+            v.setTranslationX(DATE_WIDGET_TRANSLATIONY_DISTANCE);
         }
     }
 
-    private void invisiableViews(View... views) {
-        for (View view : views) {
-            if (view != null)
-                view.setAlpha(0);
+    public void onScreenOn() {
+        if (mIsLocked) {
+            processAnimations();
+//            processWeatherInfo();
+            if (mDigitalClockView != null) {
+                mDigitalClockView.setTickerStoped(false);
+            }
         }
     }
 
@@ -1003,37 +902,38 @@ public class LockScreenManager {
     }
 
     private static final int DATE_WIDGET_TRANSLATIONY_DISTANCE = -BaseInfoHelper.dip2px(
-            HDApplication.getContext(), 100);
+            HDApplication.getContext(), 300);
 
     private void processAnimations() {
-        ObjectAnimator digitalAlpha = ObjectAnimator.ofFloat(mDigitalClockView, "alpha", 0, 1);
-        ObjectAnimator digitalTrans = ObjectAnimator.ofFloat(mDigitalClockView, "translationY",
+//        ObjectAnimator digitalAlpha = ObjectAnimator.ofFloat(mDigitalClockView, "alpha", 0, 1);
+        ObjectAnimator digitalTrans = ObjectAnimator.ofFloat(mDigitalClockView, "translationX",
                 DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
-        AnimatorSet digitalSet = new AnimatorSet();
-        digitalSet.playTogether(digitalAlpha, digitalTrans);
+        digitalTrans.setDuration(700);
+        digitalTrans.setInterpolator(new OvershootInterpolator());
+        digitalTrans.setStartDelay(50);
+//        AnimatorSet digitalSet = new AnimatorSet();
+//        digitalSet.playTogether(digitalAlpha, digitalTrans);
 
-        ObjectAnimator dateAlpha = ObjectAnimator.ofFloat(mLockDataView, "alpha", 0, 1);
-        ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mLockDataView, "translationY",
+//        ObjectAnimator dateAlpha = ObjectAnimator.ofFloat(mLockDataView, "alpha", 0, 1);
+        ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mLockDataView, "translationX",
                 DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
-        AnimatorSet dateSet = new AnimatorSet();
-        dateSet.setStartDelay(100);
-        dateSet.playTogether(dateAlpha, dateTrans);
+        dateTrans.setDuration(700);
+        dateTrans.setInterpolator(new OvershootInterpolator());
+        dateTrans.setStartDelay(150);
+//        AnimatorSet dateSet = new AnimatorSet();
+//        dateSet.setStartDelay(100);
+//        dateSet.playTogether(dateAlpha, dateTrans);
+        digitalTrans.start();
+        dateTrans.start();
 
-        ObjectAnimator wsAlpha = ObjectAnimator.ofFloat(mWeatherSummary, "alpha", 0, 1);
-        ObjectAnimator wsTrans = ObjectAnimator.ofFloat(mWeatherSummary, "translationY",
-                DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
-        AnimatorSet wsSet = new AnimatorSet();
-        wsSet.setStartDelay(200);
-        wsSet.playTogether(wsAlpha, wsTrans);
-
-        AnimatorSet finalSet = new AnimatorSet();
-        finalSet.playTogether(digitalSet, dateSet, wsSet);
-        finalSet.setDuration(700);
-        finalSet.setStartDelay(20);
+//        AnimatorSet finalSet = new AnimatorSet();
+//        finalSet.playTogether(digitalTrans, dateTrans);
+//        finalSet.setDuration(700);
+//        finalSet.setStartDelay(20);
         // finalSet.setInterpolator(new OvershootInterpolator());
-        finalSet.setInterpolator(new DecelerateInterpolator());
+//        finalSet.setInterpolator(new DecelerateInterpolator());
         // finalSet.setInterpolator(new BounceInterpolator());
-        finalSet.start();
+//        finalSet.start();
     }
 
     private Set<OnBackPressedListener> mBackPressedListeners = new HashSet<OnBackPressedListener>();

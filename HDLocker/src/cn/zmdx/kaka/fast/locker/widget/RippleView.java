@@ -265,12 +265,10 @@ public class RippleView extends LinearLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
-        // return super.onTouchEvent(event);
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        // this.onTouchEvent(event);
         return super.onInterceptTouchEvent(event);
     }
 

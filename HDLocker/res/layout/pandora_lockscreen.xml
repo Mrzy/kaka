@@ -57,7 +57,7 @@
                 <RelativeLayout
                     android:id="@+id/flipper_box"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent" >
                 </RelativeLayout>
 
                 <FrameLayout
@@ -93,29 +93,6 @@
                                 android:layout_marginLeft="4dp"
                                 android:layout_marginTop="5dp"
                                 android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal" >
-
-                            <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
-                                android:id="@+id/weather_summary"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="2dp"
-                                android:layout_marginTop="20dp"
-                                android:layout_weight="3.4"
-                                android:paddingLeft="5dp"
-                                android:textColor="@color/white"
-                                android:textSize="19dp"
-                                android:visibility="invisible" />
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="0.6" />
                         </LinearLayout>
 
                         <LinearLayout
