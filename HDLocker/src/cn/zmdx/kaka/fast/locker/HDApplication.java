@@ -3,6 +3,8 @@ package cn.zmdx.kaka.fast.locker;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import cn.zmdx.kaka.fast.locker.service.PandoraService;
 import cn.zmdx.kaka.fast.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.fast.locker.utils.HDBEventSource;
 import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
@@ -29,5 +31,11 @@ public class HDApplication extends Application {
             }
         });
         super.onCreate();
+        startPandoraService();
+    }
+
+    private void startPandoraService() {
+        Intent in = new Intent(getApplicationContext(), PandoraService.class);
+        startService(in);
     }
 }

@@ -280,39 +280,6 @@ public class LockScreenManager {
         mBoxView.addView(view, lp);
     }
 
-    // private void refreshContent() {
-    // if (mBoxView != null && mBoxView.getChildCount() > 0) {
-    // if (mFoldablePage != null && mFoldablePage instanceof FoldablePage) {
-    // FoldablePage page = (FoldablePage) mFoldablePage;
-    // if (page.isDataValidate()) {
-    // if (!HDBNetworkState.isWifiNetwork()) {
-    // page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_HTML);
-    // page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_MULTIIMG);
-    // }
-    // return;
-    // }
-    // }
-    // }
-    //
-    // mFoldablePage =
-    // PandoraBoxManager.newInstance(mContext).getFoldablePage();
-    //
-    // View contentView = mFoldablePage.getRenderedView();
-    // if (contentView == null) {
-    // initDefaultPhoto(false);
-    // return;
-    // }
-    // ViewParent parent = contentView.getParent();
-    // if (parent != null) {
-    // ((ViewGroup) parent).removeView(contentView);
-    // }
-    // ViewGroup.LayoutParams lp = mBoxView.getLayoutParams();
-    // lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
-    // lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-    // mBoxView.removeAllViews();
-    // mBoxView.addView(contentView, mBoxView.getChildCount(), lp);
-    // }
-
     @SuppressLint("InflateParams")
     private void initLockScreenViews() {
         mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
@@ -344,11 +311,6 @@ public class LockScreenManager {
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
         initSliderViewHeight(mSliderView);
-//        if (!ViewConfiguration.get(mContext).hasPermanentMenuKey()) {// 存在虚拟按键
-//            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 220));
-//        } else {
-//            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 80));
-//        }
         mTopOverlay = mEntireView.findViewById(R.id.lock_top_overlay);
         mBottomOverlay = mEntireView.findViewById(R.id.lock_bottom_overlay);
         setDrawable();
@@ -789,7 +751,13 @@ public class LockScreenManager {
 
         @Override
         public void onPanelCollapsed(View panel) {
-            UmengCustomEventManager.statisticalPullDownTimes();
+            HDBThreadUtils.runOnWorker(new Runnable() {
+
+                @Override
+                public void run() {
+                    UmengCustomEventManager.statisticalPullDownTimes();
+                }
+            });
             mSlidingPanelLayout.setEnabled(false);
         }
 
