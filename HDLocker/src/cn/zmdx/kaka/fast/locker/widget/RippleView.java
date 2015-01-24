@@ -35,7 +35,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +42,7 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.ScaleAnimation;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import cn.zmdx.kaka.fast.locker.R;
@@ -146,6 +146,7 @@ public class RippleView extends LinearLayout {
                                 ddg.onLongClick(RippleView.this);
                             }
                         }
+                        sendClickEvent(true);
                     }
 
                     @Override
@@ -161,6 +162,7 @@ public class RippleView extends LinearLayout {
                             @Override
                             public void run() {
                                 performClick();
+                                sendClickEvent(false);
                             }
                         }, DURATION);
                         return true;
@@ -273,17 +275,18 @@ public class RippleView extends LinearLayout {
     }
 
     private void sendClickEvent(final Boolean isLongClick) {
-        if (getParent() instanceof ListView) {
-            final int position = ((ListView) getParent()).getPositionForView(this);
-            final long id = ((ListView) getParent()).getItemIdAtPosition(position);
+        if (getParent() instanceof AbsListView) {
+            AbsListView alv = (AbsListView) getParent();
+            final int position = alv.getPositionForView(this);
+            final long id = alv.getItemIdAtPosition(position);
             if (isLongClick) {
                 if (((ListView) getParent()).getOnItemLongClickListener() != null)
                     ((ListView) getParent()).getOnItemLongClickListener().onItemLongClick(
                             ((ListView) getParent()), this, position, id);
             } else {
-                if (((ListView) getParent()).getOnItemClickListener() != null)
-                    ((ListView) getParent()).getOnItemClickListener().onItemClick(
-                            ((ListView) getParent()), this, position, id);
+                if (alv.getOnItemClickListener() != null)
+                    alv.getOnItemClickListener().onItemClick(
+                            alv, this, position, id);
             }
         }
     }

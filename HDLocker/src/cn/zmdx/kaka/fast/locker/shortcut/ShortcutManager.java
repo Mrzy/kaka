@@ -169,8 +169,10 @@ public class ShortcutManager {
                 WidgetConfig.SWITCH_ID_SOUND));
         mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
                 WidgetConfig.SWITCH_ID_BRIGHTNESS));
+//        mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
+//                WidgetConfig.SWITCH_ID_AIRPLANE));
         mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
-                WidgetConfig.SWITCH_ID_AIRPLANE));
+                WidgetConfig.SWITCH_ID_SETTINGS));
     }
 
     /**

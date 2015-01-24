@@ -50,6 +50,7 @@ public class WidgetConfig implements Parcelable {
     public static final int SWITCH_ID_DXFAST_WIDGET_AD= 23;
     public static final int SWITCH_ID_DXFAST_WIDGET_TOOLS_BOX= 24;
     public static final int SWITCH_ID_DXFAST_WIDGET_MASTER= 25;
+    public static final int SWITCH_ID_SETTINGS= 26;
 
     public static final int[] SWITCH_ID_LIST = new int[] {
         SWITCH_ID_WIFI,

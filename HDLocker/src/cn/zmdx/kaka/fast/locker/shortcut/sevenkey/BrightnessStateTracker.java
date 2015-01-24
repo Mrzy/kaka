@@ -7,7 +7,6 @@ import android.provider.Settings;
 import cn.zmdx.kaka.fast.locker.R;
 
 
-@SuppressWarnings("static-access")
 public class BrightnessStateTracker extends SwitchBase
         implements SettingsSystemObserver.Listener {
     private static final int[] IMG_AUTO = {

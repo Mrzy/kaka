@@ -1,8 +1,8 @@
 package cn.zmdx.kaka.fast.locker.shortcut.sevenkey;
 
-import cn.zmdx.kaka.fast.locker.HDApplication;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import cn.zmdx.kaka.fast.locker.HDApplication;
 
 public class QuickHelperItem {
     public static final int TYPE_SWITCH = 1;
@@ -108,6 +108,8 @@ public class QuickHelperItem {
             case WidgetConfig.SWITCH_ID_AUTO_LOCKSCREEN:
 //                this.tracker = new AutoLockScreenStateTracker();
                 break;
+            case WidgetConfig.SWITCH_ID_SETTINGS:
+                this.tracker = new FastSettingsTracker(WidgetConfig.SWITCH_ID_SETTINGS);
             default:
                 break;
         }
