@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:ripple="http://schemas.android.com/apk/res-auto">
 
     <style name="setting_switch">
         <item name="android:paddingLeft">0dp</item>
@@ -68,6 +68,7 @@
         <item name="android:windowBackground"> @android:color/transparent </item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!--
             Theme customizations available in newer API levels can go in
@@ -93,4 +94,9 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="rippleStyle" >
+        <item name="rv_type">rectangle</item>
+        <item name="rv_alpha">150</item>
+        <item name="rv_color">#03a9f4</item>
+    </style>
 </resources>

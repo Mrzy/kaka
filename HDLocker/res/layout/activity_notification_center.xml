@@ -83,7 +83,8 @@
         android:orientation="horizontal"
         android:paddingLeft="@dimen/setting_title_textview_margin_left"
         android:paddingRight="@dimen/setting_title_textview_margin_left"
-        ripple:rv_type="rectangle" >
+        style="@style/rippleStyle"
+        >
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             style="@style/setting_textview"
