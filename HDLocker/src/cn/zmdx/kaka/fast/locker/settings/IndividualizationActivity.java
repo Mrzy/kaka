@@ -13,7 +13,7 @@ import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.sound.LockSoundManager;
-import cn.zmdx.kaka.fast.locker.widget.SwitchView;
+import cn.zmdx.kaka.fast.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -24,9 +24,9 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
 
     private View mRootView;
 
-    private SwitchView mNoticeSButton;
+    private SwitchButton mNoticeSButton;
 
-    private SwitchView mLockScreenVoiceSButton;
+    private SwitchButton mLockScreenVoiceSButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +39,10 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
 
     private void initView() {
         mRootView = findViewById(R.id.individualization_background);
-        mNoticeSButton = (SwitchView) findViewById(R.id.individualization_notice_switch_button);
+        mNoticeSButton = (SwitchButton) findViewById(R.id.individualization_notice_switch_button);
         // mNoticeSButton.setOnCheckedChangeListener(this);
         mNoticeSButton.setChecked(isNeedNotice());
-        mLockScreenVoiceSButton = (SwitchView) findViewById(R.id.individualization_open_lockscreen_voice_switch_button);
+        mLockScreenVoiceSButton = (SwitchButton) findViewById(R.id.individualization_open_lockscreen_voice_switch_button);
         // mLockScreenVoiceSButton.setOnCheckedChangeListener(this);
         mLockScreenVoiceSButton.setChecked(isLockScreenVoice());
 
