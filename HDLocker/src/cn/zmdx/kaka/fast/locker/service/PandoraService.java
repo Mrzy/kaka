@@ -10,11 +10,10 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import cn.zmdx.kaka.fast.locker.BuildConfig;
 import cn.zmdx.kaka.fast.locker.LockScreenManager;
-import cn.zmdx.kaka.fast.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.fast.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.fast.locker.utils.HDBLOG;
-import cn.zmdx.kaka.fast.locker.BuildConfig;
 
 public class PandoraService extends Service {
 

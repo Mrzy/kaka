@@ -23,6 +23,7 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import cn.zmdx.kaka.fast.locker.service.PandoraService;
 import cn.zmdx.kaka.fast.locker.utils.HDBLOG;
 import cn.zmdx.kaka.fast.locker.BuildConfig;
 
@@ -59,6 +60,11 @@ public final class PandoraNotificationService extends NotificationListenerServic
         sNotificationServiceRunning = true;
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
     private void initInterceptPackages() {
         final NotificationPreferences np = NotificationPreferences
                 .getInstance(getApplicationContext());
@@ -67,11 +73,13 @@ public final class PandoraNotificationService extends NotificationListenerServic
         // 获取拨号的包名
         Set<String> dialerPkgNameSet = getDialerPkgName(this, Intent.ACTION_DIAL);
 
-        for (String str : dialerPkgNameSet) {
-            boolean systemApp = isSystemApp(this, str);
-            if (systemApp) {
-                // 显示系统级别的拨号软件包名
-                np.putInterceptPkgName(str);
+        if (dialerPkgNameSet != null) {
+            for (String str : dialerPkgNameSet) {
+                boolean systemApp = isSystemApp(this, str);
+                if (systemApp) {
+                    // 显示系统级别的拨号软件包名
+                    np.putInterceptPkgName(str);
+                }
             }
         }
 
@@ -86,22 +94,21 @@ public final class PandoraNotificationService extends NotificationListenerServic
             String androidOrigin = "com.google.android.talk";
             Set<String> smsPkgNameSet = getSmsPkgName(this);
 
-            for (String str : smsPkgNameSet) {
-                boolean systemApp = isSystemApp(this, str);
-                if (systemApp) {
-                    if (smsPkgNameSet.contains(androidOrigin)) {
-                        np.putInterceptPkgName(androidOrigin);
-                        return;
-                    } else {
-                        np.putInterceptPkgName(str);
-                        return;
+            if (smsPkgNameSet != null) {
+                for (String str : smsPkgNameSet) {
+                    boolean systemApp = isSystemApp(this, str);
+                    if (systemApp) {
+                        if (smsPkgNameSet.contains(androidOrigin)) {
+                            np.putInterceptPkgName(androidOrigin);
+                            return;
+                        } else {
+                            np.putInterceptPkgName(str);
+                            return;
+                        }
                     }
                 }
             }
         }
-        // com.tencent.pb 微信电话本
-        // com.google.android.dialer 默认拨号
-        // com.google.android.talk 环聊
     }
 
     // 得到所有拨号程序的包名
@@ -153,7 +160,6 @@ public final class PandoraNotificationService extends NotificationListenerServic
                 return false;
             }
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
         }
         return true;
     }
@@ -166,6 +172,11 @@ public final class PandoraNotificationService extends NotificationListenerServic
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("PandoraNotificationService onDestroy");
         }
+        try {
+            startService(new Intent(this, PandoraNotificationService.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -174,7 +185,7 @@ public final class PandoraNotificationService extends NotificationListenerServic
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(ACTION_CANCEL_NOTIFICATION)) {
+            if (ACTION_CANCEL_NOTIFICATION.equals(action)) {
                 String key = intent.getStringExtra("key");
                 if (TextUtils.isEmpty(key)) {
                     String pkg = intent.getStringExtra("pkgName");
@@ -186,7 +197,7 @@ public final class PandoraNotificationService extends NotificationListenerServic
                 } else {
                     cancelNotification(key);
                 }
-            } else if (action.equals(ACTION_OBTAIN_ACTIVE_NOTIFICATIONS)) {
+            } else if (ACTION_OBTAIN_ACTIVE_NOTIFICATIONS.equals(action)) {
                 StatusBarNotification[] sbns = getActiveNotifications();
                 NotificationInterceptor interceptor = NotificationInterceptor
                         .getInstance(getApplicationContext());

@@ -4,13 +4,10 @@ package cn.zmdx.kaka.fast.locker.notification;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.SharedPreferences;
-import cn.zmdx.kaka.fast.locker.utils.HDBLOG;
 import cn.zmdx.kaka.fast.locker.BuildConfig;
+import cn.zmdx.kaka.fast.locker.utils.HDBLOG;
 
 public class NotificationPreferences {
     private static final String SP_NAME_NOTIFICATION = "notification_sp";
@@ -37,7 +34,7 @@ public class NotificationPreferences {
         mActiveNotificationCache = getInterceptPkgNames();
     }
 
-    public static NotificationPreferences getInstance(Context context) {
+    public synchronized static NotificationPreferences getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new NotificationPreferences(context);
         }
