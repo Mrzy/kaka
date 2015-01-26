@@ -291,30 +291,35 @@ public class NotificationInterceptor extends Handler {
                 final long newLastModified = response.optLong("lastModified");
                 if (!TextUtils.isEmpty(status) && status.equals("success")) {
                     List<NotificationEntity> list = new ArrayList<NotificationEntity>();
-                    JSONArray data = response.optJSONArray("data");
-                    int size = data.length();
-                    for (int i = 0; i < size; i++) {
-                        final NotificationEntity entity = new NotificationEntity();
-                        JSONObject item = data.optJSONObject(i);
-                        entity.setCloudId(item.optInt("id"));
-                        entity.setTitle(item.optString("title"));
-                        entity.setContent(item.optString("content"));
-                        entity.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
-                        entity.setStartTime(item.optLong("start_time"));
-                        entity.setEndTime(item.optLong("end_time"));
-                        entity.setIcon(item.optString("icon"));
-                        entity.setLevel(item.optInt("level"));
-                        entity.setTargetApp(item.optString("application"));
-                        entity.setTargetUrl(item.optString("url"));
-                        entity.setTimes(item.optInt("times"));
-                        list.add(entity);
-                    }
 
-                    int result = CustomNotificationModel.getInstance().batchInsert(list);
-                    if (BuildConfig.DEBUG) {
-                        HDBLOG.logD("----拉取自定义通知原始数据：将数据存储到本地数据库，成功插入" + result + "条");
+                    JSONArray data = response.optJSONArray("data");
+                    if (data != null) {
+                        int size = data.length();
+                        for (int i = 0; i < size; i++) {
+                            final NotificationEntity entity = new NotificationEntity();
+                            JSONObject item = data.optJSONObject(i);
+                            if (item != null) {
+                                entity.setCloudId(item.optInt("id"));
+                                entity.setTitle(item.optString("title"));
+                                entity.setContent(item.optString("content"));
+                                entity.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
+                                entity.setStartTime(item.optLong("start_time"));
+                                entity.setEndTime(item.optLong("end_time"));
+                                entity.setIcon(item.optString("icon"));
+                                entity.setLevel(item.optInt("level"));
+                                entity.setTargetApp(item.optString("application"));
+                                entity.setTargetUrl(item.optString("url"));
+                                entity.setTimes(item.optInt("times"));
+                                list.add(entity);
+                            }
+                        }
+
+                        int result = CustomNotificationModel.getInstance().batchInsert(list);
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("----拉取自定义通知原始数据：将数据存储到本地数据库，成功插入" + result + "条");
+                        }
+                        mPreference.savePullCustomNotificationLastModified(newLastModified);
                     }
-                    mPreference.savePullCustomNotificationLastModified(newLastModified);
                 }
             }
 
