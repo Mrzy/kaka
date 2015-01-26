@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -79,7 +80,6 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notify_filter);
         mContext = this;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mCurType = getIntent().getIntExtra("type", TYPE_FILTER);
         mPosition = getIntent().getIntExtra("position", -1);
         initView();
@@ -96,7 +96,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         mNotifyGridView.setAreHeadersSticky(false);
 
         mAlphabetView = (AlphabetScrollerView) findViewById(R.id.notify_alphabetView);
-        mAlphabetView.init(mContentLayout,mNotifyGridView, this);
+        mAlphabetView.init(mContentLayout, mNotifyGridView, this);
         mAlphabetView.setOnEventListener(new OnEventListener() {
 
             @Override
@@ -139,6 +139,8 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         if (item.getItemId() == R.id.action_edit) {
             isEditMode = !isEditMode;
             mInterceptAdapter.notifyDataSetChanged();
+        } else if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
         }
         return true;
     }
@@ -293,6 +295,8 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
+            viewHolder.mNotifySelect.setImageDrawable(getResources().getDrawable(
+                    R.drawable.notify_filter_delete));
             NotifyFilterEntity item = mNotifyInterceptList.get(position);
             viewHolder.mNotifyAppIcon.setImageDrawable(item.getNotifyIcon());
             viewHolder.mNotifyAppName.setText(item.getNotifyCHName());
@@ -314,21 +318,80 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (isEditMode) {
                 if (position != mNotifyInterceptList.size() - 1) {
-                    for (NotifyFilterEntity entity : mNotifyDataList) {
-                        if (entity.getPkgName().equals(
-                                mNotifyInterceptList.get(position).getPkgName())) {
-                            entity.setSelect(false);
-                            break;
-                        }
-                    }
-                    removeInterceptPkgName(mNotifyInterceptList.get(position).getPkgName());
-                    mNotifyInterceptList.remove(mNotifyInterceptList.get(position));
+                    NotifyFilterEntity item = mNotifyInterceptList.get(position);
+                    setAppSelectState(item.getPkgName(), false);
+
+                    removeInterceptPkgName(item.getPkgName());
+                    mNotifyInterceptList.remove(item);
                     mInterceptAdapter.notifyDataSetChanged();
                     mNotifyFilterAdapter.notifyDataSetChanged();
                 }
             }
         }
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        NotifyFilterEntity item = mNotifyFilterAdapter.getAdapterData().get(position);
+        switch (mCurType) {
+            case TYPE_FILTER:
+                if (item.isSelect()) {
+                    setAppSelectState(item.getPkgName(), false);
+
+                    ArrayList<NotifyFilterEntity> needRemoveList = new ArrayList<NotifyFilterEntity>();
+                    for (NotifyFilterEntity entity : mNotifyInterceptList) {
+                        if (!TextUtils.isEmpty(entity.getPkgName())) {
+                            if (entity.getPkgName().equals(item.getPkgName())) {
+                                NotifyFilterEntity needRemove = entity;
+                                needRemoveList.add(needRemove);
+                            }
+                        }
+                    }
+                    mNotifyInterceptList.removeAll(needRemoveList);
+                    removeInterceptPkgName(item.getPkgName());
+                } else {
+                    setAppSelectState(item.getPkgName(), true);
+
+                    mNotifyInterceptList.add(mNotifyInterceptList.size() - 1, item);
+                    putInterceptPkgName(item.getPkgName());
+                }
+                mNotifyFilterAdapter.notifyDataSetChanged();
+                mInterceptAdapter.notifyDataSetChanged();
+                break;
+            case TYPE_SELECT:
+                Intent in = new Intent();
+                in.putExtra("position", mPosition);
+                in.putExtra("pkgName", item.getPkgName());
+                setResult(RESULT_OK, in);
+                onBackPressed();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void setAppSelectState(String itemPkgName, boolean isSelect) {
+        for (NotifyFilterEntity entity : mNotifyFilterAdapter.getAdapterData()) {
+            if (entity.getPkgName().equals(itemPkgName)) {
+                entity.setSelect(isSelect);
+            }
+        }
+
+        for (NotifyFilterEntity entity : mNotifyDataList) {
+            if (entity.getPkgName().equals(itemPkgName)) {
+                entity.setSelect(isSelect);
+            }
+        }
+    }
+
+    private void removeInterceptPkgName(String pkgName) {
+        NotificationPreferences.getInstance(mContext).removeInterceptPkgName(pkgName);
+    }
+
+    private void putInterceptPkgName(String pkgName) {
+        NotificationPreferences.getInstance(mContext).putInterceptPkgName(pkgName);
     }
 
     private void setVisibility(boolean isLoading) {
@@ -341,55 +404,10 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        NotifyFilterEntity itme = mNotifyDataList.get(position);
-        switch (mCurType) {
-            case TYPE_FILTER:
-                if (itme.isSelect()) {
-                    itme.setSelect(false);
-                    NotifyFilterEntity needRemove = new NotifyFilterEntity();
-                    for (NotifyFilterEntity entity : mNotifyDataList) {
-                        if (entity.getPkgName().equals(itme.getPkgName())) {
-                            needRemove = entity;
-                            break;
-                        }
-                    }
-                    mNotifyInterceptList.remove(needRemove);
-                    removeInterceptPkgName(itme.getPkgName());
-                } else {
-                    itme.setSelect(true);
-                    mNotifyInterceptList.add(mNotifyInterceptList.size() - 1, itme);
-                    putInterceptPkgName(itme.getPkgName());
-                }
-                mNotifyFilterAdapter.notifyDataSetChanged();
-                mInterceptAdapter.notifyDataSetChanged();
-                break;
-            case TYPE_SELECT:
-                Intent in = new Intent();
-                in.putExtra("position", mPosition);
-                in.putExtra("pkgName", itme.getPkgName());
-                setResult(RESULT_OK, in);
-                onBackPressed();
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    private void removeInterceptPkgName(String pkgName) {
-        NotificationPreferences.getInstance(mContext).removeInterceptPkgName(pkgName);
-    }
-
-    private void putInterceptPkgName(String pkgName) {
-        NotificationPreferences.getInstance(mContext).putInterceptPkgName(pkgName);
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-        overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
-                R.anim.umeng_fb_slide_out_from_right);
-    }
+    // @Override
+    // public void onBackPressed() {
+    // finish();
+    // overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+    // R.anim.umeng_fb_slide_out_from_right);
+    // }
 }

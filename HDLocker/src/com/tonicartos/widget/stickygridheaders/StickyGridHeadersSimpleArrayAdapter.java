@@ -29,6 +29,10 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
 
     private NotifySectionIndexer mIndexer;
 
+    public ArrayList<NotifyFilterEntity> getAdapterData() {
+        return mItems;
+    }
+
     public StickyGridHeadersSimpleArrayAdapter(Context context,
             ArrayList<NotifyFilterEntity> items, ListCompare listCompare) {
         init(context, items);

@@ -7,19 +7,23 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ServerOnlineWallpaperManager {
-    
+
     public static ArrayList<ServerOnlineWallpaper> parseJson(JSONObject jsonObj) {
         ArrayList<ServerOnlineWallpaper> sdList = new ArrayList<ServerOnlineWallpaper>();
         String state = jsonObj.optString("state");
         if (state.equals("success")) {
             JSONArray jsonArray = jsonObj.optJSONArray("data");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.optJSONObject(i);
-                ServerOnlineWallpaper serverOnlineWallpaper = new ServerOnlineWallpaper();
-                serverOnlineWallpaper.parseBaseJson(jsonObject);
-                sdList.add(serverOnlineWallpaper);
+            if (null != jsonArray) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.optJSONObject(i);
+                    if (null != jsonObject) {
+                        ServerOnlineWallpaper serverOnlineWallpaper = new ServerOnlineWallpaper();
+                        serverOnlineWallpaper.parseBaseJson(jsonObject);
+                        sdList.add(serverOnlineWallpaper);
+                    }
+                }
             }
-        }else {
+        } else {
             sdList = null;
         }
         return sdList;
@@ -50,7 +54,7 @@ public class ServerOnlineWallpaperManager {
         private int mPosition = -1;
 
         private boolean isCurItem = false;
-        
+
         private boolean isNewData = false;
 
         public void parseBaseJson(JSONObject jsonObject) {

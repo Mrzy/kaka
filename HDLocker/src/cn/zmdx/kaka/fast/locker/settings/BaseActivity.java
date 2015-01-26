@@ -1,11 +1,11 @@
 
 package cn.zmdx.kaka.fast.locker.settings;
 
-import cn.zmdx.kaka.fast.locker.R;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import cn.zmdx.kaka.fast.locker.R;
 
 public abstract class BaseActivity extends ActionBarActivity {
 
@@ -21,9 +21,16 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                R.anim.umeng_fb_slide_out_from_right);
     }
 }

@@ -20,7 +20,7 @@
             android:layout_height="14dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/pandora_wallpaper_select"
+            android:src="@drawable/notify_filter_select"
             android:visibility="gone" />
     </RelativeLayout>
 
