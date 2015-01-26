@@ -56,7 +56,7 @@
     <dimen name="init_setting_title_line_height">1px</dimen>
     <dimen name="init_setting_item_margin_left">33dp</dimen>
     <dimen name="init_setting_item_margin_right">33dp</dimen>
-    <dimen name="init_setting_item_margin_top">23dp</dimen>
+    <dimen name="init_setting_item_margin_top">15dp</dimen>
     <dimen name="init_setting_button_height">33dp</dimen>
     <dimen name="init_setting_button_margin_top">10dp</dimen>
     <dimen name="init_setting_complete_button_width">157dp</dimen>

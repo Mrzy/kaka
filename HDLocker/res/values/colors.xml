@@ -8,7 +8,7 @@
     <color name="setting_background">#ffffff</color>
     <color name="setting_about_us_text_color">#ffffff</color>
     <color name="setting_about_pandora_color">#2f3035</color>
-    <color name="init_setting_small_textview_color">#60ffffff</color>
+    <color name="init_setting_small_textview_color">#000000</color>
     <color name="pandora_wallpaper_dialog_item_press">#666666</color>
     <color name="pandora_wallpaper_dialog_item_normal">#191919</color>
     <color name="setting_black_translucent">#00000000</color>
@@ -45,7 +45,7 @@
     <!-- fast -->
     <color name="fast_actionbar_title_color">@android:color/white</color>
     <color name="fast_setting_text_color">#212121</color>
-    <color name="rippelColor">#FFFFFF</color>
+    <color name="rippelColor">#ffffff</color>
     
     <color name="number_lock_item_press">#03a9f4</color>
     <drawable name="action_bar_background">#03a9f4</drawable>

@@ -194,7 +194,7 @@
     <string name="fast_setting_item_open_fastlocker">是否启用锁屏</string>
     <string name="fast_setting_item_set_password">设置锁屏密码</string>
     <string name="fast_setting_item_manage_wallpaper">管理壁纸</string>
-    <string name="fast_setting_item_init">初始设置</string>
+    <string name="fast_setting_item_init">初始化设置</string>
     <string name="fast_setting_item_notification_center">通知中心</string>
     <string name="fast_setting_item_shortcut">添加快捷应用</string>
     <string name="fast_setting_item_individual">个性化设置</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
     android:id="@+id/init_setting_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,34 +11,37 @@
     android:overScrollMode="always"
     android:scrollbars="none" >
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/setting_black_translucent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:orientation="vertical"
+        android:overScrollMode="always"
+        android:scrollbars="none" >
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fillViewport="true"
-            android:orientation="vertical"
-            android:overScrollMode="always"
-            android:scrollbars="none" >
+            android:orientation="vertical" >
 
-            <LinearLayout
+            <cn.zmdx.kaka.fast.locker.widget.RippleView
+                android:id="@+id/init_setting_MIUI_allow_floating_window_guide"
+                style="@style/rippleStyle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone" >
 
                 <LinearLayout
-                    android:id="@+id/init_setting_MIUI_allow_floating_window_guide"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/init_setting_item_margin_top"
                     android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
                     android:layout_marginRight="@dimen/setting_title_textview_margin_left"
                     android:layout_marginTop="@dimen/init_setting_item_margin_top"
-                    android:orientation="vertical"
-                    android:visibility="gone" >
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
 
                     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/init_setting_button"
@@ -50,24 +54,35 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_MIUI_allow_floating_window_detail" />
-
-                    <cn.zmdx.kaka.fast.locker.widget.BaseButton
-                        android:id="@+id/init_setting_MIUI_allow_floating_window_to_set"
-                        style="@style/init_setting_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                        android:gravity="center"
-                        android:text="@string/init_setting_to_set" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/init_setting_MIUI_close_systemlocker"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/init_setting_MIUI_allow_floating_window_to_set"
+                    style="@style/init_setting_button"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+                    android:background="@drawable/fast_init_imageview_back_selector"
+                    android:gravity="center" />
+            </cn.zmdx.kaka.fast.locker.widget.RippleView>
+
+            <cn.zmdx.kaka.fast.locker.widget.RippleView
+                android:id="@+id/init_setting_MIUI_close_systemlocker"
+                style="@style/rippleStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/init_setting_item_margin_top"
                     android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
                     android:layout_marginRight="@dimen/setting_title_textview_margin_left"
                     android:layout_marginTop="@dimen/init_setting_item_margin_top"
+                    android:layout_weight="1"
                     android:orientation="vertical" >
 
                     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
@@ -81,26 +96,37 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_close_systemlocker_detail" />
-
-                    <cn.zmdx.kaka.fast.locker.widget.BaseButton
-                        android:id="@+id/init_setting_close_systemlocker_to_set"
-                        style="@style/init_setting_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                        android:gravity="center"
-                        android:text="@string/init_setting_to_set" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/init_setting_MIUI_trust_guide"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/init_setting_close_systemlocker_to_set"
+                    style="@style/init_setting_button"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+                    android:background="@drawable/fast_init_imageview_back_selector"
+                    android:gravity="center" />
+            </cn.zmdx.kaka.fast.locker.widget.RippleView>
+
+            <cn.zmdx.kaka.fast.locker.widget.RippleView
+                android:id="@+id/init_setting_MIUI_trust_guide"
+                style="@style/rippleStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/init_setting_item_margin_top"
                     android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
                     android:layout_marginRight="@dimen/setting_title_textview_margin_left"
                     android:layout_marginTop="@dimen/init_setting_item_margin_top"
-                    android:orientation="vertical"
-                    android:visibility="gone" >
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
 
                     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/init_setting_button"
@@ -113,27 +139,37 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_MIUI_trust_detail" />
-
-                    <cn.zmdx.kaka.fast.locker.widget.BaseButton
-                        android:id="@+id/init_setting_MIUI_trust_to_set"
-                        style="@style/init_setting_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                        android:gravity="center"
-                        android:text="@string/init_setting_to_set" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/init_setting_read_notification_bar_guide"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/init_setting_MIUI_trust_to_set"
+                    style="@style/init_setting_button"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+                    android:background="@drawable/fast_init_imageview_back_selector"
+                    android:gravity="center" />
+            </cn.zmdx.kaka.fast.locker.widget.RippleView>
+
+            <cn.zmdx.kaka.fast.locker.widget.RippleView
+                android:id="@+id/init_setting_read_notification_bar_guide"
+                style="@style/rippleStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/init_setting_item_margin_top"
                     android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
                     android:layout_marginRight="@dimen/setting_title_textview_margin_left"
                     android:layout_marginTop="@dimen/init_setting_item_margin_top"
-                    android:orientation="vertical"
-                    android:visibility="gone" >
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
 
                     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/init_setting_button"
@@ -146,18 +182,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/init_setting_read_notification_prompt" />
-
-                    <cn.zmdx.kaka.fast.locker.widget.BaseButton
-                        android:id="@+id/init_setting_read_notification_bar_to_set"
-                        style="@style/init_setting_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/init_setting_button_margin_top"
-                        android:gravity="center"
-                        android:text="@string/init_setting_to_set" />
                 </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/init_setting_read_notification_bar_to_set"
+                    style="@style/init_setting_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginRight="@dimen/setting_title_textview_margin_left"
+                    android:background="@drawable/fast_init_imageview_back_selector"
+                    android:gravity="center" />
+            </cn.zmdx.kaka.fast.locker.widget.RippleView>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
