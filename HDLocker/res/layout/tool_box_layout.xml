@@ -17,8 +17,6 @@
             android:id="@+id/tool_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:listSelector="@android:color/transparent"
             android:numColumns="4" >
         </cn.zmdx.kaka.fast.locker.shortcut.sevenkey.ToolbarView>

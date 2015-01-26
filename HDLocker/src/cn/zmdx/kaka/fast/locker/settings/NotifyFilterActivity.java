@@ -25,7 +25,6 @@ import android.widget.Filter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.fast.locker.R;
