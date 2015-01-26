@@ -1,14 +1,20 @@
 
 package cn.zmdx.kaka.fast.locker.settings;
 
+import java.io.File;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
+import cn.zmdx.kaka.fast.locker.widget.material.design.ButtonRectangle;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
@@ -83,11 +89,54 @@ public class MainSettingAboutActivity extends BaseActivity implements OnClickLis
         UmengUpdateAgent.setUpdateAutoPopup(false);
         UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
             @Override
-            public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
+            public void onUpdateReturned(int updateStatus, final UpdateResponse updateInfo) {
                 switch (updateStatus) {
                     case 0: // has update
-                        UmengUpdateAgent
-                                .showUpdateDialog(MainSettingAboutActivity.this, updateInfo);
+                        View customView = LayoutInflater.from(MainSettingAboutActivity.this)
+                                .inflate(R.layout.umeng_custom_update, null);
+                        final MaterialDialog mNumberLockDialog = new MaterialDialog.Builder(
+                                MainSettingAboutActivity.this).customView(customView, true).build();
+                        mNumberLockDialog.show();
+                        TypefaceTextView mContentView = (TypefaceTextView) customView
+                                .findViewById(R.id.umeng_custom_update_content);
+                        ButtonRectangle mCancleView = (ButtonRectangle) customView
+                                .findViewById(R.id.umeng_custom_update_cancle);
+                        mCancleView.setOnClickListener(new OnClickListener() {
+
+                            @Override
+                            public void onClick(View v) {
+                                mNumberLockDialog.dismiss();
+                            }
+                        });
+                        ButtonRectangle mOKView = (ButtonRectangle) customView
+                                .findViewById(R.id.umeng_custom_update_ok);
+                        mOKView.setOnClickListener(new OnClickListener() {
+
+                            @Override
+                            public void onClick(View v) {
+                                File file = UmengUpdateAgent.downloadedFile(
+                                        MainSettingAboutActivity.this, updateInfo);
+                                if (null == file) {
+                                    UmengUpdateAgent.startDownload(MainSettingAboutActivity.this,
+                                            updateInfo);
+                                } else {
+                                    UmengUpdateAgent.startInstall(MainSettingAboutActivity.this,
+                                            file);
+                                }
+                                mNumberLockDialog.dismiss();
+                            }
+                        });
+                        String contentOne = getResources().getString(R.string.UMNewVersion)
+                                + updateInfo.version + "\n";
+                        float size = Float.valueOf(updateInfo.target_size) / (1024 * 1024);
+                        String contentTwo = getResources().getString(R.string.UMTargetSize)
+                                + String.format("%.2f", size) + "M\n\n";
+                        String contentThree = getResources().getString(R.string.UMUpdateContent)
+                                + "\n" + updateInfo.updateLog;
+                        mContentView.setText(contentOne + contentTwo + contentThree);
+
+                        // UmengUpdateAgent.showUpdateDialog(MainSettingAboutActivity.this,
+                        // updateInfo);
                         break;
                     case 1: // has no update
                         Toast.makeText(MainSettingAboutActivity.this,

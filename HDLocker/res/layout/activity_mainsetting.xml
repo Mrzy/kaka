@@ -60,7 +60,7 @@
         android:layout_marginRight="24dp"
         android:background="@color/material_design_color"
         materialdesign:animate="true"
-        materialdesign:iconDrawable="@drawable/ic_action_new"
+        materialdesign:iconDrawable="@drawable/ic_action_star"
         materialdesign:rippleColor="@color/material_design_color_click" />
 
 </FrameLayout>

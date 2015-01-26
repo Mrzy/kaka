@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="@dimen/pandora_update_dialog_width"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+
+        <!-- Title -->
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
+                android:id="@+id/umeng_custom_update_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="@string/UMUpdateTitle"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@android:color/black" />
+        </RelativeLayout>
+
+        <!-- Content -->
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="10dp" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
+                    android:id="@+id/umeng_custom_update_content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="10dp"
+                    android:focusable="true"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- OK&Cancel Button -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+            <cn.zmdx.kaka.fast.locker.widget.material.design.ButtonRectangle
+                android:id="@+id/umeng_custom_update_cancle"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+                android:background="@color/material_design_color"
+                android:text="@string/UMNotNow" />
+
+            <cn.zmdx.kaka.fast.locker.widget.material.design.ButtonRectangle
+                android:id="@+id/umeng_custom_update_ok"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+                android:background="@color/material_design_color"
+                android:text="@string/UMUpdateNow" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
