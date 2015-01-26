@@ -3,7 +3,6 @@ package cn.zmdx.kaka.fast.locker.settings;
 
 import java.util.ArrayList;
 
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -148,7 +147,6 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
                 interpolate(mHeaderLogo, getActionBarIconView(),
                         mSmoothInterpolator.getInterpolation(ratio));
                 setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
-                showLockerNameAnimator(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
             }
         });
         /**
@@ -200,7 +198,6 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         mSpannableString.setSpan(mAlphaForegroundColorSpan, 0, mSpannableString.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getActionBar().setTitle(mSpannableString);
-        // getActionBar().setTitle("");
     }
 
     private void gotoLockerPasswordActivity() {
@@ -260,11 +257,11 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
     /**
      * 做LockerName的动画，暂未使用
      */
-    private void showLockerNameAnimator(float alpha) {
-        ObjectAnimator lockerNameAnimator = ObjectAnimator.ofFloat(mLockScreenName, "alpha", alpha,
-                0.0f);
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(lockerNameAnimator);
+    private void showLockerNameAnimator(float fromAlpha, float toAlpha) {
+        ObjectAnimator lockerNameAnimator = ObjectAnimator.ofFloat(mLockScreenName, "alpha",
+                fromAlpha, toAlpha);
+        lockerNameAnimator.setDuration(1000);
+        lockerNameAnimator.start();
     }
 
     public static float clamp(float value, float min, float max) {

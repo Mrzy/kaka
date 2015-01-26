@@ -8,12 +8,12 @@
 
     <cn.zmdx.kaka.fast.locker.widget.RippleView
         android:id="@+id/fast_setting_feedback"
+        style="@style/rippleStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_item_height"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/setting_title_textview_margin_left"
-        ripple:rv_type="rectangle" >
+        android:paddingLeft="@dimen/setting_title_textview_margin_left" >
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             style="@style/setting_textview"
@@ -27,12 +27,12 @@
 
     <cn.zmdx.kaka.fast.locker.widget.RippleView
         android:id="@+id/fast_setting_update"
+        style="@style/rippleStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_item_height"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/setting_title_textview_margin_left"
-        ripple:rv_type="rectangle" >
+        android:paddingLeft="@dimen/setting_title_textview_margin_left" >
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             style="@style/setting_textview"
@@ -46,12 +46,12 @@
 
     <cn.zmdx.kaka.fast.locker.widget.RippleView
         android:id="@+id/fast_setting_about"
+        style="@style/rippleStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_item_height"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/setting_title_textview_margin_left"
-        ripple:rv_type="rectangle" >
+        android:paddingLeft="@dimen/setting_title_textview_margin_left" >
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             style="@style/setting_textview"

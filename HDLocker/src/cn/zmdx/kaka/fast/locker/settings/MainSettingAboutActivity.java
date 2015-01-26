@@ -8,7 +8,6 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.R;
-import cn.zmdx.kaka.fast.locker.widget.RippleView;
 
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
@@ -16,7 +15,7 @@ import com.umeng.update.UpdateResponse;
 
 public class MainSettingAboutActivity extends BaseActivity implements OnClickListener {
 
-    private RippleView mFeedBackLayout;
+    private LinearLayout mFeedBackLayout;
 
     private LinearLayout mCheckNewVersionLayout;
 
@@ -30,7 +29,7 @@ public class MainSettingAboutActivity extends BaseActivity implements OnClickLis
     }
 
     private void initView() {
-        mFeedBackLayout = (RippleView) this.findViewById(R.id.fast_setting_feedback);
+        mFeedBackLayout = (LinearLayout) this.findViewById(R.id.fast_setting_feedback);
         mFeedBackLayout.setOnClickListener(this);
         mCheckNewVersionLayout = (LinearLayout) this.findViewById(R.id.fast_setting_update);
         mCheckNewVersionLayout.setOnClickListener(this);
