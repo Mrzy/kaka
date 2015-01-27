@@ -6,61 +6,66 @@
     android:background="@color/fast_shortcut_bg_color"
     android:orientation="vertical" >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="180dp"
         android:background="@drawable/fastbg1"
-        android:orientation="vertical"
-        android:padding="@dimen/fast_shortcut_textview_small_margin_two" >
+        android:orientation="horizontal" >
 
-        <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fast_shortcut_big_text_part_one"
-                android:textColor="@color/fast_shortcut_text_color_white_high"
-                android:textSize="17sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="6"
-                android:textColor="@color/fast_shortcut_text_color_white_high"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fast_shortcut_big_text_part_two"
-                android:textColor="@color/fast_shortcut_text_color_white_high"
-                android:textSize="17sp" />
-        </LinearLayout>
-
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/linearLayout1"
-            android:layout_alignParentBottom="true"
-            android:text="@string/fast_shortcut_small_text_part_two"
-            android:textColor="@color/fast_shortcut_text_color_white_low" />
+            android:layout_height="match_parent"
+            android:background="@color/setting_black_translucent"
+            android:padding="@dimen/fast_shortcut_textview_small_margin_two" >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/linearLayout1"
-            android:layout_marginTop="@dimen/fast_shortcut_textview_small_margin_two"
-            android:text="@string/fast_shortcut_small_text_part_one"
-            android:textColor="@color/fast_shortcut_text_color_white_low" />
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal" >
 
-    </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fast_shortcut_big_text_part_one"
+                    android:textColor="@color/fast_shortcut_text_color_white_high"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6"
+                    android:textColor="@color/fast_shortcut_text_color_white_high"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fast_shortcut_big_text_part_two"
+                    android:textColor="@color/fast_shortcut_text_color_white_high"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/linearLayout1"
+                android:layout_alignParentBottom="true"
+                android:text="@string/fast_shortcut_small_text_part_two"
+                android:textColor="@color/fast_shortcut_text_color_white_low" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/linearLayout1"
+                android:layout_marginTop="@dimen/fast_shortcut_textview_small_margin_two"
+                android:text="@string/fast_shortcut_small_text_part_one"
+                android:textColor="@color/fast_shortcut_text_color_white_low" />
+        </RelativeLayout>
+    </LinearLayout>
 
     <cn.zmdx.kaka.fast.locker.widget.material.design.ButtonFloat
         xmlns:materialdesign="http://schemas.android.com/apk/res-auto"

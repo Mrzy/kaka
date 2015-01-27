@@ -11,7 +11,7 @@
     <color name="init_setting_small_textview_color">#000000</color>
     <color name="pandora_wallpaper_dialog_item_press">#666666</color>
     <color name="pandora_wallpaper_dialog_item_normal">#191919</color>
-    <color name="setting_black_translucent">#00000000</color>
+    <color name="setting_black_translucent">#33000000</color>
     <color name="pandora_box_html_back_bg">#aa000000</color>
     <color name="pandora_box_html_back_press">#33000000</color>
     <color name="pandora_box_html_back_normal">#00000000</color>
