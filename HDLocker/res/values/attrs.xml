@@ -178,5 +178,9 @@
         <!-- if true, delays calls to OnClickListeners until ripple effect ends -->
         <attr name="clickAfterRipple" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+    </declare-styleable>
 
 </resources>

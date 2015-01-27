@@ -75,7 +75,7 @@ public class NotificationInterceptor extends Handler {
         mPreference = NotificationPreferences.getInstance(context);
     }
 
-    public static NotificationInterceptor getInstance(Context context) {
+    public synchronized static NotificationInterceptor getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new NotificationInterceptor(context, HDBThreadUtils.getWorkerLooper());
         }
@@ -169,6 +169,9 @@ public class NotificationInterceptor extends Handler {
                 }
 
                 final StatusBarNotification[] sbns = (StatusBarNotification[]) msg.obj;
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("----调度已有通知:共有通知(过滤前)" +sbns.length + "个");
+                }
                 for (StatusBarNotification notify : sbns) {
                     if (checkIntercept(notify.getPackageName())) {
                         Message message = Message.obtain();

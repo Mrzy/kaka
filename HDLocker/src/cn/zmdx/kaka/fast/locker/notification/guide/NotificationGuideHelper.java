@@ -24,9 +24,9 @@ public class NotificationGuideHelper {
         switch (preProgress) {
             case 0:// 通知功能说明，提示双击移除
                 return PandoraNotificationFactory.createGuideRemoveNotification();
-            case 1:// 教学打开通知详细
-                return PandoraNotificationFactory.createGuideOpenNotificationDetail();
-            case 2:// 教学开启通知教程
+//            case 1:// 教学打开通知详细
+//                return PandoraNotificationFactory.createGuideOpenNotificationDetail();
+            case 1:// 教学开启通知教程
                 if (PandoraNotificationService.sNotificationServiceRunning) {
                     return null;
                 }

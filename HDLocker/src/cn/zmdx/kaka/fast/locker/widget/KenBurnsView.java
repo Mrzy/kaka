@@ -4,15 +4,11 @@ package cn.zmdx.kaka.fast.locker.widget;
 import java.util.Random;
 
 import cn.zmdx.kaka.fast.locker.R;
-import cn.zmdx.kaka.fast.locker.R.id;
-import cn.zmdx.kaka.fast.locker.R.layout;
-
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
@@ -69,7 +65,6 @@ public class KenBurnsView extends FrameLayout {
      * 交换图片以播放
      */
     private void swapImage() {
-        Log.d(TAG, "swapImage active=" + mActiveImageIndex);
         if (mActiveImageIndex == -1) {
             mActiveImageIndex = 1;
             animate(mImageViews[mActiveImageIndex]);
@@ -78,7 +73,6 @@ public class KenBurnsView extends FrameLayout {
 
         int inactiveIndex = mActiveImageIndex;
         mActiveImageIndex = (1 + mActiveImageIndex) % mImageViews.length;
-        Log.d(TAG, "new active=" + mActiveImageIndex);
 
         final ImageView activeImageView = mImageViews[mActiveImageIndex];
         activeImageView.setAlpha(0.0f);
@@ -103,7 +97,6 @@ public class KenBurnsView extends FrameLayout {
         ViewPropertyAnimator propertyAnimator = view.animate().translationX(toTranslationX)
                 .translationY(toTranslationY).scaleX(toScale).scaleY(toScale).setDuration(duration);
         propertyAnimator.start();
-        Log.d(TAG, "starting Ken Burns animation " + propertyAnimator);
     }
 
     private float pickScale() {

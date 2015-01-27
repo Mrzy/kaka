@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
@@ -33,20 +34,20 @@ import cn.zmdx.kaka.fast.locker.HDApplication;
 import cn.zmdx.kaka.fast.locker.LockScreenManager;
 import cn.zmdx.kaka.fast.locker.LockScreenManager.IMainPanelListener;
 import cn.zmdx.kaka.fast.locker.LockScreenManager.IPullDownListener;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.database.CustomNotificationModel;
 import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.notification.Constants;
 import cn.zmdx.kaka.fast.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.fast.locker.notification.NotificationInterceptor;
+import cn.zmdx.kaka.fast.locker.notification.NotificationPreferences;
 import cn.zmdx.kaka.fast.locker.notification.PandoraNotificationFactory;
 import cn.zmdx.kaka.fast.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.fast.locker.notification.guide.NotificationGuideHelper;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.fast.locker.R;
-
-//import android.util.Log;
+import cn.zmdx.kaka.fast.locker.widget.CircleImageView;
 
 public class NotificationLayout extends LinearLayout {
 
@@ -60,16 +61,15 @@ public class NotificationLayout extends LinearLayout {
 
     protected static final int GAP_BETWEEN_NOTIFICATIONS = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 5);
+
     protected static final int GAP_ITEM_LEFT_MARGIN = BaseInfoHelper.dip2px(
-            HDApplication.getContext(), 15);
+            HDApplication.getContext(), 35);
+
     protected static final int GAP_ITEM_RIGHT_MARGIN = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 15);
 
-    // protected static final int NOTIFICATION_ITEM_HEIGHT =
-    // BaseInfoHelper.dip2px(
-    // HDApplication.getContext(), 64);
-
-    private static final SimpleDateFormat sSdf = new SimpleDateFormat("dd日 HH:mm");
+    @SuppressLint("SimpleDateFormat")
+    private static final SimpleDateFormat sSdf = new SimpleDateFormat("HH:mm");
 
     protected static final float ITEM_RIGHT_ANIMATOR_DISTANCE = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 50);
@@ -100,8 +100,8 @@ public class NotificationLayout extends LinearLayout {
     private void initLayoutAnimation(LayoutTransition transition) {
         Animator addAnimator = null;
         Animator removeAnimator = null;
-        Animator changingAddAnimator = null;
-        Animator changingRemoveAnimator = null;
+        // Animator changingAddAnimator = null;
+        // Animator changingRemoveAnimator = null;
 
         PropertyValuesHolder pvhScaleX = PropertyValuesHolder.ofFloat("scaleX", 0f, 1f);
         PropertyValuesHolder pvhScaleY = PropertyValuesHolder.ofFloat("scaleY", 0f, 1f);
@@ -133,28 +133,40 @@ public class NotificationLayout extends LinearLayout {
 
             View view = findViewWithTag(notificationid);
             if (view != null) {
-                updateNotificationItem(view, info);
+                updateNotificationItem(((View) view.getParent()), info);
             } else {
                 final View itemView = createNotificationItemView(info);
-                itemView.setOnTouchListener(new ItemViewTouchListener(itemView));
-                itemView.setOnClickListener(new View.OnClickListener() {
+                View leftIcon = itemView.findViewById(R.id.leftIcon);
+                leftIcon.setOnTouchListener(new ItemViewTouchListener(itemView));
+                leftIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         long currentTime = System.currentTimeMillis();
                         if (currentTime - mItemClickStartTime < ITEM_DOUBLE_TAP_DURATION) {// 响应双击事件
                             final String id = String.valueOf(v.getTag());
                             final NotificationInfo ni = mActiveNotification.get(id);
-                            if (ni.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
-                                final int intId = Integer.valueOf(id);
-                                if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE) {
-                                    NotificationGuideHelper
-                                            .markAlreadyPromptHideNotificationMsg(getContext());
-                                } else if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE) {
-                                    NotificationGuideHelper.recordGuideProgress(getContext());
-                                    NotificationInfo info = NotificationGuideHelper
-                                            .getNextGuide(getContext());
-                                    NotificationInterceptor.getInstance(getContext())
+                            if (ni != null) {
+                                if (ni.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
+                                    final int intId = Integer.valueOf(id);
+                                    if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE) {
+                                        NotificationGuideHelper
+                                                .markAlreadyPromptHideNotificationMsg(getContext());
+                                    } else if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE) {
+                                        NotificationGuideHelper.recordGuideProgress(getContext());
+                                        NotificationInfo info = NotificationGuideHelper
+                                                .getNextGuide(getContext());
+                                        if (info != null) {
+                                            NotificationInterceptor.getInstance(getContext())
                                             .sendCustomNotification(info);
+                                        }
+                                    }
+                                }
+                                NotificationPreferences prefer = NotificationPreferences
+                                        .getInstance(getContext());
+                                if (ni.getType() == NotificationInfo.NOTIFICATION_TYPE_SYSTEM
+                                        && !prefer.isAlreadyRemovedNotification()) {
+                                    NotificationPreferences.getInstance(getContext())
+                                            .markAlreadyRemovedNotification();
                                 }
                             }
                             removeNotification(id);
@@ -203,13 +215,12 @@ public class NotificationLayout extends LinearLayout {
         addView(itemView, 0, lp);
     }
 
-    @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
     private void removeNotification(String notifyId) {
         // 从view容器中将这个通知view移除
         View targetView = findViewWithTag(notifyId);
         if (targetView != null) {
-            removeView(targetView);
+            removeView((View) targetView.getParent());
         }
 
         NotificationInfo info = mActiveNotification.get(notifyId);
@@ -250,10 +261,7 @@ public class NotificationLayout extends LinearLayout {
                 case MotionEvent.ACTION_DOWN:
                     mCurrentTouchView = mItemView;
                     v.performClick();
-                    View contentLayout = mItemView.findViewById(R.id.pandora_notification_hint);
-                    contentLayout
-                            .setBackgroundResource(R.drawable.pandora_notification_click_shape);
-                    mItemView.findViewById(R.id.handleTip).setVisibility(View.VISIBLE);
+                    showContentWithAnimator(mItemView.findViewById(R.id.rightArea));
                     final String id = String.valueOf(v.getTag());
                     LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
 
@@ -286,6 +294,12 @@ public class NotificationLayout extends LinearLayout {
                                     }
                                 }, 200);
                             }
+                            NotificationPreferences prefer = NotificationPreferences
+                                    .getInstance(getContext());
+                            if (info.getType() == NotificationInfo.NOTIFICATION_TYPE_SYSTEM
+                                    && !prefer.isAlreadyOpenedNotification()) {
+                                prefer.markAlreadyOpenedNotification();
+                            }
                             removeNotification(id);
                             UmengCustomEventManager.statisticalOpenNotification(info.getId(),
                                     info.getPkg(), info.getType());
@@ -305,6 +319,22 @@ public class NotificationLayout extends LinearLayout {
 
     };
 
+    private void showContentWithAnimator(View rightView) {
+        rightView.setAlpha(0);
+        rightView.setVisibility(View.VISIBLE);
+        rightView.animate().alpha(1).setDuration(200).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                // rightView.setVisibility(V)
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+        }).start();
+    }
+
     public void clearAll() {
         // TODO
     }
@@ -314,35 +344,43 @@ public class NotificationLayout extends LinearLayout {
     };
 
     private void updateNotificationItem(View itemView, NotificationInfo info) {
-        final ImageView largeIcon = (ImageView) itemView.findViewById(R.id.largeIcon);
+        // final RippleView largeIcon = (RippleView)
+        // itemView.findViewById(R.id.largeIcon);
         final ImageView smallIcon = (ImageView) itemView.findViewById(R.id.smallIcon);
         final TextView title = (TextView) itemView.findViewById(R.id.title);
         final TextView content = (TextView) itemView.findViewById(R.id.content);
         final TextView date = (TextView) itemView.findViewById(R.id.date);
+        final CircleImageView circleIv = (CircleImageView) itemView.findViewById(R.id.circleIv);
+        final View handleTip = itemView.findViewById(R.id.handleTip);
+
         long postTime = info.getPostTime() == 0 ? new Date().getTime() : info.getPostTime();
         date.setText(sSdf.format(postTime));
         boolean showMsg = PandoraConfig.newInstance(getContext()).isShowNotificationMessage();
         Bitmap largeBmp = info.getLargeIcon();
         Drawable smallDrawable = info.getSmallIcon();
         title.setText(info.getTitle());
-        itemView.setTag(String.valueOf(info.getId()));
+        itemView.findViewById(R.id.leftIcon).setTag(String.valueOf(info.getId()));
         if (!showMsg && isWinxinOrQQ(info)) {
-            largeIcon.setImageDrawable(smallDrawable);
+            circleIv.setImageDrawable(smallDrawable);
             content.setText(getContext().getString(R.string.hide_message_tip));
             smallIcon.setVisibility(View.GONE);
         } else {
             if (largeBmp != null) {
-                largeIcon.setImageBitmap(largeBmp);
+                circleIv.setImageBitmap(largeBmp);
                 if (smallDrawable != null) {
                     smallIcon.setImageDrawable(smallDrawable);
                 }
             } else {
                 if (smallDrawable != null) {
-                    largeIcon.setImageDrawable(smallDrawable);
+                    circleIv.setImageDrawable(smallDrawable);
                 }
                 smallIcon.setVisibility(View.GONE);
             }
             content.setText(info.getContent());
+        }
+        final NotificationPreferences prefer = NotificationPreferences.getInstance(getContext());
+        if (prefer.isAlreadyOpenedNotification()&& prefer.isAlreadyRemovedNotification()) {
+            handleTip.setVisibility(View.GONE);
         }
     }
 
@@ -417,9 +455,8 @@ public class NotificationLayout extends LinearLayout {
 
     private void resetState() {
         if (mCurrentTouchView != null) {
-            View contentLayout = mCurrentTouchView.findViewById(R.id.pandora_notification_hint);
-            contentLayout.setBackgroundResource(R.drawable.pandora_notification_shape);
-            mCurrentTouchView.findViewById(R.id.handleTip).setVisibility(View.INVISIBLE);
+            final View rightView = mCurrentTouchView.findViewById(R.id.rightArea);
+            dismissContentViewWithAnimator(rightView);
 
             // 如果通知view执行了向右的偏移动画，将其恢复原位
             if (mIsRunRightArrowAnimator) {
@@ -429,5 +466,19 @@ public class NotificationLayout extends LinearLayout {
             mCurrentTouchView = null;
         }
         LockScreenManager.getInstance().setRunnableAfterUnLock(null);
+    }
+
+    private void dismissContentViewWithAnimator(final View rightView) {
+        rightView.animate().alpha(0).setDuration(200).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                rightView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                rightView.setVisibility(View.GONE);
+            }
+        }).start();
     }
 }

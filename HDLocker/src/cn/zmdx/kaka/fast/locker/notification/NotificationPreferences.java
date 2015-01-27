@@ -20,6 +20,10 @@ public class NotificationPreferences {
 
     private static final String KEY_CUSTOM_NOTIFICATION_DATA = "kcnd";
 
+    private static final String KEY_FLAG_REMOVED_NOTIFICATION = "kfrn";
+
+    private static final String KEY_FLAG_OPENED_NOTIFICATION = "kfon";
+
     private Context mContext;
 
     private SharedPreferences mSp;
@@ -90,5 +94,21 @@ public class NotificationPreferences {
 
     public void savePullCustomNotificationLastModified(long lastModified) {
         mSp.edit().putLong(KEY_PULL_CUSTOM_NOTIFICATION_LAST_MODIFIED, lastModified).commit();
+    }
+
+    public boolean isAlreadyRemovedNotification() {
+        return mSp.getBoolean(KEY_FLAG_REMOVED_NOTIFICATION, false);
+    }
+
+    public void markAlreadyRemovedNotification() {
+        mSp.edit().putBoolean(KEY_FLAG_REMOVED_NOTIFICATION, true).commit();
+    }
+
+    public boolean isAlreadyOpenedNotification() {
+        return mSp.getBoolean(KEY_FLAG_OPENED_NOTIFICATION, false);
+    }
+
+    public void markAlreadyOpenedNotification() {
+        mSp.edit().putBoolean(KEY_FLAG_OPENED_NOTIFICATION, true).commit();
     }
 }
