@@ -42,13 +42,13 @@ public class BatteryView extends View {
 
     public static final boolean ENABLE_PERCENT = true;
 
-    public static final boolean SINGLE_DIGIT_PERCENT = false;// /
+    public static final boolean SINGLE_DIGIT_PERCENT = false;
 
     public static final boolean SHOW_100_PERCENT = false;
 
     public static final int FULL = 96;
 
-    public static final int BATTERY_LOW = 20;// ///
+    public static final int BATTERY_LOW = 15;
 
     public static final int EMPTY = 4;
 

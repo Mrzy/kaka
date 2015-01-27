@@ -8,13 +8,16 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.BuildConfig;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.shortcut.AppInfo;
@@ -26,8 +29,9 @@ import cn.zmdx.kaka.fast.locker.widget.RippleView.Callback;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid.OnItemClickListener;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.PagedDragDropGridAdapter;
+import cn.zmdx.kaka.fast.locker.widget.material.design.ButtonFloat;
 
-public class ShortcutSettingsActivity extends BaseActivity {
+public class ShortcutSettingsActivity extends BaseActivity implements OnClickListener {
 
     private DragDropGrid mGridView;
 
@@ -37,6 +41,8 @@ public class ShortcutSettingsActivity extends BaseActivity {
 
     private ViewGroup mOuterView;
 
+    private ButtonFloat mShortcutEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +51,15 @@ public class ShortcutSettingsActivity extends BaseActivity {
     }
 
     private void initShortcutView() {
+        mShortcutEdit = (ButtonFloat) findViewById(R.id.shortcut_edit);
+        mShortcutEdit.setOnClickListener(this);
         mOuterView = (ViewGroup) findViewById(R.id.outerView);
         if (mGridView != null) {
             mOuterView.removeView(mGridView);
         }
         mGridView = new DragDropGrid(this);
         mGridView.setAllowLongClick(false);
+        mGridView.setBackgroundResource(R.drawable.shortcut_item_bg);
         mOuterView.addView(mGridView);
         ViewGroup.LayoutParams lp = mGridView.getLayoutParams();
         lp.height = BaseInfoHelper.getRealWidth(this) / 3 * 2;
@@ -58,7 +67,6 @@ public class ShortcutSettingsActivity extends BaseActivity {
         mAdapter = new ShortcutSettingsAdapter(this, mGridView, mData);
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(new OnItemClickListener() {
-
             @Override
             public void onItemClick(View clickedView, final int index, MotionEvent event) {
                 if (clickedView instanceof RippleView) {
@@ -109,6 +117,14 @@ public class ShortcutSettingsActivity extends BaseActivity {
         mData.add(ai);
         ShortcutManager.getInstance(this).saveShortcutInfo(mData);
         invalidate();
+    }
+
+    /**
+     * 处理EditButton的点击事件
+     */
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(ShortcutSettingsActivity.this, "进入编辑状态", Toast.LENGTH_SHORT).show();
     }
 
     static class ShortcutSettingsAdapter implements PagedDragDropGridAdapter {
@@ -204,7 +220,10 @@ public class ShortcutSettingsActivity extends BaseActivity {
             ImageView iv = (ImageView) view.findViewById(R.id.shortcut_icon);
             AppInfo ai = mData.get(index);
             if (index == mData.get(index).getPosition()) {
-                iv.setImageDrawable(mData.get(index).getDefaultIcon());
+                if (mData.get(index).getDefaultIcon() != null) {
+                    iv.setImageDrawable(mData.get(index).getDefaultIcon());
+                    iv.setBackgroundColor(Color.TRANSPARENT);
+                }
             }
             return view;
         }

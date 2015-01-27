@@ -183,7 +183,6 @@
     <string name="tip_open_notification_permission">请勾选【潘多拉锁屏】</string>
     <string name="pandora_feedback_send">发送</string>
     <string name="pandora_feedback_title">意见反馈</string>
-    
     <string name="removeItem">删除</string>
 
     <!-- 通知中心 -->
@@ -202,6 +201,10 @@
     <string name="fast_setting_item_about_fast">关于Fast锁屏</string>
     <string name="fast_locker_name_zh">Fast快锁屏</string>
     <string name="fast_locker_name_en">Fast Locker</string>
-    
     <string name="notify_title_shortcut">选择快捷应用</string>
+    <string name="fast_shortcut_big_text_part_one">大多数人一天常用应用不超过</string>
+    <string name="fast_shortcut_big_text_part_two">个</string>
+    <string name="fast_shortcut_small_text_part_one">为了让你更方便高效地使用应用</string>
+    <string name="fast_shortcut_small_text_part_two">您可以按需设置快捷应用</string>
+
 </resources>

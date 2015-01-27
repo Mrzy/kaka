@@ -5,14 +5,15 @@
     android:layout_height="wrap_content"
     android:background="@drawable/shortcut_item_bg"
     android:gravity="center"
-    ripple:rv_zoom="true"
+    android:orientation="vertical"
     ripple:rv_type="rectangle"
-    android:orientation="vertical" >
+    ripple:rv_zoom="true" >
 
     <ImageView
         android:id="@+id/shortcut_icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:src="@drawable/shortcut_add_icon" />
 
     <TextView
         android:id="@+id/shortcut_name"

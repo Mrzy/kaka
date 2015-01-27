@@ -43,5 +43,8 @@
     <dimen name="fast_mainsetting_imageview_comment_margin_right">10dp</dimen>
     <dimen name="fast_mainsetting_imageview_comment_margin_bottom">15dp</dimen>
     <dimen name="fast_mainsetting_textview_lockname_margin_top">20dp</dimen>
+    <dimen name="fast_shortcut_textview_small_margin_one">5dp</dimen>
+    <dimen name="fast_shortcut_textview_small_margin_two">10dp</dimen>
+    <dimen name="fast_shortcut_margin_right">20dp</dimen>
 
 </resources>

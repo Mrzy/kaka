@@ -55,5 +55,8 @@
     
     <color name="material_design_color">#03a9f4</color>
     <color name="material_design_color_click">#1E88E5</color>
+    <color name="fast_shortcut_bg_color">#384049</color>
+    <color name="fast_shortcut_text_color_white_high">#f2f2f2</color>
+    <color name="fast_shortcut_text_color_white_low">#cacaca</color>
 
 </resources>
