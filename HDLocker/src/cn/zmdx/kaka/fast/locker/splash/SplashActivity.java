@@ -20,7 +20,6 @@ import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.settings.MainSettingsActivity;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.fast.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
 
 public class SplashActivity extends Activity {
@@ -127,7 +126,7 @@ public class SplashActivity extends Activity {
 
             @Override
             public void run() {
-                WallpaperUtils.initDefaultWallpaper();
+                // WallpaperUtils.initDefaultWallpaper();
             }
         });
     }

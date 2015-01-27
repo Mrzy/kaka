@@ -53,7 +53,8 @@
                         style="@style/init_setting_small_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/init_setting_MIUI_allow_floating_window_detail" />
+                        android:text="@string/init_setting_MIUI_allow_floating_window_detail"
+                        android:textColor="#9d9d9d" />
                 </LinearLayout>
 
                 <ImageView
@@ -93,7 +94,8 @@
                         style="@style/init_setting_small_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/init_setting_close_systemlocker_detail" />
+                        android:text="@string/init_setting_close_systemlocker_detail"
+                        android:textColor="#9d9d9d" />
                 </LinearLayout>
 
                 <ImageView
@@ -134,7 +136,8 @@
                         style="@style/init_setting_small_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/init_setting_MIUI_trust_detail" />
+                        android:text="@string/init_setting_MIUI_trust_detail"
+                        android:textColor="#9d9d9d" />
                 </LinearLayout>
 
                 <ImageView
@@ -174,7 +177,8 @@
                         style="@style/init_setting_small_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/init_setting_read_notification_prompt" />
+                        android:text="@string/init_setting_read_notification_prompt"
+                        android:textColor="#9d9d9d" />
                 </LinearLayout>
 
                 <ImageView

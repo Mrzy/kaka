@@ -103,7 +103,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         mListView = (ListView) findViewById(R.id.listview);
         mHeader = this.findViewById(R.id.header);
         mHeaderPicture = (KenBurnsView) findViewById(R.id.header_picture);
-        mHeaderPicture.setResourceIds(R.drawable.picture0, R.drawable.picture1);
+        mHeaderPicture.setResourceIds(R.drawable.fastbg1, R.drawable.fastbg2);
         mHeaderLogo = (ImageView) findViewById(R.id.header_logo);
         mCommentImageView = (ButtonFloat) findViewById(R.id.fast_comment);
         mCommentImageView.setOnClickListener(this);

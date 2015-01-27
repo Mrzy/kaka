@@ -8,13 +8,12 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import cn.zmdx.kaka.fast.locker.HDApplication;
 import cn.zmdx.kaka.fast.locker.ImageLoaderManager;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.fast.locker.utils.ImageUtils;
 import cn.zmdx.kaka.fast.locker.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.fast.locker.wallpaper.OnlineWallpaperManager;
-import cn.zmdx.kaka.fast.locker.wallpaper.WallpaperUtils;
-import cn.zmdx.kaka.fast.locker.R;
 
 public class ThemeManager {
     public static final int THEME_ID_CUSTOM = -1;
@@ -23,7 +22,7 @@ public class ThemeManager {
 
     public static final int THEME_ID_DEFAULT = 4;
 
-    public static final int DEFAULT_BACKGROUND_RES_ID = R.drawable.pandora_splash_background;
+    public static final int DEFAULT_BACKGROUND_RES_ID = R.drawable.fast_default_wallpaper;
 
     private static final String CURRENT_THEME_CACHE_KEY = "curThemeCacheKey";
 
@@ -98,23 +97,26 @@ public class ThemeManager {
         Theme theme = new Theme();
         Bitmap cacheBmp = ImageLoaderManager.getImageMemCache().getBitmap(CURRENT_THEME_CACHE_KEY);
         if (null == cacheBmp) {
-            Bitmap defaultBitmap = WallpaperUtils.getDefaultWallpaperBitmap();
-            if (null == defaultBitmap) {
-                WallpaperUtils.initDefaultWallpaper();
-                Bitmap bmp = WallpaperUtils.getDefaultWallpaperBitmap();
-                if (null == bmp) {
-                    Drawable defaultDrawable = context.getResources().getDrawable(
-                            DEFAULT_BACKGROUND_RES_ID);
-                    addBitmapToCache(ImageUtils.drawable2Bitmap(defaultDrawable));
-                    theme.setCurDrawable(defaultDrawable);
-                } else {
-                    addBitmapToCache(defaultBitmap);
-                    theme.setCurDrawable(new BitmapDrawable(context.getResources(), defaultBitmap));
-                }
-            } else {
-                addBitmapToCache(defaultBitmap);
-                theme.setCurDrawable(new BitmapDrawable(context.getResources(), defaultBitmap));
-            }
+            // Bitmap defaultBitmap =
+            // WallpaperUtils.getDefaultWallpaperBitmap();
+            // if (null == defaultBitmap) {
+            // WallpaperUtils.initDefaultWallpaper();
+            // Bitmap bmp = WallpaperUtils.getDefaultWallpaperBitmap();
+            // if (null == bmp) {
+            Drawable defaultDrawable = context.getResources()
+                    .getDrawable(DEFAULT_BACKGROUND_RES_ID);
+            addBitmapToCache(ImageUtils.drawable2Bitmap(defaultDrawable));
+            theme.setCurDrawable(defaultDrawable);
+            // } else {
+            // addBitmapToCache(defaultBitmap);
+            // theme.setCurDrawable(new BitmapDrawable(context.getResources(),
+            // defaultBitmap));
+            // }
+            // } else {
+            // addBitmapToCache(defaultBitmap);
+            // theme.setCurDrawable(new BitmapDrawable(context.getResources(),
+            // defaultBitmap));
+            // }
 
         } else {
             theme = new Theme();
