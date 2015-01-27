@@ -8,8 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.widget.SwitchButton;
 
 public class SettingItemsAdapter extends BaseAdapter {
@@ -56,6 +60,7 @@ public class SettingItemsAdapter extends BaseAdapter {
                     .findViewById(R.id.fastlocker_setting_item_text);
             holder.lockScreenSwitch = (SwitchButton) convertView
                     .findViewById(R.id.fastlocker_lockscreen_switch);
+            holder.lockScreenSwitch.setChecked(isPandoraLockerOn());
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -65,6 +70,19 @@ public class SettingItemsAdapter extends BaseAdapter {
         switch (position) {
             case 0:
                 holder.lockScreenSwitch.setVisibility(View.VISIBLE);
+                holder.lockScreenSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        enablePandoraLocker();
+                        if (isChecked) {
+                            UmengCustomEventManager.statisticalPandoraSwitchOpenTimes();
+                        } else {
+                            disablePandoraLocker();
+                            UmengCustomEventManager.statisticalPandoraSwitchCloseTimes();
+                        }
+                    }
+                });
                 holder.settingItemIcon.setImageResource(R.drawable.fast_setting_secure);
                 break;
             case 1:
@@ -93,6 +111,18 @@ public class SettingItemsAdapter extends BaseAdapter {
                 break;
         }
         return convertView;
+    }
+
+    protected void enablePandoraLocker() {
+        PandoraConfig.newInstance(context).savePandolaLockerState(true);
+    }
+
+    protected void disablePandoraLocker() {
+        PandoraConfig.newInstance(context).savePandolaLockerState(false);
+    }
+
+    protected boolean isPandoraLockerOn() {
+        return PandoraConfig.newInstance(context).isPandolaLockerOn();
     }
 
     public static class ViewHolder {

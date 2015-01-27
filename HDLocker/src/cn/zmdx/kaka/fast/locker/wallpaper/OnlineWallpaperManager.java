@@ -128,6 +128,8 @@ public class OnlineWallpaperManager {
                 .findViewById(R.id.pandora_wallpaper_item_select);
         final ImageView mWallpaperDel = (ImageView) mWallpaperRl
                 .findViewById(R.id.pandora_wallpaper_item_delete);
+        RelativeLayout mWallpaperDelLayout = (RelativeLayout) mWallpaperRl
+                .findViewById(R.id.pandora_wallpaper_item_delete_layout);
         WallpaperUtils.loadBitmap(mContext, getFilePath(fileName), new ILoadBitmapCallback() {
 
             @Override
@@ -172,7 +174,8 @@ public class OnlineWallpaperManager {
 
         PandoraWallpaper pWallpaper = new PandoraWallpaper();
         pWallpaper.setCurrentWallpaper(isCurrentTheme);
-        pWallpaper.setImageView(mWallpaperSelect);
+        pWallpaper.setSelectView(mWallpaperSelect);
+        pWallpaper.setDeleteView(mWallpaperDelLayout);
         pWallpaper.setFileName(fileName);
         pWallpaperList.add(pWallpaper);
 

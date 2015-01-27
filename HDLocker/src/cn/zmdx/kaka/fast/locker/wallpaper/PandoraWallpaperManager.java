@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 public class PandoraWallpaperManager {
 
@@ -27,18 +28,28 @@ public class PandoraWallpaperManager {
     }
 
     public static final class PandoraWallpaper {
-        private ImageView mImageView;
+        private ImageView mSelectView;
+
+        private RelativeLayout mDeleteView;
 
         private String mFileName;
 
         private boolean isCurrentWallpaper;
 
-        public ImageView getImageView() {
-            return mImageView;
+        public ImageView getSelectView() {
+            return mSelectView;
         }
 
-        public void setImageView(ImageView mImageView) {
-            this.mImageView = mImageView;
+        public void setSelectView(ImageView mSelectView) {
+            this.mSelectView = mSelectView;
+        }
+
+        public RelativeLayout getDeleteView() {
+            return mDeleteView;
+        }
+
+        public void setDeleteView(RelativeLayout mDeleteView) {
+            this.mDeleteView = mDeleteView;
         }
 
         public String getFileName() {

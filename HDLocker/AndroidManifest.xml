@@ -80,7 +80,8 @@
             android:name=".settings.WallPaperActivity"
             android:exported="false"
             android:label="@string/fast_setting_item_manage_wallpaper"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/WallpaperActionBarTheme" >
         </activity>
         <activity
             android:name=".settings.CropImageActivity"

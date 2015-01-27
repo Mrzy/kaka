@@ -25,7 +25,8 @@
             android:layout_weight="1"
             android:background="@drawable/setting_item_selector"
             android:gravity="center"
-            android:text="@string/pandora_dialog_cancle" />
+            android:text="@string/pandora_dialog_cancle"
+            android:textColor="@android:color/white" />
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             android:id="@+id/pandora_crop_sure"
@@ -35,7 +36,8 @@
             android:layout_weight="1"
             android:background="@drawable/setting_item_selector"
             android:gravity="center"
-            android:text="@string/determine" />
+            android:text="@string/determine"
+            android:textColor="@android:color/white" />
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             android:id="@+id/pandora_rotate_btn"
@@ -46,7 +48,8 @@
             android:layout_weight="1"
             android:background="@drawable/setting_item_selector"
             android:gravity="center"
-            android:text="@string/pandora_crop_image_rotate" />
+            android:text="@string/pandora_crop_image_rotate"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 
 </RelativeLayout>

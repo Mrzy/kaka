@@ -1,6 +1,7 @@
 
 package cn.zmdx.kaka.fast.locker.settings;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import android.animation.ObjectAnimator;
@@ -9,6 +10,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.TypedValue;
@@ -25,9 +28,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.SettingItemsAdapter;
+import cn.zmdx.kaka.fast.locker.guide.GuideActivity;
+import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.widget.AlphaForegroundColorSpan;
 import cn.zmdx.kaka.fast.locker.widget.KenBurnsView;
 import cn.zmdx.kaka.fast.locker.widget.material.design.ButtonFloat;
+
+import com.umeng.analytics.MobclickAgent;
 
 public class MainSettingsActivity extends Activity implements OnClickListener {
 
@@ -71,10 +78,35 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
 
     private String[] settingItems;
 
+    boolean isFirstIn = false;
+
+    private static final int GO_GUIDE = 1001;
+
+    private MyHandler mHandler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        WeakReference<MainSettingsActivity> mActivity;
+
+        public MyHandler(MainSettingsActivity activity) {
+            mActivity = new WeakReference<MainSettingsActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainSettingsActivity activity = mActivity.get();
+            switch (msg.what) {
+                case GO_GUIDE:
+                    activity.goGuide();
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        MobclickAgent.openActivityDurationTrack(false);
         mSmoothInterpolator = new AccelerateDecelerateInterpolator();
         mHeaderHeight = getResources()
                 .getDimensionPixelSize(R.dimen.fast_mainsetting_header_height);
@@ -82,6 +114,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
 
         setContentView(R.layout.activity_mainsetting);
 
+        init();
         settingItems = new String[] {
                 getString(R.string.fast_setting_item_open_fastlocker),
                 getString(R.string.fast_setting_item_set_password),
@@ -95,6 +128,19 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         initView();
         setupActionBar();
         setupListView();
+    }
+
+    private void init() {
+        isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
+
+        if (isFirstIn) {
+            mHandler.sendEmptyMessage(GO_GUIDE);
+        }
+    }
+
+    private void goGuide() {
+        Intent intent = new Intent(this, GuideActivity.class);
+        startActivity(intent);
     }
 
     private void initView() {
@@ -158,6 +204,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 1:
+
                         break;
                     // 设置锁屏密码
                     case 2:
