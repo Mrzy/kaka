@@ -43,6 +43,8 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
 
     private ButtonFloat mShortcutEdit;
 
+    private boolean hasMultiClicked = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +77,10 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
 
                         @Override
                         public void onFinish(View v) {
-                            startSettingsActivity(index);
+                            if (!hasMultiClicked) {
+                                startSettingsActivity(index);
+                                hasMultiClicked = true;
+                            }
                         }
                     });
                     return;
@@ -105,6 +110,7 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
                 String pkgName = bundle.getString("pkgName");
                 addShortcut(pkgName, position);
             }
+            hasMultiClicked = false;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
