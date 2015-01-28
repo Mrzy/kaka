@@ -4,8 +4,8 @@ package cn.zmdx.kaka.fast.locker.widget;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
@@ -126,6 +126,7 @@ public class PandoraInitSettingPromptView extends LinearLayout implements OnClic
                         .findViewById(R.id.init_setting_read_notification_prompt);
                 mReadNotificationButton = (RippleView) mRootView
                         .findViewById(R.id.init_setting_V6_read_notification_prompt_button);
+                mReadNotificationButton.setOnClickListener(this);
             }
         } else {
             mRootView.findViewById(R.id.init_setting_MIUI_V5).setVisibility(View.GONE);
@@ -146,6 +147,7 @@ public class PandoraInitSettingPromptView extends LinearLayout implements OnClic
                     .findViewById(R.id.init_setting_read_notification_prompt);
             mReadNotificationButton = (RippleView) mRootView
                     .findViewById(R.id.init_setting_V6_read_notification_prompt_button);
+            mReadNotificationButton.setOnClickListener(this);
         }
 
     }
