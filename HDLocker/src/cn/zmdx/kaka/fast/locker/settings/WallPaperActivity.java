@@ -370,13 +370,6 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
         UmengCustomEventManager.statisticalSelectLockScreenWallpaperCount(fileName);
     }
 
-    protected void showDelDialog() {
-        Dialog dialog = new Dialog(this, android.R.style.Theme_Dialog);
-        dialog.setContentView(R.layout.pandora_dialog);
-        dialog.show();
-
-    }
-
     private void initTransition() {
         final LayoutTransition transitioner = new LayoutTransition();
         mCustomContainer.setLayoutTransition(transitioner);

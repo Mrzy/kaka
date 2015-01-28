@@ -35,7 +35,7 @@
     <color name="batterymeter_bolt_color">#B2000000</color> <!-- 70% black -->
 
     <color name="init_prompt_v5_text_prompt_color">#aaffffff</color>
-    <color name="init_prompt_v6_text_prompt_color">#636363</color>
+    <color name="init_prompt_v6_text_prompt_color">#858585</color>
     <color name="alphabet_letter_color">#ffffff</color>
     <color name="alphabet_letter_color_select">#ffffff</color>
     <color name="alphabet_color">#212121</color>
