@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.fast.locker.widget.RippleView;
 import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
 
@@ -97,6 +99,11 @@ public class MainSettingAboutActivity extends BaseActivity implements OnClickLis
                         final MaterialDialog mNumberLockDialog = new MaterialDialog.Builder(
                                 MainSettingAboutActivity.this).customView(customView, true).build();
                         mNumberLockDialog.show();
+                        int lockWidth = (int) (BaseInfoHelper
+                                .getRealWidth(MainSettingAboutActivity.this) * 0.9);
+                        int width = lockWidth;
+                        mNumberLockDialog.getWindow().setLayout(width,
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
                         TypefaceTextView mContentView = (TypefaceTextView) customView
                                 .findViewById(R.id.umeng_custom_update_content);
                         RippleView mCancleView = (RippleView) customView

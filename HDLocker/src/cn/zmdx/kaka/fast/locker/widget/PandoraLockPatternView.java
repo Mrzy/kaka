@@ -6,17 +6,19 @@ import java.util.List;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.fast.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.fast.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.fast.locker.widget.LockPatternView.Cell;
 import cn.zmdx.kaka.fast.locker.widget.LockPatternView.DisplayMode;
 import cn.zmdx.kaka.fast.locker.widget.LockPatternView.OnPatternListener;
-import cn.zmdx.kaka.fast.locker.R;
 
 public class PandoraLockPatternView extends LinearLayout {
 
@@ -54,6 +56,10 @@ public class PandoraLockPatternView extends LinearLayout {
 
     private ILockPatternListener mLockPatternListener;
 
+    public static double SCALE_LOCK_PATTERN_WIDTH = 0.8;
+
+    public static double SCALE_LOCK_PATTERN_PADDING = 0.05;
+
     public interface IVerifyListener {
         void onVerifySuccess();
     }
@@ -86,10 +92,18 @@ public class PandoraLockPatternView extends LinearLayout {
 
     private void init() {
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.pandora_lock_pattern, null);
+        int padding = (int) (SCALE_LOCK_PATTERN_PADDING * BaseInfoHelper.getRealWidth(mContext));
+        mRootView.setPadding(padding, 0, padding, 0);
         addView(mRootView);
 
         mPromptTextView = (TextView) findViewById(R.id.pandora_lock_pattern_prompt);
         mLockPatternView = (LockPatternView) findViewById(R.id.pandora_lock_pattern);
+        int screenWidth = BaseInfoHelper.getRealWidth(mContext);
+        int lockPatternWidth = (int) (screenWidth * SCALE_LOCK_PATTERN_WIDTH);
+        ViewGroup.LayoutParams params = mLockPatternView.getLayoutParams();
+        params.width = lockPatternWidth;
+        params.height = lockPatternWidth;
+        mLockPatternView.setLayoutParams(params);
         mLockPatternView.setOnPatternListener(mOnPatternListener);
 
     }
@@ -291,9 +305,10 @@ public class PandoraLockPatternView extends LinearLayout {
         // TODO Auto-generated method stub
         return mPromptTextView;
     }
-    public LockPatternView getLockPatternView(){
+
+    public LockPatternView getLockPatternView() {
         return mLockPatternView;
-        
+
     }
 
 }

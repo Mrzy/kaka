@@ -9,7 +9,7 @@
 
     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
         android:id="@+id/pandora_lock_pattern_prompt"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
@@ -19,8 +19,8 @@
 
     <cn.zmdx.kaka.fast.locker.widget.LockPatternView
         android:id="@+id/pandora_lock_pattern"
-        android:layout_width="@dimen/gusture_pattern_lock_width"
-        android:layout_height="@dimen/gusture_pattern_lock_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/gusture_pattern_lock_margin_top"
         android:background="@android:color/transparent" />
 

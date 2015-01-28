@@ -6,10 +6,12 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.fast.locker.widget.PandoraLockPatternView;
 import cn.zmdx.kaka.fast.locker.widget.PandoraLockPatternView.ILockPatternListener;
 import cn.zmdx.kaka.fast.locker.widget.PandoraNumberLockView;
@@ -200,6 +202,11 @@ public class LockerPasswordActivity extends BaseActivity implements OnCheckListe
         mLockPatternDialog = new MaterialDialog.Builder(this).customView(customView, true)
                 .dismissListener(mOnDismissListener).build();
         mLockPatternDialog.show();
+        int screenWidth = BaseInfoHelper.getRealWidth(this);
+        int lockWidth = (int) (screenWidth * PandoraLockPatternView.SCALE_LOCK_PATTERN_WIDTH);
+        int padding = (int) (screenWidth * PandoraLockPatternView.SCALE_LOCK_PATTERN_PADDING * 2);
+        int width = lockWidth + padding;
+        mLockPatternDialog.getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     private void createNumberLockDialog(View customView) {
@@ -207,7 +214,6 @@ public class LockerPasswordActivity extends BaseActivity implements OnCheckListe
         mNumberLockDialog = new MaterialDialog.Builder(this).customView(customView, true)
                 .dismissListener(mOnDismissListener).build();
         mNumberLockDialog.show();
-
     }
 
     private void dismissLockPatternDialog() {

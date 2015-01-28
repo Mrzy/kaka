@@ -14,7 +14,6 @@ import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -119,6 +118,7 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
                 .setText(getResources().getString(R.string.pandora_wallpaper_advice))
                 .setTabListener(this);
         mActionBar.addTab(tab);
+        mActionBar.setStackedBackgroundDrawable(getResources().getDrawable(R.drawable.wallpaper_tab_background));
 
         mViewList = new ArrayList<View>();
         mViewList.add(mCustomView);

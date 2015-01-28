@@ -4,10 +4,12 @@ package cn.zmdx.kaka.fast.locker.widget;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 
 public class PandoraInitSettingPromptView extends LinearLayout implements OnClickListener {
 
@@ -56,6 +58,10 @@ public class PandoraInitSettingPromptView extends LinearLayout implements OnClic
     private RippleView mCloseSystemLockerButton;
 
     private IPromptViewListener mListener;
+
+    public static double SCALE_CLOSE_SYSTEM_LOCKER_WIDTH = 0.8;
+
+    public static double SCALE_CLOSE_SYSTEM_LOCKER_PADDING = 0.05;
 
     public interface IPromptViewListener {
         void onButtonClickListener();
@@ -124,8 +130,15 @@ public class PandoraInitSettingPromptView extends LinearLayout implements OnClic
         } else {
             mRootView.findViewById(R.id.init_setting_MIUI_V5).setVisibility(View.GONE);
             mRootView.findViewById(R.id.init_setting_MIUI_V6).setVisibility(View.GONE);
+            int screenWidth = BaseInfoHelper.getRealWidth(mContext);
+            int padding = (int) (screenWidth * SCALE_CLOSE_SYSTEM_LOCKER_PADDING);
             mCloseSystemLockerView = (LinearLayout) mRootView
                     .findViewById(R.id.init_setting_close_systemlocker_prompt);
+            mCloseSystemLockerView.setPadding(padding, 0, padding, 0);
+            int viewWidth = (int) (screenWidth * SCALE_CLOSE_SYSTEM_LOCKER_WIDTH);
+            ViewGroup.LayoutParams params = mCloseSystemLockerView.getLayoutParams();
+            params.width = viewWidth + padding;
+            mCloseSystemLockerView.setLayoutParams(params);
             mCloseSystemLockerButton = (RippleView) mRootView
                     .findViewById(R.id.init_setting_close_systemlocker_prompt_button);
             mCloseSystemLockerButton.setOnClickListener(this);

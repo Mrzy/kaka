@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <LinearLayout
-        android:layout_width="@dimen/pandora_update_dialog_width"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical" >
@@ -73,7 +73,7 @@
                     android:gravity="center"
                     android:text="@string/UMNotNow"
                     android:textColor="#9e9e9e"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </cn.zmdx.kaka.fast.locker.widget.RippleView>
 
             <cn.zmdx.kaka.fast.locker.widget.RippleView
@@ -90,7 +90,7 @@
                     android:gravity="center"
                     android:text="@string/UMUpdateNow"
                     android:textColor="@color/fast_setting_text_color"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </cn.zmdx.kaka.fast.locker.widget.RippleView>
         </LinearLayout>
     </LinearLayout>

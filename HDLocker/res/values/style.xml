@@ -113,7 +113,7 @@
     <!-- ActionBar tabs styles -->
     <style name="WallpaperActionBar" parent="@style/Widget.AppCompat.ActionBar.TabView">
         <item name="android:background">@drawable/wallpaper_tab_indicator</item>
-        <item name="android:backgroundStacked">#03a9f4</item>
+        <item name="android:backgroundSplit">#03a9f4</item>
     </style>
 
     <style name="WallpaperTextStyle" parent="@android:style/Widget.Holo.ActionBar.TabText">

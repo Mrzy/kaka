@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="284dp"
-    android:layout_height="245dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
     android:baselineAligned="true"
     android:orientation="vertical" >
 
@@ -58,8 +59,8 @@
 
     <android.inputmethodservice.KeyboardView
         android:id="@+id/pandora_keyboard_view"
-        android:layout_width="284dp"
-        android:layout_height="245dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:keyBackground="@drawable/pandora_number_lock_key_selector"
         android:keyTextColor="@color/fast_setting_text_color"
