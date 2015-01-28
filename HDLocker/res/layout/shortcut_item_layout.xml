@@ -2,18 +2,34 @@
 <cn.zmdx.kaka.fast.locker.widget.RippleView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ripple="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/shortcut_item_bg"
     android:gravity="center"
     android:orientation="vertical"
     ripple:rv_type="rectangle"
     ripple:rv_zoom="true" >
 
-    <ImageView
-        android:id="@+id/shortcut_icon"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/shortcut_add_icon" />
+        android:layout_gravity="center"
+        android:padding="10dp" >
+
+        <ImageView
+            android:id="@+id/shortcut_del_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/shortcut_icon"
+            android:layout_toRightOf="@id/shortcut_icon"
+            android:src="@drawable/notify_filter_delete" />
+
+        <ImageView
+            android:id="@+id/shortcut_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/shortcut_add_icon" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/shortcut_name"

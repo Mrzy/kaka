@@ -131,4 +131,21 @@ public class ShortcutModel {
         SQLiteDatabase db = mMySqlitDatabase.getWritableDatabase();
         return db.delete(TableStructure.TABLE_NAME_SHORTCUT, null, null);
     }
+
+    public String getPkgNameByPosition(int position) {
+        String pkgName = null;
+        SQLiteDatabase db = mMySqlitDatabase.getReadableDatabase();
+        Cursor pkgNameCursor = db.query(TableStructure.TABLE_NAME_SHORTCUT, new String[] {
+            TableStructure.SCUT_PKG
+        }, TableStructure.SCUT_POSITION + "=?", new String[] {
+            String.valueOf(position)
+        }, null, null, null);
+        while (pkgNameCursor.moveToNext()) {
+            AppInfo ai = new AppInfo();
+            ai.setPkgName(pkgNameCursor.getString(0));
+            pkgName = ai.getPkgName();
+        }
+        pkgNameCursor.close();
+        return pkgName;
+    }
 }

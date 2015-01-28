@@ -5,12 +5,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.BuildConfig;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.database.ShortcutModel;
 import cn.zmdx.kaka.fast.locker.shortcut.AppInfo;
 import cn.zmdx.kaka.fast.locker.shortcut.ShortcutManager;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
@@ -44,6 +51,8 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
     private ButtonFloat mShortcutEdit;
 
     private boolean hasMultiClicked = false;
+
+    private static boolean isEditMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +87,9 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
                         @Override
                         public void onFinish(View v) {
                             if (!hasMultiClicked) {
+                                if (isEditMode) {
+                                    delShortcut(index);
+                                }
                                 startSettingsActivity(index);
                                 hasMultiClicked = true;
                             }
@@ -111,6 +123,7 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
                 addShortcut(pkgName, position);
             }
             hasMultiClicked = false;
+            isEditMode = false;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -125,12 +138,51 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
         invalidate();
     }
 
+    private void delShortcut(int index) {
+        ShortcutModel model = ShortcutModel.getInstance(this);
+        String pkgNameByPosition = model.getPkgNameByPosition(index);
+        if (BuildConfig.DEBUG) {
+            Log.i("ShortcutSettingsActivity", "---index---->>" + index);
+            Log.i("ShortcutSettingsActivity", "---pkgNameByPosition---->>" + pkgNameByPosition);
+        }
+        if (pkgNameByPosition != null) {
+            model.deleteByPkgName(pkgNameByPosition);
+        }
+        isEditMode = false;
+    }
+
     /**
      * 处理EditButton的点击事件
      */
     @Override
     public void onClick(View v) {
         Toast.makeText(ShortcutSettingsActivity.this, "进入编辑状态", Toast.LENGTH_SHORT).show();
+        isEditMode = true;
+        invalidate();
+    }
+
+    private static void createSelectStateAnimations(final View view) {
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1.1f);
+        scaleXAnimator.setDuration(250);
+
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1.1f);
+        scaleYAnimator.setDuration(250);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleXAnimator, scaleYAnimator);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator anim) {
+                ObjectAnimator resetScaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f);
+                resetScaleXAnimator.setDuration(250);
+
+                ObjectAnimator resetScaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f);
+                resetScaleYAnimator.setDuration(250);
+                AnimatorSet resetAnimatorSet = new AnimatorSet();
+                resetAnimatorSet.playTogether(resetScaleXAnimator, resetScaleYAnimator);
+                resetAnimatorSet.start();
+            }
+        });
+        animatorSet.start();
     }
 
     static class ShortcutSettingsAdapter implements PagedDragDropGridAdapter {
@@ -224,9 +276,17 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
         public View view(int page, final int index) {
             View view = mInflater.inflate(R.layout.shortcut_item_layout, null);
             ImageView iv = (ImageView) view.findViewById(R.id.shortcut_icon);
+            ImageView delIcon = (ImageView) view.findViewById(R.id.shortcut_del_icon);
             AppInfo ai = mData.get(index);
+            Drawable defaultIcon = mData.get(index).getDefaultIcon();
+            if (isEditMode) {
+                delIcon.setVisibility(View.VISIBLE);
+                createSelectStateAnimations((View) delIcon);
+            } else {
+                delIcon.setVisibility(View.GONE);
+            }
             if (index == mData.get(index).getPosition()) {
-                if (mData.get(index).getDefaultIcon() != null) {
+                if (defaultIcon != null) {
                     iv.setImageDrawable(mData.get(index).getDefaultIcon());
                     iv.setBackgroundColor(Color.TRANSPARENT);
                 }

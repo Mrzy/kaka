@@ -283,8 +283,7 @@ public class RippleView extends LinearLayout {
                             ((ListView) getParent()), this, position, id);
             } else {
                 if (alv.getOnItemClickListener() != null)
-                    alv.getOnItemClickListener().onItemClick(
-                            alv, this, position, id);
+                    alv.getOnItemClickListener().onItemClick(alv, this, position, id);
             }
         }
     }
