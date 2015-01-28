@@ -14,7 +14,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="@string/lock_pattern_prompt"
-        android:textColor="@android:color/black"
+        android:textColor="@color/fast_setting_text_color"
         android:textSize="16sp" />
 
     <cn.zmdx.kaka.fast.locker.widget.LockPatternView

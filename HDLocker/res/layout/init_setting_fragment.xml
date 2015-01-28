@@ -47,7 +47,8 @@
                         style="@style/init_setting_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/init_setting_MIUI_allow_floating_window" />
+                        android:text="@string/init_setting_MIUI_allow_floating_window"
+                        android:textColor="@color/fast_setting_text_color" />
 
                     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/init_setting_small_textview"
@@ -88,7 +89,8 @@
                         style="@style/init_setting_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/init_setting_close_systemlocker" />
+                        android:text="@string/init_setting_close_systemlocker"
+                        android:textColor="@color/fast_setting_text_color" />
 
                     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/init_setting_small_textview"
@@ -130,7 +132,8 @@
                         style="@style/init_setting_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/init_setting_MIUI_trust" />
+                        android:text="@string/init_setting_MIUI_trust"
+                        android:textColor="@color/fast_setting_text_color" />
 
                     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/init_setting_small_textview"
@@ -171,7 +174,8 @@
                         style="@style/init_setting_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/init_setting_read_notification_title" />
+                        android:text="@string/init_setting_read_notification_title"
+                        android:textColor="@color/fast_setting_text_color" />
 
                     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                         style="@style/init_setting_small_textview"

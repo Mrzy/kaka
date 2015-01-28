@@ -6,11 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.settings.InitSettingActivity;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.fast.locker.widget.RippleView;
+import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -27,13 +28,14 @@ public abstract class BaseGuideActivity extends Activity {
         super.onCreate(savedInstanceState);
         isMeizu = PandoraUtils.isMeizu(this);
         View contentView = getContentView();
-        Button nextButton = getNextButton();
-        if (contentView == null || nextButton == null) {
+        RippleView nextButton = getNextRippleView();
+        TypefaceTextView  nextTextView = getNextTypefaceTextView();
+        if (contentView == null || nextTextView == null) {
             throw new IllegalStateException(
                     "You must implement abstract method getContentView() and getNextButton()");
         }
         if (isMeizu) {
-             nextButton.setText(getResources().getString(R.string.pandora_guide_start));
+            nextTextView.setText(getResources().getString(R.string.pandora_guide_start));
         }
         setContentView(contentView);
 
@@ -57,12 +59,9 @@ public abstract class BaseGuideActivity extends Activity {
      */
     protected abstract View getContentView();
 
-    /**
-     * 需要返回一个Button对象，用于点击后进入下一页
-     * 
-     * @return
-     */
-    protected abstract Button getNextButton();
+    protected abstract RippleView getNextRippleView();
+
+    protected abstract TypefaceTextView getNextTypefaceTextView();
 
     private void goHome() {
         Intent intent = new Intent(this, InitSettingActivity.class);

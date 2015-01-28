@@ -14,11 +14,11 @@ import android.view.View;
 import android.view.animation.CycleInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.fast.locker.R;
 
 public class PandoraNumberLockView extends LinearLayout {
 
@@ -299,7 +299,7 @@ public class PandoraNumberLockView extends LinearLayout {
 
         @Override
         public void onPress(int primaryCode) {
-
+//            mKeyboardView.getKeyboard().getKeys().get(0).
         }
 
     };

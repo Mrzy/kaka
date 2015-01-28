@@ -28,8 +28,6 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
 
     private LinearLayout mReadNotificationBarGuide;
 
-    private View mRootView;
-
     private static boolean isMIUI = false;
 
     private static boolean isMeizu = false;
@@ -72,7 +70,6 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
         if (isMeizu) {
             mCloseSystemLockerGuide.setVisibility(View.GONE);
         }
-        mRootView = findViewById(R.id.init_setting_background);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             mReadNotificationBarGuide.setVisibility(View.VISIBLE);

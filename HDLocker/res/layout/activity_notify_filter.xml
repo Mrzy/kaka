@@ -19,7 +19,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="30dp"
-                android:text="选择通知项目" />
+                android:text="@string/notify_filter_select"
+                android:textColor="@color/fast_setting_text_color" />
 
             <GridView
                 android:id="@+id/notify_list_grid_view"

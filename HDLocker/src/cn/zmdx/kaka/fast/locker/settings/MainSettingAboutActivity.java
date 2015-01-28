@@ -11,8 +11,8 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.widget.RippleView;
 import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
-import cn.zmdx.kaka.fast.locker.widget.material.design.ButtonRectangle;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.umeng.update.UmengUpdateAgent;
@@ -99,7 +99,7 @@ public class MainSettingAboutActivity extends BaseActivity implements OnClickLis
                         mNumberLockDialog.show();
                         TypefaceTextView mContentView = (TypefaceTextView) customView
                                 .findViewById(R.id.umeng_custom_update_content);
-                        ButtonRectangle mCancleView = (ButtonRectangle) customView
+                        RippleView mCancleView = (RippleView) customView
                                 .findViewById(R.id.umeng_custom_update_cancle);
                         mCancleView.setOnClickListener(new OnClickListener() {
 
@@ -108,7 +108,7 @@ public class MainSettingAboutActivity extends BaseActivity implements OnClickLis
                                 mNumberLockDialog.dismiss();
                             }
                         });
-                        ButtonRectangle mOKView = (ButtonRectangle) customView
+                        RippleView mOKView = (RippleView) customView
                                 .findViewById(R.id.umeng_custom_update_ok);
                         mOKView.setOnClickListener(new OnClickListener() {
 

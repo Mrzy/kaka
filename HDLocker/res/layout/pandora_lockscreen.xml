@@ -70,8 +70,8 @@
                         android:id="@+id/lock_top"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
                         android:gravity="right"
+                        android:orientation="vertical"
                         android:paddingRight="10dp" >
 
                         <LinearLayout
@@ -92,6 +92,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="4dp"
                                 android:layout_marginTop="5dp"
+                                android:shadowColor="#30000000"
+                                android:shadowDx="1"
+                                android:shadowDy="2"
+                                android:shadowRadius="1"
                                 android:textSize="12sp" />
                         </LinearLayout>
 
@@ -115,8 +119,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="-5dp"
-                            android:paddingRight="8dp"
-                            android:orientation="horizontal" >
+                            android:orientation="horizontal"
+                            android:paddingRight="8dp" >
 
                             <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                                 android:id="@+id/lock_date"
@@ -213,11 +217,6 @@
                     android:layout_height="@dimen/pandora_online_wallpaper_panelHeight"
                     android:orientation="horizontal" >
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3" />
-
                     <LinearLayout
                         android:id="@+id/lock_wallpaper_dragview"
                         android:layout_width="0dp"
@@ -234,6 +233,11 @@
                             android:scaleType="fitXY"
                             android:src="@drawable/pandora_online_paper_button_selector" />
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3" />
                 </LinearLayout>
             </LinearLayout>
         </cn.zmdx.kaka.fast.locker.widget.WallpaperPanelLayout>

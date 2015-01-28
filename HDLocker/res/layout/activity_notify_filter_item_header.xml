@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:gravity="left"
         android:paddingLeft="30dp"
-        android:textColor="@android:color/black"
+        android:textColor="@color/fast_setting_text_color"
         android:textSize="15sp"
         android:textStyle="bold" />
 

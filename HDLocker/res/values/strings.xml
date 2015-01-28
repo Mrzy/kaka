@@ -206,5 +206,6 @@
     <string name="fast_shortcut_big_text_part_two">个</string>
     <string name="fast_shortcut_small_text_part_one">为了让你更方便高效地使用应用</string>
     <string name="fast_shortcut_small_text_part_two">您可以按需设置快捷应用</string>
+    <string name="notify_filter_select">选择通知项目</string>
 
 </resources>

@@ -41,8 +41,8 @@ import cn.zmdx.kaka.fast.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.fast.locker.utils.ImageUtils;
 import cn.zmdx.kaka.fast.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
+import cn.zmdx.kaka.fast.locker.widget.RippleView;
 import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
-import cn.zmdx.kaka.fast.locker.widget.material.design.ButtonRectangle;
 import cn.zmdx.kaka.fast.locker.widget.material.design.ProgressBarCircularIndeterminate;
 
 import com.android.volley.Response.ErrorListener;
@@ -69,7 +69,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private TypefaceTextView mAuthor;
 
-    private ButtonRectangle mApplyButton;
+    private RippleView mApplyButton;
 
     private ProgressBarCircularIndeterminate mPreviewProgressBar;
 
@@ -168,7 +168,7 @@ public class OnlineWallpaperView extends LinearLayout {
                 .findViewById(R.id.pandora_online_wallpaper_preview_author);
         mPreviewProgressBar = (ProgressBarCircularIndeterminate) mRootView
                 .findViewById(R.id.pandora_online_wallpaper_preview_progress);
-        mApplyButton = (ButtonRectangle) mRootView.findViewById(R.id.pandora_online_wallpaper_apply_button);
+        mApplyButton = (RippleView) mRootView.findViewById(R.id.pandora_online_wallpaper_apply_button);
         mApplyButton.setOnClickListener(new OnClickListener() {
 
             @Override

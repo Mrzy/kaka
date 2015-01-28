@@ -3,26 +3,32 @@ package cn.zmdx.kaka.fast.locker.guide;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.widget.RippleView;
+import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
 
 public class GuideActivity extends BaseGuideActivity {
 
-    private Button btn;
+    private RippleView btn;
+
+    private TypefaceTextView mTextView;
 
     @Override
     protected View getContentView() {
         View view = LayoutInflater.from(this).inflate(R.layout.pandora_guide, null);
-        View rootView = view.findViewById(R.id.guide_lock_top);
-//        initBackground(rootView);
-        btn = (Button) view.findViewById(R.id.go_setting);
-        btn.setBackgroundResource(R.drawable.guide_button_background_selector);
+        btn = (RippleView) view.findViewById(R.id.go_setting);
+        mTextView = (TypefaceTextView) view.findViewById(R.id.go_setting_prompt);
         return view;
     }
 
     @Override
-    protected Button getNextButton() {
+    protected RippleView getNextRippleView() {
         return btn;
+    }
+
+    @Override
+    protected TypefaceTextView getNextTypefaceTextView() {
+        return mTextView;
     }
 
     @Override
@@ -34,4 +40,5 @@ public class GuideActivity extends BaseGuideActivity {
     public void onBackPressed() {
         return;
     }
+
 }

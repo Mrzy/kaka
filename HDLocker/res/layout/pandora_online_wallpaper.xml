@@ -80,10 +80,9 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="top|left"
+                        android:layout_gravity="top|right"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_marginTop="10dp"
                         android:orientation="vertical" >
 
                         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
@@ -91,11 +90,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:visibility="gone" />
+
+                        <cn.zmdx.kaka.fast.locker.widget.DigitalClocks
+                            xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.fast.locker"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="40sp"
+                            clock:format="24" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="right"
                             android:orientation="horizontal" >
 
                             <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
@@ -113,14 +122,6 @@
                                 android:textColor="@color/white"
                                 android:textSize="15sp" />
                         </LinearLayout>
-
-                        <cn.zmdx.kaka.fast.locker.widget.DigitalClocks
-                            xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.fast.locker"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:textSize="30sp"
-                            clock:format="24" />
                     </LinearLayout>
                 </FrameLayout>
 
@@ -144,16 +145,26 @@
                     android:paddingRight="5dp"
                     android:textSize="14sp" />
 
-                <cn.zmdx.kaka.fast.locker.widget.material.design.ButtonRectangle
+                <cn.zmdx.kaka.fast.locker.widget.RippleView
+                    xmlns:ripple="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/pandora_online_wallpaper_apply_button"
+                    style="@style/rippleStyle"
                     android:layout_width="@dimen/pandora_online_wallpaper_apply_button_width"
-                    android:layout_height="@dimen/pandora_online_wallpaper_apply_button_height"
+                    android:layout_height="35dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="8dp"
                     android:background="@color/material_design_color"
-                    android:text="@string/pandora_online_wallpaper_apple" />
+                    ripple:rv_color="#80d8ff" >
 
+                    <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/pandora_online_wallpaper_apple"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp" />
+                </cn.zmdx.kaka.fast.locker.widget.RippleView>
             </RelativeLayout>
 
             <FrameLayout

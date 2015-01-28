@@ -22,7 +22,8 @@
             android:layout_weight="1"
             android:clickable="false"
             android:gravity="center_vertical"
-            android:text="@string/setting_feedback" />
+            android:text="@string/setting_feedback"
+            android:textColor="@color/fast_setting_text_color" />
     </cn.zmdx.kaka.fast.locker.widget.RippleView>
 
     <cn.zmdx.kaka.fast.locker.widget.RippleView
@@ -41,7 +42,8 @@
             android:layout_weight="1"
             android:clickable="false"
             android:gravity="center_vertical"
-            android:text="@string/setting_check_new_version" />
+            android:text="@string/setting_check_new_version"
+            android:textColor="@color/fast_setting_text_color" />
     </cn.zmdx.kaka.fast.locker.widget.RippleView>
 
     <cn.zmdx.kaka.fast.locker.widget.RippleView
@@ -60,7 +62,8 @@
             android:layout_weight="1"
             android:clickable="false"
             android:gravity="center_vertical"
-            android:text="@string/fast_setting_item_about_fast" />
+            android:text="@string/fast_setting_item_about_fast"
+            android:textColor="@color/fast_setting_text_color" />
     </cn.zmdx.kaka.fast.locker.widget.RippleView>
 
 </LinearLayout>

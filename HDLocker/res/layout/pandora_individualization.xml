@@ -40,7 +40,8 @@
                     android:layout_weight="1"
                     android:clickable="false"
                     android:gravity="center_vertical"
-                    android:text="@string/individualization_notice_switch_button" />
+                    android:text="@string/individualization_notice_switch_button"
+                    android:textColor="@color/fast_setting_text_color" />
 
                 <cn.zmdx.kaka.fast.locker.widget.SwitchButton
                     android:id="@+id/individualization_notice_switch_button"
@@ -71,7 +72,8 @@
                     android:layout_weight="1"
                     android:clickable="false"
                     android:gravity="center_vertical"
-                    android:text="@string/setting_individualization_open_lockscreen_voice" />
+                    android:text="@string/setting_individualization_open_lockscreen_voice"
+                    android:textColor="@color/fast_setting_text_color" />
 
                 <cn.zmdx.kaka.fast.locker.widget.SwitchButton
                     android:id="@+id/individualization_open_lockscreen_voice_switch_button"
