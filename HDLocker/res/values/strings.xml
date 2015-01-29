@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_name">Fask锁屏</string>
+    <string name="app_name">Fast锁屏</string>
     <!-- Accessibility description sent when user starts drawing a lock pattern. [CHAR LIMIT=NONE] -->
     <string name="lockscreen_access_pattern_start">Pattern started</string>
     <!-- Accessibility description sent when the pattern times out and is cleared. [CHAR LIMIT=NONE] -->
@@ -16,10 +16,10 @@
     <string name="setting_open_pandoralocker">启用锁屏</string>
     <string name="setting_lock_type">设置锁屏密码</string>
     <string name="init_setting_close_systemlocker">关闭系统锁屏</string>
-    <string name="init_setting_close_systemlocker_detail">解决Fask锁屏和系统锁屏冲突的问题</string>
+    <string name="init_setting_close_systemlocker_detail">解决Fast锁屏和系统锁屏冲突的问题</string>
     <string name="setting_feedback">意见反馈</string>
     <string name="setting_check_new_version">检查新版本</string>
-    <string name="setting_about_us">关于Fask锁屏</string>
+    <string name="setting_about_us">关于Fast锁屏</string>
     <string name="setting_about_pandora">潘多拉锁屏，下拉有料！</string>
     <string name="contentDescription"></string>
     <string name="setting_about_text">下拉有料</string>
@@ -38,15 +38,15 @@
 
     <!-- guide -->
     <string name="guide_button_text">前往初始设置</string>
-    <string name="guide_title_text">Fask锁屏锁屏</string>
+    <string name="guide_title_text">Fast锁屏</string>
     <string name="guide_explore_title_text">带你探索未知的世界</string>
 
     <!-- init setting -->
     <string name="init_setting_title">初始设置</string>
     <string name="init_setting_MIUI_allow_floating_window">允许显示悬浮窗</string>
-    <string name="init_setting_MIUI_allow_floating_window_detail">保证Fask锁屏可以正常运行</string>
+    <string name="init_setting_MIUI_allow_floating_window_detail">保证Fast锁屏可以正常运行</string>
     <string name="init_setting_MIUI_trust">信任程序和允许自动启动</string>
-    <string name="init_setting_MIUI_trust_detail">保证Fask锁屏可以获取必须的权限</string>
+    <string name="init_setting_MIUI_trust_detail">保证Fast锁屏可以获取必须的权限</string>
     <string name="init_setting_to_set">前往设置</string>
     <string name="init_setting_complete_to_set">完成</string>
     <string name="init_setting_close_systemlocker_prompt">请选择『无』模式</string>
@@ -80,7 +80,7 @@
     <string name="pandora_wallpaper_show_image_title">图片</string>
     <string name="pandora_wallpaper_dialog_camera">拍照</string>
     <string name="pandora_wallpaper_dialog_gallery">相册</string>
-    <string name="pandora_setting_title">Fask锁屏锁屏</string>
+    <string name="pandora_setting_title">Fast锁屏</string>
     <string name="init_setting_title_detail">初始设置详细说明</string>
     <string name="pandora_wallpaper_dialog_title">确认删除此张壁纸？</string>
     <string name="pandora_dialog_cancle">取消</string>
@@ -91,17 +91,17 @@
     <string name="individualization_notice_switch_button">显示通知栏</string>
     <string name="individualization_message_notification">通知中心隐私设置</string>
     <string name="init_setting_V6_close_systemlocker_title">请按照以下方式关闭系统锁屏</string>
-    <string name="init_setting_V6_close_systemlocker_prompt">Fask锁屏已经经过测试，不会引起您的设备以及设备上应用的问题</string>
+    <string name="init_setting_V6_close_systemlocker_prompt">Fast锁屏已经经过测试，不会引起您的设备以及设备上应用的问题</string>
     <string name="init_setting_V6_allow_floating_window_title">开启显示悬浮窗</string>
-    <string name="init_setting_V6_allow_floating_window_prompt">开启悬浮窗是为了防止按Home键跳出，Fask锁屏不会往您的桌面添加任何悬浮窗</string>
+    <string name="init_setting_V6_allow_floating_window_prompt">开启悬浮窗是为了防止按Home键跳出，Fast锁屏不会往您的桌面添加任何悬浮窗</string>
     <string name="init_setting_V6_trust_title">设置信任列表&amp;自动启动</string>
     <string name="init_setting_V6_trust_prompt_one">1.进入『授权管理』</string>
     <string name="init_setting_V6_trust_prompt_two">2.进入『自启动管理』</string>
-    <string name="init_setting_V6_trust_prompt_three">3.开启『Fask锁屏』开关</string>
-    <string name="init_setting_V6_trust_prompt">Fask锁屏需要能够在您手机开机时自动启动，只需要一次设置，以后就不需要麻烦啦</string>
-    <string name="init_setting_V6_read_notification_title">请勾选『Fask锁屏』的读取通知权限</string>
-    <string name="init_setting_V6_read_notification_prompt">Fask锁屏严格保护您的隐私，只在本机使用这些权限，用以显示通知</string>
-    <string name="init_setting_MIUI_under_18_read_notification_title">请进入『Fask锁屏』开启服务</string>
+    <string name="init_setting_V6_trust_prompt_three">3.开启『Fast锁屏』开关</string>
+    <string name="init_setting_V6_trust_prompt">Fast锁屏需要能够在您手机开机时自动启动，只需要一次设置，以后就不需要麻烦啦</string>
+    <string name="init_setting_V6_read_notification_title">请勾选『Fast锁屏』的读取通知权限</string>
+    <string name="init_setting_V6_read_notification_prompt">Fast锁屏严格保护您的隐私，只在本机使用这些权限，用以显示通知</string>
+    <string name="init_setting_MIUI_under_18_read_notification_title">请进入『Fast锁屏』开启服务</string>
     <string name="init_setting_MIUI_under_18_read_notification_prompt_detail">打开</string>
     <string name="pandora_box_guide_set_default_image">立刻设置默认背景</string>
     <string name="individualization_welcome_text">设置欢迎语</string>
@@ -169,7 +169,7 @@
     <string name="accessibility_battery_level">Battery <xliff:g id="number">%d</xliff:g> percent.</string>
     <!-- Glyph to be overlaid atop the battery when the level is extremely low. Do not translate. -->
     <string name="battery_meter_very_low_overlay_symbol">!</string>
-    <string name="notification_service_name">Fask锁屏</string>
+    <string name="notification_service_name">Fast锁屏</string>
     <string name="notify_guide_openpermission_title">请开启通知权限！</string>
     <string name="notify_guide_openpermission_content">开启通知权限后，这里才会显示您qq、微信的未读消息</string>
     <string name="notify_guide_opendetail_title">右划查看通知详情</string>
