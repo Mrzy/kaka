@@ -63,7 +63,7 @@ public class ShortcutModel {
         return false;
     }
 
-    private int deleteByPostionIfExsit(Integer position) {
+    public int deleteByPostionIfExsit(Integer position) {
         SQLiteDatabase db = mMySqlitDatabase.getWritableDatabase();
         return db.delete(TableStructure.TABLE_NAME_SHORTCUT, TableStructure.SCUT_POSITION + "=?",
                 new String[] {
@@ -141,9 +141,7 @@ public class ShortcutModel {
             String.valueOf(position)
         }, null, null, null);
         while (pkgNameCursor.moveToNext()) {
-            AppInfo ai = new AppInfo();
-            ai.setPkgName(pkgNameCursor.getString(0));
-            pkgName = ai.getPkgName();
+            pkgName = pkgNameCursor.getString(0);
         }
         pkgNameCursor.close();
         return pkgName;

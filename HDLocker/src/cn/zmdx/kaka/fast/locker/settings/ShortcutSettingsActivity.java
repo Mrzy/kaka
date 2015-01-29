@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -89,6 +87,7 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
                             if (!hasMultiClicked) {
                                 if (isEditMode) {
                                     delShortcut(index);
+                                    return;
                                 }
                                 startSettingsActivity(index);
                                 hasMultiClicked = true;
@@ -111,6 +110,8 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
         intent.putExtra("position", position);
         intent.putExtra("type", NotifyFilterActivity.TYPE_SELECT);
         startActivityForResult(intent, 1);
+        this.overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
     }
 
     @Override
@@ -123,7 +124,6 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
                 addShortcut(pkgName, position);
             }
             hasMultiClicked = false;
-            isEditMode = false;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -132,23 +132,23 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
         if (TextUtils.isEmpty(pkgName)) {
             return;
         }
-        AppInfo ai = AppInfo.createAppInfo(this, pkgName, false, null, position);
-        mData.add(ai);
-        ShortcutManager.getInstance(this).saveShortcutInfo(mData);
-        invalidate();
+        // 去除重复应用
+        ShortcutModel model = ShortcutModel.getInstance(this);
+        if (!model.existByPkgName(pkgName)) {
+            AppInfo ai = AppInfo.createAppInfo(this, pkgName, false, null, position);
+            mData.add(ai);
+            ShortcutManager.getInstance(this).saveShortcutInfo(mData);
+            invalidate();
+        }
     }
 
     private void delShortcut(int index) {
         ShortcutModel model = ShortcutModel.getInstance(this);
-        String pkgNameByPosition = model.getPkgNameByPosition(index);
         if (BuildConfig.DEBUG) {
             Log.i("ShortcutSettingsActivity", "---index---->>" + index);
-            Log.i("ShortcutSettingsActivity", "---pkgNameByPosition---->>" + pkgNameByPosition);
         }
-        if (pkgNameByPosition != null) {
-            model.deleteByPkgName(pkgNameByPosition);
-        }
-        isEditMode = false;
+        model.deleteByPostionIfExsit(index);
+        invalidate();
     }
 
     /**
@@ -156,32 +156,26 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
      */
     @Override
     public void onClick(View v) {
-        Toast.makeText(ShortcutSettingsActivity.this, "进入编辑状态", Toast.LENGTH_SHORT).show();
-        isEditMode = true;
+        isEditMode = !isEditMode;
+        if (isEditMode) {
+            Toast.makeText(ShortcutSettingsActivity.this,
+                    getString(R.string.fast_shortcut_editbtn_start), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(ShortcutSettingsActivity.this,
+                    getString(R.string.fast_shortcut_editbtn_exit), Toast.LENGTH_SHORT).show();
+        }
         invalidate();
     }
 
     private static void createSelectStateAnimations(final View view) {
-        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1.1f);
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.1f, 1f);
         scaleXAnimator.setDuration(250);
 
-        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1.1f);
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.1f, 1f);
         scaleYAnimator.setDuration(250);
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(scaleXAnimator, scaleYAnimator);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator anim) {
-                ObjectAnimator resetScaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f);
-                resetScaleXAnimator.setDuration(250);
-
-                ObjectAnimator resetScaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f);
-                resetScaleYAnimator.setDuration(250);
-                AnimatorSet resetAnimatorSet = new AnimatorSet();
-                resetAnimatorSet.playTogether(resetScaleXAnimator, resetScaleYAnimator);
-                resetAnimatorSet.start();
-            }
-        });
         animatorSet.start();
     }
 
@@ -277,11 +271,15 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
             View view = mInflater.inflate(R.layout.shortcut_item_layout, null);
             ImageView iv = (ImageView) view.findViewById(R.id.shortcut_icon);
             ImageView delIcon = (ImageView) view.findViewById(R.id.shortcut_del_icon);
-            AppInfo ai = mData.get(index);
+            
             Drawable defaultIcon = mData.get(index).getDefaultIcon();
+            ShortcutModel model = ShortcutModel.getInstance(mContext);
             if (isEditMode) {
-                delIcon.setVisibility(View.VISIBLE);
-                createSelectStateAnimations((View) delIcon);
+                String pkgNameByPosition = model.getPkgNameByPosition(index);
+                if (null != pkgNameByPosition) {
+                    delIcon.setVisibility(View.VISIBLE);
+                    createSelectStateAnimations((View) delIcon);
+                }
             } else {
                 delIcon.setVisibility(View.GONE);
             }

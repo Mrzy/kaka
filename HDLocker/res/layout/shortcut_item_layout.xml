@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/shortcut_icon"
             android:layout_toRightOf="@id/shortcut_icon"
-            android:src="@drawable/notify_filter_delete" />
+            android:src="@drawable/notify_filter_delete"
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/shortcut_icon"
