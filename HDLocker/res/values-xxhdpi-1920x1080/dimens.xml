@@ -67,10 +67,6 @@
     <dimen name="locker_arrow_move_lenght">16dp</dimen>
     <dimen name="panelHeight">260dp</dimen>
     
-    <dimen name="pandora_wallpaper_layout_width">111dp</dimen>
-    <dimen name="pandora_wallpaper_layout_height">159dp</dimen> 
-    <dimen name="pandora_wallpaper_width">96dp</dimen>
-    <dimen name="pandora_wallpaper_height">144dp</dimen> 
     <dimen name="pandora_wallpaper_height_poor_half">7.5dp</dimen> 
     
     <dimen name="setting_title_textview_margin_bottom">13dp</dimen>

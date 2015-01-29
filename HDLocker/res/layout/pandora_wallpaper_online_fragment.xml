@@ -16,8 +16,6 @@
             android:id="@+id/pandora_wallpaper_online_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="13dp"
             android:orientation="horizontal"
             android:paddingTop="10dp" >
         </LinearLayout>

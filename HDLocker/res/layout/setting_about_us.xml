@@ -48,6 +48,7 @@
             android:layout_marginTop="@dimen/setting_about_pandora_margin_one"
             android:gravity="center_horizontal"
             android:text="@string/setting_about_text"
+            android:visibility="gone"
             android:textColor="#7b7c7e"
             android:textSize="13sp" />
     </LinearLayout>

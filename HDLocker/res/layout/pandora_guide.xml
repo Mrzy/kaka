@@ -38,6 +38,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:text="@string/setting_about_text"
+            android:visibility="gone"
             android:textColor="#ffffff"
             android:textSize="14dp" />
 
