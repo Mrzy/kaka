@@ -38,8 +38,8 @@
 
         <ImageView
             android:id="@+id/pandora_wallpaper_item_delete"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:contentDescription="@string/contentDescription"

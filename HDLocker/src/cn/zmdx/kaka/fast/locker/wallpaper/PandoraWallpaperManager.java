@@ -30,7 +30,9 @@ public class PandoraWallpaperManager {
     public static final class PandoraWallpaper {
         private ImageView mSelectView;
 
-        private RelativeLayout mDeleteView;
+        private RelativeLayout mDeleteLayout;
+
+        private ImageView mDeleteView;
 
         private String mFileName;
 
@@ -44,11 +46,19 @@ public class PandoraWallpaperManager {
             this.mSelectView = mSelectView;
         }
 
-        public RelativeLayout getDeleteView() {
+        public RelativeLayout getDeleteLayout() {
+            return mDeleteLayout;
+        }
+
+        public void setDeleteLayout(RelativeLayout mDeleteLayout) {
+            this.mDeleteLayout = mDeleteLayout;
+        }
+
+        public ImageView getDeleteView() {
             return mDeleteView;
         }
 
-        public void setDeleteView(RelativeLayout mDeleteView) {
+        public void setDeleteView(ImageView mDeleteView) {
             this.mDeleteView = mDeleteView;
         }
 

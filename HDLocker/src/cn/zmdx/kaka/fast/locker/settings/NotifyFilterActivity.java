@@ -13,12 +13,14 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -27,7 +29,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.notification.NotificationPreferences;
 import cn.zmdx.kaka.fast.locker.notify.filter.AlphabetScrollerView;
@@ -36,6 +37,9 @@ import cn.zmdx.kaka.fast.locker.notify.filter.ListCompare;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterManager;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterManager.NotifyFilterEntity;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterUtil;
+import cn.zmdx.kaka.fast.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.fast.locker.utils.ImageUtils;
+import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
 import cn.zmdx.kaka.fast.locker.widget.material.design.ProgressBarCircularIndeterminate;
 
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
@@ -88,12 +92,15 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
     }
 
     private void initView() {
+        SparseIntArray sparseIntArray = NotifyFilterUtil.initAppSize(this);
+        int padding = sparseIntArray.get(NotifyFilterUtil.KEY_GRIDVIEW_PADDING);
         mContentLayout = (RelativeLayout) findViewById(R.id.notify_content);
         mLoadingView = (ProgressBarCircularIndeterminate) findViewById(R.id.notify_loading);
 
         mNotifyGridView = (StickyGridHeadersGridView) findViewById(R.id.notify_grid_view);
         mNotifyGridView.setHeadersIgnorePadding(true);
         mNotifyGridView.setAreHeadersSticky(false);
+        mNotifyGridView.setPadding(padding, 0, padding, 0);
 
         mAlphabetView = (AlphabetScrollerView) findViewById(R.id.notify_alphabetView);
         mAlphabetView.init(mContentLayout, mNotifyGridView, this);
@@ -111,6 +118,14 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         if (mCurType == TYPE_FILTER) {
             mInterceptLayout.setVisibility(View.VISIBLE);
             mInterceptGridView = (GridView) findViewById(R.id.notify_list_grid_view);
+            int gridViewHeight = sparseIntArray.get(NotifyFilterUtil.KEY_GRIDVIEW_HEIGHT);
+            int headPaddingLeft = sparseIntArray.get(NotifyFilterUtil.KEY_HEAD_PADDING_LEFT);
+            findViewById(R.id.notify_list_prompt).setPadding(headPaddingLeft, 25, 0, 25);
+            LayoutParams params = mInterceptGridView.getLayoutParams();
+            params.width = LayoutParams.MATCH_PARENT;
+            params.height = gridViewHeight;
+            mInterceptGridView.setLayoutParams(params);
+            mInterceptGridView.setPadding(padding, 0, padding, 0);
         } else {
             mInterceptLayout.setVisibility(View.GONE);
             getSupportActionBar()
@@ -271,26 +286,46 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         }
 
         private class ViewHolder {
+            private RelativeLayout mNotifyAppLayout;
+
             private ImageView mNotifyAppIcon;
 
             private ImageView mNotifySelect;
 
-            private TextView mNotifyAppName;
+            private TypefaceTextView mNotifyAppName;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            SparseIntArray sparseIntArray = NotifyFilterUtil.initAppSize(mContext);
+            int layoutWidth = sparseIntArray.get(NotifyFilterUtil.KEY_LAYOUT_WIDTH);
+            int imageWidth = sparseIntArray.get(NotifyFilterUtil.KEY_IMAGE_WIDTH);
+            int imageHeight = sparseIntArray.get(NotifyFilterUtil.KEY_IMAGE_HEIGHT);
             if (convertView == null) {
                 convertView = LayoutInflater.from(mContext).inflate(
                         R.layout.activity_notify_filter_item, parent, false);
                 viewHolder = new ViewHolder();
+                viewHolder.mNotifyAppLayout = (RelativeLayout) convertView
+                        .findViewById(R.id.notify_app_layout);
                 viewHolder.mNotifyAppIcon = (ImageView) convertView
                         .findViewById(R.id.notify_app_icon);
-                viewHolder.mNotifyAppName = (TextView) convertView
+                viewHolder.mNotifyAppName = (TypefaceTextView) convertView
                         .findViewById(R.id.notify_app_name);
                 viewHolder.mNotifySelect = (ImageView) convertView
                         .findViewById(R.id.notify_app_select);
+                viewHolder.mNotifySelect.setPadding(0, 0, (layoutWidth - imageWidth) / 2, 0);
                 convertView.setTag(viewHolder);
+
+                LayoutParams layoutParams = viewHolder.mNotifyAppLayout.getLayoutParams();
+                layoutParams.width = layoutWidth;
+                layoutParams.height = LayoutParams.WRAP_CONTENT;
+                viewHolder.mNotifyAppLayout.setLayoutParams(layoutParams);
+
+                LayoutParams params = viewHolder.mNotifyAppIcon.getLayoutParams();
+                params.width = imageWidth;
+                params.height = imageHeight;
+                viewHolder.mNotifyAppIcon.setLayoutParams(params);
+
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
@@ -298,7 +333,8 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
             viewHolder.mNotifySelect.setImageDrawable(getResources().getDrawable(
                     R.drawable.notify_filter_delete));
             NotifyFilterEntity item = mNotifyInterceptList.get(position);
-            viewHolder.mNotifyAppIcon.setImageDrawable(item.getNotifyIcon());
+            viewHolder.mNotifyAppIcon.setImageBitmap(ImageUtils.getResizedBitmap(
+                    ImageUtils.drawable2Bitmap(item.getNotifyIcon()), imageWidth, imageHeight));
             viewHolder.mNotifyAppName.setText(item.getNotifyCHName());
 
             if (isEditMode) {
@@ -309,6 +345,19 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
                 }
             } else {
                 viewHolder.mNotifySelect.setVisibility(View.GONE);
+            }
+
+            if (mNotifyInterceptList.size() > 4) {
+                int gridViewHeight = sparseIntArray.get(NotifyFilterUtil.KEY_GRIDVIEW_HEIGHT);
+                LayoutParams params = mInterceptGridView.getLayoutParams();
+                params.width = LayoutParams.MATCH_PARENT;
+                params.height = gridViewHeight;
+                mInterceptGridView.setLayoutParams(params);
+            } else {
+                LayoutParams params = mInterceptGridView.getLayoutParams();
+                params.width = LayoutParams.MATCH_PARENT;
+                params.height = LayoutParams.WRAP_CONTENT;
+                mInterceptGridView.setLayoutParams(params);
             }
 
             return convertView;
@@ -333,7 +382,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        NotifyFilterEntity item = mNotifyFilterAdapter.getAdapterData().get(position);
+        final NotifyFilterEntity item = mNotifyFilterAdapter.getAdapterData().get(position);
         switch (mCurType) {
             case TYPE_FILTER:
                 if (item.isSelect()) {
@@ -352,12 +401,13 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
                     removeInterceptPkgName(item.getPkgName());
                 } else {
                     setAppSelectState(item.getPkgName(), true);
-
                     mNotifyInterceptList.add(mNotifyInterceptList.size() - 1, item);
                     putInterceptPkgName(item.getPkgName());
+                    setSelection(mNotifyInterceptList.size() - 1);
                 }
                 mNotifyFilterAdapter.notifyDataSetChanged();
                 mInterceptAdapter.notifyDataSetChanged();
+
                 break;
             case TYPE_SELECT:
                 Intent in = new Intent();
@@ -370,6 +420,22 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
             default:
                 break;
         }
+    }
+
+    private void setSelection(final int postion) {
+        HDBThreadUtils.postOnWorkerDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                HDBThreadUtils.runOnUi(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mInterceptGridView.setSelection(postion);
+                    }
+                });
+            }
+        }, 100);
     }
 
     private void setAppSelectState(String itemPkgName, boolean isSelect) {

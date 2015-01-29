@@ -166,7 +166,4 @@ public class WallpaperUtils {
         return mCacheSparseArray;
     }
 
-    public static double getWallpaperPadding(Context context) {
-        return BaseInfoHelper.getRealWidth(context) * 0.05;
-    }
 }

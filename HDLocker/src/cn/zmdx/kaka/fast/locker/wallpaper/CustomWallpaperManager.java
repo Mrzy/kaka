@@ -148,6 +148,10 @@ public class CustomWallpaperManager {
         int imageWidth = sparseIntArray.get(WallpaperUtils.KEY_IMAGE_WIDTH);
         int imageHeight = sparseIntArray.get(WallpaperUtils.KEY_IMAGE_HEIGHT);
 
+        int delPadding = (layoutWidth - imageWidth) / 2 - 10;
+        mWallpaperDel.setPadding(0, delPadding, delPadding, 0);
+        mWallpaperSelect.setPadding(0, delPadding, delPadding, 0);
+
         LayoutParams params = mWallpaperIvRl.getLayoutParams();
         params.width = imageWidth;
         params.height = imageHeight;
@@ -161,7 +165,8 @@ public class CustomWallpaperManager {
         PandoraWallpaper pWallpaper = new PandoraWallpaper();
         pWallpaper.setCurrentWallpaper(isCurrentTheme);
         pWallpaper.setSelectView(mWallpaperSelect);
-        pWallpaper.setDeleteView(mWallpaperDelLayout);
+        pWallpaper.setDeleteView(mWallpaperDel);
+        pWallpaper.setDeleteLayout(mWallpaperDelLayout);
         pWallpaper.setFileName(fileName);
         pWallpaperList.add(pWallpaper);
 

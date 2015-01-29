@@ -16,16 +16,16 @@
             android:visibility="gone" >
 
             <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
+                android:id="@+id/notify_list_prompt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="30dp"
                 android:text="@string/notify_filter_select"
                 android:textColor="@color/fast_setting_text_color" />
 
             <GridView
                 android:id="@+id/notify_list_grid_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:choiceMode="singleChoice"
                 android:fillViewport="true"
@@ -34,10 +34,7 @@
                 android:horizontalSpacing="0dp"
                 android:listSelector="@android:color/transparent"
                 android:numColumns="4"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:paddingTop="10dp"
-                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="none"
                 android:verticalSpacing="5dp" />
         </LinearLayout>
 
@@ -54,17 +51,15 @@
             android:horizontalSpacing="0dp"
             android:listSelector="@android:color/transparent"
             android:numColumns="4"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="10dp"
-            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="none"
             android:verticalSpacing="5dp" />
 
         <cn.zmdx.kaka.fast.locker.notify.filter.AlphabetScrollerView
             android:id="@+id/notify_alphabetView"
             android:layout_width="30dp"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <cn.zmdx.kaka.fast.locker.widget.material.design.ProgressBarCircularIndeterminate

@@ -69,8 +69,8 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:background="@color/material_design_color"
-                ripple:rv_color="#80d8ff" >
+                android:background="#dcdcdc"
+                ripple:rv_color="#adadad" >
 
                 <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                     android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                     android:gravity="center"
                     android:text="@string/UMNotNow"
                     android:textColor="@android:color/white"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
             </cn.zmdx.kaka.fast.locker.widget.RippleView>
 
             <cn.zmdx.kaka.fast.locker.widget.RippleView
@@ -99,7 +99,7 @@
                     android:gravity="center"
                     android:text="@string/UMUpdateNow"
                     android:textColor="@android:color/white"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
             </cn.zmdx.kaka.fast.locker.widget.RippleView>
         </LinearLayout>
     </LinearLayout>

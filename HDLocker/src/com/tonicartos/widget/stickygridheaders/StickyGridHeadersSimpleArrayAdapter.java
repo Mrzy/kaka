@@ -7,16 +7,20 @@ import java.util.Comparator;
 import java.util.Locale;
 
 import android.content.Context;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.notify.filter.ListCompare;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterManager;
+import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterUtil;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterManager.NotifyFilterEntity;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifySectionIndexer;
 
@@ -32,6 +36,8 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
     public ArrayList<NotifyFilterEntity> getAdapterData() {
         return mItems;
     }
+
+    private Context mContext;
 
     public StickyGridHeadersSimpleArrayAdapter(Context context,
             ArrayList<NotifyFilterEntity> items, ListCompare listCompare) {
@@ -74,6 +80,10 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
             holder = (HeaderViewHolder) convertView.getTag();
         }
 
+        SparseIntArray sparseIntArray = NotifyFilterUtil.initAppSize(mContext);
+        int headPaddingLeft = sparseIntArray.get(NotifyFilterUtil.KEY_HEAD_PADDING_LEFT);
+        holder.textView.setPadding(headPaddingLeft, 0, 0, 0);
+
         NotifyFilterEntity item = getItem(position);
         String usName = item.getNotifyUSName();
         if (usName.contains(NotifyFilterManager.RECENT_TASK_MARK)) {
@@ -103,10 +113,30 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.activity_notify_filter_item, parent, false);
             viewHolder = new ViewHolder();
+            viewHolder.mNotifyAppLayout = (RelativeLayout) convertView
+                    .findViewById(R.id.notify_app_layout);
             viewHolder.mNotifyAppIcon = (ImageView) convertView.findViewById(R.id.notify_app_icon);
             viewHolder.mNotifyAppName = (TextView) convertView.findViewById(R.id.notify_app_name);
             viewHolder.mNotifySelect = (ImageView) convertView.findViewById(R.id.notify_app_select);
             convertView.setTag(viewHolder);
+
+            SparseIntArray sparseIntArray = NotifyFilterUtil.initAppSize(mContext);
+            int layoutWidth = sparseIntArray.get(NotifyFilterUtil.KEY_LAYOUT_WIDTH);
+            int imageWidth = sparseIntArray.get(NotifyFilterUtil.KEY_IMAGE_WIDTH);
+            int imageHeight = sparseIntArray.get(NotifyFilterUtil.KEY_IMAGE_HEIGHT);
+
+            viewHolder.mNotifySelect.setPadding(0, 0, (layoutWidth - imageWidth) / 2, 0);
+
+            LayoutParams layoutParams = viewHolder.mNotifyAppLayout.getLayoutParams();
+            layoutParams.width = layoutWidth;
+            layoutParams.height = LayoutParams.WRAP_CONTENT;
+            viewHolder.mNotifyAppLayout.setLayoutParams(layoutParams);
+
+            LayoutParams params = viewHolder.mNotifyAppIcon.getLayoutParams();
+            params.width = imageWidth;
+            params.height = imageHeight;
+            viewHolder.mNotifyAppIcon.setLayoutParams(params);
+
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
@@ -126,6 +156,7 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
 
     private void init(Context context, ArrayList<NotifyFilterEntity> items) {
         this.mItems = items;
+        this.mContext = context;
         Collections.sort(mItems, new SortIgnoreCase());
         mInflater = LayoutInflater.from(context);
     }
@@ -141,6 +172,9 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
     }
 
     private class ViewHolder {
+
+        private RelativeLayout mNotifyAppLayout;
+
         private ImageView mNotifyAppIcon;
 
         private ImageView mNotifySelect;

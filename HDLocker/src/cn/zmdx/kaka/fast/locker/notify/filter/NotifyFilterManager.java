@@ -31,7 +31,7 @@ public class NotifyFilterManager {
         ArrayList<NotifyFilterEntity> list = new ArrayList<NotifyFilterEntity>();
         for (String pkgName : pkgNameSet) {
             try {
-                if (list.size() <= MAX_NOTIFY_FILTER_COUNT) {
+//                if (list.size() <= MAX_NOTIFY_FILTER_COUNT) {
                     NotifyFilterEntity interceptEntity = new NotifyFilterEntity();
                     Drawable icon = packageManager.getApplicationIcon(pkgName);
                     String appName = packageManager.getApplicationLabel(
@@ -44,9 +44,9 @@ public class NotifyFilterManager {
                     interceptEntity.setSelect(true);
                     interceptEntity.setNotifyIcon(icon);
                     list.add(interceptEntity);
-                } else {
-                    break;
-                }
+//                } else {
+//                    break;
+//                }
             } catch (NameNotFoundException e) {
                 e.printStackTrace();
             }

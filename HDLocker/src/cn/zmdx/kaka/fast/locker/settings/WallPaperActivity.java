@@ -507,7 +507,8 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
         for (PandoraWallpaper wallpaper : mPandoraWallpaperList) {
             if (isEditMode) {
                 wallpaper.getSelectView().setVisibility(View.INVISIBLE);
-                wallpaper.getDeleteView().setVisibility(View.VISIBLE);
+                wallpaper.getDeleteLayout().setVisibility(View.VISIBLE);
+                createSelectStateAnimations(wallpaper.getDeleteView());
             } else {
                 if (wallpaper.getFileName().equals(fileName)) {
                     wallpaper.setCurrentWallpaper(true);
@@ -517,7 +518,7 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
                     wallpaper.setCurrentWallpaper(false);
                     wallpaper.getSelectView().setVisibility(View.INVISIBLE);
                 }
-                wallpaper.getDeleteView().setVisibility(View.GONE);
+                wallpaper.getDeleteLayout().setVisibility(View.GONE);
             }
 
         }
@@ -530,7 +531,8 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
         for (PandoraWallpaper wallpaper : mPandoraWallpaperList) {
             if (isEditMode) {
                 wallpaper.getSelectView().setVisibility(View.INVISIBLE);
-                wallpaper.getDeleteView().setVisibility(View.VISIBLE);
+                wallpaper.getDeleteLayout().setVisibility(View.VISIBLE);
+                createSelectStateAnimations(wallpaper.getDeleteView());
             } else {
                 if (wallpaper.isCurrentWallpaper()) {
                     wallpaper.getSelectView().setVisibility(View.VISIBLE);
@@ -538,7 +540,7 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
                 } else {
                     wallpaper.getSelectView().setVisibility(View.INVISIBLE);
                 }
-                wallpaper.getDeleteView().setVisibility(View.GONE);
+                wallpaper.getDeleteLayout().setVisibility(View.GONE);
             }
         }
     }
@@ -647,7 +649,8 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
     private void changeDeleteMode() {
         for (PandoraWallpaper wallpaper : mPandoraWallpaperList) {
             wallpaper.getSelectView().setVisibility(View.GONE);
-            wallpaper.getDeleteView().setVisibility(View.VISIBLE);
+            wallpaper.getDeleteLayout().setVisibility(View.VISIBLE);
+            createSelectStateAnimations(wallpaper.getDeleteView());
         }
 
     }
