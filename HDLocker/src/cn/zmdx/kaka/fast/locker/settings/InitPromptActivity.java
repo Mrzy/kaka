@@ -73,6 +73,9 @@ public class InitPromptActivity extends Activity implements IPromptViewListener 
 
     @Override
     public void onBackPressed() {
+        if (null != mPromptDialog && mPromptDialog.isShowing()) {
+            mPromptDialog.dismiss();
+        }
         finish();
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                 R.anim.umeng_fb_slide_out_from_right);

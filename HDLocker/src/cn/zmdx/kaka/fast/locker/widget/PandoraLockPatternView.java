@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import cn.zmdx.kaka.fast.locker.HDApplication;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.security.KeyguardLockerManager;
+import cn.zmdx.kaka.fast.locker.settings.LockerPasswordActivity;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.fast.locker.utils.HDBHashUtils;
@@ -95,9 +97,18 @@ public class PandoraLockPatternView extends LinearLayout {
         int padding = (int) (SCALE_LOCK_PATTERN_PADDING * BaseInfoHelper.getRealWidth(mContext));
         mRootView.setPadding(padding, 0, padding, 0);
         addView(mRootView);
-
         mPromptTextView = (TextView) findViewById(R.id.pandora_lock_pattern_prompt);
-        mLockPatternView = (LockPatternView) findViewById(R.id.pandora_lock_pattern);
+        if (mContext instanceof HDApplication) {
+            mLockPatternView = (LockPatternView) findViewById(R.id.pandora_lock_pattern_lockscreen);
+            mPromptTextView.setTextColor(mContext.getResources().getColor(
+                    R.color.lock_pattern_screen));
+        } else if (mContext instanceof LockerPasswordActivity) {
+            mLockPatternView = (LockPatternView) findViewById(R.id.pandora_lock_pattern);
+            mPromptTextView.setTextColor(mContext.getResources().getColor(
+                    R.color.fast_setting_text_color));
+        }
+        mLockPatternView.setVisibility(View.VISIBLE);
+
         int screenWidth = BaseInfoHelper.getRealWidth(mContext);
         int lockPatternWidth = (int) (screenWidth * SCALE_LOCK_PATTERN_WIDTH);
         ViewGroup.LayoutParams params = mLockPatternView.getLayoutParams();

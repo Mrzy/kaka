@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:pattern="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -22,6 +23,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/gusture_pattern_lock_margin_top"
-        android:background="@android:color/transparent" />
+        android:background="@android:color/transparent"
+        pattern:regularColor="#2e2e2e"
+        android:visibility="gone" />
+    
+    <cn.zmdx.kaka.fast.locker.widget.LockPatternView
+        android:id="@+id/pandora_lock_pattern_lockscreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/gusture_pattern_lock_margin_top"
+        android:background="@android:color/transparent"
+        pattern:regularColor="@color/lock_pattern_screen"
+        android:visibility="gone" />
 
 </LinearLayout>

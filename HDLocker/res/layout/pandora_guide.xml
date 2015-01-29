@@ -47,12 +47,12 @@
             style="@style/rippleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/explore_text"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="90dp"
+            android:layout_marginBottom="30dp"
             android:background="@color/material_design_color"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             ripple:rv_color="#80d8ff" >
 
             <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
@@ -62,7 +62,7 @@
                 android:gravity="center"
                 android:text="@string/guide_button_text"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="17sp" />
         </cn.zmdx.kaka.fast.locker.widget.RippleView>
     </RelativeLayout>
 

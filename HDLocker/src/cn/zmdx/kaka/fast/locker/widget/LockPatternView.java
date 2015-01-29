@@ -26,7 +26,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -44,8 +43,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
-import cn.zmdx.kaka.fast.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.utils.LockPatternUtils;
 
 /**
  * Displays and detects the user's unlock attempt, which is a drag of a finger
@@ -310,8 +309,7 @@ public class LockPatternView extends View {
         // getResources().getColor(R.color.lock_pattern_view_error_color);
         // mSuccessColor =
         // getResources().getColor(R.color.lock_pattern_view_success_color);
-        // mRegularColor = a.getColor(R.styleable.LockPatternView_regularColor,
-        // mRegularColor);
+        int regularColor = a.getColor(R.styleable.LockPatternView_regularColor, 0xFF2e2e2e);
         // mErrorColor = a.getColor(R.styleable.LockPatternView_errorColor,
         // mErrorColor);
         // mSuccessColor = a.getColor(R.styleable.LockPatternView_successColor,
@@ -320,7 +318,7 @@ public class LockPatternView extends View {
         // int pathColor = a.getColor(R.styleable.LockPatternView_pathColor,
         // mRegularColor);
         a.recycle();
-        initRegularDotColor();
+        initRegularDotColor(regularColor);
         // mPathPaint.setColor(pathColor);
 
         mPathPaint.setStyle(Paint.Style.STROKE);
@@ -357,16 +355,16 @@ public class LockPatternView extends View {
                 android.R.interpolator.linear);
     }
 
-    private void initRegularDotColor() {
-        mRegularDotColor[0][0] = 0xFF2e2e2e;
-        mRegularDotColor[0][1] = 0xFF2e2e2e;
-        mRegularDotColor[0][2] = 0xFF2e2e2e;
-        mRegularDotColor[1][0] = 0xFF2e2e2e;
-        mRegularDotColor[1][1] = 0xFF2e2e2e;
-        mRegularDotColor[1][2] = 0xFF2e2e2e;
-        mRegularDotColor[2][0] = 0xFF2e2e2e;
-        mRegularDotColor[2][1] = 0xFF2e2e2e;
-        mRegularDotColor[2][2] = 0xFF2e2e2e;
+    private void initRegularDotColor(int regularColor) {
+        mRegularDotColor[0][0] = regularColor;
+        mRegularDotColor[0][1] = regularColor;
+        mRegularDotColor[0][2] = regularColor;
+        mRegularDotColor[1][0] = regularColor;
+        mRegularDotColor[1][1] = regularColor;
+        mRegularDotColor[1][2] = regularColor;
+        mRegularDotColor[2][0] = regularColor;
+        mRegularDotColor[2][1] = regularColor;
+        mRegularDotColor[2][2] = regularColor;
     }
 
     public CellState[][] getCellStates() {
@@ -1029,7 +1027,7 @@ public class LockPatternView extends View {
 
         if (drawPath) {
             // mPathPaint.setColor(getCurrentColor(true /* partOfPattern */));
-            mPathPaint.setColor(Color.BLACK);
+            mPathPaint.setColor(mRegularDotColor[0][0]);
             mPathPaint.setShader(mPathShader);
 
             boolean anyCircles = false;

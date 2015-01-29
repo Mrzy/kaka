@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -64,15 +65,19 @@
                 android:id="@+id/umeng_custom_update_cancle"
                 style="@style/rippleStyle"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1" >
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@color/material_design_color"
+                ripple:rv_color="#80d8ff" >
 
                 <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/UMNotNow"
-                    android:textColor="#9e9e9e"
+                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
             </cn.zmdx.kaka.fast.locker.widget.RippleView>
 
@@ -80,16 +85,20 @@
                 android:id="@+id/umeng_custom_update_ok"
                 style="@style/rippleStyle"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_weight="1" >
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@color/material_design_color"
+                ripple:rv_color="#80d8ff" >
 
                 <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/UMUpdateNow"
-                    android:textColor="@color/fast_setting_text_color"
+                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
             </cn.zmdx.kaka.fast.locker.widget.RippleView>
         </LinearLayout>

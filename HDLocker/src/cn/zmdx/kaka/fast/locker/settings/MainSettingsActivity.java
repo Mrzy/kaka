@@ -3,12 +3,14 @@ package cn.zmdx.kaka.fast.locker.settings;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,11 +27,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.SettingItemsAdapter;
 import cn.zmdx.kaka.fast.locker.guide.GuideActivity;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.fast.locker.widget.AlphaForegroundColorSpan;
 import cn.zmdx.kaka.fast.locker.widget.KenBurnsView;
 import cn.zmdx.kaka.fast.locker.widget.material.design.ButtonFloat;
@@ -381,6 +383,28 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        Toast.makeText(this, "我想去点赞", Toast.LENGTH_SHORT).show();
+        String locale = BaseInfoHelper.getLocale(this);
+        if (locale.equals(Locale.CHINA.toString())) {
+            Uri uri = Uri.parse("market://details?id=" + BaseInfoHelper.getPkgName(this));
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else {
+            try {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id="
+                                + BaseInfoHelper.getPkgName(this)));
+                browserIntent.setClassName("com.android.vending",
+                        "com.android.vending.AssetBrowserActivity");
+                browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(browserIntent);
+            } catch (Exception e) {
+                Uri uri = Uri.parse("market://details?id=" + BaseInfoHelper.getPkgName(this));
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        }
+
     }
 }
