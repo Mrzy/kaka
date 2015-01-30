@@ -5,7 +5,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -195,6 +194,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
                 interpolate(mHeaderLogo, getActionBarIconView(),
                         mSmoothInterpolator.getInterpolation(ratio));
                 setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
+                showLockerNameAnimator(mLockScreenName, 1 - ratio);
             }
         });
         /**
@@ -306,11 +306,8 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
     /**
      * 做LockerName的动画，暂未使用
      */
-    private void showLockerNameAnimator(float fromAlpha, float toAlpha) {
-        ObjectAnimator lockerNameAnimator = ObjectAnimator.ofFloat(mLockScreenName, "alpha",
-                fromAlpha, toAlpha);
-        lockerNameAnimator.setDuration(1000);
-        lockerNameAnimator.start();
+    private void showLockerNameAnimator(View view, float toAlpha) {
+        view.setAlpha(toAlpha);
     }
 
     public static float clamp(float value, float min, float max) {
@@ -320,7 +317,6 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
     private void interpolate(View view1, View view2, float interpolation) {
         getOnScreenRect(mRect1, view1);
         getOnScreenRect(mRect2, view2);
-
         float scaleX = 1.0F + interpolation * (mRect2.width() / mRect1.width() - 1.0F);
         float scaleY = 1.0F + interpolation * (mRect2.height() / mRect1.height() - 1.0F);
         float translationX = 0.5F * (interpolation * (mRect2.left + mRect2.right - mRect1.left - mRect1.right));
