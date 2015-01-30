@@ -118,6 +118,15 @@ public class AppInfo implements Serializable, Comparable<AppInfo> {
         return ai;
     }
 
+    public static void clearAppInfo(AppInfo appInfo) {
+        appInfo.setAppName("");
+        appInfo.setDefaultIcon(null);
+        appInfo.setDisguise(false);
+        appInfo.setDisguiseDrawable(null);
+        appInfo.setPosition(appInfo.getPosition());
+        appInfo.setShortcut(true);
+    }
+
     public static Drawable getIconByPkgName(Context context, String pkgName) {
         try {
             return context.getPackageManager().getApplicationIcon(pkgName);

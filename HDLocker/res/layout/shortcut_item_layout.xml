@@ -9,11 +9,29 @@
     ripple:rv_type="rectangle"
     ripple:rv_zoom="true" >
 
-    <ImageView
-        android:id="@+id/shortcut_icon"
+    <RelativeLayout
+        android:id="@+id/shortcut_icon_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/shortcut_add_icon" />
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/shortcut_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/contentDescription"
+            android:src="@drawable/shortcut_add_icon" />
+
+        <ImageView
+            android:id="@+id/shortcut_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/contentDescription"
+            android:src="@drawable/notify_filter_delete"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/shortcut_name"

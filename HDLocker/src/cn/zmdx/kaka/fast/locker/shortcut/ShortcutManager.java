@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,7 +136,7 @@ public class ShortcutManager {
         mToolbarView = (GridView) view.findViewById(R.id.tool_bar);
         mAdapter = new ToolbarAdapter(mContext, mSwitchList);
         mToolbarView.setAdapter(mAdapter);
-//        mToolbarView.setOnItemClickListener(mToolbarItemClickListener);
+        // mToolbarView.setOnItemClickListener(mToolbarItemClickListener);
     }
 
     private OnItemClickListener mToolbarItemClickListener = new OnItemClickListener() {
@@ -169,8 +170,8 @@ public class ShortcutManager {
                 WidgetConfig.SWITCH_ID_SOUND));
         mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
                 WidgetConfig.SWITCH_ID_BRIGHTNESS));
-//        mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
-//                WidgetConfig.SWITCH_ID_AIRPLANE));
+        // mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
+        // WidgetConfig.SWITCH_ID_AIRPLANE));
         mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
                 WidgetConfig.SWITCH_ID_SETTINGS));
     }
@@ -216,5 +217,34 @@ public class ShortcutManager {
                 boolean result = sm.insert(ai);
             }
         }
+    }
+
+    public boolean delShortcutInfo(String pkgName) {
+        ShortcutModel sm = ShortcutModel.getInstance(mContext);
+        return sm.deleteByPkgName(pkgName) > 0 ? true : false;
+    }
+
+    public boolean isExsitShortcut(String pkgName) {
+        ShortcutModel sm = ShortcutModel.getInstance(mContext);
+        return sm.existByPkgName(pkgName);
+    }
+
+    private SparseIntArray mCacheSparseArray = null;
+
+    public static int KEY_LAYOUT_SIZE = 0;
+
+    public static int KEY_IMAGE_SIZE = 1;
+
+    public SparseIntArray initShortcutLayoutSize() {
+        if (null == mCacheSparseArray || mCacheSparseArray.size() == 0) {
+            int screenWidth = BaseInfoHelper.getRealWidth(mContext);
+            int parentSize = (int) (screenWidth / 3);
+            int layoutSize = parentSize / 2 + 10;
+            int imageSize = parentSize / 2;
+            mCacheSparseArray = new SparseIntArray();
+            mCacheSparseArray.put(KEY_LAYOUT_SIZE, layoutSize);
+            mCacheSparseArray.put(KEY_IMAGE_SIZE, imageSize);
+        }
+        return mCacheSparseArray;
     }
 }
