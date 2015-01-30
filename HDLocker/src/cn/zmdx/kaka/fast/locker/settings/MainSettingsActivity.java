@@ -373,8 +373,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
             return mActionBarHeight;
         }
         getTheme().resolveAttribute(android.R.attr.actionBarSize, mTypedValue, true);
-        mActionBarHeight = TypedValue.complexToDimensionPixelSize(mTypedValue.data, getResources()
-                .getDisplayMetrics());
+        mActionBarHeight = BaseInfoHelper.dip2px(this, 56);
         return mActionBarHeight;
     }
 
