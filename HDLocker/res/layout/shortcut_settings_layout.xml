@@ -49,6 +49,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/linearLayout1"
@@ -59,12 +60,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/linearLayout1"
-                android:layout_marginTop="@dimen/fast_shortcut_textview_small_margin_two"
+                android:layout_above="@+id/textView1"
+                android:layout_alignLeft="@+id/textView1"
                 android:text="@string/fast_shortcut_small_text_part_one"
                 android:textColor="@color/fast_shortcut_text_color_white_low" />
         </RelativeLayout>
+
     </LinearLayout>
 
     <cn.zmdx.kaka.fast.locker.widget.material.design.ButtonFloat

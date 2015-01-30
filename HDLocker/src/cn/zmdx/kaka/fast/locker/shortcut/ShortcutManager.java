@@ -135,7 +135,7 @@ public class ShortcutManager {
         mToolbarView = (GridView) view.findViewById(R.id.tool_bar);
         mAdapter = new ToolbarAdapter(mContext, mSwitchList);
         mToolbarView.setAdapter(mAdapter);
-//        mToolbarView.setOnItemClickListener(mToolbarItemClickListener);
+        // mToolbarView.setOnItemClickListener(mToolbarItemClickListener);
     }
 
     private OnItemClickListener mToolbarItemClickListener = new OnItemClickListener() {
@@ -169,8 +169,8 @@ public class ShortcutManager {
                 WidgetConfig.SWITCH_ID_SOUND));
         mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
                 WidgetConfig.SWITCH_ID_BRIGHTNESS));
-//        mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
-//                WidgetConfig.SWITCH_ID_AIRPLANE));
+        // mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
+        // WidgetConfig.SWITCH_ID_AIRPLANE));
         mSwitchList.add(new QuickHelperItem(QuickHelperItem.TYPE_SWITCH,
                 WidgetConfig.SWITCH_ID_SETTINGS));
     }
