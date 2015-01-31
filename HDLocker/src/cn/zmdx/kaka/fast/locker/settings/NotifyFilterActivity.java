@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Set;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -136,7 +135,6 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
 
     }
 
-    @SuppressLint("NewApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
