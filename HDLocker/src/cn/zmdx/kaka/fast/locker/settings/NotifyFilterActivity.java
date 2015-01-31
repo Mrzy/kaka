@@ -1,10 +1,12 @@
 
 package cn.zmdx.kaka.fast.locker.settings;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Set;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -134,12 +136,31 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
 
     }
 
+    @SuppressLint("NewApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_notify_filter_menu, menu);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu
                 .findItem(R.id.action_search));
+
+        Class<?> argClass = searchView.getClass();
+        // 指定某个私有属性
+        Field ownField;
+        try {
+            ownField = argClass.getDeclaredField("mSearchPlate");
+            // setAccessible 它是用来设置是否有权限访问反射类中的私有属性的，只有设置为true时才可以访问，默认为false
+            ownField.setAccessible(true);
+            View mView = (View) ownField.get(searchView);
+            mView.setBackgroundResource(R.drawable.texfield_searchview_holo_light);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
         searchView.setOnQueryTextListener(mOnQueryTextListener);
         if (mCurType == TYPE_SELECT) {
             menu.findItem(R.id.action_edit).setVisible(false);
