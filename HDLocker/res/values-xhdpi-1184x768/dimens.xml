@@ -8,7 +8,6 @@
 <!-- ############################################################################################## -->
 <resources>
 
-    <dimen name="setting_wallpaper_margin_left">33dp</dimen>
 
     <!-- onlinePaper -->
     <dimen name="pandora_online_wallpaper_panelHeight">75dp</dimen>

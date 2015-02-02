@@ -14,10 +14,10 @@
         android:paddingTop="@dimen/setting_about_pandora_height" >
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/fast_locker_logo"
+            android:background="@drawable/ic_launcher"
             android:contentDescription="@string/contentDescription" />
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
@@ -48,9 +48,9 @@
             android:layout_marginTop="@dimen/setting_about_pandora_margin_one"
             android:gravity="center_horizontal"
             android:text="@string/setting_about_text"
-            android:visibility="gone"
             android:textColor="#7b7c7e"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout

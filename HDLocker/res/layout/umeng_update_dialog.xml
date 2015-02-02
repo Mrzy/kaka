@@ -54,8 +54,7 @@
             android:layout_width="fill_parent"
             android:layout_height="2dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/pandora_update_line" />
+            android:layout_marginRight="10dp" />
         <!-- Content -->
 
         <ScrollView
@@ -103,7 +102,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:layout_weight="1"
-                android:background="@drawable/pandora_update_btn_selector"
                 android:focusable="true"
                 android:gravity="center"
                 android:padding="12dp"
@@ -116,7 +114,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:layout_weight="1"
-                android:background="@drawable/pandora_update_btn_cancel_selector"
                 android:focusable="true"
                 android:gravity="center"
                 android:padding="12dp"

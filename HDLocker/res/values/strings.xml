@@ -13,14 +13,10 @@
     <string name="determine">确定</string>
 
     <!-- setting -->
-    <string name="setting_open_pandoralocker">启用锁屏</string>
-    <string name="setting_lock_type">设置锁屏密码</string>
     <string name="init_setting_close_systemlocker">关闭系统锁屏</string>
     <string name="init_setting_close_systemlocker_detail">解决极速锁屏和系统锁屏冲突的问题</string>
     <string name="setting_feedback">意见反馈</string>
     <string name="setting_check_new_version">检查新版本</string>
-    <string name="setting_about_us">关于极速锁屏</string>
-    <string name="setting_about_pandora">极速锁屏，下拉有料！</string>
     <string name="contentDescription"></string>
     <string name="setting_about_text">下拉有料</string>
     <string name="setting_about_email">pandora@hdlocker.com</string>
@@ -28,7 +24,6 @@
 
     <!-- lock_pattern -->
     <string name="lock_pattern_prompt">绘制解锁图案，请至少连接四个点</string>
-    <string name="lock_pattern_complete">完成后请松开手指</string>
     <string name="lock_pattern_limit_prompt">至少需连接四个点，请重试</string>
     <string name="lock_pattern_new_pattern">您的新解锁图案</string>
     <string name="lock_pattern_error">请重试</string>
@@ -38,21 +33,15 @@
 
     <!-- guide -->
     <string name="guide_button_text">前往初始设置</string>
-    <string name="guide_title_text">极速锁屏</string>
-    <string name="guide_explore_title_text">带你探索未知的世界</string>
 
     <!-- init setting -->
-    <string name="init_setting_title">初始设置</string>
     <string name="init_setting_MIUI_allow_floating_window">允许显示悬浮窗</string>
     <string name="init_setting_MIUI_allow_floating_window_detail">保证极速锁屏可以正常运行</string>
     <string name="init_setting_MIUI_trust">信任程序和允许自动启动</string>
     <string name="init_setting_MIUI_trust_detail">保证极速锁屏可以获取必须的权限</string>
-    <string name="init_setting_to_set">前往设置</string>
-    <string name="init_setting_complete_to_set">完成</string>
     <string name="init_setting_close_systemlocker_prompt">请选择『无』模式</string>
     <string name="init_setting_MIUI_close_systemlocker_prompt_miui_one">开启『开发者选项』开关</string>
     <string name="init_setting_MIUI_close_systemlocker_prompt_miui_two">开启『直接进入系统』开关</string>
-    <string name="init_setting_MIUI_close_systemlocker_prompt_miui_three">*如果您已经开启屏幕密码，需要先关闭系统屏幕密码</string>
     <string name="init_setting_MIUI_allow_floating_window_prompt">请开启『显示悬浮窗』开关</string>
     <string name="init_setting_MIUI_trust_prompt_one">开启『我信任该程序』</string>
     <string name="init_setting_MIUI_trust_prompt_two">和『自动启动』开关</string>
@@ -61,35 +50,19 @@
     <string name="lock_week_monday">周一</string>
     <string name="lock_week_tuesday">周二</string>
     <string name="lock_week_wednesday">周三</string>
-    <string name="lock_week_thursday ">周四</string>
+    <string name="lock_week_thursday">周四</string>
     <string name="lock_week_friday">周五</string>
     <string name="lock_week_saturday">周六</string>
     <string name="lock_week_sunday">周日</string>
-    <string name="lock_guide_prompt_one">底部停留锁定屏幕</string>
-    <string name="lock_guide_prompt_two">轻触解锁</string>
     <string name="update_prompt_no_update">当前已经是最新版本！</string>
     <string name="update_prompt_no_wify">为了节省您的流量，请在wifi环境下操作！</string>
     <string name="update_prompt_no_internet">网络连接超时，请稍候再试！</string>
-    <string name="pandora_box_default_tip">没有猛料了...</string>
-    <string name="pandora_box_no_net_tip">网络未连接，猛料拉不出</string>
-    <string name="pandora_box_battery_charging">正在充电</string>
-    <string name="pandora_box_battery_full">电量已满</string>
-    <string name="pandora_wallpaper_title">管理壁纸</string>
     <string name="pandora_wallpaper_custom">自定义壁纸</string>
     <string name="pandora_wallpaper_advice">下载壁纸</string>
-    <string name="pandora_wallpaper_show_image_title">图片</string>
-    <string name="pandora_wallpaper_dialog_camera">拍照</string>
-    <string name="pandora_wallpaper_dialog_gallery">相册</string>
-    <string name="pandora_setting_title">极速锁屏</string>
-    <string name="init_setting_title_detail">初始设置详细说明</string>
-    <string name="pandora_wallpaper_dialog_title">确认删除此张壁纸？</string>
     <string name="pandora_dialog_cancle">取消</string>
-    <string name="pandora_dialog_sure">确认</string>
     <string name="error">出现异常，给您带来的不便，敬请谅解，我们会尽快解决</string>
     <string name="pandora_guide_start">开始体验</string>
-    <string name="setting_individualization">个性化设置</string>
     <string name="individualization_notice_switch_button">显示通知栏</string>
-    <string name="individualization_message_notification">通知中心隐私设置</string>
     <string name="init_setting_V6_close_systemlocker_title">请按照以下方式关闭系统锁屏</string>
     <string name="init_setting_V6_close_systemlocker_prompt">极速锁屏已经经过测试，不会引起您的设备以及设备上应用的问题</string>
     <string name="init_setting_V6_allow_floating_window_title">开启显示悬浮窗</string>
@@ -101,17 +74,7 @@
     <string name="init_setting_V6_trust_prompt">极速锁屏需要能够在您手机开机时自动启动，只需要一次设置，以后就不需要麻烦啦</string>
     <string name="init_setting_V6_read_notification_title">请勾选『极速锁屏』的读取通知权限</string>
     <string name="init_setting_V6_read_notification_prompt">极速锁屏严格保护您的隐私，只在本机使用这些权限，用以显示通知</string>
-    <string name="init_setting_MIUI_under_18_read_notification_title">请进入『极速锁屏』开启服务</string>
-    <string name="init_setting_MIUI_under_18_read_notification_prompt_detail">打开</string>
-    <string name="pandora_box_guide_set_default_image">立刻设置默认背景</string>
-    <string name="individualization_welcome_text">设置欢迎语</string>
-    <string name="individualization_welcome_text_detail">锁屏页面，当天气信息无法获取时显示此欢迎语</string>
-    <string name="pandora_individualization_message_notification_detail">关闭开关，则隐藏消息头像和消息内容</string>
-    <string name="individualization_welcome_text_hint">请输入欢迎语!</string>
-    <string name="share_image_news_from">来自：</string>
     <string name="pandora_crop_image_rotate">旋转</string>
-    <string name="guide_item_title_one">下拉换一批猛料</string>
-    <string name="setting_individualization_open_3G_4G">允许3G/4G时缓存图文</string>
     <string name="warm_prompt_6_10_1">美好的一天开始了</string>
     <string name="warm_prompt_6_10_2">早上好，一束阳光照在你身上，祝你天天开心</string>
     <string name="warm_prompt_10_12_1">每一天的阳光都是温暖的</string>
@@ -155,15 +118,10 @@
     <string name="number_lock_prompt">请输入密码</string>
     <string name="number_lock_confirmation_prompt">再次输入密码进行确认</string>
     <string name="number_lock_confirmation_fail_prompt">两次输入密码不一致，请重新输入</string>
-    <string name="number_lock_success">已成功设置解锁密码</string>
     <string name="number_lock_verify_fail">密码错误，请重新输入</string>
-    <string name="lock_password_title">设置锁屏密码</string>
     <string name="lock_password_type_none">无密码</string>
     <string name="lock_password_type_pattern">设置手势密码</string>
     <string name="lock_password_type_number">设置数字密码</string>
-    <string name="pandora_favorite_title">我的收藏</string>
-    <string name="pandora_favorite_state_nodata">暂无收藏</string>
-    <string name="pandora_lock_screen_card_empty_text">没有猛料</string>
 
     <!-- Content description of the battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_battery_level">Battery <xliff:g id="number">%d</xliff:g> percent.</string>
@@ -183,7 +141,6 @@
     <string name="tip_open_notification_permission">请勾选『极速锁屏』</string>
     <string name="pandora_feedback_send">发送</string>
     <string name="pandora_feedback_title">意见反馈</string>
-    <string name="removeItem">删除</string>
 
     <!-- 通知中心 -->
     <string name="activity_notification_center_title">通知中心</string>
@@ -200,7 +157,6 @@
     <string name="fast_setting_item_about">关于</string>
     <string name="fast_setting_item_about_fast">关于极速锁屏</string>
     <string name="fast_locker_name_zh">极速锁屏</string>
-    <string name="fast_locker_name_en">Fast Locker</string>
     <string name="notify_title_shortcut">选择快捷应用</string>
     <string name="fast_shortcut_big_text_part_one">大多数人一天常用应用不超过</string>
     <string name="fast_shortcut_big_text_part_two">个</string>
