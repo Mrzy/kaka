@@ -111,7 +111,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="@string/notification_service_name"
+                    android:text="@string/app_name"
                     android:textColor="@color/fast_setting_text_color"
                     android:textSize="16sp"
                     android:textStyle="normal" />

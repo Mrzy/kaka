@@ -156,7 +156,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         mCommentImageView.setOnClickListener(this);
         mActionBarTitleColor = getResources().getColor(R.color.fast_actionbar_title_color);
 
-        mSpannableString = new SpannableString(getString(R.string.fast_locker_name_zh));
+        mSpannableString = new SpannableString(getString(R.string.app_name));
         mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(mActionBarTitleColor);
     }
 

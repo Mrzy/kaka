@@ -45,7 +45,7 @@
                 android:layout_below="@+id/header_logo"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/fast_mainsetting_textview_lockname_margin_top"
-                android:text="@string/fast_locker_name_zh"
+                android:text="@string/app_name"
                 android:textColor="#ffffff"
                 android:textSize="22sp" />
         </RelativeLayout>
