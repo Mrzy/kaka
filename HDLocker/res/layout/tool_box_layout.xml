@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#d0000000"
@@ -7,24 +7,30 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/tool_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/tool_bar_bg"
-        android:orientation="horizontal" >
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-        <cn.zmdx.kaka.fast.locker.shortcut.sevenkey.ToolbarView
-            android:id="@+id/tool_bar"
+        <LinearLayout
+            android:id="@+id/tool_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:listSelector="@android:color/transparent"
-            android:numColumns="4" >
-        </cn.zmdx.kaka.fast.locker.shortcut.sevenkey.ToolbarView>
+            android:layout_height="60dp"
+            android:background="@drawable/tool_bar_bg"
+            android:orientation="horizontal" >
+
+            <cn.zmdx.kaka.fast.locker.shortcut.sevenkey.ToolbarView
+                android:id="@+id/tool_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="4" >
+            </cn.zmdx.kaka.fast.locker.shortcut.sevenkey.ToolbarView>
+        </LinearLayout>
+
+        <cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid
-        android:id="@+id/gridView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
+</FrameLayout>

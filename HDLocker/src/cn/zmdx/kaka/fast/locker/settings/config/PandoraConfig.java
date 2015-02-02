@@ -77,6 +77,8 @@ public class PandoraConfig {
 
     private static final String ONLINE_WALLPAPER_DESC = "awd";
 
+    private static final String SHUTCUT_GUIDE = "sg";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -374,6 +376,14 @@ public class PandoraConfig {
 
     public void saveOnlineWallPaperDesc(String fileName, String desc) {
         mSp.edit().putString(ONLINE_WALLPAPER_DESC + fileName, desc).commit();
+    }
+
+    public boolean isShotcutGuided() {
+        return mSp.getBoolean(SHUTCUT_GUIDE, false);
+    }
+
+    public void saveShotcutGuided() {
+        mSp.edit().putBoolean(SHUTCUT_GUIDE, true).commit();
     }
 
 }

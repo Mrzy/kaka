@@ -24,7 +24,7 @@
             android:id="@+id/pandora_splash_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:text="@string/app_name"
             android:textColor="@color/fast_setting_text_color"
             android:textSize="18sp" />

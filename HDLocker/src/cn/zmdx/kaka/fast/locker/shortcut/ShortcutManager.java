@@ -6,20 +6,27 @@ import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.database.ShortcutModel;
+import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.QuickHelperItem;
 import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.ToolbarAdapter;
 import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.WidgetConfig;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid;
 
 public class ShortcutManager {
@@ -120,7 +127,7 @@ public class ShortcutManager {
     }
 
     public View createShortcutAppsView() {
-        View view = mInflater.inflate(R.layout.tool_box_layout, null);
+        ViewGroup view = (ViewGroup) mInflater.inflate(R.layout.tool_box_layout, null);
         mGridView = (DragDropGrid) view.findViewById(R.id.gridView);
         ViewGroup.LayoutParams lp = mGridView.getLayoutParams();
         lp.height = BaseInfoHelper.getRealWidth(mContext) / 3 * 2;
@@ -129,6 +136,9 @@ public class ShortcutManager {
         mGridView.setAdapter(adapter);
 
         initToolbar(view);
+
+        initToolBoxGuideView(view);
+
         return view;
     }
 
@@ -154,6 +164,45 @@ public class ShortcutManager {
             }
         }
     };
+
+    private void initToolBoxGuideView(final ViewGroup view) {
+        if (PandoraConfig.newInstance(mContext).isShotcutGuided()) {
+            return;
+        }
+        if (ShortcutModel.getInstance(mContext).queryAll().size() != 0) {
+            return;
+        }
+        final View guideView = mInflater.inflate(R.layout.tool_box_guide_layout, null);
+        guideView.setVisibility(View.VISIBLE);
+        ViewCompat.setAlpha(guideView, 0);
+        view.addView(guideView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+         PandoraConfig.newInstance(mContext).saveShotcutGuided();
+        guideView.animate().alpha(1).setDuration(1000).setStartDelay(700).start();
+        guideView.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                view.removeView(guideView);
+            }
+        });
+        ImageView imageView = (ImageView) guideView.findViewById(R.id.tool_bar_guide_image);
+        LinearLayout.LayoutParams marginLP = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        int temWidth = BaseInfoHelper.getRealWidth(mContext) / 3;
+        marginLP.setMargins((temWidth / 3) / 2, temWidth / 3 * 2, 0, 0);
+        marginLP.width = temWidth / 3 * 2;
+        marginLP.height = LayoutParams.WRAP_CONTENT;
+        imageView.setLayoutParams(marginLP);
+
+        TypefaceTextView textView = (TypefaceTextView) guideView
+                .findViewById(R.id.tool_bar_guide_prompt);
+
+        LinearLayout.LayoutParams marginTVLP = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        marginTVLP.setMargins(temWidth / 4, 20, 0, 0);
+        textView.setLayoutParams(marginTVLP);
+    }
 
     private void updateQuickSwitch(QuickHelperItem item) {
         item.tracker.toggleState(mContext, null, null);

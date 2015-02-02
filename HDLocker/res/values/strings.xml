@@ -164,5 +164,6 @@
     <string name="fast_shortcut_small_text_part_two">您可以按需设置快捷应用</string>
     <string name="notify_filter_select">已选</string>
     <string name="fast_shortcut_repeat_prompt">您已经选择过该应用，请重新选择另外一个!</string>
+    <string name="shortcut_box_guide_prompt">您添加的快捷应用将在此处显示</string>
 
 </resources>
