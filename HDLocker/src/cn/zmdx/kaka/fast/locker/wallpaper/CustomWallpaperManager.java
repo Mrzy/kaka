@@ -40,7 +40,7 @@ public class CustomWallpaperManager {
     }
 
     public static String WALLPAPER_SDCARD_LOCATION = Environment.getExternalStorageDirectory()
-            .getPath() + "/.Pandora/wallpaper/background/";
+            .getPath() + "/.Fast/wallpaper/background/";
 
     public boolean isHaveCustomWallpaper() {
         return PandoraUtils.isHaveFile(WALLPAPER_SDCARD_LOCATION);

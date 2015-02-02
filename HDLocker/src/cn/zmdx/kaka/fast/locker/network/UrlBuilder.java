@@ -7,9 +7,9 @@ import cn.zmdx.kaka.fast.locker.BuildConfig;
 
 public class UrlBuilder {
 
-    private static String sBaseDebugUrl = "http://nb.hdlocker.com/pandora/locker!";
+    private static String sBaseDebugUrl = "http://nb.hdlocker.com:9090/fast/locker!";
 
-    private static String sBaseProdUrl = "http://pandora.hdlocker.com/pandora/locker!";
+    private static String sBaseProdUrl = "http://pandora.hdlocker.com:9090/fast/locker!";
 
     public static String getBaseUrl() {
         if (BuildConfig.DEBUG) {

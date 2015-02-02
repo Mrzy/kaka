@@ -45,7 +45,7 @@ public class OnlineWallpaperManager {
     private static String URL = UrlBuilder.getBaseUrl() + "queryWallPaper.action";
 
     public static String ONLINE_WALLPAPER_SDCARD_LOCATION = Environment
-            .getExternalStorageDirectory().getPath() + "/.Pandora/onlineWallpaper/background/";
+            .getExternalStorageDirectory().getPath() + "/.Fast/onlineWallpaper/background/";
 
     public String getFilePath(String fileName) {
         return ONLINE_WALLPAPER_SDCARD_LOCATION + fileName + ".jpg";

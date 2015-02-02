@@ -15,23 +15,20 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 import cn.zmdx.kaka.fast.locker.R;
-import cn.zmdx.kaka.fast.locker.notify.filter.ListCompare;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterManager;
-import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterUtil;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterManager.NotifyFilterEntity;
-import cn.zmdx.kaka.fast.locker.notify.filter.NotifySectionIndexer;
+import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterUtil;
 
 public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
-        StickyGridHeadersSimpleAdapter, SectionIndexer {
+        StickyGridHeadersSimpleAdapter {
 
     private LayoutInflater mInflater;
 
     private ArrayList<NotifyFilterEntity> mItems;
 
-    private NotifySectionIndexer mIndexer;
+    // private NotifySectionIndexer mIndexer;
 
     public ArrayList<NotifyFilterEntity> getAdapterData() {
         return mItems;
@@ -39,15 +36,14 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
 
     private Context mContext;
 
-    public StickyGridHeadersSimpleArrayAdapter(Context context,
-            ArrayList<NotifyFilterEntity> items, ListCompare listCompare) {
+    public StickyGridHeadersSimpleArrayAdapter(Context context, ArrayList<NotifyFilterEntity> items) {
         init(context, items);
-        if (mItems != null) {
-            mIndexer = new NotifySectionIndexer(listCompare.getAlphaIndexer(),
-                    listCompare.getSections());
-        } else {
-            mIndexer = null;
-        }
+        // if (mItems != null) {
+        // mIndexer = new NotifySectionIndexer(listCompare.getAlphaIndexer(),
+        // listCompare.getSections());
+        // } else {
+        // mIndexer = null;
+        // }
     }
 
     @Override
@@ -182,37 +178,37 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
         private TextView mNotifyAppName;
     }
 
-    @Override
-    public Object[] getSections() {
-        if (mIndexer == null) {
-            return new String[] {
-                " "
-            };
-        }
-        synchronized (mIndexer) {
-            return mIndexer.getSections();
-        }
-    }
-
-    @Override
-    public int getPositionForSection(int section) {
-        if (mIndexer == null) {
-            return -1;
-        }
-
-        synchronized (mIndexer) {
-            return mIndexer.getPositionForSection(section);
-        }
-    }
-
-    @Override
-    public int getSectionForPosition(int position) {
-        if (mIndexer == null) {
-            return -1;
-        }
-
-        synchronized (mIndexer) {
-            return mIndexer.getSectionForPosition(position);
-        }
-    }
+    // @Override
+    // public Object[] getSections() {
+    // if (mIndexer == null) {
+    // return new String[] {
+    // " "
+    // };
+    // }
+    // synchronized (mIndexer) {
+    // return mIndexer.getSections();
+    // }
+    // }
+    //
+    // @Override
+    // public int getPositionForSection(int section) {
+    // if (mIndexer == null) {
+    // return -1;
+    // }
+    //
+    // synchronized (mIndexer) {
+    // return mIndexer.getPositionForSection(section);
+    // }
+    // }
+    //
+    // @Override
+    // public int getSectionForPosition(int position) {
+    // if (mIndexer == null) {
+    // return -1;
+    // }
+    //
+    // synchronized (mIndexer) {
+    // return mIndexer.getSectionForPosition(position);
+    // }
+    // }
 }

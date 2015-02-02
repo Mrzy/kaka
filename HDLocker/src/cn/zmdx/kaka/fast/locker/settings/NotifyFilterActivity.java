@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,7 +33,6 @@ import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.notification.NotificationPreferences;
 import cn.zmdx.kaka.fast.locker.notify.filter.AlphabetScrollerView;
 import cn.zmdx.kaka.fast.locker.notify.filter.AlphabetScrollerView.OnEventListener;
-import cn.zmdx.kaka.fast.locker.notify.filter.ListCompare;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterManager;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterManager.NotifyFilterEntity;
 import cn.zmdx.kaka.fast.locker.notify.filter.NotifyFilterUtil;
@@ -78,6 +76,10 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
 
     private boolean isEditMode = false;
 
+    private boolean isSearchMode = false;
+
+    private SearchView mSearchView;
+
     private int mPosition;
 
     @Override
@@ -109,8 +111,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
 
             @Override
             public void onTouchDown() {
-                String mCurrentLetter = mAlphabetView.getCurrentLetter();
-                Log.d("syc", "mCurrentLetter=" + mCurrentLetter);
+//                String mCurrentLetter = mAlphabetView.getCurrentLetter();
             }
         });
 
@@ -139,17 +140,15 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_notify_filter_menu, menu);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu
-                .findItem(R.id.action_search));
-
-        Class<?> argClass = searchView.getClass();
+        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        Class<?> argClass = mSearchView.getClass();
         // 指定某个私有属性
         Field ownField;
         try {
             ownField = argClass.getDeclaredField("mSearchPlate");
             // setAccessible 它是用来设置是否有权限访问反射类中的私有属性的，只有设置为true时才可以访问，默认为false
             ownField.setAccessible(true);
-            View mView = (View) ownField.get(searchView);
+            View mView = (View) ownField.get(mSearchView);
             mView.setBackgroundResource(R.drawable.texfield_searchview_holo_light);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -159,7 +158,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
             e.printStackTrace();
         }
 
-        searchView.setOnQueryTextListener(mOnQueryTextListener);
+        mSearchView.setOnQueryTextListener(mOnQueryTextListener);
         if (mCurType == TYPE_SELECT) {
             menu.findItem(R.id.action_edit).setVisible(false);
         } else {
@@ -232,8 +231,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
             String constraintStr = NotifyFilterUtil.getChinesePinyinStr(constraint.toString())
                     .toString().toLowerCase(Locale.getDefault());
             FilterResults result = new FilterResults();
-
-            if (constraint != null && constraint.toString().length() > 0) {
+            if (!TextUtils.isEmpty(constraint)) {
                 ArrayList<NotifyFilterEntity> filterItems = new ArrayList<NotifyFilterEntity>();
 
                 synchronized (this) {
@@ -246,11 +244,13 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
                     result.count = filterItems.size();
                     result.values = filterItems;
                 }
+                isSearchMode = true;
             } else {
                 synchronized (this) {
                     result.count = mNotifyDataList.size();
                     result.values = mNotifyDataList;
                 }
+                isSearchMode = false;
             }
             return result;
         }
@@ -265,10 +265,10 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
     }
 
     private void setAdapter(ArrayList<NotifyFilterEntity> dataList) {
-        ListCompare listCompare = new ListCompare();
-        listCompare.initSortEntry(dataList);
+        // ListCompare listCompare = new ListCompare();
+        // listCompare.initSortEntry(dataList);
 
-        mNotifyFilterAdapter = new StickyGridHeadersSimpleArrayAdapter(this, dataList, listCompare);
+        mNotifyFilterAdapter = new StickyGridHeadersSimpleArrayAdapter(this, dataList);
         mNotifyGridView.setAdapter(mNotifyFilterAdapter);
         mNotifyGridView.setOnItemClickListener(this);
 
@@ -489,10 +489,21 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         }
     }
 
-    // @Override
-    // public void onBackPressed() {
-    // finish();
-    // overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
-    // R.anim.umeng_fb_slide_out_from_right);
-    // }
+    @Override
+    public void onBackPressed() {
+        if (isEditMode) {
+            isEditMode = !isEditMode;
+            mInterceptAdapter.notifyDataSetChanged();
+        } else if (isSearchMode) {
+            if (mNotifyFilterAdapter != null) {
+                new ListFilter().filter("");
+                mSearchView.setIconified(true);
+                mSearchView.clearFocus();
+            }
+        } else {
+            super.onBackPressed();
+            overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                    R.anim.umeng_fb_slide_out_from_right);
+        }
+    }
 }

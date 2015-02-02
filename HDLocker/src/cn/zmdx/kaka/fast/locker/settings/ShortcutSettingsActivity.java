@@ -188,6 +188,18 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (isEditMode) {
+            isEditMode = !isEditMode;
+            invalidate();
+        } else {
+            super.onBackPressed();
+            overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                    R.anim.umeng_fb_slide_out_from_right);
+        }
+    }
+
     static class ShortcutSettingsAdapter implements PagedDragDropGridAdapter {
 
         private Context mContext;
@@ -389,10 +401,12 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
         }
 
         private void createSelectStateAnimations(final View view) {
-            ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1.0f,1.1f,1.0f);
+            ObjectAnimator scaleXAnimator = ObjectAnimator
+                    .ofFloat(view, "scaleX", 1.0f, 1.1f, 1.0f);
             scaleXAnimator.setDuration(250);
 
-            ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1.0f,1.1f,1.0f);
+            ObjectAnimator scaleYAnimator = ObjectAnimator
+                    .ofFloat(view, "scaleY", 1.0f, 1.1f, 1.0f);
             scaleYAnimator.setDuration(250);
 
             AnimatorSet animatorSet = new AnimatorSet();
