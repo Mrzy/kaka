@@ -9,6 +9,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.widget.SwitchButton;
 
 public class NotificationCenterActivity extends BaseActivity implements OnCheckedChangeListener,
@@ -30,15 +31,21 @@ public class NotificationCenterActivity extends BaseActivity implements OnChecke
     private void initView() {
         mRemindSButton = (SwitchButton) findViewById(R.id.activity_notification_center_start_remind_switch_button);
         mRemindSButton.setOnCheckedChangeListener(this);
+        mRemindSButton.setChecked(PandoraConfig.newInstance(this).isNotificationActive());
         mPrivacySButton = (SwitchButton) findViewById(R.id.activity_notification_center_start_privacy_switch_button);
         mPrivacySButton.setOnCheckedChangeListener(this);
+        mPrivacySButton.setChecked(!PandoraConfig.newInstance(this).isShowNotificationContent());
         mNotifyFilterLayout = (LinearLayout) findViewById(R.id.activity_notification_center_filter);
         mNotifyFilterLayout.setOnClickListener(this);
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+        if (buttonView == mPrivacySButton) {
+            PandoraConfig.newInstance(this).saveShowNotificationContent(!isChecked);
+        } else if (buttonView == mRemindSButton) {
+            PandoraConfig.newInstance(this).saveNotificationFunctionEnabled(isChecked);
+        }
     }
 
     @Override

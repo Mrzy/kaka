@@ -157,7 +157,7 @@ public class NotificationLayout extends LinearLayout {
                                                 .getNextGuide(getContext());
                                         if (info != null) {
                                             NotificationInterceptor.getInstance(getContext())
-                                            .sendCustomNotification(info);
+                                                    .sendCustomNotification(info);
                                         }
                                     }
                                 }
@@ -179,7 +179,7 @@ public class NotificationLayout extends LinearLayout {
                 });
                 addNotificationItem(itemView);
                 if (isWinxinOrQQ(info) && !hasAlreadyPromptHideNotificationMsg()
-                        && PandoraConfig.newInstance(getContext()).isShowNotificationMessage()
+                        && PandoraConfig.newInstance(getContext()).isShowNotificationContent()
                         && !TextUtils.isEmpty(info.getTitle())
                         && !TextUtils.isEmpty(info.getContent())) {
                     NotificationInfo ni = PandoraNotificationFactory
@@ -355,12 +355,12 @@ public class NotificationLayout extends LinearLayout {
 
         long postTime = info.getPostTime() == 0 ? new Date().getTime() : info.getPostTime();
         date.setText(sSdf.format(postTime));
-        boolean showMsg = PandoraConfig.newInstance(getContext()).isShowNotificationMessage();
+        boolean showMsg = PandoraConfig.newInstance(getContext()).isShowNotificationContent();
         Bitmap largeBmp = info.getLargeIcon();
         Drawable smallDrawable = info.getSmallIcon();
         title.setText(info.getTitle());
         itemView.findViewById(R.id.leftIcon).setTag(String.valueOf(info.getId()));
-        if (!showMsg && isWinxinOrQQ(info)) {
+        if (!showMsg) {
             circleIv.setImageDrawable(smallDrawable);
             content.setText(getContext().getString(R.string.hide_message_tip));
             smallIcon.setVisibility(View.GONE);
@@ -379,7 +379,7 @@ public class NotificationLayout extends LinearLayout {
             content.setText(info.getContent());
         }
         final NotificationPreferences prefer = NotificationPreferences.getInstance(getContext());
-        if (prefer.isAlreadyOpenedNotification()&& prefer.isAlreadyRemovedNotification()) {
+        if (prefer.isAlreadyOpenedNotification() && prefer.isAlreadyRemovedNotification()) {
             handleTip.setVisibility(View.GONE);
         }
     }

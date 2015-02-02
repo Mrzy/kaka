@@ -79,6 +79,8 @@ public class PandoraConfig {
 
     private static final String SHUTCUT_GUIDE = "sg";
 
+    private static final String KEY_NOTIFICATION_ENABLED = "kne";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -249,13 +251,13 @@ public class PandoraConfig {
         return mSp.getBoolean(KEY_NEED_NOTICE, false);
     }
 
-    public void saveMessageNotification(boolean isMessage) {
+    public void saveShowNotificationContent(boolean isMessage) {
         Editor editor = mSp.edit();
         editor.putBoolean(OPEN_MESSAGE_NOTIFICATION, isMessage);
         editor.commit();
     }
 
-    public boolean isShowNotificationMessage() {
+    public boolean isShowNotificationContent() {
         return mSp.getBoolean(OPEN_MESSAGE_NOTIFICATION, true);
     }
 
@@ -386,4 +388,11 @@ public class PandoraConfig {
         mSp.edit().putBoolean(SHUTCUT_GUIDE, true).commit();
     }
 
+    public void saveNotificationFunctionEnabled(boolean enabled) {
+        mSp.edit().putBoolean(KEY_NOTIFICATION_ENABLED, enabled).commit();
+    }
+
+    public boolean isNotificationActive() {
+        return mSp.getBoolean(KEY_NOTIFICATION_ENABLED, true);
+    }
 }
