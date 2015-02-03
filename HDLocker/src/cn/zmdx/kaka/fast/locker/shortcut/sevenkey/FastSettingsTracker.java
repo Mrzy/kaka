@@ -1,11 +1,11 @@
 package cn.zmdx.kaka.fast.locker.shortcut.sevenkey;
 
-import cn.zmdx.kaka.fast.locker.LockScreenManager;
-import cn.zmdx.kaka.fast.locker.R;
-import cn.zmdx.kaka.fast.locker.settings.MainSettingsActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import cn.zmdx.kaka.fast.locker.LockScreenManager;
+import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.settings.MainSettingsActivity;
 
 public class FastSettingsTracker extends SwitchBase {
 
@@ -30,7 +30,7 @@ public class FastSettingsTracker extends SwitchBase {
         Intent intent = new Intent(cxt, MainSettingsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         cxt.startActivity(intent);
-        LockScreenManager.getInstance().unLock();
+        LockScreenManager.getInstance().unLock(true);
     }
 
     @Override

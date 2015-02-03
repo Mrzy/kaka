@@ -111,7 +111,7 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
         Intent intent = mContext.getPackageManager().getLaunchIntentForPackage(pkgName);
         if (intent != null) {
             mContext.startActivity(intent);
-            LockScreenManager.getInstance().unLock();
+            LockScreenManager.getInstance().unLock(true);
         }
     }
 

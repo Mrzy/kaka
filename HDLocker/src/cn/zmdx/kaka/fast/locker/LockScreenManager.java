@@ -655,6 +655,18 @@ public class LockScreenManager {
     }
 
     /**
+     * 启动快捷应用导致的解锁操作需要将mSlidingPanelLayout的可用状态置为true；
+     * 
+     * @param isFastSetting
+     */
+    public void unLock(boolean isFastSetting) {
+        if (isFastSetting) {
+            mSlidingPanelLayout.setEnabled(true);
+        }
+        unLock();
+    }
+
+    /**
      * 调用会解锁，如果开启安全锁，会跳转到安全锁界面；如果希望在解锁后执行其它动作，请在调用unLock()
      * 之前使用setRunnaleAfterUnLock()方法设置
      * 默认会关闭背后的假Activity，如果不希望关闭这个Activity，可以使用unLock(boolean
@@ -832,17 +844,17 @@ public class LockScreenManager {
         }
     }
 
-    private void setTranslationXForDateView(View ...views) {
+    private void setTranslationXForDateView(View... views) {
         for (View v : views) {
             v.setAlpha(0);
-//            v.setTranslationX(DATE_WIDGET_TRANSLATIONY_DISTANCE);
+            // v.setTranslationX(DATE_WIDGET_TRANSLATIONY_DISTANCE);
         }
     }
 
     public void onScreenOn() {
         if (mIsLocked) {
             processAnimations();
-//            processWeatherInfo();
+            // processWeatherInfo();
             if (mDigitalClockView != null) {
                 mDigitalClockView.setTickerStoped(false);
             }
@@ -874,13 +886,11 @@ public class LockScreenManager {
             HDApplication.getContext(), 300);
 
     private void processAnimations() {
-        ObjectAnimator digitalTrans = ObjectAnimator.ofFloat(mDigitalClockView, "alpha",
-                0, 1);
+        ObjectAnimator digitalTrans = ObjectAnimator.ofFloat(mDigitalClockView, "alpha", 0, 1);
         digitalTrans.setDuration(1500);
         digitalTrans.setStartDelay(100);
         digitalTrans.setInterpolator(new DecelerateInterpolator());
-        ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mLockDataView, "alpha",
-                0, 1);
+        ObjectAnimator dateTrans = ObjectAnimator.ofFloat(mLockDataView, "alpha", 0, 1);
         dateTrans.setDuration(1500);
         dateTrans.setInterpolator(new DecelerateInterpolator());
         digitalTrans.setStartDelay(100);
