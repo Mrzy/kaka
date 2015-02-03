@@ -36,7 +36,7 @@
                 android:layout_height="@dimen/fast_mainsetting_header_logo"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/fast_mainsetting_imageview_headlogo_margin_top"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcher_web" />
 
             <TextView
                 android:id="@+id/fastlocker_name"

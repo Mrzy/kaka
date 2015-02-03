@@ -26,6 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.SettingItemsAdapter;
 import cn.zmdx.kaka.fast.locker.guide.GuideActivity;
@@ -401,5 +402,6 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
             }
         }
 
+        Toast.makeText(MainSettingsActivity.this, "如果您喜欢我们的锁屏，请给个五星好评哦！", Toast.LENGTH_LONG).show();
     }
 }

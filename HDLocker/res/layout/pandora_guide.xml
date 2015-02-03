@@ -12,12 +12,12 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="@dimen/pandora_setting_guide_logo_width"
-            android:layout_height="@dimen/pandora_setting_guide_logo_height"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/pandora_setting_guide_logo_layout_marginTop"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_launcher_web" />
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             android:id="@+id/appName"
