@@ -199,7 +199,7 @@
     <string name="fast_setting_item_individual">个性化设置</string>
     <string name="fast_setting_item_about">关于</string>
     <string name="fast_setting_item_about_fast">关于Fast锁屏</string>
-    <string name="fast_locker_name_zh">Fast快锁屏</string>
+    <string name="fast_locker_name_zh">极速锁屏</string>
     <string name="fast_locker_name_en">Fast Locker</string>
     <string name="notify_title_shortcut">选择快捷应用</string>
     <string name="fast_shortcut_big_text_part_one">大多数人一天常用应用不超过</string>
