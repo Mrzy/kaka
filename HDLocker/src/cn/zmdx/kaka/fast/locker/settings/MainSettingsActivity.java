@@ -15,9 +15,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -56,9 +58,11 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
 
     private ButtonFloat mCommentImageView;
 
-    private View mHeader;
+    private ViewGroup mHeader;
 
     private View mPlaceHolderView;
+
+    private View mKenBurnsFooterView;
 
     private View mSpaceView;
 
@@ -149,7 +153,11 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         mRootViewFrameLayout = (FrameLayout) findViewById(R.id.actionbar_rootview);
         mLockScreenName = (TextView) findViewById(R.id.fastlocker_name);
         mListView = (ListView) findViewById(R.id.listview);
-        mHeader = this.findViewById(R.id.header);
+        mHeader = (ViewGroup) this.findViewById(R.id.header);
+        // 增加阴影
+        mKenBurnsFooterView = getLayoutInflater().inflate(
+                R.layout.activity_mainsetting_kenburns_footer, mHeader, false);
+        mHeader.addView(mKenBurnsFooterView);
         mHeaderPicture = (KenBurnsView) findViewById(R.id.header_picture);
         mHeaderPicture.setResourceIds(R.drawable.fastbg1, R.drawable.fastbg2);
         mHeaderLogo = (ImageView) findViewById(R.id.header_logo);
@@ -188,12 +196,15 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                     int totalItemCount) {
                 int scrollY = getScrollY();
+                if (scrollY < 0) {
+                    return;
+                }
                 // sticky actionbar
                 mHeader.setTranslationY(Math.max(-scrollY, mMinHeaderTranslation));
                 // header_logo --> actionbar icon
                 float ratio = clamp(mHeader.getTranslationY() / mMinHeaderTranslation, 0.0f, 1.0f);
                 interpolate(mHeaderLogo, getActionBarIconView(),
-                        mSmoothInterpolator.getInterpolation(ratio));
+                        mSmoothInterpolator.getInterpolation(0.8F * ratio));
                 setTitleAlpha(clamp(5.0F * ratio - 4.0F, 0.0F, 1.0F));
                 showLockerNameAnimator(mLockScreenName, 1 - ratio);
             }
@@ -245,6 +256,8 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
 
     private void setTitleAlpha(float alpha) {
         mAlphaForegroundColorSpan.setAlpha(alpha);
+        mSpannableString.setSpan(new AbsoluteSizeSpan(20, true), 0, mSpannableString.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         mSpannableString.setSpan(mAlphaForegroundColorSpan, 0, mSpannableString.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getActionBar().setTitle(mSpannableString);
@@ -305,7 +318,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
     }
 
     /**
-     * 做LockerName的动画，暂未使用
+     * 做LockerName的动画
      */
     private void showLockerNameAnimator(View view, float toAlpha) {
         view.setAlpha(toAlpha);
@@ -322,9 +335,8 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         float scaleY = 1.0F + interpolation * (mRect2.height() / mRect1.height() - 1.0F);
         float translationX = 0.5F * (interpolation * (mRect2.left + mRect2.right - mRect1.left - mRect1.right));
         float translationY = 0.5F * (interpolation * (mRect2.top + mRect2.bottom - mRect1.top - mRect1.bottom));
-
-        view1.setTranslationX(translationX);
-        view1.setTranslationY(translationY - mHeader.getTranslationY());
+        view1.setTranslationX(translationX - 15);
+        view1.setTranslationY(translationY - mHeader.getTranslationY() - 10);
         view1.setScaleX(scaleX);
         view1.setScaleY(scaleY);
     }
