@@ -91,7 +91,7 @@ public class NotificationInterceptor extends Handler {
     public void handleMessage(android.os.Message msg) {
         switch (msg.what) {
             case MSG_NOTIFICATION_POST:
-                if (!PandoraConfig.newInstance(mContext).isNeedNotice(mContext)) {
+                if (!PandoraConfig.newInstance(mContext).isNotificationActive()) {
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("收到新通知，但设置为不在锁屏页显示通知");
                     }
