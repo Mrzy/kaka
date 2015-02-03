@@ -165,7 +165,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         mCommentImageView.setOnClickListener(this);
         mActionBarTitleColor = getResources().getColor(R.color.fast_actionbar_title_color);
 
-        mSpannableString = new SpannableString(getString(R.string.app_name));
+        mSpannableString = new SpannableString("  "+getString(R.string.app_name));
         mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(mActionBarTitleColor);
     }
 
@@ -333,10 +333,10 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         getOnScreenRect(mRect2, view2);
         float scaleX = 1.0F + interpolation * (mRect2.width() / mRect1.width() - 1.0F);
         float scaleY = 1.0F + interpolation * (mRect2.height() / mRect1.height() - 1.0F);
-        float translationX = 0.5F * (interpolation * (mRect2.left + mRect2.right - mRect1.left - mRect1.right));
-        float translationY = 0.5F * (interpolation * (mRect2.top + mRect2.bottom - mRect1.top - mRect1.bottom));
-        view1.setTranslationX(translationX - 15);
-        view1.setTranslationY(translationY - mHeader.getTranslationY() - 10);
+        float translationX = 0.52F * (interpolation * (mRect2.left + mRect2.right - mRect1.left - mRect1.right));
+        float translationY = 0.55F * (interpolation * (mRect2.top + mRect2.bottom - mRect1.top - mRect1.bottom));
+        view1.setTranslationX(translationX);
+        view1.setTranslationY(translationY - mHeader.getTranslationY());
         view1.setScaleX(scaleX);
         view1.setScaleY(scaleY);
     }
