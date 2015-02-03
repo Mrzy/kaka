@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.zmdx.kaka.fast.locker"
-    android:versionCode="90"
-    android:versionName="1.4.1" >
+    android:versionCode="10"
+    android:versionName="0.9.0beta" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -167,11 +167,11 @@
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="54212a7ffd98c5157e02f6b2" >
+            android:value="54d02f65fd98c5f94b000bd8" >
         </meta-data>
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="pandora" />
+            android:value="fast" />
 
         <activity
             android:name=".settings.MainSettingAboutActivity"
