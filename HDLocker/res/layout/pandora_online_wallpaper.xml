@@ -154,7 +154,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="8dp"
-                    android:background="@color/material_design_color"
+                    android:background="@drawable/wallpaper_tab_background"
                     ripple:rv_color="#80d8ff" >
 
                     <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView

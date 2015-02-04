@@ -15,7 +15,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(getResources()
-                .getDrawable(R.drawable.action_bar_background));
+                .getDrawable(R.drawable.wallpaper_tab_background));
     }
 
     @Override
