@@ -40,10 +40,10 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
     private void initView() {
         mRootView = findViewById(R.id.individualization_background);
         mNoticeSButton = (SwitchButton) findViewById(R.id.individualization_notice_switch_button);
-        // mNoticeSButton.setOnCheckedChangeListener(this);
+        mNoticeSButton.setOnCheckedChangeListener(this);
         mNoticeSButton.setChecked(isNeedNotice());
         mLockScreenVoiceSButton = (SwitchButton) findViewById(R.id.individualization_open_lockscreen_voice_switch_button);
-        // mLockScreenVoiceSButton.setOnCheckedChangeListener(this);
+        mLockScreenVoiceSButton.setOnCheckedChangeListener(this);
         mLockScreenVoiceSButton.setChecked(isLockScreenVoice());
 
         // LayoutParams params = mLockerDefaultImageThumb.getLayoutParams();
