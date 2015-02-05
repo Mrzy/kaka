@@ -13,6 +13,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -97,7 +99,6 @@ public class OnlineWallpaperManager {
         RequestManager.getRequestQueue().add(request);
     }
 
-    
     public boolean isHaveOnlineWallpaper() {
         return PandoraUtils.isHaveFile(ONLINE_WALLPAPER_SDCARD_LOCATION);
     }
@@ -154,18 +155,22 @@ public class OnlineWallpaperManager {
             }
         });
         mOnlineContainer.addView(mWallpaperRl, Math.min(0, mOnlineContainer.getChildCount()));
+
+        SparseIntArray sparseIntArray = WallpaperUtils.initWallpaperSize(mContext);
+        int layoutWidth = sparseIntArray.get(WallpaperUtils.KEY_LAYOUT_WIDTH);
+        int layoutHeight = sparseIntArray.get(WallpaperUtils.KEY_LAYOUT_HEIGHT);
+        int imageWidth = sparseIntArray.get(WallpaperUtils.KEY_IMAGE_WIDTH);
+        int imageHeight = sparseIntArray.get(WallpaperUtils.KEY_IMAGE_HEIGHT);
+        
+        int selPadding = (layoutWidth - imageWidth) / 2 - 20;
+        mWallpaperSelect.setPadding(0, selPadding, selPadding, 0);
+        
         LayoutParams params = mWallpaperIvRl.getLayoutParams();
-        int width = (int) mContext.getResources().getDimension(R.dimen.pandora_wallpaper_width);
-        int height = (int) mContext.getResources().getDimension(R.dimen.pandora_wallpaper_height);
-        params.width = width;
-        params.height = height;
+        params.width = imageWidth;
+        params.height = imageHeight;
         mWallpaperIvRl.setLayoutParams(params);
 
         LayoutParams layoutParams = mWallpaperRl.getLayoutParams();
-        int layoutWidth = (int) mContext.getResources().getDimension(
-                R.dimen.pandora_wallpaper_layout_width);
-        int layoutHeight = (int) mContext.getResources().getDimension(
-                R.dimen.pandora_wallpaper_layout_height);
         layoutParams.width = layoutWidth;
         layoutParams.height = layoutHeight;
         mWallpaperRl.setLayoutParams(layoutParams);
@@ -219,18 +224,18 @@ public class OnlineWallpaperManager {
         return list;
     }
 
-    private void deleteFile(final List<OnlineWallpaper> needDelList){
+    private void deleteFile(final List<OnlineWallpaper> needDelList) {
         HDBThreadUtils.runOnWorker(new Runnable() {
-            
+
             @Override
             public void run() {
-                for (OnlineWallpaper wallpaper: needDelList) {
+                for (OnlineWallpaper wallpaper : needDelList) {
                     FileHelper.deleteFile(new File(wallpaper.mFilePath));
                 }
             }
         });
     }
-    
+
     public static Comparator<OnlineWallpaper> comparator = new Comparator<OnlineWallpaper>() {
         @Override
         public int compare(OnlineWallpaper object1, OnlineWallpaper object2) {

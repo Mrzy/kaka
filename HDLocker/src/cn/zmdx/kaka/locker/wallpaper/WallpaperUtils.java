@@ -9,9 +9,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.util.SparseIntArray;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
@@ -29,12 +31,11 @@ public class WallpaperUtils {
 
             @Override
             public void run() {
-                int thumbWidth = (int) context.getResources().getDimension(
-                        R.dimen.pandora_wallpaper_width);
-                int thumbHeight = (int) context.getResources().getDimension(
-                        R.dimen.pandora_wallpaper_height);
-                final Bitmap bitmap = ImageUtils.getBitmapFromFile(filePath, thumbWidth,
-                        thumbHeight);
+                SparseIntArray sparseIntArray = WallpaperUtils.initWallpaperSize(context);
+                int imageWidth = sparseIntArray.get(WallpaperUtils.KEY_IMAGE_WIDTH);
+                int imageHeight = sparseIntArray.get(WallpaperUtils.KEY_IMAGE_HEIGHT);
+                final Bitmap bitmap = ImageUtils.getBitmapFromFile(filePath, imageWidth,
+                        imageHeight);
                 HDBThreadUtils.runOnUi(new Runnable() {
 
                     @Override
@@ -131,6 +132,38 @@ public class WallpaperUtils {
             return BitmapFactory.decodeFile(path, null);
         }
         return null;
+    }
+
+    private static SparseIntArray mCacheSparseArray = null;
+
+    public static int KEY_LAYOUT_WIDTH = 0;
+
+    public static int KEY_LAYOUT_HEIGHT = 1;
+
+    public static int KEY_IMAGE_WIDTH = 2;
+
+    public static int KEY_IMAGE_HEIGHT = 3;
+
+    public static SparseIntArray initWallpaperSize(Context context) {
+        if (null == mCacheSparseArray || mCacheSparseArray.size() == 0) {
+            int screenWidth = BaseInfoHelper.getRealWidth(context);
+            int screenHeight = BaseInfoHelper.getRealHeight(context);
+            int layoutWidth = (int) (screenWidth / 3);
+            int imageWidth = layoutWidth - BaseInfoHelper.dip2px(context, 32);
+            int imageHeight = (imageWidth * screenHeight) / screenWidth;
+            int layoutHeight = imageHeight + (layoutWidth - imageWidth);
+            mCacheSparseArray = new SparseIntArray();
+            mCacheSparseArray.put(KEY_LAYOUT_WIDTH, layoutWidth);
+            mCacheSparseArray.put(KEY_LAYOUT_HEIGHT, layoutHeight);
+            mCacheSparseArray.put(KEY_IMAGE_WIDTH, imageWidth);
+            mCacheSparseArray.put(KEY_IMAGE_HEIGHT, imageHeight);
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("screenWidth=" + screenWidth + " padding=" + " layoutWidth="
+                        + layoutWidth + " imageWidth=" + imageWidth + " layoutHeight="
+                        + layoutHeight + " imageHeight=" + imageHeight);
+            }
+        }
+        return mCacheSparseArray;
     }
 
 }

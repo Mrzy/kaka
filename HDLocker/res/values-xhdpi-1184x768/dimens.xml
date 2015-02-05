@@ -17,9 +17,4 @@
     <dimen name="pandora_online_wallpaper_gridview_item_width">75dp</dimen>
     <dimen name="pandora_online_wallpaper_gridview_item_height">135dp</dimen>
     
-    <!-- wallpaper -->
-    <dimen name="pandora_wallpaper_layout_width">115dp</dimen>
-    <dimen name="pandora_wallpaper_layout_height">165dp</dimen>
-    <dimen name="pandora_wallpaper_width">100dp</dimen>
-    <dimen name="pandora_wallpaper_height">150dp</dimen>
 </resources>

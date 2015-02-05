@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -107,27 +108,25 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
 
     private void initCustomContainer() {
         mCustomContainer = new FixedGridLayout(this);
-        mCustomContainer.setClipChildren(false);
-        int width = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_width);
-        int height = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_height);
-        ((FixedGridLayout) mCustomContainer).setCellHeight(height);
-        ((FixedGridLayout) mCustomContainer).setCellWidth(width);
         ViewGroup parent = (ViewGroup) findViewById(R.id.parent);
-        parent.addView(mCustomContainer);
-        parent.setClipChildren(false);
+        initContainer(mCustomContainer, parent);
     }
 
     private void initDefaultContainer() {
         mOnlineContainer = new FixedGridLayout(this);
-        mOnlineContainer.setClipChildren(false);
-        int adviceWidth = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_width);
-        int adviceHeight = (int) getResources().getDimension(
-                R.dimen.pandora_wallpaper_layout_height);
-        ((FixedGridLayout) mOnlineContainer).setCellHeight(adviceHeight);
-        ((FixedGridLayout) mOnlineContainer).setCellWidth(adviceWidth);
         ViewGroup adviceParent = (ViewGroup) findViewById(R.id.advice_parent);
-        adviceParent.addView(mOnlineContainer);
-        adviceParent.setClipChildren(false);
+        initContainer(mOnlineContainer, adviceParent);
+    }
+
+    private void initContainer(ViewGroup container, ViewGroup view) {
+        container.setClipChildren(false);
+        SparseIntArray sparseIntArray = WallpaperUtils.initWallpaperSize(this);
+        int layoutWidth = sparseIntArray.get(WallpaperUtils.KEY_LAYOUT_WIDTH);
+        int layoutHeight = sparseIntArray.get(WallpaperUtils.KEY_LAYOUT_HEIGHT);
+        ((FixedGridLayout) container).setCellWidth(layoutWidth);
+        ((FixedGridLayout) container).setCellHeight(layoutHeight);
+        view.addView(container);
+        view.setClipChildren(false);
     }
 
     private void initAddCustomButton() {
@@ -155,26 +154,26 @@ public class WallPaperActivity extends BaseActivity implements IWallpaperClickLi
             }
         });
         mCustomContainer.addView(mWallpaperRl, Math.min(1, mCustomContainer.getChildCount()));
+
+        SparseIntArray sparseIntArray = WallpaperUtils.initWallpaperSize(this);
+        int layoutWidth = sparseIntArray.get(WallpaperUtils.KEY_LAYOUT_WIDTH);
+        int layoutHeight = sparseIntArray.get(WallpaperUtils.KEY_LAYOUT_HEIGHT);
+        int imageWidth = sparseIntArray.get(WallpaperUtils.KEY_IMAGE_WIDTH);
+        int imageHeight = sparseIntArray.get(WallpaperUtils.KEY_IMAGE_HEIGHT);
+
         LayoutParams params = mWallpaperIvRl.getLayoutParams();
-        int width = (int) getResources().getDimension(R.dimen.pandora_wallpaper_width);
-        int height = (int) getResources().getDimension(R.dimen.pandora_wallpaper_height);
-        params.width = width;
-        params.height = height;
+        params.width = imageWidth;
+        params.height = imageHeight;
         mWallpaperIvRl.setLayoutParams(params);
 
         LayoutParams layoutParams = mWallpaperRl.getLayoutParams();
-        int layoutWidth = (int) getResources().getDimension(R.dimen.pandora_wallpaper_layout_width);
-        int layoutHeight = (int) getResources().getDimension(
-                R.dimen.pandora_wallpaper_layout_height);
         layoutParams.width = layoutWidth;
         layoutParams.height = layoutHeight;
         mWallpaperRl.setLayoutParams(layoutParams);
 
         LayoutParams layoutParamIV = mWallpaperIv.getLayoutParams();
-        int widthIv = (int) getResources().getDimension(R.dimen.pandora_wallpaper_width);
-        int heightIv = (int) getResources().getDimension(R.dimen.pandora_wallpaper_height);
-        layoutParamIV.width = widthIv;
-        layoutParamIV.height = heightIv;
+        layoutParamIV.width = imageHeight;
+        layoutParamIV.height = imageHeight;
         mWallpaperIv.setLayoutParams(layoutParamIV);
 
     }

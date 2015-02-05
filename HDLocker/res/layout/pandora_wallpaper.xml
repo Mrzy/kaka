@@ -59,7 +59,6 @@
                         style="@style/setting_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/pandora_wallpaper_textview_margin_bottom"
                         android:layout_marginLeft="@dimen/setting_title_textview_margin_left"
                         android:layout_marginRight="@dimen/setting_title_textview_margin_left"
                         android:layout_marginTop="@dimen/pandora_wallpaper_textview_margin_top"
@@ -70,8 +69,6 @@
                         android:id="@+id/parent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="13dp"
-                        android:layout_marginRight="13dp"
                         android:orientation="horizontal" >
                     </LinearLayout>
 
@@ -106,8 +103,6 @@
                         android:id="@+id/advice_parent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="13dp"
-                        android:layout_marginRight="13dp"
                         android:orientation="horizontal" >
                     </LinearLayout>
                 </LinearLayout>

@@ -13,10 +13,6 @@
     <dimen name="pandora_box_nodata_show_image_width">75dp</dimen>
     <dimen name="pandora_box_nodata_show_image_height">75dp</dimen>
     <dimen name="panelHeight">120dp</dimen>
-    <dimen name="pandora_wallpaper_layout_width">95dp</dimen>
-    <dimen name="pandora_wallpaper_layout_height">132.5dp</dimen>
-    <dimen name="pandora_wallpaper_width">80dp</dimen>
-    <dimen name="pandora_wallpaper_height">117.5dp</dimen>
     <dimen name="pandora_box_nodata_show_image_top_height">108dp</dimen>
     
     <!-- onlinePaper -->
