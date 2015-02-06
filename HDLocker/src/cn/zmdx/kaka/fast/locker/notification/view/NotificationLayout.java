@@ -361,7 +361,11 @@ public class NotificationLayout extends LinearLayout {
         title.setText(info.getTitle());
         itemView.findViewById(R.id.leftIcon).setTag(String.valueOf(info.getId()));
         if (!showMsg) {
-            circleIv.setImageDrawable(smallDrawable);
+            if (null ==smallDrawable) {
+                circleIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.notification_default_icon));
+            }else {
+                circleIv.setImageDrawable(smallDrawable);
+            }
             content.setText(getContext().getString(R.string.hide_message_tip));
             smallIcon.setVisibility(View.GONE);
         } else {
@@ -373,6 +377,8 @@ public class NotificationLayout extends LinearLayout {
             } else {
                 if (smallDrawable != null) {
                     circleIv.setImageDrawable(smallDrawable);
+                }else {
+                    circleIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.notification_default_icon));
                 }
                 smallIcon.setVisibility(View.GONE);
             }
