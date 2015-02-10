@@ -8,6 +8,7 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
@@ -165,7 +166,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         mCommentImageView.setOnClickListener(this);
         mActionBarTitleColor = getResources().getColor(R.color.fast_actionbar_title_color);
 
-        mSpannableString = new SpannableString("  "+getString(R.string.app_name));
+        mSpannableString = new SpannableString("  " + getString(R.string.app_name));
         mAlphaForegroundColorSpan = new AlphaForegroundColorSpan(mActionBarTitleColor);
     }
 
@@ -334,7 +335,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         float scaleX = 1.0F + interpolation * (mRect2.width() / mRect1.width() - 1.0F);
         float scaleY = 1.0F + interpolation * (mRect2.height() / mRect1.height() - 1.0F);
         float translationX = 0.52F * (interpolation * (mRect2.left + mRect2.right - mRect1.left - mRect1.right));
-        float translationY = 0.55F * (interpolation * (mRect2.top + mRect2.bottom - mRect1.top - mRect1.bottom));
+        float translationY = 0.5F * (interpolation * (mRect2.top + mRect2.bottom - mRect1.top - mRect1.bottom));
         view1.setTranslationX(translationX);
         view1.setTranslationY(translationY - mHeader.getTranslationY());
         view1.setScaleX(scaleX);
@@ -371,10 +372,19 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         actionBar.setIcon(R.drawable.ic_transparent);
         // 隐藏ActionBar图标
         actionBar.setDisplayHomeAsUpEnabled(false);
+        setActionBarTitleViewPadding();
     }
 
     private ImageView getActionBarIconView() {
         return (ImageView) findViewById(android.R.id.home);
+    }
+
+    private void setActionBarTitleViewPadding() {
+        int titleId = Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
+        TextView textView = (TextView) getWindow().findViewById(titleId);
+        int height = getActionBarHeight();
+        int padding = (int) ((height - textView.getTextSize()) / 2)-BaseInfoHelper.dip2px(this, 15);
+        textView.setPadding(0, padding, 0, 0);
     }
 
     public int getActionBarHeight() {
@@ -382,7 +392,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
             return mActionBarHeight;
         }
         getTheme().resolveAttribute(android.R.attr.actionBarSize, mTypedValue, true);
-        mActionBarHeight = BaseInfoHelper.dip2px(this, 56);
+        mActionBarHeight = BaseInfoHelper.dip2px(this, 65);
         return mActionBarHeight;
     }
 
