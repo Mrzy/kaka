@@ -459,6 +459,10 @@ public class NotificationLayout extends LinearLayout {
         public void onStartPullDown() {
             resetState();
         }
+
+        @Override
+        public void onCollapsed() {
+        }
     };
 
     private void resetState() {

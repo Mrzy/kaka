@@ -5,28 +5,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.support.v4.view.ViewCompat;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager.LayoutParams;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import cn.zmdx.kaka.fast.locker.HDApplication;
+import cn.zmdx.kaka.fast.locker.LockScreenManager;
+import cn.zmdx.kaka.fast.locker.LockScreenManager.IPullDownListener;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.database.ShortcutModel;
+import cn.zmdx.kaka.fast.locker.settings.ShortcutSettingsActivity;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.QuickHelperItem;
 import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.ToolbarAdapter;
 import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.WidgetConfig;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
-import cn.zmdx.kaka.fast.locker.widget.TypefaceTextView;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid;
 
 public class ShortcutManager {
@@ -165,43 +171,94 @@ public class ShortcutManager {
         }
     };
 
+    private View mGuideView;
+
+    private static final int GUIDE_ANIMATOR_Y_OFFSET = BaseInfoHelper.dip2px(
+            HDApplication.getContext(), 60);
+
     private void initToolBoxGuideView(final ViewGroup view) {
         if (PandoraConfig.newInstance(mContext).isShotcutGuided()) {
             return;
         }
-        if (ShortcutModel.getInstance(mContext).queryAll().size() != 0) {
-            return;
-        }
-        final View guideView = mInflater.inflate(R.layout.tool_box_guide_layout, null);
-        guideView.setVisibility(View.VISIBLE);
-        ViewCompat.setAlpha(guideView, 0);
-        view.addView(guideView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        PandoraConfig.newInstance(mContext).saveShotcutGuided();
-        guideView.animate().alpha(1).setDuration(1000).setStartDelay(700).start();
-        guideView.setOnClickListener(new OnClickListener() {
+        mGuideView = mInflater.inflate(R.layout.tool_box_guide_layout, null);
+        mGuideView.setVisibility(View.GONE);
+        view.addView(mGuideView, new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, GUIDE_ANIMATOR_Y_OFFSET));
+        mGuideView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                view.removeView(guideView);
+                dismissGuideWithAnimator();
+                // view.removeView(mGuideView);
+                PandoraConfig.newInstance(mContext).saveShotcutGuided();
             }
         });
-        ImageView imageView = (ImageView) guideView.findViewById(R.id.tool_bar_guide_image);
-        LinearLayout.LayoutParams marginLP = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        int temWidth = BaseInfoHelper.getRealWidth(mContext) / 3;
-        marginLP.setMargins((temWidth / 3) / 2, temWidth / 3 * 2, 0, 0);
-        marginLP.width = temWidth / 3 * 2;
-        marginLP.height = LayoutParams.WRAP_CONTENT;
-        imageView.setLayoutParams(marginLP);
+        mGuideView.findViewById(R.id.rightNowSettings).setOnClickListener(
+                new View.OnClickListener() {
 
-        TypefaceTextView textView = (TypefaceTextView) guideView
-                .findViewById(R.id.tool_bar_guide_prompt);
+                    @Override
+                    public void onClick(View v) {
+                        LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
 
-        LinearLayout.LayoutParams marginTVLP = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        marginTVLP.setMargins(temWidth / 4, 20, 0, 0);
-        textView.setLayoutParams(marginTVLP);
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(mContext, ShortcutSettingsActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                mContext.startActivity(intent);
+                            }
+                        });
+                        LockScreenManager.getInstance().unLock();
+                        PandoraConfig.newInstance(mContext).saveShotcutGuided();
+                    }
+                });
+        mGuideView.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                LockScreenManager.getInstance().unRegistPullDownListener(mPullDownListener);
+            }
+
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                LockScreenManager.getInstance().registPullDownListener(mPullDownListener);
+            }
+        });
+    }
+
+    private IPullDownListener mPullDownListener = new IPullDownListener() {
+
+        @Override
+        public void onStartPullDown() {
+
+        }
+
+        @Override
+        public void onCollapsed() {
+            showGuideWithAnimator();
+        }
+    };
+
+    public void showGuideWithAnimator() {
+        if (mGuideView == null) {
+            return;
+        }
+        mGuideView.setTranslationY(-GUIDE_ANIMATOR_Y_OFFSET);
+        mGuideView.setVisibility(View.VISIBLE);
+        mGuideView.animate().translationY(0).setDuration(500)
+                .setInterpolator(new AccelerateInterpolator()).start();
+    }
+
+    public void dismissGuideWithAnimator() {
+        if (mGuideView == null) {
+            return;
+        }
+        mGuideView.animate().translationY(-GUIDE_ANIMATOR_Y_OFFSET).setDuration(500)
+                .setInterpolator(new DecelerateInterpolator())
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mGuideView.setVisibility(View.GONE);
+                    }
+                }).start();
     }
 
     private void updateQuickSwitch(QuickHelperItem item) {

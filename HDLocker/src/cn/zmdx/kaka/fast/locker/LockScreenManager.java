@@ -771,6 +771,8 @@ public class LockScreenManager {
                 }
             });
             mSlidingPanelLayout.setEnabled(false);
+
+            dispatchCollapsedEvent();
         }
 
         @Override
@@ -809,6 +811,7 @@ public class LockScreenManager {
 
     public interface IPullDownListener {
         void onStartPullDown();
+        void onCollapsed();
     }
 
     private Set<IPullDownListener> mPullDownListener = new HashSet<IPullDownListener>();
@@ -817,6 +820,14 @@ public class LockScreenManager {
         synchronized (mPullDownListener) {
             for (IPullDownListener listener : mPullDownListener) {
                 listener.onStartPullDown();
+            }
+        }
+    }
+
+    private void dispatchCollapsedEvent() {
+        synchronized (mPullDownListener) {
+            for (IPullDownListener listener : mPullDownListener) {
+                listener.onCollapsed();
             }
         }
     }
