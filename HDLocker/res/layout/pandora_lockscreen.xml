@@ -167,7 +167,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:paddingBottom="10dp"
-                        android:paddingTop="30dp" >
+                        android:paddingTop="20dp" >
                     </cn.zmdx.kaka.fast.locker.notification.view.NotificationLayout>
 
                     <FrameLayout

@@ -63,10 +63,10 @@ public class NotificationLayout extends LinearLayout {
             HDApplication.getContext(), 5);
 
     protected static final int GAP_ITEM_LEFT_MARGIN = BaseInfoHelper.dip2px(
-            HDApplication.getContext(), 35);
+            HDApplication.getContext(), 20);
 
     protected static final int GAP_ITEM_RIGHT_MARGIN = BaseInfoHelper.dip2px(
-            HDApplication.getContext(), 15);
+            HDApplication.getContext(), 20);
 
     @SuppressLint("SimpleDateFormat")
     private static final SimpleDateFormat sSdf = new SimpleDateFormat("HH:mm");
@@ -133,12 +133,12 @@ public class NotificationLayout extends LinearLayout {
 
             View view = findViewWithTag(notificationid);
             if (view != null) {
-                updateNotificationItem(((View) view.getParent()), info);
+                updateNotificationItem(view, info);
             } else {
                 final View itemView = createNotificationItemView(info);
-                View leftIcon = itemView.findViewById(R.id.leftIcon);
-                leftIcon.setOnTouchListener(new ItemViewTouchListener(itemView));
-                leftIcon.setOnClickListener(new View.OnClickListener() {
+//                View leftIcon = itemView.findViewById(R.id.leftIcon);
+                itemView.setOnTouchListener(new ItemViewTouchListener(itemView));
+                itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         long currentTime = System.currentTimeMillis();
@@ -220,7 +220,7 @@ public class NotificationLayout extends LinearLayout {
         // 从view容器中将这个通知view移除
         View targetView = findViewWithTag(notifyId);
         if (targetView != null) {
-            removeView((View) targetView.getParent());
+            removeView(targetView);
         }
 
         NotificationInfo info = mActiveNotification.get(notifyId);
@@ -261,7 +261,8 @@ public class NotificationLayout extends LinearLayout {
                 case MotionEvent.ACTION_DOWN:
                     mCurrentTouchView = mItemView;
                     v.performClick();
-                    showContentWithAnimator(mItemView.findViewById(R.id.rightArea));
+                    mItemView.findViewById(R.id.rightArea).setBackgroundResource(R.drawable.notification_item_right_bg_pressed);
+//                    showContentWithAnimator(mItemView.findViewById(R.id.rightArea));
                     final String id = String.valueOf(v.getTag());
                     LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
 
@@ -346,6 +347,7 @@ public class NotificationLayout extends LinearLayout {
     private void updateNotificationItem(View itemView, NotificationInfo info) {
         // final RippleView largeIcon = (RippleView)
         // itemView.findViewById(R.id.largeIcon);
+        itemView.findViewById(R.id.leftIcon).bringToFront();
         final ImageView smallIcon = (ImageView) itemView.findViewById(R.id.smallIcon);
         final TextView title = (TextView) itemView.findViewById(R.id.title);
         final TextView content = (TextView) itemView.findViewById(R.id.content);
@@ -359,7 +361,7 @@ public class NotificationLayout extends LinearLayout {
         Bitmap largeBmp = info.getLargeIcon();
         Drawable smallDrawable = info.getSmallIcon();
         title.setText(info.getTitle());
-        itemView.findViewById(R.id.leftIcon).setTag(String.valueOf(info.getId()));
+        itemView.setTag(String.valueOf(info.getId()));
         if (!showMsg) {
             if (null ==smallDrawable) {
                 circleIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.notification_default_icon));
@@ -461,14 +463,16 @@ public class NotificationLayout extends LinearLayout {
 
     private void resetState() {
         if (mCurrentTouchView != null) {
-            final View rightView = mCurrentTouchView.findViewById(R.id.rightArea);
-            dismissContentViewWithAnimator(rightView);
+//            final View rightView = mCurrentTouchView.findViewById(R.id.rightArea);
+//            dismissContentViewWithAnimator(rightView);
 
             // 如果通知view执行了向右的偏移动画，将其恢复原位
             if (mIsRunRightArrowAnimator) {
                 mCurrentTouchView.animate().translationX(0).setDuration(300).start();
                 mIsRunRightArrowAnimator = false;
             }
+            // 恢复点击态背景
+            mCurrentTouchView.findViewById(R.id.rightArea).setBackgroundResource(R.drawable.notification_item_right_bg);
             mCurrentTouchView = null;
         }
         LockScreenManager.getInstance().setRunnableAfterUnLock(null);

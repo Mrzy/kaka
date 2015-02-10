@@ -9,13 +9,38 @@
     android:focusableInTouchMode="false" >
 
     <RelativeLayout
+        android:id="@+id/leftIcon"
+        android:layout_width="64dp"
+        android:layout_height="64dp" >
+
+        <cn.zmdx.kaka.fast.locker.widget.CircleImageView
+            xmlns:circleIv="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/circleIv"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_centerHorizontal="true"
+            circleIv:border_color="#03a9f4"
+            circleIv:border_width="2dp" />
+
+        <ImageView
+            android:id="@+id/smallIcon"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_alignBottom="@id/circleIv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="2dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:scaleType="fitXY" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/rightArea"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_weight="1"
         android:background="@drawable/notification_item_right_bg"
-        android:paddingLeft="64dp"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
             android:id="@+id/date"
@@ -32,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="37dp"
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@id/date"
             android:ellipsize="end"
@@ -47,18 +72,18 @@
             android:layout_height="25dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/title"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="37dp"
             android:layout_marginTop="2dp" >
 
             <cn.zmdx.kaka.fast.locker.widget.TypefaceTextView
                 android:id="@+id/content"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:paddingTop="4dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:ellipsize="end"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
+                android:paddingTop="4dp"
                 android:singleLine="true"
                 android:textColor="#90000000"
                 android:textSize="12dp" />
@@ -71,33 +96,6 @@
                 android:textColor="#60000000"
                 android:textSize="10dp" />
         </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/leftIcon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:background="@drawable/notification_item_icon_shadow" >
-
-        <cn.zmdx.kaka.fast.locker.widget.CircleImageView
-            xmlns:circleIv="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/circleIv"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
-            circleIv:border_width="2dp"
-            circleIv:border_color="#03a9f4"
-            android:layout_centerHorizontal="true" />
-
-        <ImageView
-            android:id="@+id/smallIcon"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:layout_alignBottom="@id/circleIv"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="2dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:scaleType="fitXY" />
     </RelativeLayout>
 
 </FrameLayout>
