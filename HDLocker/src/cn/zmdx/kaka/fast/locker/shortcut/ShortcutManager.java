@@ -12,8 +12,8 @@ import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager.LayoutParams;
 import android.view.ViewGroup;
+import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
@@ -177,7 +177,7 @@ public class ShortcutManager {
         ViewCompat.setAlpha(guideView, 0);
         view.addView(guideView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-         PandoraConfig.newInstance(mContext).saveShotcutGuided();
+        PandoraConfig.newInstance(mContext).saveShotcutGuided();
         guideView.animate().alpha(1).setDuration(1000).setStartDelay(700).start();
         guideView.setOnClickListener(new OnClickListener() {
 
@@ -230,9 +230,13 @@ public class ShortcutManager {
      * 
      * @return
      */
-    @SuppressWarnings("unchecked")
     public List<AppInfo> getShortcutInfo() {
         List<AppInfo> data = ShortcutModel.getInstance(mContext).queryAll();
+        if (data.size() == 0 && PandoraConfig.newInstance(mContext).isShutcutDefaultEnabled()) {
+            data = ShortcutUtil.initDefaultShotrcutInfo(mContext);
+            saveShortcutInfo(data);
+            PandoraConfig.newInstance(mContext).saveShutcutDefaultEnabled(false);
+        }
         List<AppInfo> tmpList = new ArrayList<AppInfo>();
         for (int pos = 0; pos < 6; pos++) {
             boolean posExsit = false;

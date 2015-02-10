@@ -80,6 +80,8 @@ public class PandoraConfig {
     private static final String SHUTCUT_GUIDE = "sg";
 
     private static final String KEY_NOTIFICATION_ENABLED = "kne";
+    
+    private static final String KEY_SHUTCUT_DEFAULT = "ksd";
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -395,4 +397,13 @@ public class PandoraConfig {
     public boolean isNotificationActive() {
         return mSp.getBoolean(KEY_NOTIFICATION_ENABLED, true);
     }
+    
+    public void saveShutcutDefaultEnabled(boolean enabled) {
+        mSp.edit().putBoolean(KEY_SHUTCUT_DEFAULT, enabled).commit();
+    }
+
+    public boolean isShutcutDefaultEnabled() {
+        return mSp.getBoolean(KEY_SHUTCUT_DEFAULT, true);
+    }
+    
 }
