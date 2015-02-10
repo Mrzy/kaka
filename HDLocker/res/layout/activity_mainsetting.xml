@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="7dp"
-            android:src="@drawable/fastbg1" />
+            android:src="@drawable/fastbg2" />
 
         <RelativeLayout
             android:layout_width="match_parent"

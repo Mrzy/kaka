@@ -25,7 +25,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -68,8 +67,6 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
     private View mSpaceView;
 
     private TextView mLockScreenName;
-
-    private FrameLayout mRootViewFrameLayout;// unused
 
     private AccelerateDecelerateInterpolator mSmoothInterpolator;
 
@@ -151,7 +148,6 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
     }
 
     private void initView() {
-        mRootViewFrameLayout = (FrameLayout) findViewById(R.id.actionbar_rootview);
         mLockScreenName = (TextView) findViewById(R.id.fastlocker_name);
         mListView = (ListView) findViewById(R.id.listview);
         mHeader = (ViewGroup) this.findViewById(R.id.header);
@@ -160,7 +156,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
                 R.layout.activity_mainsetting_kenburns_footer, mHeader, false);
         mHeader.addView(mKenBurnsFooterView);
         mHeaderPicture = (KenBurnsView) findViewById(R.id.header_picture);
-        mHeaderPicture.setResourceIds(R.drawable.fastbg1, R.drawable.fastbg2);
+        mHeaderPicture.setResourceIds(R.drawable.fastbg2);
         mHeaderLogo = (ImageView) findViewById(R.id.header_logo);
         mCommentImageView = (ButtonFloat) findViewById(R.id.fast_comment);
         mCommentImageView.setOnClickListener(this);
@@ -383,7 +379,8 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
         int titleId = Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
         TextView textView = (TextView) getWindow().findViewById(titleId);
         int height = getActionBarHeight();
-        int padding = (int) ((height - textView.getTextSize()) / 2)-BaseInfoHelper.dip2px(this, 15);
+        int padding = (int) ((height - textView.getTextSize()) / 2)
+                - BaseInfoHelper.dip2px(this, 15);
         textView.setPadding(0, padding, 0, 0);
     }
 

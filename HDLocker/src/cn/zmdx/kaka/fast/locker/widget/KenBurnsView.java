@@ -3,7 +3,6 @@ package cn.zmdx.kaka.fast.locker.widget;
 
 import java.util.Random;
 
-import cn.zmdx.kaka.fast.locker.R;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -13,9 +12,9 @@ import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import cn.zmdx.kaka.fast.locker.R;
 
 public class KenBurnsView extends FrameLayout {
-    private static final String TAG = "KenBurnsView";
 
     private final Handler mHandler;
 
@@ -34,6 +33,8 @@ public class KenBurnsView extends FrameLayout {
     private float maxScaleFactor = 1.5F;
 
     private float minScaleFactor = 1.2F;
+
+    private int mImageViewCount = 1;
 
     private Runnable mSwapImageRunnable = new Runnable() {
         @Override
@@ -66,7 +67,7 @@ public class KenBurnsView extends FrameLayout {
      */
     private void swapImage() {
         if (mActiveImageIndex == -1) {
-            mActiveImageIndex = 1;
+            mActiveImageIndex = mImageViewCount - 1;
             animate(mImageViews[mActiveImageIndex]);
             return;
         }
@@ -148,9 +149,9 @@ public class KenBurnsView extends FrameLayout {
         super.onFinishInflate();
         View view = inflate(getContext(), R.layout.view_kenburns, this);
 
-        mImageViews = new ImageView[2];
+        mImageViews = new ImageView[mImageViewCount];
         mImageViews[0] = (ImageView) view.findViewById(R.id.image0);
-        mImageViews[1] = (ImageView) view.findViewById(R.id.image1);
+        // mImageViews[1] = (ImageView) view.findViewById(R.id.image1);
     }
 
     private void fillImageViews() {
