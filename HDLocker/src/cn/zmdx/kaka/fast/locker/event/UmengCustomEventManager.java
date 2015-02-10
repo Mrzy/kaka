@@ -28,29 +28,17 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_CLICK_OR_DRAG_ROPE_TIMES = "clickOrDragRopeTimes";// 用户点击或者拉动绳索
 
-    public static final String EVENT_SET_LOCKSCREEN_WALLPAPER_TIMES = "setLockScreenWallpaperTimes";// 用户在新闻屏设置壁纸
-
     public static final String EVENT_APPLY_LOCKSCREEN_WALLPAPER_TIMES = "applyLockScreenWallpaperTimes";// 用户点击应用壁纸按钮进行设置壁纸
 
     public static final String EVENT_SELECT_LOCKSCREEN_WALLPAPER_COUNT = "selectLockScreenWallpaperCount";// 在个性化设置界面选择某张壁纸的次数
-
-    public static final String EVENT_PULL_TO_REFRESH_TIMES = "pullToRefreshTimes";// 用户下拉刷新
 
     public static final String EVENT_SHOW_NOTIFY_TIMES = "showNotifyTimes";// 用户设置显示通知栏次数
 
     public static final String EVENT_CLOSE_NOTIFY_TIMES = "closeNotifyTimes";// 用户设置关闭通知栏次数
 
-    public static final String EVENT_ALLOW_AUTO_DOWNLOAD = "allowAutoDownload";// 用户允许3G/4G时缓存图文
-
-    public static final String EVENT_DISALLOW_AUTO_DOWNLOAD = "disallowAutoDownload";// 用户不允许3G/4G时缓存图文
-
     public static final String EVENT_ENABLE_LOCKSCREEN_SOUND = "enableLockScreenSound";// 音效开关打开
 
     public static final String EVENT_DISABLE_LOCKSCREEN_SOUND = "disableLockScreenSound";// 音效开关关闭
-
-    public static final String EVENT_SEE_CONTENT_DETAILS = "seeContentDetails";// 查看新闻条目的详情
-
-    public static final String EVENT_CARD_IS_FAVORITED = "cardIsFavorited";// 卡片被收藏
 
     public static final String EVENT_ENTER_CAMERA_FROM_LOCKER = "enterCamera";// 进入相机
 
@@ -59,6 +47,95 @@ public class UmengCustomEventManager {
     public static final String EVENT_REMOVE_NOTIFICATION = "removeNotification";// 双击移除一个通知
 
     public static final String EVENT_OPEN_NOTIFICATION = "openNotification";// 右划打开一个通知
+
+    public static final String EVENT_ALLOW_NOTIFICATION = "allowNotification";// 开启通知提醒
+
+    public static final String EVENT_DISALLOW_NOTIFICATION = "disallowNotification";// 关闭通知提醒
+
+    public static final String EVENT_HIDE_NOTIFICATION = "hideNotification";// 隐藏通知内容
+
+    public static final String EVENT_SHOW_NOTIFICATION = "showNotification";// 显示通知内容
+
+    public static final String EVENT_COMMENT = "comment";// 点击评价按钮
+
+    public static final String EVENT_CLICK_SHORTCUT = "clickShortcut";// 点击锁屏页快捷应用
+
+    public static final String EVENT_CLICK_TOOL_ICON = "clickToolIcon";// 点击工具条快捷图标
+
+    public static final String EVENT_NOTIFY_FILTER_APP = "notifyFilterApps";// 通知筛选的应用名称
+
+    public static final String EVENT_ALL_SHORTCUT = "allShortcut";// 所有的快捷应用名称
+
+    /**
+     * 统计开启通知提醒
+     */
+    public static void statisticalEnableAllowNotification() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_ALLOW_NOTIFICATION);
+    }
+
+    /**
+     * 统计关闭通知提醒
+     */
+    public static void statisticalDisallowNotification() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_DISALLOW_NOTIFICATION);
+    }
+
+    /**
+     * 隐藏通知内容
+     */
+    public static void statisticalHideNotification() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_HIDE_NOTIFICATION);
+    }
+
+    /**
+     * 显示通知内容
+     */
+    public static void statisticalShowNotification() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_SHOW_NOTIFICATION);
+    }
+
+    /**
+     * 点击评价按钮
+     */
+    public static void statisticalCommentTimes() {
+        MobclickAgent.onEvent(HDApplication.getContext(), UmengCustomEventManager.EVENT_COMMENT);
+    }
+
+    /**
+     * 点击锁屏页快捷应用
+     */
+    public static void statisticalClickShortcut(String pkgName) {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_CLICK_SHORTCUT, pkgName);
+    }
+
+    /**
+     * 点击工具条快捷图标
+     */
+    public static void statisticalClickToolIcon() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_CLICK_TOOL_ICON);
+    }
+
+    /**
+     * 通知筛选的应用名称
+     */
+    public static void statisticalNotifyFilterApps(String notifyFilterApps) {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_NOTIFY_FILTER_APP, notifyFilterApps);
+    }
+
+    /**
+     * 所有的快捷应用名称
+     */
+    public static void statisticalAllShortcut(String allShortcutApps) {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_ALL_SHORTCUT, allShortcutApps);
+    }
 
     public static void statisticalEnterCamera() {
         MobclickAgent.onEvent(HDApplication.getContext(),
@@ -78,30 +155,6 @@ public class UmengCustomEventManager {
     public static void statisticalOpenNotification(int id, String pkgName, int type) {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_OPEN_NOTIFICATION, id + "|" + pkgName + "|" + type);
-    }
-
-    /**
-     * 统计哪张卡片被收藏
-     * 
-     * @param mCloudId
-     */
-    public static void statisticalCardIsFavorited(String mCloudId) {
-        if (null != mCloudId) {
-            MobclickAgent.onEvent(HDApplication.getContext(),
-                    UmengCustomEventManager.EVENT_CARD_IS_FAVORITED, mCloudId);
-        }
-    }
-
-    /**
-     * 统计查看新闻条目的详情
-     * 
-     * @param mCloudId
-     */
-    public static void statisticalSeeContentDetails(String mCloudId) {
-        if (null != mCloudId) {
-            MobclickAgent.onEvent(HDApplication.getContext(),
-                    UmengCustomEventManager.EVENT_SEE_CONTENT_DETAILS, mCloudId);
-        }
     }
 
     /**
@@ -129,14 +182,6 @@ public class UmengCustomEventManager {
     }
 
     /**
-     * 统计用户在新闻屏设置壁纸的次数
-     */
-    public static void statisticalSetLockScreenWallpaperTimes() {
-        MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_SET_LOCKSCREEN_WALLPAPER_TIMES);
-    }
-
-    /**
      * 统计用户点击应用壁纸按钮进行设置壁纸的次数
      */
     public static void statisticalApplyLockScreenWallpaperTimes() {
@@ -155,14 +200,6 @@ public class UmengCustomEventManager {
     }
 
     /**
-     * 统计用户下拉刷新的次数
-     */
-    public static void statisticalPullToRefreshTimes() {
-        MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_PULL_TO_REFRESH_TIMES);
-    }
-
-    /**
      * 统计用户显示通知栏
      */
     public static void statisticalShowNotifyTimes() {
@@ -176,22 +213,6 @@ public class UmengCustomEventManager {
     public static void statisticalCloseNotifyTimes() {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_CLOSE_NOTIFY_TIMES);
-    }
-
-    /**
-     * 统计用户允许3G/4G时缓存图文
-     */
-    public static void statisticalAllowAutoDownload() {
-        MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_ALLOW_AUTO_DOWNLOAD);
-    }
-
-    /**
-     * 统计用户不允许3G/4G时缓存图文
-     */
-    public static void statisticalDisallowAutoDownload() {
-        MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_DISALLOW_AUTO_DOWNLOAD);
     }
 
     /**

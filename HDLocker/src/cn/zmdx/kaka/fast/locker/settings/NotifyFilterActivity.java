@@ -3,6 +3,7 @@ package cn.zmdx.kaka.fast.locker.settings;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
@@ -30,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.notification.NotificationPreferences;
 import cn.zmdx.kaka.fast.locker.notify.filter.AlphabetScrollerView;
 import cn.zmdx.kaka.fast.locker.notify.filter.AlphabetScrollerView.OnEventListener;
@@ -111,7 +113,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
 
             @Override
             public void onTouchDown() {
-//                String mCurrentLetter = mAlphabetView.getCurrentLetter();
+                // String mCurrentLetter = mAlphabetView.getCurrentLetter();
             }
         });
 
@@ -505,5 +507,18 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
             overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                     R.anim.umeng_fb_slide_out_from_right);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        Set<String> pkgNameSet = NotificationPreferences.getInstance(mContext)
+                .getInterceptPkgNames();
+        String notifyFilterApp = "|";
+        for (Iterator iterator = pkgNameSet.iterator(); iterator.hasNext();) {
+            notifyFilterApp += (String) iterator.next() + "|";
+        }
+        UmengCustomEventManager.statisticalNotifyFilterApps(notifyFilterApp);
     }
 }

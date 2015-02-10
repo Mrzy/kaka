@@ -12,8 +12,8 @@ import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager.LayoutParams;
 import android.view.ViewGroup;
+import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.database.ShortcutModel;
+import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.QuickHelperItem;
 import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.ToolbarAdapter;
@@ -153,6 +154,7 @@ public class ShortcutManager {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            UmengCustomEventManager.statisticalClickToolIcon();
             final QuickHelperItem item = (QuickHelperItem) mAdapter.getItem(position);
             if (item == null) {
                 return;
@@ -177,7 +179,7 @@ public class ShortcutManager {
         ViewCompat.setAlpha(guideView, 0);
         view.addView(guideView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-         PandoraConfig.newInstance(mContext).saveShotcutGuided();
+        PandoraConfig.newInstance(mContext).saveShotcutGuided();
         guideView.animate().alpha(1).setDuration(1000).setStartDelay(700).start();
         guideView.setOnClickListener(new OnClickListener() {
 
