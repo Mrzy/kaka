@@ -162,7 +162,7 @@
     <string name="fast_shortcut_small_text_part_two">您可以按需设置快捷应用</string>
     <string name="notify_filter_select">已选</string>
     <string name="fast_shortcut_repeat_prompt">您已经选择过该应用，请重新选择另外一个!</string>
-    <string name="shortcut_box_guide_prompt">下面是我们通过智能算法计算出的6个常用应用，支持自定义哟</string>
+    <string name="shortcut_box_guide_prompt">下面是我们通过智能算法计算出您的常用应用，支持自定义哟</string>
     <string name="settings_custom_shortcut_app">立即自定义</string>
 
 </resources>

@@ -40,7 +40,9 @@ public class KenBurnsView extends FrameLayout {
         @Override
         public void run() {
             swapImage();
-            mHandler.postDelayed(mSwapImageRunnable, mSwapMs - mFadeInOutMs * 2);
+            if (mResourceIds.length > 1) {
+                mHandler.postDelayed(mSwapImageRunnable, mSwapMs - mFadeInOutMs * 2);
+            }
         }
     };
 

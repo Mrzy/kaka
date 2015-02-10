@@ -33,11 +33,11 @@
             android:background="@drawable/wallpaper_tab_background"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/tool_bar_guide"
             android:textSize="14dp"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:clickable="false"
+            android:textColor="#caffffff"
             android:text="@string/settings_custom_shortcut_app"
              />
     </cn.zmdx.kaka.fast.locker.widget.RippleView>
