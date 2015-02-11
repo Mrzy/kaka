@@ -301,13 +301,17 @@ public class LockScreenManager {
         mDigitalClockView = (DigitalClocks) mEntireView.findViewById(R.id.digitalClock);
 
         batteryView = (BatteryView) mEntireView.findViewById(R.id.batteryView);
-        batteryView.setLevelListener(new ILevelCallBack() {
+        if (!PandoraConfig.newInstance(mContext).isNeedNotice(mContext)) {
+            batteryView.setLevelListener(new ILevelCallBack() {
 
-            @Override
-            public void onLevelChanged(int level) {
-                mBatteryInfo.setText(level + "%");
-            }
-        });
+                @Override
+                public void onLevelChanged(int level) {
+                    mBatteryInfo.setText(level + "%");
+                }
+            });
+        } else {
+            batteryView.setVisibility(View.INVISIBLE);
+        }
         mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
         mSliderView.setPanelSlideListener(mSlideListener);
         initSliderViewHeight(mSliderView);
@@ -811,6 +815,7 @@ public class LockScreenManager {
 
     public interface IPullDownListener {
         void onStartPullDown();
+
         void onCollapsed();
     }
 

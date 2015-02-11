@@ -244,6 +244,9 @@ public class ShortcutManager {
         if (mGuideView == null) {
             return;
         }
+        if (mGuideView.getVisibility() == View.VISIBLE) {
+            return;
+        }
         mGuideView.setTranslationY(-GUIDE_ANIMATOR_Y_OFFSET);
         mGuideView.setVisibility(View.VISIBLE);
         mGuideView.animate().translationY(0).setDuration(500)
