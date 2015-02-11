@@ -1,8 +1,10 @@
 
 package cn.zmdx.kaka.locker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import android.annotation.SuppressLint;
@@ -18,6 +20,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
@@ -39,14 +42,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.BatteryView;
 import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
-import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.FoldablePage;
 import cn.zmdx.kaka.locker.content.box.IFoldablePage;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
-import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
+import cn.zmdx.kaka.locker.notification.view.NotificationLayout;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager.IUnlockListener;
@@ -66,11 +68,9 @@ import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
 import cn.zmdx.kaka.locker.widget.DigitalClocks;
-import cn.zmdx.kaka.locker.widget.PandoraPanelLayout;
-import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.PanelSlideListener;
-import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SimplePanelSlideListener;
-import cn.zmdx.kaka.locker.widget.PandoraPanelLayout.SlideState;
 import cn.zmdx.kaka.locker.widget.SlidingPaneLayout;
+import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
+import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
 import com.nineoldandroids.animation.AnimatorSet;
@@ -84,7 +84,7 @@ public class LockScreenManager {
 
     protected static final int MAX_TIMES_SHOW_GUIDE = 3;
 
-    private PandoraPanelLayout mSliderView;
+    private SlidingUpPanelLayout mSliderView;
 
     private ViewGroup mEntireView;
 
@@ -132,13 +132,15 @@ public class LockScreenManager {
 
     private LinearLayout mOnlineViewContainer, mLockDataView;
 
-    private View mTopOverlay, mBottomOverlay;
-
     private boolean mNeedPassword = false;
 
     private BatteryView batteryView;
-    
+
     private ImageView mCameraIcon;
+
+    private ViewPagerCompat mPager;
+
+    private SlidingUpPanelLayout mSlidingUpView;
 
     public interface ILockScreenListener {
         void onLock();
@@ -204,13 +206,13 @@ public class LockScreenManager {
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 
-//        if (!PandoraConfig.newInstance(mContext).isNeedNotice(mContext)) {
-//            mWinParams.flags |= LayoutParams.FLAG_FULLSCREEN;
-//        }
-//        if (Build.VERSION.SDK_INT >= 19) {
-//            mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS;
-//            mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
-//        }
+        // if (!PandoraConfig.newInstance(mContext).isNeedNotice(mContext)) {
+        // mWinParams.flags |= LayoutParams.FLAG_FULLSCREEN;
+        // }
+        // if (Build.VERSION.SDK_INT >= 19) {
+        // mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        // mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+        // }
         mWinParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 
         final Display display = mWinManager.getDefaultDisplay();
@@ -225,26 +227,91 @@ public class LockScreenManager {
         mWinParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         mWinParams.gravity = Gravity.TOP | Gravity.START;
 
-        initLockScreenViews();
+        // initLockScreenViews();
 
+        initNewLockScreenViews();
         mWinManager.addView(mEntireView, mWinParams);
         startFakeActivity();
 
-        refreshContent();
-        setDate();
+        // refreshContent();
+        // setDate();
 
         notifyLocked();
 
         // 尝试拉取资讯数据及图片的预下载
-        PandoraBoxDispatcher.getInstance().pullData();
+        // PandoraBoxDispatcher.getInstance().pullData();
 
-        NotificationInterceptor.getInstance(mContext).tryDispatchCustomNotification();
-        NotificationInterceptor.getInstance(mContext).tryPullCustomNotificationData();
+        // NotificationInterceptor.getInstance(mContext).tryDispatchCustomNotification();
+        // NotificationInterceptor.getInstance(mContext).tryPullCustomNotificationData();
 
         checkNewVersion();
 
         String currentDate = BaseInfoHelper.getCurrentDate();
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
+    }
+
+    private void initNewLockScreenViews() {
+        mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
+                R.layout.new_pandora_lockscreen, null);
+
+        mSlidingUpView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.slidingUpPanelLayout);
+        mSlidingUpView.setDragViewClickable(false);
+
+        mPager = (ViewPagerCompat) mEntireView.findViewById(R.id.viewPager);
+        mCurTheme = ThemeManager.getCurrentTheme();
+        Drawable bgDrawable = mCurTheme.getCurDrawable();
+        LockerUtils.renderScreenLockerBackground(mPager, bgDrawable);
+
+        List<View> pages = new ArrayList<View>();
+        ViewGroup page1 = (ViewGroup) LayoutInflater.from(mContext).inflate(
+                R.layout.pandora_password_pager_layout, null);
+        initSecurePanel(page1);
+        final View page2 = LayoutInflater.from(mContext).inflate(
+                R.layout.pandora_main_pager_layout, null);
+        page2.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        pages.add(page1);
+        pages.add(page2);
+        LockerPagerAdapter pagerAdapter = new LockerPagerAdapter(mContext, mPager, pages);
+        mPager.setAdapter(pagerAdapter);
+        mPager.setCurrentItem(1);
+        mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    if (mNeedPassword) {
+                        NotificationLayout notificationLayout = (NotificationLayout) page2
+                                .findViewById(R.id.lock_bottom_notification_layout);
+                        if (notificationLayout != null) {
+                            notificationLayout.restoreItemsPosition();
+                        }
+                    }
+
+                    // dismiss news panel
+                    mSlidingUpView.hidePanel();
+                } else if (position == 1) {
+                    if (mNeedPassword) {
+                        // 如果从密码页滑回锁屏页，将之前设置的解锁后执行动作清除。即此处认为用户没有输入密码解锁，又滑回了锁屏页
+                        setRunnableAfterUnLock(null);
+                    }
+
+                    mSlidingUpView.showPanel();
+                }
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (positionOffset == 0.0 && position == 0) {
+                    unLock();
+                }
+                
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
     }
 
     public void setWindowAnimations(int anim) {
@@ -413,7 +480,7 @@ public class LockScreenManager {
         mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_lockscreen, null);
         initGuideView();
-        initSecurePanel();
+        // initSecurePanel();
         mSlidingPanelLayout = (SlidingPaneLayout) mEntireView.findViewById(R.id.sliding_layout);
         mSlidingPanelLayout.setPanelSlideListener(mSlideOutListener);
         mSlidingPanelLayout.setSliderFadeColor(Color.parseColor("#a0000000"));
@@ -438,19 +505,51 @@ public class LockScreenManager {
                 mBatteryInfo.setText(level + "%");
             }
         });
-        mSliderView = (PandoraPanelLayout) mEntireView.findViewById(R.id.locker_view);
-        mSliderView.setPanelSlideListener(mSlideListener);
+        mSliderView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.locker_view);
+        mSliderView.setPanelSlideListener(mSlideUpListener);
         if (!ViewConfiguration.get(mContext).hasPermanentMenuKey()) {// 存在虚拟按键
             mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 110));
         } else {
             mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 80));
         }
-        mTopOverlay = mEntireView.findViewById(R.id.lock_top_overlay);
-        mBottomOverlay = mEntireView.findViewById(R.id.lock_bottom_overlay);
         setDrawable();
         initCamera();
         initOnlinePaperPanel();
     }
+
+    private SlidingUpPanelLayout.PanelSlideListener mSlideUpListener = new SlidingUpPanelLayout.PanelSlideListener() {
+
+        @Override
+        public void onPanelSlide(View panel, float slideOffset) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPanelCollapsed(View panel) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPanelExpanded(View panel) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPanelAnchored(View panel) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPanelHidden(View panel) {
+            // TODO Auto-generated method stub
+
+        }
+
+    };
 
     private void initCamera() {
         final View outerView = mEntireView.findViewById(R.id.camera_outline);
@@ -558,7 +657,7 @@ public class LockScreenManager {
         @Override
         public void onPanelClosed(View panel) {
             dispatchMainPanelClosed();
-            //取消侧滑展开操作，将解锁后的操作恢复
+            // 取消侧滑展开操作，将解锁后的操作恢复
             setRunnableAfterUnLock(null);
         }
     };
@@ -636,7 +735,7 @@ public class LockScreenManager {
         }
     }
 
-    private void initSecurePanel() {
+    private void initSecurePanel(ViewGroup container) {
         final KeyguardLockerManager klm = new KeyguardLockerManager(mContext);
         final View view = klm.getCurrentLockerView(new IUnlockListener() {
             @Override
@@ -657,11 +756,11 @@ public class LockScreenManager {
 
         });
         if (view != null) {
-            mSlidingBehindLayout = (FrameLayout) mEntireView
-                    .findViewById(R.id.sliding_behind_layout);
+            // mSlidingBehindLayout = (FrameLayout) mEntireView
+            // .findViewById(R.id.sliding_behind_layout);
 
             view.setTag("passwordView");
-            mSlidingBehindLayout.addView(view);
+            container.addView(view);
             mNeedPassword = true;
         } else {
             mNeedPassword = false;
@@ -669,8 +768,10 @@ public class LockScreenManager {
     }
 
     private void initOnlinePaperPanel() {
-        mOnlineViewContainer = (LinearLayout) mEntireView.findViewById(R.id.pandora_online_wallpaper);
-        mOnlinePanel = (WallpaperPanelLayout) mEntireView.findViewById(R.id.locker_wallpaper_sliding);
+        mOnlineViewContainer = (LinearLayout) mEntireView
+                .findViewById(R.id.pandora_online_wallpaper);
+        mOnlinePanel = (WallpaperPanelLayout) mEntireView
+                .findViewById(R.id.locker_wallpaper_sliding);
         mOnlinePanel
                 .setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
 
@@ -696,7 +797,8 @@ public class LockScreenManager {
                                 @Override
                                 public void applyOnlinePaper(String filePath) {
                                     if (null != mSliderView && !TextUtils.isEmpty(filePath)) {
-                                        Drawable drawable = mSliderView.setForgroundFile(filePath);
+                                        Drawable drawable = LockerUtils
+                                                .renderScreenLockerBackground(mSliderView, filePath);
                                         if (mNeedPassword) {
                                             if (null != drawable) {
                                                 doFastBlur(drawable);
@@ -747,7 +849,7 @@ public class LockScreenManager {
     private void setDrawable() {
         mCurTheme = ThemeManager.getCurrentTheme();
         Drawable bgDrawable = mCurTheme.getCurDrawable();
-        mSliderView.setForegroundDrawable(bgDrawable);
+        mSliderView.setBackgroundDrawable(bgDrawable);
         if (mNeedPassword) {
             if (null != bgDrawable) {
                 doFastBlur(bgDrawable);
@@ -800,8 +902,8 @@ public class LockScreenManager {
         if (!mNeedPassword) {
             internalUnLock(isCloseFakeActivity);
         } else {
-            if (!mSlidingPanelLayout.isOpen()) {
-                mSlidingPanelLayout.openPane();
+            if (mPager != null && mPager.getCurrentItem() == 1) {
+                mPager.setCurrentItem(0, true);
             }
         }
     }
@@ -820,19 +922,19 @@ public class LockScreenManager {
             notifyUnLocked();
         cancelAnimatorIfNeeded();
 
-        mFoldablePage.onFinish();
+        // mFoldablePage.onFinish();
         if (mUnLockRunnable != null) {
             mWinManager.removeView(mEntireView);
         } else {
             mWinManager.removeViewImmediate(mEntireView);
         }
-        mSliderView.recycle();
+        // mSliderView.recycle();
         mEntireView = null;
         mIsLocked = false;
         isInit = false;
 
         mOnlineWallpaperView = null;
-        mOnlineViewContainer.removeAllViews();
+        // mOnlineViewContainer.removeAllViews();
 
         if (mUnLockRunnable != null) {
             HDBThreadUtils.runOnUi(mUnLockRunnable);
@@ -858,58 +960,59 @@ public class LockScreenManager {
 
     private Runnable mUnLockRunnable = null;
 
-    private PanelSlideListener mSlideListener = new SimplePanelSlideListener() {
-
-        @Override
-        public void onPanelSlide(View panel, float slideOffset) {
-            setLockScreenDim(slideOffset);
-        }
-
-        private void setLockScreenDim(float slideOffset) {
-            float localSlideOffset = 0.6f * (1.0f - slideOffset);
-            if (mTopOverlay != null && mBottomOverlay != null) {
-                mTopOverlay.setAlpha(localSlideOffset);
-                mBottomOverlay.setAlpha(localSlideOffset);
-            }
-        }
-
-        @Override
-        public void onPanelCollapsed(View panel) {
-            UmengCustomEventManager.statisticalPullDownTimes();
-        }
-
-        @Override
-        public void onPanelExpanded(View panel) {
-        }
-
-        @Override
-        public void onPanelHidden(View panel) {
-
-        }
-
-        @Override
-        public void onPanelFixed(View panel) {
-        }
-
-        @Override
-        public void onPanelClickedDuringFixed() {
-        }
-
-        public void onPanelStartDown(View view) {
-            dispatchStartPullDownEvent();
-        };
-
-        public void onPanelHiddenEnd() {
-        };
-
-        public boolean onPanelFastDown(float y) {
-            if (y > PandoraPolicy.DEFAULT_MAX_YVEL) {// 向下滑的速度达到一定值时，直接解锁
-                mSliderView.collapsePanel();
-                return true;
-            }
-            return false;
-        };
-    };
+    // private PanelSlideListener mSlideListener = new
+    // SimplePanelSlideListener() {
+    //
+    // @Override
+    // public void onPanelSlide(View panel, float slideOffset) {
+    // setLockScreenDim(slideOffset);
+    // }
+    //
+    // private void setLockScreenDim(float slideOffset) {
+    // float localSlideOffset = 0.6f * (1.0f - slideOffset);
+    // if (mTopOverlay != null && mBottomOverlay != null) {
+    // mTopOverlay.setAlpha(localSlideOffset);
+    // mBottomOverlay.setAlpha(localSlideOffset);
+    // }
+    // }
+    //
+    // @Override
+    // public void onPanelCollapsed(View panel) {
+    // UmengCustomEventManager.statisticalPullDownTimes();
+    // }
+    //
+    // @Override
+    // public void onPanelExpanded(View panel) {
+    // }
+    //
+    // @Override
+    // public void onPanelHidden(View panel) {
+    //
+    // }
+    //
+    // @Override
+    // public void onPanelFixed(View panel) {
+    // }
+    //
+    // @Override
+    // public void onPanelClickedDuringFixed() {
+    // }
+    //
+    // public void onPanelStartDown(View view) {
+    // dispatchStartPullDownEvent();
+    // };
+    //
+    // public void onPanelHiddenEnd() {
+    // };
+    //
+    // public boolean onPanelFastDown(float y) {
+    // if (y > PandoraPolicy.DEFAULT_MAX_YVEL) {// 向下滑的速度达到一定值时，直接解锁
+    // mSliderView.collapsePanel();
+    // return true;
+    // }
+    // return false;
+    // };
+    // };
 
     public interface IPullDownListener {
         void onStartPullDown();
@@ -938,8 +1041,8 @@ public class LockScreenManager {
     }
 
     public void onScreenOff() {
-        invisiableViews(mLockDataView, mWeatherSummary, mDigitalClockView);
-        cancelAnimatorIfNeeded();
+        // invisiableViews(mLockDataView, mWeatherSummary, mDigitalClockView);
+        // cancelAnimatorIfNeeded();
         if (mSliderView != null && !mSliderView.isPanelExpanded()) {
             mSliderView.expandPanel();
         }
@@ -950,9 +1053,9 @@ public class LockScreenManager {
 
     public void onScreenOn() {
         if (mIsLocked) {
-            processAnimations();
-            processWeatherInfo();
-            refreshContent();
+            // processAnimations();
+            // processWeatherInfo();
+            // refreshContent();
             if (mDigitalClockView != null) {
                 mDigitalClockView.setTickerStoped(false);
             }
@@ -975,16 +1078,13 @@ public class LockScreenManager {
         if (mSliderView == null) {
             return 1.0f;
         }
-        float rate = mSliderView.getContentViewWidthHeightRate();
+        // float rate = mSliderView.getContentViewWidthHeightRate();
+        float rate = 0;
         if (rate == 0) {
             rate = 1.0f;
         }
         mBoxRate = rate;
         return mBoxRate;
-    }
-
-    public SlideState getLockPanelState() {
-        return mSliderView != null ? mSliderView.getSlideState() : null;
     }
 
     private static final int DATE_WIDGET_TRANSLATIONY_DISTANCE = -BaseInfoHelper.dip2px(
