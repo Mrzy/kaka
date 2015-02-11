@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout
+        xmlns:supl="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/slidingUpPanelLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        supl:slidingInitialState="collapsed"
+        supl:slidingOverlay="true"
+        supl:slidingPanelHeight="80dp"
+        supl:slidingParalaxOffset="0dp"
+        supl:slidingShadowHeight="5dp" >
+
+        <cn.zmdx.kaka.locker.widget.ViewPagerCompat
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#88000000"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
+</FrameLayout>

@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 
 /**
  * ViewDragHelper is a utility class for writing custom ViewGroups. It offers a
@@ -372,6 +373,10 @@ public class ViewDragHelper {
             setDragState(STATE_IDLE);
         }
     };
+
+    public static ViewDragHelper create(ViewGroup forParent, Callback cb) {
+        return new ViewDragHelper(forParent.getContext(), forParent, cb, new LinearInterpolator());
+    }
 
     /**
      * Factory method to create a new ViewDragHelper.

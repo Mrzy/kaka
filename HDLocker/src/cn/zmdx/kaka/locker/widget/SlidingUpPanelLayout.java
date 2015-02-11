@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker.widget;
 
+import java.io.File;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -452,23 +454,34 @@ public class SlidingUpPanelLayout extends ViewGroup {
         }
         mDragView = dragView;
         if (mDragView != null) {
-            mDragView.setClickable(true);
             mDragView.setFocusable(false);
             mDragView.setFocusableInTouchMode(false);
-            mDragView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!isEnabled())
-                        return;
-                    if (!isPanelExpanded() && !isPanelAnchored()) {
-                        expandPanel(mAnchorPoint);
-                    } else {
-                        collapsePanel();
+            if (canDragViewClick()) {
+                mDragView.setClickable(true);
+                mDragView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!isEnabled())
+                            return;
+                        if (!isPanelExpanded() && !isPanelAnchored()) {
+                            expandPanel(mAnchorPoint);
+                        } else {
+                            collapsePanel();
+                        }
                     }
-                }
-            });
-            ;
+                });
+            }
         }
+    }
+
+    private boolean mDragViewClickable = true;
+
+    public void setDragViewClickable(boolean clickable) {
+        mDragViewClickable = clickable;
+    }
+
+    public boolean canDragViewClick() {
+        return mDragViewClickable;
     }
 
     /**
@@ -1061,7 +1074,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
      * @param slideOffset position to animate to
      * @param velocity initial velocity in case of fling, or 0.
      */
-    boolean smoothSlideTo(float slideOffset, int velocity) {
+    public boolean smoothSlideTo(float slideOffset, int velocity) {
         if (!isSlidingEnabled()) {
             // Nothing to do.
             return false;
@@ -1356,5 +1369,21 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 return new SavedState[size];
             }
         };
+    }
+
+    @SuppressLint("NewApi")
+    @Override
+    public void setBackground(Drawable background) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            super.setBackground(background);
+        } else {
+            setBackgroundDrawable(background);
+        }
+    }
+
+    @Override
+    public void setBackgroundResource(int resId) {
+        Drawable drawable = getContext().getResources().getDrawable(resId);
+        setBackground(drawable);
     }
 }
