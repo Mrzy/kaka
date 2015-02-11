@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import cn.zmdx.kaka.fast.locker.BuildConfig;
 import cn.zmdx.kaka.fast.locker.LockScreenManager;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.utils.HDBLOG;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.DragDropGrid;
 import cn.zmdx.kaka.fast.locker.widget.dragdropgridview.PagedDragDropGridAdapter;
@@ -130,6 +131,7 @@ public class ShortcutAppAdapter implements PagedDragDropGridAdapter {
                     AppInfo ai = (AppInfo) v.getTag();
                     String pkgName = ai.getPkgName();
                     startTarget(pkgName);
+                    UmengCustomEventManager.statisticalClickShortcut(pkgName + "|");
                 }
             }
         });

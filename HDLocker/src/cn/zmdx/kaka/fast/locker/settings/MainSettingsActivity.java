@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.SettingItemsAdapter;
+import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.guide.GuideActivity;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
@@ -398,6 +399,7 @@ public class MainSettingsActivity extends Activity implements OnClickListener {
      */
     @Override
     public void onClick(View v) {
+        UmengCustomEventManager.statisticalCommentTimes();
         String locale = BaseInfoHelper.getLocale(this);
         if (locale.equals(Locale.CHINA.toString())) {
             Uri uri = Uri.parse("market://details?id=" + BaseInfoHelper.getPkgName(this));

@@ -28,6 +28,7 @@ import cn.zmdx.kaka.fast.locker.LockScreenManager.IPullDownListener;
 import cn.zmdx.kaka.fast.locker.R;
 import cn.zmdx.kaka.fast.locker.database.ShortcutModel;
 import cn.zmdx.kaka.fast.locker.settings.ShortcutSettingsActivity;
+import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.QuickHelperItem;
 import cn.zmdx.kaka.fast.locker.shortcut.sevenkey.ToolbarAdapter;
@@ -159,6 +160,7 @@ public class ShortcutManager {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            UmengCustomEventManager.statisticalClickToolIcon();
             final QuickHelperItem item = (QuickHelperItem) mAdapter.getItem(position);
             if (item == null) {
                 return;
@@ -182,7 +184,8 @@ public class ShortcutManager {
         }
         mGuideView = mInflater.inflate(R.layout.tool_box_guide_layout, null);
         mGuideView.setVisibility(View.GONE);
-        view.addView(mGuideView, new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, GUIDE_ANIMATOR_Y_OFFSET));
+        view.addView(mGuideView, new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT,
+                GUIDE_ANIMATOR_Y_OFFSET));
         mGuideView.setOnClickListener(new OnClickListener() {
 
             @Override

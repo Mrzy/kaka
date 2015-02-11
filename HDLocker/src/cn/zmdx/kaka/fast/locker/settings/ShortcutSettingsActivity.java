@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import cn.zmdx.kaka.fast.locker.BuildConfig;
 import cn.zmdx.kaka.fast.locker.R;
+import cn.zmdx.kaka.fast.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.fast.locker.shortcut.AppInfo;
 import cn.zmdx.kaka.fast.locker.shortcut.ShortcutManager;
 import cn.zmdx.kaka.fast.locker.utils.BaseInfoHelper;
@@ -78,6 +79,7 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
         ViewGroup.LayoutParams lp = mGridView.getLayoutParams();
         lp.height = BaseInfoHelper.getRealWidth(this) / 3 * 2;
         mData = ShortcutManager.getInstance(this).getShortcutInfo();
+        UmengCustomEventManager.statisticalAllShortcut(getAllShortcut(mData));
         mAdapter = new ShortcutSettingsAdapter(this, mGridView, mData);
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(new OnItemClickListener() {
@@ -117,6 +119,14 @@ public class ShortcutSettingsActivity extends BaseActivity implements OnClickLis
 
     private void invalidate() {
         initShortcutView();
+    }
+
+    private String getAllShortcut(List<AppInfo> mAppInfosList) {
+        String allShortcutApps = "|";
+        for (AppInfo appInfo : mAppInfosList) {
+            allShortcutApps += appInfo.getAppName() + "|";
+        }
+        return allShortcutApps;
     }
 
     private void startSettingsActivity(int position) {
