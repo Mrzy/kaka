@@ -70,8 +70,9 @@ public final class PandoraNotificationService extends NotificationListenerServic
                 .getInstance(getApplicationContext());
         np.putInterceptPkgName(Constants.PKGNAME_WEIXIN);// 微信
         np.putInterceptPkgName(Constants.PKGNAME_QQ);// qq
+        np.putInterceptPkgName("com.android.phone");
         // 获取拨号的包名
-        Set<String> dialerPkgNameSet = getDialerPkgName(this, Intent.ACTION_DIAL);
+        Set<String> dialerPkgNameSet = getDialerPkgName(this, Intent.ACTION_CALL);
 
         if (dialerPkgNameSet != null) {
             for (String str : dialerPkgNameSet) {
@@ -116,7 +117,7 @@ public final class PandoraNotificationService extends NotificationListenerServic
         PackageManager sPackageManager = context.getPackageManager();
         Intent dialerIntent = new Intent(intentStr);
         List<ResolveInfo> intentResolveInfos = sPackageManager.queryIntentActivities(dialerIntent,
-                PackageManager.GET_RECEIVERS);
+                PackageManager.MATCH_DEFAULT_ONLY);
         int size = intentResolveInfos.size();
         if (size < 1) {
             return null;

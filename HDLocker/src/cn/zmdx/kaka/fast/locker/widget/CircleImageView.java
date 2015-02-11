@@ -40,38 +40,47 @@ public class CircleImageView extends ImageView {
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
+
     private static final int COLORDRAWABLE_DIMENSION = 2;
 
     private static final int DEFAULT_BORDER_WIDTH = 0;
+
     private static final int DEFAULT_BORDER_COLOR = Color.BLACK;
 
     private final RectF mDrawableRect = new RectF();
+
     private final RectF mBorderRect = new RectF();
 
     private final Matrix mShaderMatrix = new Matrix();
+
     private final Paint mBitmapPaint = new Paint();
+
     private final Paint mBorderPaint = new Paint();
 
     private int mBorderColor = DEFAULT_BORDER_COLOR;
+
     private int mBorderWidth = DEFAULT_BORDER_WIDTH;
 
     private Bitmap mBitmap;
+
     private BitmapShader mBitmapShader;
+
     private int mBitmapWidth;
+
     private int mBitmapHeight;
 
     private float mDrawableRadius;
+
     private float mBorderRadius;
 
     private ColorFilter mColorFilter;
 
     private boolean mReady;
+
     private boolean mSetupPending;
 
     public CircleImageView(Context context) {
-        super(context);
-
-        init();
+        this(context, null);
     }
 
     public CircleImageView(Context context, AttributeSet attrs) {
@@ -81,9 +90,11 @@ public class CircleImageView extends ImageView {
     public CircleImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyle, 0);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyle,
+                0);
 
-        mBorderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_border_width, DEFAULT_BORDER_WIDTH);
+        mBorderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_border_width,
+                DEFAULT_BORDER_WIDTH);
         mBorderColor = a.getColor(R.styleable.CircleImageView_border_color, DEFAULT_BORDER_COLOR);
 
         a.recycle();
@@ -109,7 +120,8 @@ public class CircleImageView extends ImageView {
     @Override
     public void setScaleType(ScaleType scaleType) {
         if (scaleType != SCALE_TYPE) {
-            throw new IllegalArgumentException(String.format("ScaleType %s not supported.", scaleType));
+            throw new IllegalArgumentException(String.format("ScaleType %s not supported.",
+                    scaleType));
         }
     }
 
@@ -120,13 +132,19 @@ public class CircleImageView extends ImageView {
         }
     }
 
+    private Paint mCircleBackgroundPaint = new Paint();
+
     @Override
     protected void onDraw(Canvas canvas) {
         if (getDrawable() == null) {
             return;
         }
 
+        // draw background
+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, mDrawableRadius, mCircleBackgroundPaint);
+        // draw icon
         canvas.drawCircle(getWidth() / 2, getHeight() / 2, mDrawableRadius, mBitmapPaint);
+        // draw border
         if (mBorderWidth != 0) {
             canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, mBorderPaint);
         }
@@ -217,9 +235,11 @@ public class CircleImageView extends ImageView {
             Bitmap bitmap;
 
             if (drawable instanceof ColorDrawable) {
-                bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);
+                bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION,
+                        BITMAP_CONFIG);
             } else {
-                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
+                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                        drawable.getIntrinsicHeight(), BITMAP_CONFIG);
             }
 
             Canvas canvas = new Canvas(bitmap);
@@ -241,10 +261,14 @@ public class CircleImageView extends ImageView {
             return;
         }
 
+        mCircleBackgroundPaint.setColor(Color.parseColor("#f9f9f9"));
+
         mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
 
         mBitmapPaint.setAntiAlias(true);
         mBitmapPaint.setShader(mBitmapShader);
+        mBitmapPaint.setColor(Color.parseColor("#f9f9f9"));
+        mBitmapPaint.setStyle(Paint.Style.FILL);
 
         mBorderPaint.setStyle(Paint.Style.STROKE);
         mBorderPaint.setAntiAlias(true);
@@ -255,13 +279,15 @@ public class CircleImageView extends ImageView {
         mBitmapWidth = mBitmap.getWidth();
 
         mBorderRect.set(0, 0, getWidth(), getHeight());
-        mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2, (mBorderRect.width() - mBorderWidth) / 2);
+        mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2,
+                (mBorderRect.width() - mBorderWidth) / 2);
 
-        mDrawableRect.set(mBorderWidth, mBorderWidth, mBorderRect.width() - mBorderWidth, mBorderRect.height() - mBorderWidth);
+        mDrawableRect.set(mBorderWidth, mBorderWidth, mBorderRect.width() - mBorderWidth,
+                mBorderRect.height() - mBorderWidth);
         mDrawableRadius = Math.min(mDrawableRect.height() / 2, mDrawableRect.width() / 2);
 
         updateShaderMatrix();
-        invalidate();
+        // invalidate();
     }
 
     private void updateShaderMatrix() {
@@ -280,7 +306,8 @@ public class CircleImageView extends ImageView {
         }
 
         mShaderMatrix.setScale(scale, scale);
-        mShaderMatrix.postTranslate((int) (dx + 0.5f) + mBorderWidth, (int) (dy + 0.5f) + mBorderWidth);
+        mShaderMatrix.postTranslate((int) (dx + 0.5f) + mBorderWidth, (int) (dy + 0.5f)
+                + mBorderWidth);
 
         mBitmapShader.setLocalMatrix(mShaderMatrix);
     }
