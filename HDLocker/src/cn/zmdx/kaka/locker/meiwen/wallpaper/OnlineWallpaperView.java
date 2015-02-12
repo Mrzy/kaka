@@ -24,7 +24,6 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import cn.zmdx.kaka.locker.meiwen.BuildConfig;
 import cn.zmdx.kaka.locker.meiwen.ImageLoaderManager;
 import cn.zmdx.kaka.locker.meiwen.RequestManager;
@@ -42,6 +41,7 @@ import cn.zmdx.kaka.locker.meiwen.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.meiwen.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.meiwen.utils.ImageUtils;
 import cn.zmdx.kaka.locker.meiwen.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
+import cn.zmdx.kaka.locker.meiwen.widget.ProgressBarCircularIndeterminate;
 import cn.zmdx.kaka.locker.meiwen.widget.TypefaceTextView;
 
 import com.android.volley.Response.ErrorListener;
@@ -58,7 +58,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private GridView mGridView;
 
-    private ProgressBar mGVPb;
+    private ProgressBarCircularIndeterminate mGVPb;
 
     private WallpaperAdpter mWallpaperAdpter;
 
@@ -70,7 +70,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private TypefaceTextView mApplyButton;
 
-    private ProgressBar mPreviewProgressBar;
+    private ProgressBarCircularIndeterminate mPreviewProgressBar;
 
     private ArrayList<ServerOnlineWallpaper> list;
 
@@ -90,7 +90,7 @@ public class OnlineWallpaperView extends LinearLayout {
 
     private TypefaceTextView mPromptTextView;
 
-    private ProgressBar mPromptPb;
+    private ProgressBarCircularIndeterminate mPromptPb;
 
     private static final boolean PREFER_QUALITY_OVER_SPEED = false;
 
@@ -130,7 +130,8 @@ public class OnlineWallpaperView extends LinearLayout {
         addView(mRootView);
         mContentView = (LinearLayout) mRootView
                 .findViewById(Res.id.pandora_online_wallpaper_content);
-        mPromptPb = (ProgressBar) mRootView.findViewById(Res.id.pandora_online_wallpaper_prompt_pb);
+        mPromptPb = (ProgressBarCircularIndeterminate) mRootView
+                .findViewById(Res.id.pandora_online_wallpaper_prompt_pb);
         mPromptTextView = (TypefaceTextView) mRootView
                 .findViewById(Res.id.pandora_online_wallpaper_prompt_text_view);
         mPreview = (ImageView) mRootView
@@ -166,7 +167,7 @@ public class OnlineWallpaperView extends LinearLayout {
         }
         mAuthor = (TypefaceTextView) mRootView
                 .findViewById(Res.id.pandora_online_wallpaper_preview_author);
-        mPreviewProgressBar = (ProgressBar) mRootView
+        mPreviewProgressBar = (ProgressBarCircularIndeterminate) mRootView
                 .findViewById(Res.id.pandora_online_wallpaper_preview_progress);
         mApplyButton = (TypefaceTextView) mRootView
                 .findViewById(Res.id.pandora_online_wallpaper_apply_button);
@@ -201,8 +202,11 @@ public class OnlineWallpaperView extends LinearLayout {
                 .findViewById(Res.id.pandora_online_wallpaper_preview_date);
         mTemperature = (TypefaceTextView) mRootView
                 .findViewById(Res.id.pandora_online_wallpaper_preview_temperature);
-        mGVPb = (ProgressBar) mRootView.findViewById(Res.id.pandora_online_wallpaper_gridview_pb);
+        mGVPb = (ProgressBarCircularIndeterminate) mRootView
+                .findViewById(Res.id.pandora_online_wallpaper_gridview_pb);
         mGridView = (GridView) mRootView.findViewById(Res.id.pandora_online_wallpaper_gridview);
+        mGridView.setVerticalFadingEdgeEnabled(true);
+        mGridView.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 20));
 
         readyPullWallpaperFromServer();
     }

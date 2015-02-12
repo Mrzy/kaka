@@ -69,11 +69,10 @@
                         android:scaleType="fitXY"
                         android:src="@color/online_wallpaper_preview_translucent" />
 
-                    <ProgressBar
+                    <cn.zmdx.kaka.locker.meiwen.widget.ProgressBarCircularIndeterminate
                         android:id="@+id/pandora_online_wallpaper_preview_progress"
-                        style="@android:style/Widget.ProgressBar.Small"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
                         android:layout_gravity="center"
                         android:visibility="gone" />
 
@@ -175,11 +174,10 @@
                     android:scrollbars="none"
                     android:verticalSpacing="@dimen/pandora_online_wallpaper_gridview_vertical_spacing" />
 
-                <ProgressBar
+                <cn.zmdx.kaka.locker.meiwen.widget.ProgressBarCircularIndeterminate
                     android:id="@+id/pandora_online_wallpaper_gridview_pb"
-                    style="@android:style/Widget.ProgressBar.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_gravity="center"
                     android:visibility="gone" />
             </FrameLayout>
@@ -197,11 +195,10 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <ProgressBar
+    <cn.zmdx.kaka.locker.meiwen.widget.ProgressBarCircularIndeterminate
         android:id="@+id/pandora_online_wallpaper_prompt_pb"
-        style="@android:style/Widget.ProgressBar.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_gravity="center"
         android:visibility="visible" />
 

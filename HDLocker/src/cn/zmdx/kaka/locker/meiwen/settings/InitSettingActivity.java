@@ -86,7 +86,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             findViewById(Res.id.init_setting_read_notification_bar_guide).setVisibility(View.VISIBLE);
-            mReadNotificationBtn = (BaseButton) findViewById(Res.id.init_setting_read_notification_bar_guide);
+            mReadNotificationBtn = (BaseButton) findViewById(Res.id.init_setting_read_notification_bar_to_set);
             mReadNotificationBtn.setOnClickListener(this);
         }
     }
