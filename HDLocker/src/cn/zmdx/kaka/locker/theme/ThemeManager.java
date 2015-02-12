@@ -23,7 +23,7 @@ public class ThemeManager {
 
     public static final int THEME_ID_DEFAULT = 4;
 
-    public static final int DEFAULT_BACKGROUND_RES_ID = R.drawable.pandora_splash_background;
+    public static final int DEFAULT_BACKGROUND_RES_ID = R.drawable.pandora_default_background;
 
     private static final String CURRENT_THEME_CACHE_KEY = "curThemeCacheKey";
 

@@ -6,6 +6,8 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,12 +18,16 @@ import android.widget.ImageView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 public class SplashActivity extends Activity {
+
+    private View mRootView;
 
     private TypefaceTextView mVersion;
 
@@ -41,6 +47,8 @@ public class SplashActivity extends Activity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
         setContentView(R.layout.pandora_splash);
+
+        mRootView = findViewById(R.id.pandora_splash_background);
         initDesktopDrawable();
         mIcon = (ImageView) findViewById(R.id.pandora_splash_icon);
         mAppName = (TypefaceTextView) findViewById(R.id.pandora_splash_app_name);
@@ -116,13 +124,12 @@ public class SplashActivity extends Activity {
         mVersion.setText("V " + version);
     }
 
+    @SuppressWarnings("deprecation")
     private void initDesktopDrawable() {
-        HDBThreadUtils.runOnWorker(new Runnable() {
-
-            @Override
-            public void run() {
-                WallpaperUtils.initDefaultWallpaper();
-            }
-        });
+        Drawable drawable = ThemeManager.getCurrentTheme().getCurDrawable();
+        Bitmap bitmap = PandoraUtils.doFastBlur(SplashActivity.this, 0,
+                ImageUtils.drawable2Bitmap(drawable), mRootView);
+        mRootView.setBackgroundDrawable(ImageUtils.bitmap2Drawable(SplashActivity.this, bitmap));
     }
+
 }
