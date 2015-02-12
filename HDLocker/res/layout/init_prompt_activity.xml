@@ -47,14 +47,16 @@
                 android:textStyle="normal" />
         </LinearLayout>
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        <cn.zmdx.kaka.locker.widget.BaseButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/init_setting_button_background"
             android:gravity="center"
+            android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+            android:clickable="false"
             android:text="@string/determine"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
@@ -112,7 +114,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
                     android:contentDescription="@string/contentDescription"
-                    android:src="@drawable/init_prompt_notification" />
+                    android:src="@drawable/pandora_wallpaper_select" />
             </LinearLayout>
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
@@ -127,15 +129,17 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.widget.BaseButton
                 android:id="@+id/init_setting_V6_read_notification_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/init_setting_button_background"
                 android:gravity="center"
+                android:clickable="false"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
                 android:text="@string/determine"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
@@ -333,15 +337,17 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.widget.BaseButton
                 android:id="@+id/init_setting_V6_close_systemlocker_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
+                android:clickable="false"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/init_setting_button_background"
                 android:gravity="center"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
                 android:text="@string/determine"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
@@ -386,15 +392,17 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.widget.BaseButton
                 android:id="@+id/init_setting_V6_allow_floating_window_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/init_setting_button_background"
                 android:gravity="center"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+                android:clickable="false"
                 android:text="@string/determine"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
@@ -464,15 +472,17 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            <cn.zmdx.kaka.locker.widget.BaseButton
                 android:id="@+id/init_setting_V6_trust_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/init_setting_button_background"
+                android:clickable="false"
                 android:gravity="center"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
                 android:text="@string/determine"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
