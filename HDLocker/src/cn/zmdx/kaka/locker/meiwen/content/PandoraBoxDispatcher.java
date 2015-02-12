@@ -114,7 +114,8 @@ public class PandoraBoxDispatcher extends Handler {
 
     private boolean checkOriginalDataPullable() {
         long lastTime = mConfig.getLastTimePullOriginalData();
-        return System.currentTimeMillis() - lastTime > PandoraPolicy.MIN_PULL_ORIGINAL_TIME;
+        int count = ServerImageDataModel.getInstance().getCountUnRead();
+        return System.currentTimeMillis() - lastTime > PandoraPolicy.MIN_PULL_ORIGINAL_TIME && count < 20;
     }
 
     private void loadPandoraServerImage() {
@@ -169,7 +170,7 @@ public class PandoraBoxDispatcher extends Handler {
     }
 
     private void processPullOriginalData() {
-        long lastModified = ServerImageDataModel.getInstance().queryLastModifiedOfToday();
+        long lastModified = ServerImageDataModel.getInstance().queryLastModified();
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("lastModified:" + lastModified);
         }

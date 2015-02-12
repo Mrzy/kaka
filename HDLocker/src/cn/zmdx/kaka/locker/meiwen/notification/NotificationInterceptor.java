@@ -24,6 +24,7 @@ import android.text.TextUtils;
 import cn.zmdx.kaka.locker.meiwen.BuildConfig;
 import cn.zmdx.kaka.locker.meiwen.RequestManager;
 import cn.zmdx.kaka.locker.meiwen.database.CustomNotificationModel;
+import cn.zmdx.kaka.locker.meiwen.network.UrlBuilder;
 import cn.zmdx.kaka.locker.meiwen.utils.HDBLOG;
 import cn.zmdx.kaka.locker.meiwen.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.meiwen.utils.HDBThreadUtils;
@@ -49,8 +50,6 @@ public class NotificationInterceptor extends Handler {
 
     private static final int DURATION_PULL_CUSTOM_NOTIFICATION_DATA = BuildConfig.DEBUG ? 30 * 1000
             : 2 * 60 * 60 * 1000;
-
-    private static final String BASE_URL = "http://nb.hdlocker.com/pandora/notify!queryNotifyList.action";
 
     private static final int MSG_DISPATCH_CUSTOM_NOTIFICATION = 6;
 
@@ -240,7 +239,8 @@ public class NotificationInterceptor extends Handler {
      * @return
      */
     private String getUrl(long lastModified) {
-        return BASE_URL + "?lastModified=" + lastModified;
+        return UrlBuilder.getBaseUrl() + "notify!queryNotifyList.action?lastModified="
+                + lastModified;
     }
 
     private void handlePullCustomNotificationData() {
@@ -272,29 +272,33 @@ public class NotificationInterceptor extends Handler {
                 if (!TextUtils.isEmpty(status) && status.equals("success")) {
                     List<NotificationEntity> list = new ArrayList<NotificationEntity>();
                     JSONArray data = response.optJSONArray("data");
-                    int size = data.length();
-                    for (int i = 0; i < size; i++) {
-                        final NotificationEntity entity = new NotificationEntity();
-                        JSONObject item = data.optJSONObject(i);
-                        entity.setCloudId(item.optInt("id"));
-                        entity.setTitle(item.optString("title"));
-                        entity.setContent(item.optString("content"));
-                        entity.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
-                        entity.setStartTime(item.optLong("start_time"));
-                        entity.setEndTime(item.optLong("end_time"));
-                        entity.setIcon(item.optString("icon"));
-                        entity.setLevel(item.optInt("level"));
-                        entity.setTargetApp(item.optString("application"));
-                        entity.setTargetUrl(item.optString("url"));
-                        entity.setTimes(item.optInt("times"));
-                        list.add(entity);
-                    }
+                    if (data != null) {
+                        int size = data.length();
+                        for (int i = 0; i < size; i++) {
+                            final NotificationEntity entity = new NotificationEntity();
+                            JSONObject item = data.optJSONObject(i);
+                            if (item != null) {
+                                entity.setCloudId(item.optInt("id"));
+                                entity.setTitle(item.optString("title"));
+                                entity.setContent(item.optString("content"));
+                                entity.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
+                                entity.setStartTime(item.optLong("start_time"));
+                                entity.setEndTime(item.optLong("end_time"));
+                                entity.setIcon(item.optString("icon"));
+                                entity.setLevel(item.optInt("level"));
+                                entity.setTargetApp(item.optString("application"));
+                                entity.setTargetUrl(item.optString("url"));
+                                entity.setTimes(item.optInt("times"));
+                                list.add(entity);
+                            }
+                        }
 
-                    int result = CustomNotificationModel.getInstance().batchInsert(list);
-                    if (BuildConfig.DEBUG) {
-                        HDBLOG.logD("----拉取自定义通知原始数据：将数据存储到本地数据库，成功插入" + result + "条");
+                        int result = CustomNotificationModel.getInstance().batchInsert(list);
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("----拉取自定义通知原始数据：将数据存储到本地数据库，成功插入" + result + "条");
+                        }
+                        mPreference.savePullCustomNotificationLastModified(newLastModified);
                     }
-                    mPreference.savePullCustomNotificationLastModified(newLastModified);
                 }
             }
 
