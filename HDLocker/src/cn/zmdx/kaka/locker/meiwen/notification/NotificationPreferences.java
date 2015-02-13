@@ -23,6 +23,8 @@ public class NotificationPreferences {
 
     private static final String KEY_CUSTOM_NOTIFICATION_DATA = "kcnd";
 
+    private static final String KEY_LAST_SHOW_GUIDE_OPEN_NOTIFICATION = "klsgon";
+
     private Context mContext;
 
     private SharedPreferences mSp;
@@ -93,5 +95,13 @@ public class NotificationPreferences {
 
     public void savePullCustomNotificationLastModified(long lastModified) {
         mSp.edit().putLong(KEY_PULL_CUSTOM_NOTIFICATION_LAST_MODIFIED, lastModified).commit();
+    }
+
+    public long getLastShowGuideOpenNotificationServiceTime() {
+        return mSp.getLong(KEY_LAST_SHOW_GUIDE_OPEN_NOTIFICATION, 0);
+    }
+
+    public void saveLastShowGuideOpenNotificationServiceTime(long currentTime) {
+        mSp.edit().putLong(KEY_LAST_SHOW_GUIDE_OPEN_NOTIFICATION, currentTime).commit();
     }
 }

@@ -121,8 +121,10 @@ public class NotificationLayout extends LinearLayout {
                                     NotificationGuideHelper.recordGuideProgress(mContext);
                                     NotificationInfo info = NotificationGuideHelper
                                             .getNextGuide(mContext);
-                                    NotificationInterceptor.getInstance(mContext)
-                                            .sendCustomNotification(info);
+                                    if (info != null) {
+                                        NotificationInterceptor.getInstance(mContext)
+                                        .sendCustomNotification(info);
+                                    }
                                 }
                             }
                             removeNotification(id);
@@ -259,6 +261,8 @@ public class NotificationLayout extends LinearLayout {
                                         getResources().getString(
                                                 Res.string.open_notification_permission_toast),
                                         Toast.LENGTH_LONG).show();
+                            } else if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE) {
+                                NotificationGuideHelper.recordGuideProgress(mContext);
                             }
                             removeNotification(id);
                             UmengCustomEventManager.statisticalOpenNotification(info.getId(),
