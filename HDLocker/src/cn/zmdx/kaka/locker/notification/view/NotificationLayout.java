@@ -46,8 +46,6 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
-//import android.util.Log;
-
 public class NotificationLayout extends LinearLayout {
 
     private NotificationInterceptor mInterceptor;
@@ -60,13 +58,16 @@ public class NotificationLayout extends LinearLayout {
 
     protected static final int GAP_BETWEEN_NOTIFICATIONS = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 5);
+
     protected static final int GAP_ITEM_LEFT_MARGIN = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 15);
+
     protected static final int GAP_ITEM_RIGHT_MARGIN = BaseInfoHelper.dip2px(
             HDApplication.getContext(), 15);
 
-//    protected static final int NOTIFICATION_ITEM_HEIGHT = BaseInfoHelper.dip2px(
-//            HDApplication.getContext(), 64);
+    // protected static final int NOTIFICATION_ITEM_HEIGHT =
+    // BaseInfoHelper.dip2px(
+    // HDApplication.getContext(), 64);
 
     private static final SimpleDateFormat sSdf = new SimpleDateFormat("dd日 HH:mm");
 
@@ -152,8 +153,10 @@ public class NotificationLayout extends LinearLayout {
                                     NotificationGuideHelper.recordGuideProgress(getContext());
                                     NotificationInfo info = NotificationGuideHelper
                                             .getNextGuide(getContext());
-                                    NotificationInterceptor.getInstance(getContext())
-                                            .sendCustomNotification(info);
+                                    if (info != null) {
+                                        NotificationInterceptor.getInstance(getContext())
+                                                .sendCustomNotification(info);
+                                    }
                                 }
                             }
                             removeNotification(id);
@@ -300,6 +303,8 @@ public class NotificationLayout extends LinearLayout {
                                                 Toast.LENGTH_LONG).show();
                                     }
                                 }, 200);
+                            } else if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE) {
+                                NotificationGuideHelper.recordGuideProgress(getContext());
                             }
                             removeNotification(id);
                             UmengCustomEventManager.statisticalOpenNotification(info.getId(),
