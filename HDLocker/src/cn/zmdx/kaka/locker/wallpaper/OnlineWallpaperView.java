@@ -199,7 +199,8 @@ public class OnlineWallpaperView extends LinearLayout {
                 .findViewById(R.id.pandora_online_wallpaper_preview_temperature);
         mGVPb = (ProgressBar) mRootView.findViewById(R.id.pandora_online_wallpaper_gridview_pb);
         mGridView = (GridView) mRootView.findViewById(R.id.pandora_online_wallpaper_gridview);
-
+        mGridView.setVerticalFadingEdgeEnabled(true);
+        mGridView.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 20));
         readyPullWallpaperFromServer();
     }
 
