@@ -21,6 +21,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.SimpleDrawerListener;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
@@ -30,6 +32,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewGroup.OnHierarchyChangeListener;
 import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -147,6 +150,8 @@ public class LockScreenManager {
 
     private SlidingUpPanelLayout mSlidingUpView;
 
+    private DrawerLayout mRightDrawerLayout;
+
     public interface ILockScreenListener {
         void onLock();
 
@@ -259,20 +264,26 @@ public class LockScreenManager {
         mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.new_pandora_lockscreen, null);
 
-        //初始化用于显示热点头条的上拉面板view
+        // 初始化用于显示热点头条的上拉面板view
         mSlidingUpView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.slidingUpPanelLayout);
         mSlidingUpView.setPanelSlideListener(mSlidingUpPanelListener);
         mSlidingUpView.setDragViewClickable(false);
 
-        //初始化处理壁纸模糊的view
+        // 初始化处理壁纸模糊的view
         mBlurImageView = mEntireView.findViewById(R.id.blurImageView);
         mBlurImageView.setAlpha(0);// 默认模糊的view不显示，透明度设置为0
 
-        //初始化右划解锁的viewpager
+        // 初始化右侧工具栏
+        mRightDrawerLayout = (DrawerLayout) mEntireView.findViewById(R.id.rightToolbarPanel);
+        mRightDrawerLayout.setDrawerListener(mRightDrawableListener);
+        mRightDrawerLayout.setScrimColor(Color.TRANSPARENT);
+
+        // 初始化右划解锁的viewpager
         mPager = (ViewPagerCompat) mEntireView.findViewById(R.id.viewPager);
         mCurTheme = ThemeManager.getCurrentTheme();
         Drawable curWallpaper = mCurTheme.getCurDrawable();
-        Drawable lockBg = LockerUtils.renderScreenLockerBackground(mEntireView.findViewById(R.id.lockerBg), curWallpaper);
+        Drawable lockBg = LockerUtils.renderScreenLockerBackground(
+                mEntireView.findViewById(R.id.lockerBg), curWallpaper);
 
         LockerUtils.renderScreenLockerBlurEffect(mBlurImageView, lockBg);
 
@@ -280,8 +291,7 @@ public class LockScreenManager {
         ViewGroup page1 = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_password_pager_layout, null);
         initSecurePanel(page1);
-        mMainPage = LayoutInflater.from(mContext).inflate(
-                R.layout.pandora_main_pager_layout, null);
+        mMainPage = LayoutInflater.from(mContext).inflate(R.layout.pandora_main_pager_layout, null);
         mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         pages.add(page1);
@@ -289,62 +299,125 @@ public class LockScreenManager {
         LockerPagerAdapter pagerAdapter = new LockerPagerAdapter(mContext, mPager, pages);
         mPager.setAdapter(pagerAdapter);
         mPager.setCurrentItem(1);
-        mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        mPager.setOnPageChangeListener(mViewPagerChangeListener);
+        
+        // 监听是否有通知，以处理背景模糊效果
+        NotificationLayout nl = (NotificationLayout) mMainPage.findViewById(R.id.lock_bottom_notification_layout);
+        nl.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
+
             @Override
-            public void onPageSelected(int position) {
-                if (position == 0) {
-                    if (mNeedPassword) {
-                        NotificationLayout notificationLayout = (NotificationLayout) mMainPage
-                                .findViewById(R.id.lock_bottom_notification_layout);
-                        if (notificationLayout != null) {
-                            notificationLayout.restoreItemsPosition();
-                        }
-                    }
-
-                    // dismiss news panel
-                    mSlidingUpView.hidePanel();
-                } else if (position == 1) {
-                    if (mNeedPassword) {
-                        // 如果从密码页滑回锁屏页，将之前设置的解锁后执行动作清除。即此处认为用户没有输入密码解锁，又滑回了锁屏页
-                        setRunnableAfterUnLock(null);
-                    }
-
-                    mSlidingUpView.showPanel();
+            public void onChildViewAdded(View parent, View child) {
+                ViewGroup vg = (ViewGroup) parent;
+                if (vg.getChildCount() == 1) {
+                    fadeInWallpaperBlurAnimator();
                 }
             }
 
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (positionOffset == 0.0 && position == 0) {
-                    unLock();
+            public void onChildViewRemoved(View parent, View child) {
+                ViewGroup vg = (ViewGroup) parent;
+                if (vg.getChildCount() == 0) {
+                    fadeOutWallpaperBlurAnimator();
                 }
-                if (position == 1 && positionOffset == 0.0) {
-                    setWallpaperBlurEffect(0);
-                } else {
-                    setWallpaperBlurEffect(1.0f - positionOffset);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
             }
         });
-
     }
+
+    private ViewPager.SimpleOnPageChangeListener mViewPagerChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+        @Override
+        public void onPageSelected(int position) {
+            if (position == 0) {
+                if (mNeedPassword) {
+                    NotificationLayout notificationLayout = (NotificationLayout) mMainPage
+                            .findViewById(R.id.lock_bottom_notification_layout);
+                    if (notificationLayout != null) {
+                        notificationLayout.restoreItemsPosition();
+                    }
+                }
+
+                // dismiss news panel
+                mSlidingUpView.hidePanel();
+            } else if (position == 1) {
+                if (mNeedPassword) {
+                    // 如果从密码页滑回锁屏页，将之前设置的解锁后执行动作清除。即此处认为用户没有输入密码解锁，又滑回了锁屏页
+                    setRunnableAfterUnLock(null);
+                }
+
+                mSlidingUpView.showPanel();
+            }
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            if (positionOffset == 0.0 && position == 0) {
+                unLock();
+            }
+            if (position == 1 && positionOffset == 0.0) {
+                setWallpaperBlurEffect(0);
+            } else {
+                setWallpaperBlurEffect(1.0f - positionOffset);
+                setMainPageAlpha(positionOffset);
+            }
+        }
+    };
+
+    private SimpleDrawerListener mRightDrawableListener = new SimpleDrawerListener() {
+
+        public void onDrawerSlide(View drawerView, float slideOffset) {
+            setWallpaperBlurEffect(slideOffset);
+            setMainPageAlpha(1.0f - slideOffset * 0.5f);
+            if (slideOffset == 0) {
+                mSlidingUpView.showPanel();
+            } else {
+                mSlidingUpView.hidePanel();
+            }
+        };
+
+        public void onDrawerClosed(View drawerView) {
+            // boolean isOpened = mRightDrawerLayout.isDrawerOpen(drawerView);
+        };
+
+        public void onDrawerOpened(View drawerView) {
+        };
+    };
 
     private SimplePanelSlideListener mSlidingUpPanelListener = new SimplePanelSlideListener() {
         public void onPanelSlide(View panel, float slideOffset) {
-            //模糊背景
-            setWallpaperBlurEffect(slideOffset);
-            //渐隐时间，天气文字
-            if (mMainPage != null) {
-                mMainPage.setAlpha(1.0f - slideOffset);
+            // 模糊背景
+            if (slideOffset >= 0) {
+                setWallpaperBlurEffect(Math.max(0, slideOffset));
+                // 渐隐时间，天气文字
+                setMainPageAlpha(1.0f - slideOffset);
             }
         };
     };
 
+    private void fadeInWallpaperBlurAnimator() {
+        if (mBlurImageView != null) {
+            mBlurImageView.animate().alpha(1).setDuration(500).start();
+        }
+    }
+
+    private void fadeOutWallpaperBlurAnimator() {
+        if (mBlurImageView != null) {
+            mBlurImageView.animate().alpha(0).setDuration(500).start();
+        }
+    }
+
+    /**
+     * 设置锁屏主页（包含时间，天气等信息）的整体透明度
+     * 
+     * @param alpha
+     */
+    private void setMainPageAlpha(float alpha) {
+        if (mMainPage != null) {
+            mMainPage.setAlpha(alpha);
+        }
+    }
+
     /**
      * 设置锁屏页壁纸的模糊效果。level值范围为[0, 1]，值越大，模糊程度越高。
+     * 
      * @param level 模糊的程度
      */
     private void setWallpaperBlurEffect(float level) {

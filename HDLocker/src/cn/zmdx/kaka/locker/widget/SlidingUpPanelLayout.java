@@ -324,6 +324,9 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 mOverlayContent = ta.getBoolean(R.styleable.SlidingUpPanelLayout_slidingOverlay,
                         DEFAULT_OVERLAY_FLAG);
 
+                mDragViewClickable = ta.getBoolean(R.styleable.SlidingUpPanelLayout_slidingDragViewClickable,
+                        true);
+
                 mAnchorPoint = ta.getFloat(R.styleable.SlidingUpPanelLayout_slidingAnchorPoint,
                         DEFAULT_ANCHOR_POINT);
 
@@ -470,6 +473,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
                         }
                     }
                 });
+            } else {
+                mDragView.setOnClickListener(null);
             }
         }
     }

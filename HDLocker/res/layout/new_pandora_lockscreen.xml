@@ -9,11 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
+        supl:slidingDragView="@+id/newspanel_header"
         supl:slidingInitialState="collapsed"
         supl:slidingOverlay="true"
-        supl:slidingDragView="@+id/newspanel_header"
         supl:slidingPanelHeight="80dp"
         supl:slidingParalaxOffset="0dp"
+        supl:slidingDragViewClickable="false"
         supl:slidingShadowHeight="5dp" >
 
         <FrameLayout
@@ -30,10 +31,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <cn.zmdx.kaka.locker.widget.ViewPagerCompat
-                android:id="@+id/viewPager"
+            <android.support.v4.widget.DrawerLayout
+                android:id="@+id/rightToolbarPanel"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent" >
+
+                <cn.zmdx.kaka.locker.widget.ViewPagerCompat
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:clickable="true"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#88000000" >
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v4.widget.DrawerLayout>
         </FrameLayout>
 
         <LinearLayout
