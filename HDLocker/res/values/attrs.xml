@@ -64,6 +64,7 @@
         <attr name="slidingFlingVelocity" format="integer" />
         <attr name="slidingDragView" format="reference" />
         <attr name="slidingOverlay" format="boolean" />
+        <attr name="slidingDragViewClickable" format="boolean" />
         <attr name="slidingAnchorPoint" format="float" />
         <attr name="slidingInitialState" format="enum">
             <enum name="expanded" value="0" />

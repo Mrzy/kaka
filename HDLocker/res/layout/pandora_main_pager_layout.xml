@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="15dp" >
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -22,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="5dp"
-            android:textSize="12sp" />
+            android:textSize="12dp" />
     </LinearLayout>
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
@@ -32,6 +33,10 @@
         android:layout_marginRight="2dp"
         android:layout_marginTop="20dp"
         android:paddingLeft="5dp"
+        android:shadowColor="#30000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="1"
         android:text="今天天气不错"
         android:textColor="@color/white"
         android:textSize="19dp"
@@ -71,8 +76,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="-13dp"
         android:gravity="center_horizontal"
+        android:shadowColor="#30000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="1"
         android:textColor="@color/white"
-        android:textSize="75sp"
+        android:textSize="70sp"
         clock:format="24" />
 
     <cn.zmdx.kaka.locker.notification.view.NotificationLayout
