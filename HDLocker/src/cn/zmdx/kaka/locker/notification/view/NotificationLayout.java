@@ -438,7 +438,6 @@ public class NotificationLayout extends LinearLayout {
 
         @Override
         public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
-            // Log.e("zy", "onUpdate, leftOffset:" + leftOffset);
 
         }
 

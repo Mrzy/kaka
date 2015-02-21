@@ -4,11 +4,13 @@ package cn.zmdx.kaka.locker;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.BlurUtils;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
@@ -71,5 +73,18 @@ public class LockerUtils {
             view.setBackgroundDrawable(finalDrawable);
         }
         return finalDrawable;
+    }
+
+    public static Bitmap getViewBitmap(View v) {
+        if(v.getWidth() == 0 || v.getHeight() == 0)
+            return null;
+        Bitmap b = Bitmap.createBitmap( v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        v.draw(c);
+        return b;
+    }
+
+   static void renderScreenLockerBlurEffect(View mBlurImageView, Drawable bgDrawable) {
+        BlurUtils.doFastBlur(sContext, ImageUtils.drawable2Bitmap(bgDrawable), mBlurImageView, 10);
     }
 }

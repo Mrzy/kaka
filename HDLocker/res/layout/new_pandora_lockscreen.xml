@@ -11,20 +11,47 @@
         android:gravity="bottom"
         supl:slidingInitialState="collapsed"
         supl:slidingOverlay="true"
+        supl:slidingDragView="@+id/newspanel_header"
         supl:slidingPanelHeight="80dp"
         supl:slidingParalaxOffset="0dp"
         supl:slidingShadowHeight="5dp" >
 
-        <cn.zmdx.kaka.locker.widget.ViewPagerCompat
-            android:id="@+id/viewPager"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/lockerBg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/blurImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <cn.zmdx.kaka.locker.widget.ViewPagerCompat
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#88000000"
+            android:clickable="true"
             android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/newspanel_header"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:text="今日头条"
+                android:textColor="#ffffff"
+                android:textSize="40dp" />
         </LinearLayout>
     </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
+
 </FrameLayout>

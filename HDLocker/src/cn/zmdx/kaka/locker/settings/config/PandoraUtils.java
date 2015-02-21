@@ -83,6 +83,14 @@ public class PandoraUtils {
     //
     // }
 
+    /**
+     * @deprecated 参数设计不合理，不建议使用
+     * @param context
+     * @param overhangSize
+     * @param bkg
+     * @param view
+     * @return
+     */
     public static Bitmap doFastBlur(Context context, int overhangSize, Bitmap bkg, View view) {
         float scaleFactor = 8;
         float radius = 10;
