@@ -1,14 +1,76 @@
-package cn.zmdx.kaka.locker.settings.config;
 
+package cn.zmdx.kaka.locker.utils;
+
+import cn.zmdx.kaka.locker.BuildConfig;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build.VERSION;
+import android.view.View;
 
-/**
- * @deprecated 请使用BlurUtils代替
- * Created by paveld on 3/6/14.
- */
-public class FastBlur {
+public class BlurUtils {
 
-    public static Bitmap doBlur(Bitmap sentBitmap, int radius, boolean canReuseInBitmap) {
+    /**
+     * 将bitmap做模糊处理后设置为view的background。scaleFactor默认为8，此值越小性能越佳，但效果越差。
+     * TODO 此方法为同步方法，若对程序性能要求极高，需要将模糊步骤改为异步计算，待实现。
+     * @param context
+     * @param bkg
+     * @param view
+     * @param radius
+     * @return
+     */
+    @SuppressWarnings("deprecation")
+    @SuppressLint("NewApi")
+    public static void doFastBlur(Context context, Bitmap bkg, View view, float radius) {
+        long start = System.currentTimeMillis();
+        float scaleFactor = 8;
+        Bitmap overlay = Bitmap.createBitmap((int) (bkg.getWidth() / scaleFactor),
+                (int) (bkg.getHeight() / scaleFactor), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(overlay);
+        canvas.translate(-view.getLeft() / scaleFactor, -view.getTop() / scaleFactor);
+        canvas.scale(1 / scaleFactor, 1 / scaleFactor);
+        Paint paint = new Paint();
+        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
+        canvas.drawBitmap(bkg, 0, 0, paint);
+
+        overlay = getBlurBitmap(context, overlay, radius, true);
+        if (VERSION.SDK_INT >= 16) {
+            view.setBackground(new BitmapDrawable(context.getResources(), overlay));
+        } else {
+            view.setBackgroundDrawable(new BitmapDrawable(overlay));
+        }
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("blur processor takes time :" + (System.currentTimeMillis() - start) + "ms");
+        }
+    }
+
+    @SuppressLint("NewApi")
+    public static Bitmap getBlurBitmap(Context context, Bitmap sentBitmap, float floatRadius,
+            boolean canReuseInBitmap) {
+
+        Bitmap bitmap;
+        if (canReuseInBitmap) {
+            bitmap = sentBitmap;
+        } else {
+            bitmap = sentBitmap.copy(sentBitmap.getConfig(), true);
+        }
+
+        //有bug，blur后的图片右侧边缘没有模糊，暂时注掉
+//        if (VERSION.SDK_INT > 16) {
+//            final RenderScript rs = RenderScript.create(context);
+//            final Allocation input = Allocation.createFromBitmap(rs, sentBitmap,
+//                    Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+//            final Allocation output = Allocation.createTyped(rs, input.getType());
+//            final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+//            script.setRadius(floatRadius /* e.g. 3.f */);
+//            script.setInput(input);
+//            script.forEach(output);
+//            output.copyTo(bitmap);
+//            return bitmap;
+//        }
 
         // Stack Blur v1.0 from
         // http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html
@@ -38,13 +100,7 @@ public class FastBlur {
         //
         // Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
 
-        Bitmap bitmap;
-        if (canReuseInBitmap) {
-            bitmap = sentBitmap;
-        } else {
-            bitmap = sentBitmap.copy(sentBitmap.getConfig(), true);
-        }
-
+        int radius = (int) floatRadius;
         if (radius < 1) {
             return (null);
         }

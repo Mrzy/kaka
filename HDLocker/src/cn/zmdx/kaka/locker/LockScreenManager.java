@@ -70,6 +70,7 @@ import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
 import cn.zmdx.kaka.locker.widget.DigitalClocks;
 import cn.zmdx.kaka.locker.widget.SlidingPaneLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
+import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
@@ -139,6 +140,10 @@ public class LockScreenManager {
     private ImageView mCameraIcon;
 
     private ViewPagerCompat mPager;
+
+    private View mBlurImageView;
+
+    private View mMainPage;
 
     private SlidingUpPanelLayout mSlidingUpView;
 
@@ -254,24 +259,33 @@ public class LockScreenManager {
         mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.new_pandora_lockscreen, null);
 
+        //初始化用于显示热点头条的上拉面板view
         mSlidingUpView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.slidingUpPanelLayout);
+        mSlidingUpView.setPanelSlideListener(mSlidingUpPanelListener);
         mSlidingUpView.setDragViewClickable(false);
 
+        //初始化处理壁纸模糊的view
+        mBlurImageView = mEntireView.findViewById(R.id.blurImageView);
+        mBlurImageView.setAlpha(0);// 默认模糊的view不显示，透明度设置为0
+
+        //初始化右划解锁的viewpager
         mPager = (ViewPagerCompat) mEntireView.findViewById(R.id.viewPager);
         mCurTheme = ThemeManager.getCurrentTheme();
-        Drawable bgDrawable = mCurTheme.getCurDrawable();
-        LockerUtils.renderScreenLockerBackground(mPager, bgDrawable);
+        Drawable curWallpaper = mCurTheme.getCurDrawable();
+        Drawable lockBg = LockerUtils.renderScreenLockerBackground(mEntireView.findViewById(R.id.lockerBg), curWallpaper);
+
+        LockerUtils.renderScreenLockerBlurEffect(mBlurImageView, lockBg);
 
         List<View> pages = new ArrayList<View>();
         ViewGroup page1 = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_password_pager_layout, null);
         initSecurePanel(page1);
-        final View page2 = LayoutInflater.from(mContext).inflate(
+        mMainPage = LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_main_pager_layout, null);
-        page2.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         pages.add(page1);
-        pages.add(page2);
+        pages.add(mMainPage);
         LockerPagerAdapter pagerAdapter = new LockerPagerAdapter(mContext, mPager, pages);
         mPager.setAdapter(pagerAdapter);
         mPager.setCurrentItem(1);
@@ -280,7 +294,7 @@ public class LockScreenManager {
             public void onPageSelected(int position) {
                 if (position == 0) {
                     if (mNeedPassword) {
-                        NotificationLayout notificationLayout = (NotificationLayout) page2
+                        NotificationLayout notificationLayout = (NotificationLayout) mMainPage
                                 .findViewById(R.id.lock_bottom_notification_layout);
                         if (notificationLayout != null) {
                             notificationLayout.restoreItemsPosition();
@@ -304,7 +318,11 @@ public class LockScreenManager {
                 if (positionOffset == 0.0 && position == 0) {
                     unLock();
                 }
-                
+                if (position == 1 && positionOffset == 0.0) {
+                    setWallpaperBlurEffect(0);
+                } else {
+                    setWallpaperBlurEffect(1.0f - positionOffset);
+                }
             }
 
             @Override
@@ -312,6 +330,27 @@ public class LockScreenManager {
             }
         });
 
+    }
+
+    private SimplePanelSlideListener mSlidingUpPanelListener = new SimplePanelSlideListener() {
+        public void onPanelSlide(View panel, float slideOffset) {
+            //模糊背景
+            setWallpaperBlurEffect(slideOffset);
+            //渐隐时间，天气文字
+            if (mMainPage != null) {
+                mMainPage.setAlpha(1.0f - slideOffset);
+            }
+        };
+    };
+
+    /**
+     * 设置锁屏页壁纸的模糊效果。level值范围为[0, 1]，值越大，模糊程度越高。
+     * @param level 模糊的程度
+     */
+    private void setWallpaperBlurEffect(float level) {
+        if (mBlurImageView != null) {
+            mBlurImageView.setAlpha(level);
+        }
     }
 
     public void setWindowAnimations(int anim) {
