@@ -66,7 +66,7 @@ public class NotificationPreferences {
         mSp.edit().putStringSet(KEY_ACTIVE_NOTIFICATIONS, interceptPkgs).commit();
     }
 
-    private Set<String> getInterceptPkgNames() {
+    public Set<String> getInterceptPkgNames() {
         if (mActiveNotificationCache == null) {
             mActiveNotificationCache = mSp.getStringSet(KEY_ACTIVE_NOTIFICATIONS,
                     new HashSet<String>());

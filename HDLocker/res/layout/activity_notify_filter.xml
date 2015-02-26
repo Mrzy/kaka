@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+
+    <RelativeLayout
+        android:id="@+id/notify_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/notify_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/notify_list_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="筛选"
+                android:textColor="#212121" />
+
+            <GridView
+                android:id="@+id/notify_list_grid_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:choiceMode="singleChoice"
+                android:fillViewport="true"
+                android:focusable="false"
+                android:gravity="center"
+                android:horizontalSpacing="0dp"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="4"
+                android:scrollbars="none"
+                android:verticalSpacing="5dp" />
+        </LinearLayout>
+
+        <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+            android:id="@+id/notify_grid_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/notify_list_layout"
+            android:background="@android:color/white"
+            android:choiceMode="singleChoice"
+            android:fillViewport="true"
+            android:focusable="false"
+            android:gravity="center"
+            android:horizontalSpacing="0dp"
+            android:listSelector="@android:color/transparent"
+            android:numColumns="4"
+            android:scrollbars="none"
+            android:verticalSpacing="5dp" />
+
+        <cn.zmdx.kaka.locker.notify.filter.AlphabetScrollerView
+            android:id="@+id/notify_alphabetView"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <!--
+         <cn.zmdx.kaka.fast.locker.widget.material.design.ProgressBarCircularIndeterminate
+        android:id="@+id/notify_loading"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_centerInParent="true"
+        android:background="@color/material_design_color" />
+    -->
+
+    <ProgressBar
+        android:id="@+id/notify_loading"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>
