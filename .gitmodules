@@ -7,3 +7,6 @@
 [submodule "HDLocker/submodules/CardLibrary"]
 	path = HDLocker/submodules/CardLibrary
 	url = git@github.com:Mrzy/CardLibrary.git
+[submodule "HDLocker/submodules/SupportCardView"]
+	path = HDLocker/submodules/SupportCardView
+	url = git@github.com:Mrzy/supportCardView.git
