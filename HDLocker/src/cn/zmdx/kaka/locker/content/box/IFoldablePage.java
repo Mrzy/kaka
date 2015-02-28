@@ -14,8 +14,6 @@ public interface IFoldablePage {
 
     public View getRenderedView();
 
-    public void setAdapter(FoldableBoxAdapter adapter);
-
     public void onFinish();
 
 }

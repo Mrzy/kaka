@@ -1,8 +1,6 @@
 
 package cn.zmdx.kaka.locker.widget;
 
-import java.io.File;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -23,8 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import cn.zmdx.kaka.locker.R;
-
-import com.nineoldandroids.view.animation.AnimatorProxy;
 
 public class SlidingUpPanelLayout extends ViewGroup {
 
@@ -324,8 +320,8 @@ public class SlidingUpPanelLayout extends ViewGroup {
                 mOverlayContent = ta.getBoolean(R.styleable.SlidingUpPanelLayout_slidingOverlay,
                         DEFAULT_OVERLAY_FLAG);
 
-                mDragViewClickable = ta.getBoolean(R.styleable.SlidingUpPanelLayout_slidingDragViewClickable,
-                        true);
+                mDragViewClickable = ta.getBoolean(
+                        R.styleable.SlidingUpPanelLayout_slidingDragViewClickable, true);
 
                 mAnchorPoint = ta.getFloat(R.styleable.SlidingUpPanelLayout_slidingAnchorPoint,
                         DEFAULT_ANCHOR_POINT);
@@ -1018,11 +1014,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
         // Update the parallax based on the new slide offset
         if (mParallaxOffset > 0 && mSlideOffset >= 0) {
             int mainViewOffset = getCurrentParalaxOffset();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                mMainView.setTranslationY(mainViewOffset);
-            } else {
-                AnimatorProxy.wrap(mMainView).setTranslationY(mainViewOffset);
-            }
+            mMainView.setTranslationY(mainViewOffset);
         }
         // Dispatch the slide event
         dispatchOnPanelSlide(mSlideableView);

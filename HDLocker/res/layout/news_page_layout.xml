@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <cn.zmdx.kaka.locker.content.StickyLayout
+        android:id="@+id/stickyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="#88000000"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_launcher" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip
+                android:id="@+id/newsTabStrip"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/strip_tab_background" />
+
+            <cn.zmdx.kaka.locker.widget.ViewPagerCompat
+                android:id="@+id/newsViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </cn.zmdx.kaka.locker.content.StickyLayout>
+
+</FrameLayout>

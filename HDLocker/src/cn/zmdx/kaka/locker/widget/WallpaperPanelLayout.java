@@ -1,3 +1,4 @@
+
 package cn.zmdx.kaka.locker.widget;
 
 import android.annotation.SuppressLint;
@@ -8,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
@@ -23,9 +23,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import cn.zmdx.kaka.locker.R;
 
-import com.nineoldandroids.view.animation.AnimatorProxy;
-
-public class WallpaperPanelLayout extends ViewGroup{
+public class WallpaperPanelLayout extends ViewGroup {
 
     private static final String TAG = WallpaperPanelLayout.class.getSimpleName();
 
@@ -57,11 +55,14 @@ public class WallpaperPanelLayout extends ViewGroup{
     /**
      * Default Minimum velocity that will be detected as a fling
      */
-    private static final int DEFAULT_MIN_FLING_VELOCITY = 400; // dips per second
+    private static final int DEFAULT_MIN_FLING_VELOCITY = 400; // dips per
+                                                               // second
+
     /**
      * Default is set to false because that is how it was written
      */
     private static final boolean DEFAULT_OVERLAY_FLAG = false;
+
     /**
      * Default attributes for layout
      */
@@ -122,14 +123,14 @@ public class WallpaperPanelLayout extends ViewGroup{
     private boolean mOverlayContent = DEFAULT_OVERLAY_FLAG;
 
     /**
-     * If provided, the panel can be dragged by only this view. Otherwise, the entire panel can be
-     * used for dragging.
+     * If provided, the panel can be dragged by only this view. Otherwise, the
+     * entire panel can be used for dragging.
      */
     private View mDragView;
 
     /**
-     * If provided, the panel can be dragged by only this view. Otherwise, the entire panel can be
-     * used for dragging.
+     * If provided, the panel can be dragged by only this view. Otherwise, the
+     * entire panel can be used for dragging.
      */
     private int mDragViewResId = -1;
 
@@ -147,17 +148,14 @@ public class WallpaperPanelLayout extends ViewGroup{
      * Current state of the slideable view.
      */
     private enum SlideState {
-        EXPANDED,
-        COLLAPSED,
-        ANCHORED,
-        HIDDEN,
-        DRAGGING
+        EXPANDED, COLLAPSED, ANCHORED, HIDDEN, DRAGGING
     }
+
     private SlideState mSlideState = SlideState.COLLAPSED;
 
     /**
-     * How far the panel is offset from its expanded position.
-     * range [0, 1] where 0 = collapsed, 1 = expanded.
+     * How far the panel is offset from its expanded position. range [0, 1]
+     * where 0 = collapsed, 1 = expanded.
      */
     private float mSlideOffset;
 
@@ -178,15 +176,16 @@ public class WallpaperPanelLayout extends ViewGroup{
     private boolean mIsSlidingEnabled;
 
     /**
-     * Flag indicating if a drag view can have its own touch events.  If set
-     * to true, a drag view can scroll horizontally and have its own click listener.
-     *
-     * Default is set to false.
+     * Flag indicating if a drag view can have its own touch events. If set to
+     * true, a drag view can scroll horizontally and have its own click
+     * listener. Default is set to false.
      */
     private boolean mIsUsingDragViewTouchEvents;
 
     private float mInitialMotionX;
+
     private float mInitialMotionY;
+
     private float mAnchorPoint = 1.f;
 
     private PanelSlideListener mPanelSlideListener;
@@ -194,14 +193,18 @@ public class WallpaperPanelLayout extends ViewGroup{
     private final ViewDragHelper mDragHelper;
 
     private static Interpolator sExpandAndCollapseInterpolator = new OvershootInterpolator(1.5f);
-//    private static Interpolator sExpandAndCollapseInterpolator = new DecelerateInterpolator();
-//    private static Interpolator sExpandAndCollapseInterpolator = new  BounceInterpolator();
-//    private static Interpolator sExpandAndCollapseInterpolator = new  AccelerateDecelerateInterpolator();
+
+    // private static Interpolator sExpandAndCollapseInterpolator = new
+    // DecelerateInterpolator();
+    // private static Interpolator sExpandAndCollapseInterpolator = new
+    // BounceInterpolator();
+    // private static Interpolator sExpandAndCollapseInterpolator = new
+    // AccelerateDecelerateInterpolator();
 
     /**
-     * Stores whether or not the pane was expanded the last time it was slideable.
-     * If expand/collapse operations are invoked this state is modified. Used by
-     * instance state save/restore.
+     * Stores whether or not the pane was expanded the last time it was
+     * slideable. If expand/collapse operations are invoked this state is
+     * modified. Used by instance state save/restore.
      */
     private boolean mFirstLayout = true;
 
@@ -213,52 +216,64 @@ public class WallpaperPanelLayout extends ViewGroup{
     public interface PanelSlideListener {
         /**
          * Called when a sliding pane's position changes.
+         * 
          * @param panel The child view that was moved
-         * @param slideOffset The new offset of this sliding pane within its range, from 0-1
+         * @param slideOffset The new offset of this sliding pane within its
+         *            range, from 0-1
          */
         public void onPanelSlide(View panel, float slideOffset);
+
         /**
          * Called when a sliding panel becomes slid completely collapsed.
+         * 
          * @param panel The child view that was slid to an collapsed position
          */
         public void onPanelCollapsed(View panel);
 
         /**
          * Called when a sliding panel becomes slid completely expanded.
+         * 
          * @param panel The child view that was slid to a expanded position
          */
         public void onPanelExpanded(View panel);
 
         /**
          * Called when a sliding panel becomes anchored.
+         * 
          * @param panel The child view that was slid to a anchored position
          */
         public void onPanelAnchored(View panel);
 
         /**
          * Called when a sliding panel becomes completely hidden.
+         * 
          * @param panel The child view that was slid to a hidden position
          */
         public void onPanelHidden(View panel);
     }
 
     /**
-     * No-op stubs for {@link PanelSlideListener}. If you only want to implement a subset
-     * of the listener methods you can extend this instead of implement the full interface.
+     * No-op stubs for {@link PanelSlideListener}. If you only want to implement
+     * a subset of the listener methods you can extend this instead of implement
+     * the full interface.
      */
     public static class SimplePanelSlideListener implements PanelSlideListener {
         @Override
         public void onPanelSlide(View panel, float slideOffset) {
         }
+
         @Override
         public void onPanelCollapsed(View panel) {
         }
+
         @Override
         public void onPanelExpanded(View panel) {
         }
+
         @Override
         public void onPanelAnchored(View panel) {
         }
+
         @Override
         public void onPanelHidden(View panel) {
         }
@@ -276,10 +291,11 @@ public class WallpaperPanelLayout extends ViewGroup{
         this(context, attrs, defStyle, sExpandAndCollapseInterpolator);
     }
 
-    public WallpaperPanelLayout(Context context, AttributeSet attrs, int defStyle, Interpolator interpolator) {
+    public WallpaperPanelLayout(Context context, AttributeSet attrs, int defStyle,
+            Interpolator interpolator) {
         super(context, attrs, defStyle);
 
-        if(isInEditMode()) {
+        if (isInEditMode()) {
             mShadowDrawable = null;
             mDragHelper = null;
             return;
@@ -291,7 +307,8 @@ public class WallpaperPanelLayout extends ViewGroup{
             if (defAttrs != null) {
                 int gravity = defAttrs.getInt(0, Gravity.NO_GRAVITY);
                 if (gravity != Gravity.TOP && gravity != Gravity.BOTTOM) {
-                    throw new IllegalArgumentException("gravity must be set to either top or bottom");
+                    throw new IllegalArgumentException(
+                            "gravity must be set to either top or bottom");
                 }
                 mIsSlidingUp = gravity == Gravity.BOTTOM;
             }
@@ -301,20 +318,29 @@ public class WallpaperPanelLayout extends ViewGroup{
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.WallpaperPanelLayout);
 
             if (ta != null) {
-                mPanelHeight = ta.getDimensionPixelSize(R.styleable.WallpaperPanelLayout_PanelHeight, -1);
-                mShadowHeight = ta.getDimensionPixelSize(R.styleable.WallpaperPanelLayout_ShadowHeight, -1);
-                mParallaxOffset = ta.getDimensionPixelSize(R.styleable.WallpaperPanelLayout_ParalaxOffset, -1);
+                mPanelHeight = ta.getDimensionPixelSize(
+                        R.styleable.WallpaperPanelLayout_PanelHeight, -1);
+                mShadowHeight = ta.getDimensionPixelSize(
+                        R.styleable.WallpaperPanelLayout_ShadowHeight, -1);
+                mParallaxOffset = ta.getDimensionPixelSize(
+                        R.styleable.WallpaperPanelLayout_ParalaxOffset, -1);
 
-                mMinFlingVelocity = ta.getInt(R.styleable.WallpaperPanelLayout_FlingVelocity, DEFAULT_MIN_FLING_VELOCITY);
-                mCoveredFadeColor = ta.getColor(R.styleable.WallpaperPanelLayout_FadeColor, DEFAULT_FADE_COLOR);
+                mMinFlingVelocity = ta.getInt(R.styleable.WallpaperPanelLayout_FlingVelocity,
+                        DEFAULT_MIN_FLING_VELOCITY);
+                mCoveredFadeColor = ta.getColor(R.styleable.WallpaperPanelLayout_FadeColor,
+                        DEFAULT_FADE_COLOR);
 
                 mDragViewResId = ta.getResourceId(R.styleable.WallpaperPanelLayout_DragView, -1);
 
-                mOverlayContent = ta.getBoolean(R.styleable.WallpaperPanelLayout_Overlay,DEFAULT_OVERLAY_FLAG);
+                mOverlayContent = ta.getBoolean(R.styleable.WallpaperPanelLayout_Overlay,
+                        DEFAULT_OVERLAY_FLAG);
 
-                mAnchorPoint = ta.getFloat(R.styleable.WallpaperPanelLayout_AnchorPoint, DEFAULT_ANCHOR_POINT);
+                mAnchorPoint = ta.getFloat(R.styleable.WallpaperPanelLayout_AnchorPoint,
+                        DEFAULT_ANCHOR_POINT);
 
-                mSlideState = SlideState.values()[ta.getInt(R.styleable.WallpaperPanelLayout_InitialState, DEFAULT_SLIDE_STATE.ordinal())];
+                mSlideState = SlideState.values()[ta.getInt(
+                        R.styleable.WallpaperPanelLayout_InitialState,
+                        DEFAULT_SLIDE_STATE.ordinal())];
             }
 
             ta.recycle();
@@ -349,6 +375,7 @@ public class WallpaperPanelLayout extends ViewGroup{
 
         mIsSlidingEnabled = true;
     }
+
     /**
      * Set the Drag View after the view is inflated
      */
@@ -361,9 +388,9 @@ public class WallpaperPanelLayout extends ViewGroup{
     }
 
     /**
-     * Set the color used to fade the pane covered by the sliding pane out when the pane
-     * will become fully covered in the expanded state.
-     *
+     * Set the color used to fade the pane covered by the sliding pane out when
+     * the pane will become fully covered in the expanded state.
+     * 
      * @param color An ARGB-packed color value
      */
     public void setCoveredFadeColor(int color) {
@@ -380,6 +407,7 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     /**
      * Set sliding enabled flag
+     * 
      * @param enabled flag value
      */
     public void setSlidingEnabled(boolean enabled) {
@@ -392,7 +420,7 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     /**
      * Set the collapsed panel height in pixels
-     *
+     * 
      * @param val A height in pixels
      */
     public void setPanelHeight(int val) {
@@ -412,12 +440,13 @@ public class WallpaperPanelLayout extends ViewGroup{
      */
     public int getCurrentParalaxOffset() {
         // Clamp slide offset at zero for parallax computation;
-        int offset = (int)(mParallaxOffset * Math.max(mSlideOffset, 0));
+        int offset = (int) (mParallaxOffset * Math.max(mSlideOffset, 0));
         return mIsSlidingUp ? -offset : offset;
     }
 
     /**
      * Sets the panel slide listener
+     * 
      * @param listener
      */
     public void setPanelSlideListener(PanelSlideListener listener) {
@@ -425,8 +454,9 @@ public class WallpaperPanelLayout extends ViewGroup{
     }
 
     /**
-     * Set the draggable view portion. Use to null, to allow the whole panel to be draggable
-     *
+     * Set the draggable view portion. Use to null, to allow the whole panel to
+     * be draggable
+     * 
      * @param dragView A view that will be used to drag the panel.
      */
     public void setDragView(View dragView) {
@@ -441,22 +471,24 @@ public class WallpaperPanelLayout extends ViewGroup{
             mDragView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!isEnabled()) return;
+                    if (!isEnabled())
+                        return;
                     if (!isPanelExpanded() && !isPanelAnchored()) {
                         expandPanel(mAnchorPoint);
                     } else {
                         collapsePanel();
                     }
                 }
-            });;
+            });
+            ;
         }
     }
 
     /**
      * Set an anchor point where the panel can stop during sliding
-     *
-     * @param anchorPoint A value between 0 and 1, determining the position of the anchor point
-     *                    starting from the top of the layout.
+     * 
+     * @param anchorPoint A value between 0 and 1, determining the position of
+     *            the anchor point starting from the top of the layout.
      */
     public void setAnchorPoint(float anchorPoint) {
         if (anchorPoint > 0 && anchorPoint <= 1) {
@@ -466,7 +498,7 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     /**
      * Gets the currently set anchor point
-     *
+     * 
      * @return the currently set anchor point
      */
     public float getAnchorPoint() {
@@ -475,6 +507,7 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     /**
      * Sets whether or not the panel overlays the content
+     * 
      * @param overlayed
      */
     public void setOverlayed(boolean overlayed) {
@@ -548,8 +581,8 @@ public class WallpaperPanelLayout extends ViewGroup{
         final int clampedChildRight = Math.min(rightBound, child.getRight());
         final int clampedChildBottom = Math.min(bottomBound, child.getBottom());
         final int vis;
-        if (clampedChildLeft >= left && clampedChildTop >= top &&
-                clampedChildRight <= right && clampedChildBottom <= bottom) {
+        if (clampedChildLeft >= left && clampedChildTop >= top && clampedChildRight <= right
+                && clampedChildBottom <= bottom) {
             vis = INVISIBLE;
         } else {
             vis = VISIBLE;
@@ -608,7 +641,8 @@ public class WallpaperPanelLayout extends ViewGroup{
             setDragView(mSlideableView);
         }
 
-        // If the sliding panel is not visible, then put the whole view in the hidden state
+        // If the sliding panel is not visible, then put the whole view in the
+        // hidden state
         if (mSlideableView.getVisibility() == GONE) {
             mSlideState = SlideState.HIDDEN;
         }
@@ -620,7 +654,8 @@ public class WallpaperPanelLayout extends ViewGroup{
             final View child = getChildAt(i);
             final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
-            // We always measure the sliding panel in order to know it's height (needed for show panel)
+            // We always measure the sliding panel in order to know it's height
+            // (needed for show panel)
             if (child.getVisibility() == GONE && i == 0) {
                 continue;
             }
@@ -667,19 +702,20 @@ public class WallpaperPanelLayout extends ViewGroup{
 
         if (mFirstLayout) {
             switch (mSlideState) {
-            case EXPANDED:
-                mSlideOffset = 1.0f;
-                break;
-            case ANCHORED:
-                mSlideOffset = mAnchorPoint;
-                break;
-            case HIDDEN:
-                int newTop = computePanelTopPosition(0.0f) + (mIsSlidingUp ? +mPanelHeight : -mPanelHeight);
-                mSlideOffset = computeSlideOffset(newTop);
-                break;
-            default:
-                mSlideOffset = 0.f;
-                break;
+                case EXPANDED:
+                    mSlideOffset = 1.0f;
+                    break;
+                case ANCHORED:
+                    mSlideOffset = mAnchorPoint;
+                    break;
+                case HIDDEN:
+                    int newTop = computePanelTopPosition(0.0f)
+                            + (mIsSlidingUp ? +mPanelHeight : -mPanelHeight);
+                    mSlideOffset = computeSlideOffset(newTop);
+                    break;
+                default:
+                    mSlideOffset = 0.f;
+                    break;
             }
         }
 
@@ -700,7 +736,8 @@ public class WallpaperPanelLayout extends ViewGroup{
 
             if (!mIsSlidingUp) {
                 if (child == mMainView && !mOverlayContent) {
-                    childTop = computePanelTopPosition(mSlideOffset) + mSlideableView.getMeasuredHeight();
+                    childTop = computePanelTopPosition(mSlideOffset)
+                            + mSlideableView.getMeasuredHeight();
                 }
             }
             final int childBottom = childTop + childHeight;
@@ -727,9 +764,8 @@ public class WallpaperPanelLayout extends ViewGroup{
     }
 
     /**
-     * Set if the drag view can have its own touch events.  If set
-     * to true, a drag view can scroll horizontally and have its own click listener.
-     *
+     * Set if the drag view can have its own touch events. If set to true, a
+     * drag view can scroll horizontally and have its own click listener.
      * Default is set to false.
      */
     public void setEnableDragViewTouchEvents(boolean enabled) {
@@ -748,8 +784,8 @@ public class WallpaperPanelLayout extends ViewGroup{
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         final int action = MotionEventCompat.getActionMasked(ev);
 
-
-        if (!isEnabled() || !mIsSlidingEnabled || (mIsUnableToDrag && action != MotionEvent.ACTION_DOWN)) {
+        if (!isEnabled() || !mIsSlidingEnabled
+                || (mIsUnableToDrag && action != MotionEvent.ACTION_DOWN)) {
             mDragHelper.cancel();
             return super.onInterceptTouchEvent(ev);
         }
@@ -780,7 +816,8 @@ public class WallpaperPanelLayout extends ViewGroup{
                     return super.onInterceptTouchEvent(ev);
                 }
 
-                if ((ady > dragSlop && adx > ady) || !isDragViewUnder((int)mInitialMotionX, (int)mInitialMotionY)) {
+                if ((ady > dragSlop && adx > ady)
+                        || !isDragViewUnder((int) mInitialMotionX, (int) mInitialMotionY)) {
                     mDragHelper.cancel();
                     mIsUnableToDrag = true;
                     return false;
@@ -802,15 +839,16 @@ public class WallpaperPanelLayout extends ViewGroup{
     }
 
     private boolean isDragViewUnder(int x, int y) {
-        if (mDragView == null) return false;
+        if (mDragView == null)
+            return false;
         int[] viewLocation = new int[2];
         mDragView.getLocationOnScreen(viewLocation);
         int[] parentLocation = new int[2];
         this.getLocationOnScreen(parentLocation);
         int screenX = parentLocation[0] + x;
         int screenY = parentLocation[1] + y;
-        return screenX >= viewLocation[0] && screenX < viewLocation[0] + mDragView.getWidth() &&
-                screenY >= viewLocation[1] && screenY < viewLocation[1] + mDragView.getHeight();
+        return screenX >= viewLocation[0] && screenX < viewLocation[0] + mDragView.getWidth()
+                && screenY >= viewLocation[1] && screenY < viewLocation[1] + mDragView.getHeight();
     }
 
     private boolean expandPanel(View pane, int initialVelocity, float mSlideOffset) {
@@ -820,6 +858,7 @@ public class WallpaperPanelLayout extends ViewGroup{
     private boolean expandPanel(View pane, int initialVelocity, float mSlideOffset, int duration) {
         return mFirstLayout || smoothSlideTo(mSlideOffset, initialVelocity, duration);
     }
+
     private boolean collapsePanel(View pane, int initialVelocity) {
         return mFirstLayout || smoothSlideTo(0.0f, initialVelocity);
     }
@@ -835,9 +874,9 @@ public class WallpaperPanelLayout extends ViewGroup{
         int slidingViewHeight = mSlideableView != null ? mSlideableView.getMeasuredHeight() : 0;
         int slidePixelOffset = (int) (slideOffset * mSlideRange);
         // Compute the top of the panel if its collapsed
-        return mIsSlidingUp
-                ? getMeasuredHeight() - getPaddingBottom() - mPanelHeight - slidePixelOffset
-                : getPaddingTop() - slidingViewHeight + mPanelHeight + slidePixelOffset;
+        return mIsSlidingUp ? getMeasuredHeight() - getPaddingBottom() - mPanelHeight
+                - slidePixelOffset : getPaddingTop() - slidingViewHeight + mPanelHeight
+                + slidePixelOffset;
     }
 
     /*
@@ -847,18 +886,19 @@ public class WallpaperPanelLayout extends ViewGroup{
         // Compute the panel top position if the panel is collapsed (offset 0)
         final int topBoundCollapsed = computePanelTopPosition(0);
 
-        // Determine the new slide offset based on the collapsed top position and the new required
+        // Determine the new slide offset based on the collapsed top position
+        // and the new required
         // top position
-        return (mIsSlidingUp
-                ? (float) (topBoundCollapsed - topPosition) / mSlideRange
+        return (mIsSlidingUp ? (float) (topBoundCollapsed - topPosition) / mSlideRange
                 : (float) (topPosition - topBoundCollapsed) / mSlideRange);
     }
 
     /**
      * Collapse the sliding pane if it is currently slideable. If first layout
      * has already completed this will animate.
-     *
-     * @return true if the pane was slideable and is now collapsed/in the process of collapsing
+     * 
+     * @return true if the pane was slideable and is now collapsed/in the
+     *         process of collapsing
      */
     public boolean collapsePanel() {
         if (mFirstLayout) {
@@ -873,8 +913,9 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     /**
      * Expand the sliding pane if it is currently slideable.
-     *
-     * @return true if the pane was slideable and is now expanded/in the process of expading
+     * 
+     * @return true if the pane was slideable and is now expanded/in the process
+     *         of expading
      */
     public boolean expandPanel() {
         if (mFirstLayout) {
@@ -887,8 +928,9 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     /**
      * Expand the sliding pane to the anchor point if it is currently slideable.
-     *
-     * @return true if the pane was slideable and is now expanded/in the process of expading
+     * 
+     * @return true if the pane was slideable and is now expanded/in the process
+     *         of expading
      */
     public boolean anchorPanel() {
         if (mFirstLayout) {
@@ -901,19 +943,22 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     /**
      * Partially expand the sliding panel up to a specific offset
-     *
-     * @param mSlideOffset Value between 0 and 1, where 0 is completely expanded.
-     * @return true if the pane was slideable and is now expanded/in the process of expanding
+     * 
+     * @param mSlideOffset Value between 0 and 1, where 0 is completely
+     *            expanded.
+     * @return true if the pane was slideable and is now expanded/in the process
+     *         of expanding
      */
     public boolean expandPanel(float mSlideOffset) {
-        if (mSlideableView == null || mSlideState == SlideState.EXPANDED) return false;
+        if (mSlideableView == null || mSlideState == SlideState.EXPANDED)
+            return false;
         mSlideableView.setVisibility(View.VISIBLE);
         return expandPanel(mSlideableView, 0, mSlideOffset, DURATION_EXPAND_OR_COLLAPSE);
     }
 
     /**
      * Check if the sliding panel in this layout is fully expanded.
-     *
+     * 
      * @return true if sliding panel is completely expanded
      */
     public boolean isPanelExpanded() {
@@ -922,7 +967,7 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     /**
      * Check if the sliding panel in this layout is anchored.
-     *
+     * 
      * @return true if sliding panel is anchored
      */
     public boolean isPanelAnchored() {
@@ -931,7 +976,7 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     /**
      * Check if the sliding panel in this layout is currently visible.
-     *
+     * 
      * @return true if the sliding panel is visible.
      */
     public boolean isPanelHidden() {
@@ -945,7 +990,8 @@ public class WallpaperPanelLayout extends ViewGroup{
         if (mFirstLayout) {
             mSlideState = SlideState.COLLAPSED;
         } else {
-            if (mSlideableView == null || mSlideState != SlideState.HIDDEN) return;
+            if (mSlideableView == null || mSlideState != SlideState.HIDDEN)
+                return;
             mSlideableView.setVisibility(View.VISIBLE);
             requestLayout();
             smoothSlideTo(0, 0);
@@ -959,8 +1005,10 @@ public class WallpaperPanelLayout extends ViewGroup{
         if (mFirstLayout) {
             mSlideState = SlideState.HIDDEN;
         } else {
-            if (mSlideState == SlideState.DRAGGING || mSlideState == SlideState.HIDDEN) return;
-            int newTop = computePanelTopPosition(0.0f) + (mIsSlidingUp ? +mPanelHeight : -mPanelHeight);
+            if (mSlideState == SlideState.DRAGGING || mSlideState == SlideState.HIDDEN)
+                return;
+            int newTop = computePanelTopPosition(0.0f)
+                    + (mIsSlidingUp ? +mPanelHeight : -mPanelHeight);
             smoothSlideTo(computeSlideOffset(newTop), 0);
         }
     }
@@ -973,20 +1021,18 @@ public class WallpaperPanelLayout extends ViewGroup{
         // Update the parallax based on the new slide offset
         if (mParallaxOffset > 0 && mSlideOffset >= 0) {
             int mainViewOffset = getCurrentParalaxOffset();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                mMainView.setTranslationY(mainViewOffset);
-            } else {
-                AnimatorProxy.wrap(mMainView).setTranslationY(mainViewOffset);
-            }
+            mMainView.setTranslationY(mainViewOffset);
         }
         // Dispatch the slide event
         dispatchOnPanelSlide(mSlideableView);
-        // If the slide offset is negative, and overlay is not on, we need to increase the
+        // If the slide offset is negative, and overlay is not on, we need to
+        // increase the
         // height of the main content
         if (mSlideOffset <= 0 && !mOverlayContent) {
             // expand the main view
-            LayoutParams lp = (LayoutParams)mMainView.getLayoutParams();
-            lp.height = mIsSlidingUp ? (newTop - getPaddingBottom()) : (getHeight() - getPaddingBottom() - mSlideableView.getMeasuredHeight() - newTop);
+            LayoutParams lp = (LayoutParams) mMainView.getLayoutParams();
+            lp.height = mIsSlidingUp ? (newTop - getPaddingBottom()) : (getHeight()
+                    - getPaddingBottom() - mSlideableView.getMeasuredHeight() - newTop);
             mMainView.requestLayout();
         }
     }
@@ -997,7 +1043,8 @@ public class WallpaperPanelLayout extends ViewGroup{
         final int save = canvas.save(Canvas.CLIP_SAVE_FLAG);
 
         if (isSlidingEnabled() && mSlideableView != child) {
-            // Clip against the slider; no sense drawing what will immediately be covered,
+            // Clip against the slider; no sense drawing what will immediately
+            // be covered,
             // Unless the panel is set to overlay content
             if (!mOverlayContent) {
                 canvas.getClipBounds(mTmpRect);
@@ -1026,7 +1073,7 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     /**
      * Smoothly animate mDraggingPane to the target X position within its range.
-     *
+     * 
      * @param slideOffset position to animate to
      * @param velocity initial velocity in case of fling, or 0.
      */
@@ -1102,10 +1149,10 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     /**
      * Tests scrollability within child views of v given a delta of dx.
-     *
+     * 
      * @param v View to test for horizontal scrollability
-     * @param checkV Whether the view v passed should itself be checked for scrollability (true),
-     *               or just its children (false).
+     * @param checkV Whether the view v passed should itself be checked for
+     *            scrollability (true), or just its children (false).
      * @param dx Delta scrolled in pixels
      * @param x X coordinate of the active touch point
      * @param y Y coordinate of the active touch point
@@ -1117,20 +1164,22 @@ public class WallpaperPanelLayout extends ViewGroup{
             final int scrollX = v.getScrollX();
             final int scrollY = v.getScrollY();
             final int count = group.getChildCount();
-            // Count backwards - let topmost views consume scroll distance first.
+            // Count backwards - let topmost views consume scroll distance
+            // first.
             for (int i = count - 1; i >= 0; i--) {
                 final View child = group.getChildAt(i);
-                if (x + scrollX >= child.getLeft() && x + scrollX < child.getRight() &&
-                        y + scrollY >= child.getTop() && y + scrollY < child.getBottom() &&
-                        canScroll(child, true, dx, x + scrollX - child.getLeft(),
-                                y + scrollY - child.getTop())) {
+                if (x + scrollX >= child.getLeft()
+                        && x + scrollX < child.getRight()
+                        && y + scrollY >= child.getTop()
+                        && y + scrollY < child.getBottom()
+                        && canScroll(child, true, dx, x + scrollX - child.getLeft(), y + scrollY
+                                - child.getTop())) {
                     return true;
                 }
             }
         }
         return checkV && ViewCompat.canScrollHorizontally(v, -dx);
     }
-
 
     @Override
     protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
@@ -1139,8 +1188,7 @@ public class WallpaperPanelLayout extends ViewGroup{
 
     @Override
     protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
-        return p instanceof MarginLayoutParams
-                ? new LayoutParams((MarginLayoutParams) p)
+        return p instanceof MarginLayoutParams ? new LayoutParams((MarginLayoutParams) p)
                 : new LayoutParams(p);
     }
 
@@ -1225,7 +1273,8 @@ public class WallpaperPanelLayout extends ViewGroup{
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
             int target = 0;
 
-            // direction is always positive if we are sliding in the expanded direction
+            // direction is always positive if we are sliding in the expanded
+            // direction
             float direction = mIsSlidingUp ? -yvel : yvel;
 
             if (direction > 0) {
@@ -1235,10 +1284,12 @@ public class WallpaperPanelLayout extends ViewGroup{
                 // swipe down -> collapse
                 target = computePanelTopPosition(0.0f);
             } else if (mAnchorPoint != 1 && mSlideOffset >= (1.f + mAnchorPoint) / 2) {
-                // zero velocity, and far enough from anchor point => expand to the top
+                // zero velocity, and far enough from anchor point => expand to
+                // the top
                 target = computePanelTopPosition(1.0f);
             } else if (mAnchorPoint == 1 && mSlideOffset >= 0.5f) {
-                // zero velocity, and far enough from anchor point => expand to the top
+                // zero velocity, and far enough from anchor point => expand to
+                // the top
                 target = computePanelTopPosition(1.0f);
             } else if (mAnchorPoint != 1 && mSlideOffset >= mAnchorPoint) {
                 target = computePanelTopPosition(mAnchorPoint);
@@ -1326,8 +1377,7 @@ public class WallpaperPanelLayout extends ViewGroup{
             out.writeString(mSlideState.toString());
         }
 
-        public static final Parcelable.Creator<SavedState> CREATOR =
-                new Parcelable.Creator<SavedState>() {
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
             @Override
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);

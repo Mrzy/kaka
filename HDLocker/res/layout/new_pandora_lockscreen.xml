@@ -9,12 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        supl:slidingDragView="@+id/newspanel_header"
+        supl:slidingDragView="@+id/header"
+        supl:slidingDragViewClickable="false"
         supl:slidingInitialState="collapsed"
         supl:slidingOverlay="true"
         supl:slidingPanelHeight="80dp"
         supl:slidingParalaxOffset="0dp"
-        supl:slidingDragViewClickable="false"
         supl:slidingShadowHeight="5dp" >
 
         <FrameLayout
@@ -42,10 +42,10 @@
                     android:layout_height="match_parent" />
 
                 <LinearLayout
-                    android:clickable="true"
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
+                    android:clickable="true"
                     android:orientation="vertical" >
 
                     <LinearLayout
@@ -58,20 +58,12 @@
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/newsLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#88000000"
             android:clickable="true"
             android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/newspanel_header"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:gravity="center"
-                android:text="今日头条"
-                android:textColor="#ffffff"
-                android:textSize="40dp" />
         </LinearLayout>
     </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
 
