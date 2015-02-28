@@ -5,15 +5,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
-import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 public class HtmlBox implements IPandoraBox {
     protected static final int MAX_TIMES_SHOW_GUIDE = 10;
@@ -27,12 +22,9 @@ public class HtmlBox implements IPandoraBox {
 
     private WebView mWebView;
 
-    private FoldablePage mPage;
-
     @SuppressLint("SetJavaScriptEnabled")
-    public HtmlBox(Context context, FoldablePage page, PandoraData data) {
+    public HtmlBox(Context context, PandoraData data) {
         mData = data;
-        mPage = page;
         mContext = context;
         mEntireView = LayoutInflater.from(context).inflate(R.layout.pandora_box_html_layout, null);
         mWebView = (WebView) mEntireView.findViewById(R.id.pandora_box_html_context_show);

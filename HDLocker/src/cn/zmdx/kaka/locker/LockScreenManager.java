@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
@@ -33,7 +35,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewGroup.OnHierarchyChangeListener;
-import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.BounceInterpolator;
@@ -46,9 +47,7 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.BatteryView;
 import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
-import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
-import cn.zmdx.kaka.locker.content.box.FoldablePage;
 import cn.zmdx.kaka.locker.content.box.IFoldablePage;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationLayout;
@@ -62,7 +61,6 @@ import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
-import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
@@ -77,9 +75,6 @@ import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewHelper;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
 
@@ -209,6 +204,7 @@ public class LockScreenManager {
         mIsNeedNotice = mPandoraConfig.isNeedNotice(mContext);
         if (mIsNeedNotice) {
             mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+            // mWinParams.type = WindowManager.LayoutParams.TYPE_INPUT_METHOD;
         } else {
             mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
         }
@@ -233,7 +229,7 @@ public class LockScreenManager {
         mWinParams.format = PixelFormat.TRANSPARENT;
         // params.format=PixelFormat.RGBA_8888;
         mWinParams.windowAnimations = R.style.anim_locker_window;
-        mWinParams.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
+        // mWinParams.softInputMode = WindowManager.LayoutParams.SOFT_INPU
         mWinParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         mWinParams.gravity = Gravity.TOP | Gravity.START;
 
@@ -300,9 +296,10 @@ public class LockScreenManager {
         mPager.setAdapter(pagerAdapter);
         mPager.setCurrentItem(1);
         mPager.setOnPageChangeListener(mViewPagerChangeListener);
-        
+
         // 监听是否有通知，以处理背景模糊效果
-        NotificationLayout nl = (NotificationLayout) mMainPage.findViewById(R.id.lock_bottom_notification_layout);
+        NotificationLayout nl = (NotificationLayout) mMainPage
+                .findViewById(R.id.lock_bottom_notification_layout);
         nl.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
 
             @Override
@@ -388,6 +385,15 @@ public class LockScreenManager {
                 setWallpaperBlurEffect(Math.max(0, slideOffset));
                 // 渐隐时间，天气文字
                 setMainPageAlpha(1.0f - slideOffset);
+            }
+        };
+
+        public void onPanelExpanded(View panel) {
+            View view = PandoraBoxManager.newInstance(mContext).getNewsPage();
+            ViewGroup newsLayout = (ViewGroup) panel.findViewById(R.id.newsLayout);
+            if (newsLayout.getChildCount() == 0) {
+                newsLayout.addView(view);
+                mSlidingUpView.setDragView(newsLayout.findViewById(R.id.header));
             }
         };
     };
@@ -556,35 +562,36 @@ public class LockScreenManager {
     }
 
     private void refreshContent() {
-        if (mBoxView != null && mBoxView.getChildCount() > 0) {
-            if (mFoldablePage != null && mFoldablePage instanceof FoldablePage) {
-                FoldablePage page = (FoldablePage) mFoldablePage;
-                if (page.isDataValidate()) {
-                    if (!HDBNetworkState.isWifiNetwork()) {
-                        page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_HTML);
-                        page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_MULTIIMG);
-                    }
-                    return;
-                }
-            }
-        }
+        // if (mBoxView != null && mBoxView.getChildCount() > 0) {
+        // if (mFoldablePage != null && mFoldablePage instanceof FoldablePage) {
+        // FoldablePage page = (FoldablePage) mFoldablePage;
+        // if (page.isDataValidate()) {
+        // if (!HDBNetworkState.isWifiNetwork()) {
+        // page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_HTML);
+        // page.removeItemsByCategory(ServerDataMapping.S_DATATYPE_MULTIIMG);
+        // }
+        // return;
+        // }
+        // }
+        // }
 
-        mFoldablePage = PandoraBoxManager.newInstance(mContext).getFoldablePage();
+        // mFoldablePage =
+        // PandoraBoxManager.newInstance(mContext).getFoldablePage();
 
-        View contentView = mFoldablePage.getRenderedView();
-        if (contentView == null) {
-            initDefaultPhoto(false);
-            return;
-        }
-        ViewParent parent = contentView.getParent();
-        if (parent != null) {
-            ((ViewGroup) parent).removeView(contentView);
-        }
-        ViewGroup.LayoutParams lp = mBoxView.getLayoutParams();
-        lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        mBoxView.removeAllViews();
-        mBoxView.addView(contentView, mBoxView.getChildCount(), lp);
+        // View contentView = mFoldablePage.getRenderedView();
+        // if (contentView == null) {
+        // initDefaultPhoto(false);
+        // return;
+        // }
+        // ViewParent parent = contentView.getParent();
+        // if (parent != null) {
+        // ((ViewGroup) parent).removeView(contentView);
+        // }
+        // ViewGroup.LayoutParams lp = mBoxView.getLayoutParams();
+        // lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        // lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        // mBoxView.removeAllViews();
+        // mBoxView.addView(contentView, mBoxView.getChildCount(), lp);
     }
 
     @SuppressLint("InflateParams")
@@ -727,7 +734,7 @@ public class LockScreenManager {
         final ImageView guideView = new ImageView(mContext);
         guideView.setScaleType(ScaleType.FIT_XY);
         guideView.setVisibility(View.VISIBLE);
-        ViewHelper.setAlpha(guideView, 0);
+        guideView.setAlpha(0);
         mEntireView.addView(guideView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         guideView.animate().alpha(1).setDuration(1000).setStartDelay(700).start();

@@ -6,8 +6,8 @@ import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 
 public class MultiImgBox extends HtmlBox {
 
-    public MultiImgBox(Context context, FoldablePage page, PandoraData data) {
-        super(context, page, data);
+    public MultiImgBox(Context context, PandoraData data) {
+        super(context, data);
     }
     @Override
     public int getCategory() {

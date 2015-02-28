@@ -37,13 +37,10 @@ public class SingleImageBox implements IPandoraBox, View.OnClickListener {
 
     private BaseScrollView mScrollView;
 
-    private FoldablePage mPage;
-
     private View mBackBtn;
 
-    public SingleImageBox(Context context, FoldablePage page, PandoraData data) {
+    public SingleImageBox(Context context, PandoraData data) {
         mData = data;
-        mPage = page;
         mContext = context;
     }
 
@@ -144,10 +141,10 @@ public class SingleImageBox implements IPandoraBox, View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v == mBackBtn) {
-            mPage.foldBack();
-        } else if (v == mSingleImgView) {
-            mPage.foldBack();
-        }
+//        if (v == mBackBtn) {
+//            mPage.foldBack();
+//        } else if (v == mSingleImgView) {
+//            mPage.foldBack();
+//        }
     }
 }

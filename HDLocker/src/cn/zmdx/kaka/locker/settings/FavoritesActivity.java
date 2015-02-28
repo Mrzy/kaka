@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
-import cn.zmdx.kaka.locker.content.box.FoldablePage;
 import cn.zmdx.kaka.locker.content.box.IFoldablePage;
 
 public class FavoritesActivity extends BaseActivity {
@@ -17,7 +16,7 @@ public class FavoritesActivity extends BaseActivity {
 
     private View mRootView;
 
-    private FoldablePage mFoldablePage;
+//    private FoldablePage mFoldablePage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,35 +32,35 @@ public class FavoritesActivity extends BaseActivity {
         LinearLayout titleView = (LinearLayout) findViewById(R.id.pandora_favorite_title_layout);
         initBackground(mRootView);
         initTitleHeight(titleView);
-        PandoraBoxManager manager = PandoraBoxManager.newInstance(this);
-        IFoldablePage foldablePage = manager.getFavoriteFoldablePage();
-        mFoldablePage = (FoldablePage) foldablePage;
-        mFoldablePage.setGuidePageVisibility(false);
-        View renderedView = foldablePage.getRenderedView();
-        mFoldablePage.setSwipeRefreshEnabled(false);
-        if (null != renderedView) {
-            layout.addView(renderedView);
-        } else {
+//        PandoraBoxManager manager = PandoraBoxManager.newInstance(this);
+//        IFoldablePage foldablePage = manager.getFavoriteFoldablePage();
+//        mFoldablePage = (FoldablePage) foldablePage;
+//        mFoldablePage.setGuidePageVisibility(false);
+//        View renderedView = foldablePage.getRenderedView();
+//        mFoldablePage.setSwipeRefreshEnabled(false);
+//        if (null != renderedView) {
+//            layout.addView(renderedView);
+//        } else {
             TextView tv = (TextView) layout.findViewById(R.id.emptyView);
             tv.setText(R.string.pandora_favorite_state_nodata);
             tv.setVisibility(View.VISIBLE);
-        }
+//        }
     }
 
     @Override
     public void onBackPressed() {
-        if (mFoldablePage != null && mFoldablePage.isFoldBack()) {
-            mFoldablePage.foldBack();
-        } else {
+//        if (mFoldablePage != null && mFoldablePage.isFoldBack()) {
+//            mFoldablePage.foldBack();
+//        } else {
             finish();
             overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                     R.anim.umeng_fb_slide_out_from_right);
-        }
+//        }
     }
 
     @Override
     protected void onDestroy() {
-        mFoldablePage.onFinish();
+//        mFoldablePage.onFinish();
         super.onDestroy();
     }
 }
