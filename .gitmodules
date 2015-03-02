@@ -10,3 +10,9 @@
 [submodule "HDLocker/submodules/SupportCardView"]
 	path = HDLocker/submodules/SupportCardView
 	url = git@github.com:Mrzy/supportCardView.git
+[submodule "HDLocker/submodules/MaterialDialogs"]
+	path = HDLocker/submodules/MaterialDialogs
+	url = git@github.com:Mrzy/MaterialDialogsLibrary.git
+[submodule "HDLocker/submodules/support-v7-appcompat"]
+	path = HDLocker/submodules/support-v7-appcompat
+	url = git@github.com:Mrzy/appcompat-v7.git
