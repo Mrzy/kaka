@@ -11,20 +11,17 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.LayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
-import cn.zmdx.kaka.locker.content.StickyLayout.OnGiveUpTouchEventListener;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
+import cn.zmdx.kaka.locker.content.view.FlipperView;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -39,9 +36,14 @@ public class PandoraBoxManager {
 
     private LayoutInflater mInflater;
 
+    private FlipperView mHeaderView;
+
+    private View mEntireView;
+
     private PandoraBoxManager(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
+        mEntireView = mInflater.inflate(R.layout.news_page_layout, null);
     }
 
     public synchronized static PandoraBoxManager newInstance(Context context) {
@@ -51,9 +53,22 @@ public class PandoraBoxManager {
         return mPbManager;
     }
 
-    public View getNewsPage() {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.news_page_layout, null);
-        final ViewPagerCompat viewPager = (ViewPagerCompat) view.findViewById(R.id.newsViewPager);
+    public View initHeader() {
+        mHeaderView = (FlipperView) mEntireView.findViewById(R.id.header);
+        mHeaderView.closeUpperView(false);
+        // TODO bind data
+        return mHeaderView;
+    }
+
+    private boolean mInitBody = false;
+
+    public void initBody() {
+        if (mInitBody) {
+            return;
+        }
+        mInitBody = true;
+        final ViewPagerCompat viewPager = (ViewPagerCompat) mEntireView
+                .findViewById(R.id.newsViewPager);
         List<View> pages = new ArrayList<View>();
         initNewsPages(pages);
         List<String> titles = new ArrayList<String>();
@@ -61,36 +76,22 @@ public class PandoraBoxManager {
         NewsPagerAdapter pagerAdapter = new NewsPagerAdapter(pages, titles);
         viewPager.setAdapter(pagerAdapter);
 
-        final PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) view
+        final PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) mEntireView
                 .findViewById(R.id.newsTabStrip);
         tabStrip.setViewPager(viewPager);
         tabStrip.setShouldExpand(true);
+    }
 
-        final StickyLayout sl = (StickyLayout) view.findViewById(R.id.stickyLayout);
-        sl.setOnGiveUpTouchEventListener(new OnGiveUpTouchEventListener() {
-            @Override
-            public boolean giveUpTouchEvent(MotionEvent event) {
-                if (tabStrip.getTop() >= 0) {
-                    final NewsPagerAdapter pagerAdapter = (NewsPagerAdapter) viewPager.getAdapter();
-                    int curPosi = viewPager.getCurrentItem();
-                    final ViewGroup curPage = (ViewGroup) pagerAdapter.getItem(curPosi);
-                    int position = -1;
-                    if (curPage != null && curPage instanceof RecyclerView) {
-                        final RecyclerView rv = (RecyclerView) curPage;
-                        final LayoutManager lm = rv.getLayoutManager();
-                        if (lm instanceof LinearLayoutManager || lm instanceof GridLayoutManager) {
-                            final LinearLayoutManager llm = (LinearLayoutManager) lm;
-                            position = llm.findFirstVisibleItemPosition();
-                        }
-                    }
-                    if (position == 0) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-        return view;
+    public void openHotHeader() {
+        if (mHeaderView != null) {
+            mHeaderView.openUpperView(true);
+        }
+    }
+
+    public void closeHotHeader() {
+        if (mHeaderView != null) {
+            mHeaderView.closeUpperView(true);
+        }
     }
 
     private void initTitles(List<String> titles) {
@@ -119,7 +120,6 @@ public class PandoraBoxManager {
     }
 
     private View initJokeView() {
-        // TODO Auto-generated method stub
         RecyclerView rv = (RecyclerView) mInflater.inflate(R.layout.pager_news_layout, null);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         rv.setHasFixedSize(true);
@@ -133,7 +133,6 @@ public class PandoraBoxManager {
     }
 
     private View initSociView() {
-        // TODO Auto-generated method stub
         RecyclerView rv = (RecyclerView) mInflater.inflate(R.layout.pager_news_layout, null);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         rv.setHasFixedSize(true);
@@ -147,7 +146,6 @@ public class PandoraBoxManager {
     }
 
     private View initTechView() {
-        // TODO Auto-generated method stub
         RecyclerView rv = (RecyclerView) mInflater.inflate(R.layout.pager_news_layout, null);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         rv.setHasFixedSize(true);
@@ -161,7 +159,6 @@ public class PandoraBoxManager {
     }
 
     private View initGirlView() {
-        // TODO Auto-generated method stub
         RecyclerView rv = (RecyclerView) mInflater.inflate(R.layout.pager_news_layout, null);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         // rv.setHasFixedSize(true);
@@ -175,7 +172,6 @@ public class PandoraBoxManager {
     }
 
     private View initHotNewsView() {
-        // TODO Auto-generated method stub
         View view = mInflater.inflate(R.layout.pager_news_layout, null);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
@@ -379,5 +375,9 @@ public class PandoraBoxManager {
                 R.drawable.pandora_box_default));
         pd.setDataType("DEFAULT_PAGE");
         return new DefaultBox(mContext, pd);
+    }
+
+    public View getEntireView() {
+        return mEntireView;
     }
 }

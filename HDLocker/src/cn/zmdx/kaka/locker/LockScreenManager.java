@@ -318,6 +318,21 @@ public class LockScreenManager {
                 }
             }
         });
+
+        // 初始化新闻页
+        View newsView = PandoraBoxManager.newInstance(mContext).getEntireView();
+        ViewGroup newsLayout = (ViewGroup) mSlidingUpView.findViewById(R.id.newsLayout);
+        if (newsLayout.getChildCount() == 0) {
+            ViewGroup vg = (ViewGroup) newsView.getParent();
+            if (vg != null) {
+                vg.removeView(newsView);
+            }
+            newsLayout.addView(newsView);
+            mSlidingUpView.setDragView(newsLayout.findViewById(R.id.header));
+        }
+        // 初始化新闻页header
+        PandoraBoxManager.newInstance(mContext).initHeader();
+        PandoraBoxManager.newInstance(mContext).closeHotHeader();
     }
 
     private ViewPager.SimpleOnPageChangeListener mViewPagerChangeListener = new ViewPager.SimpleOnPageChangeListener() {
@@ -389,12 +404,12 @@ public class LockScreenManager {
         };
 
         public void onPanelExpanded(View panel) {
-            View view = PandoraBoxManager.newInstance(mContext).getNewsPage();
-            ViewGroup newsLayout = (ViewGroup) panel.findViewById(R.id.newsLayout);
-            if (newsLayout.getChildCount() == 0) {
-                newsLayout.addView(view);
-                mSlidingUpView.setDragView(newsLayout.findViewById(R.id.header));
-            }
+            PandoraBoxManager.newInstance(mContext).openHotHeader();
+            PandoraBoxManager.newInstance(mContext).initBody();
+        };
+
+        public void onPanelCollapsed(View panel) {
+            PandoraBoxManager.newInstance(mContext).closeHotHeader();
         };
     };
 

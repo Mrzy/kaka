@@ -1,4 +1,4 @@
-package cn.zmdx.kaka.locker.content;
+package cn.zmdx.kaka.locker.content.view;
 
 /**
 The MIT License (MIT)
