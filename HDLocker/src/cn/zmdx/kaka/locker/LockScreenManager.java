@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.SimpleDrawerListener;
 import android.text.TextUtils;
 import android.view.Display;
@@ -48,7 +47,6 @@ import cn.zmdx.kaka.locker.battery.BatteryView;
 import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
-import cn.zmdx.kaka.locker.content.box.IFoldablePage;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationLayout;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
@@ -121,8 +119,6 @@ public class LockScreenManager {
 
     private ILockScreenListener mLockListener = null;
 
-    private IFoldablePage mFoldablePage;
-
     private boolean isInit = false;
 
     private WallpaperPanelLayout mOnlinePanel;
@@ -144,8 +140,6 @@ public class LockScreenManager {
     private View mMainPage;
 
     private SlidingUpPanelLayout mSlidingUpView;
-
-    private DrawerLayout mRightDrawerLayout;
 
     public interface ILockScreenListener {
         void onLock();
@@ -204,7 +198,6 @@ public class LockScreenManager {
         mIsNeedNotice = mPandoraConfig.isNeedNotice(mContext);
         if (mIsNeedNotice) {
             mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-            // mWinParams.type = WindowManager.LayoutParams.TYPE_INPUT_METHOD;
         } else {
             mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
         }
@@ -212,13 +205,6 @@ public class LockScreenManager {
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 
-        // if (!PandoraConfig.newInstance(mContext).isNeedNotice(mContext)) {
-        // mWinParams.flags |= LayoutParams.FLAG_FULLSCREEN;
-        // }
-        // if (Build.VERSION.SDK_INT >= 19) {
-        // mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_STATUS;
-        // mWinParams.flags |= LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
-        // }
         mWinParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 
         final Display display = mWinManager.getDefaultDisplay();
@@ -268,11 +254,6 @@ public class LockScreenManager {
         // 初始化处理壁纸模糊的view
         mBlurImageView = mEntireView.findViewById(R.id.blurImageView);
         mBlurImageView.setAlpha(0);// 默认模糊的view不显示，透明度设置为0
-
-        // 初始化右侧工具栏
-        mRightDrawerLayout = (DrawerLayout) mEntireView.findViewById(R.id.rightToolbarPanel);
-        mRightDrawerLayout.setDrawerListener(mRightDrawableListener);
-        mRightDrawerLayout.setScrimColor(Color.TRANSPARENT);
 
         // 初始化右划解锁的viewpager
         mPager = (ViewPagerCompat) mEntireView.findViewById(R.id.viewPager);
