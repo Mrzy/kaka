@@ -66,5 +66,4 @@
             android:orientation="vertical" >
         </LinearLayout>
     </cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout>
-
 </FrameLayout>

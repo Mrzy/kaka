@@ -18,6 +18,7 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
@@ -182,42 +183,25 @@ public class PandoraBoxManager {
         }
         NewsPageAdapter adapter = new NewsPageAdapter(news);
         rv.setAdapter(adapter);
-
         return view;
     }
 
     private View initWallPaperView() {
         RecyclerView rv = (RecyclerView) mInflater.inflate(R.layout.pager_news_layout, null);
-        // rv.setHasFixedSize(true);
+        rv.setHasFixedSize(true);
         List<String> news = new ArrayList<String>();
-        for (int i = 0; i < 100; i++) {
-            news.add("今日头条" + i);
-        }
-        NewsPageAdapter adapter = new NewsPageAdapter(news);
+        news.add("http://e.hiphotos.baidu.com/image/w%3D400/sign=fe5ab378b1de9c82a665f88f5c8180d2/9345d688d43f8794c8c01f6fd01b0ef41bd53ab7.jpg");
+        news.add("http://a.hiphotos.baidu.com/image/w%3D400/sign=78c33218357adab43dd01a43bbd5b36b/3c6d55fbb2fb4316edf8fb4a23a4462309f7d31f.jpg");
+        news.add("http://a.hiphotos.baidu.com/image/w%3D400/sign=079be1e0b68f8c54e3d3c42f0a282dee/d0c8a786c9177f3ecfc3db0372cf3bc79e3d56cc.jpg");
+        news.add("http://c.hiphotos.baidu.com/image/w%3D400/sign=e075723e718da9774e2f872b8050f872/f603918fa0ec08fafbd8a2aa5bee3d6d54fbdae7.jpg");
+        news.add("http://e.hiphotos.baidu.com/image/w%3D400/sign=a60dc1920a24ab18e016e03705fbe69a/f703738da97739124770a1d5fb198618367ae234.jpg");
+        news.add("http://a.hiphotos.baidu.com/image/w%3D400/sign=b40ee8fd5ddf8db1bc2e7d643922dddb/bba1cd11728b4710517c14a9c0cec3fdfc032300.jpg");
+        news.add("http://c.hiphotos.baidu.com/image/w%3D400/sign=df63aede4410b912bfc1f7fef3fcfcb5/72f082025aafa40f598927b8a864034f78f01903.jpg");
+        rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        WallpaperPageAdapter adapter = new WallpaperPageAdapter(mContext, news);
         rv.setAdapter(adapter);
-        GridLayoutManager glm = new GridLayoutManager(mContext, 3);
-        glm.setSpanSizeLookup(new MyGridSpanSizeLookup(adapter, glm));
-        rv.setLayoutManager(glm);
         return rv;
     }
-
-    private static class MyGridSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
-
-        private NewsPageAdapter mAdapter;
-
-        private GridLayoutManager mLayoutManager;
-
-        public MyGridSpanSizeLookup(NewsPageAdapter adapter, GridLayoutManager glm) {
-            mAdapter = adapter;
-            mLayoutManager = glm;
-        }
-
-        @Override
-        public int getSpanSize(int position) {
-            String item = mAdapter.getValueAt(position);
-            return 1 + (Math.abs(item.hashCode()) % mLayoutManager.getSpanCount());
-        }
-    };
 
     private static class NewsPagerAdapter extends PagerAdapter {
         private List<View> mPages;
