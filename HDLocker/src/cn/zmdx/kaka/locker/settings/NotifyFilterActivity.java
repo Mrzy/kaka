@@ -1,7 +1,6 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
@@ -11,13 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -28,11 +24,8 @@ import android.widget.Filter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.NotificationPreferences;
 import cn.zmdx.kaka.locker.notify.filter.AlphabetScrollerView;
 import cn.zmdx.kaka.locker.notify.filter.AlphabetScrollerView.OnEventListener;
@@ -41,6 +34,7 @@ import cn.zmdx.kaka.locker.notify.filter.NotifyFilterManager.NotifyFilterEntity;
 import cn.zmdx.kaka.locker.notify.filter.NotifyFilterUtil;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
+import cn.zmdx.kaka.locker.widget.ProgressBarMaterial;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
@@ -54,7 +48,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
 
     private RelativeLayout mContentLayout;
 
-    private ProgressBar mLoadingView;
+    private ProgressBarMaterial mLoadingView;
 
     private StickyGridHeadersGridView mNotifyGridView;
 
@@ -100,7 +94,7 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         SparseIntArray sparseIntArray = NotifyFilterUtil.initAppSize(this);
         int padding = sparseIntArray.get(NotifyFilterUtil.KEY_GRIDVIEW_PADDING);
         mContentLayout = (RelativeLayout) findViewById(R.id.notify_content);
-        mLoadingView = (ProgressBar) findViewById(R.id.notify_loading);
+        mLoadingView = (ProgressBarMaterial) findViewById(R.id.notify_loading);
 
         mNotifyGridView = (StickyGridHeadersGridView) findViewById(R.id.notify_grid_view);
         mNotifyGridView.setHeadersIgnorePadding(true);
@@ -132,53 +126,50 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
             mInterceptGridView.setPadding(padding, 0, padding, 0);
         } else {
             mInterceptLayout.setVisibility(View.GONE);
-//            getSupportActionBar()
-//                    .setTitle(getResources().getString(R.string.notify_title_shortcut));
         }
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.activity_notify_filter_menu, menu);
-//        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-//        Class<?> argClass = mSearchView.getClass();
-//        // 指定某个私有属性
-//        Field ownField;
-//        try {
-//            ownField = argClass.getDeclaredField("mSearchPlate");
-//            // setAccessible 它是用来设置是否有权限访问反射类中的私有属性的，只有设置为true时才可以访问，默认为false
-//            ownField.setAccessible(true);
-//            View mView = (View) ownField.get(mSearchView);
-//            mView.setBackgroundResource(R.drawable.texfield_searchview_holo_light);
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (IllegalArgumentException e) {
-//            e.printStackTrace();
-//        }
-//
-//        mSearchView.setOnQueryTextListener(mOnQueryTextListener);
-//        if (mCurType == TYPE_SELECT) {
-//            menu.findItem(R.id.action_edit).setVisible(false);
-//        } else {
-//            menu.findItem(R.id.action_edit).setVisible(true);
-//        }
-//        return super.onCreateOptionsMenu(menu);
-//    }
+    // public boolean onCreateOptionsMenu(Menu menu) {
+    // MenuInflater inflater = getMenuInflater();
+    // inflater.inflate(R.menu.activity_notify_filter_menu, menu);
+    // mSearchView = (SearchView)
+    // MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+    // Class<?> argClass = mSearchView.getClass();
+    // // 指定某个私有属性
+    // Field ownField;
+    // try {
+    // ownField = argClass.getDeclaredField("mSearchPlate");
+    // // setAccessible 它是用来设置是否有权限访问反射类中的私有属性的，只有设置为true时才可以访问，默认为false
+    // ownField.setAccessible(true);
+    // View mView = (View) ownField.get(mSearchView);
+    // mView.setBackgroundResource(R.drawable.texfield_searchview_holo_light);
+    // } catch (NoSuchFieldException e) {
+    // e.printStackTrace();
+    // } catch (IllegalAccessException e) {
+    // e.printStackTrace();
+    // } catch (IllegalArgumentException e) {
+    // e.printStackTrace();
+    // }
+    //
+    // mSearchView.setOnQueryTextListener(mOnQueryTextListener);
+    // if (mCurType == TYPE_SELECT) {
+    // menu.findItem(R.id.action_edit).setVisible(false);
+    // } else {
+    // menu.findItem(R.id.action_edit).setVisible(true);
+    // }
+    // return super.onCreateOptionsMenu(menu);
+    // }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.action_edit) {
-//            isEditMode = !isEditMode;
-//            mInterceptAdapter.notifyDataSetChanged();
-//        } else if (item.getItemId() == android.R.id.home) {
-//            onBackPressed();
-//        }
-//        return true;
-//    }
+    // public boolean onOptionsItemSelected(MenuItem item) {
+    // if (item.getItemId() == R.id.action_edit) {
+    // isEditMode = !isEditMode;
+    // mInterceptAdapter.notifyDataSetChanged();
+    // } else if (item.getItemId() == android.R.id.home) {
+    // onBackPressed();
+    // }
+    // return true;
+    // }
 
     private final SearchView.OnQueryTextListener mOnQueryTextListener = new SearchView.OnQueryTextListener() {
         @Override
@@ -519,6 +510,6 @@ public class NotifyFilterActivity extends BaseActivity implements OnItemClickLis
         for (Iterator iterator = pkgNameSet.iterator(); iterator.hasNext();) {
             notifyFilterApp += (String) iterator.next() + "|";
         }
-//        UmengCustomEventManager.statisticalNotifyFilterApps(notifyFilterApp);
+        // UmengCustomEventManager.statisticalNotifyFilterApps(notifyFilterApp);
     }
 }
