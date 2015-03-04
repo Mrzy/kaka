@@ -53,4 +53,10 @@
         </LinearLayout>
     </LinearLayout>
 
+    <cn.zmdx.kaka.locker.content.view.NewsDetailLayout
+        android:id="@+id/detailLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </cn.zmdx.kaka.locker.content.view.NewsDetailLayout>
+
 </FrameLayout>

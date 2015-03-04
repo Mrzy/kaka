@@ -7,8 +7,8 @@ import java.util.List;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,6 +23,7 @@ import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.view.FlipperView;
+import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -41,10 +42,13 @@ public class PandoraBoxManager {
 
     private View mEntireView;
 
+    private NewsDetailLayout mDetailLayout;
+
     private PandoraBoxManager(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
         mEntireView = mInflater.inflate(R.layout.news_page_layout, null);
+        mDetailLayout = (NewsDetailLayout) mEntireView.findViewById(R.id.detailLayout);
     }
 
     public synchronized static PandoraBoxManager newInstance(Context context) {
@@ -189,7 +193,7 @@ public class PandoraBoxManager {
     private View initWallPaperView() {
         RecyclerView rv = (RecyclerView) mInflater.inflate(R.layout.pager_news_layout, null);
         rv.setHasFixedSize(true);
-        List<String> news = new ArrayList<String>();
+        final List<String> news = new ArrayList<String>();
         news.add("http://e.hiphotos.baidu.com/image/w%3D400/sign=fe5ab378b1de9c82a665f88f5c8180d2/9345d688d43f8794c8c01f6fd01b0ef41bd53ab7.jpg");
         news.add("http://a.hiphotos.baidu.com/image/w%3D400/sign=78c33218357adab43dd01a43bbd5b36b/3c6d55fbb2fb4316edf8fb4a23a4462309f7d31f.jpg");
         news.add("http://a.hiphotos.baidu.com/image/w%3D400/sign=079be1e0b68f8c54e3d3c42f0a282dee/d0c8a786c9177f3ecfc3db0372cf3bc79e3d56cc.jpg");
@@ -198,9 +202,36 @@ public class PandoraBoxManager {
         news.add("http://a.hiphotos.baidu.com/image/w%3D400/sign=b40ee8fd5ddf8db1bc2e7d643922dddb/bba1cd11728b4710517c14a9c0cec3fdfc032300.jpg");
         news.add("http://c.hiphotos.baidu.com/image/w%3D400/sign=df63aede4410b912bfc1f7fef3fcfcb5/72f082025aafa40f598927b8a864034f78f01903.jpg");
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        WallpaperPageAdapter adapter = new WallpaperPageAdapter(mContext, news);
+        WallpaperPageAdapter adapter = new WallpaperPageAdapter(mContext, rv, news);
+        adapter.setOnItemClickListener(new WallpaperPageAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View view, int position) {
+                String url = news.get(position);
+                TextView detailView = new TextView(mContext);
+                detailView.setBackgroundColor(Color.WHITE);
+                detailView.setOnClickListener(new View.OnClickListener() {
+                    
+                    @Override
+                    public void onClick(View v) {
+                        closeDetailPage();
+                    }
+                });
+                detailView.setText("详情页");
+                openDetailPage(detailView);
+            }
+        });
         rv.setAdapter(adapter);
         return rv;
+    }
+
+    private void openDetailPage(View view) {
+        mDetailLayout.addDetailView(view);
+        mDetailLayout.open();
+    }
+
+    private void closeDetailPage() {
+        mDetailLayout.close();
     }
 
     private static class NewsPagerAdapter extends PagerAdapter {
