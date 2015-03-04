@@ -43,8 +43,6 @@ import cn.zmdx.kaka.locker.notification.guide.NotificationGuideHelper;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.widget.SwipeLayout;
-import cn.zmdx.kaka.locker.widget.SwipeLayout.SwipeListener;
 
 public class NotificationLayout extends LinearLayout {
 
@@ -60,14 +58,13 @@ public class NotificationLayout extends LinearLayout {
             HDApplication.getContext(), 5);
 
     protected static final int GAP_ITEM_LEFT_MARGIN = BaseInfoHelper.dip2px(
-            HDApplication.getContext(), 15);
+            HDApplication.getContext(), 0);
 
     protected static final int GAP_ITEM_RIGHT_MARGIN = BaseInfoHelper.dip2px(
-            HDApplication.getContext(), 15);
+            HDApplication.getContext(), 0);
 
-    // protected static final int NOTIFICATION_ITEM_HEIGHT =
-    // BaseInfoHelper.dip2px(
-    // HDApplication.getContext(), 64);
+    protected static final int NOTIFICATION_ITEM_HEIGHT = BaseInfoHelper.dip2px(
+            HDApplication.getContext(), 64);
 
     private static final SimpleDateFormat sSdf = new SimpleDateFormat("dd日 HH:mm");
 
@@ -209,24 +206,8 @@ public class NotificationLayout extends LinearLayout {
             final View childView = getChildAt(i);
             if (childView instanceof SwipeLayout) {
                 SwipeLayout sl = (SwipeLayout) childView;
-                sl.close();
+                sl.close(false);
             }
-        }
-    }
-
-    /**
-     * 移除通知教学完成，记录状态
-     * 
-     * @param id 通知id
-     */
-    private void recordGuideStateIfNeeded(String id) {
-        final NotificationInfo ni = mActiveNotification.get(id);
-        int intId = Integer.valueOf(id);
-        if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE
-                && ni.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
-            NotificationGuideHelper.recordGuideProgress(getContext());
-        } else if (intId == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL) {
-            NotificationGuideHelper.recordGuideProgress(getContext());
         }
     }
 
@@ -240,6 +221,7 @@ public class NotificationLayout extends LinearLayout {
         lp.bottomMargin = GAP_BETWEEN_NOTIFICATIONS;
         lp.leftMargin = GAP_ITEM_LEFT_MARGIN;
         lp.rightMargin = GAP_ITEM_RIGHT_MARGIN;
+        lp.height = NOTIFICATION_ITEM_HEIGHT;
         addView(itemView, 0, lp);
     }
 
@@ -275,82 +257,6 @@ public class NotificationLayout extends LinearLayout {
         }
     }
 
-    // private class ItemViewTouchListener implements OnTouchListener {
-    //
-    // private View mItemView;
-    //
-    // public ItemViewTouchListener(View itemView) {
-    // mItemView = itemView;
-    // }
-    //
-    // @Override
-    // public boolean onTouch(View v, MotionEvent event) {
-    // switch (event.getAction()) {
-    // case MotionEvent.ACTION_DOWN:
-    // mCurrentTouchView = mItemView;
-    // v.performClick();
-    // View contentLayout =
-    // mItemView.findViewById(R.id.pandora_notification_hint);
-    // contentLayout
-    // .setBackgroundResource(R.drawable.pandora_notification_click_shape);
-    // mItemView.findViewById(R.id.handleTip).setVisibility(View.VISIBLE);
-    // final String id = String.valueOf(v.getTag());
-    // LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
-    //
-    // @Override
-    // public void run() {
-    // final NotificationInfo info = mActiveNotification.get(id);
-    // try {
-    // PendingIntent pi = info.getPendingIntent();
-    // if (pi != null) {
-    // pi.send();
-    // }
-    // } catch (Exception e) {
-    // }
-    // if (Integer.valueOf(id) ==
-    // PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE) {
-    // NotificationGuideHelper
-    // .markAlreadyPromptHideNotificationMsg(getContext());
-    // } else if (Integer.valueOf(id) ==
-    // PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_OPENDETAIL) {
-    // NotificationGuideHelper.recordGuideProgress(getContext());
-    // } else if (Integer.parseInt(id) ==
-    // PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_OPEN_PERMISSION) {
-    // // 启动设置通知权限引导界面
-    // HDBThreadUtils.postOnUiDelayed(new Runnable() {
-    //
-    // @Override
-    // public void run() {
-    // Toast.makeText(
-    // getContext(),
-    // getResources().getString(
-    // R.string.tip_open_notification_permission),
-    // Toast.LENGTH_LONG).show();
-    // }
-    // }, 200);
-    // } else if (Integer.valueOf(id) ==
-    // PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_REMOVE) {
-    // NotificationGuideHelper.recordGuideProgress(getContext());
-    // }
-    // removeNotification(id);
-    // UmengCustomEventManager.statisticalOpenNotification(info.getId(),
-    // info.getPkg(), info.getType());
-    // }
-    // });
-    // return true;
-    // case MotionEvent.ACTION_MOVE:
-    // return true;
-    // case MotionEvent.ACTION_UP:
-    // resetState();
-    // break;
-    // case MotionEvent.ACTION_CANCEL:
-    // break;
-    // }
-    // return true;
-    // }
-    //
-    // };
-
     public void clearAll() {
         // TODO
     }
@@ -359,30 +265,39 @@ public class NotificationLayout extends LinearLayout {
         return false;
     };
 
-    private void updateNotificationItem(View itemView, NotificationInfo info) {
-        SwipeLayout swipeView = (SwipeLayout) itemView.findViewById(R.id.swipeLayout);
-        swipeView.setShowMode(SwipeLayout.ShowMode.LayDown);
-        swipeView.setDragEdges(SwipeLayout.DragEdge.Left, SwipeLayout.DragEdge.Right);
-        // When using multiple drag edges it's a good idea to pass the ids of
-        // the views that you're using for the left, right, top bottom views (-1
-        // if you're not using a particular view)
-        swipeView.setBottomViewIds(R.id.bottom_left, R.id.bottom_right, SwipeLayout.EMPTY_LAYOUT,
-                SwipeLayout.EMPTY_LAYOUT);
-        // swipeView.addRevealListener(R.id.delete, new
-        // SwipeLayout.OnRevealListener() {
-        // @Override
-        // public void onReveal(View child, SwipeLayout.DragEdge edge, float
-        // fraction, int distance) {
-        //
-        // }
-        // });
-        swipeView.addSwipeListener(mSwipeListener);
+    private SwipeLayout.OnSwipeLayoutListener mSwipeListener = new SwipeLayout.OnSwipeLayoutListener() {
 
-        final ImageView largeIcon = (ImageView) itemView.findViewById(R.id.largeIcon);
-        final ImageView smallIcon = (ImageView) itemView.findViewById(R.id.smallIcon);
-        final TextView title = (TextView) itemView.findViewById(R.id.title);
-        final TextView content = (TextView) itemView.findViewById(R.id.content);
-        final TextView date = (TextView) itemView.findViewById(R.id.date);
+        @Override
+        public void onSlide(SwipeLayout layout, float offset) {
+            View rightView = layout.getRightView();
+            View leftView = layout.getLeftView();
+        }
+
+        @Override
+        public void onOpened(SwipeLayout layout, int direction) {
+            final String id = String.valueOf(layout.getTag());
+            if (direction == SwipeLayout.OPEN_DIRECTION_LEFT) {
+                openNotification(id);
+            } else if (direction == SwipeLayout.OPEN_DIRECTION_RIGHT) {
+                removeNotificationItem(id);
+            }
+        }
+
+        public void onClosed() {
+        };
+    };
+
+    private void updateNotificationItem(View itemView, NotificationInfo info) {
+        SwipeLayout swipeView = (SwipeLayout) itemView;
+        swipeView.setOnSwipeLayoutListener(mSwipeListener);
+
+        final ImageView largeIcon = (ImageView) swipeView.getUpperView().findViewById(
+                R.id.largeIcon);
+        final ImageView smallIcon = (ImageView) swipeView.getUpperView().findViewById(
+                R.id.smallIcon);
+        final TextView title = (TextView) swipeView.getUpperView().findViewById(R.id.title);
+        final TextView content = (TextView) swipeView.getUpperView().findViewById(R.id.content);
+        final TextView date = (TextView) swipeView.getUpperView().findViewById(R.id.date);
         long postTime = info.getPostTime() == 0 ? new Date().getTime() : info.getPostTime();
         date.setText(sSdf.format(postTime));
         boolean showMsg = PandoraConfig.newInstance(getContext()).isShowNotificationMessage();
@@ -410,44 +325,7 @@ public class NotificationLayout extends LinearLayout {
         }
     }
 
-    private SwipeListener mSwipeListener = new SwipeListener() {
-
-        @Override
-        public void onStartOpen(SwipeLayout layout, boolean left) {
-        }
-
-        @Override
-        public void onOpened(SwipeLayout layout, boolean left) {
-            final String id = String.valueOf(layout.getTag());
-            if (left) {
-                openNotification(id);
-            } else {
-                closeNotificationItem(id);
-            }
-        }
-
-        @Override
-        public void onStartClose(SwipeLayout layout, boolean left) {
-
-        }
-
-        @Override
-        public void onClosed(SwipeLayout layout) {
-
-        }
-
-        @Override
-        public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
-
-        }
-
-        @Override
-        public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
-        }
-
-    };
-
-    private void closeNotificationItem(String id) {
+    private void removeNotificationItem(String id) {
         final NotificationInfo ni = mActiveNotification.get(id);
         if (ni == null) {
             return;
@@ -513,22 +391,27 @@ public class NotificationLayout extends LinearLayout {
     }
 
     private View createNotificationItemView(NotificationInfo info) {
-        final View view = View.inflate(getContext(), R.layout.notification_item_layout, null);
-        updateNotificationItem(view, info);
-        return view;
+        SwipeLayout itemView = new SwipeLayout(getContext());
+        View leftView = View
+                .inflate(getContext(), R.layout.notification_item_leftview_layout, null);
+        View rightView = View.inflate(getContext(), R.layout.notification_item_rightview_layout,
+                null);
+        View upperView = View.inflate(getContext(), R.layout.notification_item_layout, null);
+
+        itemView.addLeftView(leftView);
+        itemView.addRightView(rightView);
+        itemView.addUpperView(upperView);
+        updateNotificationItem(itemView, info);
+        return itemView;
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        // LockScreenManager.getInstance().unRegistMainPanelListener(mMainPanelListener);
-        // LockScreenManager.getInstance().unRegistPullDownListener(mPullDownListener);
         super.onDetachedFromWindow();
     }
 
     @Override
     protected void onAttachedToWindow() {
-        // LockScreenManager.getInstance().registMainPanelListener(mMainPanelListener);
-        // LockScreenManager.getInstance().registPullDownListener(mPullDownListener);
         sendGuideNotificationIfNeeded();
         super.onAttachedToWindow();
     }
@@ -539,63 +422,4 @@ public class NotificationLayout extends LinearLayout {
             NotificationInterceptor.getInstance(getContext()).sendCustomNotification(guideNi);
         }
     }
-
-    // private boolean mIsRunRightArrowAnimator = false;
-
-    /**
-     * 锁屏页右划解锁的监听器
-     */
-    // private IMainPanelListener mMainPanelListener = new IMainPanelListener()
-    // {
-    //
-    // @Override
-    // public void onMainPanelOpened() {
-    //
-    // }
-    //
-    // @Override
-    // public void onMainPanelClosed() {
-    // resetState();
-    // }
-    //
-    // @Override
-    // public void onMainPanelSlide(View panel, float slideOffset) {
-    // // 为通知view执行一个向右的偏移动画
-    // if (!mIsRunRightArrowAnimator) {
-    // if (mCurrentTouchView != null) {
-    // mIsRunRightArrowAnimator = true;
-    // mCurrentTouchView.animate().translationX(ITEM_RIGHT_ANIMATOR_DISTANCE)
-    // .setDuration(300).start();
-    // }
-    // }
-    // }
-    // };
-
-    /**
-     * 锁屏页下拉抽屉的监听器
-     */
-    // private IPullDownListener mPullDownListener = new IPullDownListener() {
-    //
-    // @Override
-    // public void onStartPullDown() {
-    // resetState();
-    // }
-    // };
-
-    // private void resetState() {
-    // if (mCurrentTouchView != null) {
-    // View contentLayout =
-    // mCurrentTouchView.findViewById(R.id.pandora_notification_hint);
-    // contentLayout.setBackgroundResource(R.drawable.pandora_notification_shape);
-    // mCurrentTouchView.findViewById(R.id.handleTip).setVisibility(View.INVISIBLE);
-    //
-    // // 如果通知view执行了向右的偏移动画，将其恢复原位
-    // if (mIsRunRightArrowAnimator) {
-    // mCurrentTouchView.animate().translationX(0).setDuration(300).start();
-    // mIsRunRightArrowAnimator = false;
-    // }
-    // mCurrentTouchView = null;
-    // }
-    // LockScreenManager.getInstance().setRunnableAfterUnLock(null);
-    // }
 }

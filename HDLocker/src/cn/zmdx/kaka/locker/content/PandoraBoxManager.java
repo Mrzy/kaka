@@ -300,41 +300,6 @@ public class PandoraBoxManager {
         }
     }
 
-    // public IFoldablePage getFoldablePage() {
-    // List<ServerImageData> data =
-    // getDataFormLocalDB(PandoraPolicy.MIN_COUNT_FOLDABLE_BOX);
-    // if (BuildConfig.DEBUG) {
-    // HDBLOG.logD("从本地取出数据条数：" + data.size());
-    // }
-    // FoldablePage box = new FoldablePage(mContext, data);
-    // FoldableBoxAdapter adapter = new FoldableBoxAdapter(mContext,
-    // box.makeCardList(data));
-    // box.setAdapter(adapter);
-    // return box;
-    // }
-
-    // public IFoldablePage getFavoriteFoldablePage() {
-    // FavoritesManager manager = new FavoritesManager(mContext);
-    // List<ServerImageData> listData = new ArrayList<ServerImageData>();
-    // Cursor cursor = manager.getFavoritesInfo();
-    // if (cursor == null) {
-    // return null;
-    // }
-    // List<ServerImageData> cursorToList = cursorToList(cursor, listData);
-    // if (BuildConfig.DEBUG) {
-    // HDBLOG.logD("从本地取出收藏条数：" + cursorToList.size());
-    // }
-    // FoldablePage foldablePage = null;
-    // if (null != cursorToList) {
-    // foldablePage = new FoldablePage(mContext, cursorToList);
-    // FoldableBoxAdapter adapter = new
-    // FoldableBoxAdapter(HDApplication.getContext(),
-    // foldablePage.makeCardList(cursorToList));
-    // foldablePage.setAdapter(adapter);
-    // }
-    // return foldablePage;
-    // }
-
     public List<ServerImageData> cursorToList(Cursor cursor, List<ServerImageData> list) {
         if (null != cursor) {
             try {

@@ -1,111 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cn.zmdx.kaka.locker.widget.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipeLayout"
-    android:clickable="true"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pandora_notification_hint"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/pandora_notification_shape"
+    android:gravity="center_vertical"
+    android:paddingBottom="1dp"
+    android:paddingTop="1dp" >
 
-    <FrameLayout
-        android:id="@+id/bottom_left"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+    <ImageView
+        android:id="@+id/largeIcon"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="7dp"
+        android:scaleType="fitXY" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="open"
-            android:textSize="20dp" />
-    </FrameLayout>
+    <ImageView
+        android:id="@+id/smallIcon"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_alignBottom="@id/largeIcon"
+        android:layout_alignRight="@id/largeIcon"
+        android:scaleType="fitXY" />
 
-    <FrameLayout
-        android:id="@+id/bottom_right"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="4dp"
+        android:textColor="#90ffffff"
+        android:textSize="12dp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="delete"
-            android:gravity="right"
-            android:textSize="20dp" />
-    </FrameLayout>
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@id/date"
+        android:layout_toRightOf="@id/largeIcon"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#ffffff"
+        android:textSize="14dp" />
 
-    <RelativeLayout
-        android:id="@+id/pandora_notification_hint"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/pandora_notification_shape"
-        android:gravity="center_vertical"
-        android:paddingBottom="1dp"
-        android:paddingTop="1dp" >
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/handleTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/date"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/notification_item_handleTip"
+        android:textColor="#60ffffff"
+        android:textSize="10dp"
+        android:visibility="invisible" />
 
-        <ImageView
-            android:id="@+id/largeIcon"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginBottom="7dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="7dp"
-            android:scaleType="fitXY" />
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_toLeftOf="@id/date"
+        android:layout_toRightOf="@id/largeIcon"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="#bbffffff"
+        android:textSize="12dp" />
 
-        <ImageView
-            android:id="@+id/smallIcon"
-            android:layout_width="13dp"
-            android:layout_height="13dp"
-            android:layout_alignBottom="@id/largeIcon"
-            android:layout_alignRight="@id/largeIcon"
-            android:scaleType="fitXY" />
-
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="4dp"
-            android:textColor="#90ffffff"
-            android:textSize="12dp" />
-
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@id/date"
-            android:layout_toRightOf="@id/largeIcon"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textColor="#ffffff"
-            android:textSize="14dp" />
-
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-            android:id="@+id/handleTip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/date"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/notification_item_handleTip"
-            android:textColor="#60ffffff"
-            android:textSize="10dp"
-            android:visibility="invisible" />
-
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-            android:id="@+id/content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="4dp"
-            android:layout_toLeftOf="@id/date"
-            android:layout_toRightOf="@id/largeIcon"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="#bbffffff"
-            android:textSize="12dp" />
-    </RelativeLayout>
-
-</cn.zmdx.kaka.locker.widget.SwipeLayout>
+</RelativeLayout>
