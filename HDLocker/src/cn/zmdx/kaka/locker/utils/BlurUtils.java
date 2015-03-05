@@ -1,7 +1,6 @@
 
 package cn.zmdx.kaka.locker.utils;
 
-import cn.zmdx.kaka.locker.BuildConfig;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,7 +8,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build.VERSION;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import cn.zmdx.kaka.locker.BuildConfig;
 
 public class BlurUtils {
 
@@ -37,10 +39,15 @@ public class BlurUtils {
         canvas.drawBitmap(bkg, 0, 0, paint);
 
         overlay = getBlurBitmap(context, overlay, radius, true);
-        if (VERSION.SDK_INT >= 16) {
-            view.setBackground(new BitmapDrawable(context.getResources(), overlay));
+        if (view instanceof ImageView) {
+            ImageView iv = (ImageView) view;
+            iv.setImageBitmap(overlay);
         } else {
-            view.setBackgroundDrawable(new BitmapDrawable(overlay));
+            if (VERSION.SDK_INT >= 16) {
+                view.setBackground(new BitmapDrawable(context.getResources(), overlay));
+            } else {
+                view.setBackgroundDrawable(new BitmapDrawable(overlay));
+            }
         }
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("blur processor takes time :" + (System.currentTimeMillis() - start) + "ms");
