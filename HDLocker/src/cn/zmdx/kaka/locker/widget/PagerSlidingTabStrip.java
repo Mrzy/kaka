@@ -86,10 +86,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int tabPadding = 24;
     private int dividerWidth = 1;
 
-    private int tabTextSize = 12;
-    private int tabTextColor = 0xFF666666;
+    private int tabTextSize = 14;
+    private int tabTextColor = 0xFF919191;
     private Typeface tabTypeface = null;
-    private int tabTypefaceStyle = Typeface.BOLD;
+    private int tabTypefaceStyle = Typeface.NORMAL;
 
     private int lastScrollX = 0;
 
@@ -319,6 +319,20 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
         // default: line below current tab
         View currentTab = tabsContainer.getChildAt(currentPosition);
+        
+        for (int i = 0; i < tabCount; i++) {
+            View v = tabsContainer.getChildAt(i);
+            if (v instanceof TextView) {
+                TextView tab = (TextView) v;
+                if(v==currentTab){
+                    tab.setTextColor(getContext().getResources().getColor(R.color.white));
+                }else{
+                    tab.setTextColor(tabTextColor);
+                }
+            }
+            
+        }
+        
         float lineLeft = currentTab.getLeft();
         float lineRight = currentTab.getRight();
 

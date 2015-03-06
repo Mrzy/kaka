@@ -219,7 +219,7 @@ public class OnlineWallpaperView extends LinearLayout {
                 pullWallpaperFromSP(lastPullJson);
             } else {
                 mGVPb.setVisibility(View.VISIBLE);
-                pullWallpaperFromServer(lastPullJson);
+//                pullWallpaperFromServer(lastPullJson);
             }
         } else {
             if (BuildConfig.DEBUG) {
@@ -230,70 +230,70 @@ public class OnlineWallpaperView extends LinearLayout {
         }
     }
 
-    private void pullWallpaperFromServer(final String lastPullJson) {
-        OnlineWallpaperManager.getInstance().pullWallpaperFromServer(new Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("成功获取网路壁纸数据");
-                }
-                mGVPb.setVisibility(View.GONE);
-                list = ServerOnlineWallpaperManager.parseJson(response);
-                if (list == null) {
-                    String promptString = mContext.getString(R.string.data_error);
-                    showTextPrompt(false, promptString);
-                    return;
-                }
-                if (!TextUtils.isEmpty(lastPullJson)) {
-                    try {
-                        ArrayList<ServerOnlineWallpaper> spJsonlist = ServerOnlineWallpaperManager.parseJson(new JSONObject(
-                                lastPullJson));
-                        for (int i = 0; i < list.size(); i++) {
-                            String imageUrl = list.get(i).getImageURL();
-                            for (int j = 0; j < spJsonlist.size(); j++) {
-                                String spImageUrl = spJsonlist.get(j).getImageURL();
-                                if (!imageUrl.equals(spImageUrl)) {
-                                    list.get(i).setNewData(true);
-                                } else {
-                                    list.get(i).setNewData(false);
-                                    break;
-                                }
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    for (int i = 0; i < list.size(); i++) {
-                        list.get(i).setNewData(true);
-                    }
-                }
-
-                if (null == mWallpaperAdpter) {
-                    mWallpaperAdpter = new WallpaperAdpter();
-                    mGridView.setAdapter(mWallpaperAdpter);
-                }
-                mWallpaperAdpter.notifyDataSetChanged();
-                PandoraConfig.newInstance(mContext).saveLastOnlinePullTime(
-                        System.currentTimeMillis());
-                PandoraConfig.newInstance(mContext).saveLastOnlineServerJsonData(
-                        response.toString());
-            }
-        }, new ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (!TextUtils.isEmpty(lastPullJson)) {
-                    pullWallpaperFromSP(lastPullJson);
-                } else {
-                    String promptString = mContext.getString(R.string.network_error);
-                    showTextPrompt(false, promptString);
-                }
-                mGVPb.setVisibility(View.GONE);
-            }
-        });
-    }
+//    private void pullWallpaperFromServer(final String lastPullJson) {
+//        OnlineWallpaperManager.getInstance().pullWallpaperFromServer(new Listener<JSONObject>() {
+//
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                if (BuildConfig.DEBUG) {
+//                    HDBLOG.logD("成功获取网路壁纸数据");
+//                }
+//                mGVPb.setVisibility(View.GONE);
+//                list = ServerOnlineWallpaperManager.parseJson(response);
+//                if (list == null) {
+//                    String promptString = mContext.getString(R.string.data_error);
+//                    showTextPrompt(false, promptString);
+//                    return;
+//                }
+//                if (!TextUtils.isEmpty(lastPullJson)) {
+//                    try {
+//                        ArrayList<ServerOnlineWallpaper> spJsonlist = ServerOnlineWallpaperManager.parseJson(new JSONObject(
+//                                lastPullJson));
+//                        for (int i = 0; i < list.size(); i++) {
+//                            String imageUrl = list.get(i).getImageURL();
+//                            for (int j = 0; j < spJsonlist.size(); j++) {
+//                                String spImageUrl = spJsonlist.get(j).getImageURL();
+//                                if (!imageUrl.equals(spImageUrl)) {
+//                                    list.get(i).setNewData(true);
+//                                } else {
+//                                    list.get(i).setNewData(false);
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    for (int i = 0; i < list.size(); i++) {
+//                        list.get(i).setNewData(true);
+//                    }
+//                }
+//
+//                if (null == mWallpaperAdpter) {
+//                    mWallpaperAdpter = new WallpaperAdpter();
+//                    mGridView.setAdapter(mWallpaperAdpter);
+//                }
+//                mWallpaperAdpter.notifyDataSetChanged();
+//                PandoraConfig.newInstance(mContext).saveLastOnlinePullTime(
+//                        System.currentTimeMillis());
+//                PandoraConfig.newInstance(mContext).saveLastOnlineServerJsonData(
+//                        response.toString());
+//            }
+//        }, new ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                if (!TextUtils.isEmpty(lastPullJson)) {
+//                    pullWallpaperFromSP(lastPullJson);
+//                } else {
+//                    String promptString = mContext.getString(R.string.network_error);
+//                    showTextPrompt(false, promptString);
+//                }
+//                mGVPb.setVisibility(View.GONE);
+//            }
+//        });
+//    }
 
     private void pullWallpaperFromSP(String lastPullJson) {
         try {

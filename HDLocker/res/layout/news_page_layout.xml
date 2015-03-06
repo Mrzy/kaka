@@ -41,10 +41,17 @@
             android:orientation="vertical" >
 
             <cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip
+                xmlns:psts="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/newsTabStrip"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/strip_tab_background" />
+                android:layout_height="35dp"
+                android:layout_marginLeft="31dp"
+                android:layout_marginRight="31dp"
+                android:background="@drawable/strip_tab_background"
+                psts:pstsDividerColor="@android:color/transparent"
+                psts:pstsIndicatorColor="#919191"
+                psts:pstsIndicatorHeight="2dp"
+                psts:pstsUnderlineColor="@android:color/transparent" />
 
             <cn.zmdx.kaka.locker.widget.ViewPagerCompat
                 android:id="@+id/newsViewPager"

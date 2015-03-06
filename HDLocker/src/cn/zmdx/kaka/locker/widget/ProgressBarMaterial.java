@@ -11,6 +11,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
+import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.android.volley.misc.Utils;
@@ -19,7 +20,7 @@ public class ProgressBarMaterial extends CustomView {
 
     final static String ANDROIDXML = "http://schemas.android.com/apk/res/android";
 
-    int backgroundColor = Color.parseColor("#03a9f4");
+    int backgroundColor = R.color.progressBarMaterialColor;
 
     public ProgressBarMaterial(Context context, AttributeSet attrs) {
         super(context, attrs);

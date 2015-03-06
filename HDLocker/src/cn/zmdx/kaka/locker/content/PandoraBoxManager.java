@@ -7,7 +7,6 @@ import java.util.List;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,8 +24,14 @@ import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.view.FlipperView;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
+import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager;
+import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager.IPullWallpaperListener;
+import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView.IWallpaperDetailListener;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
@@ -100,12 +105,12 @@ public class PandoraBoxManager {
     }
 
     private void initTitles(List<String> titles) {
-        titles.add("壁纸");
-        titles.add("热门");
-        titles.add("社会");
-        titles.add("科技");
-        titles.add("美女");
-        titles.add("搞笑");
+        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_wallpaper));
+        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_headlines));
+        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_gossip));
+        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_micro_choice));
+        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_beauty));
+        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_funny));
     }
 
     private void initNewsPages(List<View> data) {
@@ -125,7 +130,8 @@ public class PandoraBoxManager {
     }
 
     private View initJokeView() {
-        RecyclerView rv = (RecyclerView) mInflater.inflate(R.layout.pager_news_layout, null);
+        View view = mInflater.inflate(R.layout.pager_news_layout, null);
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         rv.setHasFixedSize(true);
         List<String> news = new ArrayList<String>();
@@ -134,11 +140,12 @@ public class PandoraBoxManager {
         }
         NewsPageAdapter adapter = new NewsPageAdapter(news);
         rv.setAdapter(adapter);
-        return rv;
+        return view;
     }
 
     private View initSociView() {
-        RecyclerView rv = (RecyclerView) mInflater.inflate(R.layout.pager_news_layout, null);
+        View view = mInflater.inflate(R.layout.pager_news_layout, null);
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         rv.setHasFixedSize(true);
         List<String> news = new ArrayList<String>();
@@ -147,11 +154,12 @@ public class PandoraBoxManager {
         }
         NewsPageAdapter adapter = new NewsPageAdapter(news);
         rv.setAdapter(adapter);
-        return rv;
+        return view;
     }
 
     private View initTechView() {
-        RecyclerView rv = (RecyclerView) mInflater.inflate(R.layout.pager_news_layout, null);
+        View view = mInflater.inflate(R.layout.pager_news_layout, null);
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         rv.setHasFixedSize(true);
         List<String> news = new ArrayList<String>();
@@ -160,20 +168,21 @@ public class PandoraBoxManager {
         }
         NewsPageAdapter adapter = new NewsPageAdapter(news);
         rv.setAdapter(adapter);
-        return rv;
+        return view;
     }
 
     private View initGirlView() {
-        RecyclerView rv = (RecyclerView) mInflater.inflate(R.layout.pager_news_layout, null);
+        View view = mInflater.inflate(R.layout.pager_news_layout, null);
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        // rv.setHasFixedSize(true);
+        rv.setHasFixedSize(true);
         List<String> news = new ArrayList<String>();
         for (int i = 0; i < 100; i++) {
             news.add("今日头条" + i);
         }
         NewsPageAdapter adapter = new NewsPageAdapter(news);
         rv.setAdapter(adapter);
-        return rv;
+        return view;
     }
 
     private View initHotNewsView() {
@@ -191,38 +200,61 @@ public class PandoraBoxManager {
     }
 
     private View initWallPaperView() {
-        RecyclerView rv = (RecyclerView) mInflater.inflate(R.layout.pager_news_layout, null);
+        View view = mInflater.inflate(R.layout.pager_news_layout, null);
+        final RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext,
+                LinearLayoutManager.VERTICAL, false);
+        rv.setLayoutManager(mLayoutManager);
         rv.setHasFixedSize(true);
-        final List<String> news = new ArrayList<String>();
-        news.add("http://e.hiphotos.baidu.com/image/w%3D400/sign=fe5ab378b1de9c82a665f88f5c8180d2/9345d688d43f8794c8c01f6fd01b0ef41bd53ab7.jpg");
-        news.add("http://a.hiphotos.baidu.com/image/w%3D400/sign=78c33218357adab43dd01a43bbd5b36b/3c6d55fbb2fb4316edf8fb4a23a4462309f7d31f.jpg");
-        news.add("http://a.hiphotos.baidu.com/image/w%3D400/sign=079be1e0b68f8c54e3d3c42f0a282dee/d0c8a786c9177f3ecfc3db0372cf3bc79e3d56cc.jpg");
-        news.add("http://c.hiphotos.baidu.com/image/w%3D400/sign=e075723e718da9774e2f872b8050f872/f603918fa0ec08fafbd8a2aa5bee3d6d54fbdae7.jpg");
-        news.add("http://e.hiphotos.baidu.com/image/w%3D400/sign=a60dc1920a24ab18e016e03705fbe69a/f703738da97739124770a1d5fb198618367ae234.jpg");
-        news.add("http://a.hiphotos.baidu.com/image/w%3D400/sign=b40ee8fd5ddf8db1bc2e7d643922dddb/bba1cd11728b4710517c14a9c0cec3fdfc032300.jpg");
-        news.add("http://c.hiphotos.baidu.com/image/w%3D400/sign=df63aede4410b912bfc1f7fef3fcfcb5/72f082025aafa40f598927b8a864034f78f01903.jpg");
-        rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        WallpaperPageAdapter adapter = new WallpaperPageAdapter(mContext, rv, news);
-        adapter.setOnItemClickListener(new WallpaperPageAdapter.OnItemClickListener() {
-
+        rv.setVerticalFadingEdgeEnabled(true);
+        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 20));
+        rv.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                String url = news.get(position);
-                TextView detailView = new TextView(mContext);
-                detailView.setBackgroundColor(Color.WHITE);
-                detailView.setOnClickListener(new View.OnClickListener() {
-                    
-                    @Override
-                    public void onClick(View v) {
-                        closeDetailPage();
-                    }
-                });
-                detailView.setText("详情页");
-                openDetailPage(detailView);
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastVisibleItem = ((LinearLayoutManager) mLayoutManager)
+                        .findLastVisibleItemPosition();
+                int totalItemCount = mLayoutManager.getItemCount();
+                // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
+                // dy>0 表示向下滑动
+                if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
+                    // loadPage(currentQueryMap);
+                }
             }
         });
-        rv.setAdapter(adapter);
-        return rv;
+        OnlineWallpaperManager.getInstance().pullWallpaperData(mContext,
+                new IPullWallpaperListener() {
+
+                    @Override
+                    public void onSuccecc(final List<ServerOnlineWallpaper> list) {
+                        final WallpaperPageAdapter adapter = new WallpaperPageAdapter(mContext, rv,
+                                list);
+                        adapter.setOnItemClickListener(new WallpaperPageAdapter.OnItemClickListener() {
+
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                WallpaperDetailView detailView = new WallpaperDetailView(mContext);
+                                detailView.setData(list.get(position));
+                                detailView
+                                        .setWallpaperDetailListener(new IWallpaperDetailListener() {
+
+                                            @Override
+                                            public void onBack() {
+                                                closeDetailPage();
+                                            }
+                                        });
+                                openDetailPage(detailView);
+                            }
+                        });
+                        rv.setAdapter(adapter);
+                    }
+
+                    @Override
+                    public void onFail() {
+
+                    }
+                });
+        return view;
     }
 
     private void openDetailPage(View view) {

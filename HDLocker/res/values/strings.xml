@@ -58,13 +58,13 @@
     <string name="init_setting_MIUI_trust_prompt_two">和『自动启动』开关</string>
     <string name="init_setting_read_notification_title">打开通知权限</string>
     <string name="init_setting_read_notification_prompt">开启消息通知后，即可在你的锁屏页面呈现你感兴趣的消息哦~</string>
-    <string name="lock_week_monday">周一</string>
-    <string name="lock_week_tuesday">周二</string>
-    <string name="lock_week_wednesday">周三</string>
-    <string name="lock_week_thursday ">周四</string>
-    <string name="lock_week_friday">周五</string>
-    <string name="lock_week_saturday">周六</string>
-    <string name="lock_week_sunday">周日</string>
+    <string name="lock_week_monday">星期一</string>
+    <string name="lock_week_tuesday">星期二</string>
+    <string name="lock_week_wednesday">星期三</string>
+    <string name="lock_week_thursday">星期四</string>
+    <string name="lock_week_friday">星期五</string>
+    <string name="lock_week_saturday">星期六</string>
+    <string name="lock_week_sunday">星期日</string>
     <string name="lock_guide_prompt_one">底部停留锁定屏幕</string>
     <string name="lock_guide_prompt_two">轻触解锁</string>
     <string name="update_prompt_no_update">当前已经是最新版本！</string>
@@ -192,5 +192,12 @@
     
     <string name="pandora_feedback_send">发送</string>
     <string name="pandora_feedback_title">意见反馈</string>
+    
+    <string name="pandora_news_classify_wallpaper">壁纸</string>
+    <string name="pandora_news_classify_headlines">头条</string>
+    <string name="pandora_news_classify_gossip">八卦</string>
+    <string name="pandora_news_classify_micro_choice">微精选</string>
+    <string name="pandora_news_classify_beauty">美女</string>
+    <string name="pandora_news_classify_funny">搞笑</string>
 
 </resources>
