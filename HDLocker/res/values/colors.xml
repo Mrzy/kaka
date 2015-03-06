@@ -40,4 +40,7 @@
     <color name="init_prompt_v6_text_prompt_color">#636363</color>
 
     <color name="background_tab_pressed">#6633B5E5</color>
+    
+    <color name="rippelColor">#ffffff</color>
+    <color name="progressBarMaterialColor">#03a9f4</color>
 </resources>

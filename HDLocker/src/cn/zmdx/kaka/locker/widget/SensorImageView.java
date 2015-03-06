@@ -15,7 +15,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 
 public class SensorImageView extends ImageView {
@@ -35,7 +34,7 @@ public class SensorImageView extends ImageView {
 
     public static final int TRANSITION_MODE_STATIC = 3;
 
-    private static final int DEFAULT_TRANSITION_SPEED = 1;
+    private static final int DEFAULT_TRANSITION_SPEED = 3;
 
     private int mCurMode = TRANSITION_MODE_SENSOR;
 
@@ -51,7 +50,7 @@ public class SensorImageView extends ImageView {
         super(context, attrs, defStyle);
         // Attention to the super call here!
         super.setScaleType(ImageView.ScaleType.MATRIX);
-        mTransSpeed = DEFAULT_TRANSITION_SPEED;
+        mTransSpeed = -DEFAULT_TRANSITION_SPEED;
     }
 
     public SensorImageView(Context context, int mode) {
@@ -129,6 +128,7 @@ public class SensorImageView extends ImageView {
 
             int drawableWidth = getDrawable().getIntrinsicWidth();
             mDrawableWidth = (int) (drawableWidth * mScaleRate);
+            mCurTransX = -(mDrawableWidth / 2 - getWidth() / 2);
             mInit = true;
         }
 
@@ -147,7 +147,6 @@ public class SensorImageView extends ImageView {
         setImageMatrix(mMatrix);
         postInvalidateDelayed(FRAME_DELAY);
         super.onDraw(canvas);
-        Log.e("zy", "...........");
     }
 
     private SensorManager mSensor;
@@ -173,13 +172,13 @@ public class SensorImageView extends ImageView {
         @Override
         public void onSensorChanged(SensorEvent event) {
             float x = event.values[0];
-//            float y = event.values[1];
-//            float z = event.values[2];
+            // float y = event.values[1];
+            // float z = event.values[2];
 
             if (x > 1) {
-                mTransSpeed = DEFAULT_TRANSITION_SPEED;
-            } else if (x < -1) {
                 mTransSpeed = -DEFAULT_TRANSITION_SPEED;
+            } else if (x < -1) {
+                mTransSpeed = DEFAULT_TRANSITION_SPEED;
             } else {
                 mTransSpeed = 0;
             }

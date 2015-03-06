@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/setting_black_translucent"
+    android:clickable="true"
+    android:orientation="vertical" >
+
+    <cn.zmdx.kaka.locker.widget.ProgressBarMaterial
+        android:id="@+id/wallpaper_loading"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:background="@color/progressBarMaterialColor"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/wallpaper_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <cn.zmdx.kaka.locker.widget.SensorImageView
+            android:id="@+id/wallpaper_detail_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/contentDescription" />
+
+        <cn.zmdx.kaka.locker.widget.SensorImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/contentDescription"
+            android:src="@color/online_wallpaper_preview_translucent" />
+
+        <LinearLayout
+            android:id="@+id/wallpaper_element"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="9dp"
+            android:orientation="vertical" >
+
+            <cn.zmdx.kaka.locker.widget.DigitalClocks
+                xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
+                android:id="@+id/digitalClock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/white"
+                android:textSize="65sp"
+                clock:format="24" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="80dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+            <cn.zmdx.kaka.locker.widget.BaseButton
+                android:id="@+id/wallpaper_return"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:text="返回" />
+
+            <cn.zmdx.kaka.locker.widget.BaseButton
+                android:id="@+id/wallpaper_apply"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="50dp"
+                android:text="应用壁纸" />
+        </LinearLayout>
+    </FrameLayout>
+
+</FrameLayout>

@@ -7,13 +7,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.util.Log;
+import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,22 +23,28 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
+import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.FileHelper;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.IWallpaperClickListener;
 import cn.zmdx.kaka.locker.wallpaper.PandoraWallpaperManager.PandoraWallpaper;
+import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.ILoadBitmapCallback;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
+import com.android.volley.error.VolleyError;
 import com.android.volley.request.JsonObjectRequest;
 
 @SuppressLint("InflateParams")
@@ -92,9 +99,85 @@ public class OnlineWallpaperManager {
         }
     }
 
-    public void pullWallpaperFromServer(Listener<JSONObject> listener, ErrorListener errorListener) {
+    public interface IPullWallpaperListener {
+        void onSuccecc(List<ServerOnlineWallpaper> list);
+
+        void onFail();
+    }
+
+    /**
+     * 获取壁纸信息
+     * 
+     * @param context
+     * @param listener
+     */
+    public void pullWallpaperData(Context context, IPullWallpaperListener listener) {
+        long curTime = System.currentTimeMillis();
+        long lastPullTime = PandoraConfig.newInstance(context).getLastOnlinePullTime();
+        final String lastPullJson = PandoraConfig.newInstance(context)
+                .getLastOnlineServerJsonData();
+        if ((curTime - lastPullTime) >= PandoraPolicy.MIN_PULL_WALLPAPER_ORIGINAL_TIME
+                || TextUtils.isEmpty(lastPullJson)) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
+            }
+            if (!PandoraConfig.newInstance(context).isMobileNetwork()
+                    && !HDBNetworkState.isWifiNetwork()) {
+                parseWallpaperJson(lastPullJson, listener);
+            } else {
+                getWallpaperFromServer(listener, lastPullJson);
+            }
+        } else {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("未满足获取数据条件，加载本地缓存数据");
+            }
+            parseWallpaperJson(lastPullJson, listener);
+        }
+    }
+
+    /**
+     * 解析壁纸数据Json
+     * 
+     * @param lastPullJson
+     * @param listener
+     */
+    private void parseWallpaperJson(String lastPullJson, IPullWallpaperListener listener) {
+        try {
+            List<ServerOnlineWallpaper> list = ServerOnlineWallpaperManager
+                    .parseJson(new JSONObject(lastPullJson));
+            listener.onSuccecc(list);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onFail();
+        }
+    }
+
+    /**
+     * 从服务器获取壁纸数据
+     * 
+     * @param listener
+     * @param lastPullJson
+     */
+    public void getWallpaperFromServer(final IPullWallpaperListener listener,
+            final String lastPullJson) {
         JsonObjectRequest request = null;
-        request = new JsonObjectRequest(URL, null, listener, errorListener);
+        request = new JsonObjectRequest(URL, null, new Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                parseWallpaperJson(response.toString(), listener);
+            }
+        }, new ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (!TextUtils.isEmpty(lastPullJson)) {
+                    parseWallpaperJson(lastPullJson, listener);
+                } else {
+                    listener.onFail();
+                }
+            }
+        });
         request.setShouldCache(false);
         RequestManager.getRequestQueue().add(request);
     }
@@ -161,10 +244,10 @@ public class OnlineWallpaperManager {
         int layoutHeight = sparseIntArray.get(WallpaperUtils.KEY_LAYOUT_HEIGHT);
         int imageWidth = sparseIntArray.get(WallpaperUtils.KEY_IMAGE_WIDTH);
         int imageHeight = sparseIntArray.get(WallpaperUtils.KEY_IMAGE_HEIGHT);
-        
+
         int selPadding = (layoutWidth - imageWidth) / 2 - 20;
         mWallpaperSelect.setPadding(0, selPadding, selPadding, 0);
-        
+
         LayoutParams params = mWallpaperIvRl.getLayoutParams();
         params.width = imageWidth;
         params.height = imageHeight;
