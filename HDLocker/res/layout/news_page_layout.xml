@@ -9,29 +9,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <cn.zmdx.kaka.locker.content.view.FlipperView
+        <LinearLayout
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:background="#88000000"
+            android:background="#50000000"
             android:orientation="vertical" >
-
-            <LinearLayout
-                android:id="@+id/header_hot"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#ffffff"
-                android:orientation="vertical" >
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/header_time"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#000000"
-                android:orientation="vertical" >
-            </LinearLayout>
-        </cn.zmdx.kaka.locker.content.view.FlipperView>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/content"

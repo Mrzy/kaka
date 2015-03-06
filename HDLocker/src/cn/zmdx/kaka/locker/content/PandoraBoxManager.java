@@ -8,26 +8,28 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.content.adapter.NewsPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
-import cn.zmdx.kaka.locker.content.view.FlipperView;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager.IPullWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
@@ -44,7 +46,7 @@ public class PandoraBoxManager {
 
     private LayoutInflater mInflater;
 
-    private FlipperView mHeaderView;
+    private View mHeaderView;
 
     private View mEntireView;
 
@@ -65,8 +67,7 @@ public class PandoraBoxManager {
     }
 
     public View initHeader() {
-        mHeaderView = (FlipperView) mEntireView.findViewById(R.id.header);
-        mHeaderView.closeUpperView(false);
+        mHeaderView = mEntireView.findViewById(R.id.header);
         // TODO bind data
         return mHeaderView;
     }
@@ -93,18 +94,6 @@ public class PandoraBoxManager {
         tabStrip.setShouldExpand(true);
     }
 
-    public void openHotHeader() {
-        if (mHeaderView != null) {
-            mHeaderView.openUpperView(true);
-        }
-    }
-
-    public void closeHotHeader() {
-        if (mHeaderView != null) {
-            mHeaderView.closeUpperView(true);
-        }
-    }
-
     private void initTitles(List<String> titles) {
         titles.add(mContext.getResources().getString(R.string.pandora_news_classify_wallpaper));
         titles.add(mContext.getResources().getString(R.string.pandora_news_classify_headlines));
@@ -117,16 +106,16 @@ public class PandoraBoxManager {
     private void initNewsPages(List<View> data) {
         View wallPaperView = initWallPaperView();
         View hotNewsView = initHotNewsView();
-        View girlView = initGirlView();
-        View techView = initTechView();
-        View sociView = initSociView();
+        View gossipView = initGossipView();
+        View microMediaView = initMicroMediaView();
+        View beautyView = initBeautyView();
         View jokeView = initJokeView();
         data.clear();
         data.add(wallPaperView);
         data.add(hotNewsView);
-        data.add(girlView);
-        data.add(techView);
-        data.add(sociView);
+        data.add(gossipView);
+        data.add(microMediaView);
+        data.add(beautyView);
         data.add(jokeView);
     }
 
@@ -141,10 +130,27 @@ public class PandoraBoxManager {
         }
         NewsPageAdapter adapter = new NewsPageAdapter(news);
         rv.setAdapter(adapter);
+
+        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
+                .findViewById(R.id.refreshLayout);
+        refreshView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                refreshView.setRefreshing(true);
+                HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        refreshView.setRefreshing(false);
+                    }
+                }, 1500);
+            }
+        });
         return view;
     }
 
-    private View initSociView() {
+    private View initBeautyView() {
         View view = mInflater.inflate(R.layout.pager_news_layout, null);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
@@ -155,10 +161,27 @@ public class PandoraBoxManager {
         }
         NewsPageAdapter adapter = new NewsPageAdapter(news);
         rv.setAdapter(adapter);
+
+        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
+                .findViewById(R.id.refreshLayout);
+        refreshView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                refreshView.setRefreshing(true);
+                HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        refreshView.setRefreshing(false);
+                    }
+                }, 1500);
+            }
+        });
         return view;
     }
 
-    private View initTechView() {
+    private View initMicroMediaView() {
         View view = mInflater.inflate(R.layout.pager_news_layout, null);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
@@ -169,10 +192,27 @@ public class PandoraBoxManager {
         }
         NewsPageAdapter adapter = new NewsPageAdapter(news);
         rv.setAdapter(adapter);
+
+        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
+                .findViewById(R.id.refreshLayout);
+        refreshView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                refreshView.setRefreshing(true);
+                HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        refreshView.setRefreshing(false);
+                    }
+                }, 1500);
+            }
+        });
         return view;
     }
 
-    private View initGirlView() {
+    private View initGossipView() {
         View view = mInflater.inflate(R.layout.pager_news_layout, null);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
@@ -183,6 +223,23 @@ public class PandoraBoxManager {
         }
         NewsPageAdapter adapter = new NewsPageAdapter(news);
         rv.setAdapter(adapter);
+
+        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
+                .findViewById(R.id.refreshLayout);
+        refreshView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                refreshView.setRefreshing(true);
+                HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        refreshView.setRefreshing(false);
+                    }
+                }, 1500);
+            }
+        });
         return view;
     }
 
@@ -197,11 +254,28 @@ public class PandoraBoxManager {
         }
         NewsPageAdapter adapter = new NewsPageAdapter(news);
         rv.setAdapter(adapter);
+
+        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
+                .findViewById(R.id.refreshLayout);
+        refreshView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                refreshView.setRefreshing(true);
+                HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        refreshView.setRefreshing(false);
+                    }
+                }, 1500);
+            }
+        });
         return view;
     }
 
     private View initWallPaperView() {
-        View view = mInflater.inflate(R.layout.pager_news_layout, null);
+        View view = mInflater.inflate(R.layout.pager_wallpaper_layout, null);
         final RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext,
                 LinearLayoutManager.VERTICAL, false);
@@ -304,46 +378,6 @@ public class PandoraBoxManager {
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
-        }
-    }
-
-    private static class NewsPageAdapter extends RecyclerView.Adapter<NewsPageAdapter.ViewHolder> {
-
-        public static class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView mTextView;
-
-            public ViewHolder(View view) {
-                super(view);
-                mTextView = (TextView) view;
-            }
-        }
-
-        private List<String> mNews;
-
-        public NewsPageAdapter(List<String> news) {
-            mNews = news;
-        }
-
-        public String getValueAt(int position) {
-            return mNews.get(position);
-        }
-
-        @Override
-        public int getItemCount() {
-            // TODO Auto-generated method stub
-            return mNews.size();
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder viewHolder, int position) {
-            viewHolder.mTextView.setText(mNews.get(position));
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup arg0, int arg1) {
-            TextView tv = new TextView(arg0.getContext());
-            ViewHolder vh = new ViewHolder(tv);
-            return vh;
         }
     }
 

@@ -21,8 +21,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout.SimpleDrawerListener;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -220,6 +220,7 @@ public class LockScreenManager {
         mWinManager.addView(mEntireView, mWinParams);
         startFakeActivity();
 
+        registBackPressedListener(mBackPressedListener);
         // refreshContent();
         // setDate();
 
@@ -304,7 +305,6 @@ public class LockScreenManager {
         }
         // 初始化新闻页header
         PandoraBoxManager.newInstance(mContext).initHeader();
-        PandoraBoxManager.newInstance(mContext).closeHotHeader();
     }
 
     private ViewPager.SimpleOnPageChangeListener mViewPagerChangeListener = new ViewPager.SimpleOnPageChangeListener() {
@@ -386,12 +386,10 @@ public class LockScreenManager {
         };
 
         public void onPanelExpanded(View panel) {
-            PandoraBoxManager.newInstance(mContext).openHotHeader();
             PandoraBoxManager.newInstance(mContext).initBody();
         };
 
         public void onPanelCollapsed(View panel) {
-            PandoraBoxManager.newInstance(mContext).closeHotHeader();
         };
     };
 
@@ -971,13 +969,13 @@ public class LockScreenManager {
             notifyUnLocked();
         cancelAnimatorIfNeeded();
 
-        // mFoldablePage.onFinish();
+        unRegistBackPressedListener(mBackPressedListener);
+
         if (mUnLockRunnable != null) {
             mWinManager.removeView(mEntireView);
         } else {
             mWinManager.removeViewImmediate(mEntireView);
         }
-        // mSliderView.recycle();
         mEntireView = null;
         mIsLocked = false;
         isInit = false;
@@ -990,6 +988,18 @@ public class LockScreenManager {
             mUnLockRunnable = null;
         }
     }
+
+    private OnBackPressedListener mBackPressedListener = new OnBackPressedListener() {
+
+        @Override
+        public void onBackPressed() {
+            if (mSlidingUpView != null) {
+                if (mSlidingUpView.isPanelExpanded()) {
+                    mSlidingUpView.collapsePanel();
+                }
+            }
+        }
+    };
 
     private void cancelAnimatorIfNeeded() {
         if (null != mObjectAnimator) {
