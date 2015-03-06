@@ -345,25 +345,35 @@ public class LockScreenManager {
         }
     };
 
-    private SimpleDrawerListener mRightDrawableListener = new SimpleDrawerListener() {
+    // 展开上拉的新闻面板
+    public void expandNewsPanel() {
+        mSlidingUpView.expandPanel();
+    }
 
-        public void onDrawerSlide(View drawerView, float slideOffset) {
-            setWallpaperBlurEffect(slideOffset);
-            setMainPageAlpha(1.0f - slideOffset * 0.5f);
-            if (slideOffset == 0) {
-                mSlidingUpView.showPanel();
-            } else {
-                mSlidingUpView.hidePanel();
-            }
-        };
+    // 收缩上拉的新闻面板
+    public void collapseNewsPanel() {
+        mSlidingUpView.collapsePanel();
+    }
 
-        public void onDrawerClosed(View drawerView) {
-            // boolean isOpened = mRightDrawerLayout.isDrawerOpen(drawerView);
-        };
-
-        public void onDrawerOpened(View drawerView) {
-        };
-    };
+//    private SimpleDrawerListener mRightDrawableListener = new SimpleDrawerListener() {
+//
+//        public void onDrawerSlide(View drawerView, float slideOffset) {
+//            setWallpaperBlurEffect(slideOffset);
+//            setMainPageAlpha(1.0f - slideOffset * 0.5f);
+//            if (slideOffset == 0) {
+//                mSlidingUpView.showPanel();
+//            } else {
+//                mSlidingUpView.hidePanel();
+//            }
+//        };
+//
+//        public void onDrawerClosed(View drawerView) {
+//            // boolean isOpened = mRightDrawerLayout.isDrawerOpen(drawerView);
+//        };
+//
+//        public void onDrawerOpened(View drawerView) {
+//        };
+//    };
 
     private SimplePanelSlideListener mSlidingUpPanelListener = new SimplePanelSlideListener() {
         public void onPanelSlide(View panel, float slideOffset) {

@@ -260,6 +260,7 @@ public class SensorImageView extends ImageView {
             float wscale = (float) getWidth() / (float) getDrawable().getIntrinsicWidth();
             float hscale = (float) getHeight() / (float) getDrawable().getIntrinsicHeight();
             mScaleRate = Math.max(wscale, hscale);
+            mInit = false;
         } catch (Exception e) {
         }
     }
