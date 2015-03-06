@@ -51,13 +51,13 @@ import cn.zmdx.kaka.locker.security.KeyguardLockerManager.IUnlockListener;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
-import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaper;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
@@ -130,7 +130,7 @@ public class LockScreenManager {
 
     private ViewPagerCompat mPager;
 
-    private View mBlurImageView;
+    private ImageView mBlurImageView;
 
     private View mMainPage;
 
@@ -247,8 +247,8 @@ public class LockScreenManager {
         mSlidingUpView.setDragViewClickable(false);
 
         // 初始化处理壁纸模糊的view
-        mBlurImageView = mEntireView.findViewById(R.id.blurImageView);
-        mBlurImageView.setAlpha(0);// 默认模糊的view不显示，透明度设置为0
+        mBlurImageView = (ImageView) mEntireView.findViewById(R.id.blurImageView);
+        mBlurImageView.setAlpha(0.0f);// 默认模糊的view不显示，透明度设置为0
 
         initWallpaper();
 
@@ -873,65 +873,6 @@ public class LockScreenManager {
         }
     }
 
-    private void initOnlinePaperPanel() {
-        mOnlineViewContainer = (LinearLayout) mEntireView
-                .findViewById(R.id.pandora_online_wallpaper);
-        mOnlinePanel = (WallpaperPanelLayout) mEntireView
-                .findViewById(R.id.locker_wallpaper_sliding);
-        mOnlinePanel
-                .setPanelSlideListener(new cn.zmdx.kaka.locker.widget.WallpaperPanelLayout.PanelSlideListener() {
-
-                    @Override
-                    public void onPanelSlide(View panel, float slideOffset) {
-                        if (!isInit) {
-                            isInit = true;
-                            initOnlinePaperPanelView();
-                        }
-                    }
-
-                    @Override
-                    public void onPanelHidden(View panel) {
-                    }
-
-                    @Override
-                    public void onPanelExpanded(View panel) {
-                        mSliderView.setEnabled(false);
-                        if (null != mOnlineWallpaperView) {
-                            mOnlineWallpaperView.initContentView();
-                            mOnlineWallpaperView.setOnWallpaperListener(new IOnlineWallpaper() {
-
-                                @Override
-                                public void applyOnlinePaper(String filePath) {
-                                    if (null != mSliderView && !TextUtils.isEmpty(filePath)) {
-                                        Drawable drawable = LockerUtils
-                                                .renderScreenLockerBackground(mSliderView, filePath);
-                                        if (mNeedPassword) {
-                                            if (null != drawable) {
-                                                doFastBlur(drawable);
-                                            }
-                                        }
-                                    }
-                                    mOnlinePanel.collapsePanel();
-                                }
-                            });
-                            mOnlineWallpaperView.setWeatherString(mWeatherSummary.getText()
-                                    .toString());
-                            mOnlineWallpaperView.setDate(mDate.getText().toString());
-                        }
-                    }
-
-                    @Override
-                    public void onPanelCollapsed(View panel) {
-                        isInit = false;
-                        mSliderView.setEnabled(true);
-                    }
-
-                    @Override
-                    public void onPanelAnchored(View panel) {
-                    }
-                });
-    }
-
     protected void initOnlinePaperPanelView() {
         if (null == mOnlineWallpaperView) {
             mOnlineWallpaperView = new OnlineWallpaperView(mContext);
@@ -952,14 +893,12 @@ public class LockScreenManager {
         }
     }
 
-    private void initWallpaper() {
-//        mCurTheme = ThemeManager.getCurrentTheme();
-//        final Drawable curWallpaper = mCurTheme.getCurDrawable();
-//        Drawable lockBg = LockerUtils.renderScreenLockerBackground(
-//                mEntireView.findViewById(R.id.lockerBg), curWallpaper);
+    public void initWallpaper() {
+        mCurTheme = ThemeManager.getCurrentTheme();
+        final Drawable curWallpaper = mCurTheme.getCurDrawable();
+        Drawable lockBg = LockerUtils.renderScreenLockerWallpaper(
+                ((ImageView)mEntireView.findViewById(R.id.lockerBg)), curWallpaper);
 
-        // test
-        Drawable lockBg = ((ImageView) mEntireView.findViewById(R.id.lockerBg)).getDrawable();
         LockerUtils.renderScreenLockerBlurEffect(mBlurImageView, lockBg);
     }
 
@@ -1105,13 +1044,6 @@ public class LockScreenManager {
             if (mDigitalClockView != null) {
                 mDigitalClockView.setTickerStoped(false);
             }
-        }
-    }
-
-    private void invisiableViews(View... views) {
-        for (View view : views) {
-            if (view != null)
-                view.setAlpha(0);
         }
     }
 

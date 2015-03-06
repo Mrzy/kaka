@@ -1,14 +1,13 @@
 
 package cn.zmdx.kaka.locker;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.BlurUtils;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -21,7 +20,7 @@ public class LockerUtils {
         sContext = HDApplication.getContext();
     }
 
-    static Drawable renderScreenLockerBackground(View view, String fileName) {
+    static Drawable renderScreenLockerWallpaper(ImageView view, String fileName) {
         if (TextUtils.isEmpty(fileName)) {
             if (BuildConfig.DEBUG) {
                 throw new NullPointerException("fileName must not be null");
@@ -29,7 +28,7 @@ public class LockerUtils {
             HDBLOG.logE("fileName must not be null when getScreenLockerBackground");
         }
 
-        //获得手机屏幕的物理宽高，包括通知栏和虚拟按键栏（如果存在的话）
+        // 获得手机屏幕的物理宽高，包括通知栏和虚拟按键栏（如果存在的话）
         int screenWidth = BaseInfoHelper.getRealWidth(sContext);
         int screenHeight = BaseInfoHelper.getRealHeight(sContext);
 
@@ -40,51 +39,31 @@ public class LockerUtils {
             }
             return null;
         }
-        return renderScreenLockerBackground(view, bitmap);
+        return renderScreenLockerWallpaper(view, bitmap);
     }
 
-    static Drawable renderScreenLockerBackground(View view, Drawable resDrawable) {
+    static Drawable renderScreenLockerWallpaper(ImageView view, Drawable resDrawable) {
         final Bitmap bmp = ImageUtils.drawable2Bitmap(resDrawable);
-        return renderScreenLockerBackground(view, bmp);
+        return renderScreenLockerWallpaper(view, bmp);
     }
 
-    @SuppressWarnings("deprecation")
-    @SuppressLint("NewApi")
-    static Drawable renderScreenLockerBackground(View view, Bitmap resBmp) {
-        int width = BaseInfoHelper.getRealWidth(sContext);
-        int realHeight = BaseInfoHelper.getRealHeight(sContext);
-        Bitmap desBmp = ImageUtils.getResizedBitmap(resBmp, width, realHeight);
-        if (desBmp == null) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logE("occured exception when getResizedBitmap, so return null");
-            }
-            return null;
-        }
-        int x = Math.max(0, (desBmp.getWidth() - width) / 2);
-        Bitmap finalBmp = Bitmap.createBitmap(desBmp, x, 0, width, realHeight);
-        if (!finalBmp.equals(desBmp)) {
-            desBmp.recycle();
-        }
-
-        Drawable finalDrawable = ImageUtils.bitmap2Drawable(sContext, finalBmp);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackground(finalDrawable);
-        } else {
-            view.setBackgroundDrawable(finalDrawable);
-        }
+    static Drawable renderScreenLockerWallpaper(ImageView view, Bitmap resBmp) {
+        Drawable finalDrawable = ImageUtils.bitmap2Drawable(sContext, resBmp);
+        ImageView iv = (ImageView) view;
+        iv.setImageDrawable(finalDrawable);
         return finalDrawable;
     }
 
     public static Bitmap getViewBitmap(View v) {
-        if(v.getWidth() == 0 || v.getHeight() == 0)
+        if (v.getWidth() == 0 || v.getHeight() == 0)
             return null;
-        Bitmap b = Bitmap.createBitmap( v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap b = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);
         v.draw(c);
         return b;
     }
 
-   static void renderScreenLockerBlurEffect(View mBlurImageView, Drawable bgDrawable) {
+    static void renderScreenLockerBlurEffect(ImageView mBlurImageView, Drawable bgDrawable) {
         BlurUtils.doFastBlur(sContext, ImageUtils.drawable2Bitmap(bgDrawable), mBlurImageView, 10);
     }
 }

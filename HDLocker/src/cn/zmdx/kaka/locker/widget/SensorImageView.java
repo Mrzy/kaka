@@ -1,29 +1,43 @@
 
 package cn.zmdx.kaka.locker.widget;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 public class SensorImageView extends ImageView {
 
     /**
-     * Delay between a pair of frames at a 100 FPS frame rate. modified by
-     * zhangyan. 由60修改为100，实际运行fps不会达到100fps，因为自身绘制需要时间。估计实际运行效率在60fps之上
+     * Delay between a pair of frames at a 60 FPS frame rate.
+     * 实际达不到60fps,因为自身绘制需要时间
      */
     private static final long FRAME_DELAY = 1000 / 60;
 
     /** Matrix used to perform all the necessary transition transformations. */
     private final Matrix mMatrix = new Matrix();
 
-    /** The rect that holds the bounds of this view. */
-    private final RectF mViewportRect = new RectF();
+    public static final int TRANSITION_MODE_AUTO = 1;
+
+    public static final int TRANSITION_MODE_SENSOR = 2;
+
+    public static final int TRANSITION_MODE_STATIC = 3;
+
+    private static final int DEFAULT_TRANSITION_SPEED = 1;
+
+    private int mCurMode = TRANSITION_MODE_SENSOR;
 
     public SensorImageView(Context context) {
         this(context, null);
@@ -37,7 +51,30 @@ public class SensorImageView extends ImageView {
         super(context, attrs, defStyle);
         // Attention to the super call here!
         super.setScaleType(ImageView.ScaleType.MATRIX);
-        mTransSpeed = 1;
+        mTransSpeed = DEFAULT_TRANSITION_SPEED;
+    }
+
+    public SensorImageView(Context context, int mode) {
+        this(context, null);
+        ensureValidMode(mode);
+        mCurMode = mode;
+    }
+
+    private void ensureValidMode(int mode) {
+        if (mode != TRANSITION_MODE_AUTO && mode != TRANSITION_MODE_SENSOR
+                && mode != TRANSITION_MODE_STATIC) {
+            throw new IllegalArgumentException(
+                    "非法参数，mode值必须为TRANSITION_MODE_AUTO或TRANSITION_MODE_SENSOR");
+        }
+    }
+
+    public void setTransitionMode(int mode) {
+        ensureValidMode(mode);
+        mCurMode = mode;
+    }
+
+    public int getCurTransitionMode() {
+        return mCurMode;
     }
 
     @Override
@@ -98,27 +135,95 @@ public class SensorImageView extends ImageView {
         mMatrix.reset();
         mMatrix.postScale(mScaleRate, mScaleRate);
 
-        if (!isTurnOnTransition() || !ensureEnoughWidth()) {
+        if (mCurMode == TRANSITION_MODE_STATIC || !ensureEnoughWidth()) {
             mMatrix.postTranslate(-(mDrawableWidth / 2 - getWidth() / 2), 0);
             setImageMatrix(mMatrix);
+            super.onDraw(canvas);
             return;
         }
 
-        if (mAutoPlay) {
-            updateTransX();
-            mMatrix.postTranslate(mCurTransX, 0);
-        } else {
-            // TODO 增加根据sensor动态调整
-        }
+        updateTransX();
+        mMatrix.postTranslate(mCurTransX, 0);
         setImageMatrix(mMatrix);
         postInvalidateDelayed(FRAME_DELAY);
         super.onDraw(canvas);
+        Log.e("zy", "...........");
     }
+
+    private SensorManager mSensor;
+
+    private void registSensorListener() {
+        if (mSensor == null) {
+            mSensor = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+        }
+        Sensor gravitySensor = mSensor.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        mSensor.registerListener(mSensorEventListener, gravitySensor,
+                SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    private void unRegistSensorListener() {
+        if (mSensor != null) {
+            mSensor.unregisterListener(mSensorEventListener);
+            mSensor = null;
+        }
+    }
+
+    private SensorEventListener mSensorEventListener = new SensorEventListener() {
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            float x = event.values[0];
+//            float y = event.values[1];
+//            float z = event.values[2];
+
+            if (x > 1) {
+                mTransSpeed = DEFAULT_TRANSITION_SPEED;
+            } else if (x < -1) {
+                mTransSpeed = -DEFAULT_TRANSITION_SPEED;
+            } else {
+                mTransSpeed = 0;
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
+
+    protected void onAttachedToWindow() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        getContext().registerReceiver(mScreenReceiver, filter);
+    };
+
+    @Override
+    protected void onDetachedFromWindow() {
+        getContext().unregisterReceiver(mScreenReceiver);
+        super.onDetachedFromWindow();
+    }
+
+    private BroadcastReceiver mScreenReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                unRegistSensorListener();
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                if (mCurMode == TRANSITION_MODE_SENSOR) {
+                    registSensorListener();
+                }
+            }
+        }
+    };
 
     private void updateTransX() {
         int maxTransX = mDrawableWidth - getWidth();
-        if (mCurTransX == 0 || mCurTransX == -maxTransX) {
-            mTransSpeed = -mTransSpeed;
+        if (mCurMode == TRANSITION_MODE_AUTO) {
+            if (mCurTransX == 0 || mCurTransX == -maxTransX) {
+                mTransSpeed = -mTransSpeed;
+            }
         }
 
         if (mCurTransX + mTransSpeed > 0) {
@@ -148,22 +253,6 @@ public class SensorImageView extends ImageView {
         float width = getDrawable().getIntrinsicWidth() * mScaleRate;
         return width > getWidth();
     }
-
-    public boolean isTurnOnTransition() {
-        return mTurnOnTransition;
-    }
-
-    public void turnOffTransition() {
-        mTurnOnTransition = false;
-    }
-
-    public void turnOnTransition() {
-        mTurnOnTransition = true;
-    }
-
-    private boolean mTurnOnTransition = true;
-
-    private boolean mAutoPlay = true;
 
     private float mScaleRate;
 

@@ -23,7 +23,6 @@
 
             <cn.zmdx.kaka.locker.widget.SensorImageView
                 android:id="@+id/lockerBg"
-                android:src="@drawable/img1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
