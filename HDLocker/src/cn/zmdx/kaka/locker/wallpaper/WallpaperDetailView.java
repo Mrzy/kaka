@@ -61,6 +61,7 @@ public class WallpaperDetailView extends LinearLayout {
     private void initView() {
         mView = LayoutInflater.from(mContext).inflate(R.layout.wallpaper_detail, null);
         addView(mView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+
         mLoadingView = (ProgressBarMaterial) mView.findViewById(R.id.wallpaper_loading);
         mContentView = (FrameLayout) mView.findViewById(R.id.wallpaper_content);
         mImageView = (SensorImageView) mView.findViewById(R.id.wallpaper_detail_image);
@@ -97,6 +98,7 @@ public class WallpaperDetailView extends LinearLayout {
                 if (null != mListener) {
                     mListener.onBack();
                     LockScreenManager.getInstance().initWallpaper();
+                    LockScreenManager.getInstance().collapseNewsPanel();
                 }
             }
         });

@@ -16,6 +16,7 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdapter.ViewHolder> {
@@ -40,9 +41,9 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
             List<ServerOnlineWallpaper> list) {
         mData = list;
         mContext = context;
-        mMargins = BaseInfoHelper.dip2px(mContext, 25);
+        mMargins = BaseInfoHelper.dip2px(mContext, 10);
         mImageWidth = BaseInfoHelper.getRealWidth(mContext) - mMargins * 2;
-        mImageHeight = (512 * mImageWidth) / 916;
+        mImageHeight = (720 * mImageWidth) / 1080;
         // 916 512
     }
 
@@ -68,7 +69,7 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
             LinearLayout mLayout = (LinearLayout) view.findViewById(R.id.wallpaper_layout);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            lp.setMargins(mMargins, 0, mMargins, 0);
+            lp.setMargins(mMargins - 5, 0, mMargins, 0);
             mLayout.setLayoutParams(lp);
         }
     }
@@ -83,7 +84,7 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final ServerOnlineWallpaper item = mData.get(position);
         Picasso.with(mContext).load(item.getThumbURL()).resize(mImageWidth, mImageHeight)
                 .centerCrop().into(holder.mImageView);
