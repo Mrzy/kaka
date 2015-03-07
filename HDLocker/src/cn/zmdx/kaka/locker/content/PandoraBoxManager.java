@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter;
@@ -207,7 +208,7 @@ public class PandoraBoxManager {
         rv.setLayoutManager(mLayoutManager);
         rv.setHasFixedSize(true);
         rv.setVerticalFadingEdgeEnabled(true);
-        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 20));
+        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 10));
         rv.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -235,8 +236,7 @@ public class PandoraBoxManager {
                             public void onItemClick(View view, int position) {
                                 WallpaperDetailView detailView = new WallpaperDetailView(mContext);
                                 detailView.setData(list.get(position));
-                                detailView
-                                        .setWallpaperDetailListener(new IWallpaperDetailListener() {
+                                detailView.setWallpaperDetailListener(new IWallpaperDetailListener() {
 
                                             @Override
                                             public void onBack() {
