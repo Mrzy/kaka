@@ -64,6 +64,6 @@ public class LockerUtils {
     }
 
     static void renderScreenLockerBlurEffect(ImageView mBlurImageView, Drawable bgDrawable) {
-        BlurUtils.doFastBlur(sContext, ImageUtils.drawable2Bitmap(bgDrawable), mBlurImageView, 10);
+        BlurUtils.doFastBlur(sContext, ImageUtils.drawable2Bitmap(bgDrawable), mBlurImageView, 15);
     }
 }

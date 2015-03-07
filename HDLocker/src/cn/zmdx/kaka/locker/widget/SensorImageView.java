@@ -175,7 +175,11 @@ public class SensorImageView extends ImageView {
             // float y = event.values[1];
             // float z = event.values[2];
 
-            if (x > 1) {
+            if (x > 2) {
+                mTransSpeed = -(DEFAULT_TRANSITION_SPEED + DEFAULT_TRANSITION_SPEED);
+            } else if (x < -2) {
+                mTransSpeed = DEFAULT_TRANSITION_SPEED + DEFAULT_TRANSITION_SPEED;
+            } else if (x > 1){
                 mTransSpeed = -DEFAULT_TRANSITION_SPEED;
             } else if (x < -1) {
                 mTransSpeed = DEFAULT_TRANSITION_SPEED;
