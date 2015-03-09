@@ -16,25 +16,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import cn.zmdx.kaka.locker.BuildConfig;
-import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.adapter.NewsPageAdapter;
-import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager;
-import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager.IPullWallpaperListener;
-import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView.IWallpaperDetailListener;
+import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
+import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
@@ -275,59 +269,19 @@ public class PandoraBoxManager {
     }
 
     private View initWallPaperView() {
-        View view = mInflater.inflate(R.layout.pager_wallpaper_layout, null);
-        final RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
-        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext,
-                LinearLayoutManager.VERTICAL, false);
-        rv.setLayoutManager(mLayoutManager);
-        rv.setHasFixedSize(true);
-        rv.setVerticalFadingEdgeEnabled(true);
-        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 10));
-        rv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        OnlineWallpaperView view = new OnlineWallpaperView(mContext);
+        view.setOnlineWallpaperListener(new IOnlineWallpaperListener() {
+
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItem = ((LinearLayoutManager) mLayoutManager)
-                        .findLastVisibleItemPosition();
-                int totalItemCount = mLayoutManager.getItemCount();
-                // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
-                // dy>0 表示向下滑动
-                if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
-                    // loadPage(currentQueryMap);
-                }
+            public void onOpenDetailPage(View view) {
+                openDetailPage(view);
+            }
+
+            @Override
+            public void onCloseDetailPage() {
+                closeDetailPage();
             }
         });
-        OnlineWallpaperManager.getInstance().pullWallpaperData(mContext,
-                new IPullWallpaperListener() {
-
-                    @Override
-                    public void onSuccecc(final List<ServerOnlineWallpaper> list) {
-                        final WallpaperPageAdapter adapter = new WallpaperPageAdapter(mContext, rv,
-                                list);
-                        adapter.setOnItemClickListener(new WallpaperPageAdapter.OnItemClickListener() {
-
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                WallpaperDetailView detailView = new WallpaperDetailView(mContext);
-                                detailView.setData(list.get(position));
-                                detailView.setWallpaperDetailListener(new IWallpaperDetailListener() {
-
-                                            @Override
-                                            public void onBack() {
-                                                closeDetailPage();
-                                            }
-                                        });
-                                openDetailPage(detailView);
-                            }
-                        });
-                        rv.setAdapter(adapter);
-                    }
-
-                    @Override
-                    public void onFail() {
-
-                    }
-                });
         return view;
     }
 

@@ -57,7 +57,7 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
-import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
+import cn.zmdx.kaka.locker.wallpaper.OldOnlineWallpaperView;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
@@ -118,7 +118,7 @@ public class LockScreenManager {
 
     private WallpaperPanelLayout mOnlinePanel;
 
-    private OnlineWallpaperView mOnlineWallpaperView;
+    private OldOnlineWallpaperView mOnlineWallpaperView;
 
     private LinearLayout mOnlineViewContainer, mLockDataView;
 
@@ -883,7 +883,7 @@ public class LockScreenManager {
 
     protected void initOnlinePaperPanelView() {
         if (null == mOnlineWallpaperView) {
-            mOnlineWallpaperView = new OnlineWallpaperView(mContext);
+            mOnlineWallpaperView = new OldOnlineWallpaperView(mContext);
         }
         mOnlineViewContainer.removeAllViews();
         mOnlineViewContainer.addView(mOnlineWallpaperView);
