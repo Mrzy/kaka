@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="true"
     android:orientation="vertical" >
+
+    <include layout="@layout/pandora_title_layout" />
 
     <FrameLayout
         android:id="@+id/content"
@@ -11,4 +13,4 @@
         android:layout_height="match_parent" >
     </FrameLayout>
 
-</merge>
+</LinearLayout>

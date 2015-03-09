@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.widget.BaseButton;
+import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.fb.SyncListener;
@@ -72,6 +73,10 @@ public class FeedbackActivity extends BaseActivity {
     }
 
     private void initView() {
+        TypefaceTextView title = (TypefaceTextView) findViewById(R.id.subtitle);
+        title.setText(getString(R.string.pandora_feedback_title));
+        title.setVisibility(View.VISIBLE);
+
         mListView = (ListView) findViewById(R.id.fb_reply_list);
         sendBtn = (BaseButton) findViewById(R.id.fb_send_btn);
         inputEdit = (EditText) findViewById(R.id.fb_send_content);

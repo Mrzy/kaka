@@ -86,7 +86,7 @@
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name=".settings.MAboutActivity"
+            android:name=".settings.AboutActivity"
             android:exported="false"
             android:screenOrientation="portrait" >
         </activity>

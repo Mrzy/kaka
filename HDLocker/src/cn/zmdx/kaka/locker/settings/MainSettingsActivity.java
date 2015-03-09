@@ -5,28 +5,29 @@ import java.lang.ref.WeakReference;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
+import android.view.View;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.guide.GuideActivity;
 import cn.zmdx.kaka.locker.service.PandoraService;
+import cn.zmdx.kaka.locker.settings.MainSettingFragment.IMainSettingListener;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class MainSettingsActivity extends FragmentActivity {
+public class MainSettingsActivity extends FragmentActivity implements IMainSettingListener {
 
     private Intent mServiceIntent = null;
 
     boolean isFirstIn = false;
 
     private static final int GO_GUIDE = 1001;
+
+    private TypefaceTextView mTitle;
 
     private MyHandler mHandler = new MyHandler(this);
 
@@ -52,13 +53,13 @@ public class MainSettingsActivity extends FragmentActivity {
     @SuppressLint("InlinedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= 19) {
-            Window window = getWindow();
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
+        // if (Build.VERSION.SDK_INT >= 19) {
+        // Window window = getWindow();
+        // window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+        // WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        // window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+        // WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        // }
         mServiceIntent = new Intent(getApplicationContext(), PandoraService.class);
         startService(mServiceIntent);
         init();
@@ -67,19 +68,18 @@ public class MainSettingsActivity extends FragmentActivity {
         MobclickAgent.openActivityDurationTrack(false);
         // UmengUpdateAgent.silentUpdate(this);
         setContentView(R.layout.main_setting_activity);
-//        getWindow().getAttributes().flags |= LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+
+        mTitle = (TypefaceTextView) findViewById(R.id.title);
+        mTitle.setVisibility(View.VISIBLE);
+
+        // getWindow().getAttributes().flags |=
+        // LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.content, new MainSettingsFragment()).commit();
+                .add(R.id.content, new MainSettingFragment()).commit();
     }
 
     private void init() {
-        // 读取SharedPreferences中需要的数据
-        // 使用SharedPreferences来记录程序的使用次数
-
-        // 取得相应的值，如果没有该值，说明还未写入，用true作为默认值
         isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
-
-        // 判断程序与第几次运行，如果是第一次运行则跳转到引导界面，否则跳转到主界面
         if (isFirstIn) {
             mHandler.sendEmptyMessage(GO_GUIDE);
         }
@@ -92,16 +92,19 @@ public class MainSettingsActivity extends FragmentActivity {
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("MainSettingsActivity"); // 统计页面
-        MobclickAgent.onResume(this); // 统计时长
+        MobclickAgent.onPageStart("MainSettingsActivity");
+        MobclickAgent.onResume(this);
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("MainSettingsActivity"); // 保证 onPageEnd
-                                                         // 在onPause
-        // 之前调用,因为 onPause 中会保存信息
+        MobclickAgent.onPageEnd("MainSettingsActivity");
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    public void onItemClick(String title) {
+        mTitle.setText(title);
     }
 
 }

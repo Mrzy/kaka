@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip
+        xmlns:psts="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/setting_pats"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@drawable/strip_tab_background"
+        psts:pstsDividerColor="@android:color/transparent"
+        psts:pstsIndicatorColor="#919191"
+        psts:pstsIndicatorHeight="2dp"
+        psts:pstsUnderlineColor="@android:color/transparent" />
+
+    <cn.zmdx.kaka.locker.widget.ViewPagerCompat
+        android:id="@+id/setting_viewpaper"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

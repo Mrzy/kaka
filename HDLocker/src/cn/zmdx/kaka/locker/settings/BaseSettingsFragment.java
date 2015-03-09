@@ -85,7 +85,7 @@ public abstract class BaseSettingsFragment extends Fragment {
 
     protected void gotoAbout() {
         Intent in = new Intent();
-        in.setClass(getActivity(), MAboutActivity.class);
+        in.setClass(getActivity(), AboutActivity.class);
         startActivity(in);
         getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                 R.anim.umeng_fb_slide_out_from_left);
