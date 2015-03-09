@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 public class BaseLinearLayout extends LinearLayout {
 
@@ -25,8 +26,7 @@ public class BaseLinearLayout extends LinearLayout {
 
     @SuppressWarnings("deprecation")
     private void init() {
-        int padding = (int) getContext().getResources().getDimension(
-                R.dimen.pandora_linearLayout_padding);
+        int padding = BaseInfoHelper.dip2px(getContext(), 14);
         setPadding(padding, 0, padding, 0);
         setBackgroundDrawable(getContext().getResources().getDrawable(
                 R.drawable.setting_item_selector));
