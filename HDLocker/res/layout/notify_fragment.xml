@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <cn.zmdx.kaka.locker.widget.BaseLinearLayout
+        android:id="@+id/notify_open_notification_permissions_item"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_item_height"
+        android:layout_marginTop="11dp"
+        android:orientation="horizontal" >
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            style="@style/setting_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:text="打开通知权限" />
+
+        <ImageView
+            style="@style/setting_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/contentDescription"
+            android:src="@drawable/lock_arrow" />
+    </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
+
+    <cn.zmdx.kaka.locker.widget.BaseLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_item_height"
+        android:layout_marginTop="11dp"
+        android:orientation="horizontal" >
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            style="@style/setting_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:text="开启通知提醒" />
+
+        <cn.zmdx.kaka.locker.widget.SwitchButton
+            android:id="@+id/notify_open_notification_switch_button"
+            style="@style/setting_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:frameDrawable="@drawable/switch_frame"
+            app:sliderDrawable="@drawable/switch_slider"
+            app:stateDrawable="@drawable/switch_state_normal"
+            app:stateMaskDrawable="@drawable/switch_state_mask" />
+    </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
+
+    <cn.zmdx.kaka.locker.widget.BaseLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_item_height"
+        android:layout_marginTop="11dp"
+        android:orientation="horizontal" >
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            style="@style/setting_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:text="隐藏通知内容" />
+
+        <cn.zmdx.kaka.locker.widget.SwitchButton
+            android:id="@+id/notify_hide_notice_content_switch_button"
+            style="@style/setting_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:frameDrawable="@drawable/switch_frame"
+            app:sliderDrawable="@drawable/switch_slider"
+            app:stateDrawable="@drawable/switch_state_normal"
+            app:stateMaskDrawable="@drawable/switch_state_mask" />
+    </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
+
+    <cn.zmdx.kaka.locker.widget.BaseLinearLayout
+        android:id="@+id/notify_notice_manage_switch_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_item_height"
+        android:layout_marginTop="11dp"
+        android:orientation="horizontal" >
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            style="@style/setting_textview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:text="通知管理" />
+    </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
+
+</LinearLayout>

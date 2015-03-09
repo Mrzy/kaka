@@ -1,7 +1,6 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,7 +20,7 @@ import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class MainSettingsFragment extends BaseSettingsFragment implements OnCheckedChangeListener,
+public class GeneralFragment extends BaseSettingsFragment implements OnCheckedChangeListener,
         OnClickListener {
     private View mRootView;
 
@@ -43,8 +42,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
 
     private LinearLayout mPandoraFavorite;
 
-    private View mSettingBackground;
-
     public static final int GUSTURE_REQUEST_CODE_SUCCESS = 37;
 
     public static final int GUSTURE_REQUEST_CODE_FAIL = 38;
@@ -55,40 +52,33 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
     ViewGroup container, @Nullable
     Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.pandora_setting, container, false);
+        mRootView = inflater.inflate(R.layout.general_fragment, container, false);
         initView();
-        initTitleHeight();
         initSwitchButtonState();
         return mRootView;
     }
 
     private void initView() {
-        mInitSetting = (LinearLayout) mRootView.findViewById(R.id.setting_init);
-        mInitSetting.setOnClickListener(this);
-        mInitSetting.setVisibility(View.VISIBLE);
+//        mInitSetting = (LinearLayout) mRootView.findViewById(R.id.setting_init);
+//        mInitSetting.setOnClickListener(this);
+//        mInitSetting.setVisibility(View.VISIBLE);
 
-        mPandoraFavorite = (LinearLayout) mRootView.findViewById(R.id.pandora_favorite);
-        mPandoraFavorite.setOnClickListener(this);
-        mSettingBackground = mRootView.findViewById(R.id.setting_background);
+//        mPandoraFavorite = (LinearLayout) mRootView.findViewById(R.id.pandora_favorite);
+//        mPandoraFavorite.setOnClickListener(this);
 
-        mSettingIndividualization = (LinearLayout) mRootView
-                .findViewById(R.id.setting_individualization);
-        mSettingIndividualization.setOnClickListener(this);
+//        mSettingIndividualization = (LinearLayout) mRootView
+//                .findViewById(R.id.setting_individualization);
+//        mSettingIndividualization.setOnClickListener(this);
 
         mPandoraLockerSButton = (SwitchButton) mRootView
                 .findViewById(R.id.setting_pandoralocker_switch_button);
         mPandoraLockerSButton.setOnCheckedChangeListener(this);
 
-        mLockType = (LinearLayout) mRootView.findViewById(R.id.setting_lock_type_prompt);
-        mLockType.setOnClickListener(this);
+//        mLockType = (LinearLayout) mRootView.findViewById(R.id.setting_lock_type_prompt);
+//        mLockType.setOnClickListener(this);
 
         mFeedback = (LinearLayout) mRootView.findViewById(R.id.setting_feedback_prompt);
         mFeedback.setOnClickListener(this);
@@ -96,23 +86,10 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
                 .findViewById(R.id.setting_checkout_new_version_prompt);
         mCheckNewVersion.setOnClickListener(this);
 
-        mConcernTeam = (LinearLayout) mRootView.findViewById(R.id.setting_concern_team);
+        mConcernTeam = (LinearLayout) mRootView.findViewById(R.id.setting_about_pandora_item);
         mConcernTeam.setOnClickListener(this);
-        mChangeBackground = (LinearLayout) mRootView.findViewById(R.id.setting_change_background);
-        mChangeBackground.setOnClickListener(this);
-    }
-
-    private void initTitleHeight() {
-        int statusBarHeight = PandoraUtils.getStatusBarHeight(getActivity());
-        LinearLayout titleLayout = (LinearLayout) mRootView
-                .findViewById(R.id.pandora_setting_title);
-        titleLayout.setPadding(0, statusBarHeight, 0, 0);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void initBackground() {
-        Theme theme = ThemeManager.getCurrentTheme();
-        mSettingBackground.setBackgroundDrawable(theme.getCurDrawable());
+//        mChangeBackground = (LinearLayout) mRootView.findViewById(R.id.setting_change_background);
+//        mChangeBackground.setOnClickListener(this);
     }
 
     private void initSwitchButtonState() {
@@ -142,7 +119,6 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
         super.onResume();
         MobclickAgent.onPageStart("MainSettingsFragment"); // 统计页面
-        initBackground();
     }
 
     public void onPause() {
@@ -156,30 +132,30 @@ public class MainSettingsFragment extends BaseSettingsFragment implements OnChec
             case R.id.setting_feedback_prompt:
                 startFeedback();
                 break;
-            case R.id.setting_concern_team:
+            case R.id.setting_about_pandora_item:
                 gotoAbout();
                 break;
             case R.id.setting_checkout_new_version_prompt:
                 checkNewVersion();
                 break;
-            case R.id.setting_change_background:
-                gotoWallpaper();
-                break;
-            case R.id.setting_init:
-                gotoInit();
-                break;
-            case R.id.setting_individualization:
-                gotoIndividualization();
-                break;
-            case R.id.setting_lock_type_prompt:
-                gotoLockerPassword();
-                break;
-            case R.id.pandora_favorite:
-                Intent intent = new Intent(getActivity(), FavoritesActivity.class);
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                R.anim.umeng_fb_slide_out_from_left);
-                break;
+//            case R.id.setting_change_background:
+//                gotoWallpaper();
+//                break;
+//            case R.id.setting_init:
+//                gotoInit();
+//                break;
+//            case R.id.setting_individualization:
+//                gotoIndividualization();
+//                break;
+//            case R.id.setting_lock_type_prompt:
+//                gotoLockerPassword();
+//                break;
+//            case R.id.pandora_favorite:
+//                Intent intent = new Intent(getActivity(), FavoritesActivity.class);
+//                startActivity(intent);
+//                getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+//                        R.anim.umeng_fb_slide_out_from_left);
+//                break;
             default:
                 break;
         }

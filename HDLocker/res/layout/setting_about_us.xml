@@ -6,21 +6,9 @@
     android:clickable="true"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <include
         android:id="@+id/setting_about_top"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_us_height"
-        android:layout_alignParentTop="true"
-        android:background="#2f3035" >
-
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/setting_about_us"
-            android:textColor="@color/setting_about_us_text_color"
-            android:textSize="20sp" />
-    </LinearLayout>
+        layout="@layout/pandora_title_layout" />
 
     <LinearLayout
         android:id="@+id/setting_anout_middle"
