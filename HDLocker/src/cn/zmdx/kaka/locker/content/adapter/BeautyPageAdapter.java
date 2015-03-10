@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +29,7 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
         public ImageView mImageView;
 
         public CardView mCardView;
-        
+
         public ViewHolder(View view) {
             super(view);
             mTextView = (TextView) view.findViewById(R.id.text);
@@ -54,32 +55,50 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         ServerImageData data = mData.get(position);
-        holder.mTextView.setText(data.getImageDesc());
+        holder.mTextView.setText(data.getTitle());
         Picasso picasso = Picasso.with(mContext);
-                picasso.load(data.getUrl()).transform(new Transformation() {
+        picasso.load(data.getUrl()).transform(new Transformation() {
 
-                    @Override
-                    public String key() {
-                        return "matrix()";
-                    }
+            @Override
+            public String key() {
+                return "matrix()";
+            }
 
-                    @Override
-                    public Bitmap transform(Bitmap source) {
-                        int cardWidth = holder.mCardView.getWidth();
-                        int imgWidth = source.getWidth();
-                        int imgHeight = source.getHeight();
-                        float scaleRate = (float) cardWidth / (float) imgWidth;
-                        int newHeight = (int) (scaleRate * imgHeight);
-                        return ImageUtils.scaleTo(source, cardWidth, newHeight, true);
-                    }
-                }).into(holder.mImageView);
+            @Override
+            public Bitmap transform(Bitmap source) {
+                int cardWidth = holder.mCardView.getWidth();
+                int imgWidth = source.getWidth();
+                int imgHeight = source.getHeight();
+                float scaleRate = (float) cardWidth / (float) imgWidth;
+                int newHeight = (int) (scaleRate * imgHeight);
+                return ImageUtils.scaleTo(source, cardWidth, newHeight, true);
+            }
+        }).into(holder.mImageView);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClicked(View view, int position);
+    }
+
+    private OnItemClickListener mListener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup vg, int position) {
+    public ViewHolder onCreateViewHolder(ViewGroup vg, final int position) {
         View view = LayoutInflater.from(vg.getContext()).inflate(
                 R.layout.news_page_beauty_item_layout, vg, false);
         ViewHolder vh = new ViewHolder(view);
+        view.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onItemClicked(v, position);
+                }
+            }
+        });
         return vh;
     }
 }
