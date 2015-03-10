@@ -12,7 +12,7 @@ import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
 import cn.zmdx.kaka.locker.LockScreenManager.ILockScreenListener;
-import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
+import cn.zmdx.kaka.locker.settings.MainSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
@@ -41,7 +41,7 @@ public class FakeActivity extends Activity {
 
             @Override
             public void onLock() {
-                boolean lockScreenVoice = config.isLockScreenVoice();
+                boolean lockScreenVoice = config.isLockSoundOn();
                 if (lockScreenVoice) {
                     LockSoundManager.play(LockSoundManager.SOUND_ID_LOCK);
                 }
@@ -51,7 +51,7 @@ public class FakeActivity extends Activity {
             public void onUnLock() {
                 finish();
                 overridePendingTransition(0, 0);
-                boolean lockScreenVoice = config.isLockScreenVoice();
+                boolean lockScreenVoice = config.isLockSoundOn();
                 if (lockScreenVoice) {
                     LockSoundManager.play(LockSoundManager.SOUND_ID_UNLOCK);
                 }
@@ -60,7 +60,7 @@ public class FakeActivity extends Activity {
             @Override
             public void onInitDefaultImage() {
                 Intent intent = new Intent();
-                intent.setClass(FakeActivity.this, MainSettingsActivity.class);
+                intent.setClass(FakeActivity.this, MainSettingActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

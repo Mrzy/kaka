@@ -10,6 +10,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,14 +25,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.widget.BaseButton;
-import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.fb.SyncListener;
 import com.umeng.fb.model.Conversation;
 import com.umeng.fb.model.Reply;
 
-public class FeedbackActivity extends BaseActivity {
+public class FeedbackActivity extends ActionBarActivity {
 
     private ListView mListView;
 
@@ -73,10 +73,6 @@ public class FeedbackActivity extends BaseActivity {
     }
 
     private void initView() {
-        TypefaceTextView title = (TypefaceTextView) findViewById(R.id.subtitle);
-        title.setText(getString(R.string.pandora_feedback_title));
-        title.setVisibility(View.VISIBLE);
-
         mListView = (ListView) findViewById(R.id.fb_reply_list);
         sendBtn = (BaseButton) findViewById(R.id.fb_send_btn);
         inputEdit = (EditText) findViewById(R.id.fb_send_content);
@@ -172,6 +168,9 @@ public class FeedbackActivity extends BaseActivity {
             }
         }
 
+        @SuppressLint({
+                "SimpleDateFormat", "InflateParams"
+        })
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;

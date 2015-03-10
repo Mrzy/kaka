@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/white" >
 
-    <include layout="@layout/pandora_title_layout" />
-
     <LinearLayout
         android:id="@+id/fb_input_layout"
         android:layout_width="fill_parent"

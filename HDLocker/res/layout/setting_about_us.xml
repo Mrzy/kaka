@@ -6,10 +6,6 @@
     android:clickable="true"
     android:orientation="vertical" >
 
-    <include
-        android:id="@+id/setting_about_top"
-        layout="@layout/pandora_title_layout" />
-
     <LinearLayout
         android:id="@+id/setting_anout_middle"
         android:layout_width="match_parent"

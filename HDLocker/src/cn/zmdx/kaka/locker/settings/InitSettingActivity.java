@@ -143,14 +143,14 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
                 break;
 
             case R.id.init_setting_read_notification_bar_to_set:
-                if (isMIUI) {
-                    PandoraUtils.setMIUIAllowReadNotification(InitSettingActivity.this,
-                            mMIUIVersion);
-                } else if (isMeizu) {
-                    PandoraUtils.setMeizuAllowReadNotification(InitSettingActivity.this);
-                } else {
-                    PandoraUtils.setRegularAllowReadNotification(InitSettingActivity.this);
-                }
+//                if (isMIUI) {
+//                    PandoraUtils.setMIUIAllowReadNotification(InitSettingActivity.this,
+//                            mMIUIVersion);
+//                } else if (isMeizu) {
+//                    PandoraUtils.setMeizuAllowReadNotification(InitSettingActivity.this);
+//                } else {
+//                    PandoraUtils.setRegularAllowReadNotification(InitSettingActivity.this);
+//                }
 
                 mReadNotificationBtn.setBackgroundResource(R.drawable.base_button_pressed);
                 if (mHandler.hasMessages(MSG_READ_NOTIFICATION)) {

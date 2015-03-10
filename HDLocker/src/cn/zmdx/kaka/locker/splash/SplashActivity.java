@@ -17,7 +17,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.settings.MainSettingsActivity;
+import cn.zmdx.kaka.locker.settings.MainSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -94,7 +94,7 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 Intent in = new Intent();
-                in.setClass(SplashActivity.this, MainSettingsActivity.class);
+                in.setClass(SplashActivity.this, MainSettingActivity.class);
                 startActivity(in);
                 overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                         R.anim.umeng_fb_slide_out_from_left);

@@ -46,11 +46,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".settings.MainSettingsActivity"
+            android:name=".settings.MainSettingActivity"
             android:exported="false"
+            android:label="通用"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@style/Theme.AppCompat" >
         </activity>
         <activity
             android:name=".settings.BaseActivity"
@@ -84,11 +85,6 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
-        </activity>
-        <activity
-            android:name=".settings.AboutActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".FakeActivity"
@@ -155,10 +151,6 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name=".settings.FeedbackActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
 
         <service android:name=".service.PandoraService" />
         <!-- umeng -->
@@ -200,10 +192,32 @@
             android:exported="false"
             android:screenOrientation="portrait" >
         </activity>
+
+        <!-- activitys -->
         <activity
-            android:name=".settings.NotifyFilterActivity"
+            android:name=".settings.FAQActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:label="常见问题"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat" />
+        <activity
+            android:name=".settings.FeedbackActivity"
+            android:exported="false"
+            android:label="意见反馈"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat" />
+        <activity
+            android:name=".settings.AboutActivity"
+            android:exported="false"
+            android:label="关于潘多拉"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat" />
+        <activity
+            android:name=".settings.NotifyManagerActivity"
+            android:exported="false"
+            android:label="通知管理"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat" />
     </application>
 
 </manifest>

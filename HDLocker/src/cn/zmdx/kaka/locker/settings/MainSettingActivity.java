@@ -8,18 +8,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
-import android.view.View;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Window;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.guide.GuideActivity;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.MainSettingFragment.IMainSettingListener;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class MainSettingsActivity extends FragmentActivity implements IMainSettingListener {
+public class MainSettingActivity extends ActionBarActivity implements IMainSettingListener {
 
     private Intent mServiceIntent = null;
 
@@ -27,20 +26,18 @@ public class MainSettingsActivity extends FragmentActivity implements IMainSetti
 
     private static final int GO_GUIDE = 1001;
 
-    private TypefaceTextView mTitle;
-
     private MyHandler mHandler = new MyHandler(this);
 
     private static class MyHandler extends Handler {
-        WeakReference<MainSettingsActivity> mActivity;
+        WeakReference<MainSettingActivity> mActivity;
 
-        public MyHandler(MainSettingsActivity activity) {
-            mActivity = new WeakReference<MainSettingsActivity>(activity);
+        public MyHandler(MainSettingActivity activity) {
+            mActivity = new WeakReference<MainSettingActivity>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            MainSettingsActivity activity = mActivity.get();
+            MainSettingActivity activity = mActivity.get();
             switch (msg.what) {
                 case GO_GUIDE:
                     activity.goGuide();
@@ -63,19 +60,17 @@ public class MainSettingsActivity extends FragmentActivity implements IMainSetti
         mServiceIntent = new Intent(getApplicationContext(), PandoraService.class);
         startService(mServiceIntent);
         init();
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         // AppUninstall.openUrlWhenUninstall(this, "http://www.hdlocker.com");
         MobclickAgent.openActivityDurationTrack(false);
         // UmengUpdateAgent.silentUpdate(this);
         setContentView(R.layout.main_setting_activity);
 
-        mTitle = (TypefaceTextView) findViewById(R.id.title);
-        mTitle.setVisibility(View.VISIBLE);
-
         // getWindow().getAttributes().flags |=
         // LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.content, new MainSettingFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.content, new MainSettingFragment())
+                .commit();
     }
 
     private void init() {
@@ -104,7 +99,6 @@ public class MainSettingsActivity extends FragmentActivity implements IMainSetti
 
     @Override
     public void onItemClick(String title) {
-        mTitle.setText(title);
+        getSupportActionBar().setTitle(title);
     }
-
 }
