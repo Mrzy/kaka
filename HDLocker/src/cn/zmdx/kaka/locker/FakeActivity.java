@@ -82,7 +82,8 @@ public class FakeActivity extends Activity {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setFullScreen() {
         int systemUI = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        if (!ViewConfiguration.get(this).hasPermanentMenuKey()) {// 有虚拟按键（Navigation bar）
+        if (!ViewConfiguration.get(this).hasPermanentMenuKey()) {// 有虚拟按键（Navigation
+                                                                 // bar）
             systemUI |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         }
