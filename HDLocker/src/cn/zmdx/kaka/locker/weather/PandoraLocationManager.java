@@ -2,124 +2,154 @@
 package cn.zmdx.kaka.locker.weather;
 
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
+import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.utils.HDBLOG;
+
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 
 public class PandoraLocationManager {
+    private static final String TAG = "PandoraLocationManager";
 
     private static PandoraLocationManager INSTANCE = null;
 
     private LocationManager mLocationManager;
 
-    private static Location mRecentLocation;
+    private BDLocation mBdLocation = null;
+
+    private MLocation mBaseLocation = new MLocation();
 
     private PandoraLocationManager() {
         mLocationManager = (LocationManager) HDApplication.getContext().getSystemService(
                 Context.LOCATION_SERVICE);
     }
 
-    public static PandoraLocationManager getInstance() {
+    private PandoraLocationManager(Context context) {
+        mLocationClient = new LocationClient(context.getApplicationContext());
+        initParams();
+        mLocationClient.registerLocationListener(bdLocationListener);
+    }
+
+    public static PandoraLocationManager getInstance(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new PandoraLocationManager();
+            INSTANCE = new PandoraLocationManager(context);
         }
         return INSTANCE;
     }
 
-    public void registLocationUpdates() {
-        boolean isNetworkProvider = false;
-        boolean isGpsProvider = false;
-        try {
-            isNetworkProvider = mLocationManager
-                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            isGpsProvider = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    private ICityNameCallBack mCityNameCallBack;
 
-        } catch (Exception e) {
-            return;
+    public void setCityNameListener(ICityNameCallBack iCityNameCallBack) {
+        mCityNameCallBack = iCityNameCallBack;
+    }
+
+    public interface ICityNameCallBack {
+        void onGetCityName(String cityName);
+    }
+
+    public BDLocationListener bdLocationListener = new MyLocationListener();
+
+    private LocationClient mLocationClient;
+
+    public void startMonitor() {
+        Log.d(TAG, "start monitor location");
+        if (!mLocationClient.isStarted()) {
+            mLocationClient.start();
         }
-
-        if (!isNetworkProvider && !isGpsProvider) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("没有可用的provider，注册位置更新监听失败");
-            }
-            return;
+        if (mLocationClient != null && mLocationClient.isStarted()) {
+            mLocationClient.requestLocation();
+        } else {
+            Log.d("LocSDK3", "locClient is null or not started");
         }
+    }
 
-        if (isNetworkProvider) {
-            Location loc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (loc == null) {
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1,
-                        mLocaitonListener);
-            } else {
-                mRecentLocation = loc;
+    public void stopMonitor() {
+        Log.d(TAG, "stop monitor location");
+        if (mLocationClient != null && mLocationClient.isStarted()) {
+            mLocationClient.stop();
+        }
+    }
+
+    public BDLocation getLocation() {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "baidu get getLocation-->");
+        }
+        return mBdLocation;
+    }
+
+    public MLocation getBaseLocation() {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "baidu get getBaseLocation-->");
+        }
+        return mBaseLocation;
+    }
+
+    private void initParams() {
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true);
+        option.setAddrType("all");// 返回的定位结果包含地址信息
+        option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
+        option.setScanSpan(5000);// 设置发起定位请求的间隔时间为5000ms
+        mLocationClient.setLocOption(option);
+    }
+
+    public class MyLocationListener implements BDLocationListener {
+
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            if (location == null) {
                 return;
             }
-            return;
+            mBdLocation = location;
+            mBaseLocation.latitude = mBdLocation.getLatitude();
+            mBaseLocation.longitude = mBdLocation.getLongitude();
+
+            StringBuffer sb = new StringBuffer(256);
+            sb.append("time : ");
+            sb.append(location.getTime());
+            sb.append("\nerror code : ");
+            sb.append(location.getLocType());
+            sb.append("\nlatitude : ");
+            sb.append(location.getLatitude());
+            sb.append("\nlontitude : ");
+            sb.append(location.getLongitude());
+            sb.append("\nradius : ");
+            sb.append(location.getRadius());
+            sb.append("\ncity : ");
+            sb.append(location.getCity());
+
+            if (null != mCityNameCallBack && null != location.getCity()) {
+                mCityNameCallBack.onGetCityName(location.getCity());
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "---location.getCity()-->>" + location.getCity());
+                }
+            }
+
+            if (location.getLocType() == BDLocation.TypeGpsLocation) {
+                sb.append("\nspeed : ");
+                sb.append(location.getSpeed());
+                sb.append("\nsatellite : ");
+                sb.append(location.getSatelliteNumber());
+            } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
+                sb.append("\naddr : ");
+                sb.append(location.getAddrStr());
+            }
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "----->>" + sb);
+            }
         }
 
-        if (isGpsProvider) {
-            Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (loc == null) {
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1,
-                        mLocaitonListener);
-            } else {
-                mRecentLocation = loc;
-                return;
-            }
+        public void onReceivePoi(BDLocation poiLocation) {
         }
     }
 
-    public void unRegistLocationUpdates() {
-        if (mLocaitonListener != null) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("unRegistLocationUpdates()");
-            }
-            mLocationManager.removeUpdates(mLocaitonListener);
-        }
+    public class MLocation {
+        public double latitude;
+
+        public double longitude;
     }
-
-    /**
-     * 获取当前位置
-     * 
-     * @return 没有位置信息时返回null
-     */
-    public static Location getRecentLocation() {
-        return mRecentLocation;
-    }
-
-    private LocationListener mLocaitonListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("onLocationChanged");
-            }
-            mRecentLocation = location;
-            // mLocationManager.removeUpdates(mLocaitonListener);
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("onStatusChanged");
-            }
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("onProviderEnabled");
-            }
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("onProviderDisabled");
-            }
-        }
-    };
 }

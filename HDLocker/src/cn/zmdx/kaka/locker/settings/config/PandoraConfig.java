@@ -187,13 +187,13 @@ public class PandoraConfig {
         return mSp.getString(KEY_CURRENT_WALLPAPER, "");
     }
 
-    public long getLastCheckWeatherTime() {
-        return mSp.getLong(KEY_LAST_CHECK_WEATHER, 0);
+    public String getLastCheckWeatherTime() {
+        return mSp.getString(KEY_LAST_CHECK_WEATHER, "");
     }
 
-    public void saveLastCheckWeatherTime(long time) {
+    public void saveLastCheckWeatherTime(String time) {
         Editor editor = mSp.edit();
-        editor.putLong(KEY_LAST_CHECK_WEATHER, time);
+        editor.putString(KEY_LAST_CHECK_WEATHER, time);
         editor.commit();
     }
 
