@@ -16,6 +16,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
@@ -46,13 +48,13 @@ public class PandoraBoxManager {
 
     private View mEntireView;
 
-    private NewsDetailLayout mDetailLayout;
+    private FrameLayout mDetailLayout;
 
     private PandoraBoxManager(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
         mEntireView = mInflater.inflate(R.layout.news_page_layout, null);
-        mDetailLayout = (NewsDetailLayout) mEntireView.findViewById(R.id.detailLayout);
+        mDetailLayout = (FrameLayout) mEntireView.findViewById(R.id.detailLayout);
     }
 
     public synchronized static PandoraBoxManager newInstance(Context context) {
@@ -151,31 +153,36 @@ public class PandoraBoxManager {
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
-        sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+//        sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         // sglm.offsetChildrenHorizontal(100);
         rv.setLayoutManager(sglm);
         rv.setHasFixedSize(true);
-        List<ServerImageData> news = new ArrayList<ServerImageData>();
+        final List<ServerImageData> news = new ArrayList<ServerImageData>();
         for (int i = 0; i < 100; i++) {
             ServerImageData sid = new ServerImageData();
             sid.setUrl("http://d.hiphotos.baidu.com/image/w%3D310/sign=0249364880025aafd33278cacbecab8d/9f2f070828381f303a7efd21ab014c086f06f0d7.jpg");
-            sid.setImageDesc("今日头条");
+            sid.setImageDesc("http://www.baidu.com");
+            sid.setTitle("今日头条");
 
             ServerImageData sid1 = new ServerImageData();
             sid1.setUrl("http://b.hiphotos.baidu.com/image/w%3D310/sign=4d73b518e8f81a4c2632eac8e72b6029/caef76094b36acaf6f9d91907fd98d1001e99c58.jpg");
-            sid1.setImageDesc("安达大师傅阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方发生地方阿斯顿发生发生地方阿斯顿发生发生地方阿斯顿发生");
+            sid1.setImageDesc("http://www.baidu.com");
+            sid1.setTitle("安达大师傅阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方发生地方阿斯顿发生发生地方阿斯顿发生发生地方阿斯顿发生");
 
             ServerImageData sid2 = new ServerImageData();
             sid2.setUrl("http://c.hiphotos.baidu.com/image/w%3D310/sign=f40022eaff1f4134e037037f151f95c1/b7fd5266d0160924f9061d12d60735fae6cd3493.jpg");
-            sid2.setImageDesc("安达大师傅阿地方阿斯顿发生地方阿斯顿发生地方阿斯顿发");
+            sid2.setImageDesc("http://www.baidu.com");
+            sid2.setTitle("安达大师傅阿地方阿斯顿发生地方阿斯顿发生地方阿斯顿发");
 
             ServerImageData sid3 = new ServerImageData();
             sid3.setUrl("http://d.hiphotos.baidu.com/image/w%3D310/sign=2ad444025066d0167e199829a72ad498/4b90f603738da9772a1d41e4b251f8198718e3cb.jpg");
-            sid3.setImageDesc("安达大师傅阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方");
+            sid3.setImageDesc("http://www.baidu.com");
+            sid3.setTitle("安达大师傅阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方阿斯顿发生地方");
 
             ServerImageData sid4 = new ServerImageData();
             sid4.setUrl("http://a.hiphotos.baidu.com/image/w%3D310/sign=463e44ced2160924dc25a41ae406359b/f703738da977391243d8a6f9fa198618377ae2a8.jpg");
-            sid4.setImageDesc("安达大师傅阿地方阿斯顿发生地");
+            sid4.setImageDesc("http://www.baidu.com");
+            sid4.setTitle("安达大师傅阿地方阿斯顿发生地");
 
             news.add(sid);
             news.add(sid1);
@@ -184,6 +191,17 @@ public class PandoraBoxManager {
             news.add(sid4);
         }
         BeautyPageAdapter adapter = new BeautyPageAdapter(mContext, news);
+        adapter.setOnItemClickListener(new BeautyPageAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClicked(View view, int position) {
+                final ServerImageData sid = news.get(position);
+                String url = sid.getImageDesc();
+                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this);
+                ndl.loadUrl(url);
+                openDetailPage(ndl);
+            }
+        });
         rv.setAdapter(adapter);
 
         final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
@@ -315,13 +333,17 @@ public class PandoraBoxManager {
         return view;
     }
 
-    private void openDetailPage(View view) {
-        mDetailLayout.addDetailView(view);
-        mDetailLayout.open();
+    public void openDetailPage(View view) {
+        mDetailLayout.removeAllViews();
+        mDetailLayout.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        mDetailLayout.bringChildToFront(view);
+        mDetailLayout.setVisibility(View.VISIBLE);
+        // TODO add animator
     }
 
-    private void closeDetailPage() {
-        mDetailLayout.close();
+    public void closeDetailPage() {
+        mDetailLayout.setVisibility(View.INVISIBLE);
+        mDetailLayout.removeAllViews();
     }
 
     private static class NewsPagerAdapter extends PagerAdapter {
