@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <cn.zmdx.kaka.locker.widget.BaseLinearLayout
-        android:id="@+id/notify_open_notification_permissions_item"
+        android:id="@+id/setting_open_notification_permissions_item"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_item_height"
         android:layout_marginTop="11dp"
@@ -45,7 +45,7 @@
             android:text="开启通知提醒" />
 
         <cn.zmdx.kaka.locker.widget.SwitchButton
-            android:id="@+id/notify_open_notification_switch_button"
+            android:id="@+id/setting_open_notification_switch_button"
             style="@style/setting_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             android:text="隐藏通知内容" />
 
         <cn.zmdx.kaka.locker.widget.SwitchButton
-            android:id="@+id/notify_hide_notice_content_switch_button"
+            android:id="@+id/setting_hide_notice_content_switch_button"
             style="@style/setting_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
     </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
 
     <cn.zmdx.kaka.locker.widget.BaseLinearLayout
-        android:id="@+id/notify_notice_manage_switch_button"
+        android:id="@+id/setting_notify_manage_item"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_item_height"
         android:layout_marginTop="11dp"

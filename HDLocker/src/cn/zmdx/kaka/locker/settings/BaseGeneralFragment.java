@@ -13,7 +13,7 @@ import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
 
-public abstract class BaseSettingsFragment extends Fragment {
+public abstract class BaseGeneralFragment extends Fragment {
 
     private PandoraConfig mPandoraConfig;
 

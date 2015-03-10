@@ -150,41 +150,41 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
     // }
 
     private void closeNoticeBar() {
-        PandoraConfig.newInstance(this).saveNeedNotice(false);
+        PandoraConfig.newInstance(this).saveNotifyFunctionState(false);
     }
 
     private void openNoticeBar() {
-        PandoraConfig.newInstance(this).saveNeedNotice(true);
+        PandoraConfig.newInstance(this).saveNotifyFunctionState(true);
     }
 
     private boolean isNeedNotice() {
-        return PandoraConfig.newInstance(this).isNeedNotice(this);
+        return PandoraConfig.newInstance(this).isNotifyFunctionOn();
     }
 
     private void closeMobileNetwork() {
-        PandoraConfig.newInstance(this).saveMobileNetwork(false);
+        PandoraConfig.newInstance(this).save3G4GNetworkState(false);
     }
 
     private void openMobileNetwork() {
-        PandoraConfig.newInstance(this).saveMobileNetwork(true);
+        PandoraConfig.newInstance(this).save3G4GNetworkState(true);
     }
 
     private boolean isMobileNetwork() {
-        return PandoraConfig.newInstance(this).isMobileNetwork();
+        return PandoraConfig.newInstance(this).is3G4GNetworkOn();
     }
 
     private void closeLocksScreenVoice() {
-        PandoraConfig.newInstance(this).saveLockScreenVoice(false);
+        PandoraConfig.newInstance(this).saveLockSoundState(false);
         LockSoundManager.release();
     }
 
     private void openLockScreenVoice() {
-        PandoraConfig.newInstance(this).saveLockScreenVoice(true);
+        PandoraConfig.newInstance(this).saveLockSoundState(true);
         LockSoundManager.initSoundPool();
     }
 
     private boolean isLockScreenVoice() {
-        return PandoraConfig.newInstance(this).isLockScreenVoice();
+        return PandoraConfig.newInstance(this).isLockSoundOn();
     }
 
     private void closeMessageNotification() {
@@ -206,7 +206,7 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
     @Override
     public void onBackPressed() {
         Intent in = new Intent();
-        in.setClass(IndividualizationActivity.this, MainSettingsActivity.class);
+        in.setClass(IndividualizationActivity.this, MainSettingActivity.class);
         startActivity(in);
         finish();
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,

@@ -132,7 +132,7 @@ public class WallpaperDetailView extends LinearLayout {
         Bitmap cacheBitmap = ImageLoaderManager.getOnlineImageCache(mContext).getBitmap(
                 HDBHashUtils.getStringMD5(mData.getImageURL()));
         if (null == cacheBitmap) {
-            if (!PandoraConfig.newInstance(mContext).isMobileNetwork()
+            if (!PandoraConfig.newInstance(mContext).is3G4GNetworkOn()
                     && !HDBNetworkState.isWifiNetwork()) {
                 String promptString = mContext.getResources().getString(
                         R.string.setting_network_error);

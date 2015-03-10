@@ -206,7 +206,18 @@ public class PandoraUtils {
         }
     }
 
-    public static void setMIUIAllowReadNotification(Context mContext, String version) {
+    public static void setAllowReadNotification(Context mContext, boolean isMIUI, String version,
+            boolean isMeizu) {
+        if (isMIUI) {
+            setMIUIAllowReadNotification(mContext, version);
+        } else if (isMeizu) {
+            setMeizuAllowReadNotification(mContext);
+        } else {
+            setRegularAllowReadNotification(mContext);
+        }
+    }
+
+    private static void setMIUIAllowReadNotification(Context mContext, String version) {
         try {
             if (version.equals(MUIU_V5)) {
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -225,37 +236,29 @@ public class PandoraUtils {
         }
     }
 
-    public static void setMeizuAllowReadNotification(Context mContext) {
-        boolean meizu = isMeizu(mContext);
+    private static void setMeizuAllowReadNotification(Context mContext) {
         try {
-            if (meizu) {
-                if (Build.VERSION.SDK_INT >= 18) {
-                    Intent intent = new Intent(
-                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                    mContext.startActivity(intent);
-                } else {
-                    Intent intent = new Intent("android.settings.ACCESSIBILITY_SETTINGS");
-                    mContext.startActivity(intent);
-                }
+            if (Build.VERSION.SDK_INT >= 18) {
+                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                mContext.startActivity(intent);
+            } else {
+                Intent intent = new Intent("android.settings.ACCESSIBILITY_SETTINGS");
+                mContext.startActivity(intent);
             }
+
         } catch (Exception e) {
             Toast.makeText(mContext, R.string.error, Toast.LENGTH_SHORT).show();
         }
     }
 
-    public static void setRegularAllowReadNotification(Context mContext) {
-        boolean meizu = isMeizu(mContext);
-        boolean miui = isMIUI(mContext);
+    private static void setRegularAllowReadNotification(Context mContext) {
         try {
-            if (!meizu && !miui) {
-                if (Build.VERSION.SDK_INT >= 18) {
-                    Intent intent = new Intent(
-                            "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                    mContext.startActivity(intent);
-                } else {
-                    Intent intent = new Intent("android.settings.ACCESSIBILITY_SETTINGS");
-                    mContext.startActivity(intent);
-                }
+            if (Build.VERSION.SDK_INT >= 18) {
+                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                mContext.startActivity(intent);
+            } else {
+                Intent intent = new Intent("android.settings.ACCESSIBILITY_SETTINGS");
+                mContext.startActivity(intent);
             }
         } catch (Exception e) {
             Toast.makeText(mContext, R.string.error, Toast.LENGTH_SHORT).show();

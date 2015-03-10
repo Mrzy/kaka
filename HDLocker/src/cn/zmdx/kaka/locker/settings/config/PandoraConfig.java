@@ -77,6 +77,10 @@ public class PandoraConfig {
 
     private static final String ONLINE_WALLPAPER_DESC = "awd";
 
+    private static final String KEY_OPEN_NOTIFICATION_REMIND = "konr";
+
+    private static final String KEY_HIDE_NOTIFY_CONTENT = "khnc";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -93,9 +97,9 @@ public class PandoraConfig {
         return mSp.getBoolean(PANDORA_LOCKER_SP_NAME, true);
     }
 
-    public void savePandolaLockerState(boolean isOn) {
+    public void savePandolaLockerState(boolean isEnable) {
         Editor editor = mSp.edit();
-        editor.putBoolean(PANDORA_LOCKER_SP_NAME, isOn);
+        editor.putBoolean(PANDORA_LOCKER_SP_NAME, isEnable);
         editor.commit();
     }
 
@@ -215,35 +219,33 @@ public class PandoraConfig {
         return mSp.getBoolean(KEY_HAS_GUIDED, false);
     }
 
-    // 开关手机网络状态存入SharedPreferences
-    public void saveMobileNetwork(boolean mobileNetwork) {
+    public void save3G4GNetworkState(boolean isEnable) {
         Editor editor = mSp.edit();
-        editor.putBoolean(KEY_NEED_MOBILE_NETWORK, mobileNetwork);
+        editor.putBoolean(KEY_NEED_MOBILE_NETWORK, isEnable);
         editor.commit();
     }
 
-    public boolean isMobileNetwork() {
+    public boolean is3G4GNetworkOn() {
         return mSp.getBoolean(KEY_NEED_MOBILE_NETWORK, true);
     }
 
-    // 开关锁屏声音存入SPreferences
-    public void saveLockScreenVoice(boolean lockscreenvoice) {
+    public void saveLockSoundState(boolean isEnable) {
         Editor editor = mSp.edit();
-        editor.putBoolean(OPEN_LOCK_SCREEN_VOCIE, lockscreenvoice);
+        editor.putBoolean(OPEN_LOCK_SCREEN_VOCIE, isEnable);
         editor.commit();
     }
 
-    public boolean isLockScreenVoice() {
+    public boolean isLockSoundOn() {
         return mSp.getBoolean(OPEN_LOCK_SCREEN_VOCIE, true);
     }
 
-    public void saveNeedNotice(boolean isNeed) {
+    public void saveNotifyFunctionState(boolean isEnable) {
         Editor editor = mSp.edit();
-        editor.putBoolean(KEY_NEED_NOTICE, isNeed);
+        editor.putBoolean(KEY_NEED_NOTICE, isEnable);
         editor.commit();
     }
 
-    public boolean isNeedNotice(Context context) {
+    public boolean isNotifyFunctionOn() {
         return mSp.getBoolean(KEY_NEED_NOTICE, false);
     }
 
@@ -374,6 +376,23 @@ public class PandoraConfig {
 
     public void saveOnlineWallPaperDesc(String fileName, String desc) {
         mSp.edit().putString(ONLINE_WALLPAPER_DESC + fileName, desc).commit();
+    }
+
+    //
+    public boolean isNotificationRemindOn() {
+        return mSp.getBoolean(KEY_OPEN_NOTIFICATION_REMIND, false);
+    }
+
+    public void saveNotificationRemindState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_OPEN_NOTIFICATION_REMIND, isEnable);
+    }
+
+    public boolean isHideNotifyContent() {
+        return mSp.getBoolean(KEY_HIDE_NOTIFY_CONTENT, false);
+    }
+
+    public void saveHideNotifyContentState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_HIDE_NOTIFY_CONTENT, isEnable);
     }
 
 }

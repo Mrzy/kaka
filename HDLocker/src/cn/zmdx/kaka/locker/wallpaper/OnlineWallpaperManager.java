@@ -121,7 +121,7 @@ public class OnlineWallpaperManager {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
             }
-            if (!PandoraConfig.newInstance(context).isMobileNetwork()
+            if (!PandoraConfig.newInstance(context).is3G4GNetworkOn()
                     && !HDBNetworkState.isWifiNetwork()) {
                 parseWallpaperJson(lastPullJson, listener);
             } else {

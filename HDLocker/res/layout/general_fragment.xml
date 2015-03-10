@@ -151,7 +151,8 @@
             android:id="@+id/setting_xiaomi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:visibility="gone" >
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 style="@style/setting_textview"
@@ -270,12 +271,8 @@
                 android:layout_weight="1"
                 android:clickable="false"
                 android:gravity="center_vertical"
-                android:text="关于pandora" />
+                android:text="关于潘多拉" />
         </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/setting_item_height" />
     </LinearLayout>
 
 </ScrollView>

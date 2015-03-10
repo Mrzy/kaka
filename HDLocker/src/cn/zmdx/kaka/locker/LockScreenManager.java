@@ -190,7 +190,7 @@ public class LockScreenManager {
 
         mWinParams = new WindowManager.LayoutParams();
 
-        mIsNeedNotice = mPandoraConfig.isNeedNotice(mContext);
+        mIsNeedNotice = mPandoraConfig.isNotifyFunctionOn();
         if (mIsNeedNotice) {
             mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         } else {

@@ -1,9 +1,8 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -11,7 +10,7 @@ import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends ActionBarActivity {
 
     private TypefaceTextView mVersion;
 
@@ -24,10 +23,6 @@ public class AboutActivity extends Activity {
     }
 
     private void initView() {
-        TypefaceTextView title = (TypefaceTextView) findViewById(R.id.subtitle);
-        title.setText(getString(R.string.setting_about_us));
-        title.setVisibility(View.VISIBLE);
-        
         mVersion = (TypefaceTextView) findViewById(R.id.setting_about_version);
         String version = PandoraUtils.getVersionCode(this);
         mVersion.setText(version);

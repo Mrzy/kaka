@@ -39,16 +39,12 @@ public class MainSettingFragment extends Fragment {
     ViewGroup container, @Nullable
     Bundle savedInstanceState) {
         mEntireView = inflater.inflate(R.layout.main_setting_fragment, container, false);
-        final ViewPagerCompat viewPager = (ViewPagerCompat) mEntireView
+        ViewPagerCompat viewPager = (ViewPagerCompat) mEntireView
                 .findViewById(R.id.setting_viewpaper);
-        List<Fragment> pages = new ArrayList<Fragment>();
-        initNewsPages(pages);
-        List<String> titles = new ArrayList<String>();
-        initTitles(titles);
-        PageFragmentAdapter pagerAdapter = new PageFragmentAdapter(getFragmentManager(), pages,
-                titles);
+        PageFragmentAdapter pagerAdapter = new PageFragmentAdapter(getFragmentManager(),
+                initFragmentList(), initFragmentTitleList());
         viewPager.setAdapter(pagerAdapter);
-        final PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) mEntireView
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) mEntireView
                 .findViewById(R.id.setting_pats);
         tabStrip.setViewPager(viewPager);
         tabStrip.setOnPageChangeListener(pagerAdapter);
@@ -56,22 +52,26 @@ public class MainSettingFragment extends Fragment {
         return mEntireView;
     }
 
-    private void initTitles(List<String> titles) {
-        titles.add("通用");
-        titles.add("通知");
-        titles.add("密码");
-        titles.add("壁纸");
+    private List<String> initFragmentTitleList() {
+        List<String> titleList = new ArrayList<String>();
+        titleList.add("通用");
+        titleList.add("通知");
+        titleList.add("密码");
+        titleList.add("壁纸");
+        return titleList;
     }
 
-    private void initNewsPages(List<Fragment> pages) {
+    private List<Fragment> initFragmentList() {
+        List<Fragment> fragmentList = new ArrayList<Fragment>();
         GeneralFragment mainSettingsFragment = new GeneralFragment();
         NotifyFragment notifyFragment = new NotifyFragment();
         PasswordFragment passwordFragment = new PasswordFragment();
         WallpaperFragment wallpaperFragment = new WallpaperFragment();
-        pages.add(mainSettingsFragment);
-        pages.add(notifyFragment);
-        pages.add(passwordFragment);
-        pages.add(wallpaperFragment);
+        fragmentList.add(mainSettingsFragment);
+        fragmentList.add(notifyFragment);
+        fragmentList.add(passwordFragment);
+        fragmentList.add(wallpaperFragment);
+        return fragmentList;
     }
 
     public class PageFragmentAdapter extends FragmentPagerAdapter implements OnPageChangeListener {

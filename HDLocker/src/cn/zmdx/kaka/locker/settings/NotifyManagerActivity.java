@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
@@ -40,7 +41,7 @@ import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersSimpleArrayAdapter;
 
-public class NotifyFilterActivity extends BaseActivity implements OnItemClickListener {
+public class NotifyManagerActivity extends ActionBarActivity implements OnItemClickListener {
 
     public final static int TYPE_FILTER = 753;
 

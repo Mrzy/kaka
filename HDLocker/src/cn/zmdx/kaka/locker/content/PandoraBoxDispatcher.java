@@ -157,7 +157,7 @@ public class PandoraBoxDispatcher extends Handler {
         if (HDBNetworkState.isWifiNetwork()) {
             count = PandoraPolicy.COUNT_DOWNLOAD_IMAGE_WIFI;
         } else {
-            if (mConfig.isMobileNetwork()) {
+            if (mConfig.is3G4GNetworkOn()) {
                 count = PandoraPolicy.COUNT_DOWNLOAD_IMAGE_NON_WIFI;
             }
         }
