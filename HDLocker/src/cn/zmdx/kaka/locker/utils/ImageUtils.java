@@ -181,7 +181,13 @@ public class ImageUtils {
         float scaleHeight = ((float) newHeight) / height;
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap target = Bitmap.createBitmap(src, 0, 0, width, height, matrix, true);
+        Bitmap target = null;
+        try {
+            target = Bitmap.createBitmap(src, 0, 0, width, height, matrix, true);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 
         if (recycle && src != target) {
             src.recycle();

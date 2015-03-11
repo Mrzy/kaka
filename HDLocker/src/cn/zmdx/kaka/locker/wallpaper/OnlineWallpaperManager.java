@@ -178,7 +178,6 @@ public class OnlineWallpaperManager {
                 }
             }
         });
-        request.setShouldCache(false);
         RequestManager.getRequestQueue().add(request);
     }
 
