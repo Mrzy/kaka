@@ -8,8 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherCityInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureIndexInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
@@ -22,7 +20,7 @@ public class ParseWeatherJsonUtils {
         smartWeatherInfo = new SmartWeatherInfo();
         if (weatherObj != null) {
             try {
-//                JSONObject weatherObj = new JSONObject(jsonObj);
+                // JSONObject weatherObj = new JSONObject(jsonObj);
                 JSONObject cityInfoObj = weatherObj.getJSONObject("c");
                 SmartWeatherCityInfo cityInfo = new SmartWeatherCityInfo();
                 cityInfo.setCityId(cityInfoObj.optString("c1"));
@@ -30,18 +28,12 @@ public class ParseWeatherJsonUtils {
                 cityInfo.setLocationCityNameCh(cityInfoObj.optString("c5"));
                 cityInfo.setProvinceNameCh(cityInfoObj.optString("c7"));
                 cityInfo.setCountryNameCh(cityInfoObj.optString("c9"));
-                if (BuildConfig.DEBUG) {
-                    Log.i("ParseJson", "----国家名---->>" + cityInfoObj.optString("c9"));
-                }
                 smartWeatherInfo.setSmartWeatherCityInfo(cityInfo);
 
                 JSONObject cityFeatureObj = weatherObj.getJSONObject("f");
                 SmartWeatherFeatureInfo featureInfo = new SmartWeatherFeatureInfo();
                 featureInfo.setForecastReleasedTime(cityFeatureObj.optString("f0"));
                 smartWeatherInfo.setSmartWeatherFeatureInfo(featureInfo);
-                if (BuildConfig.DEBUG) {
-                    Log.i("ParseJson", "----发布时间---->>" + cityFeatureObj.optString("f0"));
-                }
 
                 JSONArray cityFeatureArray = cityFeatureObj.getJSONArray("f1");
                 List<SmartWeatherFeatureIndexInfo> smartWeatherFeatureIndexInfoList = new ArrayList<SmartWeatherFeatureIndexInfo>();
@@ -57,16 +49,11 @@ public class ParseWeatherJsonUtils {
                     featureIndexInfo.setDaytimeWindForceNo(cityFeatureIndexObj.optString("fg"));
                     featureIndexInfo.setNightWindForceNo(cityFeatureIndexObj.optString("fh"));
                     featureIndexInfo.setSunriseAndSunset(cityFeatureIndexObj.optString("fi"));
-                    if (BuildConfig.DEBUG) {
-                        Log.i("ParseJson", "----白天温度---->>" + cityFeatureIndexObj.optString("fc"));
-                        Log.i("ParseJson", "----白天风力---->>" + cityFeatureIndexObj.optString("fg"));
-                    }
                     smartWeatherFeatureIndexInfoList.add(featureIndexInfo);
                     featureInfo
                             .setSmartWeatherFeatureIndexInfoList(smartWeatherFeatureIndexInfoList);
                     smartWeatherInfo.setSmartWeatherFeatureInfo(featureInfo);
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }

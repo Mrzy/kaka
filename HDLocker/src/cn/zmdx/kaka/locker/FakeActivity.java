@@ -70,6 +70,7 @@ public class FakeActivity extends Activity {
             }
         });
         PandoraLocationManager.getInstance(this).startMonitor();
+        LockScreenManager.getInstance().processWeatherInfo();
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

@@ -143,8 +143,6 @@ public class LockScreenManager {
 
     private View mMainPage;
 
-    private ISmartWeatherCallback callback;
-
     private SlidingUpPanelLayout mSlidingUpView;
 
     public interface ILockScreenListener {
@@ -167,7 +165,7 @@ public class LockScreenManager {
         mKeyguard = keyguard.newKeyguardLock("pandora");
         mPandoraConfig = PandoraConfig.newInstance(mContext);
         disableSystemLock();
-        processWeatherInfo();
+        // processWeatherInfo();
     }
 
     public void disableSystemLock() {
@@ -367,25 +365,26 @@ public class LockScreenManager {
         mSlidingUpView.collapsePanel();
     }
 
-//    private SimpleDrawerListener mRightDrawableListener = new SimpleDrawerListener() {
-//
-//        public void onDrawerSlide(View drawerView, float slideOffset) {
-//            setWallpaperBlurEffect(slideOffset);
-//            setMainPageAlpha(1.0f - slideOffset * 0.5f);
-//            if (slideOffset == 0) {
-//                mSlidingUpView.showPanel();
-//            } else {
-//                mSlidingUpView.hidePanel();
-//            }
-//        };
-//
-//        public void onDrawerClosed(View drawerView) {
-//            // boolean isOpened = mRightDrawerLayout.isDrawerOpen(drawerView);
-//        };
-//
-//        public void onDrawerOpened(View drawerView) {
-//        };
-//    };
+    // private SimpleDrawerListener mRightDrawableListener = new
+    // SimpleDrawerListener() {
+    //
+    // public void onDrawerSlide(View drawerView, float slideOffset) {
+    // setWallpaperBlurEffect(slideOffset);
+    // setMainPageAlpha(1.0f - slideOffset * 0.5f);
+    // if (slideOffset == 0) {
+    // mSlidingUpView.showPanel();
+    // } else {
+    // mSlidingUpView.hidePanel();
+    // }
+    // };
+    //
+    // public void onDrawerClosed(View drawerView) {
+    // // boolean isOpened = mRightDrawerLayout.isDrawerOpen(drawerView);
+    // };
+    //
+    // public void onDrawerOpened(View drawerView) {
+    // };
+    // };
 
     private SimplePanelSlideListener mSlidingUpPanelListener = new SimplePanelSlideListener() {
         public void onPanelSlide(View panel, float slideOffset) {
@@ -462,9 +461,10 @@ public class LockScreenManager {
         mContext.startActivity(intent);
     }
 
-    private void processWeatherInfo() {
-        final Long lastCheckTime = Long.parseLong(mPandoraConfig.getLastCheckWeatherTime());
-        if (System.currentTimeMillis() - lastCheckTime < PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
+    public void processWeatherInfo() {
+        long str2TimeMillis = SmartWeatherUtils.str2TimeMillis(mPandoraConfig
+                .getLastCheckWeatherTime());
+        if (System.currentTimeMillis() - str2TimeMillis < PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("检查天气条件不满足,使用缓存数据");
             }
@@ -474,12 +474,12 @@ public class LockScreenManager {
                     JSONObject weatherObj = new JSONObject(info);
                     SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
                             .parseWeatherJson(weatherObj);
-                    updateWeatherInfo(smartWeatherInfo);
+                    updateView(smartWeatherInfo);
                 } catch (Exception e) {
-                    updateWeatherInfo(null);
+                    updateView(null);
                 }
             } else {
-                updateWeatherInfo(null);
+                updateView(null);
             }
             return;
         }
@@ -502,17 +502,16 @@ public class LockScreenManager {
                 updateView(null);
             }
         });
-
     }
 
-    private void updateWeatherInfo(final SmartWeatherInfo smartWeatherInfo) {
-        HDBThreadUtils.runOnUi(new Runnable() {
-            @Override
-            public void run() {
-                updateView(smartWeatherInfo);
-            }
-        });
-    }
+    // private void updateWeatherInfo(final SmartWeatherInfo smartWeatherInfo) {
+    // HDBThreadUtils.runOnUi(new Runnable() {
+    // @Override
+    // public void run() {
+    // updateView(smartWeatherInfo);
+    // }
+    // });
+    // }
 
     private void updateView(SmartWeatherInfo smartWeatherInfo) {
         if (smartWeatherInfo == null) {
@@ -551,13 +550,13 @@ public class LockScreenManager {
             if (BuildConfig.DEBUG) {
                 Log.i(TAG, "--sunrise-->>" + sunrise + "," + "--sunset-->>" + sunset);
                 Log.i(TAG, "--sunriseAndSunset-->>" + sunriseAndSunset);
+                Log.i(TAG, "最后更新于" + SmartWeatherUtils.getHourFromString(forecastReleasedTime)
+                        + "点");
+                Log.i(TAG, "  " + daytimeCentTemp + "℃");
+                Log.i(TAG, "  " + daytimeWindForceNo + "级");
+                Log.i(TAG, "日出:" + sunrise);
+                Log.i(TAG, "日落:" + sunset);
             }
-            Log.i(TAG, "最后更新于" + SmartWeatherUtils.getHourFromString(forecastReleasedTime) + "点");
-
-            Log.i(TAG, "  " + daytimeCentTemp + "℃");
-            Log.i(TAG, "  " + daytimeWindForceNo + "级");
-            Log.i(TAG, "日出:" + sunrise);
-            Log.i(TAG, "日落:" + sunset);
         }
     }
 
@@ -609,47 +608,55 @@ public class LockScreenManager {
         // mBoxView.addView(contentView, mBoxView.getChildCount(), lp);
     }
 
-//    @SuppressLint("InflateParams")
-//    private void initLockScreenViews() {
-//        mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
-//                R.layout.pandora_lockscreen, null);
-//        initGuideView();
-//        // initSecurePanel();
-//        mSlidingPanelLayout = (SlidingPaneLayout) mEntireView.findViewById(R.id.sliding_layout);
-//        mSlidingPanelLayout.setPanelSlideListener(mSlideOutListener);
-//        mSlidingPanelLayout.setSliderFadeColor(Color.parseColor("#a0000000"));
-//        mSlidingPanelLayout.setOverhangVisiable(mNeedPassword);
-//        mSlidingPanelLayout.setShadowDrawableLeft(mContext.getResources().getDrawable(
-//                R.drawable.sliding_panel_layout_shadow));
-//        mSlidingBehindLayout = (FrameLayout) mEntireView.findViewById(R.id.sliding_behind_layout);
-//        mSlidingBehindBlurView = (ImageView) mEntireView.findViewById(R.id.sliding_behind_blur);
-//        mBatteryInfo = (TextView) mEntireView.findViewById(R.id.battery_info);
-//        mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
-//        mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
-//        mTemperature = (TextView) mEntireView.findViewById(R.id.lock_temperature);
-//        mLockDataView = (LinearLayout) mEntireView.findViewById(R.id.lock_date_view);
-//        mWeatherSummary = (TextView) mEntireView.findViewById(R.id.weather_summary);
-//        mDigitalClockView = (DigitalClocks) mEntireView.findViewById(R.id.digitalClock);
-//
-//        batteryView = (BatteryView) mEntireView.findViewById(R.id.batteryView);
-//        batteryView.setLevelListener(new ILevelCallBack() {
-//
-//            @Override
-//            public void onLevelChanged(int level) {
-//                mBatteryInfo.setText(level + "%");
-//            }
-//        });
-//        mSliderView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.locker_view);
-//        mSliderView.setPanelSlideListener(mSlideUpListener);
-//        if (!ViewConfiguration.get(mContext).hasPermanentMenuKey()) {// 存在虚拟按键
-//            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 110));
-//        } else {
-//            mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 80));
-//        }
-//        setDrawable();
-//        initCamera();
-//        initOnlinePaperPanel();
-//    }
+    // @SuppressLint("InflateParams")
+    // private void initLockScreenViews() {
+    // mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
+    // R.layout.pandora_lockscreen, null);
+    // initGuideView();
+    // // initSecurePanel();
+    // mSlidingPanelLayout = (SlidingPaneLayout)
+    // mEntireView.findViewById(R.id.sliding_layout);
+    // mSlidingPanelLayout.setPanelSlideListener(mSlideOutListener);
+    // mSlidingPanelLayout.setSliderFadeColor(Color.parseColor("#a0000000"));
+    // mSlidingPanelLayout.setOverhangVisiable(mNeedPassword);
+    // mSlidingPanelLayout.setShadowDrawableLeft(mContext.getResources().getDrawable(
+    // R.drawable.sliding_panel_layout_shadow));
+    // mSlidingBehindLayout = (FrameLayout)
+    // mEntireView.findViewById(R.id.sliding_behind_layout);
+    // mSlidingBehindBlurView = (ImageView)
+    // mEntireView.findViewById(R.id.sliding_behind_blur);
+    // mBatteryInfo = (TextView) mEntireView.findViewById(R.id.battery_info);
+    // mBoxView = (ViewGroup) mEntireView.findViewById(R.id.flipper_box);
+    // mDate = (TextView) mEntireView.findViewById(R.id.lock_date);
+    // mTemperature = (TextView)
+    // mEntireView.findViewById(R.id.lock_temperature);
+    // mLockDataView = (LinearLayout)
+    // mEntireView.findViewById(R.id.lock_date_view);
+    // mWeatherSummary = (TextView)
+    // mEntireView.findViewById(R.id.weather_summary);
+    // mDigitalClockView = (DigitalClocks)
+    // mEntireView.findViewById(R.id.digitalClock);
+    //
+    // batteryView = (BatteryView) mEntireView.findViewById(R.id.batteryView);
+    // batteryView.setLevelListener(new ILevelCallBack() {
+    //
+    // @Override
+    // public void onLevelChanged(int level) {
+    // mBatteryInfo.setText(level + "%");
+    // }
+    // });
+    // mSliderView = (SlidingUpPanelLayout)
+    // mEntireView.findViewById(R.id.locker_view);
+    // mSliderView.setPanelSlideListener(mSlideUpListener);
+    // if (!ViewConfiguration.get(mContext).hasPermanentMenuKey()) {// 存在虚拟按键
+    // mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 110));
+    // } else {
+    // mSliderView.setPanelHeight(BaseInfoHelper.dip2px(mContext, 80));
+    // }
+    // setDrawable();
+    // initCamera();
+    // initOnlinePaperPanel();
+    // }
 
     private SlidingUpPanelLayout.PanelSlideListener mSlideUpListener = new SlidingUpPanelLayout.PanelSlideListener() {
 
@@ -925,7 +932,7 @@ public class LockScreenManager {
         mCurTheme = ThemeManager.getCurrentTheme();
         final Drawable curWallpaper = mCurTheme.getCurDrawable();
         Drawable lockBg = LockerUtils.renderScreenLockerWallpaper(
-                ((ImageView)mEntireView.findViewById(R.id.lockerBg)), curWallpaper);
+                ((ImageView) mEntireView.findViewById(R.id.lockerBg)), curWallpaper);
 
         LockerUtils.renderScreenLockerBlurEffect(mBlurImageView, lockBg);
     }

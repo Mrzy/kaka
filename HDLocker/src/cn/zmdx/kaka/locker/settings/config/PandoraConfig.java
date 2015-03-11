@@ -81,6 +81,8 @@ public class PandoraConfig {
 
     private static final String KEY_HIDE_NOTIFY_CONTENT = "khnc";
 
+    private static final String KEY_LAST_CITY_NAME = "klcn";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -201,6 +203,16 @@ public class PandoraConfig {
         Editor editor = mSp.edit();
         editor.putString(KEY_LAST_WEATHER_INFO, info);
         editor.commit();
+    }
+
+    public void saveLastCityName(String cityName) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_LAST_CITY_NAME, cityName);
+        editor.commit();
+    }
+
+    public String getLastCityName() {
+        return mSp.getString(KEY_LAST_CITY_NAME, "北京");
     }
 
     public String getLastWeatherInfo() {
