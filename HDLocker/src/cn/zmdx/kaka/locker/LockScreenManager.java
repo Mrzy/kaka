@@ -145,8 +145,6 @@ public class LockScreenManager {
 
     private View mMainPage;
 
-    private ISmartWeatherCallback callback;
-
     private SlidingUpPanelLayout mSlidingUpView;
 
     private boolean mKeepBlurEffect = false;
@@ -171,7 +169,7 @@ public class LockScreenManager {
         mKeyguard = keyguard.newKeyguardLock("pandora");
         mPandoraConfig = PandoraConfig.newInstance(mContext);
         disableSystemLock();
-        processWeatherInfo();
+        // processWeatherInfo();
     }
 
     public void disableSystemLock() {
@@ -501,9 +499,10 @@ public class LockScreenManager {
         mContext.startActivity(intent);
     }
 
-    private void processWeatherInfo() {
-        final Long lastCheckTime = Long.parseLong(mPandoraConfig.getLastCheckWeatherTime());
-        if (System.currentTimeMillis() - lastCheckTime < PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
+    public void processWeatherInfo() {
+        long str2TimeMillis = SmartWeatherUtils.str2TimeMillis(mPandoraConfig
+                .getLastCheckWeatherTime());
+        if (System.currentTimeMillis() - str2TimeMillis < PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("检查天气条件不满足,使用缓存数据");
             }
@@ -513,12 +512,12 @@ public class LockScreenManager {
                     JSONObject weatherObj = new JSONObject(info);
                     SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
                             .parseWeatherJson(weatherObj);
-                    updateWeatherInfo(smartWeatherInfo);
+                    updateView(smartWeatherInfo);
                 } catch (Exception e) {
-                    updateWeatherInfo(null);
+                    updateView(null);
                 }
             } else {
-                updateWeatherInfo(null);
+                updateView(null);
             }
             return;
         }
@@ -541,17 +540,16 @@ public class LockScreenManager {
                 updateView(null);
             }
         });
-
     }
 
-    private void updateWeatherInfo(final SmartWeatherInfo smartWeatherInfo) {
-        HDBThreadUtils.runOnUi(new Runnable() {
-            @Override
-            public void run() {
-                updateView(smartWeatherInfo);
-            }
-        });
-    }
+    // private void updateWeatherInfo(final SmartWeatherInfo smartWeatherInfo) {
+    // HDBThreadUtils.runOnUi(new Runnable() {
+    // @Override
+    // public void run() {
+    // updateView(smartWeatherInfo);
+    // }
+    // });
+    // }
 
     private void updateView(SmartWeatherInfo smartWeatherInfo) {
         if (smartWeatherInfo == null) {
@@ -590,13 +588,13 @@ public class LockScreenManager {
             if (BuildConfig.DEBUG) {
                 Log.i(TAG, "--sunrise-->>" + sunrise + "," + "--sunset-->>" + sunset);
                 Log.i(TAG, "--sunriseAndSunset-->>" + sunriseAndSunset);
+                Log.i(TAG, "最后更新于" + SmartWeatherUtils.getHourFromString(forecastReleasedTime)
+                        + "点");
+                Log.i(TAG, "  " + daytimeCentTemp + "℃");
+                Log.i(TAG, "  " + daytimeWindForceNo + "级");
+                Log.i(TAG, "日出:" + sunrise);
+                Log.i(TAG, "日落:" + sunset);
             }
-            Log.i(TAG, "最后更新于" + SmartWeatherUtils.getHourFromString(forecastReleasedTime) + "点");
-
-            Log.i(TAG, "  " + daytimeCentTemp + "℃");
-            Log.i(TAG, "  " + daytimeWindForceNo + "级");
-            Log.i(TAG, "日出:" + sunrise);
-            Log.i(TAG, "日落:" + sunset);
         }
     }
 

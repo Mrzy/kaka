@@ -2,19 +2,18 @@
 package cn.zmdx.kaka.locker.weather.utils;
 
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import android.util.Base64;
-import android.util.Log;
 
 public class SmartWeatherUtils {
-    private static final String TAG = "SmartWeatherSecurityUtils";
-
     private static final String ENCODING = "UTF-8";
 
     private static final String MAC_NAME = "HmacSHA1";
@@ -48,21 +47,12 @@ public class SmartWeatherUtils {
         return mac.doFinal(text);
     }
 
-    /**
-     * 获取URL通过privatekey加密后的码
-     * 
-     * @param url
-     * @param privatekey
-     * @return
-     * @throws Exception
-     */
-    public static String getEncodedKey(String url, String privatekey) throws Exception {
+    private static String getEncodedKey(String url, String privatekey) throws Exception {
         String encodedKey = "";
         byte[] key_bytes = new byte[0];
         key_bytes = HmacSHA1Encrypt(url, privatekey);
         String base64encoderStr = Base64.encodeToString(key_bytes, Base64.NO_WRAP);
         encodedKey = URLEncoder.encode(base64encoderStr, ENCODING);
-        Log.i("EncryptKey", "--encodedKey--" + encodedKey);
         return encodedKey;
     }
 
@@ -76,7 +66,7 @@ public class SmartWeatherUtils {
         return sb.toString();
     }
 
-    public static String getPublicKeyUrl(String areaid) {
+    private static String getPublicKeyUrl(String areaid) {
         StringBuilder sb = new StringBuilder(BASE_WEATHER_URL);
         sb.append("areaid=" + areaid);
         sb.append("&type=" + TYPE);
@@ -92,20 +82,33 @@ public class SmartWeatherUtils {
         return formatDate;
     }
 
+    public static long str2TimeMillis(String dataStr) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
+        long timeMillis = 0;
+        try {
+            Date date = dateFormat.parse(dataStr);
+            timeMillis = date.getTime();
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return timeMillis;
+    }
+
     public static String getHourFromString(String str) {
         // 201503061100
         String hour = str.substring(8, 10);
         return hour;
     }
 
-    public static String getKey(String areaid) {
+    private static String getKey(String areaid) {
         String key = null;
         try {
-            key = SmartWeatherUtils.getEncodedKey(getPublicKeyUrl(areaid), PRIVATE_KEY);
+            key = getEncodedKey(getPublicKeyUrl(areaid), PRIVATE_KEY);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "--key--->>" + key);
         return key;
     }
 }

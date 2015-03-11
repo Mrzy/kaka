@@ -4,11 +4,11 @@ package cn.zmdx.kaka.locker.weather;
 import java.io.InputStream;
 import java.util.List;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.os.Handler;
 import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
@@ -16,7 +16,6 @@ import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.weather.PandoraLocationManager.ICityNameCallBack;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherCityInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureIndexInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
@@ -43,9 +42,11 @@ public class PandoraWeatherManager {
 
     private InputStream xmlStream;
 
-    private String areaId = null;
+    private String areaIdInXml = null;
 
     private String forecastReleasedTime;
+
+    private String areaId = null;
 
     private PandoraWeatherManager() {
     }
@@ -63,11 +64,39 @@ public class PandoraWeatherManager {
         void onFailure();
     }
 
+    /**
+     * 获取气象台天气接口
+     */
+    public interface IGetSmartWeatherCallback {
+        // 从本地获取天气
+        void getWeatherFormCache(final ISmartWeatherCallback callback);
+
+        // 从网络获取天气
+        void getCurrentSmartWeather(final ISmartWeatherCallback callback);
+    }
+
+    public void getWeatherFormCache(final ISmartWeatherCallback callback) {
+        HDBThreadUtils.runOnWorker(new Runnable() {
+            @Override
+            public void run() {
+                String lastWeatherInfo = PandoraConfig.newInstance(mContext).getLastWeatherInfo();
+                if (lastWeatherInfo != null) {
+                    try {
+                        JSONObject weatherObj = new JSONObject(lastWeatherInfo);
+                        updateView(weatherObj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+    }
+
     public void getCurrentSmartWeather(final ISmartWeatherCallback callback) {
         HDBThreadUtils.runOnWorker(new Runnable() {
             @Override
             public void run() {
-                getCurWeatherURL();
                 internalGetCurrentSmartWeather(callback);
             }
         });
@@ -91,7 +120,6 @@ public class PandoraWeatherManager {
                 } else {
                     SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
                             .parseWeatherJson(response);
-                    updateView(response);
                     PandoraConfig.newInstance(mContext).saveLastWeatherInfo(response.toString());
                     callback.onSuccess(smartWeatherInfo);
                 }
@@ -109,44 +137,21 @@ public class PandoraWeatherManager {
         RequestManager.getRequestQueue().add(request);
     }
 
-    private String getCityNameByLocation() {
-        PandoraLocationManager.getInstance(mContext).setCityNameListener(new ICityNameCallBack() {
-            @Override
-            public void onGetCityName(String cityName) {
-                if (cityName != null) {
-                    cityNameStr = cityName;
-                    PandoraLocationManager.getInstance(mContext).stopMonitor();
-                }
-                Log.e(TAG, "cityName: ---->" + cityName);
-            }
-        });
-        return cityNameStr;
-    }
-
     private String getCurWeatherURL() {
-        final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                String cityNameByLocation = getCityNameByLocation();
-                if (cityNameByLocation != null) {
-                    String areaid = getAreaId(cityNameByLocation);
-                    String key = SmartWeatherUtils.getKey(areaid);
-                    String date = SmartWeatherUtils.getDate();
-                    PandoraConfig.newInstance(mContext).saveLastCheckWeatherTime(date);
-                    String publicKeyUrl = SmartWeatherUtils.getPublicKeyUrl(areaid);
-                    weatherUrl = SmartWeatherUtils.getWeatherUrl(areaid);
-                    if (BuildConfig.DEBUG) {
-                        Log.i(TAG, "--areaid-->>" + areaid + "\n--weatherUrl-->>" + weatherUrl
-                                + "\n--publicKeyUrl-->>" + publicKeyUrl);
-                        Log.e(TAG, "cityNameByLocation: ---->" + cityNameByLocation);
-                    }
-                }
-                handler.postDelayed(this, 3000);
-            }
-        };
-        handler.postDelayed(runnable, 50);// 打开定时器，执行操作
-        handler.removeCallbacksAndMessages(this);// 关闭定时器处理
+        cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
+        if (cityNameStr != null) {
+            areaId = getAreaId(cityNameStr);
+        } else {
+            String lastCityName = PandoraConfig.newInstance(mContext).getLastCityName();
+            areaId = getAreaId(lastCityName);
+        }
+        String date = SmartWeatherUtils.getDate();
+        PandoraConfig.newInstance(mContext).saveLastCheckWeatherTime(date);
+        weatherUrl = SmartWeatherUtils.getWeatherUrl(areaId);
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "--areaid-->>" + areaId + "\n--weatherUrl-->>" + weatherUrl);
+            Log.e(TAG, "cityNameStr: ---->" + cityNameStr);
+        }
         return weatherUrl;
     }
 
@@ -155,12 +160,12 @@ public class PandoraWeatherManager {
         try {
             xmlStream = asset.open("cityInfo.xml");
             if (cityNameStr != null) {
-                areaId = XMLParserUtils.getAreaIdByCityName(xmlStream, cityNameStr);
+                areaIdInXml = XMLParserUtils.getAreaIdByCityName(xmlStream, cityNameStr);
             }
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        return areaId;
+        return areaIdInXml;
     }
 
     private void updateView(JSONObject weatherObj) {
@@ -196,16 +201,6 @@ public class PandoraWeatherManager {
             String[] split = sunriseAndSunset.split("\\|");//
             String sunrise = split[0];
             String sunset = split[1];
-            if (BuildConfig.DEBUG) {
-                Log.i(TAG, "--sunrise-->>" + sunrise + "," + "--sunset-->>" + sunset);
-                Log.i(TAG, "--sunriseAndSunset-->>" + sunriseAndSunset);
-            }
-            Log.i(TAG, "最后更新于" + SmartWeatherUtils.getHourFromString(forecastReleasedTime) + "点");
-
-            Log.i(TAG, "  " + daytimeCentTemp + "℃");
-            Log.i(TAG, "  " + daytimeWindForceNo + "级");
-            Log.i(TAG, "日出:" + sunrise);
-            Log.i(TAG, "日落:" + sunset);
         }
     }
 }

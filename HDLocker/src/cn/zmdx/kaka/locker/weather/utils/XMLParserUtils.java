@@ -7,9 +7,7 @@ import java.util.List;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import android.util.Log;
 import android.util.Xml;
-import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.weather.entity.CityInfo;
 
 /**
@@ -21,7 +19,6 @@ public class XMLParserUtils {
     public static List<CityInfo> pullParseXML(InputStream xmlStream) {
         List<CityInfo> cityInfos = null;
         CityInfo cityInfo = null;
-
         XmlPullParser parser = Xml.newPullParser();
         if (parser != null) {
             try {
@@ -59,16 +56,9 @@ public class XMLParserUtils {
         List<CityInfo> cityInfos = pullParseXML(xmlStream);
         for (CityInfo cityInfo : cityInfos) {
             String cityName = cityInfo.getCityName();
-            if (BuildConfig.DEBUG) {
-                Log.i("XMLParserUtils", "--------cityName--->>" + cityName);
-                Log.i("XMLParserUtils", "--------cityNameStr--->>" + cityNameStr);
-            }
             if (cityNameStr.contains(cityName)) {
                 String areaId = cityInfo.getAreaId();
                 result = areaId;
-                if (BuildConfig.DEBUG) {
-                    Log.i("XMLParserUtils", "--------result--->>" + result);
-                }
                 return result;
             }
         }
