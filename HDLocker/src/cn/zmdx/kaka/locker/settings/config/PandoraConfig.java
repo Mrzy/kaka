@@ -89,6 +89,8 @@ public class PandoraConfig {
 
     private static final String KEY_RANDOM_REPLACEMENT = "krp";
 
+    private static final String KEY_LAST_CITY_NAME = "klcn";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
