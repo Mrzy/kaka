@@ -4,25 +4,21 @@ package cn.zmdx.kaka.locker.content.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
-import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
-public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.ViewHolder> {
+public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mTextView;
@@ -51,39 +47,9 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
 
     private List<ServerImageData> mData;
 
-    public BeautyPageAdapter(Context context, List<ServerImageData> data) {
+    public GeneralNewsPageAdapter(Context context, List<ServerImageData> data) {
         mContext = context;
         mData = data;
-    }
-
-    @Override
-    public int getItemCount() {
-        return mData.size();
-    }
-
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        ServerImageData data = mData.get(position);
-        holder.mTextView.setText(data.getTitle());
-        Picasso picasso = Picasso.with(mContext);
-        picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
-        picasso.load(data.getUrl()).transform(new Transformation() {
-
-            @Override
-            public String key() {
-                return "matrix()";
-            }
-
-            @Override
-            public Bitmap transform(Bitmap source) {
-                int cardWidth = holder.mCardView.getWidth();
-                int imgWidth = source.getWidth();
-                int imgHeight = source.getHeight();
-                float scaleRate = (float) cardWidth / (float) imgWidth;
-                int newHeight = (int) (scaleRate * imgHeight);
-                return ImageUtils.scaleTo(source, cardWidth, newHeight, true);
-            }
-        }).into(holder.mImageView);
     }
 
     public interface OnItemClickListener {
@@ -97,9 +63,23 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup vg, final int position) {
+    public int getItemCount() {
+        return mData.size();
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        ServerImageData data = mData.get(position);
+        holder.mTextView.setText(data.getTitle());
+        Picasso picasso = Picasso.with(mContext);
+        picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
+        picasso.load(data.getUrl()).into(holder.mImageView);
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup vg, int position) {
         View view = LayoutInflater.from(vg.getContext()).inflate(
-                R.layout.news_page_beauty_item_layout, vg, false);
+                R.layout.news_page_general_item_layout, vg, false);
         ViewHolder vh = new ViewHolder(view);
         return vh;
     }

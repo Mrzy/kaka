@@ -27,7 +27,7 @@ public class UrlBuilder {
         }
     }
 
-    /**@deprecated
+    /**@deprecated 暂不可用
      * @param params url参数
      * @return
      */

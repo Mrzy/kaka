@@ -3,7 +3,7 @@ package cn.zmdx.kaka.locker;
 
 import android.app.Application;
 import android.content.Context;
-import cn.zmdx.kaka.locker.content.PandoraBoxDispatcher;
+import cn.zmdx.kaka.locker.crash.CrashHandler;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.utils.HDBEventSource;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -29,7 +29,11 @@ public class HDApplication extends Application {
                 LockSoundManager.initSoundPool();
             }
         });
-        PandoraBoxDispatcher.getInstance().pullData();
+        // PandoraBoxDispatcher.getInstance().pullData();
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(getApplicationContext());
+        crashHandler.setCollectDeviceInfo(false);
+        crashHandler.setWrite2File(false);
         super.onCreate();
     }
 }
