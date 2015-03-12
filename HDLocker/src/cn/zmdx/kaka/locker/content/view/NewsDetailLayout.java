@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.content.view;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -15,6 +16,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
@@ -30,6 +32,8 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
     private GestureDetector mGestureDetector;// 实例化手势对象
 
     private PandoraBoxManager mPbManager;
+
+    private ContentLoadingProgressBar mProgressBar;
 
     private static final int SWIPE_MIN_DISTANCE = BaseInfoHelper.dip2px(HDApplication.getContext(), 50);
 
@@ -55,9 +59,20 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
     private void init() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.news_detail_layout, this);
+        mProgressBar = (ContentLoadingProgressBar) view.findViewById(R.id.progress);
         mWebView = (WebView) view.findViewById(R.id.webView);
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setWebChromeClient(new WebChromeClient());
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                mProgressBar.show();
+                mProgressBar.setProgress(newProgress);
+                if (newProgress == 100) {
+                    mProgressBar.hide();
+                }
+                super.onProgressChanged(view, newProgress);
+            }
+        });
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.getSettings().setSupportZoom(true);
         mWebView.getSettings().setBuiltInZoomControls(false);

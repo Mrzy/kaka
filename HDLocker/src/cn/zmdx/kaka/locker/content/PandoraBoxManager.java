@@ -31,6 +31,7 @@ import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
@@ -122,15 +123,19 @@ public class PandoraBoxManager {
     private View initJokeView() {
         View view = mInflater.inflate(R.layout.pager_news_layout, null);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
-        final LinearLayoutManager llm = new LinearLayoutManager(mContext,
-                LinearLayoutManager.VERTICAL, false);
-        rv.setLayoutManager(llm);
+        rv.setVerticalFadingEdgeEnabled(true);
+        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
+        final StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2,
+                StaggeredGridLayoutManager.VERTICAL);
+        // sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        // sglm.offsetChildrenHorizontal(100);
+        rv.setLayoutManager(sglm);
         rv.setHasFixedSize(true);
 
         final List<ServerImageData> news = new ArrayList<ServerImageData>();
-        final GeneralNewsPageAdapter adapter = new GeneralNewsPageAdapter(mContext, news);
-        rv.setAdapter(adapter);
-        adapter.setOnItemClickListener(new GeneralNewsPageAdapter.OnItemClickListener() {
+        final BeautyPageAdapter adapter = new BeautyPageAdapter(mContext, news);
+
+        adapter.setOnItemClickListener(new BeautyPageAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClicked(View view, int position) {
@@ -141,9 +146,13 @@ public class PandoraBoxManager {
                 openDetailPage(ndl);
             }
         });
+        rv.setAdapter(adapter);
 
         final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
                 .findViewById(R.id.refreshLayout);
+
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news, refreshView, false);
+
         refreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
@@ -152,18 +161,19 @@ public class PandoraBoxManager {
                         false);
             }
         });
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news, refreshView, false);
 
         rv.setOnScrollListener(new OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItem = llm.findLastVisibleItemPosition();
-                int totalItemCount = llm.getItemCount();
+                int[] lastVisibleItem = ((StaggeredGridLayoutManager) sglm)
+                        .findLastVisibleItemPositions(null);
+                int lastItem = Math.max(lastVisibleItem[0], lastVisibleItem[1]);
+                int totalItemCount = sglm.getItemCount();
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
-                if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
+                if (lastItem >= totalItemCount - 4 && dy > 0) {
                     NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news,
                             refreshView, true);
                 }
@@ -175,6 +185,8 @@ public class PandoraBoxManager {
     private View initBeautyView() {
         View view = mInflater.inflate(R.layout.pager_news_layout, null);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
+        rv.setVerticalFadingEdgeEnabled(true);
+        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         final StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
         // sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
@@ -235,6 +247,8 @@ public class PandoraBoxManager {
     private View initMicroMediaView() {
         View view = mInflater.inflate(R.layout.pager_news_layout, null);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
+        rv.setVerticalFadingEdgeEnabled(true);
+        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         final LinearLayoutManager llm = new LinearLayoutManager(mContext,
                 LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(llm);
@@ -288,6 +302,8 @@ public class PandoraBoxManager {
     private View initGossipView() {
         View view = mInflater.inflate(R.layout.pager_news_layout, null);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
+        rv.setVerticalFadingEdgeEnabled(true);
+        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         final LinearLayoutManager llm = new LinearLayoutManager(mContext,
                 LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(llm);
@@ -341,6 +357,8 @@ public class PandoraBoxManager {
     private View initHotNewsView() {
         View view = mInflater.inflate(R.layout.pager_news_layout, null);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
+        rv.setVerticalFadingEdgeEnabled(true);
+        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         final LinearLayoutManager llm = new LinearLayoutManager(mContext,
                 LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(llm);
