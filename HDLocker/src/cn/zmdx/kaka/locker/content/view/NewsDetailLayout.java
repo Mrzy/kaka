@@ -1,10 +1,16 @@
 
 package cn.zmdx.kaka.locker.content.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -12,14 +18,23 @@ import android.widget.FrameLayout;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
-public class NewsDetailLayout extends FrameLayout implements View.OnClickListener{
+public class NewsDetailLayout extends FrameLayout implements View.OnClickListener, OnTouchListener,
+        OnGestureListener {
 
     private WebView mWebView;
 
     private View mBackBtn, mForwardBtn, mLikeBtn, mShareBtn;
 
+    private GestureDetector mGestureDetector;// 实例化手势对象
+
     private PandoraBoxManager mPbManager;
+
+    private static final int SWIPE_MIN_DISTANCE = BaseInfoHelper.dip2px(HDApplication.getContext(), 50);
+
+    private static final int SWIPE_THRESHOLD_VELOCITY = 2000;
+
     public NewsDetailLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
@@ -44,6 +59,11 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.setWebViewClient(new WebViewClient());
+        mWebView.getSettings().setSupportZoom(true);
+        mWebView.getSettings().setBuiltInZoomControls(false);
+        mWebView.setOnTouchListener(this);
+
+        mGestureDetector = new GestureDetector(getContext(), this);
 
         mBackBtn = view.findViewById(R.id.back);
         mForwardBtn = view.findViewById(R.id.forward);
@@ -60,20 +80,74 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         mWebView.loadUrl(url);
     }
 
+    private void back() {
+        if (mWebView.canGoBack()) {
+            mWebView.goBack();
+        } else {
+            animate().translationX(getWidth()).setDuration(300).setListener(new AnimatorListenerAdapter() {
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mPbManager.closeDetailPage();
+                }
+            }).start();
+        }
+    }
+
     @Override
     public void onClick(View v) {
         if (v == mBackBtn) {
-            if (mWebView.canGoBack()) {
-                mWebView.goBack();
-            } else {
-                mPbManager.closeDetailPage();
-            }
+            back();
         } else if (v == mForwardBtn) {
             mWebView.goForward();
         } else if (v == mLikeBtn) {
-            
+
         } else if (v == mShareBtn) {
-            
+
         }
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
+                && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+            back();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return mGestureDetector.onTouchEvent(event);
     }
 }

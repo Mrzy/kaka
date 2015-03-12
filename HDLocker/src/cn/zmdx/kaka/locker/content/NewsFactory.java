@@ -75,16 +75,9 @@ public class NewsFactory {
             return;
         }
 
-        String lastModified = null;
-        if (older) {
-            // 如果需要加载更早的数据，获得当前数据集中的最久远的时间作为参数传给服务器
-            lastModified = getLastModified(data);
-        } else {
-            // 否则认为要加载最新的数据，值传0
-            lastModified = "0";
-        }
+        String lastModified = getLastModified(data, older);
         JsonObjectRequest request = null;
-        final String url = getUrl(type, lastModified);
+        final String url = getUrl(type, lastModified, older);
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("加载新闻url:" + url);
         }
@@ -126,23 +119,33 @@ public class NewsFactory {
         RequestManager.getRequestQueue().add(request);
     }
 
-    private static String getUrl(int type, String lastModified) {
-        return UrlBuilder.getBaseUrl() + "locker!queryDataImgTableNew.action?dataType=" + type
-                + "&lastModified=" + lastModified;
+    private static String getUrl(int type, String lastModified, boolean older) {
+        final String flag = older ? "1" : "0";
+        return UrlBuilder.getBaseUrl() + "locker!queryDataImgTableNew.action?type=" + type
+                + "&lastModified=" + lastModified + "&flag=" + flag;
     }
 
-    private static String getLastModified(List<ServerImageData> data) {
-        long oldestDate = System.currentTimeMillis();
+    private static String getLastModified(List<ServerImageData> data, boolean older) {
+        long time = 0;
+        if (older) {
+            time = System.currentTimeMillis();
+        }
+
         for (ServerImageData sid : data) {
             final String modifyTime = sid.getCollectTime();
             if (!TextUtils.isEmpty(modifyTime)) {
                 long lm = Long.valueOf(modifyTime);
-                if (lm < oldestDate) {
-                    oldestDate = lm;
+                if (older) {
+                    if (lm < time) {
+                        time = lm;
+                    }
+                } else {
+                    if (lm > time) {
+                        time = lm;
+                    }
                 }
             }
         }
-        return String.valueOf(oldestDate);
+        return String.valueOf(time);
     }
-
 }

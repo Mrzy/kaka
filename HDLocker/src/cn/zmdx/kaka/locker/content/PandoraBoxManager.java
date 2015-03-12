@@ -4,6 +4,8 @@ package cn.zmdx.kaka.locker.content;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -410,9 +412,10 @@ public class PandoraBoxManager {
         mDetailLayout.removeAllViews();
         mDetailLayout.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
+        view.setTranslationX(mDetailLayout.getWidth());
         mDetailLayout.bringChildToFront(view);
         mDetailLayout.setVisibility(View.VISIBLE);
-        // TODO add animator
+        view.animate().translationX(0).setDuration(300).start();
     }
 
     public void closeDetailPage() {
