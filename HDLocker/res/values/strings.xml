@@ -27,14 +27,15 @@
     <string name="setting_about_cooperation">商务合作：13910064771</string>
 
     <!-- lock_pattern -->
-    <string name="lock_pattern_prompt">绘制解锁图案，请至少连接四个点</string>
+    <string name="lock_pattern_prompt">绘制解锁图案</string>
+    <string name="lock_pattern_verify_prompt">绘制当前解锁图案</string>
     <string name="lock_pattern_complete">完成后请松开手指</string>
-    <string name="lock_pattern_limit_prompt">至少需连接四个点，请重试</string>
+    <string name="lock_pattern_limit_prompt">至少需连接四个点</string>
     <string name="lock_pattern_new_pattern">您的新解锁图案</string>
-    <string name="lock_pattern_error">请重试</string>
+    <string name="lock_pattern_error">两次图案不一致，请重试绘制</string>
     <string name="lock_pattern_save_prompt">已记录</string>
     <string name="lock_pattern_confirmation_prompt">再次绘制图案进行确定</string>
-    <string name="lock_pattern_verify_fail">验证失败，请重试!</string>
+    <string name="lock_pattern_verify_fail">图案不匹配，请重新绘制</string>
 
     <!-- guide -->
     <string name="guide_button_text">前往初始设置</string>
@@ -199,5 +200,41 @@
     <string name="pandora_news_classify_micro_choice">微精选</string>
     <string name="pandora_news_classify_beauty">美女</string>
     <string name="pandora_news_classify_funny">搞笑</string>
+    <string name="pandora_setting_general">通用</string>
+    <string name="pandora_setting_notify">通知</string>
+    <string name="pandora_setting_password">密码</string>
+    <string name="pandora_setting_wallpaper">壁纸</string>
+    
+    <string name="pandora_setting_general_pandoralocker">开启潘多拉锁屏</string>
+    <string name="pandora_setting_general_close_system_lock">关闭系统锁屏</string>
+    <string name="pandora_setting_general_open_lock_sound">开启锁屏声音</string>
+    <string name="pandora_setting_general_show_notify">显示通知栏</string>
+    <string name="pandora_setting_general_xiaomi_setting">小米用户专用设置</string>
+    <string name="pandora_setting_general_allow_floating_window">允许显示悬浮窗</string>
+    <string name="pandora_setting_general_trust">信任程序和允许自动启动</string>
+    <string name="pandora_setting_general_faq">常见问题</string>
+    <string name="pandora_setting_general_feedback">意见反馈</string>
+    <string name="pandora_setting_general_checkout_new_version">检查新版本</string>
+    <string name="pandora_setting_general_about">关于潘多拉</string>
+    <string name="pandora_setting_general_evaluation">评价一下我们</string>
+    
+    <string name="pandora_setting_notify_open_permission">打开通知权限</string>
+    <string name="pandora_setting_notify_open_notification">开启通知提醒</string>
+    <string name="pandora_setting_notify_hide_content">隐藏通知内容</string>
+    <string name="pandora_setting_notify_manage">通知管理</string>
+    
+    <string name="pandora_setting_password_none">无密码</string>
+    <string name="pandora_setting_password_lock_pattern">手势密码</string>
+    <string name="pandora_setting_password_number_lock">数字密码</string>
+    <string name="pandora_setting_password_pure">纯净</string>
+    <string name="pandora_setting_password_neon">霓虹</string>
+    <string name="pandora_setting_password_florescence">花信</string>
+    <string name="pandora_setting_password_touch">格调</string>
+    <string name="pandora_setting_password_deep_sea">深海</string>
+    <string name="pandora_setting_password_midsummer">盛夏</string>
+    
+    <string name="pandora_setting_open_gravity_sensor">开启重力感应壁纸</string>
+    <string name="pandora_setting_replacement_wallpaper">随机更换壁纸</string>
+    <string name="pandora_setting_local_wallpaper">使用本地壁纸</string>
 
 </resources>

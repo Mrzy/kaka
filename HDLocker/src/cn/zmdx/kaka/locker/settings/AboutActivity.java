@@ -19,6 +19,8 @@ public class AboutActivity extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_about_us);
+        getSupportActionBar().setBackgroundDrawable(
+                getResources().getDrawable(R.drawable.action_bar_bg));
         initView();
     }
 

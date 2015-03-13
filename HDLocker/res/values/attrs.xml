@@ -36,11 +36,27 @@
         </attr>
     </declare-styleable>
     <declare-styleable name="SwitchButton">
-        <attr name="frameDrawable" format="reference|color" />
-        <attr name="stateDrawable" format="reference|color" />
-        <attr name="stateMaskDrawable" format="reference|color" />
-        <attr name="sliderDrawable" format="reference|color" />
-        <attr name="withTextInterval" format="dimension" />
+        <attr name="onDrawable" format="reference" />
+        <attr name="offDrawable" format="reference" />
+        <attr name="thumbDrawable" format="reference" />
+        <attr name="thumb_margin" format="dimension|reference" />
+        <attr name="thumb_marginTop" format="dimension|reference" />
+        <attr name="thumb_marginBottom" format="dimension|reference" />
+        <attr name="thumb_marginLeft" format="dimension|reference" />
+        <attr name="thumb_marginRight" format="dimension|reference" />
+        <attr name="thumb_width" format="dimension|reference" />
+        <attr name="thumb_height" format="dimension|reference" />
+        <attr name="onColor" format="color|reference" />
+        <attr name="offColor" format="color|reference" />
+        <attr name="thumbColor" format="color|reference" />
+        <attr name="thumbPressedColor" format="color|reference" />
+        <attr name="animationVelocity" format="integer" />
+        <attr name="radius" format="integer" />
+        <attr name="measureFactor" format="float" />
+        <attr name="insetLeft" format="dimension|reference" />
+        <attr name="insetRight" format="dimension|reference" />
+        <attr name="insetTop" format="dimension|reference" />
+        <attr name="insetBottom" format="dimension|reference" />
     </declare-styleable>
     <declare-styleable name="DigialClocks">
         <attr name="format" format="integer" />
@@ -151,6 +167,7 @@
         <attr name="pstsUnderlineColor" format="color" />
         <attr name="pstsDividerColor" format="color" />
         <attr name="pstsIndicatorHeight" format="dimension" />
+        <attr name="pstsIndicatorPadding" format="dimension" />
         <attr name="pstsUnderlineHeight" format="dimension" />
         <attr name="pstsDividerPadding" format="dimension" />
         <attr name="pstsTabPaddingLeftRight" format="dimension" />

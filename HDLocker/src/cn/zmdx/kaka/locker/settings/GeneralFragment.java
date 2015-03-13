@@ -12,13 +12,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.initialization.InitializationManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.widget.BaseLinearLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -27,6 +27,7 @@ import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
 
 public class GeneralFragment extends Fragment implements OnCheckedChangeListener, OnClickListener {
+    
     private View mEntireView;
 
     private SwitchButton mPandoraLockerSButton;
@@ -37,19 +38,19 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
     private SwitchButton mOpenSoundSButton;
 
-    private BaseLinearLayout mCloseSystemLock;
+    private LinearLayout mCloseSystemLock;
 
-    private BaseLinearLayout mFloatingWindow;
+    private LinearLayout mFloatingWindow;
 
-    private BaseLinearLayout mTrust;
+    private LinearLayout mTrust;
 
-    private BaseLinearLayout mFAQ;
+    private LinearLayout mFAQ;
 
-    private BaseLinearLayout mFeedback;
+    private LinearLayout mFeedback;
 
-    private BaseLinearLayout mCheckNewVersion;
+    private LinearLayout mCheckNewVersion;
 
-    private BaseLinearLayout mAboutPandora;
+    private LinearLayout mAboutPandora;
 
     private Context mContext;
 
@@ -96,23 +97,23 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
         initSettingXiaomi();
 
-        mFAQ = (BaseLinearLayout) mEntireView.findViewById(R.id.setting_faq_item);
+        mFAQ = (LinearLayout) mEntireView.findViewById(R.id.setting_faq_item);
         mFAQ.setOnClickListener(this);
 
-        mFeedback = (BaseLinearLayout) mEntireView.findViewById(R.id.setting_feedback_prompt);
+        mFeedback = (LinearLayout) mEntireView.findViewById(R.id.setting_feedback_prompt);
         mFeedback.setOnClickListener(this);
 
-        mCheckNewVersion = (BaseLinearLayout) mEntireView
+        mCheckNewVersion = (LinearLayout) mEntireView
                 .findViewById(R.id.setting_checkout_new_version_prompt);
         mCheckNewVersion.setOnClickListener(this);
 
-        mAboutPandora = (BaseLinearLayout) mEntireView
+        mAboutPandora = (LinearLayout) mEntireView
                 .findViewById(R.id.setting_about_pandora_item);
         mAboutPandora.setOnClickListener(this);
     }
 
     private void initSettingMeizu() {
-        mCloseSystemLock = (BaseLinearLayout) mEntireView
+        mCloseSystemLock = (LinearLayout) mEntireView
                 .findViewById(R.id.setting_close_system_lock_item);
         if (isMeizu) {
             mCloseSystemLock.setVisibility(View.GONE);
@@ -124,11 +125,11 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
     private void initSettingXiaomi() {
         if (PandoraUtils.isMIUI(mContext)) {
             mEntireView.findViewById(R.id.setting_xiaomi).setVisibility(View.VISIBLE);
-            mFloatingWindow = (BaseLinearLayout) mEntireView
+            mFloatingWindow = (LinearLayout) mEntireView
                     .findViewById(R.id.setting_allow_floating_window_item);
             mFloatingWindow.setOnClickListener(this);
 
-            mTrust = (BaseLinearLayout) mEntireView.findViewById(R.id.setting_trust_item);
+            mTrust = (LinearLayout) mEntireView.findViewById(R.id.setting_trust_item);
             mTrust.setOnClickListener(this);
         }
     }

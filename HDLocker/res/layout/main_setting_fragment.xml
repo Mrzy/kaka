@@ -9,10 +9,12 @@
         android:id="@+id/setting_pats"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:background="@drawable/strip_tab_background"
+        android:background="@color/setting_background_color"
         psts:pstsDividerColor="@android:color/transparent"
-        psts:pstsIndicatorColor="#919191"
+        psts:pstsIndicatorColor="@color/setting_psts_indicator_color"
         psts:pstsIndicatorHeight="2dp"
+        psts:pstsIndicatorPadding="15dp"
+        psts:pstsTabBackground="@android:color/transparent"
         psts:pstsUnderlineColor="@android:color/transparent" />
 
     <cn.zmdx.kaka.locker.widget.ViewPagerCompat

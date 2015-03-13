@@ -6,14 +6,16 @@ import java.util.List;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.pattern.LockPatternManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.utils.LockPatternUtils;
 import cn.zmdx.kaka.locker.widget.LockPatternView.Cell;
 import cn.zmdx.kaka.locker.widget.LockPatternView.DisplayMode;
 import cn.zmdx.kaka.locker.widget.LockPatternView.OnPatternListener;
@@ -54,6 +56,14 @@ public class PandoraLockPatternView extends LinearLayout {
 
     private ILockPatternListener mLockPatternListener;
 
+    public static double SCALE_LOCK_PATTERN_WIDTH = 0.8;
+
+    public static double SCALE_LOCK_PATTERN_PADDING = 0.05;
+
+    private int mColorStyle;
+
+    private boolean isLockScreen;
+
     public interface IVerifyListener {
         void onVerifySuccess();
     }
@@ -67,29 +77,49 @@ public class PandoraLockPatternView extends LinearLayout {
      * @param type
      * @param lockPatternListener
      */
-    public PandoraLockPatternView(Context context, int type,
+    public PandoraLockPatternView(Context context, int type, int colorStyle,
             ILockPatternListener lockPatternListener) {
         super(context);
         mContext = context;
         mLockPatternListener = lockPatternListener;
         mLockPatternType = type;
-        init();
+        mColorStyle = colorStyle;
+        init(mLockPatternType == TYPE_LOCK_PATTERN_CLOSE ? true : false);
     }
 
-    public PandoraLockPatternView(Context context, int type, IVerifyListener verifyListener) {
+    public PandoraLockPatternView(Context context, int type, int colorStyle,
+            IVerifyListener verifyListener, boolean isScreen) {
         super(context);
         mContext = context;
         mVerifyListener = verifyListener;
         mLockPatternType = type;
-        init();
+        mColorStyle = isScreen == true ? LockPatternManager.LOCK_PATTERN_STYLE_White : colorStyle;
+        isLockScreen = isScreen;
+        init(true);
     }
 
-    private void init() {
+    private void init(boolean isVerify) {
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.pandora_lock_pattern, null);
+        int padding = (int) (SCALE_LOCK_PATTERN_PADDING * BaseInfoHelper.getRealWidth(mContext));
+        mRootView.setPadding(padding, 0, padding, 0);
         addView(mRootView);
-
         mPromptTextView = (TextView) findViewById(R.id.pandora_lock_pattern_prompt);
+        if (isVerify) {
+            mPromptTextView.setText(getResources().getString(R.string.lock_pattern_verify_prompt));
+        }
+        if (isLockScreen) {
+            mPromptTextView.setTextColor(getResources().getColor(R.color.white));
+        }
         mLockPatternView = (LockPatternView) findViewById(R.id.pandora_lock_pattern);
+        mLockPatternView.setColorStyle(mColorStyle);
+        mLockPatternView.setVisibility(View.VISIBLE);
+
+        int screenWidth = BaseInfoHelper.getRealWidth(mContext);
+        int lockPatternWidth = (int) (screenWidth * SCALE_LOCK_PATTERN_WIDTH);
+        ViewGroup.LayoutParams params = mLockPatternView.getLayoutParams();
+        params.width = lockPatternWidth;
+        params.height = lockPatternWidth;
+        mLockPatternView.setLayoutParams(params);
         mLockPatternView.setOnPatternListener(mOnPatternListener);
 
     }
@@ -151,10 +181,11 @@ public class PandoraLockPatternView extends LinearLayout {
         onPatternDetectedTimes = onPatternDetectedTimes + 1;
         if (isPatternDetectedForConfirmation(onPatternDetectedTimes)) {
             // TODO success to set lock pattern
-            String md5Pattern = HDBHashUtils
-                    .getStringMD5(LockPatternUtils.patternToString(pattern));
+            String md5Pattern = HDBHashUtils.getStringMD5(LockPatternManager.getInstance()
+                    .patternToString(pattern));
             saveLockPattern(md5Pattern);
             setUnLockType(KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN);
+            setLockPatternStyle();
             if (null != mLockPatternListener) {
                 mLockPatternListener.onPatternDetected(TYPE_LOCK_PATTERN_OPEN, true);
             }
@@ -166,7 +197,7 @@ public class PandoraLockPatternView extends LinearLayout {
 
             @Override
             public void run() {
-                saveLockPattern(LockPatternUtils.patternToString(pattern));
+                saveLockPattern(LockPatternManager.getInstance().patternToString(pattern));
                 setPromptString(mContext.getResources().getString(
                         R.string.lock_pattern_confirmation_prompt));
                 mLockPatternView.clearPattern();
@@ -189,7 +220,7 @@ public class PandoraLockPatternView extends LinearLayout {
 
     private boolean checkPattern(List<Cell> pattern) {
         String stored = getLockPaternString();
-        String patternString = LockPatternUtils.patternToString(pattern);
+        String patternString = LockPatternManager.getInstance().patternToString(pattern);
         switch (mLockPatternType) {
             case TYPE_LOCK_PATTERN_OPEN:
                 if (!stored.equals(null)) {
@@ -234,7 +265,7 @@ public class PandoraLockPatternView extends LinearLayout {
             }
         } else {
             mLockPatternView.setDisplayMode(DisplayMode.Wrong);
-            setPromptString(mContext.getResources().getString(R.string.lock_pattern_error));
+            setPromptString(mContext.getResources().getString(R.string.lock_pattern_verify_fail));
             HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
                 @Override
@@ -252,6 +283,10 @@ public class PandoraLockPatternView extends LinearLayout {
 
     private void setUnLockType(int type) {
         PandoraConfig.newInstance(mContext).saveUnlockType(type);
+    }
+
+    private void setLockPatternStyle() {
+        PandoraConfig.newInstance(mContext).saveLockPatternStyle(mColorStyle);
     }
 
     private void verifyLockPattern(List<Cell> pattern) {
@@ -291,9 +326,10 @@ public class PandoraLockPatternView extends LinearLayout {
         // TODO Auto-generated method stub
         return mPromptTextView;
     }
-    public LockPatternView getLockPatternView(){
+
+    public LockPatternView getLockPatternView() {
         return mLockPatternView;
-        
+
     }
 
 }

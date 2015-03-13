@@ -2,19 +2,24 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="setting_switch">
-        <item name="android:paddingLeft">0dp</item>
-        <item name="android:paddingTop">0dp</item>
-        <item name="android:paddingRight">10dp</item>
-        <item name="android:paddingBottom">0dp</item>
-        <item name="android:minHeight">52dp</item>
-        <item name="android:drawablePadding">2dp</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginRight">22dp</item>
     </style>
 
     <style name="setting_textview">
-        <item name="android:textColor">@color/setting_textview_color</item>
+        <item name="android:textColor">@color/setting_text_normal_color</item>
         <item name="android:textSize">17sp</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">27dp</item>
+        <item name="android:clickable">false</item>
+    </style>
+    
+    <style name="setting_textview_subtitle">
+        <item name="android:textColor">@color/setting_text_grey_color</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">27dp</item>
+        <item name="android:clickable">false</item>
     </style>
 
     <style name="locker_password_dialog_theme" parent="@android:style/Theme.Dialog">

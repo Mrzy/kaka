@@ -20,7 +20,6 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
-import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.widget.BaseButton;
 import cn.zmdx.kaka.locker.widget.ProgressBarMaterial;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
@@ -44,17 +43,26 @@ public class WallpaperDetailView extends LinearLayout {
 
     private BaseButton mApplyButton;
 
-    private ServerOnlineWallpaper mData;
+    // private ServerOnlineWallpaper mData;
+
+    private String mImageUrl;
+
+    private String mDesc;
+
+    private boolean isLockScreen;
 
     public interface IWallpaperDetailListener {
         void onBack();
+
+        void onApplyWallpaper();
     }
 
     private IWallpaperDetailListener mListener;
 
-    public WallpaperDetailView(Context context) {
+    public WallpaperDetailView(Context context, boolean isScreen) {
         super(context);
         mContext = context;
+        isLockScreen = isScreen;
         initView();
     }
 
@@ -82,7 +90,7 @@ public class WallpaperDetailView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 OnlineWallpaperManager.getInstance().mkDirs();
-                String md5ImageUrl = HDBHashUtils.getStringMD5(mData.getImageURL());
+                String md5ImageUrl = HDBHashUtils.getStringMD5(mImageUrl);
                 OnlineWallpaperManager.getInstance().saveThemeId(mContext,
                         ThemeManager.THEME_ID_ONLINE);
                 Bitmap previewBitmap = ImageLoaderManager.getOnlineImageCache(mContext).getBitmap(
@@ -90,22 +98,25 @@ public class WallpaperDetailView extends LinearLayout {
                 ThemeManager.addBitmapToCache(previewBitmap);
                 OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(mContext,
                         md5ImageUrl);
-                PandoraConfig.newInstance(mContext).saveOnlineWallPaperDesc(md5ImageUrl,
-                        mData.getDesc());
+                PandoraConfig.newInstance(mContext).saveOnlineWallPaperDesc(md5ImageUrl, mDesc);
                 ImageUtils.saveImageToFile(previewBitmap, OnlineWallpaperManager.getInstance()
                         .getFilePath(md5ImageUrl));
                 UmengCustomEventManager.statisticalApplyLockScreenWallpaperTimes();
                 if (null != mListener) {
-                    mListener.onBack();
-                    LockScreenManager.getInstance().initWallpaper();
-                    LockScreenManager.getInstance().collapseNewsPanel();
+                    mListener.onApplyWallpaper();
+                    if (isLockScreen) {
+                        LockScreenManager.getInstance().initWallpaper();
+                        LockScreenManager.getInstance().collapseNewsPanel();
+                    }
                 }
             }
         });
     }
 
-    public void setData(ServerOnlineWallpaper serverOnlineWallpaper) {
-        mData = serverOnlineWallpaper;
+    public void setData(String imageUrl, String desc) {
+        // mData = serverOnlineWallpaper;
+        mImageUrl = imageUrl;
+        mDesc = desc;
         downloadImage();
     }
 
@@ -130,7 +141,7 @@ public class WallpaperDetailView extends LinearLayout {
 
     private void downloadImage() {
         Bitmap cacheBitmap = ImageLoaderManager.getOnlineImageCache(mContext).getBitmap(
-                HDBHashUtils.getStringMD5(mData.getImageURL()));
+                HDBHashUtils.getStringMD5(mImageUrl));
         if (null == cacheBitmap) {
             if (!PandoraConfig.newInstance(mContext).is3G4GNetworkOn()
                     && !HDBNetworkState.isWifiNetwork()) {
@@ -139,29 +150,26 @@ public class WallpaperDetailView extends LinearLayout {
                 return;
             }
             showView(true);
-            ByteArrayRequest mRequest = new ByteArrayRequest(mData.getImageURL(),
-                    new Listener<byte[]>() {
+            ByteArrayRequest mRequest = new ByteArrayRequest(mImageUrl, new Listener<byte[]>() {
 
-                        @Override
-                        public void onResponse(byte[] data) {
-                            Bitmap previewBitmap = doParse(data,
-                                    BaseInfoHelper.getRealWidth(mContext),
-                                    BaseInfoHelper.getRealHeight(mContext));
-                            if (null != previewBitmap) {
-                                setImageBitmap(previewBitmap);
-                                ImageLoaderManager.getOnlineImageCache(mContext).putBitmap(
-                                        HDBHashUtils.getStringMD5(mData.getImageURL()),
-                                        previewBitmap);
-                            }
-                            showView(false);
-                        }
-                    }, new ErrorListener() {
+                @Override
+                public void onResponse(byte[] data) {
+                    Bitmap previewBitmap = doParse(data, BaseInfoHelper.getRealWidth(mContext),
+                            BaseInfoHelper.getRealHeight(mContext));
+                    if (null != previewBitmap) {
+                        setImageBitmap(previewBitmap);
+                        ImageLoaderManager.getOnlineImageCache(mContext).putBitmap(
+                                HDBHashUtils.getStringMD5(mImageUrl), previewBitmap);
+                    }
+                    showView(false);
+                }
+            }, new ErrorListener() {
 
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            mLoadingView.setVisibility(View.GONE);
-                        }
-                    });
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    mLoadingView.setVisibility(View.GONE);
+                }
+            });
             mRequest.setShouldCache(false);
             RequestManager.getRequestQueue().add(mRequest);
         } else {

@@ -36,7 +36,7 @@ public class ServerOnlineWallpaperManager {
 
         private String name;
 
-        private int publishDATE;
+        private Long publishDATE;
 
         private String imageNAME;
 
@@ -59,7 +59,7 @@ public class ServerOnlineWallpaperManager {
             desc = jsonObject.optString("p_desc");
             thumbURL = jsonObject.optString("thumbURL");
             name = jsonObject.optString("p_name");
-            publishDATE = jsonObject.optInt("publishDATE", 0);
+            publishDATE = jsonObject.optLong("publishDATE", 0);
             imageNAME = jsonObject.optString("imageNAME");
             imageURL = jsonObject.optString("imageURL");
             imageEXT = jsonObject.optString("imageEXT");
@@ -105,11 +105,11 @@ public class ServerOnlineWallpaperManager {
             this.name = name;
         }
 
-        public int getPublishDATE() {
+        public long getPublishDATE() {
             return publishDATE;
         }
 
-        public void setPublishDATE(int publishDATE) {
+        public void setPublishDATE(long publishDATE) {
             this.publishDATE = publishDATE;
         }
 
