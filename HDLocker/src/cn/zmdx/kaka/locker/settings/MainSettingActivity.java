@@ -67,6 +67,8 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         // UmengUpdateAgent.silentUpdate(this);
         setContentView(R.layout.main_setting_activity);
 
+        getSupportActionBar().setBackgroundDrawable(
+                getResources().getDrawable(R.drawable.action_bar_bg));
         // getWindow().getAttributes().flags |=
         // LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         getSupportFragmentManager().beginTransaction().add(R.id.content, new MainSettingFragment())

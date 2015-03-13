@@ -35,6 +35,7 @@ import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
+import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
@@ -424,7 +425,7 @@ public class PandoraBoxManager {
     }
 
     private View initWallPaperView() {
-        OnlineWallpaperView view = new OnlineWallpaperView(mContext);
+        OnlineWallpaperView view = new OnlineWallpaperView(mContext, true);
         view.setOnlineWallpaperListener(new IOnlineWallpaperListener() {
 
             @Override
@@ -435,6 +436,11 @@ public class PandoraBoxManager {
             @Override
             public void onCloseDetailPage() {
                 closeDetailPage();
+            }
+
+            @Override
+            public void onGoToDetailClick(ServerOnlineWallpaper item) {
+                
             }
         });
         return view;

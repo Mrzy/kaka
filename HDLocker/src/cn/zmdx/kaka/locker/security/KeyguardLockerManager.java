@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.security;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
+import cn.zmdx.kaka.locker.pattern.LockPatternManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.widget.PandoraLockPatternView;
 import cn.zmdx.kaka.locker.widget.PandoraNumberLockView;
@@ -39,15 +40,17 @@ public class KeyguardLockerManager {
     }
 
     private View makeGestureLockView(final IUnlockListener listener) {
+        int style = PandoraConfig.newInstance(mContext).getLockPatternStyle(
+                LockPatternManager.LOCK_PATTERN_STYLE_PURE);
         PandoraLockPatternView lockPatternView = new PandoraLockPatternView(mContext,
-                PandoraLockPatternView.TYPE_LOCK_PATTERN_VERIFY,
+                PandoraLockPatternView.TYPE_LOCK_PATTERN_VERIFY, style,
                 new PandoraLockPatternView.IVerifyListener() {
 
                     @Override
                     public void onVerifySuccess() {
                         listener.onSuccess();
                     }
-                });
+                }, true);
         lockPatternView.setGravity(Gravity.CENTER);
         return lockPatternView;
     }
@@ -62,7 +65,7 @@ public class KeyguardLockerManager {
                         listener.onSuccess();
                     }
 
-                });
+                }, true);
         numberLockView.setGravity(Gravity.CENTER);
         return numberLockView;
     }

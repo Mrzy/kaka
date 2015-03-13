@@ -1,563 +1,657 @@
 
 package cn.zmdx.kaka.locker.widget;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
+import android.graphics.Paint.Style;
+import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Region;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.DrawableContainer;
-import android.os.Build;
-import android.text.TextUtils;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.CompoundButton;
-import android.widget.Scroller;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.widget.AnimationController.OnAnimateListener;
 
 /**
- * 开关按钮
+ * SwitchButton widget which is easy to use
+ * 
+ * @version 1.2
+ * @author kyleduo
+ * @since 2014-09-24
  */
+
 public class SwitchButton extends CompoundButton {
-    private static final int TOUCH_MODE_IDLE = 0;
+    private static boolean SHOW_RECT = false;
 
-    private static final int TOUCH_MODE_DOWN = 1;
+    private boolean mIsChecked = false;
 
-    private static final int TOUCH_MODE_DRAGGING = 2;
+    private SwitchButtonUtil mConf;
 
-    private int buttonLeft; // 按钮在画布上的X坐标
+    /**
+     * zone for thumb to move inside
+     */
+    private Rect mSafeZone;
 
-    private int buttonTop; // 按钮在画布上的Y坐标
+    /**
+     * zone for background
+     */
+    private Rect mBackZone;
 
-    private int tempSlideX = 0; // X轴当前坐标，用于动态绘制图片显示坐标，实现滑动效果
+    private Rect mThumbZone;
 
-    private int tempMinSlideX = 0; // X轴最小坐标，用于防止往左边滑动时超出范围
+    private RectF mSaveLayerZone;
 
-    private int tempMaxSlideX = 0; // X轴最大坐标，用于防止往右边滑动时超出范围
+    private AnimationController mAnimationController;
 
-    private int tempTotalSlideDistance; // 滑动距离，用于记录每次滑动的距离，在滑动结束后根据距离判断是否切换状态或者回滚
+    private SBAnimationListener mOnAnimateListener = new SBAnimationListener();
 
-    private int duration = 200; // 动画持续时间
+    private boolean isAnimating = false;
 
-    private int touchMode; // 触摸模式，用来在处理滑动事件的时候区分操作
+    private float mStartX, mStartY, mLastX;
 
-    private int touchSlop;
+    private float mCenterPos;
 
-    private int withTextInterval = 16; // 文字和按钮之间的间距
+    private int mTouchSlop;
 
-    private float touchX; // 记录上次触摸坐标，用于计算滑动距离
+    private int mClickTimeout;
 
-    private float minChangeDistanceScale = 0.2f; // 有效距离比例，例如按钮宽度为100，比例为0.3，那么只有当滑动距离大于等于(100*0.3)才会切换状态，否则就回滚
+    private Paint mRectPaint;
 
-    private Paint paint; // 画笔，用来绘制遮罩效果
+    private Rect mBounds = null;
 
-    private RectF buttonRectF; // 按钮的位置
+    private OnCheckedChangeListener mOnCheckedChangeListener;
 
-    private Drawable frameDrawable; // 框架层图片
+    @SuppressLint("NewApi")
+    public SwitchButton(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        initView();
 
-    private Drawable stateDrawable; // 状态图片
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SwitchButton);
 
-    private Drawable stateMaskDrawable; // 状态遮罩图片
+        mConf.setThumbMarginInPixel(ta.getDimensionPixelSize(R.styleable.SwitchButton_thumb_margin,
+                mConf.getDefaultThumbMarginInPixel()));
+        mConf.setThumbMarginInPixel(
+                ta.getDimensionPixelSize(R.styleable.SwitchButton_thumb_marginTop,
+                        mConf.getThumbMarginTop()),
+                ta.getDimensionPixelSize(R.styleable.SwitchButton_thumb_marginBottom,
+                        mConf.getThumbMarginBottom()),
+                ta.getDimensionPixelSize(R.styleable.SwitchButton_thumb_marginLeft,
+                        mConf.getThumbMarginLeft()),
+                ta.getDimensionPixelSize(R.styleable.SwitchButton_thumb_marginRight,
+                        mConf.getThumbMarginRight()));
+        mConf.setRadius(ta.getInt(R.styleable.SwitchButton_radius,
+                SwitchButtonUtil.Default.DEFAULT_RADIUS));
 
-    private Drawable sliderDrawable; // 滑块图片
+        mConf.setThumbWidthAndHeightInPixel(
+                ta.getDimensionPixelSize(R.styleable.SwitchButton_thumb_width, -1),
+                ta.getDimensionPixelSize(R.styleable.SwitchButton_thumb_height, -1));
 
-    // private Drawable sliderCloseDrawable; // 滑块图片
+        mConf.setMeasureFactor(ta.getFloat(R.styleable.SwitchButton_measureFactor, -1));
 
-    private SwitchScroller switchScroller; // 切换滚动器，用于实现平滑滚动效果
+        mConf.setInsetBounds(ta.getDimensionPixelSize(R.styleable.SwitchButton_insetLeft, 0),
+                ta.getDimensionPixelSize(R.styleable.SwitchButton_insetTop, 0),
+                ta.getDimensionPixelSize(R.styleable.SwitchButton_insetRight, 0),
+                ta.getDimensionPixelSize(R.styleable.SwitchButton_insetBottom, 0));
 
-    private PorterDuffXfermode porterDuffXfermode;// 遮罩类型
+        int velocity = ta.getInteger(R.styleable.SwitchButton_animationVelocity, -1);
+        mAnimationController.setVelocity(velocity);
+
+        fetchDrawableFromAttr(ta);
+        ta.recycle();
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+    }
+
+    public SwitchButton(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
 
     public SwitchButton(Context context) {
         this(context, null);
     }
 
-    public SwitchButton(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(attrs);
-    }
-
-    public SwitchButton(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init(attrs);
+    private void initView() {
+        mConf = SwitchButtonUtil
+                .getDefault(getContext().getResources().getDisplayMetrics().density);
+        mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+        mClickTimeout = ViewConfiguration.getPressedStateDuration()
+                + ViewConfiguration.getTapTimeout();
+        mAnimationController = AnimationController.getDefault().init(mOnAnimateListener);
+        mBounds = new Rect();
+        if (SHOW_RECT) {
+            mRectPaint = new Paint();
+            mRectPaint.setStyle(Style.STROKE);
+        }
     }
 
     /**
-     * 初始化
+     * fetch drawable resources from attrs, drop them to conf, AFTER the size
+     * has been confirmed
      * 
-     * @param attrs 属性
+     * @param ta
      */
-    private void init(AttributeSet attrs) {
-        setGravity(Gravity.CENTER_VERTICAL);
-        paint = new Paint();
-        paint.setColor(Color.RED);
-        porterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
-        switchScroller = new SwitchScroller(getContext(), new AccelerateDecelerateInterpolator());
-        buttonRectF = new RectF();
+    private void fetchDrawableFromAttr(TypedArray ta) {
+        if (mConf == null) {
+            return;
+        }
+        mConf.setOffDrawable(fetchDrawable(ta, R.styleable.SwitchButton_offDrawable,
+                R.styleable.SwitchButton_offColor, SwitchButtonUtil.Default.DEFAULT_OFF_COLOR));
+        mConf.setOnDrawable(fetchDrawable(ta, R.styleable.SwitchButton_onDrawable,
+                R.styleable.SwitchButton_onColor, SwitchButtonUtil.Default.DEFAULT_ON_COLOR));
+        mConf.setThumbDrawable(fetchThumbDrawable(ta));
+    }
 
-        if (attrs != null && getContext() != null) {
-            TypedArray typedArray = getContext().obtainStyledAttributes(attrs,
-                    R.styleable.SwitchButton);
-            if (typedArray != null) {
-                withTextInterval = (int) typedArray.getDimension(
-                        R.styleable.SwitchButton_withTextInterval, 0.0f);
-                setDrawables(typedArray.getDrawable(R.styleable.SwitchButton_frameDrawable),
-                        typedArray.getDrawable(R.styleable.SwitchButton_stateDrawable),
-                        typedArray.getDrawable(R.styleable.SwitchButton_stateMaskDrawable),
-                        typedArray.getDrawable(R.styleable.SwitchButton_sliderDrawable));
-                typedArray.recycle();
-            }
+    private Drawable fetchDrawable(TypedArray ta, int attrId, int alterColorId, int defaultColor) {
+        Drawable tempDrawable = ta.getDrawable(attrId);
+        if (tempDrawable == null) {
+            int tempColor = ta.getColor(alterColorId, defaultColor);
+            tempDrawable = new GradientDrawable();
+            ((GradientDrawable) tempDrawable).setCornerRadius(this.mConf.getRadius());
+            ((GradientDrawable) tempDrawable).setColor(tempColor);
+        }
+        return tempDrawable;
+    }
+
+    private Drawable fetchThumbDrawable(TypedArray ta) {
+
+        Drawable tempDrawable = ta.getDrawable(R.styleable.SwitchButton_thumbDrawable);
+        if (tempDrawable != null) {
+            return tempDrawable;
         }
 
-        ViewConfiguration config = ViewConfiguration.get(getContext());
-        touchSlop = config.getScaledTouchSlop();
-        setChecked(isChecked());
-        setClickable(true); // 设置允许点击，当用户点击在按钮其它区域的时候就会切换状态
+        int normalColor = ta.getColor(R.styleable.SwitchButton_thumbColor,
+                SwitchButtonUtil.Default.DEFAULT_THUMB_COLOR);
+        int pressedColor = ta.getColor(R.styleable.SwitchButton_thumbPressedColor,
+                SwitchButtonUtil.Default.DEFAULT_THUMB_PRESSED_COLOR);
+
+        StateListDrawable drawable = new StateListDrawable();
+        GradientDrawable normalDrawable = new GradientDrawable();
+        normalDrawable.setCornerRadius(this.mConf.getRadius());
+        normalDrawable.setColor(normalColor);
+        GradientDrawable pressedDrawable = new GradientDrawable();
+        pressedDrawable.setCornerRadius(this.mConf.getRadius());
+        pressedDrawable.setColor(pressedColor);
+        drawable.addState(View.PRESSED_ENABLED_STATE_SET, pressedDrawable);
+        drawable.addState(new int[] {}, normalDrawable);
+
+        return drawable;
+    }
+
+    public void setConfiguration(SwitchButtonUtil conf) {
+        if (mConf == null) {
+            mConf = SwitchButtonUtil.getDefault(conf.getDensity());
+        }
+        mConf.setOffDrawable(conf.getOffDrawableWithFix());
+        mConf.setOnDrawable(conf.getOnDrawableWithFix());
+        mConf.setThumbDrawable(conf.getThumbDrawableWithFix());
+        mConf.setThumbMarginInPixel(conf.getThumbMarginTop(), conf.getThumbMarginBottom(),
+                conf.getThumbMarginLeft(), conf.getThumbMarginRight());
+        mConf.setThumbWidthAndHeightInPixel(conf.getThumbWidth(), conf.getThumbHeight());
+        mConf.setVelocity(conf.getVelocity());
+        mConf.setMeasureFactor(conf.getMeasureFactor());
+        mAnimationController.setVelocity(mConf.getVelocity());
+        this.requestLayout();
+        setup();
+        setChecked(mIsChecked);
+    }
+
+    /**
+     * return a REFERENCE of configuration, it is suggested that not to change
+     * that
+     * 
+     * @return
+     */
+    public SwitchButtonUtil getConfiguration() {
+        return mConf;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // 计算宽度
-        int measureWidth;
-        switch (MeasureSpec.getMode(widthMeasureSpec)) {
-            case MeasureSpec.AT_MOST:// 如果widthSize是当前视图可使用的最大宽度
-                measureWidth = getCompoundPaddingLeft() + getCompoundPaddingRight();
-                break;
-            case MeasureSpec.EXACTLY:// 如果widthSize是当前视图可使用的绝对宽度
-                measureWidth = MeasureSpec.getSize(widthMeasureSpec);
-                break;
-            case MeasureSpec.UNSPECIFIED:// 如果widthSize对当前视图宽度的计算没有任何参考意义
-                measureWidth = getCompoundPaddingLeft() + getCompoundPaddingRight();
-                break;
-            default:
-                measureWidth = getCompoundPaddingLeft() + getCompoundPaddingRight();
-                break;
-        }
-
-        // 计算高度
-        int measureHeight;
-        switch (MeasureSpec.getMode(heightMeasureSpec)) {
-            case MeasureSpec.AT_MOST:// 如果heightSize是当前视图可使用的最大宽度
-                measureHeight = (frameDrawable != null ? frameDrawable.getIntrinsicHeight() : 0)
-                        + getCompoundPaddingTop() + getCompoundPaddingBottom();
-                break;
-            case MeasureSpec.EXACTLY:// 如果heightSize是当前视图可使用的绝对宽度
-                measureHeight = MeasureSpec.getSize(heightMeasureSpec);
-                break;
-            case MeasureSpec.UNSPECIFIED:// 如果heightSize对当前视图宽度的计算没有任何参考意义
-                measureHeight = (frameDrawable != null ? frameDrawable.getIntrinsicHeight() : 0)
-                        + getCompoundPaddingTop() + getCompoundPaddingBottom();
-                break;
-            default:
-                measureHeight = (frameDrawable != null ? frameDrawable.getIntrinsicHeight() : 0)
-                        + getCompoundPaddingTop() + getCompoundPaddingBottom();
-                break;
-        }
-
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        if (measureWidth < getMeasuredWidth()) {
-            measureWidth = getMeasuredWidth();
-        }
-
-        if (measureHeight < getMeasuredHeight()) {
-            measureHeight = getMeasuredHeight();
-        }
-
-        setMeasuredDimension(measureWidth, measureHeight);
+        setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        Drawable[] drawables = getCompoundDrawables();
-        int drawableRightWidth = 0;
-        int drawableTopHeight = 0;
-        int drawableBottomHeight = 0;
-        if (drawables != null) {
-            if (drawables.length > 1 && drawables[1] != null) {
-                drawableTopHeight = drawables[1].getIntrinsicHeight()
-                        + getCompoundDrawablePadding();
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        setup();
+    }
+
+    private void setup() {
+        setupBackZone();
+        setupSafeZone();
+        setupThumbZone();
+
+        setupDrawableBounds();
+        if (this.getMeasuredWidth() > 0 && this.getMeasuredHeight() > 0) {
+            mSaveLayerZone = new RectF(0, 0, this.getMeasuredWidth(), this.getMeasuredHeight());
+        }
+
+        ViewGroup parent = (ViewGroup) this.getParent();
+        if (parent != null) {
+            parent.setClipChildren(false);
+        }
+    }
+
+    /**
+     * setup zone for thumb to move
+     * 
+     * @param w
+     * @param h
+     */
+    private void setupSafeZone() {
+        int w = getMeasuredWidth();
+        int h = getMeasuredHeight();
+        if (w > 0 && h > 0) {
+            if (mSafeZone == null) {
+                mSafeZone = new Rect();
             }
-            if (drawables.length > 2 && drawables[2] != null) {
-                drawableRightWidth = drawables[2].getIntrinsicWidth()
-                        + getCompoundDrawablePadding();
+            int left, right, top, bottom;
+            left = getPaddingLeft()
+                    + (mConf.getThumbMarginLeft() > 0 ? mConf.getThumbMarginLeft() : 0);
+            right = w - getPaddingRight()
+                    - (mConf.getThumbMarginRight() > 0 ? mConf.getThumbMarginRight() : 0)
+                    + (-mConf.getShrinkX());
+            top = getPaddingTop() + (mConf.getThumbMarginTop() > 0 ? mConf.getThumbMarginTop() : 0);
+            bottom = h - getPaddingBottom()
+                    - (mConf.getThumbMarginBottom() > 0 ? mConf.getThumbMarginBottom() : 0)
+                    + (-mConf.getShrinkY());
+            mSafeZone.set(left, top, right, bottom);
+
+            mCenterPos = mSafeZone.left
+                    + (mSafeZone.right - mSafeZone.left - mConf.getThumbWidth()) / 2;
+        } else {
+            mSafeZone = null;
+        }
+    }
+
+    private void setupBackZone() {
+        int w = getMeasuredWidth();
+        int h = getMeasuredHeight();
+        if (w > 0 && h > 0) {
+            if (mBackZone == null) {
+                mBackZone = new Rect();
             }
-            if (drawables.length > 3 && drawables[3] != null) {
-                drawableBottomHeight = drawables[3].getIntrinsicHeight()
-                        + getCompoundDrawablePadding();
+            int left, right, top, bottom;
+            left = getPaddingLeft()
+                    + (mConf.getThumbMarginLeft() > 0 ? 0 : -mConf.getThumbMarginLeft());
+            right = w - getPaddingRight()
+                    - (mConf.getThumbMarginRight() > 0 ? 0 : -mConf.getThumbMarginRight())
+                    + (-mConf.getShrinkX());
+            top = getPaddingTop()
+                    + (mConf.getThumbMarginTop() > 0 ? 0 : -mConf.getThumbMarginTop());
+            bottom = h - getPaddingBottom()
+                    - (mConf.getThumbMarginBottom() > 0 ? 0 : -mConf.getThumbMarginBottom())
+                    + (-mConf.getShrinkY());
+            mBackZone.set(left, top, right, bottom);
+        } else {
+            mBackZone = null;
+        }
+    }
+
+    private void setupThumbZone() {
+        int w = getMeasuredWidth();
+        int h = getMeasuredHeight();
+        if (w > 0 && h > 0) {
+            if (mThumbZone == null) {
+                mThumbZone = new Rect();
+            }
+            int left, right, top, bottom;
+            left = mIsChecked ? (mSafeZone.right - mConf.getThumbWidth()) : mSafeZone.left;
+            right = left + mConf.getThumbWidth();
+            top = mSafeZone.top;
+            bottom = top + mConf.getThumbHeight();
+            mThumbZone.set(left, top, right, bottom);
+        } else {
+            mThumbZone = null;
+        }
+    }
+
+    private void setupDrawableBounds() {
+        if (mBackZone != null) {
+            mConf.getOnDrawable().setBounds(mBackZone);
+            mConf.getOffDrawable().setBounds(mBackZone);
+        }
+        if (mThumbZone != null) {
+            mConf.getThumbDrawable().setBounds(mThumbZone);
+        }
+    }
+
+    private int measureWidth(int measureSpec) {
+        int measuredWidth = 0;
+
+        int specMode = MeasureSpec.getMode(measureSpec);
+        int specSize = MeasureSpec.getSize(measureSpec);
+
+        int minWidth = (int) (mConf.getThumbWidth() * mConf.getMeasureFactor() + getPaddingLeft() + getPaddingRight());
+        int innerMarginWidth = mConf.getThumbMarginLeft() + mConf.getThumbMarginRight();
+        if (innerMarginWidth > 0) {
+            minWidth += innerMarginWidth;
+        }
+
+        if (specMode == MeasureSpec.EXACTLY) {
+            measuredWidth = Math.max(specSize, minWidth);
+        } else {
+            measuredWidth = minWidth;
+            if (specMode == MeasureSpec.AT_MOST) {
+                measuredWidth = Math.min(specSize, minWidth);
             }
         }
 
-        buttonLeft = (getWidth() - (frameDrawable != null ? frameDrawable.getIntrinsicWidth() : 0)
-                - getPaddingRight() - drawableRightWidth);
-        buttonTop = (getHeight() - (frameDrawable != null ? frameDrawable.getIntrinsicHeight() : 0)
-                + drawableTopHeight - drawableBottomHeight) / 2;
-        buttonRectF.set(buttonLeft, buttonTop,
-                buttonLeft + (frameDrawable != null ? frameDrawable.getIntrinsicWidth() : 0),
-                buttonTop + (frameDrawable != null ? frameDrawable.getIntrinsicHeight() : 0));
+        // bounds are negative numbers
+        measuredWidth += (mConf.getInsetBounds().left + mConf.getInsetBounds().right);
+
+        return measuredWidth;
+    }
+
+    private int measureHeight(int measureSpec) {
+        int measuredHeight = 0;
+
+        int specMode = MeasureSpec.getMode(measureSpec);
+        int specSize = MeasureSpec.getSize(measureSpec);
+
+        int minHeight = mConf.getThumbHeight() + getPaddingTop() + getPaddingBottom();
+        int innerMarginHeight = mConf.getThumbMarginTop() + mConf.getThumbMarginBottom();
+
+        if (innerMarginHeight > 0) {
+            minHeight += innerMarginHeight;
+        }
+
+        if (specMode == MeasureSpec.EXACTLY) {
+            measuredHeight = Math.max(specSize, minHeight);
+        } else {
+            measuredHeight = minHeight;
+            if (specMode == MeasureSpec.AT_MOST) {
+                measuredHeight = Math.min(specSize, minHeight);
+            }
+        }
+
+        measuredHeight += (mConf.getInsetBounds().top + mConf.getInsetBounds().bottom);
+
+        return measuredHeight;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // 保存图层并全体偏移，让paddingTop和paddingLeft生效
-        canvas.save();
-        canvas.translate(buttonLeft, buttonTop);
+        canvas.getClipBounds(mBounds);
+        if (mBounds != null && mConf.needShrink()) {
+            mBounds.inset(mConf.getInsetX(), mConf.getInsetY());
+            canvas.clipRect(mBounds, Region.Op.REPLACE);
+            canvas.translate(mConf.getInsetBounds().left, mConf.getInsetBounds().top);
+        }
 
-        // 绘制状态层
-        if (stateDrawable != null && stateMaskDrawable != null) {
-            Bitmap stateBitmap = getBitmapFromDrawable(stateDrawable);
-            if (stateMaskDrawable != null && stateBitmap != null && !stateBitmap.isRecycled()) {
-                // 保存并创建一个新的透明层，如果不这样做的话，画出来的背景会是黑的
-                int src = canvas.saveLayer(0, 0, getWidth(), getHeight(), paint,
-                        Canvas.MATRIX_SAVE_FLAG | Canvas.CLIP_SAVE_FLAG
-                                | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
-                                | Canvas.FULL_COLOR_LAYER_SAVE_FLAG
-                                | Canvas.CLIP_TO_LAYER_SAVE_FLAG);
-                // 绘制遮罩层
-                stateMaskDrawable.draw(canvas);
-                // 绘制状态图片按并应用遮罩效果
-                paint.setXfermode(porterDuffXfermode);
-                canvas.drawBitmap(stateBitmap, tempSlideX, 0, paint);
-                paint.setXfermode(null);
-                // 融合图层
-                canvas.restoreToCount(src);
+        boolean useGeneralDisableEffect = !isEnabled() && this.notStatableDrawable();
+        if (useGeneralDisableEffect) {
+            canvas.saveLayerAlpha(mSaveLayerZone, 255 / 2, Canvas.MATRIX_SAVE_FLAG
+                    | Canvas.CLIP_SAVE_FLAG | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
+                    | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG);
+        }
+
+        mConf.getOffDrawable().draw(canvas);
+        mConf.getOnDrawable().setAlpha(calcAlpha());
+        mConf.getOnDrawable().draw(canvas);
+        mConf.getThumbDrawable().draw(canvas);
+
+        if (useGeneralDisableEffect) {
+            canvas.restore();
+        }
+
+        if (SHOW_RECT) {
+            mRectPaint.setColor(Color.parseColor("#AA0000"));
+            canvas.drawRect(mBackZone, mRectPaint);
+            mRectPaint.setColor(Color.parseColor("#00FF00"));
+            canvas.drawRect(mSafeZone, mRectPaint);
+            mRectPaint.setColor(Color.parseColor("#0000FF"));
+            canvas.drawRect(mThumbZone, mRectPaint);
+        }
+    }
+
+    private boolean notStatableDrawable() {
+        boolean thumbStatable = (mConf.getThumbDrawable() instanceof StateListDrawable);
+        boolean onStatable = (mConf.getOnDrawable() instanceof StateListDrawable);
+        boolean offStatable = (mConf.getOffDrawable() instanceof StateListDrawable);
+        return !thumbStatable || !onStatable || !offStatable;
+    }
+
+    /**
+     * calculate the alpha value for on layer
+     * 
+     * @return 0 ~ 255
+     */
+    private int calcAlpha() {
+        int alpha = 255;
+        if (mSafeZone == null || mSafeZone.right == mSafeZone.left) {
+
+        } else {
+            int backWidth = mSafeZone.right - mConf.getThumbWidth() - mSafeZone.left;
+            if (backWidth > 0) {
+                alpha = (mThumbZone.left - mSafeZone.left) * 255 / backWidth;
             }
         }
 
-        // 绘制框架层
-        if (frameDrawable != null) {
-            frameDrawable.draw(canvas);
-        }
-
-        // 绘制发光滑块层
-        if (sliderDrawable != null) {
-            Bitmap sliderBitmap = getBitmapFromDrawable(sliderDrawable);
-            if (sliderBitmap != null && !sliderBitmap.isRecycled()) {
-                canvas.drawBitmap(sliderBitmap, tempSlideX, 0, paint);
-            }
-        }
-
-        // 融合图层
-        canvas.restore();
+        return alpha;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getActionMasked()) {
-            case MotionEvent.ACTION_DOWN: {
-                // 如果按钮当前可用并且按下位置正好在按钮之内
-                if (isEnabled() && buttonRectF.contains(event.getX(), event.getY())) {
-                    touchMode = TOUCH_MODE_DOWN;
-                    tempTotalSlideDistance = 0; // 清空总滑动距离
-                    touchX = event.getX(); // 记录X轴坐标
-                    setClickable(false); // 当用户触摸在按钮位置的时候禁用点击效果，这样做的目的是为了不让背景有按下效果
-                }
+
+        if (isAnimating || !isEnabled()) {
+            return false;
+        }
+        int action = event.getAction();
+
+        float deltaX = event.getX() - mStartX;
+        float deltaY = event.getY() - mStartY;
+
+        // status the view going to change to when finger released
+        boolean nextStatus = mIsChecked;
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                catchView();
+                mStartX = event.getX();
+                mStartY = event.getY();
+                mLastX = mStartX;
+                setPressed(true);
                 break;
-            }
 
-            case MotionEvent.ACTION_MOVE: {
-                switch (touchMode) {
-                    case TOUCH_MODE_IDLE: {
-                        break;
-                    }
-                    case TOUCH_MODE_DOWN: {
-                        final float x = event.getX();
-                        if (Math.abs(x - touchX) > touchSlop) {
-                            touchMode = TOUCH_MODE_DRAGGING;
-                            // 禁值父View拦截触摸事件
-                            // 如果不加这段代码的话，当被ScrollView包括的时候，你会发现，当你在此按钮上按下，
-                            // 紧接着滑动的时候ScrollView会跟着滑动，然后按钮的事件就丢失了，这会造成很难完成滑动操作
-                            // 这样一来用户会抓狂的，加上这句话呢ScrollView就不会滚动了
-                            if (getParent() != null) {
-                                getParent().requestDisallowInterceptTouchEvent(true);
-                            }
-                            touchX = x;
-                            return true;
-                        }
-                        break;
-                    }
-                    case TOUCH_MODE_DRAGGING: {
-                        float newTouchX = event.getX();
-                        tempTotalSlideDistance += setSlideX(tempSlideX
-                                + ((int) (newTouchX - touchX))); // 更新X轴坐标并记录总滑动距离
-                        touchX = newTouchX;
-                        invalidate();
-                        return true;
-                    }
-                }
+            case MotionEvent.ACTION_MOVE:
+                float x = event.getX();
+                moveThumb((int) (x - mLastX));
+                mLastX = x;
                 break;
-            }
-
-            case MotionEvent.ACTION_UP: {
-                setClickable(true);
-
-                // 结尾滑动操作
-                if (touchMode == TOUCH_MODE_DRAGGING) {// 这是滑动操作
-                    touchMode = TOUCH_MODE_IDLE;
-                    // 如果滑动距离大于等于最小切换距离就切换状态，否则回滚
-                    if (Math.abs(tempTotalSlideDistance) >= Math.abs(frameDrawable
-                            .getIntrinsicWidth() * minChangeDistanceScale)) {
-                        toggle(); // 切换状态
-                    } else {
-                        switchScroller.startScroll(isChecked());
-                    }
-                } else if (touchMode == TOUCH_MODE_DOWN) { // 这是按在按钮上的单击操作
-                    touchMode = TOUCH_MODE_IDLE;
-                    toggle();
-                }
-
-                break;
-            }
 
             case MotionEvent.ACTION_CANCEL:
-            case MotionEvent.ACTION_OUTSIDE: {
-                setClickable(true);
-                if (touchMode == TOUCH_MODE_DRAGGING) {
-                    touchMode = TOUCH_MODE_IDLE;
-                    switchScroller.startScroll(isChecked()); // 回滚
-                } else {
-                    touchMode = TOUCH_MODE_IDLE;
-                }
-                break;
-            }
-        }
+            case MotionEvent.ACTION_UP:
+                setPressed(false);
 
-        super.onTouchEvent(event);
-        return isEnabled();
+                nextStatus = getStatusBasedOnPos();
+
+                float time = event.getEventTime() - event.getDownTime();
+
+                if (deltaX < mTouchSlop && deltaY < mTouchSlop && time < mClickTimeout) {
+                    performClick();
+                } else {
+                    slideToChecked(nextStatus);
+                }
+
+                break;
+
+            default:
+                break;
+        }
+        invalidate();
+        return true;
+    }
+
+    /**
+     * return the status based on position of thumb
+     * 
+     * @return
+     */
+    private boolean getStatusBasedOnPos() {
+        return mThumbZone.left > mCenterPos;
+    }
+
+    @Override
+    public void invalidate() {
+        if (mBounds != null && mConf.needShrink()) {
+            invalidate(mBounds);
+        } else {
+            super.invalidate();
+        }
+    }
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
+
+    private void catchView() {
+        ViewParent parent = getParent();
+        if (parent != null) {
+            parent.requestDisallowInterceptTouchEvent(true);
+        }
+    }
+
+    @Override
+    public void setChecked(final boolean checked) {
+        setChecked(checked, true);
+    }
+
+    public void setChecked(final boolean checked, boolean trigger) {
+        if (mThumbZone != null) {
+            moveThumb(checked ? getMeasuredWidth() : -getMeasuredWidth());
+        }
+        setCheckedInClass(checked, trigger);
+    }
+
+    @Override
+    public boolean isChecked() {
+        return mIsChecked;
+    }
+
+    @Override
+    public void toggle() {
+        toggle(true);
+    }
+
+    public void toggle(boolean animated) {
+        if (animated) {
+            slideToChecked(!mIsChecked);
+        } else {
+            setChecked(!mIsChecked);
+        }
     }
 
     @Override
     protected void drawableStateChanged() {
         super.drawableStateChanged();
-        int[] drawableState = getDrawableState();
-        if (frameDrawable != null)
-            frameDrawable.setState(drawableState); // 更新框架图片的状态
-        if (stateDrawable != null)
-            stateDrawable.setState(drawableState); // 更新状态图片的状态
-        if (stateMaskDrawable != null)
-            stateMaskDrawable.setState(drawableState); // 更新状态遮罩图片的状态
-        if (sliderDrawable != null)
-            sliderDrawable.setState(drawableState); // 更新滑块图片的状态
-        // if (sliderCloseDrawable != null) {
-        // sliderCloseDrawable.setState(drawableState);
-        // }
-        invalidate();
+        setDrawableState(mConf.getThumbDrawable());
+        setDrawableState(mConf.getOnDrawable());
+        setDrawableState(mConf.getOffDrawable());
     }
 
-    @Override
-    protected boolean verifyDrawable(Drawable who) {
-        return super.verifyDrawable(who) || who == frameDrawable || who == stateDrawable
-                || who == stateMaskDrawable || who == sliderDrawable;
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    @Override
-    public void jumpDrawablesToCurrentState() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            super.jumpDrawablesToCurrentState();
-            if (frameDrawable != null)
-                frameDrawable.jumpToCurrentState();
-            if (stateDrawable != null)
-                stateDrawable.jumpToCurrentState();
-            if (stateMaskDrawable != null)
-                stateMaskDrawable.jumpToCurrentState();
-            if (sliderDrawable != null)
-                sliderDrawable.jumpToCurrentState();
-            // if (sliderCloseDrawable != null) {
-            // sliderCloseDrawable.jumpToCurrentState();
-            // }
+    private void setDrawableState(Drawable drawable) {
+        if (drawable != null) {
+            int[] myDrawableState = getDrawableState();
+            drawable.setState(myDrawableState);
+            invalidate();
         }
     }
 
-    @Override
-    public void setChecked(boolean checked) {
-        boolean changed = checked != isChecked();
-        super.setChecked(checked);
-        if (changed) {
-            if (getWidth() > 0 && switchScroller != null) { // 如果已经绘制完成
-                switchScroller.startScroll(checked);
-            } else {
-                setSlideX(isChecked() ? tempMaxSlideX : tempMinSlideX); // 直接修改X轴坐标，因为尚未绘制完成的时候，动画执行效果不理想，所以直接修改坐标，而不执行动画
-            }
+    public void setOnCheckedChangeListener(OnCheckedChangeListener onCheckedChangeListener) {
+        if (onCheckedChangeListener == null) {
+            throw new IllegalArgumentException("onCheckedChangeListener can not be null");
+        }
+        mOnCheckedChangeListener = onCheckedChangeListener;
+    }
+
+    private void setCheckedInClass(boolean checked) {
+        setCheckedInClass(checked, true);
+    }
+
+    private void setCheckedInClass(boolean checked, boolean trigger) {
+        if (mIsChecked == checked) {
+            return;
+        }
+        mIsChecked = checked;
+
+        refreshDrawableState();
+
+        if (mOnCheckedChangeListener != null && trigger) {
+            mOnCheckedChangeListener.onCheckedChanged(this, mIsChecked);
         }
     }
 
-    @Override
-    public int getCompoundPaddingRight() {
-        // 重写此方法实现让文本提前换行，避免当文本过长时被按钮给盖住
-        int padding = super.getCompoundPaddingRight()
-                + (frameDrawable != null ? frameDrawable.getIntrinsicWidth() : 0);
-        if (!TextUtils.isEmpty(getText())) {
-            padding += withTextInterval;
+    public void slideToChecked(boolean checked) {
+        if (isAnimating) {
+            return;
         }
-        return padding;
+        int from = mThumbZone.left;
+        int to = checked ? mSafeZone.right - mConf.getThumbWidth() : mSafeZone.left;
+        mAnimationController.startAnimation(from, to);
     }
 
-    /**
-     * 设置图片
-     * 
-     * @param frameBitmap 框架图片
-     * @param stateDrawable 状态图片
-     * @param stateMaskDrawable 状态遮罩图片
-     * @param sliderDrawable 滑块图片
-     * @param sliderCloseDrawable
-     */
-    public void setDrawables(Drawable frameBitmap, Drawable stateDrawable,
-            Drawable stateMaskDrawable, Drawable sliderDrawable) {
-        if (frameBitmap == null || stateDrawable == null || stateMaskDrawable == null
-                || sliderDrawable == null) {
-            throw new IllegalArgumentException("ALL NULL");
+    private void moveThumb(int delta) {
+
+        int newLeft = mThumbZone.left + delta;
+        int newRight = mThumbZone.right + delta;
+        if (newLeft < mSafeZone.left) {
+            newLeft = mSafeZone.left;
+            newRight = newLeft + mConf.getThumbWidth();
+        }
+        if (newRight > mSafeZone.right) {
+            newRight = mSafeZone.right;
+            newLeft = newRight - mConf.getThumbWidth();
         }
 
-        this.frameDrawable = frameBitmap;
-        this.stateDrawable = stateDrawable;
-        this.stateMaskDrawable = stateMaskDrawable;
-        this.sliderDrawable = sliderDrawable;
-        // this.sliderCloseDrawable = sliderCloseDrawable;
-
-        this.frameDrawable.setBounds(0, 0, this.frameDrawable.getIntrinsicWidth(),
-                this.frameDrawable.getIntrinsicHeight());
-        this.frameDrawable.setCallback(this);
-        this.stateDrawable.setBounds(0, 0, this.stateDrawable.getIntrinsicWidth(),
-                this.stateDrawable.getIntrinsicHeight());
-        this.stateDrawable.setCallback(this);
-        this.stateMaskDrawable.setBounds(0, 0, this.stateMaskDrawable.getIntrinsicWidth(),
-                this.stateMaskDrawable.getIntrinsicHeight());
-        this.stateMaskDrawable.setCallback(this);
-        this.sliderDrawable.setBounds(0, 0, this.sliderDrawable.getIntrinsicWidth(),
-                this.sliderDrawable.getIntrinsicHeight());
-        this.sliderDrawable.setCallback(this);
-        // this.sliderCloseDrawable.setBounds(0, 0,
-        // this.sliderCloseDrawable.getIntrinsicWidth(),
-        // this.sliderCloseDrawable.getIntrinsicHeight());
-        // this.sliderCloseDrawable.setCallback(this);
-
-        this.tempMinSlideX = (-1 * (stateDrawable.getIntrinsicWidth() - frameBitmap
-                .getIntrinsicWidth())); // 初始化X轴最小值
-        setSlideX(isChecked() ? tempMaxSlideX : tempMinSlideX); // 根据选中状态初始化默认坐标
-
-        requestLayout();
+        moveThumbTo(newLeft, newRight);
     }
 
-    /**
-     * 设置图片
-     * 
-     * @param frameDrawableResId 框架图片ID
-     * @param stateDrawableResId 状态图片ID
-     * @param stateMaskDrawableResId 状态遮罩图片ID
-     * @param sliderDrawableResId 滑块图片ID
-     */
-    public void setDrawableResIds(int frameDrawableResId, int stateDrawableResId,
-            int stateMaskDrawableResId, int sliderDrawableResId) {
-        if (getResources() != null) {
-            setDrawables(getResources().getDrawable(frameDrawableResId), getResources()
-                    .getDrawable(stateDrawableResId),
-                    getResources().getDrawable(stateMaskDrawableResId),
-                    getResources().getDrawable(sliderDrawableResId));
-        }
+    private void moveThumbTo(int newLeft, int newRight) {
+        mThumbZone.set(newLeft, mThumbZone.top, newRight, mThumbZone.bottom);
+        mConf.getThumbDrawable().setBounds(mThumbZone);
     }
 
-    /**
-     * 设置动画持续时间
-     * 
-     * @param duration 动画持续时间
-     */
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
+    class SBAnimationListener implements OnAnimateListener {
 
-    /**
-     * 设置有效距离比例
-     * 
-     * @param minChangeDistanceScale
-     *            有效距离比例，例如按钮宽度为100，比例为0.3，那么只有当滑动距离大于等于(100*0.3)才会切换状态，否则就回滚
-     */
-    public void setMinChangeDistanceScale(float minChangeDistanceScale) {
-        this.minChangeDistanceScale = minChangeDistanceScale;
-    }
-
-    /**
-     * 设置按钮和文本之间的间距
-     * 
-     * @param withTextInterval 按钮和文本之间的间距，当有文本的时候此参数才能派上用场
-     */
-    public void setWithTextInterval(int withTextInterval) {
-        this.withTextInterval = withTextInterval;
-        requestLayout();
-    }
-
-    /**
-     * 设置X轴坐标
-     * 
-     * @param newSlideX 新的X轴坐标
-     * @return Xz轴坐标增加的值，例如newSlideX等于100，旧的X轴坐标为49，那么返回值就是51
-     */
-    private int setSlideX(int newSlideX) {
-        // 防止滑动超出范围
-        if (newSlideX < tempMinSlideX)
-            newSlideX = tempMinSlideX;
-        if (newSlideX > tempMaxSlideX)
-            newSlideX = tempMaxSlideX;
-        // 计算本次距离增量
-        int addDistance = newSlideX - tempSlideX;
-        this.tempSlideX = newSlideX;
-        return addDistance;
-    }
-
-    private static Bitmap getBitmapFromDrawable(Drawable drawable) {
-        if (drawable == null) {
-            return null;
-        }
-
-        if (drawable instanceof DrawableContainer) {
-            return getBitmapFromDrawable(drawable.getCurrent());
-        } else if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * 切换滚动器，用于实现滚动动画
-     */
-    private class SwitchScroller implements Runnable {
-        private Scroller scroller;
-
-        public SwitchScroller(Context context, android.view.animation.Interpolator interpolator) {
-            this.scroller = new Scroller(context, interpolator);
-        }
-
-        /**
-         * 开始滚动
-         * 
-         * @param checked 是否选中
-         */
-        public void startScroll(boolean checked) {
-            scroller.startScroll(tempSlideX, 0, (checked ? tempMaxSlideX : tempMinSlideX)
-                    - tempSlideX, 0, duration);
-            post(this);
+        @Override
+        public void onAnimationStart() {
+            isAnimating = true;
         }
 
         @Override
-        public void run() {
-            if (scroller.computeScrollOffset()) {
-                setSlideX(scroller.getCurrX());
-                invalidate();
-                post(this);
-            }
+        public boolean continueAnimating() {
+            return mThumbZone.right < mSafeZone.right && mThumbZone.left > mSafeZone.left;
         }
+
+        @Override
+        public void onFrameUpdate(int frame) {
+            moveThumb(frame);
+            postInvalidate();
+        }
+
+        @Override
+        public void onAnimateComplete() {
+            setCheckedInClass(getStatusBasedOnPos());
+            isAnimating = false;
+        }
+
     }
 }

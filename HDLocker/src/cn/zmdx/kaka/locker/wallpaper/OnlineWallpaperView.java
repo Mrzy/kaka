@@ -1,6 +1,9 @@
 
 package cn.zmdx.kaka.locker.wallpaper;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.content.Context;
@@ -10,6 +13,7 @@ import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter;
@@ -27,11 +31,15 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
 
     private RecyclerView mRecyclerView;
 
+    private ImageView mBottomView;
+
     private LinearLayoutManager mLayoutManager;
 
     private WallpaperPageAdapter mAdapter;
 
-    private List<ServerOnlineWallpaper> mList;
+    private List<ServerOnlineWallpaper> mList = new ArrayList<ServerOnlineWallpaperManager.ServerOnlineWallpaper>();
+
+    private boolean isLockScreen;
 
     private IOnlineWallpaperListener mListener;
 
@@ -39,6 +47,8 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         void onCloseDetailPage();
 
         void onOpenDetailPage(View view);
+
+        void onGoToDetailClick(ServerOnlineWallpaper item);
     }
 
     public OnlineWallpaperView(Context context, AttributeSet attrs, int defStyle) {
@@ -53,9 +63,10 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         initView();
     }
 
-    public OnlineWallpaperView(Context context) {
+    public OnlineWallpaperView(Context context, boolean isScreen) {
         super(context);
         mContext = context;
+        isLockScreen = isScreen;
         initView();
     }
 
@@ -69,12 +80,16 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         mRecyclerView.setVerticalFadingEdgeEnabled(true);
         mRecyclerView.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 10));
         mRecyclerView.setOnScrollListener(mScrollListener);
+        mBottomView = (ImageView) mEntireView.findViewById(R.id.online_view_bottom);
+
         pullWallpaperData();
     }
 
     public void setOnlineWallpaperListener(IOnlineWallpaperListener listener) {
         mListener = listener;
     }
+
+    private boolean isLoadMore = false;
 
     private OnScrollListener mScrollListener = new OnScrollListener() {
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -86,21 +101,43 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
             // dy>0 表示向下滑动
             if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
                 // loadPage(currentQueryMap);
+                if (!isLoadMore) {
+                    isLoadMore = true;
+                    pullWallpaperData();
+                }
             }
         };
     };
 
+    private long publishDATE;
+
     private void pullWallpaperData() {
-        OnlineWallpaperManager.getInstance().pullWallpaperData(mContext, this);
+        OnlineWallpaperManager.getInstance().pullWallpaperData(mContext, this, publishDATE);
     }
 
     @Override
     public void onSuccecc(List<ServerOnlineWallpaper> list) {
-        mList = list;
-        mAdapter = new WallpaperPageAdapter(mContext, mRecyclerView, list);
-        mAdapter.setOnItemClickListener(this);
-        mRecyclerView.setAdapter(mAdapter);
+        isLoadMore = false;
+        Collections.sort(list, comparator);
+        publishDATE = list.get(list.size() - 1).getPublishDATE();
+        mList.addAll(list);
+        if (null == mAdapter) {
+            mAdapter = new WallpaperPageAdapter(mContext, mRecyclerView, mList);
+            mAdapter.setOnItemClickListener(this);
+            mRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+
     }
+
+    public static Comparator<ServerOnlineWallpaper> comparator = new Comparator<ServerOnlineWallpaper>() {
+
+        @Override
+        public int compare(ServerOnlineWallpaper lhs, ServerOnlineWallpaper rhs) {
+            return (lhs.getPublishDATE() - rhs.getPublishDATE()) > 0 ? -1 : 1;
+        }
+    };
 
     @Override
     public void onFail() {
@@ -109,19 +146,37 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
 
     @Override
     public void onItemClick(View view, int position) {
-        WallpaperDetailView detailView = new WallpaperDetailView(mContext);
-        detailView.setData(mList.get(position));
-        detailView.setWallpaperDetailListener(new IWallpaperDetailListener() {
+        if (isLockScreen) {
+            WallpaperDetailView detailView = new WallpaperDetailView(mContext, isLockScreen);
+            detailView.setData(mList.get(position).getImageURL(), mList.get(position).getDesc());
+            detailView.setWallpaperDetailListener(new IWallpaperDetailListener() {
 
-            @Override
-            public void onBack() {
-                if (null != mListener) {
-                    mListener.onCloseDetailPage();
+                @Override
+                public void onBack() {
+                    if (null != mListener) {
+                        mListener.onCloseDetailPage();
+                    }
                 }
+
+                @Override
+                public void onApplyWallpaper() {
+                    if (null != mListener) {
+                        mListener.onCloseDetailPage();
+                    }
+                }
+            });
+            if (null != mListener) {
+                mListener.onOpenDetailPage(detailView);
             }
-        });
-        if (null != mListener) {
-            mListener.onOpenDetailPage(detailView);
+        } else {
+            if (null != mListener) {
+                mListener.onGoToDetailClick(mList.get(position));
+            }
         }
     }
+
+    public ImageView getBottomView() {
+        return mBottomView;
+    }
+
 }

@@ -49,15 +49,17 @@ public class MainSettingFragment extends Fragment {
         tabStrip.setViewPager(viewPager);
         tabStrip.setOnPageChangeListener(pagerAdapter);
         tabStrip.setShouldExpand(true);
+        tabStrip.setTextColor(getResources().getColor(R.color.setting_text_grey_color));
+        tabStrip.setTextPressColor(getResources().getColor(R.color.setting_text_normal_color));
         return mEntireView;
     }
 
     private List<String> initFragmentTitleList() {
         List<String> titleList = new ArrayList<String>();
-        titleList.add("通用");
-        titleList.add("通知");
-        titleList.add("密码");
-        titleList.add("壁纸");
+        titleList.add(getResources().getString(R.string.pandora_setting_general));
+        titleList.add(getResources().getString(R.string.pandora_setting_notify));
+        titleList.add(getResources().getString(R.string.pandora_setting_password));
+        titleList.add(getResources().getString(R.string.pandora_setting_wallpaper));
         return titleList;
     }
 

@@ -74,11 +74,7 @@
                         android:id="@+id/individualization_notice_switch_button"
                         style="@style/setting_switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:frameDrawable="@drawable/switch_frame"
-                        app:sliderDrawable="@drawable/switch_slider"
-                        app:stateDrawable="@drawable/switch_state_normal"
-                        app:stateMaskDrawable="@drawable/switch_state_mask" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -103,11 +99,7 @@
                         android:id="@+id/individualization_3G_4G_switch_button"
                         style="@style/setting_switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:frameDrawable="@drawable/switch_frame"
-                        app:sliderDrawable="@drawable/switch_slider"
-                        app:stateDrawable="@drawable/switch_state_normal"
-                        app:stateMaskDrawable="@drawable/switch_state_mask" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -132,11 +124,7 @@
                         android:id="@+id/individualization_open_lockscreen_voice_switch_button"
                         style="@style/setting_switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:frameDrawable="@drawable/switch_frame"
-                        app:sliderDrawable="@drawable/switch_slider"
-                        app:stateDrawable="@drawable/switch_state_normal"
-                        app:stateMaskDrawable="@drawable/switch_state_mask" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -179,11 +167,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:scaleType="centerCrop"
-                        app:frameDrawable="@drawable/switch_frame"
-                        app:sliderDrawable="@drawable/switch_slider"
-                        app:stateDrawable="@drawable/switch_state_normal"
-                        app:stateMaskDrawable="@drawable/switch_state_mask" />
+                        android:scaleType="centerCrop" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

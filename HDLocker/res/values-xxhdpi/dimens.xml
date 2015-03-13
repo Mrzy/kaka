@@ -41,7 +41,6 @@
     <dimen name="setting_title_textview_margin_top">25dp</dimen>
     <dimen name="setting_title_textview_margin_left">13.5dp</dimen>
     <dimen name="setting_title_line_height">1px</dimen>
-    <dimen name="setting_item_height">60dp</dimen>
     <dimen name="pandora_wallpaper_textview_margin_top">23dp</dimen>
     <dimen name="pandora_wallpaper_textview_margin_bottom">17dp</dimen>
     <dimen name="pandora_wallpaper_default_line_margin_top">21dp</dimen>
@@ -53,7 +52,7 @@
     <dimen name="pandora_update_dialog_width">280dp</dimen>
     <dimen name="card_detail_toolbar_height">40dp</dimen>
     <dimen name="pandora_box_nodata_show_image_top_height">150dp</dimen>
-    
+
     <!-- onlinePaper -->
     <dimen name="pandora_online_wallpaper_panelHeight">68dp</dimen>
     <dimen name="pandora_online_wallpaper_margin_top">20dp</dimen>
@@ -72,22 +71,22 @@
     <dimen name="pandora_online_wallpaper_gridview_vertical_spacing">10dp</dimen>
     <dimen name="pandora_online_wallpaper_gridview_item_width">60dp</dimen>
     <dimen name="pandora_online_wallpaper_gridview_item_height">108dp</dimen>
-    
     <dimen name="lock_pattern_dot_line_width">3dp</dimen>
     <dimen name="lock_pattern_dot_size">12dp</dimen>
     <dimen name="lock_pattern_dot_size_activated">42dp</dimen>
-    
+
     <!-- MIUI V5 init_promt -->
     <dimen name="init_setting_V5_close_systemlocker_prompt_margin_top">56dp</dimen>
     <dimen name="init_setting_V5_close_systemlocker_prompt_imageview_margin_top">6dp</dimen>
     <dimen name="init_setting_V5_textview_prompt_margin_top">3dp</dimen>
     <dimen name="init_setting_V5_textview_prompt_margin_left">10dp</dimen>
-    
     <dimen name="init_setting_V5_allow_floating_window_prompt_margin_top">184dp</dimen>
     <dimen name="init_setting_V5_trust_prompt_margin_top">56dp</dimen>
-    
     <dimen name="pandora_number_lock_translation_x_displacement">4dp</dimen>
-    
     <dimen name="init_prompt_layout_margin_left">5dp</dimen>
-    
+    <!--  -->
+    <dimen name="setting_item_height">50dp</dimen>
+    <dimen name="setting_sub_item_height">35dp</dimen>
+    <dimen name="setting_password_lock_pattern_image_padding">40dp</dimen>
+
 </resources>

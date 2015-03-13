@@ -2,12 +2,12 @@
 package cn.zmdx.kaka.locker.widget;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
-public class BaseLinearLayout extends LinearLayout {
+public class BaseLinearLayout extends CardView {
 
     public BaseLinearLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -26,10 +26,12 @@ public class BaseLinearLayout extends LinearLayout {
 
     @SuppressWarnings("deprecation")
     private void init() {
-        int padding = BaseInfoHelper.dip2px(getContext(), 14);
-        setPadding(padding, 0, padding, 0);
-        setBackgroundDrawable(getContext().getResources().getDrawable(
-                R.drawable.setting_item_selector));
+        setCardBackgroundColor(getContext().getResources().getColor(android.R.color.white));
+        setRadius(5);
+        setCardElevation(2);
+        setMaxCardElevation(2);
+//        setBackgroundDrawable(getContext().getResources().getDrawable(
+//                R.drawable.password_item_background));
         setClickable(true);
     }
 }
