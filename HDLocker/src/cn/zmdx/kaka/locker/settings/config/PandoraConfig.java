@@ -83,6 +83,12 @@ public class PandoraConfig {
 
     private static final String KEY_LAST_CITY_NAME = "klcn";
 
+    private static final String KEY_LOCK_PATTERN_STYLE = "klps";
+
+    private static final String KEY_GRAVITY_SENOR = "kgs";
+
+    private static final String KEY_RANDOM_REPLACEMENT = "krp";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -396,7 +402,7 @@ public class PandoraConfig {
     }
 
     public void saveNotificationRemindState(boolean isEnable) {
-        mSp.edit().putBoolean(KEY_OPEN_NOTIFICATION_REMIND, isEnable);
+        mSp.edit().putBoolean(KEY_OPEN_NOTIFICATION_REMIND, isEnable).commit();
     }
 
     public boolean isHideNotifyContent() {
@@ -404,7 +410,31 @@ public class PandoraConfig {
     }
 
     public void saveHideNotifyContentState(boolean isEnable) {
-        mSp.edit().putBoolean(KEY_HIDE_NOTIFY_CONTENT, isEnable);
+        mSp.edit().putBoolean(KEY_HIDE_NOTIFY_CONTENT, isEnable).commit();
+    }
+
+    public int getLockPatternStyle(int defaultStyle) {
+        return mSp.getInt(KEY_LOCK_PATTERN_STYLE, defaultStyle);
+    }
+
+    public void saveLockPatternStyle(int type) {
+        mSp.edit().putInt(KEY_LOCK_PATTERN_STYLE, type).commit();
+    }
+
+    public boolean isGravitySenorOn() {
+        return mSp.getBoolean(KEY_GRAVITY_SENOR, false);
+    }
+
+    public void saveGravitySenorState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_GRAVITY_SENOR, isEnable).commit();
+    }
+
+    public boolean isRandomReplacementOn() {
+        return mSp.getBoolean(KEY_RANDOM_REPLACEMENT, false);
+    }
+
+    public void saveRandomReplacementState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_RANDOM_REPLACEMENT, isEnable).commit();
     }
 
 }

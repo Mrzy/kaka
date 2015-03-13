@@ -28,7 +28,6 @@ import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
-import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -50,7 +49,7 @@ import com.android.volley.request.JsonObjectRequest;
 @SuppressLint("InflateParams")
 public class OnlineWallpaperManager {
 
-    private static String URL = UrlBuilder.getBaseUrl() + "locker!queryWallPaper.action";
+    private static String URL = UrlBuilder.getBaseUrl() + "locker!queryWallPaperNew.action";
 
     public static String ONLINE_WALLPAPER_SDCARD_LOCATION = Environment
             .getExternalStorageDirectory().getPath() + "/.Pandora/onlineWallpaper/background/";
@@ -111,28 +110,29 @@ public class OnlineWallpaperManager {
      * @param context
      * @param listener
      */
-    public void pullWallpaperData(Context context, IPullWallpaperListener listener) {
+    public void pullWallpaperData(Context context, IPullWallpaperListener listener, long publishDATE) {
         long curTime = System.currentTimeMillis();
         long lastPullTime = PandoraConfig.newInstance(context).getLastOnlinePullTime();
         final String lastPullJson = PandoraConfig.newInstance(context)
                 .getLastOnlineServerJsonData();
-        if ((curTime - lastPullTime) >= PandoraPolicy.MIN_PULL_WALLPAPER_ORIGINAL_TIME
-                || TextUtils.isEmpty(lastPullJson)) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
-            }
-            if (!PandoraConfig.newInstance(context).is3G4GNetworkOn()
-                    && !HDBNetworkState.isWifiNetwork()) {
-                parseWallpaperJson(lastPullJson, listener);
-            } else {
-                getWallpaperFromServer(listener, lastPullJson);
-            }
-        } else {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("未满足获取数据条件，加载本地缓存数据");
-            }
-            parseWallpaperJson(lastPullJson, listener);
+        // if ((curTime - lastPullTime) >=
+        // PandoraPolicy.MIN_PULL_WALLPAPER_ORIGINAL_TIME
+        // || TextUtils.isEmpty(lastPullJson)) {
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
         }
+        if (!PandoraConfig.newInstance(context).is3G4GNetworkOn()
+                && !HDBNetworkState.isWifiNetwork()) {
+            parseWallpaperJson(lastPullJson, listener);
+        } else {
+            getWallpaperFromServer(listener, lastPullJson, publishDATE);
+        }
+        // } else {
+        // if (BuildConfig.DEBUG) {
+        // HDBLOG.logD("未满足获取数据条件，加载本地缓存数据");
+        // }
+        // parseWallpaperJson(lastPullJson, listener);
+        // }
     }
 
     /**
@@ -159,25 +159,26 @@ public class OnlineWallpaperManager {
      * @param lastPullJson
      */
     public void getWallpaperFromServer(final IPullWallpaperListener listener,
-            final String lastPullJson) {
+            final String lastPullJson, long lastModified) {
         JsonObjectRequest request = null;
-        request = new JsonObjectRequest(URL, null, new Listener<JSONObject>() {
+        request = new JsonObjectRequest(URL + "?lastModified=" + lastModified, null,
+                new Listener<JSONObject>() {
 
-            @Override
-            public void onResponse(JSONObject response) {
-                parseWallpaperJson(response.toString(), listener);
-            }
-        }, new ErrorListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        parseWallpaperJson(response.toString(), listener);
+                    }
+                }, new ErrorListener() {
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (!TextUtils.isEmpty(lastPullJson)) {
-                    parseWallpaperJson(lastPullJson, listener);
-                } else {
-                    listener.onFail();
-                }
-            }
-        });
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (!TextUtils.isEmpty(lastPullJson)) {
+                            parseWallpaperJson(lastPullJson, listener);
+                        } else {
+                            listener.onFail();
+                        }
+                    }
+                });
         RequestManager.getRequestQueue().add(request);
     }
 

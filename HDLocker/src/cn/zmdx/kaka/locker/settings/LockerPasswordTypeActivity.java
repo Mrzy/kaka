@@ -71,20 +71,20 @@ public class LockerPasswordTypeActivity extends BaseActivity {
     }
 
     private void setLockPatternViewVisibleWithVerifyListener(final boolean isNeedNumberLockView) {
-        mLockPatternView = new PandoraLockPatternView(this,
-                PandoraLockPatternView.TYPE_LOCK_PATTERN_VERIFY,
-                new PandoraLockPatternView.IVerifyListener() {
-
-                    @Override
-                    public void onVerifySuccess() {
-                        // TODO
-                        if (isNeedNumberLockView) {
-                            setNumberLockViewVisibleWithNumberLockListener(PandoraNumberLockView.LOCK_NUMBER_TYPE_OPEN);
-                        } else {
-                            finishWithResult();
-                        }
-                    }
-                });
+//        mLockPatternView = new PandoraLockPatternView(this,
+//                PandoraLockPatternView.TYPE_LOCK_PATTERN_VERIFY,
+//                new PandoraLockPatternView.IVerifyListener() {
+//
+//                    @Override
+//                    public void onVerifySuccess() {
+//                        // TODO
+//                        if (isNeedNumberLockView) {
+//                            setNumberLockViewVisibleWithNumberLockListener(PandoraNumberLockView.LOCK_NUMBER_TYPE_OPEN);
+//                        } else {
+//                            finishWithResult();
+//                        }
+//                    }
+//                });
         mLockPatternView.setGravity(Gravity.CENTER);
         if (mLockPatternLayout.getChildCount() != 0) {
             mLockPatternLayout.removeAllViews();
@@ -94,14 +94,14 @@ public class LockerPasswordTypeActivity extends BaseActivity {
     }
 
     private void setLockPatternViewVisibleWithLockPatternListener(int type) {
-        mLockPatternView = new PandoraLockPatternView(this, type, new ILockPatternListener() {
-
-            @Override
-            public void onPatternDetected(int type, boolean success) {
-                // TODO
-                finishWithResult();
-            }
-        });
+//        mLockPatternView = new PandoraLockPatternView(this, type, new ILockPatternListener() {
+//
+//            @Override
+//            public void onPatternDetected(int type, boolean success) {
+//                // TODO
+//                finishWithResult();
+//            }
+//        });
         mLockPatternView.setGravity(Gravity.CENTER);
         if (mLockPatternLayout.getChildCount() != 0) {
             mLockPatternLayout.removeAllViews();
@@ -116,21 +116,21 @@ public class LockerPasswordTypeActivity extends BaseActivity {
     }
 
     private void setNumberLockViewVisibleWithVerifyListener(final boolean isNeedLockPatternView) {
-        mNumberLockView = new PandoraNumberLockView(this,
-                PandoraNumberLockView.LOCK_NUMBER_TYPE_VERIFY,
-                new PandoraNumberLockView.IVerifyListener() {
-
-                    @Override
-                    public void onVerifySuccess() {
-                        // TODO
-                        if (isNeedLockPatternView) {
-                            setLockPatternViewVisibleWithLockPatternListener(PandoraLockPatternView.TYPE_LOCK_PATTERN_OPEN);
-                        } else {
-                            finishWithResult();
-                        }
-                    }
-
-                });
+//        mNumberLockView = new PandoraNumberLockView(this,
+//                PandoraNumberLockView.LOCK_NUMBER_TYPE_VERIFY,
+//                new PandoraNumberLockView.IVerifyListener() {
+//
+//                    @Override
+//                    public void onVerifySuccess() {
+//                        // TODO
+//                        if (isNeedLockPatternView) {
+//                            setLockPatternViewVisibleWithLockPatternListener(PandoraLockPatternView.TYPE_LOCK_PATTERN_OPEN);
+//                        } else {
+//                            finishWithResult();
+//                        }
+//                    }
+//
+//                });
         mNumberLockView.setGravity(Gravity.CENTER);
         if (mNumberLockLayout.getChildCount() != 0) {
             mNumberLockLayout.removeAllViews();

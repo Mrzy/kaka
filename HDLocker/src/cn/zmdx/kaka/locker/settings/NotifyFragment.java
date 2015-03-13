@@ -12,11 +12,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.initialization.InitializationManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.widget.BaseLinearLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -29,9 +29,9 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
 
     private SwitchButton mHideNotifyContentSButton;
 
-    private BaseLinearLayout mNotifyPermission;
+    private LinearLayout mNotifyPermission;
 
-    private BaseLinearLayout mNotifyManager;
+    private LinearLayout mNotifyManager;
 
     private Context mContext;
 
@@ -60,15 +60,14 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
         mOpenNotificationRemindSButton.setOnCheckedChangeListener(this);
 
         mHideNotifyContentSButton = (SwitchButton) mEntireView
-                .findViewById(R.id.setting_hide_notice_content_switch_button);
+                .findViewById(R.id.setting_hide_content_switch_button);
         mHideNotifyContentSButton.setOnCheckedChangeListener(this);
 
-        mNotifyPermission = (BaseLinearLayout) mEntireView
-                .findViewById(R.id.setting_open_notification_permissions_item);
+        mNotifyPermission = (LinearLayout) mEntireView
+                .findViewById(R.id.setting_open_permissions_item);
         mNotifyPermission.setOnClickListener(this);
 
-        mNotifyManager = (BaseLinearLayout) mEntireView
-                .findViewById(R.id.setting_notify_manage_item);
+        mNotifyManager = (LinearLayout) mEntireView.findViewById(R.id.setting_notify_manage_item);
         mNotifyManager.setOnClickListener(this);
     }
 

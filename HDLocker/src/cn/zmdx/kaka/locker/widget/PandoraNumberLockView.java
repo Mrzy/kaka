@@ -7,8 +7,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
-import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.CycleInterpolator;
@@ -19,6 +17,7 @@ import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.widget.KeyboardView.OnKeyboardActionListener;
 
 public class PandoraNumberLockView extends LinearLayout {
 
@@ -38,13 +37,17 @@ public class PandoraNumberLockView extends LinearLayout {
         init();
     }
 
-    public PandoraNumberLockView(Context context, int type, IVerifyListener verifyListener) {
+    public PandoraNumberLockView(Context context, int type, IVerifyListener verifyListener,
+            boolean isScreen) {
         super(context);
         mContext = context;
         mVerifyListener = verifyListener;
         mNumberLockType = type;
+        isLockScreen = isScreen;
         init();
     }
+
+    private boolean isLockScreen;
 
     private INumberLockListener mNumberLockListener;
 
@@ -56,22 +59,7 @@ public class PandoraNumberLockView extends LinearLayout {
 
     private KeyboardView mKeyboardView;
 
-    public View getKeyboardView() {
-        return mKeyboardView;
-    }
-
-    private LinearLayout mDownPassWordMark;
-
-    public LinearLayout getDownPasswordMark() {
-        return mDownPassWordMark;
-    }
-
     private TypefaceTextView mPromptTextView;
-
-    public TypefaceTextView getPromptTextView() {
-        return mPromptTextView;
-
-    }
 
     private LinearLayout mNumberLayout;
 
@@ -97,8 +85,6 @@ public class PandoraNumberLockView extends LinearLayout {
 
     private static final int TIMES_SET_NUMBER_LOCK_AGAIN = 2;
 
-    private static final int THREAD_SLEPPING_DELAY = 300;
-
     private static final int VERIFY_FAIL_ANIMATION_DURATION = 60;
 
     private static final int VERIFY_FAIL_ANIMATION_REPEAT_COUNT = 4;
@@ -110,17 +96,28 @@ public class PandoraNumberLockView extends LinearLayout {
     private void init() {
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.pandora_number_lock, null);
         addView(mRootView);
-        mKeyboardView = (KeyboardView) mRootView.findViewById(R.id.pandora_keyboard_view);
-        mKeyboardView.setKeyboard(new Keyboard(mContext, R.layout.pandora_number_lock_content));
-        mKeyboardView.setPreviewEnabled(false);
-        mKeyboardView.setOnKeyboardActionListener(mKeyboardListener);
         mPromptTextView = (TypefaceTextView) mRootView.findViewById(R.id.number_lock_prompt);
-        mDownPassWordMark = (LinearLayout) mRootView.findViewById(R.id.pandora_number_layout);
         mNumberLayout = (LinearLayout) findViewById(R.id.pandora_number_layout);
         mNumberOne = (ImageView) mRootView.findViewById(R.id.pandora_number_one);
         mNumberTwo = (ImageView) mRootView.findViewById(R.id.pandora_number_two);
         mNumberThree = (ImageView) mRootView.findViewById(R.id.pandora_number_three);
         mNumberFour = (ImageView) mRootView.findViewById(R.id.pandora_number_four);
+        mKeyboardView = (KeyboardView) mRootView.findViewById(R.id.pandora_keyboard_view);
+        if (isLockScreen) {
+            mPromptTextView.setTextColor(getResources().getColor(R.color.white));
+            mKeyboardView.setKeyTextColor(getResources().getColor(R.color.white));
+            mNumberOne.setImageResource(R.drawable.pandora_number_lock_white_line);
+            mNumberTwo.setImageResource(R.drawable.pandora_number_lock_white_line);
+            mNumberThree.setImageResource(R.drawable.pandora_number_lock_white_line);
+            mNumberFour.setImageResource(R.drawable.pandora_number_lock_white_line);
+            mKeyboardView.setKeyboard(new Keyboard(mContext,
+                    R.layout.pandora_number_lock_white_content));
+        } else {
+            
+            mKeyboardView.setKeyboard(new Keyboard(mContext, R.layout.pandora_number_lock_content));
+        }
+        mKeyboardView.setPreviewEnabled(false);
+        mKeyboardView.setOnKeyboardActionListener(mKeyboardListener);
     }
 
     private void clearPasswordStringBuffer(boolean isNeedAnimation) {
@@ -156,43 +153,83 @@ public class PandoraNumberLockView extends LinearLayout {
     protected void showPasswordStringBuffer(boolean isNeedAnimation) {
         switch (mPassword.toString().length()) {
             case 0:
-                mNumberOne.setImageResource(R.drawable.pandora_number_lock_line);
-                mNumberTwo.setImageResource(R.drawable.pandora_number_lock_line);
-                mNumberThree.setImageResource(R.drawable.pandora_number_lock_line);
-                mNumberFour.setImageResource(R.drawable.pandora_number_lock_line);
+                mNumberOne
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_line
+                                : R.drawable.pandora_number_lock_line);
+                mNumberTwo
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_line
+                                : R.drawable.pandora_number_lock_line);
+                mNumberThree
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_line
+                                : R.drawable.pandora_number_lock_line);
+                mNumberFour
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_line
+                                : R.drawable.pandora_number_lock_line);
                 break;
             case 1:
-                mNumberOne.setImageResource(R.drawable.pandora_number_lock_point);
-                mNumberTwo.setImageResource(R.drawable.pandora_number_lock_line);
-                mNumberThree.setImageResource(R.drawable.pandora_number_lock_line);
-                mNumberFour.setImageResource(R.drawable.pandora_number_lock_line);
+                mNumberOne
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_point
+                                : R.drawable.pandora_number_lock_point);
+                mNumberTwo
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_line
+                                : R.drawable.pandora_number_lock_line);
+                mNumberThree
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_line
+                                : R.drawable.pandora_number_lock_line);
+                mNumberFour
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_line
+                                : R.drawable.pandora_number_lock_line);
                 if (isNeedAnimation) {
                     createNumberStateAnimations(mNumberOne);
                 }
                 break;
             case 2:
-                mNumberOne.setImageResource(R.drawable.pandora_number_lock_point);
-                mNumberTwo.setImageResource(R.drawable.pandora_number_lock_point);
-                mNumberThree.setImageResource(R.drawable.pandora_number_lock_line);
-                mNumberFour.setImageResource(R.drawable.pandora_number_lock_line);
+                mNumberOne
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_point
+                                : R.drawable.pandora_number_lock_point);
+                mNumberTwo
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_point
+                                : R.drawable.pandora_number_lock_point);
+                mNumberThree
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_line
+                                : R.drawable.pandora_number_lock_line);
+                mNumberFour
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_line
+                                : R.drawable.pandora_number_lock_line);
                 if (isNeedAnimation) {
                     createNumberStateAnimations(mNumberTwo);
                 }
                 break;
             case 3:
-                mNumberOne.setImageResource(R.drawable.pandora_number_lock_point);
-                mNumberTwo.setImageResource(R.drawable.pandora_number_lock_point);
-                mNumberThree.setImageResource(R.drawable.pandora_number_lock_point);
-                mNumberFour.setImageResource(R.drawable.pandora_number_lock_line);
+                mNumberOne
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_point
+                                : R.drawable.pandora_number_lock_point);
+                mNumberTwo
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_point
+                                : R.drawable.pandora_number_lock_point);
+                mNumberThree
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_point
+                                : R.drawable.pandora_number_lock_point);
+                mNumberFour
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_line
+                                : R.drawable.pandora_number_lock_line);
                 if (isNeedAnimation) {
                     createNumberStateAnimations(mNumberThree);
                 }
                 break;
             case 4:
-                mNumberOne.setImageResource(R.drawable.pandora_number_lock_point);
-                mNumberTwo.setImageResource(R.drawable.pandora_number_lock_point);
-                mNumberThree.setImageResource(R.drawable.pandora_number_lock_point);
-                mNumberFour.setImageResource(R.drawable.pandora_number_lock_point);
+                mNumberOne
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_point
+                                : R.drawable.pandora_number_lock_point);
+                mNumberTwo
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_point
+                                : R.drawable.pandora_number_lock_point);
+                mNumberThree
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_point
+                                : R.drawable.pandora_number_lock_point);
+                mNumberFour
+                        .setImageResource(isLockScreen ? R.drawable.pandora_number_lock_white_point
+                                : R.drawable.pandora_number_lock_point);
                 if (isNeedAnimation) {
                     createNumberStateAnimations(mNumberFour);
                 }
@@ -301,7 +338,7 @@ public class PandoraNumberLockView extends LinearLayout {
 
         @Override
         public void onPress(int primaryCode) {
-
+            // mKeyboardView.getKeyboard().getKeys().get(0).
         }
 
     };
@@ -318,16 +355,10 @@ public class PandoraNumberLockView extends LinearLayout {
         onPatternDetectedTimes = onPatternDetectedTimes + 1;
         if (isPatternDetectedForConfirmation(onPatternDetectedTimes)) {
             // TODO   success to set munber lock
-            HDBThreadUtils.postOnUiDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    setUnLockType(KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK);
-                    if (null != mNumberLockListener) {
-                        mNumberLockListener.onSetNumberLock(LOCK_NUMBER_TYPE_OPEN, true);
-                    }
-                }
-            }, THREAD_SLEPPING_DELAY);
+            setUnLockType(KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK);
+            if (null != mNumberLockListener) {
+                mNumberLockListener.onSetNumberLock(LOCK_NUMBER_TYPE_OPEN, true);
+            }
             return;
         }
         setPromptString(mContext.getResources().getString(R.string.number_lock_confirmation_prompt));

@@ -214,27 +214,31 @@
         <activity
             android:name=".settings.FAQActivity"
             android:exported="false"
-            android:label="常见问题"
+            android:label="@string/pandora_setting_general_faq"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".settings.FeedbackActivity"
             android:exported="false"
-            android:label="意见反馈"
+            android:label="@string/pandora_setting_general_feedback"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".settings.AboutActivity"
             android:exported="false"
-            android:label="关于潘多拉"
+            android:label="@string/pandora_setting_general_about"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".settings.NotifyManagerActivity"
             android:exported="false"
-            android:label="通知管理"
+            android:label="@string/pandora_setting_notify_manage"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat" />
+        <activity
+            android:name=".settings.WallpaperDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

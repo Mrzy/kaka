@@ -26,7 +26,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -45,7 +44,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.utils.LockPatternUtils;
+import cn.zmdx.kaka.locker.pattern.LockPatternManager;
 
 /**
  * Displays and detects the user's unlock attempt, which is a drag of a finger
@@ -65,7 +64,7 @@ public class LockPatternView extends View {
 
     private static final boolean PROFILE_DRAWING = false;
 
-    private final CellState[][] mCellStates;
+    private CellState[][] mCellStates;
 
     private final int mDotSize;
 
@@ -304,23 +303,7 @@ public class LockPatternView extends View {
         mPathPaint.setAntiAlias(true);
         mPathPaint.setDither(true);
 
-        // mRegularColor =
-        // getResources().getColor(R.color.lock_pattern_view_regular_color);
-        // mErrorColor =
-        // getResources().getColor(R.color.lock_pattern_view_error_color);
-        // mSuccessColor =
-        // getResources().getColor(R.color.lock_pattern_view_success_color);
-        // mRegularColor = a.getColor(R.styleable.LockPatternView_regularColor,
-        // mRegularColor);
-        // mErrorColor = a.getColor(R.styleable.LockPatternView_errorColor,
-        // mErrorColor);
-        // mSuccessColor = a.getColor(R.styleable.LockPatternView_successColor,
-        // mSuccessColor);
-
-        // int pathColor = a.getColor(R.styleable.LockPatternView_pathColor,
-        // mRegularColor);
         a.recycle();
-        initRegularDotColor();
         // mPathPaint.setColor(pathColor);
 
         mPathPaint.setStyle(Paint.Style.STROKE);
@@ -337,7 +320,24 @@ public class LockPatternView extends View {
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
 
-        mCellStates = new CellState[3][3];
+        initRegularDotColor(LockPatternManager.getInstance().getLockPatternStyle(getContext(),
+                LockPatternManager.LOCK_PATTERN_STYLE_PURE));
+
+        // mCellStates = new CellState[3][3];
+        // initCellStates();
+
+        // mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(context,
+        // android.Res.interpolator.fast_out_slow_in);
+        // mLinearOutSlowInInterpolator =
+        // AnimationUtils.loadInterpolator(context,
+        // android.Res.interpolator.linear_out_slow_in);
+        mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(context,
+                android.R.interpolator.linear);
+        mLinearOutSlowInInterpolator = AnimationUtils.loadInterpolator(context,
+                android.R.interpolator.linear);
+    }
+
+    private void initCellStates() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 mCellStates[i][j] = new CellState();
@@ -345,28 +345,22 @@ public class LockPatternView extends View {
                 mCellStates[i][j].color = mRegularDotColor[i][j];
             }
         }
-
-        // mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(context,
-        // android.R.interpolator.fast_out_slow_in);
-        // mLinearOutSlowInInterpolator =
-        // AnimationUtils.loadInterpolator(context,
-        // android.R.interpolator.linear_out_slow_in);
-        mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(context,
-                android.R.interpolator.linear);
-        mLinearOutSlowInInterpolator = AnimationUtils.loadInterpolator(context,
-                android.R.interpolator.linear);
     }
 
-    private void initRegularDotColor() {
-        mRegularDotColor[0][0] = Color.WHITE;
-        mRegularDotColor[0][1] = Color.WHITE;
-        mRegularDotColor[0][2] = Color.WHITE;
-        mRegularDotColor[1][0] = Color.WHITE;
-        mRegularDotColor[1][1] = Color.WHITE;
-        mRegularDotColor[1][2] = Color.WHITE;
-        mRegularDotColor[2][0] = Color.WHITE;
-        mRegularDotColor[2][1] = Color.WHITE;
-        mRegularDotColor[2][2] = Color.WHITE;
+    private void initRegularDotColor(int[][] styleColor) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                mRegularDotColor[i][j] = styleColor[i][j];
+            }
+        }
+        mCellStates = new CellState[3][3];
+        initCellStates();
+    }
+
+    public void setColorStyle(int style) {
+        initRegularDotColor(LockPatternManager.getInstance().getLockPatternStyle(getContext(),
+                style));
+//        invalidate();
     }
 
     public CellState[][] getCellStates() {
@@ -1029,7 +1023,7 @@ public class LockPatternView extends View {
 
         if (drawPath) {
             // mPathPaint.setColor(getCurrentColor(true /* partOfPattern */));
-            mPathPaint.setColor(Color.WHITE);
+            mPathPaint.setColor(mRegularDotColor[0][0]);
             mPathPaint.setShader(mPathShader);
 
             boolean anyCircles = false;
@@ -1128,15 +1122,17 @@ public class LockPatternView extends View {
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
-        return new SavedState(superState, LockPatternUtils.patternToString(mPattern),
-                mPatternDisplayMode.ordinal(), mInputEnabled, mInStealthMode, mEnableHapticFeedback);
+        return new SavedState(superState, LockPatternManager.getInstance()
+                .patternToString(mPattern), mPatternDisplayMode.ordinal(), mInputEnabled,
+                mInStealthMode, mEnableHapticFeedback);
     }
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
         final SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-        setPattern(DisplayMode.Correct, LockPatternUtils.stringToPattern(ss.getSerializedPattern()));
+        setPattern(DisplayMode.Correct,
+                LockPatternManager.getInstance().stringToPattern(ss.getSerializedPattern()));
         mPatternDisplayMode = DisplayMode.values()[ss.getDisplayMode()];
         mInputEnabled = ss.isInputEnabled();
         mInStealthMode = ss.isInStealthMode();

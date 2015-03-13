@@ -1,84 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/setting_background_color"
     android:orientation="vertical" >
 
-    <cn.zmdx.kaka.locker.widget.BaseLinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_item_height"
-        android:layout_marginTop="11dp"
-        android:orientation="horizontal" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-            style="@style/setting_textview"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="false"
-            android:gravity="center_vertical"
-            android:text="开启重力感应壁纸" />
-
-        <cn.zmdx.kaka.locker.widget.SwitchButton
-            android:id="@+id/notify_open_gravity_sensor_switch_button"
-            style="@style/setting_switch"
-            android:layout_width="wrap_content"
+        <cn.zmdx.kaka.locker.widget.BaseLinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:frameDrawable="@drawable/switch_frame"
-            app:sliderDrawable="@drawable/switch_slider"
-            app:stateDrawable="@drawable/switch_state_normal"
-            app:stateMaskDrawable="@drawable/switch_state_mask" />
-    </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
+            android:orientation="horizontal" >
 
-    <cn.zmdx.kaka.locker.widget.BaseLinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_item_height"
+                    android:orientation="horizontal" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/setting_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/pandora_setting_open_gravity_sensor" />
+
+                    <cn.zmdx.kaka.locker.widget.SwitchButton
+                        android:id="@+id/notify_open_gravity_sensor_switch_button"
+                        style="@style/setting_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginRight="17dp"
+                    android:background="@drawable/setting_line"
+                    android:contentDescription="@string/contentDescription" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_item_height"
+                    android:orientation="horizontal" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/setting_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/pandora_setting_replacement_wallpaper" />
+
+                    <cn.zmdx.kaka.locker.widget.SwitchButton
+                        android:id="@+id/notify_random_replacement_wallpaper_switch_button"
+                        style="@style/setting_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginRight="17dp"
+                    android:background="@drawable/setting_line"
+                    android:contentDescription="@string/contentDescription" />
+
+                <LinearLayout
+                    android:id="@+id/notify_local_wallpaper_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_item_height"
+                    android:orientation="horizontal" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/setting_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/pandora_setting_local_wallpaper" />
+
+                    <ImageView
+                        style="@style/setting_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/contentDescription"
+                        android:src="@drawable/setting_arrow" />
+                </LinearLayout>
+            </LinearLayout>
+        </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
+
+        <LinearLayout
+            android:id="@+id/setting_online_wallpaper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/setting_online_detail_wallpaper"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_item_height"
-        android:layout_marginTop="11dp"
-        android:orientation="horizontal" >
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+    </LinearLayout>
 
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-            style="@style/setting_textview"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="false"
-            android:gravity="center_vertical"
-            android:text="随机更换壁纸" />
-
-        <cn.zmdx.kaka.locker.widget.SwitchButton
-            android:id="@+id/notify_random_replacement_wallpaper_switch_button"
-            style="@style/setting_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:frameDrawable="@drawable/switch_frame"
-            app:sliderDrawable="@drawable/switch_slider"
-            app:stateDrawable="@drawable/switch_state_normal"
-            app:stateMaskDrawable="@drawable/switch_state_mask" />
-    </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
-
-    <cn.zmdx.kaka.locker.widget.BaseLinearLayout
-        android:id="@+id/notify_local_wallpaper_item"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_item_height"
-        android:layout_marginTop="11dp"
-        android:orientation="horizontal" >
-
-        <cn.zmdx.kaka.locker.widget.TypefaceTextView
-            style="@style/setting_textview"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="false"
-            android:gravity="center_vertical"
-            android:text="使用本地壁纸" />
-
-        <ImageView
-            style="@style/setting_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/contentDescription"
-            android:src="@drawable/lock_arrow" />
-    </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
-
-</LinearLayout>
+</FrameLayout>

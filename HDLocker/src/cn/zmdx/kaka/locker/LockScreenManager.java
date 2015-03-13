@@ -24,6 +24,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;

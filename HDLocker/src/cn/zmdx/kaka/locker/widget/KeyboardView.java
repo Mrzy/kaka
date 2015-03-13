@@ -136,6 +136,12 @@ public class KeyboardView extends View implements View.OnClickListener {
     private int mLabelTextSize;
     private int mKeyTextSize;
     private int mKeyTextColor;
+    
+    public void setKeyTextColor(int mKeyTextColor) {
+        this.mKeyTextColor = mKeyTextColor;
+        invalidate();
+    }
+
     private float mShadowRadius = 0f; //TODO change
     private int mShadowColor = 0; //TODO change
     private float mBackgroundDimAmount;
@@ -661,7 +667,6 @@ public class KeyboardView extends View implements View.OnClickListener {
         final int kbdPaddingTop = getPaddingTop();
         final Key[] keys = mKeys;
         final Key invalidKey = mInvalidatedKey;
-
         paint.setColor(mKeyTextColor);
         boolean drawSingleKey = false;
         if (invalidKey != null && canvas.getClipBounds(clipRegion)) {

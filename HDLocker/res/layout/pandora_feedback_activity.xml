@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white" >
+    android:background="@color/setting_background_color" >
 
     <LinearLayout
         android:id="@+id/fb_input_layout"
@@ -49,6 +49,7 @@
                 android:layout_toStartOf="@id/fb_send_btn"
                 android:background="@drawable/fb_input_bg"
                 android:hint="@string/pandora_feedback_title"
+                android:textColorHint="@color/setting_text_grey_color"
                 android:minHeight="33dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
