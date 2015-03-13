@@ -4,11 +4,10 @@ package cn.zmdx.kaka.locker.content;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -74,6 +73,16 @@ public class PandoraBoxManager {
     }
 
     private boolean mInitBody = false;
+
+    private int blendColors(int from, int to, float ratio) {
+        final float inverseRatio = 1f - ratio;
+
+        final float r = Color.red(to) * ratio + Color.red(from) * inverseRatio;
+        final float g = Color.green(to) * ratio + Color.green(from) * inverseRatio;
+        final float b = Color.blue(to) * ratio + Color.blue(from) * inverseRatio;
+
+        return Color.rgb((int) r, (int) g, (int) b);
+    }
 
     public void initBody() {
         if (mInitBody) {
@@ -151,13 +160,13 @@ public class PandoraBoxManager {
         final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
                 .findViewById(R.id.refreshLayout);
 
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news, refreshView, false);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, adapter, news, refreshView, false);
 
         refreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news, refreshView,
+                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, adapter, news, refreshView,
                         false);
             }
         });
@@ -174,7 +183,7 @@ public class PandoraBoxManager {
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
                 if (lastItem >= totalItemCount - 4 && dy > 0) {
-                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news,
+                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, adapter, news,
                             refreshView, true);
                 }
             }
@@ -213,13 +222,13 @@ public class PandoraBoxManager {
         final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
                 .findViewById(R.id.refreshLayout);
 
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news, refreshView, false);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, adapter, news, refreshView, false);
 
         refreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news, refreshView,
+                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, adapter, news, refreshView,
                         false);
             }
         });
@@ -236,7 +245,7 @@ public class PandoraBoxManager {
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
                 if (lastItem >= totalItemCount - 4 && dy > 0) {
-                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news,
+                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, adapter, news,
                             refreshView, true);
                 }
             }
@@ -304,15 +313,15 @@ public class PandoraBoxManager {
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setVerticalFadingEdgeEnabled(true);
         rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
-        final LinearLayoutManager llm = new LinearLayoutManager(mContext,
-                LinearLayoutManager.VERTICAL, false);
-        rv.setLayoutManager(llm);
+        final StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2,
+                StaggeredGridLayoutManager.VERTICAL);
+        rv.setLayoutManager(sglm);
         rv.setHasFixedSize(true);
 
         final List<ServerImageData> news = new ArrayList<ServerImageData>();
-        final GeneralNewsPageAdapter adapter = new GeneralNewsPageAdapter(mContext, news);
-        rv.setAdapter(adapter);
-        adapter.setOnItemClickListener(new GeneralNewsPageAdapter.OnItemClickListener() {
+        final BeautyPageAdapter adapter = new BeautyPageAdapter(mContext, news);
+
+        adapter.setOnItemClickListener(new BeautyPageAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClicked(View view, int position) {
@@ -323,9 +332,13 @@ public class PandoraBoxManager {
                 openDetailPage(ndl);
             }
         });
+        rv.setAdapter(adapter);
 
         final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
                 .findViewById(R.id.refreshLayout);
+
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, adapter, news, refreshView, false);
+
         refreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
@@ -334,18 +347,19 @@ public class PandoraBoxManager {
                         false);
             }
         });
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, adapter, news, refreshView, false);
 
         rv.setOnScrollListener(new OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItem = llm.findLastVisibleItemPosition();
-                int totalItemCount = llm.getItemCount();
+                int[] lastVisibleItem = ((StaggeredGridLayoutManager) sglm)
+                        .findLastVisibleItemPositions(null);
+                int lastItem = Math.max(lastVisibleItem[0], lastVisibleItem[1]);
+                int totalItemCount = sglm.getItemCount();
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
-                if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
+                if (lastItem >= totalItemCount - 4 && dy > 0) {
                     NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, adapter, news,
                             refreshView, true);
                 }

@@ -16,7 +16,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
@@ -37,7 +36,7 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
     private static final int SWIPE_MIN_DISTANCE = BaseInfoHelper.dip2px(HDApplication.getContext(), 50);
 
-    private static final int SWIPE_THRESHOLD_VELOCITY = 2000;
+    private static final int SWIPE_THRESHOLD_VELOCITY = BaseInfoHelper.dip2px(HDApplication.getContext(), 500);
 
     public NewsDetailLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -154,7 +153,9 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
+        float xDistance = e2.getX() - e1.getX();
+        float yDistance = Math.abs(e1.getY() - e2.getY());
+        if (xDistance > SWIPE_MIN_DISTANCE && xDistance > yDistance
                 && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
             back();
         }
