@@ -157,7 +157,7 @@ public class PandoraBoxManager {
         final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
                 .findViewById(R.id.refreshLayout);
 
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, adapter, news, refreshView, false);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, adapter, news, refreshView, true);
 
         refreshView.setOnRefreshListener(new OnRefreshListener() {
 
@@ -219,7 +219,7 @@ public class PandoraBoxManager {
         final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
                 .findViewById(R.id.refreshLayout);
 
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, adapter, news, refreshView, false);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, adapter, news, refreshView, true);
 
         refreshView.setOnRefreshListener(new OnRefreshListener() {
 
@@ -286,7 +286,7 @@ public class PandoraBoxManager {
             }
         });
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, adapter, news, refreshView,
-                false);
+                true);
 
         rv.setOnScrollListener(new OnScrollListener() {
             @Override
@@ -334,7 +334,7 @@ public class PandoraBoxManager {
         final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
                 .findViewById(R.id.refreshLayout);
 
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, adapter, news, refreshView, false);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, adapter, news, refreshView, true);
 
         refreshView.setOnRefreshListener(new OnRefreshListener() {
 
@@ -400,7 +400,7 @@ public class PandoraBoxManager {
                         false);
             }
         });
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news, refreshView, false);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news, refreshView, true);
 
         rv.setOnScrollListener(new OnScrollListener() {
 

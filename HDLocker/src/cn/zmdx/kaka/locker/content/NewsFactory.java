@@ -54,7 +54,12 @@ public class NewsFactory {
             srl.setRefreshing(true);
         }
 
-        if (mLoadingOlder) {
+        boolean isLoadingOlder = false;
+        if (srl.getTag() != null) {
+            isLoadingOlder = (Boolean) srl.getTag();
+        }
+
+        if (isLoadingOlder) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("正在加载更早的数据，中断此次请求");
             }
@@ -64,11 +69,13 @@ public class NewsFactory {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("开始加载更早的数据");
             }
-            mLoadingOlder = true;
+            isLoadingOlder = true;
+            srl.setTag(isLoadingOlder);
         }
         if (!HDBNetworkState.isNetworkAvailable()) {
             srl.setRefreshing(false);
-            mLoadingOlder = false;
+            isLoadingOlder = false;
+            srl.setTag(isLoadingOlder);
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("无网络，中断请求新闻数据");
             }
@@ -99,8 +106,9 @@ public class NewsFactory {
                 adapter.notifyDataSetChanged();
                 if (srl != null) {
                     srl.setRefreshing(false);
+                    // 标记已加载完数据
+                    srl.setTag(false);
                 }
-                mLoadingOlder = false;
             }
 
         }, new ErrorListener() {
@@ -112,8 +120,9 @@ public class NewsFactory {
                 }
                 if (srl != null) {
                     srl.setRefreshing(false);
+                    // 标记已加载完数据
+                    srl.setTag(false);
                 }
-                mLoadingOlder = false;
             }
         });
         RequestManager.getRequestQueue().add(request);
@@ -131,17 +140,19 @@ public class NewsFactory {
             time = System.currentTimeMillis();
         }
 
-        for (ServerImageData sid : data) {
-            final String modifyTime = sid.getCollectTime();
-            if (!TextUtils.isEmpty(modifyTime)) {
-                long lm = Long.valueOf(modifyTime);
-                if (older) {
-                    if (lm < time) {
-                        time = lm;
-                    }
-                } else {
-                    if (lm > time) {
-                        time = lm;
+        if (data != null && data.size() > 0) {
+            for (ServerImageData sid : data) {
+                final String modifyTime = sid.getCollectTime();
+                if (!TextUtils.isEmpty(modifyTime)) {
+                    long lm = Long.valueOf(modifyTime);
+                    if (older) {
+                        if (lm < time) {
+                            time = lm;
+                        }
+                    } else {
+                        if (lm > time) {
+                            time = lm;
+                        }
                     }
                 }
             }

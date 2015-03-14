@@ -80,6 +80,9 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         mRecyclerView.setVerticalFadingEdgeEnabled(true);
         mRecyclerView.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 10));
         mRecyclerView.setOnScrollListener(mScrollListener);
+        mAdapter = new WallpaperPageAdapter(mContext, mRecyclerView, mList);
+        mAdapter.setOnItemClickListener(this);
+        mRecyclerView.setAdapter(mAdapter);
         mBottomView = (ImageView) mEntireView.findViewById(R.id.online_view_bottom);
 
         pullWallpaperData();
