@@ -145,13 +145,19 @@ public class SensorImageView extends ImageView {
         updateTransX();
         mMatrix.postTranslate(mCurTransX, 0);
         setImageMatrix(mMatrix);
-        postInvalidateDelayed(FRAME_DELAY);
+        if (!mPause) {
+            postInvalidateDelayed(FRAME_DELAY);
+        }
         super.onDraw(canvas);
     }
 
     private SensorManager mSensor;
 
     private void registSensorListener() {
+        if (mCurMode != TRANSITION_MODE_SENSOR) {
+            return;
+        }
+        unRegistSensorListener();
         if (mSensor == null) {
             mSensor = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         }
@@ -179,7 +185,7 @@ public class SensorImageView extends ImageView {
                 mTransSpeed = -(DEFAULT_TRANSITION_SPEED + DEFAULT_TRANSITION_SPEED);
             } else if (x < -2) {
                 mTransSpeed = DEFAULT_TRANSITION_SPEED + DEFAULT_TRANSITION_SPEED;
-            } else if (x > 1){
+            } else if (x > 1) {
                 mTransSpeed = -DEFAULT_TRANSITION_SPEED;
             } else if (x < -1) {
                 mTransSpeed = DEFAULT_TRANSITION_SPEED;
@@ -203,6 +209,7 @@ public class SensorImageView extends ImageView {
     @Override
     protected void onDetachedFromWindow() {
         getContext().unregisterReceiver(mScreenReceiver);
+        unRegistSensorListener();
         super.onDetachedFromWindow();
     }
 
@@ -214,9 +221,7 @@ public class SensorImageView extends ImageView {
             if (Intent.ACTION_SCREEN_OFF.equals(action)) {
                 unRegistSensorListener();
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                if (mCurMode == TRANSITION_MODE_SENSOR) {
-                    registSensorListener();
-                }
+                registSensorListener();
             }
         }
     };
@@ -274,5 +279,18 @@ public class SensorImageView extends ImageView {
      */
     private void handleImageChange() {
         updateScaleRate();
+    }
+
+    private boolean mPause = false;
+
+    public void pauseSensor() {
+        unRegistSensorListener();
+        mPause = true;
+    }
+
+    public void resumeSensor() {
+        registSensorListener();
+        mPause = false;
+        invalidate();
     }
 }
