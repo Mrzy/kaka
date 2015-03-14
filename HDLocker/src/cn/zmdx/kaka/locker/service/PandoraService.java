@@ -11,10 +11,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
-import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
 public class PandoraService extends Service {
 
@@ -25,11 +26,14 @@ public class PandoraService extends Service {
      */
     public static final String ALARMALERT_ACTION_ZX = "com.zdworks.android.zdclock.ACTION_ALARM_ALERT";
 
+    private Context mContext = HDApplication.getContext();
+
     @Override
     public void onCreate() {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("PandoraService is startup");
         }
+        PandoraLocationManager.getInstance(mContext).startMonitor();
         registerBroadcastReceiver();
         TelephonyManager manager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
         manager.listen(new MyPhoneListener(), PhoneStateListener.LISTEN_CALL_STATE);

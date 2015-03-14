@@ -1,24 +1,18 @@
 
 package cn.zmdx.kaka.locker.weather;
 
-import java.io.InputStream;
-import java.util.List;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.RequestManager;
+import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherCityInfo;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureIndexInfo;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
 import cn.zmdx.kaka.locker.weather.utils.ParseWeatherJsonUtils;
 import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
@@ -39,12 +33,6 @@ public class PandoraWeatherManager {
     private String weatherUrl;
 
     private String cityNameStr = null;
-
-    private InputStream xmlStream;
-
-    private String areaIdInXml = null;
-
-    private String forecastReleasedTime;
 
     private String areaId = null;
 
@@ -76,21 +64,17 @@ public class PandoraWeatherManager {
     }
 
     public void getWeatherFormCache(final ISmartWeatherCallback callback) {
-        HDBThreadUtils.runOnWorker(new Runnable() {
-            @Override
-            public void run() {
-                String lastWeatherInfo = PandoraConfig.newInstance(mContext).getLastWeatherInfo();
-                if (lastWeatherInfo != null) {
-                    try {
-                        JSONObject weatherObj = new JSONObject(lastWeatherInfo);
-                        updateView(weatherObj);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
+        String lastWeatherInfo = PandoraConfig.newInstance(mContext).getLastWeatherInfo();
+        if (lastWeatherInfo != null) {
+            try {
+                JSONObject weatherObj = new JSONObject(lastWeatherInfo);
+                SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
+                        .parseWeatherJson(weatherObj);
+                PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        });
-
+        }
     }
 
     public void getCurrentSmartWeather(final ISmartWeatherCallback callback) {
@@ -118,6 +102,8 @@ public class PandoraWeatherManager {
                     callback.onFailure();
                     return;
                 } else {
+                    String date = SmartWeatherUtils.getDate();
+                    PandoraConfig.newInstance(mContext).saveLastCheckWeatherTime(date);
                     SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
                             .parseWeatherJson(response);
                     PandoraConfig.newInstance(mContext).saveLastWeatherInfo(response.toString());
@@ -140,67 +126,16 @@ public class PandoraWeatherManager {
     private String getCurWeatherURL() {
         cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
         if (cityNameStr != null) {
-            areaId = getAreaId(cityNameStr);
+            areaId = XMLParserUtils.getAreaId(cityNameStr);
         } else {
             String lastCityName = PandoraConfig.newInstance(mContext).getLastCityName();
-            areaId = getAreaId(lastCityName);
+            areaId = XMLParserUtils.getAreaId(lastCityName);
         }
-        String date = SmartWeatherUtils.getDate();
-        PandoraConfig.newInstance(mContext).saveLastCheckWeatherTime(date);
         weatherUrl = SmartWeatherUtils.getWeatherUrl(areaId);
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "--areaid-->>" + areaId + "\n--weatherUrl-->>" + weatherUrl);
             Log.e(TAG, "cityNameStr: ---->" + cityNameStr);
         }
         return weatherUrl;
-    }
-
-    private String getAreaId(String cityNameStr) {
-        AssetManager asset = this.mContext.getAssets();
-        try {
-            xmlStream = asset.open("cityInfo.xml");
-            if (cityNameStr != null) {
-                areaIdInXml = XMLParserUtils.getAreaIdByCityName(xmlStream, cityNameStr);
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        return areaIdInXml;
-    }
-
-    private void updateView(JSONObject weatherObj) {
-        SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils.parseWeatherJson(weatherObj);
-        SmartWeatherCityInfo smartWeatherCityInfo = smartWeatherInfo.getSmartWeatherCityInfo();
-        SmartWeatherFeatureInfo smartWeatherFeatureInfo = smartWeatherInfo
-                .getSmartWeatherFeatureInfo();
-        List<SmartWeatherFeatureIndexInfo> smartWeatherFeatureIndexInfoList = smartWeatherFeatureInfo
-                .getSmartWeatherFeatureIndexInfoList();
-
-        forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
-
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, "----得到预报发布时间---->>" + forecastReleasedTime);
-        }
-        String cityNameCh = smartWeatherCityInfo.getCityNameCh();
-        String locationCityNameCh = smartWeatherCityInfo.getLocationCityNameCh();
-        String provinceNameCh = smartWeatherCityInfo.getProvinceNameCh();
-        String countryNameCh = smartWeatherCityInfo.getCountryNameCh();
-        Log.i(TAG, "城市名:" + cityNameCh);
-        Log.i(TAG, "所属城市:" + locationCityNameCh);
-        Log.i(TAG, "所属省:" + provinceNameCh);
-        Log.i(TAG, "所属国家:" + countryNameCh);
-
-        for (int i = 0; i < smartWeatherFeatureIndexInfoList.size(); i++) {
-            SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
-                    .get(i);
-
-            String daytimeCentTemp = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
-            String daytimeWindForceNo = smartWeatherFeatureIndexInfo.getDaytimeWindForceNo();
-
-            String sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
-            String[] split = sunriseAndSunset.split("\\|");//
-            String sunrise = split[0];
-            String sunset = split[1];
-        }
     }
 }

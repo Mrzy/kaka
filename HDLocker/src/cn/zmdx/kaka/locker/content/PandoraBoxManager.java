@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.content;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -22,6 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.ImageView;
+import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
@@ -40,6 +43,10 @@ import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.widget.FloatingActionButton;
+import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureIndexInfo;
+import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
+import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
+import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
@@ -69,6 +76,15 @@ public class PandoraBoxManager implements View.OnClickListener {
             Color.parseColor("#80ab47bc"), Color.parseColor("#808bc34a"),
             Color.parseColor("#80ea861c"), Color.parseColor("#803db7ff")
     };
+    private TextView tvLunarCalendar;
+
+    private TextView tvWeatherFeature;
+
+    private TextView tvWeatherPM;
+
+    private TextView tvUnreadNews;
+
+    private ImageView ivWeatherFeaturePic;
 
     private PandoraBoxManager(Context context) {
         mContext = context;
@@ -86,8 +102,33 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     public View initHeader() {
         mHeaderView = mEntireView.findViewById(R.id.header);
-        // TODO bind data
+        tvLunarCalendar = (TextView) mHeaderView.findViewById(R.id.tvLunarCalendar);
+        tvWeatherFeature = (TextView) mHeaderView.findViewById(R.id.tvWeatherFeature);
+        tvWeatherPM = (TextView) mHeaderView.findViewById(R.id.tvWeatherPM);
+        tvUnreadNews = (TextView) mHeaderView.findViewById(R.id.tvUnreadNews);
+        ivWeatherFeaturePic = (ImageView) mHeaderView.findViewById(R.id.ivWeatherFeaturePic);
+
         return mHeaderView;
+    }
+
+    @SuppressLint("NewApi")
+    public void updateView(SmartWeatherInfo smartWeatherInfo) {
+        if (smartWeatherInfo == null) {
+            return;
+        }
+        SmartWeatherFeatureInfo smartWeatherFeatureInfo = smartWeatherInfo
+                .getSmartWeatherFeatureInfo();
+        List<SmartWeatherFeatureIndexInfo> smartWeatherFeatureIndexInfoList = smartWeatherFeatureInfo
+                .getSmartWeatherFeatureIndexInfoList();
+
+        SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
+                .get(0);
+
+        String daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
+        int featureIndexPicResId = XMLParserUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
+        String featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
+        tvWeatherFeature.setText(featureNameByNo);
+        ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
     }
 
     private boolean mInitBody = false;
