@@ -11,8 +11,10 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import android.annotation.SuppressLint;
 import android.util.Base64;
 
+@SuppressLint("SimpleDateFormat")
 public class SmartWeatherUtils {
     private static final String ENCODING = "UTF-8";
 
@@ -83,14 +85,14 @@ public class SmartWeatherUtils {
     }
 
     public static long str2TimeMillis(String dataStr) {
-        Calendar cal = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
         long timeMillis = 0;
         try {
-            Date date = dateFormat.parse(dataStr);
-            timeMillis = date.getTime();
+            if (dataStr != null) {
+                Date date = dateFormat.parse(dataStr);
+                timeMillis = date.getTime();
+            }
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return timeMillis;

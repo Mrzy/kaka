@@ -198,7 +198,8 @@ public class PandoraConfig {
     }
 
     public String getLastCheckWeatherTime() {
-        return mSp.getString(KEY_LAST_CHECK_WEATHER, "");
+
+        return mSp.getString(KEY_LAST_CHECK_WEATHER, String.valueOf(System.currentTimeMillis()));
     }
 
     public void saveLastCheckWeatherTime(String time) {
@@ -220,7 +221,7 @@ public class PandoraConfig {
     }
 
     public String getLastCityName() {
-        return mSp.getString(KEY_LAST_CITY_NAME, "北京");
+        return mSp.getString(KEY_LAST_CITY_NAME, "");
     }
 
     public String getLastWeatherInfo() {

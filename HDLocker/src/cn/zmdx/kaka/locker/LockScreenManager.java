@@ -62,9 +62,6 @@ import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.OldOnlineWallpaperView;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherCityInfo;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureIndexInfo;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
 import cn.zmdx.kaka.locker.weather.utils.ParseWeatherJsonUtils;
 import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
@@ -474,12 +471,12 @@ public class LockScreenManager {
                     JSONObject weatherObj = new JSONObject(info);
                     SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
                             .parseWeatherJson(weatherObj);
-                    updateView(smartWeatherInfo);
+                    PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
                 } catch (Exception e) {
-                    updateView(null);
+                    PandoraBoxManager.newInstance(mContext).updateView(null);
                 }
             } else {
-                updateView(null);
+                PandoraBoxManager.newInstance(mContext).updateView(null);
             }
             return;
         }
@@ -490,74 +487,33 @@ public class LockScreenManager {
         if (null != mOnlineWallpaperView) {
             mOnlineWallpaperView.setWeatherString(promptString);
         }
-        PandoraWeatherManager.getInstance().getCurrentSmartWeather(new ISmartWeatherCallback() {
+//         PandoraWeatherManager.getInstance().getCurrentSmartWeather(new
+//         ISmartWeatherCallback() {
+//        
+//         @Override
+//         public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
+//         PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
+//         }
+//        
+//         @Override
+//         public void onFailure() {
+//         PandoraBoxManager.newInstance(mContext).updateView(null);
+//         }
+//         });
 
-            @Override
-            public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
-                updateView(smartWeatherInfo);
-            }
-
-            @Override
-            public void onFailure() {
-                updateView(null);
-            }
-        });
-    }
-
-    // private void updateWeatherInfo(final SmartWeatherInfo smartWeatherInfo) {
-    // HDBThreadUtils.runOnUi(new Runnable() {
-    // @Override
-    // public void run() {
-    // updateView(smartWeatherInfo);
-    // }
-    // });
-    // }
-
-    private void updateView(SmartWeatherInfo smartWeatherInfo) {
-        if (smartWeatherInfo == null) {
-            return;
-        }
-        SmartWeatherCityInfo smartWeatherCityInfo = smartWeatherInfo.getSmartWeatherCityInfo();
-        SmartWeatherFeatureInfo smartWeatherFeatureInfo = smartWeatherInfo
-                .getSmartWeatherFeatureInfo();
-        List<SmartWeatherFeatureIndexInfo> smartWeatherFeatureIndexInfoList = smartWeatherFeatureInfo
-                .getSmartWeatherFeatureIndexInfoList();
-
-        String forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, "----得到预报发布时间---->>" + forecastReleasedTime);
-        }
-        String cityNameCh = smartWeatherCityInfo.getCityNameCh();
-        String locationCityNameCh = smartWeatherCityInfo.getLocationCityNameCh();
-        String provinceNameCh = smartWeatherCityInfo.getProvinceNameCh();
-        String countryNameCh = smartWeatherCityInfo.getCountryNameCh();
-        Log.i(TAG, "城市名:" + cityNameCh);
-        Log.i(TAG, "所属城市:" + locationCityNameCh);
-        Log.i(TAG, "所属省:" + provinceNameCh);
-        Log.i(TAG, "所属国家:" + countryNameCh);
-
-        for (int i = 0; i < smartWeatherFeatureIndexInfoList.size(); i++) {
-            SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
-                    .get(i);
-
-            String daytimeCentTemp = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
-            String daytimeWindForceNo = smartWeatherFeatureIndexInfo.getDaytimeWindForceNo();
-
-            String sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
-            String[] split = sunriseAndSunset.split("\\|");//
-            String sunrise = split[0];
-            String sunset = split[1];
-            if (BuildConfig.DEBUG) {
-                Log.i(TAG, "--sunrise-->>" + sunrise + "," + "--sunset-->>" + sunset);
-                Log.i(TAG, "--sunriseAndSunset-->>" + sunriseAndSunset);
-                Log.i(TAG, "最后更新于" + SmartWeatherUtils.getHourFromString(forecastReleasedTime)
-                        + "点");
-                Log.i(TAG, "  " + daytimeCentTemp + "℃");
-                Log.i(TAG, "  " + daytimeWindForceNo + "级");
-                Log.i(TAG, "日出:" + sunrise);
-                Log.i(TAG, "日落:" + sunset);
-            }
-        }
+         PandoraWeatherManager.getInstance().getWeatherFormCache(new
+         ISmartWeatherCallback() {
+        
+         @Override
+         public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
+         PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
+         }
+        
+         @Override
+         public void onFailure() {
+         PandoraBoxManager.newInstance(mContext).updateView(null);
+         }
+         });
     }
 
     /**

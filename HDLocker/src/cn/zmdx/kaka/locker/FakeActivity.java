@@ -69,7 +69,6 @@ public class FakeActivity extends Activity {
                 finish();
             }
         });
-        PandoraLocationManager.getInstance(this).startMonitor();
         LockScreenManager.getInstance().processWeatherInfo();
     }
 
