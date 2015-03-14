@@ -46,11 +46,9 @@ public class MainSettingFragment extends Fragment {
         viewPager.setAdapter(pagerAdapter);
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) mEntireView
                 .findViewById(R.id.setting_pats);
+        tabStrip.setShouldExpand(true);
         tabStrip.setViewPager(viewPager);
         tabStrip.setOnPageChangeListener(pagerAdapter);
-        tabStrip.setShouldExpand(true);
-        tabStrip.setTextColor(getResources().getColor(R.color.setting_text_grey_color));
-        tabStrip.setTextPressColor(getResources().getColor(R.color.setting_text_normal_color));
         return mEntireView;
     }
 
