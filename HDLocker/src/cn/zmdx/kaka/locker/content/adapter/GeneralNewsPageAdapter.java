@@ -7,6 +7,7 @@ import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +16,23 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.utils.TimeUtils;
 
 import com.squareup.picasso.Picasso;
 
 public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView mTextView;
+        public TextView mTextView, mFromTv, mTimeTv;
 
         public ImageView mImageView;
-
-        public CardView mCardView;
 
         public ViewHolder(View view) {
             super(view);
             mTextView = (TextView) view.findViewById(R.id.text);
+            mFromTv = (TextView) view.findViewById(R.id.from);
+            mTimeTv = (TextView) view.findViewById(R.id.time);
             mImageView = (ImageView) view.findViewById(R.id.image);
-            mCardView = (CardView) view.findViewById(R.id.cardView);
             view.setOnClickListener(this);
         }
 
@@ -71,9 +72,20 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
     public void onBindViewHolder(ViewHolder holder, int position) {
         ServerImageData data = mData.get(position);
         holder.mTextView.setText(data.getTitle());
-        Picasso picasso = Picasso.with(mContext);
-        picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
-        picasso.load(data.getUrl()).into(holder.mImageView);
+        holder.mFromTv.setText(data.getCollectWebsite());
+        long time = 0;
+        try {
+            time = Long.valueOf(data.getCollectTime());
+        } catch (Exception e) {
+        }
+        holder.mTimeTv.setText(TimeUtils.getInterval(mContext, time));
+        if (TextUtils.isEmpty(data.getUrl())) {
+            holder.mImageView.setVisibility(View.GONE);
+        } else {
+            Picasso picasso = Picasso.with(mContext);
+            picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
+            picasso.load(data.getUrl()).into(holder.mImageView);
+        }
     }
 
     @Override

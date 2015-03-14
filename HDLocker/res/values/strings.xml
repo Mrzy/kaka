@@ -238,4 +238,11 @@
     <string name="pandora_setting_replacement_wallpaper">随机更换壁纸</string>
     <string name="pandora_setting_local_wallpaper">使用本地壁纸</string>
 
+    <string name="justnow">刚刚</string>
+    <string name="minute">分钟前</string>
+    <string name="hours">小时前</string>
+    <string name="today">今天</string>
+    <string name="yesterday">昨天</string>
+    <string name="day">天前</string>
+
 </resources>

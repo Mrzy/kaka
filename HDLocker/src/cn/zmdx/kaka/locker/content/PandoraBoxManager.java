@@ -7,7 +7,6 @@ import java.util.List;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -75,16 +74,6 @@ public class PandoraBoxManager {
 
     private boolean mInitBody = false;
 
-    private int blendColors(int from, int to, float ratio) {
-        final float inverseRatio = 1f - ratio;
-
-        final float r = Color.red(to) * ratio + Color.red(from) * inverseRatio;
-        final float g = Color.green(to) * ratio + Color.green(from) * inverseRatio;
-        final float b = Color.blue(to) * ratio + Color.blue(from) * inverseRatio;
-
-        return Color.rgb((int) r, (int) g, (int) b);
-    }
-
     public void initBody() {
         if (mInitBody) {
             return;
@@ -102,7 +91,7 @@ public class PandoraBoxManager {
         final PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) mEntireView
                 .findViewById(R.id.newsTabStrip);
         tabStrip.setViewPager(viewPager);
-        tabStrip.setShouldExpand(true);
+        tabStrip.setShouldExpand(false);
     }
 
     private void initTitles(List<String> titles) {
@@ -199,7 +188,7 @@ public class PandoraBoxManager {
         rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         final StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
-        // sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+         sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         // sglm.offsetChildrenHorizontal(100);
         rv.setLayoutManager(sglm);
         rv.setHasFixedSize(true);

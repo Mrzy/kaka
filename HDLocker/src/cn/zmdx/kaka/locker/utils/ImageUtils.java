@@ -185,7 +185,6 @@ public class ImageUtils {
         try {
             target = Bitmap.createBitmap(src, 0, 0, width, height, matrix, true);
         } catch(Exception e) {
-            e.printStackTrace();
             return null;
         }
 

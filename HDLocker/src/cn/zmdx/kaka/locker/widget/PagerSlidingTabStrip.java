@@ -438,20 +438,21 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             if (delegatePageListener != null) {
                 delegatePageListener.onPageSelected(position);
             }
-            View currentTab = tabsContainer.getChildAt(position);
-            for (int i = 0; i < tabCount; i++) {
-                View v = tabsContainer.getChildAt(i);
-                if (v instanceof TextView) {
-                    TextView tab = (TextView) v;
-                    if (v == currentTab) {
-                        tab.setTextColor(tabPressTextColor);
-                        setTextAnimator(tab, tabTextSize, tabPressTextSize);
-                    } else {
-                        tab.setTextColor(tabTextColor);
-                        tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
-                    }
-                }
-            }
+//            View currentTab = tabsContainer.getChildAt(position);
+//            for (int i = 0; i < tabCount; i++) {
+//                View v = tabsContainer.getChildAt(i);
+//                if (v instanceof TextView) {
+//                    TextView tab = (TextView) v;
+//                    if (v == currentTab) {
+//                        tab.setTextColor(tabPressTextColor);
+//                        setTextAnimator(tab, tabTextSize, tabPressTextSize);
+//                    } else {
+//                        tab.setTextColor(tabTextColor);
+//                        tab.setTextSize(tabTextSize);
+//                    }
+//                }
+//
+//            }
         }
 
     }
