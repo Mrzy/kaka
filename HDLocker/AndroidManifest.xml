@@ -217,7 +217,8 @@
             android:exported="false"
             android:label="@string/pandora_setting_notify_manage"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat" />
+            android:theme="@style/Theme.AppCompat"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".settings.WallpaperDetailActivity"
             android:exported="false"

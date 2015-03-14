@@ -222,6 +222,7 @@
     <string name="pandora_setting_notify_open_notification">开启通知提醒</string>
     <string name="pandora_setting_notify_hide_content">隐藏通知内容</string>
     <string name="pandora_setting_notify_manage">通知管理</string>
+    <string name="pandora_setting_notify_manage_chosen">已选</string>
     
     <string name="pandora_setting_password_none">无密码</string>
     <string name="pandora_setting_password_lock_pattern">手势密码</string>

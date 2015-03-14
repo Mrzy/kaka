@@ -67,7 +67,7 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
     public View getHeaderView(int position, View convertView, ViewGroup parent) {
         HeaderViewHolder holder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.activity_notify_filter_item_header, parent,
+            convertView = mInflater.inflate(R.layout.activity_notify_manager_item_header, parent,
                     false);
             holder = new HeaderViewHolder();
             holder.textView = (TextView) convertView.findViewById(R.id.item_header);
@@ -107,7 +107,7 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.activity_notify_filter_item, parent, false);
+            convertView = mInflater.inflate(R.layout.activity_notify_manager_item, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.mNotifyAppLayout = (RelativeLayout) convertView
                     .findViewById(R.id.notify_app_layout);
