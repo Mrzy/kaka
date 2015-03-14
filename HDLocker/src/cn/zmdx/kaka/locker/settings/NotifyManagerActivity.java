@@ -5,16 +5,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
+import java.lang.reflect.Field;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -82,7 +87,7 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notify_filter);
+        setContentView(R.layout.activity_notify_manager);
         getSupportActionBar().setBackgroundDrawable(
                 getResources().getDrawable(R.drawable.action_bar_bg));
         mContext = this;
@@ -121,7 +126,7 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
             mInterceptGridView = (GridView) findViewById(R.id.notify_list_grid_view);
             int gridViewHeight = sparseIntArray.get(NotifyFilterUtil.KEY_GRIDVIEW_HEIGHT);
             int headPaddingLeft = sparseIntArray.get(NotifyFilterUtil.KEY_HEAD_PADDING_LEFT);
-            findViewById(R.id.notify_list_prompt).setPadding(headPaddingLeft, 25, 0, 25);
+            findViewById(R.id.notify_list_prompt).setPadding(headPaddingLeft, 0, 0, 0);
             LayoutParams params = mInterceptGridView.getLayoutParams();
             params.width = LayoutParams.MATCH_PARENT;
             params.height = gridViewHeight;
@@ -133,46 +138,45 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
 
     }
 
-    // public boolean onCreateOptionsMenu(Menu menu) {
-    // MenuInflater inflater = getMenuInflater();
-    // inflater.inflate(R.menu.activity_notify_filter_menu, menu);
-    // mSearchView = (SearchView)
-    // MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-    // Class<?> argClass = mSearchView.getClass();
-    // // 指定某个私有属性
-    // Field ownField;
-    // try {
-    // ownField = argClass.getDeclaredField("mSearchPlate");
-    // // setAccessible 它是用来设置是否有权限访问反射类中的私有属性的，只有设置为true时才可以访问，默认为false
-    // ownField.setAccessible(true);
-    // View mView = (View) ownField.get(mSearchView);
-    // mView.setBackgroundResource(R.drawable.texfield_searchview_holo_light);
-    // } catch (NoSuchFieldException e) {
-    // e.printStackTrace();
-    // } catch (IllegalAccessException e) {
-    // e.printStackTrace();
-    // } catch (IllegalArgumentException e) {
-    // e.printStackTrace();
-    // }
-    //
-    // mSearchView.setOnQueryTextListener(mOnQueryTextListener);
-    // if (mCurType == TYPE_SELECT) {
-    // menu.findItem(R.id.action_edit).setVisible(false);
-    // } else {
-    // menu.findItem(R.id.action_edit).setVisible(true);
-    // }
-    // return super.onCreateOptionsMenu(menu);
-    // }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_notify_manager_menu, menu);
+        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        Class<?> argClass = mSearchView.getClass();
+        // 指定某个私有属性
+        Field ownField;
+        try {
+            ownField = argClass.getDeclaredField("mSearchPlate");
+            // setAccessible 它是用来设置是否有权限访问反射类中的私有属性的，只有设置为true时才可以访问，默认为false
+            ownField.setAccessible(true);
+            View mView = (View) ownField.get(mSearchView);
+            mView.setBackgroundResource(R.drawable.texfield_searchview_holo_light);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
 
-    // public boolean onOptionsItemSelected(MenuItem item) {
-    // if (item.getItemId() == R.id.action_edit) {
-    // isEditMode = !isEditMode;
-    // mInterceptAdapter.notifyDataSetChanged();
-    // } else if (item.getItemId() == android.R.id.home) {
-    // onBackPressed();
-    // }
-    // return true;
-    // }
+        mSearchView.setOnQueryTextListener(mOnQueryTextListener);
+        if (mCurType == TYPE_SELECT) {
+            menu.findItem(R.id.action_edit).setVisible(false);
+        } else {
+            menu.findItem(R.id.action_edit).setVisible(true);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_edit) {
+            isEditMode = !isEditMode;
+            mInterceptAdapter.notifyDataSetChanged();
+        } else if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return true;
+    }
 
     private final SearchView.OnQueryTextListener mOnQueryTextListener = new SearchView.OnQueryTextListener() {
         @Override
@@ -318,7 +322,7 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
             int imageHeight = sparseIntArray.get(NotifyFilterUtil.KEY_IMAGE_HEIGHT);
             if (convertView == null) {
                 convertView = LayoutInflater.from(mContext).inflate(
-                        R.layout.activity_notify_filter_item, parent, false);
+                        R.layout.activity_notify_manager_item, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.mNotifyAppLayout = (RelativeLayout) convertView
                         .findViewById(R.id.notify_app_layout);

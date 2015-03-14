@@ -60,7 +60,7 @@ public class NotifyFilterUtil {
             int itemLayoutWidth = Math.round(((screenWidth - padding * 2) / 4));
             int itemImageWidth = Math.round(Math.round((screenWidth * 0.15)));
             int itemImageHeight = itemImageWidth;
-            int gridViewHeight = Math.round(Math.round((screenHeight * 0.25)));
+            int gridViewHeight = Math.round(Math.round((screenHeight * 0.13)));
             int headPaddingLeft = padding + (itemLayoutWidth - itemImageWidth) / 2;
             mCacheSparseArray = new SparseIntArray();
             mCacheSparseArray.put(KEY_LAYOUT_WIDTH, itemLayoutWidth);

@@ -19,8 +19,8 @@
                 android:id="@+id/notify_list_prompt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="筛选"
-                android:textColor="#212121" />
+                android:text="@string/pandora_setting_notify_manage_chosen"
+                android:textColor="@color/setting_text_normal_color" />
 
             <GridView
                 android:id="@+id/notify_list_grid_view"

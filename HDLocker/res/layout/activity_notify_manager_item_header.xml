@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="left"
-        android:textColor="#212121"
+        android:textColor="@color/setting_text_normal_color"
         android:textSize="15sp" />
 
 </LinearLayout>
