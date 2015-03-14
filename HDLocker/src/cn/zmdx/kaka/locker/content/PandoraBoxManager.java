@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -87,10 +88,16 @@ public class PandoraBoxManager {
         initTitles(titles);
         NewsPagerAdapter pagerAdapter = new NewsPagerAdapter(pages, titles);
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(1);
 
         final PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) mEntireView
                 .findViewById(R.id.newsTabStrip);
         tabStrip.setViewPager(viewPager);
+        tabStrip.setTabBgColors(new int[] {
+                Color.parseColor("#26a69a"), Color.parseColor("#e84e40"),
+                Color.parseColor("#ab47bc"), Color.parseColor("#8bc34a"),
+                Color.parseColor("#ea861c"), Color.parseColor("#3db7ff")
+        });
         tabStrip.setShouldExpand(false);
     }
 
@@ -173,8 +180,8 @@ public class PandoraBoxManager {
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
                 if (lastItem >= totalItemCount - 4 && dy > 0) {
-                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, adapter, news,
-                            refreshView, true);
+                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, adapter, news, refreshView,
+                            true);
                 }
             }
         });
@@ -188,7 +195,7 @@ public class PandoraBoxManager {
         rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         final StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
-         sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         // sglm.offsetChildrenHorizontal(100);
         rv.setLayoutManager(sglm);
         rv.setHasFixedSize(true);
@@ -429,7 +436,7 @@ public class PandoraBoxManager {
 
             @Override
             public void onGoToDetailClick(ServerOnlineWallpaper item) {
-                
+
             }
         });
         return view;

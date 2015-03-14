@@ -18,14 +18,20 @@ package cn.zmdx.kaka.locker.widget;
 
 import java.util.Locale;
 
+import com.android.volley.misc.ViewCompat;
+
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -33,6 +39,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -221,6 +228,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             throw new IllegalStateException("ViewPager does not have adapter instance.");
         }
 
+        mLastPosition = pager.getCurrentItem();
         pager.setOnPageChangeListener(pageListener);
 
         notifyDataSetChanged();
@@ -404,6 +412,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         }
     }
 
+    private int mLastPosition;
+
     private class PageListener implements OnPageChangeListener {
 
         @Override
@@ -435,24 +445,38 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
         @Override
         public void onPageSelected(int position) {
+            if (mTabBgColors != null) {
+                if (mLastPosition != position) {
+                    Drawable[] layers = new Drawable[] {
+                            new ColorDrawable(mTabBgColors[mLastPosition]),
+                            new ColorDrawable(mTabBgColors[position])
+                    };
+                    TransitionDrawable td = new TransitionDrawable(layers);
+                    ViewCompat.setBackground(PagerSlidingTabStrip.this, td);
+                    td.startTransition(300);
+                } else {
+                    setBackgroundColor(mTabBgColors[position]);
+                }
+            }
+            mLastPosition = position;
             if (delegatePageListener != null) {
                 delegatePageListener.onPageSelected(position);
             }
-//            View currentTab = tabsContainer.getChildAt(position);
-//            for (int i = 0; i < tabCount; i++) {
-//                View v = tabsContainer.getChildAt(i);
-//                if (v instanceof TextView) {
-//                    TextView tab = (TextView) v;
-//                    if (v == currentTab) {
-//                        tab.setTextColor(tabPressTextColor);
-//                        setTextAnimator(tab, tabTextSize, tabPressTextSize);
-//                    } else {
-//                        tab.setTextColor(tabTextColor);
-//                        tab.setTextSize(tabTextSize);
-//                    }
-//                }
-//
-//            }
+            // View currentTab = tabsContainer.getChildAt(position);
+            // for (int i = 0; i < tabCount; i++) {
+            // View v = tabsContainer.getChildAt(i);
+            // if (v instanceof TextView) {
+            // TextView tab = (TextView) v;
+            // if (v == currentTab) {
+            // tab.setTextColor(tabPressTextColor);
+            // setTextAnimator(tab, tabTextSize, tabPressTextSize);
+            // } else {
+            // tab.setTextColor(tabTextColor);
+            // tab.setTextSize(tabTextSize);
+            // }
+            // }
+            //
+            // }
         }
 
     }
@@ -670,4 +694,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         };
     }
 
+    private int[] mTabBgColors;
+
+    public void setTabBgColors(int[] colors) {
+        mTabBgColors = colors;
+        setBackgroundColor(mTabBgColors[pager.getCurrentItem()]);
+    }
 }
