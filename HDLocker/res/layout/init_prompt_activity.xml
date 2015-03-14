@@ -47,16 +47,17 @@
                 android:textStyle="normal" />
         </LinearLayout>
 
-        <cn.zmdx.kaka.locker.widget.BaseButton
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="20dp"
+            android:background="@drawable/init_prompt_button_selector"
+            android:clickable="false"
             android:gravity="center"
             android:paddingLeft="60dp"
-                android:paddingRight="60dp"
-            android:clickable="false"
+            android:paddingRight="60dp"
             android:text="@string/determine"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
@@ -129,15 +130,16 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.BaseButton
+            <Button
                 android:id="@+id/init_setting_V6_read_notification_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="20dp"
-                android:gravity="center"
+                android:background="@drawable/init_prompt_button_selector"
                 android:clickable="false"
+                android:gravity="center"
                 android:paddingLeft="60dp"
                 android:paddingRight="60dp"
                 android:text="@string/determine"
@@ -337,14 +339,15 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.BaseButton
+            <Button
                 android:id="@+id/init_setting_V6_close_systemlocker_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
-                android:clickable="false"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/init_prompt_button_selector"
+                android:clickable="false"
                 android:gravity="center"
                 android:paddingLeft="60dp"
                 android:paddingRight="60dp"
@@ -392,17 +395,18 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.BaseButton
+            <Button
                 android:id="@+id/init_setting_V6_allow_floating_window_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/init_prompt_button_selector"
+                android:clickable="false"
                 android:gravity="center"
                 android:paddingLeft="60dp"
                 android:paddingRight="60dp"
-                android:clickable="false"
                 android:text="@string/determine"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
@@ -472,13 +476,14 @@
                 android:textSize="14sp"
                 android:textStyle="normal" />
 
-            <cn.zmdx.kaka.locker.widget.BaseButton
+            <Button
                 android:id="@+id/init_setting_V6_trust_prompt_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/init_prompt_button_selector"
                 android:clickable="false"
                 android:gravity="center"
                 android:paddingLeft="60dp"

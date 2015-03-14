@@ -105,7 +105,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
         switch (view.getId()) {
             case R.id.init_setting_close_systemlocker_to_set:
                 PandoraUtils.closeSystemLocker(InitSettingActivity.this, isMIUI);
-                mCloseSystemLockBtn.setBackgroundResource(R.drawable.base_button_pressed);
+                mCloseSystemLockBtn.setBackgroundResource(R.drawable.feedback_button_press);
 
                 if (mHandler.hasMessages(MSG_CLOSE_SYSTEM_LOCKER)) {
                     mHandler.removeMessages(MSG_CLOSE_SYSTEM_LOCKER);
@@ -117,7 +117,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
 
             case R.id.init_setting_MIUI_allow_floating_window_to_set:
                 PandoraUtils.setAllowFolatWindow(InitSettingActivity.this, mMIUIVersion);
-                mFolatfingWindowBtn.setBackgroundResource(R.drawable.base_button_pressed);
+                mFolatfingWindowBtn.setBackgroundResource(R.drawable.feedback_button_press);
 
                 if (mHandler.hasMessages(MSG_ALLOW_FOLAT_WINDOW)) {
                     mHandler.removeMessages(MSG_ALLOW_FOLAT_WINDOW);
@@ -129,7 +129,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
 
             case R.id.init_setting_MIUI_trust_to_set:
                 PandoraUtils.setTrust(InitSettingActivity.this, mMIUIVersion);
-                mTrustBtn.setBackgroundResource(R.drawable.base_button_pressed);
+                mTrustBtn.setBackgroundResource(R.drawable.feedback_button_press);
                 if (mHandler.hasMessages(MSG_TRUST)) {
                     mHandler.removeMessages(MSG_TRUST);
                 }
@@ -152,7 +152,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
 //                    PandoraUtils.setRegularAllowReadNotification(InitSettingActivity.this);
 //                }
 
-                mReadNotificationBtn.setBackgroundResource(R.drawable.base_button_pressed);
+                mReadNotificationBtn.setBackgroundResource(R.drawable.feedback_button_press);
                 if (mHandler.hasMessages(MSG_READ_NOTIFICATION)) {
                     mHandler.removeMessages(MSG_READ_NOTIFICATION);
                 }

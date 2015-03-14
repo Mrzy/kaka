@@ -90,7 +90,7 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
     @Override
     public void onClick(View view) {
         if (view == mNotifyPermission) {
-            InitializationManager.getInstance(NotifyFragment.this).initializationLockScreen(
+            InitializationManager.getInstance(getActivity()).initializationLockScreen(
                     InitializationManager.TYPE_READ_NOTIFICATION);
         } else if (view == mNotifyManager) {
             Intent in = new Intent();

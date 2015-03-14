@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -43,7 +44,7 @@ public class FeedbackActivity extends ActionBarActivity {
 
     private ReplyAdapter adapter;
 
-    private BaseButton sendBtn;
+    private Button sendBtn;
 
     private EditText inputEdit;
 
@@ -76,7 +77,7 @@ public class FeedbackActivity extends ActionBarActivity {
 
     private void initView() {
         mListView = (ListView) findViewById(R.id.fb_reply_list);
-        sendBtn = (BaseButton) findViewById(R.id.fb_send_btn);
+        sendBtn = (Button) findViewById(R.id.fb_send_btn);
         inputEdit = (EditText) findViewById(R.id.fb_send_content);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.fb_reply_refresh);
 

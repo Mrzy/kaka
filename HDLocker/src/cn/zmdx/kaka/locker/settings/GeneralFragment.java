@@ -193,13 +193,13 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
     @Override
     public void onClick(View view) {
         if (view == mCloseSystemLock) {
-            InitializationManager.getInstance(GeneralFragment.this).initializationLockScreen(
+            InitializationManager.getInstance(getActivity()).initializationLockScreen(
                     InitializationManager.TYPE_CLOSE_SYSTEM_LOCKER);
         } else if (view == mFloatingWindow) {
-            InitializationManager.getInstance(GeneralFragment.this).initializationLockScreen(
+            InitializationManager.getInstance(getActivity()).initializationLockScreen(
                     InitializationManager.TYPE_ALLOW_FOLAT_WINDOW);
         } else if (view == mTrust) {
-            InitializationManager.getInstance(GeneralFragment.this).initializationLockScreen(
+            InitializationManager.getInstance(getActivity()).initializationLockScreen(
                     InitializationManager.TYPE_TRUST);
         } else if (view == mFAQ) {
             startActivity(FAQActivity.class);
