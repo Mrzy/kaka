@@ -3,12 +3,11 @@ package cn.zmdx.kaka.locker.initialization;
 
 import java.lang.ref.WeakReference;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.InitPromptActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -37,14 +36,14 @@ public class InitializationManager {
 
     private static final int MSG_SETTING_DELAY = 500;
 
-    public static InitializationManager getInstance(Fragment fragment) {
+    public static InitializationManager getInstance(Context context) {
         if (null == mInstance) {
-            mContext = fragment.getActivity();
+            mContext = context;
             mInstance = new InitializationManager();
-            mInitializationHandler = new InitializationHandler(fragment);
-            isMIUI = PandoraUtils.isMIUI(fragment.getActivity());
+            mInitializationHandler = new InitializationHandler((Activity) mContext);
+            isMIUI = PandoraUtils.isMIUI(mContext);
             mMIUIVersion = PandoraUtils.getSystemProperty();
-            isMeizu = PandoraUtils.isMeizu(fragment.getActivity());
+            isMeizu = PandoraUtils.isMeizu(mContext);
         }
         return mInstance;
     }
@@ -86,10 +85,10 @@ public class InitializationManager {
     }
 
     private static class InitializationHandler extends Handler {
-        WeakReference<Fragment> mFragment;
+        WeakReference<Activity> mActivity;
 
-        public InitializationHandler(Fragment fragment) {
-            mFragment = new WeakReference<Fragment>(fragment);
+        public InitializationHandler(Activity context) {
+            mActivity = new WeakReference<Activity>(context);
         }
 
         @Override
@@ -115,7 +114,7 @@ public class InitializationManager {
         }
 
         public void showPromptActicity(boolean isMIUI, String mMIUIVersion, int type) {
-            FragmentActivity activity = mFragment.get().getActivity();
+            Activity activity = mActivity.get();
             Intent in = new Intent();
             in.setClass(activity, InitPromptActivity.class);
             in.putExtra("isMIUI", isMIUI);
