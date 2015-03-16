@@ -38,7 +38,7 @@
                     android:shadowDy="1"
                     android:shadowRadius="1"
                     android:textColor="#ffffff"
-                    android:textSize="30dp" />
+                    android:textSize="40dp" />
 
                 <cn.zmdx.kaka.locker.widget.TypefaceTextView
                     android:id="@+id/wallpaper_date_month"
@@ -50,7 +50,7 @@
                     android:shadowDy="1"
                     android:shadowRadius="1"
                     android:textColor="#ffffff"
-                    android:textSize="11dp" />
+                    android:textSize="15dp" />
             </LinearLayout>
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
@@ -62,7 +62,8 @@
                 android:shadowDx="1"
                 android:shadowDy="1"
                 android:shadowRadius="1"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:visibility="gone" />
         </LinearLayout>
     </FrameLayout>
 
