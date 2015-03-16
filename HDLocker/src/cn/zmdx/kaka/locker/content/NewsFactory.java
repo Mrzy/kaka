@@ -47,7 +47,7 @@ public class NewsFactory {
     static void updateNews(int type, final RecyclerView.Adapter adapter,
             final List<ServerImageData> data, final SwipeRefreshLayout srl, final boolean older) {
         if (adapter == null || data == null) {
-            throw new NullPointerException();
+            return;
         }
 
         if (srl != null && !older) {

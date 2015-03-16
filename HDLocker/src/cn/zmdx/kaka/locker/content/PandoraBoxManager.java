@@ -9,18 +9,21 @@ import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
@@ -36,10 +39,11 @@ import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
+import cn.zmdx.kaka.locker.widget.FloatingActionButton;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
-public class PandoraBoxManager {
+public class PandoraBoxManager implements View.OnClickListener {
 
     private static PandoraBoxManager mPbManager;
 
@@ -52,6 +56,19 @@ public class PandoraBoxManager {
     private View mEntireView;
 
     private FrameLayout mDetailLayout;
+
+    private FloatingActionButton mBackBtn;
+
+    private static final int[] mTabColors = new int[] {
+            Color.parseColor("#26a69a"), Color.parseColor("#e84e40"), Color.parseColor("#ab47bc"),
+            Color.parseColor("#8bc34a"), Color.parseColor("#ea861c"), Color.parseColor("#3db7ff")
+    };
+
+    private static final int[] mFloatingButtonColors = new int[] {
+            Color.parseColor("#8026a69a"), Color.parseColor("#80e84e40"),
+            Color.parseColor("#80ab47bc"), Color.parseColor("#808bc34a"),
+            Color.parseColor("#80ea861c"), Color.parseColor("#803db7ff")
+    };
 
     private PandoraBoxManager(Context context) {
         mContext = context;
@@ -80,6 +97,11 @@ public class PandoraBoxManager {
             return;
         }
         mInitBody = true;
+        mBackBtn = (FloatingActionButton) mEntireView.findViewById(R.id.backBtn);
+        mBackBtn.setColorNormal(mFloatingButtonColors[1]);
+        mBackBtn.setColorPressed(mFloatingButtonColors[1]);
+        mBackBtn.setOnClickListener(this);
+
         final ViewPagerCompat viewPager = (ViewPagerCompat) mEntireView
                 .findViewById(R.id.newsViewPager);
         List<View> pages = new ArrayList<View>();
@@ -93,12 +115,37 @@ public class PandoraBoxManager {
         final PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) mEntireView
                 .findViewById(R.id.newsTabStrip);
         tabStrip.setViewPager(viewPager);
-        tabStrip.setTabBgColors(new int[] {
-                Color.parseColor("#26a69a"), Color.parseColor("#e84e40"),
-                Color.parseColor("#ab47bc"), Color.parseColor("#8bc34a"),
-                Color.parseColor("#ea861c"), Color.parseColor("#3db7ff")
-        });
+        tabStrip.setTabBgColors(mTabColors);
         tabStrip.setShouldExpand(false);
+        tabStrip.setOnPageChangeListener(new OnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(int position) {
+                mBackBtn.setColorNormal(mFloatingButtonColors[position]);
+                mBackBtn.setColorPressed(mFloatingButtonColors[position]);
+            }
+
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
+    }
+
+    public void refreshAllNews() {
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mJokeAdapter, mHotNews,
+                mHotRefreshView, true);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mJokeAdapter, mHotNews,
+                mGossipRefreshView, true);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mJokeAdapter, mMicroMediaNews,
+                mMicroMediaRefreshView, true);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mJokeAdapter, mBeautyNews,
+                mBeautyRefreshView, true);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
+                mJokeRefreshView, true);
     }
 
     private void initTitles(List<String> titles) {
@@ -126,6 +173,23 @@ public class PandoraBoxManager {
         data.add(jokeView);
     }
 
+    private List<ServerImageData> mHotNews = new ArrayList<ServerImageData>();
+
+    private List<ServerImageData> mGossipNews = new ArrayList<ServerImageData>();
+
+    private List<ServerImageData> mMicroMediaNews = new ArrayList<ServerImageData>();
+
+    private List<ServerImageData> mBeautyNews = new ArrayList<ServerImageData>();
+
+    private List<ServerImageData> mJokeNews = new ArrayList<ServerImageData>();
+
+    private BeautyPageAdapter mBeautyAdapter, mJokeAdapter, mGossipAdapter;
+
+    private GeneralNewsPageAdapter mMicroMediaAdapter, mHotAdapter;
+
+    private SwipeRefreshLayout mJokeRefreshView, mBeautyRefreshView, mMicroMediaRefreshView,
+            mGossipRefreshView, mHotRefreshView;
+
     private View initJokeView() {
         View view = mInflater.inflate(R.layout.pager_news_layout, null);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recyclerView);
@@ -138,33 +202,33 @@ public class PandoraBoxManager {
         rv.setLayoutManager(sglm);
         rv.setHasFixedSize(true);
 
-        final List<ServerImageData> news = new ArrayList<ServerImageData>();
-        final BeautyPageAdapter adapter = new BeautyPageAdapter(mContext, news);
+        // final List<ServerImageData> news = new ArrayList<ServerImageData>();
+        mJokeAdapter = new BeautyPageAdapter(mContext, mJokeNews);
 
-        adapter.setOnItemClickListener(new BeautyPageAdapter.OnItemClickListener() {
+        mJokeAdapter.setOnItemClickListener(new BeautyPageAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClicked(View view, int position) {
-                final ServerImageData sid = news.get(position);
+                final ServerImageData sid = mJokeNews.get(position);
                 String url = sid.getImageDesc();
                 NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this);
                 ndl.loadUrl(url);
                 openDetailPage(ndl);
             }
         });
-        rv.setAdapter(adapter);
+        rv.setAdapter(mJokeAdapter);
 
-        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
-                .findViewById(R.id.refreshLayout);
+        mJokeRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
 
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, adapter, news, refreshView, true);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
+                mJokeRefreshView, true);
 
-        refreshView.setOnRefreshListener(new OnRefreshListener() {
+        mJokeRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, adapter, news, refreshView,
-                        false);
+                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
+                        mJokeRefreshView, false);
             }
         });
 
@@ -180,8 +244,8 @@ public class PandoraBoxManager {
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
                 if (lastItem >= totalItemCount - 4 && dy > 0) {
-                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, adapter, news, refreshView,
-                            true);
+                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
+                            mJokeRefreshView, true);
                 }
             }
         });
@@ -200,33 +264,33 @@ public class PandoraBoxManager {
         rv.setLayoutManager(sglm);
         rv.setHasFixedSize(true);
 
-        final List<ServerImageData> news = new ArrayList<ServerImageData>();
-        final BeautyPageAdapter adapter = new BeautyPageAdapter(mContext, news);
+        // final List<ServerImageData> news = new ArrayList<ServerImageData>();
+        mBeautyAdapter = new BeautyPageAdapter(mContext, mBeautyNews);
 
-        adapter.setOnItemClickListener(new BeautyPageAdapter.OnItemClickListener() {
+        mBeautyAdapter.setOnItemClickListener(new BeautyPageAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClicked(View view, int position) {
-                final ServerImageData sid = news.get(position);
+                final ServerImageData sid = mBeautyNews.get(position);
                 String url = sid.getImageDesc();
                 NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this);
                 ndl.loadUrl(url);
                 openDetailPage(ndl);
             }
         });
-        rv.setAdapter(adapter);
+        rv.setAdapter(mBeautyAdapter);
 
-        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
-                .findViewById(R.id.refreshLayout);
+        mBeautyRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
 
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, adapter, news, refreshView, true);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
+                mBeautyRefreshView, true);
 
-        refreshView.setOnRefreshListener(new OnRefreshListener() {
+        mBeautyRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, adapter, news, refreshView,
-                        false);
+                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
+                        mBeautyRefreshView, false);
             }
         });
 
@@ -242,8 +306,8 @@ public class PandoraBoxManager {
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
                 if (lastItem >= totalItemCount - 4 && dy > 0) {
-                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, adapter, news,
-                            refreshView, true);
+                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter,
+                            mBeautyNews, mBeautyRefreshView, true);
                 }
             }
         });
@@ -260,14 +324,14 @@ public class PandoraBoxManager {
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);
 
-        final List<ServerImageData> news = new ArrayList<ServerImageData>();
-        final GeneralNewsPageAdapter adapter = new GeneralNewsPageAdapter(mContext, news);
-        rv.setAdapter(adapter);
-        adapter.setOnItemClickListener(new GeneralNewsPageAdapter.OnItemClickListener() {
+        // final List<ServerImageData> news = new ArrayList<ServerImageData>();
+        mMicroMediaAdapter = new GeneralNewsPageAdapter(mContext, mMicroMediaNews);
+        rv.setAdapter(mMicroMediaAdapter);
+        mMicroMediaAdapter.setOnItemClickListener(new GeneralNewsPageAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClicked(View view, int position) {
-                final ServerImageData sid = news.get(position);
+                final ServerImageData sid = mMicroMediaNews.get(position);
                 String url = sid.getImageDesc();
                 NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this);
                 ndl.loadUrl(url);
@@ -275,18 +339,17 @@ public class PandoraBoxManager {
             }
         });
 
-        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
-                .findViewById(R.id.refreshLayout);
-        refreshView.setOnRefreshListener(new OnRefreshListener() {
+        mMicroMediaRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
+        mMicroMediaRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, adapter, news,
-                        refreshView, false);
+                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
+                        mMicroMediaNews, mMicroMediaRefreshView, false);
             }
         });
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, adapter, news, refreshView,
-                true);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
+                mMicroMediaNews, mMicroMediaRefreshView, true);
 
         rv.setOnScrollListener(new OnScrollListener() {
             @Override
@@ -297,8 +360,8 @@ public class PandoraBoxManager {
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
                 if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
-                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, adapter, news,
-                            refreshView, true);
+                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
+                            mMicroMediaNews, mMicroMediaRefreshView, true);
                 }
             }
         });
@@ -315,33 +378,33 @@ public class PandoraBoxManager {
         rv.setLayoutManager(sglm);
         rv.setHasFixedSize(true);
 
-        final List<ServerImageData> news = new ArrayList<ServerImageData>();
-        final BeautyPageAdapter adapter = new BeautyPageAdapter(mContext, news);
+        // final List<ServerImageData> news = new ArrayList<ServerImageData>();
+        mGossipAdapter = new BeautyPageAdapter(mContext, mGossipNews);
 
-        adapter.setOnItemClickListener(new BeautyPageAdapter.OnItemClickListener() {
+        mGossipAdapter.setOnItemClickListener(new BeautyPageAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClicked(View view, int position) {
-                final ServerImageData sid = news.get(position);
+                final ServerImageData sid = mGossipNews.get(position);
                 String url = sid.getImageDesc();
                 NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this);
                 ndl.loadUrl(url);
                 openDetailPage(ndl);
             }
         });
-        rv.setAdapter(adapter);
+        rv.setAdapter(mGossipAdapter);
 
-        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
-                .findViewById(R.id.refreshLayout);
+        mGossipRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
 
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, adapter, news, refreshView, true);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
+                mGossipRefreshView, true);
 
-        refreshView.setOnRefreshListener(new OnRefreshListener() {
+        mGossipRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, adapter, news, refreshView,
-                        false);
+                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
+                        mGossipRefreshView, false);
             }
         });
 
@@ -357,8 +420,8 @@ public class PandoraBoxManager {
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
                 if (lastItem >= totalItemCount - 4 && dy > 0) {
-                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, adapter, news,
-                            refreshView, true);
+                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter,
+                            mGossipNews, mGossipRefreshView, true);
                 }
             }
         });
@@ -375,14 +438,14 @@ public class PandoraBoxManager {
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);
 
-        final List<ServerImageData> news = new ArrayList<ServerImageData>();
-        final GeneralNewsPageAdapter adapter = new GeneralNewsPageAdapter(mContext, news);
-        rv.setAdapter(adapter);
-        adapter.setOnItemClickListener(new GeneralNewsPageAdapter.OnItemClickListener() {
+        // final List<ServerImageData> news = new ArrayList<ServerImageData>();
+        mHotAdapter = new GeneralNewsPageAdapter(mContext, mHotNews);
+        rv.setAdapter(mHotAdapter);
+        mHotAdapter.setOnItemClickListener(new GeneralNewsPageAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClicked(View view, int position) {
-                final ServerImageData sid = news.get(position);
+                final ServerImageData sid = mHotNews.get(position);
                 String url = sid.getImageDesc();
                 NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this);
                 ndl.loadUrl(url);
@@ -390,17 +453,17 @@ public class PandoraBoxManager {
             }
         });
 
-        final SwipeRefreshLayout refreshView = (SwipeRefreshLayout) view
-                .findViewById(R.id.refreshLayout);
-        refreshView.setOnRefreshListener(new OnRefreshListener() {
+        mHotRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
+        mHotRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news, refreshView,
-                        false);
+                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
+                        mHotRefreshView, false);
             }
         });
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news, refreshView, true);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
+                mHotRefreshView, true);
 
         rv.setOnScrollListener(new OnScrollListener() {
 
@@ -412,8 +475,8 @@ public class PandoraBoxManager {
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
                 if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
-                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, adapter, news,
-                            refreshView, true);
+                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
+                            mHotRefreshView, true);
                 }
             }
         });
@@ -542,5 +605,12 @@ public class PandoraBoxManager {
 
     public View getEntireView() {
         return mEntireView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == mBackBtn) {
+            LockScreenManager.getInstance().collapseNewsPanel();
+        }
     }
 }

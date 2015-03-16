@@ -399,7 +399,9 @@ public class LockScreenManager {
 
         public void onPanelExpanded(View panel) {
             PandoraBoxManager.newInstance(mContext).initBody();
+            PandoraBoxManager.newInstance(mContext).refreshAllNews();
             pauseWallpaperTranslation();
+            
         };
 
         public void onPanelCollapsed(View panel) {

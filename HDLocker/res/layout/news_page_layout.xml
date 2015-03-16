@@ -19,10 +19,10 @@
 
         <LinearLayout
             android:id="@+id/content"
-            android:background="#ffffff"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="#ffffff"
             android:orientation="vertical" >
 
             <cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip
@@ -30,20 +30,33 @@
                 android:id="@+id/newsTabStrip"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:paddingBottom="3dp"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
-                android:textSize="14dp"
-                android:paddingBottom="3dp"
                 android:textColor="#ffffff"
+                android:textSize="14dp"
                 psts:pstsDividerColor="@android:color/transparent"
                 psts:pstsIndicatorColor="#a0ffffff"
                 psts:pstsIndicatorHeight="2dp"
                 psts:pstsUnderlineColor="@android:color/transparent" />
 
-            <cn.zmdx.kaka.locker.widget.ViewPagerCompat
-                android:id="@+id/newsViewPager"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent" >
+
+                <cn.zmdx.kaka.locker.widget.ViewPagerCompat
+                    android:id="@+id/newsViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <cn.zmdx.kaka.locker.widget.FloatingActionButton
+                    android:id="@+id/backBtn"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 

@@ -48,4 +48,6 @@
     <color name="setting_text_normal_color">#555555</color>
     <color name="setting_psts_indicator_color">#3db7ff</color>
 
+    <color name="material_blue_500">#5677fc</color>
+    <color name="material_blue_600">#4e6cef</color>
 </resources>
