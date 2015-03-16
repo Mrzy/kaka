@@ -93,7 +93,8 @@ public class PandoraLockPatternView extends LinearLayout {
         mContext = context;
         mVerifyListener = verifyListener;
         mLockPatternType = type;
-        mColorStyle = isScreen == true ? LockPatternManager.LOCK_PATTERN_STYLE_White : colorStyle;
+        mColorStyle = (isScreen == true && LockPatternManager.LOCK_PATTERN_STYLE_PURE == colorStyle) ? LockPatternManager.LOCK_PATTERN_STYLE_White
+                : colorStyle;
         isLockScreen = isScreen;
         init(true);
     }

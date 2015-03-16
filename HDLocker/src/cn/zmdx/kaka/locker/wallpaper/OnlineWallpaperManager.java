@@ -15,7 +15,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,28 +111,16 @@ public class OnlineWallpaperManager {
      * @param listener
      */
     public void pullWallpaperData(Context context, IPullWallpaperListener listener, long publishDATE) {
-        long curTime = System.currentTimeMillis();
-        long lastPullTime = PandoraConfig.newInstance(context).getLastOnlinePullTime();
         final String lastPullJson = PandoraConfig.newInstance(context)
                 .getLastOnlineServerJsonData();
-        // if ((curTime - lastPullTime) >=
-        // PandoraPolicy.MIN_PULL_WALLPAPER_ORIGINAL_TIME
-        // || TextUtils.isEmpty(lastPullJson)) {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
         }
-        if (!PandoraConfig.newInstance(context).is3G4GNetworkOn()
-                && !HDBNetworkState.isWifiNetwork()) {
+        if (!HDBNetworkState.isWifiNetwork()) {
             parseWallpaperJson(lastPullJson, listener);
         } else {
             getWallpaperFromServer(listener, lastPullJson, publishDATE);
         }
-        // } else {
-        // if (BuildConfig.DEBUG) {
-        // HDBLOG.logD("未满足获取数据条件，加载本地缓存数据");
-        // }
-        // parseWallpaperJson(lastPullJson, listener);
-        // }
     }
 
     /**
@@ -167,7 +154,6 @@ public class OnlineWallpaperManager {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("syc", "response=" + response.toString());
                         parseWallpaperJson(response.toString(), listener);
                     }
                 }, new ErrorListener() {
