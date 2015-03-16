@@ -13,7 +13,7 @@ public class FAQActivity extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(
-                getResources().getDrawable(R.drawable.action_bar_bg));
+                getResources().getDrawable(R.drawable.action_bar_bg_blue));
         setContentView(R.layout.activity_faq);
     }
 

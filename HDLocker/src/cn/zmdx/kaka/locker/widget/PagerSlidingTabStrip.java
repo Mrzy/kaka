@@ -18,14 +18,11 @@ package cn.zmdx.kaka.locker.widget;
 
 import java.util.Locale;
 
-import com.android.volley.misc.ViewCompat;
-
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
@@ -39,7 +36,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -49,6 +45,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
+
+import com.android.volley.misc.ViewCompat;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView {
 
@@ -109,9 +107,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     private int dividerWidth = 1;
 
-    private int tabTextSize = 16;
+    private int tabTextSize = 15;
 
-    private int tabPressTextSize = 19;
+    private int tabPressTextSize = 17;
 
     private int tabTextColor = 0xFFa1a1a1;
 
@@ -126,6 +124,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int tabBackgroundResId = R.drawable.strip_tab_background;
 
     private Locale locale;
+
+    private boolean shouldSizeBigger = false;
 
     public PagerSlidingTabStrip(Context context) {
         this(context, null);
@@ -323,7 +323,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
                 tab.setTypeface(tabTypeface, tabTypefaceStyle);
                 tab.setTextColor(tabTextColor);
-
+                if (shouldSizeBigger) {
+                    setTextSizeBigger(0);
+                }
                 // setAllCaps() is only available from API 14, so the upper case
                 // is made manually if we are on a
                 // pre-ICS-build
@@ -462,23 +464,28 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             if (delegatePageListener != null) {
                 delegatePageListener.onPageSelected(position);
             }
-            // View currentTab = tabsContainer.getChildAt(position);
-            // for (int i = 0; i < tabCount; i++) {
-            // View v = tabsContainer.getChildAt(i);
-            // if (v instanceof TextView) {
-            // TextView tab = (TextView) v;
-            // if (v == currentTab) {
-            // tab.setTextColor(tabPressTextColor);
-            // setTextAnimator(tab, tabTextSize, tabPressTextSize);
-            // } else {
-            // tab.setTextColor(tabTextColor);
-            // tab.setTextSize(tabTextSize);
-            // }
-            // }
-            //
-            // }
+            if (shouldSizeBigger) {
+                setTextSizeBigger(position);
+            }
         }
+    }
 
+    private void setTextSizeBigger(int position) {
+        View currentTab = tabsContainer.getChildAt(position);
+        for (int i = 0; i < tabCount; i++) {
+            View v = tabsContainer.getChildAt(i);
+            if (v instanceof TextView) {
+                TextView tab = (TextView) v;
+                if (v == currentTab) {
+                    tab.setTextColor(tabPressTextColor);
+                    setTextAnimator(tab, tabTextSize, tabPressTextSize);
+                } else {
+                    tab.setTextColor(tabTextColor);
+                    tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
+                }
+            }
+
+        }
     }
 
     private void setTextAnimator(final TextView view, float tabSize, float tabPressSize) {
@@ -577,6 +584,15 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public boolean getShouldExpand() {
         return shouldExpand;
+    }
+
+    public void setShouldSizeBigger(boolean shouldSizeBigger) {
+        this.shouldSizeBigger = shouldSizeBigger;
+        requestLayout();
+    }
+
+    public boolean getShouldSizeBigger() {
+        return shouldSizeBigger;
     }
 
     public boolean isTextAllCaps() {

@@ -89,7 +89,7 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notify_manager);
         getSupportActionBar().setBackgroundDrawable(
-                getResources().getDrawable(R.drawable.action_bar_bg));
+                getResources().getDrawable(R.drawable.action_bar_bg_blue));
         mContext = this;
         mCurType = getIntent().getIntExtra("type", TYPE_FILTER);
         mPosition = getIntent().getIntExtra("position", -1);

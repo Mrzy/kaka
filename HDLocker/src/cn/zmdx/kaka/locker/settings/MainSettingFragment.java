@@ -22,8 +22,10 @@ public class MainSettingFragment extends Fragment {
 
     private View mEntireView;
 
+    private PagerSlidingTabStrip mTabStrip;
+
     public interface IMainSettingListener {
-        void onItemClick(String title);
+        void onItemClick(String title, int position);
     }
 
     private IMainSettingListener mCallback;
@@ -44,11 +46,11 @@ public class MainSettingFragment extends Fragment {
         PageFragmentAdapter pagerAdapter = new PageFragmentAdapter(getFragmentManager(),
                 initFragmentList(), initFragmentTitleList());
         viewPager.setAdapter(pagerAdapter);
-        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) mEntireView
-                .findViewById(R.id.setting_pats);
-        tabStrip.setShouldExpand(true);
-        tabStrip.setViewPager(viewPager);
-        tabStrip.setOnPageChangeListener(pagerAdapter);
+        mTabStrip = (PagerSlidingTabStrip) mEntireView.findViewById(R.id.setting_pats);
+        mTabStrip.setShouldExpand(true);
+        mTabStrip.setShouldSizeBigger(true);
+        mTabStrip.setViewPager(viewPager);
+        mTabStrip.setOnPageChangeListener(pagerAdapter);
         return mEntireView;
     }
 
@@ -112,7 +114,9 @@ public class MainSettingFragment extends Fragment {
         @Override
         public void onPageSelected(int position) {
             if (null != mCallback) {
-                mCallback.onItemClick(getPageTitle(position).toString());
+                mCallback.onItemClick(getPageTitle(position).toString(), position);
+                mTabStrip.setIndicatorColor(((MainSettingActivity) (getActivity()))
+                        .getBackgroundColor()[position]);
             }
         }
     }

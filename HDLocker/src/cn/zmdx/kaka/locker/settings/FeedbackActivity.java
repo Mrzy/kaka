@@ -63,7 +63,7 @@ public class FeedbackActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pandora_feedback_activity);
         getSupportActionBar().setBackgroundDrawable(
-                getResources().getDrawable(R.drawable.action_bar_bg));
+                getResources().getDrawable(R.drawable.action_bar_bg_blue));
         mContext = this;
 
         initView();
