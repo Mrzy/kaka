@@ -90,8 +90,8 @@
         android:id="@+id/lock_bottom_notification_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingTop="20dp" >
+        android:layout_marginBottom="160dp"
+        android:paddingTop="5dp" >
     </cn.zmdx.kaka.locker.notification.view.NotificationLayout>
 
 </LinearLayout>

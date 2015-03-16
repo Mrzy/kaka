@@ -22,6 +22,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -274,7 +275,7 @@ public class LockScreenManager {
         // 监听是否有通知，以处理背景模糊效果
         NotificationLayout nl = (NotificationLayout) mMainPage
                 .findViewById(R.id.lock_bottom_notification_layout);
-        nl.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
+        nl.getRecyclerView().setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
 
             @Override
             public void onChildViewAdded(View parent, View child) {
@@ -401,7 +402,7 @@ public class LockScreenManager {
             PandoraBoxManager.newInstance(mContext).initBody();
             PandoraBoxManager.newInstance(mContext).refreshAllNews();
             pauseWallpaperTranslation();
-            
+
         };
 
         public void onPanelCollapsed(View panel) {

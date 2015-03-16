@@ -248,8 +248,8 @@
                             android:src="@drawable/pandora_online_paper_button_selector" />
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </cn.zmdx.kaka.locker.widget.WallpaperPanelLayout>
+            </LinearLayout>        </cn.zmdx.kaka.locker.widget.WallpaperPanelLayout>
+
     </cn.zmdx.kaka.locker.widget.SlidingPaneLayout>
 
 </FrameLayout>

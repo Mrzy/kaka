@@ -39,7 +39,7 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
         @Override
         public void onClick(View v) {
             if (mListener != null) {
-                mListener.onItemClicked(v, getPosition());
+                mListener.onItemClicked(v, getAdapterPosition());
             }
         }
     }
