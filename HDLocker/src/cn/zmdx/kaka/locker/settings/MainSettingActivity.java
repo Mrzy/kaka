@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.settings;
 import java.lang.ref.WeakReference;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,6 +20,7 @@ import cn.zmdx.kaka.locker.guide.GuideActivity;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.MainSettingFragment.IMainSettingListener;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -142,5 +144,27 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
 
     private void setBackground(Drawable drawable) {
         getSupportActionBar().setBackgroundDrawable(drawable);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case PandoraUtils.REQUEST_CODE_GALLERY: {
+                Intent intent = new Intent();
+                intent.setClass(MainSettingActivity.this, NewCropImageActivity.class);
+                intent.setData(data.getData());
+                startActivity(intent);
+                overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                        R.anim.umeng_fb_slide_out_from_left);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     }
 }

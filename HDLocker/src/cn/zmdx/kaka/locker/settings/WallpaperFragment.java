@@ -1,10 +1,13 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +18,9 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
@@ -84,6 +90,8 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
                 in.putExtra("desc", item.getDesc());
                 in.setClass(getActivity(), WallpaperDetailActivity.class);
                 getActivity().startActivity(in);
+                getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                        R.anim.umeng_fb_slide_out_from_left);
             }
         });
         view.addView(onlineWallpaperView);
@@ -100,7 +108,7 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
     @Override
     public void onClick(View v) {
-
+        PandoraUtils.gotoGalleryActivity(getActivity(), PandoraUtils.REQUEST_CODE_GALLERY);
     }
 
     private boolean isGravitySenorOn() {
@@ -118,4 +126,5 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
     private void saveRandomReplacementState(boolean isEnable) {
         PandoraConfig.newInstance(getActivity()).saveRandomReplacementState(isEnable);
     }
+
 }

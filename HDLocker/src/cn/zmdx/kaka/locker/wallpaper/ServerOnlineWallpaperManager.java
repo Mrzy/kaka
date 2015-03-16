@@ -7,7 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ServerOnlineWallpaperManager {
-    
+
     public static ArrayList<ServerOnlineWallpaper> parseJson(JSONObject jsonObj) {
         ArrayList<ServerOnlineWallpaper> sdList = new ArrayList<ServerOnlineWallpaper>();
         String state = jsonObj.optString("state");
@@ -19,7 +19,7 @@ public class ServerOnlineWallpaperManager {
                 serverOnlineWallpaper.parseBaseJson(jsonObject);
                 sdList.add(serverOnlineWallpaper);
             }
-        }else {
+        } else {
             sdList = null;
         }
         return sdList;
@@ -44,13 +44,15 @@ public class ServerOnlineWallpaperManager {
 
         private String imageEXT;
 
+        private int top;
+
         /**
          * 数据所在位置
          */
         private int mPosition = -1;
 
         private boolean isCurItem = false;
-        
+
         private boolean isNewData = false;
 
         public void parseBaseJson(JSONObject jsonObject) {
@@ -63,6 +65,7 @@ public class ServerOnlineWallpaperManager {
             imageNAME = jsonObject.optString("imageNAME");
             imageURL = jsonObject.optString("imageURL");
             imageEXT = jsonObject.optString("imageEXT");
+            top = jsonObject.optInt("top", 0);
         }
 
         public String getId() {
@@ -135,6 +138,14 @@ public class ServerOnlineWallpaperManager {
 
         public void setImageEXT(String imageEXT) {
             this.imageEXT = imageEXT;
+        }
+
+        public int getTop() {
+            return top;
+        }
+
+        public void setTop(int top) {
+            this.top = top;
         }
 
         public int getPosition() {

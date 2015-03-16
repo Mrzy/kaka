@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +14,10 @@ import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter.OnItemClickListener;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager.IPullWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView.IWallpaperDetailListener;
@@ -68,6 +67,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         initView();
     }
 
+    @SuppressLint("InflateParams")
     private void initView() {
         mEntireView = LayoutInflater.from(mContext).inflate(R.layout.pager_wallpaper_layout, null);
         addView(mEntireView);
@@ -75,15 +75,13 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         mLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setVerticalFadingEdgeEnabled(true);
-        mRecyclerView.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 10));
         mRecyclerView.setOnScrollListener(mScrollListener);
 
-        pullWallpaperData();
     }
 
     public void setOnlineWallpaperListener(IOnlineWallpaperListener listener) {
         mListener = listener;
+        pullWallpaperData();
     }
 
     private boolean isLoadMore = false;
@@ -97,7 +95,6 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
             // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
             // dy>0 表示向下滑动
             if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
-                // loadPage(currentQueryMap);
                 if (!isLoadMore) {
                     isLoadMore = true;
                     pullWallpaperData();
@@ -115,6 +112,9 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
     @Override
     public void onSuccecc(List<ServerOnlineWallpaper> list) {
         isLoadMore = false;
+        if (list == null) {
+            return;
+        }
         Collections.sort(list, comparator);
         publishDATE = list.get(list.size() - 1).getPublishDATE();
         mList.addAll(list);
@@ -138,7 +138,6 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
 
     @Override
     public void onFail() {
-
     }
 
     @Override
