@@ -46,6 +46,6 @@
     <color name="setting_background_color">#f5f5f5</color>
     <color name="setting_text_grey_color">#a1a1a1</color>
     <color name="setting_text_normal_color">#555555</color>
-    <color name="setting_psts_indicator_color">#e84e40</color>
+    <color name="setting_psts_indicator_color">#3db7ff</color>
 
 </resources>

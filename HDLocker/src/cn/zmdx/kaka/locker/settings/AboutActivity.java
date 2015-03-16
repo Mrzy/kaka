@@ -20,7 +20,7 @@ public class AboutActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_about_us);
         getSupportActionBar().setBackgroundDrawable(
-                getResources().getDrawable(R.drawable.action_bar_bg));
+                getResources().getDrawable(R.drawable.action_bar_bg_blue));
         initView();
     }
 

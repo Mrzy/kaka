@@ -49,7 +49,7 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.pandora_splash);
 
         mRootView = findViewById(R.id.pandora_splash_background);
-        initDesktopDrawable();
+//        initDesktopDrawable();
         mIcon = (ImageView) findViewById(R.id.pandora_splash_icon);
         mAppName = (TypefaceTextView) findViewById(R.id.pandora_splash_app_name);
         mVersion = (TypefaceTextView) findViewById(R.id.pandora_splash_version);

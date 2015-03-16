@@ -5,6 +5,10 @@ import java.lang.ref.WeakReference;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +29,22 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
     boolean isFirstIn = false;
 
     private static final int GO_GUIDE = 1001;
+
+    private int[] mBackgroundDrawable = {
+            R.drawable.action_bar_bg_blue, R.drawable.action_bar_bg_purple,
+            R.drawable.action_bar_bg_orange, R.drawable.action_bar_bg_red
+    };
+
+    private int[] mBackgroundColor = {
+            Color.parseColor("#3db7ff"), Color.parseColor("#ab47bc"), Color.parseColor("#ea861c"),
+            Color.parseColor("#e84e40")
+    };
+
+    public int[] getBackgroundColor() {
+        return mBackgroundColor;
+    }
+
+    private int mLastPosition;
 
     private MyHandler mHandler = new MyHandler(this);
 
@@ -67,8 +87,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         // UmengUpdateAgent.silentUpdate(this);
         setContentView(R.layout.main_setting_activity);
 
-        getSupportActionBar().setBackgroundDrawable(
-                getResources().getDrawable(R.drawable.action_bar_bg));
+        setBackground(getResources().getDrawable(R.drawable.action_bar_bg_blue));
         // getWindow().getAttributes().flags |=
         // LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         getSupportFragmentManager().beginTransaction().add(R.id.content, new MainSettingFragment())
@@ -100,7 +119,28 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
     }
 
     @Override
-    public void onItemClick(String title) {
+    public void onItemClick(String title, int position) {
         getSupportActionBar().setTitle(title);
+        setActionBarBackground(position);
+        mLastPosition = position;
+    }
+
+    private void setActionBarBackground(int position) {
+        if (mLastPosition != position) {
+            Drawable[] layers = new Drawable[] {
+                    new ColorDrawable(mBackgroundColor[mLastPosition]),
+                    new ColorDrawable(mBackgroundColor[position])
+            };
+            TransitionDrawable td = new TransitionDrawable(layers);
+            setBackground(td);
+            td.startTransition(300);
+        } else {
+            setBackground(getResources().getDrawable(mBackgroundDrawable[position]));
+        }
+
+    }
+
+    private void setBackground(Drawable drawable) {
+        getSupportActionBar().setBackgroundDrawable(drawable);
     }
 }
