@@ -64,7 +64,6 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
         final LinearLayout detailView = (LinearLayout) mEntireView
                 .findViewById(R.id.setting_online_detail_wallpaper);
         OnlineWallpaperView onlineWallpaperView = new OnlineWallpaperView(getActivity(), false);
-        onlineWallpaperView.getBottomView().setVisibility(View.GONE);
         onlineWallpaperView.setOnlineWallpaperListener(new IOnlineWallpaperListener() {
 
             @Override

@@ -217,6 +217,8 @@
     <string name="pandora_setting_general_checkout_new_version">检查新版本</string>
     <string name="pandora_setting_general_about">关于潘多拉</string>
     <string name="pandora_setting_general_evaluation">评价一下我们</string>
+    <string name="pandora_setting_general_evaluation_praise">好评</string>
+    <string name="pandora_setting_general_evaluation_bad_review">差评</string>
     
     <string name="pandora_setting_notify_open_permission">打开通知权限</string>
     <string name="pandora_setting_notify_open_notification">开启通知提醒</string>
