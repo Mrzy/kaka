@@ -138,6 +138,8 @@ public class LockScreenManager {
 
     private SlidingUpPanelLayout mSlidingUpView;
 
+    private boolean mKeepBlurEffect = false;
+
     public interface ILockScreenListener {
         void onLock();
 
@@ -296,6 +298,7 @@ public class LockScreenManager {
                 if (vg.getChildCount() == 1) {
                     fadeInWallpaperBlurAnimator();
                 }
+                mKeepBlurEffect = true;
             }
 
             @Override
@@ -303,6 +306,7 @@ public class LockScreenManager {
                 ViewGroup vg = (ViewGroup) parent;
                 if (vg.getChildCount() == 0) {
                     fadeOutWallpaperBlurAnimator();
+                    mKeepBlurEffect = false;
                 }
             }
         });
@@ -362,9 +366,13 @@ public class LockScreenManager {
                 unLock();
             }
             if (position == 1 && positionOffset == 0.0) {
-                setWallpaperBlurEffect(0);
+                if (!mKeepBlurEffect) {
+                    setWallpaperBlurEffect(0);
+                }
             } else {
-                setWallpaperBlurEffect(1.0f - positionOffset);
+                if (!mKeepBlurEffect) {
+                    setWallpaperBlurEffect(1.0f - positionOffset);
+                }
                 setMainPageAlpha(positionOffset);
             }
         }
@@ -405,7 +413,9 @@ public class LockScreenManager {
         public void onPanelSlide(View panel, float slideOffset) {
             // 模糊背景
             if (slideOffset >= 0) {
-                setWallpaperBlurEffect(Math.max(0, slideOffset));
+                if (!mKeepBlurEffect) {
+                    setWallpaperBlurEffect(Math.max(0, slideOffset));
+                }
                 // 渐隐时间，天气文字
                 setMainPageAlpha(1.0f - slideOffset);
             }
@@ -415,7 +425,6 @@ public class LockScreenManager {
             PandoraBoxManager.newInstance(mContext).initBody();
             PandoraBoxManager.newInstance(mContext).refreshAllNews();
             pauseWallpaperTranslation();
-
         };
 
         public void onPanelCollapsed(View panel) {

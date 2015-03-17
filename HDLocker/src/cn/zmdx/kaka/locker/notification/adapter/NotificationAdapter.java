@@ -69,11 +69,13 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
     private SwipeLayout.OnSwipeLayoutListener mSwipeListener = new SwipeLayout.OnSwipeLayoutListener() {
         @Override
         public void onOpened(SwipeLayout swipeLayout, int direction) {
-            final NotificationInfo info = (NotificationInfo) swipeLayout.getTag();
+            Object[] tagData = (Object[]) swipeLayout.getTag();
+            final NotificationInfo info = (NotificationInfo) tagData[0];
+            final int position = (Integer) tagData[1];
             if (direction == SwipeLayout.OPEN_DIRECTION_LEFT) {
-                openNotification(info);
+                openNotification(info, position);
             } else if (direction == SwipeLayout.OPEN_DIRECTION_RIGHT) {
-                mNotiLayout.removeNotification(info);
+                mNotiLayout.removeNotification(info, position);
             }
         }
 
@@ -88,7 +90,7 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
         }
     };
 
-    private void openNotification(final NotificationInfo info) {
+    private void openNotification(final NotificationInfo info, final int position) {
         LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
 
             @Override
@@ -119,7 +121,7 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
                 }
                 UmengCustomEventManager.statisticalOpenNotification(info.getId(), info.getPkg(),
                         info.getType());
-                mNotiLayout.removeNotification(info);
+                mNotiLayout.removeNotification(info, position);
             }
         });
         LockScreenManager.getInstance().unLock();
@@ -154,7 +156,10 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
         Bitmap largeBmp = info.getLargeIcon();
         Drawable smallDrawable = info.getSmallIcon();
         holder.titleTv.setText(info.getTitle());
-        holder.swipeLayout.setTag(info);
+        Object[] tagData = new Object[2];
+        tagData[0] = info;
+        tagData[1] = position;
+        holder.swipeLayout.setTag(tagData);
         if (!showMsg && isWinxinOrQQ(info)) {
             holder.largeIconIv.setImageDrawable(smallDrawable);
             holder.contentTv.setText(mContext.getString(R.string.hide_message_tip));

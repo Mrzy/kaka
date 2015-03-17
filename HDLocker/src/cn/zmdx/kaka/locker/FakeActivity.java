@@ -15,7 +15,6 @@ import cn.zmdx.kaka.locker.LockScreenManager.ILockScreenListener;
 import cn.zmdx.kaka.locker.settings.MainSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
-import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -69,7 +68,6 @@ public class FakeActivity extends Activity {
                 finish();
             }
         });
-        PandoraLocationManager.getInstance().registLocationUpdates();
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -104,7 +102,6 @@ public class FakeActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        PandoraLocationManager.getInstance().unRegistLocationUpdates();
         super.onDestroy();
     }
 

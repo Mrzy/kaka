@@ -22,6 +22,7 @@ import android.os.Message;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.database.CustomNotificationModel;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
@@ -105,8 +106,9 @@ public class NotificationInterceptor extends Handler {
                     Bitmap largeIcon = (Bitmap) bundle.getParcelable("android.largeIcon");
                     long postTime = sbn.getPostTime();
 
+                    // TODO 有的通知不是用的标准通知接口开发，所有title都为null，针对这种情况，可以自定义通知标题处理，而不是忽略
                     if (TextUtils.isEmpty(title) && TextUtils.isEmpty(content)) {
-                        return;
+                        title = mContext.getString(R.string.new_message_title);
                     }
 
                     if (!checkMessageValid(sbn.getPackageName(), title, content)) {

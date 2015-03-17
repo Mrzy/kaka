@@ -170,5 +170,4 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
             }
         }
     }
-
 }

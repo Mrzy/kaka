@@ -93,7 +93,7 @@ public class NotificationLayout extends FrameLayout {
                     break;
                 }
             }
-            removeNotification(info);
+            removeNotification(info, -1);
         }
 
         @Override
@@ -114,8 +114,13 @@ public class NotificationLayout extends FrameLayout {
         }
     }
 
+    /**
+     * 
+     * @param info
+     * @param position
+     */
     @SuppressLint("NewApi")
-    public void removeNotification(NotificationInfo info) {
+    public void removeNotification(NotificationInfo info, int position) {
         if (info != null) {
             // 如果是自定义通知，要从本地数据库删除通知
             if (info.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
@@ -136,7 +141,11 @@ public class NotificationLayout extends FrameLayout {
 
             // 从内存中的通知集合中移除这个通知
             mActiveNotification.remove(info);
-            mAdapter.notifyDataSetChanged();
+            if (position != -1) {
+                mAdapter.notifyItemRemoved(position);
+            } else {
+                mAdapter.notifyDataSetChanged();
+            }
         }
     }
 
