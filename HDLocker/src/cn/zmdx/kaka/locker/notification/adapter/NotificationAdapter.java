@@ -5,8 +5,11 @@ import java.util.List;
 
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.View;
@@ -18,10 +21,12 @@ import android.widget.Toast;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.database.CustomNotificationModel;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.Constants;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
+import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.notification.guide.NotificationGuideHelper;
 import cn.zmdx.kaka.locker.notification.view.NotificationLayout;
 import cn.zmdx.kaka.locker.notification.view.SwipeLayout;
@@ -38,9 +43,8 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
 
     private List<NotificationInfo> mData;
 
-    private NotificationLayout mNotiLayout;
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements
+            SwipeLayout.OnSwipeLayoutListener {
 
         private SwipeLayout swipeLayout;
 
@@ -51,31 +55,22 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
         public ViewHolder(View view) {
             super(view);
             swipeLayout = (SwipeLayout) view;
-            swipeLayout.setOnSwipeLayoutListener(mSwipeListener);
+            swipeLayout.setOnSwipeLayoutListener(this);
             largeIconIv = (ImageView) swipeLayout.getUpperView().findViewById(R.id.largeIcon);
             smallIconIv = (ImageView) swipeLayout.getUpperView().findViewById(R.id.smallIcon);
             titleTv = (TextView) swipeLayout.getUpperView().findViewById(R.id.title);
             contentTv = (TextView) swipeLayout.getUpperView().findViewById(R.id.content);
             dateTv = (TextView) swipeLayout.getUpperView().findViewById(R.id.date);
         }
-    }
 
-    public NotificationAdapter(Context context, NotificationLayout nl, List<NotificationInfo> data) {
-        mContext = context;
-        mNotiLayout = nl;
-        mData = data;
-    }
-
-    private SwipeLayout.OnSwipeLayoutListener mSwipeListener = new SwipeLayout.OnSwipeLayoutListener() {
         @Override
         public void onOpened(SwipeLayout swipeLayout, int direction) {
-            Object[] tagData = (Object[]) swipeLayout.getTag();
-            final NotificationInfo info = (NotificationInfo) tagData[0];
-            final int position = (Integer) tagData[1];
+            NotificationInfo info = (NotificationInfo) swipeLayout.getTag();
             if (direction == SwipeLayout.OPEN_DIRECTION_LEFT) {
-                openNotification(info, position);
+                openNotification(info);
+                remove(info);
             } else if (direction == SwipeLayout.OPEN_DIRECTION_RIGHT) {
-                mNotiLayout.removeNotification(info, position);
+                remove(info);
             }
         }
 
@@ -88,9 +83,43 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
         public void onSlide(SwipeLayout layout, float offset) {
 
         }
-    };
+    }
 
-    private void openNotification(final NotificationInfo info, final int position) {
+    public NotificationAdapter(Context context, List<NotificationInfo> data) {
+        mContext = context;
+        mData = data;
+    }
+
+    public void add(NotificationInfo info, int position) {
+        mData.add(position, info);
+        notifyItemInserted(position);
+    }
+
+    public void remove(NotificationInfo info) {
+        if (info != null) {
+            // 如果是自定义通知，要从本地数据库删除通知
+            if (info.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
+                CustomNotificationModel.getInstance().deleteById(info.getId());
+            } else if (info.getType() == NotificationInfo.NOTIFICATION_TYPE_SYSTEM) {
+                // 如果为系统通知，清除通知栏中的这个通知
+                Intent intent = new Intent();
+                intent.setAction(PandoraNotificationService.ACTION_CANCEL_NOTIFICATION);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    intent.putExtra("key", info.getKey());
+                } else {
+                    intent.putExtra("pkgName", info.getPkg());
+                    intent.putExtra("tag", info.getTag());
+                    intent.putExtra("id", info.getId());
+                }
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+            }
+        }
+        int position = mData.indexOf(info);
+        mData.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    private void openNotification(final NotificationInfo info) {
         LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
 
             @Override
@@ -121,7 +150,6 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
                 }
                 UmengCustomEventManager.statisticalOpenNotification(info.getId(), info.getPkg(),
                         info.getType());
-                mNotiLayout.removeNotification(info, position);
             }
         });
         LockScreenManager.getInstance().unLock();
@@ -156,10 +184,7 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
         Bitmap largeBmp = info.getLargeIcon();
         Drawable smallDrawable = info.getSmallIcon();
         holder.titleTv.setText(info.getTitle());
-        Object[] tagData = new Object[2];
-        tagData[0] = info;
-        tagData[1] = position;
-        holder.swipeLayout.setTag(tagData);
+        holder.swipeLayout.setTag(info);
         if (!showMsg && isWinxinOrQQ(info)) {
             holder.largeIconIv.setImageDrawable(smallDrawable);
             holder.contentTv.setText(mContext.getString(R.string.hide_message_tip));

@@ -207,11 +207,11 @@ public final class PandoraNotificationService extends NotificationListenerServic
         msg.what = NotificationInterceptor.MSG_NOTIFICATION_POST;
         msg.obj = sbn;
         // 如果是qq，延迟200ms，以解决连续收到qq消息时会remove两次导致消息被移除的问题
-        if (sbn.getPackageName().equals(Constants.PKGNAME_QQ)) {
-            interceptor.sendMessageDelayed(msg, 200);
-        } else {
-            interceptor.sendMessage(msg);
-        }
+//        if (sbn.getPackageName().equals(Constants.PKGNAME_QQ)) {
+            interceptor.sendMessageDelayed(msg, 400);
+//        } else {
+//            interceptor.sendMessage(msg);
+//        }
     }
 
     @Override
