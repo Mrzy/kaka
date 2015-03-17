@@ -63,7 +63,7 @@ public class NotificationPreferences {
     }
 
     private void write(Set<String> interceptPkgs) {
-        mSp.edit().putStringSet(KEY_ACTIVE_NOTIFICATIONS, interceptPkgs).commit();
+        mSp.edit().clear().putStringSet(KEY_ACTIVE_NOTIFICATIONS, interceptPkgs).commit();
     }
 
     public Set<String> getInterceptPkgNames() {
