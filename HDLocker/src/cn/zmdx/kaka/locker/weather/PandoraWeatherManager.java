@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
@@ -65,7 +66,7 @@ public class PandoraWeatherManager {
 
     public void getWeatherFormCache(final ISmartWeatherCallback callback) {
         String lastWeatherInfo = PandoraConfig.newInstance(mContext).getLastWeatherInfo();
-        if (lastWeatherInfo != null) {
+        if (!TextUtils.isEmpty(lastWeatherInfo)) {
             try {
                 JSONObject weatherObj = new JSONObject(lastWeatherInfo);
                 SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
@@ -125,7 +126,7 @@ public class PandoraWeatherManager {
 
     private String getCurWeatherURL() {
         cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
-        if (cityNameStr != null) {
+        if (!TextUtils.isEmpty(cityNameStr)) {
             areaId = XMLParserUtils.getAreaId(cityNameStr);
         } else {
             String lastCityName = PandoraConfig.newInstance(mContext).getLastCityName();

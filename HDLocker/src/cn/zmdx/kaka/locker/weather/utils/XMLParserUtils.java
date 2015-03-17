@@ -10,10 +10,10 @@ import org.xmlpull.v1.XmlPullParser;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.text.TextUtils;
 import android.util.Xml;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.weather.entity.CityInfo;
-import cn.zmdx.kaka.locker.weather.entity.MeteorologicalCodeConstant;
 import cn.zmdx.kaka.locker.weather.entity.MeteorologicalInfo;
 
 /**
@@ -76,8 +76,8 @@ public class XMLParserUtils {
         AssetManager asset = mContext.getAssets();
         InputStream xmlStream;
         try {
-            xmlStream = asset.open("CityInfo.xml");
-            if (cityNameStr != null) {
+            xmlStream = asset.open("cityInfo.xml");
+            if (!TextUtils.isEmpty(cityNameStr)) {
                 List<CityInfo> cityInfos = pullCityInfoParseXML(xmlStream);
                 for (CityInfo cityInfo : cityInfos) {
                     String cityName = cityInfo.getCityName();
@@ -162,49 +162,5 @@ public class XMLParserUtils {
             e.printStackTrace();
         }
         return featureName;
-    }
-
-    /**
-     * 根据白天天气指数值获取对应的天气特征图片
-     * 
-     * @param featureNoStr
-     * @return
-     */
-    public static int getFeatureIndexPicByNo(String featureNoStr) {
-        int result = 0;
-        if (featureNoStr.equals("00")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[0];
-        } else if (featureNoStr.equals("01")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[1];
-        } else if (featureNoStr.equals("02")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[2];
-        } else if (featureNoStr.equals("04")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[3];
-        } else if (featureNoStr.equals("06")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[4];
-        } else if (featureNoStr.equals("07")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[5];
-        } else if (featureNoStr.equals("08")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[6];
-        } else if (featureNoStr.equals("09")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[7];
-        } else if (featureNoStr.equals("14")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[8];
-        } else if (featureNoStr.equals("15")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[9];
-        } else if (featureNoStr.equals("16")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[10];
-        } else if (featureNoStr.equals("18")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[11];
-        } else if (featureNoStr.equals("29")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[12];
-        } else if (featureNoStr.equals("53")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[13];
-        } else if (featureNoStr.equals("000")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[14];
-        } else if (featureNoStr.equals("001")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[15];
-        }
-        return result;
     }
 }

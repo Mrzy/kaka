@@ -17,7 +17,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,11 +41,13 @@ import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
-import cn.zmdx.kaka.locker.widget.FloatingActionButton;
+import cn.zmdx.kaka.locker.weather.entity.MeteorologicalCodeConstant;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureIndexInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
+import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
 import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
+import cn.zmdx.kaka.locker.widget.FloatingActionButton;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
@@ -76,13 +77,24 @@ public class PandoraBoxManager implements View.OnClickListener {
             Color.parseColor("#80ab47bc"), Color.parseColor("#808bc34a"),
             Color.parseColor("#80ea861c"), Color.parseColor("#803db7ff")
     };
+
     private TextView tvLunarCalendar;
 
     private TextView tvWeatherFeature;
 
-    private TextView tvWeatherPM;
+    private TextView tvWeatherCentTemp;
 
     private TextView tvUnreadNews;
+
+    private TextView tvWeatherWind;
+
+    private TextView tvWeatherWindForce;
+
+    private int featureIndexPicResId;
+
+    private String featureNameByNo;
+
+    private String centTemp;
 
     private ImageView ivWeatherFeaturePic;
 
@@ -104,8 +116,10 @@ public class PandoraBoxManager implements View.OnClickListener {
         mHeaderView = mEntireView.findViewById(R.id.header);
         tvLunarCalendar = (TextView) mHeaderView.findViewById(R.id.tvLunarCalendar);
         tvWeatherFeature = (TextView) mHeaderView.findViewById(R.id.tvWeatherFeature);
-        tvWeatherPM = (TextView) mHeaderView.findViewById(R.id.tvWeatherPM);
+        tvWeatherCentTemp = (TextView) mHeaderView.findViewById(R.id.tvWeatherCentTemp);
         tvUnreadNews = (TextView) mHeaderView.findViewById(R.id.tvUnreadNews);
+        tvWeatherWind = (TextView) mHeaderView.findViewById(R.id.tvWeatherWind);
+        tvWeatherWindForce = (TextView) mHeaderView.findViewById(R.id.tvWeatherWindForce);
         ivWeatherFeaturePic = (ImageView) mHeaderView.findViewById(R.id.ivWeatherFeaturePic);
 
         return mHeaderView;
@@ -123,12 +137,40 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
                 .get(0);
-
-        String daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
-        int featureIndexPicResId = XMLParserUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
-        String featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
+        String daytimeWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
+                .getDaytimeWindForceNo());// 白天风力
+        String nightWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
+                .getNightWindForceNo());// 夜间风力
+        String daytimeWind = SmartWeatherUtils.getWindByNo(smartWeatherFeatureIndexInfo
+                .getDaytimeWindNo());// 白天风向
+        String nightWind = SmartWeatherUtils.getWindByNo(smartWeatherFeatureIndexInfo
+                .getNightWindNo());// 夜间风向
+        String forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
+        boolean isNight = SmartWeatherUtils.isNight(forecastReleasedTime);
+        if (isNight) {
+            String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
+            centTemp = smartWeatherFeatureIndexInfo.getNightCentTemp();
+            featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
+            featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
+            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
+                featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
+            }
+            tvWeatherWind.setText(nightWind);
+            tvWeatherWindForce.setText(",风力" + nightWindForce);
+        } else {
+            String daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
+            centTemp = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
+            featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
+            featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
+            tvWeatherWind.setText(daytimeWind);
+            tvWeatherWindForce.setText(",风力" + daytimeWindForce);
+        }
         tvWeatherFeature.setText(featureNameByNo);
         ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
+        tvWeatherCentTemp.setText(centTemp + "℃");
+        String lunarCal = SmartWeatherUtils.getLunarCal();
+        String cyclicalm = SmartWeatherUtils.getCyclicalm();
+        tvLunarCalendar.setText(cyclicalm + lunarCal);
     }
 
     private boolean mInitBody = false;

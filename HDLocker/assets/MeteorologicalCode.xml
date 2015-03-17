@@ -42,6 +42,11 @@
         d3="Heavy rain" />
 
     <d
+        d1="10"
+        d2="暴雨"
+        d3="Storm" />
+
+    <d
         d1="14"
         d2="小雪"
         d3="Light snow" />
@@ -55,6 +60,11 @@
         d1="16"
         d2="大雪"
         d3="Heavy snow" />
+
+    <d
+        d1="17"
+        d2="暴雪"
+        d3="Snowstorm" />
 
     <d
         d1="18"

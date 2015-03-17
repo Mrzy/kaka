@@ -12,7 +12,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.util.Base64;
+import cn.zmdx.kaka.locker.weather.entity.MeteorologicalCodeConstant;
 
 @SuppressLint("SimpleDateFormat")
 public class SmartWeatherUtils {
@@ -84,6 +86,30 @@ public class SmartWeatherUtils {
         return formatDate;
     }
 
+    public static String getLunarCal() {
+        Calendar today = Calendar.getInstance();
+        String todayFormatDate = String.valueOf(today.get(Calendar.YEAR)) + "年"
+                + String.valueOf(today.get(Calendar.MONTH) + 1) + "月"
+                + String.valueOf(today.get(Calendar.DAY_OF_MONTH)) + "日";
+        SimpleDateFormat chineseDateFormat = new SimpleDateFormat("yyyy年MM月dd日");
+        try {
+            today.setTime(chineseDateFormat.parse(todayFormatDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        LunarUtils lunarCal = new LunarUtils(today);
+        String lunar = lunarCal.toString();
+        return lunar;
+    }
+
+    public static String getCyclicalm() {
+        Calendar today = Calendar.getInstance();
+        int year = today.get(Calendar.YEAR);
+        LunarUtils lunarCal = new LunarUtils(today);
+        String cyclical = lunarCal.cyclical(year);
+        return cyclical;
+    }
+
     public static long str2TimeMillis(String dataStr) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
         long timeMillis = 0;
@@ -104,6 +130,16 @@ public class SmartWeatherUtils {
         return hour;
     }
 
+    public static boolean isNight(String hour) {
+        boolean isNightTime = false;
+        Calendar cal = Calendar.getInstance();
+        int hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
+        if (hourOfDay >= 18 && hourOfDay <= 24 || hourOfDay >= 1 && hourOfDay <= 7) {
+            return !isNightTime;
+        }
+        return isNightTime;
+    }
+
     private static String getKey(String areaid) {
         String key = null;
         try {
@@ -112,5 +148,77 @@ public class SmartWeatherUtils {
             e.printStackTrace();
         }
         return key;
+    }
+
+    /**
+     * 根据白天天气指数值获取对应的天气特征图片
+     * 
+     * @param featureNoStr
+     * @return
+     */
+    public static int getFeatureIndexPicByNo(String featureNoStr) {
+        int result = 0;
+        if (featureNoStr.equals("00")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[0];
+        } else if (featureNoStr.equals("01")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[1];
+        } else if (featureNoStr.equals("02")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[2];
+        } else if (featureNoStr.equals("04")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[3];
+        } else if (featureNoStr.equals("06")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[4];
+        } else if (featureNoStr.equals("07")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[5];
+        } else if (featureNoStr.equals("08")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[6];
+        } else if (featureNoStr.equals("09")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[7];
+        } else if (featureNoStr.equals("10")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[8];
+        } else if (featureNoStr.equals("14")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[9];
+        } else if (featureNoStr.equals("15")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[10];
+        } else if (featureNoStr.equals("16")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[11];
+        } else if (featureNoStr.equals("17")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[12];
+        } else if (featureNoStr.equals("18")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[13];
+        } else if (featureNoStr.equals("29")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[14];
+        } else if (featureNoStr.equals("53")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[15];
+        } else if (featureNoStr.equals("000")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[16];
+        } else if (featureNoStr.equals("001")) {
+            result = MeteorologicalCodeConstant.meteorologicalCodePics[17];
+        }
+        return result;
+    }
+
+    /**
+     * 根据风力值得到风力
+     */
+
+    public static String getWindForceByNo(String windForceNo) {
+        String windForce = null;
+        if (!TextUtils.isEmpty(windForceNo)) {
+            windForce = MeteorologicalCodeConstant.meterologicalWindForces[Integer
+                    .parseInt(windForceNo)];
+        }
+        return windForce;
+    }
+
+    /**
+     * 根据风向值得到风向
+     */
+    public static String getWindByNo(String windNo) {
+        String wind = null;
+        if (!TextUtils.isEmpty(windNo)) {
+            wind = MeteorologicalCodeConstant.meterologicalWindFeatures[Integer.parseInt(windNo)];
+        }
+        return wind;
     }
 }

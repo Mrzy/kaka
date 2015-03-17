@@ -24,7 +24,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -517,41 +516,42 @@ public class LockScreenManager {
                 PandoraBoxManager.newInstance(mContext).updateView(null);
             }
             return;
-        }
-        String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar.getInstance()
-                .get(Calendar.HOUR_OF_DAY));
-        // mWeatherSummary.setText(promptString);
-        // mWeatherSummary.setVisibility(View.VISIBLE);
-        if (null != mOnlineWallpaperView) {
-            mOnlineWallpaperView.setWeatherString(promptString);
-        }
-//         PandoraWeatherManager.getInstance().getCurrentSmartWeather(new
-//         ISmartWeatherCallback() {
-//        
-//         @Override
-//         public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
-//         PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
-//         }
-//        
-//         @Override
-//         public void onFailure() {
-//         PandoraBoxManager.newInstance(mContext).updateView(null);
-//         }
-//         });
+        } else {
 
-         PandoraWeatherManager.getInstance().getWeatherFormCache(new
-         ISmartWeatherCallback() {
-        
-         @Override
-         public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
-         PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
-         }
-        
-         @Override
-         public void onFailure() {
-         PandoraBoxManager.newInstance(mContext).updateView(null);
-         }
-         });
+            String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
+                    .getInstance().get(Calendar.HOUR_OF_DAY));
+            // mWeatherSummary.setText(promptString);
+            // mWeatherSummary.setVisibility(View.VISIBLE);
+            if (null != mOnlineWallpaperView) {
+                mOnlineWallpaperView.setWeatherString(promptString);
+            }
+            // PandoraWeatherManager.getInstance().getCurrentSmartWeather(new
+            // ISmartWeatherCallback() {
+            //
+            // @Override
+            // public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
+            // PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
+            // }
+            //
+            // @Override
+            // public void onFailure() {
+            // PandoraBoxManager.newInstance(mContext).updateView(null);
+            // }
+            // });
+
+            PandoraWeatherManager.getInstance().getWeatherFormCache(new ISmartWeatherCallback() {
+
+                @Override
+                public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
+                    PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
+                }
+
+                @Override
+                public void onFailure() {
+                    PandoraBoxManager.newInstance(mContext).updateView(null);
+                }
+            });
+        }
     }
 
     /**
