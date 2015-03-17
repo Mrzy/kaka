@@ -127,6 +127,7 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
                 .findViewById(R.id.setting_close_system_lock_item);
         if (isMeizu) {
             mCloseSystemLock.setVisibility(View.GONE);
+            mEntireView.findViewById(R.id.setting_close_system_lock_item).setVisibility(View.GONE);
         } else {
             mCloseSystemLock.setOnClickListener(this);
         }

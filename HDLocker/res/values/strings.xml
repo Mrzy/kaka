@@ -249,6 +249,20 @@
     
     <string name="pandora_setting_wallpaper_detail_back">返回</string>
     <string name="pandora_setting_wallpaper_detail_apply">应用壁纸</string>
+    
     <string name="new_message_title">一条新消息</string>
+    
+    <string name="pandora_wallpaper_month_january">Jan</string>
+    <string name="pandora_wallpaper_month_february">Feb</string>
+    <string name="pandora_wallpaper_month_march">Mar</string>
+    <string name="pandora_wallpaper_month_april">Apr</string>
+    <string name="pandora_wallpaper_month_may">May</string>
+    <string name="pandora_wallpaper_month_june">Jun</string>
+    <string name="pandora_wallpaper_month_july">Jul</string>
+    <string name="pandora_wallpaper_month_august">Aug</string>
+    <string name="pandora_wallpaper_month_september">Sep</string>
+    <string name="pandora_wallpaper_month_october">Oct</string>
+    <string name="pandora_wallpaper_month_november">Nov</string>
+    <string name="pandora_wallpaper_month_december">Dec</string>
 
 </resources>

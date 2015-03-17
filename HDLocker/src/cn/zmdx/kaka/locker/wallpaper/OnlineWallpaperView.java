@@ -76,7 +76,9 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setOnScrollListener(mScrollListener);
-
+        mAdapter = new WallpaperPageAdapter(mContext, mRecyclerView, mList);
+        mAdapter.setOnItemClickListener(this);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     public void setOnlineWallpaperListener(IOnlineWallpaperListener listener) {
@@ -118,13 +120,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         Collections.sort(list, comparator);
         publishDATE = list.get(list.size() - 1).getPublishDATE();
         mList.addAll(list);
-        if (null == mAdapter) {
-            mAdapter = new WallpaperPageAdapter(mContext, mRecyclerView, mList);
-            mAdapter.setOnItemClickListener(this);
-            mRecyclerView.setAdapter(mAdapter);
-        } else {
-            mAdapter.notifyDataSetChanged();
-        }
+        mAdapter.notifyDataSetChanged();
 
     }
 

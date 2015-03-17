@@ -1,26 +1,21 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
@@ -47,6 +42,7 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
     }
 
     private void initView() {
+
         mGravitySenorSButton = (SwitchButton) mEntireView
                 .findViewById(R.id.notify_open_gravity_sensor_switch_button);
         mGravitySenorSButton.setOnCheckedChangeListener(this);
@@ -67,20 +63,16 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
     private void initWallpaperListView() {
         LinearLayout view = (LinearLayout) mEntireView.findViewById(R.id.setting_online_wallpaper);
-        final LinearLayout detailView = (LinearLayout) mEntireView
-                .findViewById(R.id.setting_online_detail_wallpaper);
-        OnlineWallpaperView onlineWallpaperView = new OnlineWallpaperView(getActivity(), false);
+        final OnlineWallpaperView onlineWallpaperView = new OnlineWallpaperView(getActivity(),
+                false);
         onlineWallpaperView.setOnlineWallpaperListener(new IOnlineWallpaperListener() {
 
             @Override
             public void onOpenDetailPage(View view) {
-                detailView.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT,
-                        LayoutParams.MATCH_PARENT));
             }
 
             @Override
             public void onCloseDetailPage() {
-                detailView.removeAllViews();
             }
 
             @Override
@@ -94,7 +86,8 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
                         R.anim.umeng_fb_slide_out_from_left);
             }
         });
-        view.addView(onlineWallpaperView);
+        view.addView(onlineWallpaperView, new LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT));
     }
 
     @Override

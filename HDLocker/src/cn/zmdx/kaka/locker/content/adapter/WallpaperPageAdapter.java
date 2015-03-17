@@ -16,7 +16,6 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdapter.ViewHolder> {
@@ -89,9 +88,8 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
         Picasso.with(mContext).load(item.getThumbURL()).resize(mImageWidth, mImageHeight)
                 .centerCrop().into(holder.mImageView);
         holder.mPublicDay.setText("" + getDayByTime(item.getPublishDATE(), Calendar.DAY_OF_MONTH));
-        int month = getDayByTime(item.getPublishDATE(), Calendar.MONTH) + 1;
-        int xq = getDayByTime(item.getPublishDATE(), Calendar.DAY_OF_WEEK);
-        holder.mPublicMonth.setText(month + "月\n" + getWeekStr(xq));
+        int month = getDayByTime(item.getPublishDATE(), Calendar.MONTH);
+        holder.mPublicMonth.setText("" + getMonthEn(month));
         holder.mWallpaperName.setText(item.getDesc());
         final View itemView = holder.itemView;
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -108,27 +106,37 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
 
     private int getDayByTime(long time, int field) {
         Calendar cal = Calendar.getInstance();
-        // if (time > 0) {
-        cal.setTimeInMillis(time);
-        // }
+        if (time > 0) {
+            cal.setTimeInMillis(time);
+        }
         return cal.get(field);
     }
 
-    private String getWeekStr(int xq) {
-        if (xq == 1) {
-            return mContext.getString(R.string.lock_week_sunday);
-        } else if (xq == 2) {
-            return mContext.getString(R.string.lock_week_monday);
-        } else if (xq == 3) {
-            return mContext.getString(R.string.lock_week_tuesday);
-        } else if (xq == 4) {
-            return mContext.getString(R.string.lock_week_wednesday);
-        } else if (xq == 5) {
-            return mContext.getString(R.string.lock_week_thursday);
-        } else if (xq == 6) {
-            return mContext.getString(R.string.lock_week_friday);
-        } else if (xq == 7) {
-            return mContext.getString(R.string.lock_week_saturday);
+    private String getMonthEn(int month) {
+        if (month == 0) {
+            return mContext.getString(R.string.pandora_wallpaper_month_january);
+        } else if (month == 1) {
+            return mContext.getString(R.string.pandora_wallpaper_month_february);
+        } else if (month == 2) {
+            return mContext.getString(R.string.pandora_wallpaper_month_march);
+        } else if (month == 3) {
+            return mContext.getString(R.string.pandora_wallpaper_month_april);
+        } else if (month == 4) {
+            return mContext.getString(R.string.pandora_wallpaper_month_may);
+        } else if (month == 5) {
+            return mContext.getString(R.string.pandora_wallpaper_month_june);
+        } else if (month == 6) {
+            return mContext.getString(R.string.pandora_wallpaper_month_july);
+        } else if (month == 7) {
+            return mContext.getString(R.string.pandora_wallpaper_month_august);
+        } else if (month == 8) {
+            return mContext.getString(R.string.pandora_wallpaper_month_september);
+        } else if (month == 9) {
+            return mContext.getString(R.string.pandora_wallpaper_month_october);
+        } else if (month == 10) {
+            return mContext.getString(R.string.pandora_wallpaper_month_november);
+        } else if (month == 11) {
+            return mContext.getString(R.string.pandora_wallpaper_month_december);
         } else {
             return "";
         }

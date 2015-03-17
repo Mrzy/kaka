@@ -36,7 +36,6 @@
         <activity
             android:name=".settings.MainSettingActivity"
             android:excludeFromRecents="true"
-            android:label="@string/pandora_setting_general"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat" >
