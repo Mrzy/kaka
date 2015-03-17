@@ -113,7 +113,6 @@ public class PandoraNumberLockView extends LinearLayout {
             mKeyboardView.setKeyboard(new Keyboard(mContext,
                     R.layout.pandora_number_lock_white_content));
         } else {
-            
             mKeyboardView.setKeyboard(new Keyboard(mContext, R.layout.pandora_number_lock_content));
         }
         mKeyboardView.setPreviewEnabled(false);
