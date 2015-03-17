@@ -22,7 +22,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -363,7 +362,13 @@ public class LockScreenManager {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             if (positionOffset == 0.0 && position == 0) {
-                unLock();
+                HDBThreadUtils.runOnUi(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        unLock();
+                    }
+                });
             }
             if (position == 1 && positionOffset == 0.0) {
                 if (!mKeepBlurEffect) {
@@ -1018,11 +1023,7 @@ public class LockScreenManager {
 
         unRegistBackPressedListener(mBackPressedListener);
 
-        if (mUnLockRunnable != null) {
-            mWinManager.removeView(mEntireView);
-        } else {
-            mWinManager.removeViewImmediate(mEntireView);
-        }
+        mWinManager.removeView(mEntireView);
         mEntireView = null;
         mIsLocked = false;
         isInit = false;
