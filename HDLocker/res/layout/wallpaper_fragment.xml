@@ -30,7 +30,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/pandora_setting_open_gravity_sensor" />
+                        android:text="@string/pandora_setting_wallpaper_open_gravity_sensor" />
 
                     <cn.zmdx.kaka.locker.widget.SwitchButton
                         android:id="@+id/notify_open_gravity_sensor_switch_button"
@@ -58,7 +58,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/pandora_setting_replacement_wallpaper" />
+                        android:text="@string/pandora_setting_wallpaper_replacement_wallpaper" />
 
                     <cn.zmdx.kaka.locker.widget.SwitchButton
                         android:id="@+id/notify_random_replacement_wallpaper_switch_button"
@@ -86,7 +86,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/pandora_setting_local_wallpaper" />
+                        android:text="@string/pandora_setting_wallpaper_local_wallpaper" />
 
                     <ImageView
                         style="@style/setting_switch"

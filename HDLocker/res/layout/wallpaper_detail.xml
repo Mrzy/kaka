@@ -61,18 +61,32 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal" >
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1" />
+
             <cn.zmdx.kaka.locker.widget.BaseButton
                 android:id="@+id/wallpaper_return"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
-                android:text="返回" />
+                android:text="@string/pandora_setting_wallpaper_detail_back" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="2" />
 
             <cn.zmdx.kaka.locker.widget.BaseButton
                 android:id="@+id/wallpaper_apply"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
-                android:layout_marginLeft="50dp"
-                android:text="应用壁纸" />
+                android:text="@string/pandora_setting_wallpaper_detail_apply" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1" />
         </LinearLayout>
     </FrameLayout>
 

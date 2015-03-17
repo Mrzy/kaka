@@ -7,6 +7,7 @@ import android.view.Window;
 import android.webkit.WebView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
 public class FAQActivity extends ActionBarActivity {
 
@@ -18,7 +19,10 @@ public class FAQActivity extends ActionBarActivity {
                 getResources().getDrawable(R.drawable.action_bar_bg_blue));
         setContentView(R.layout.activity_faq);
         WebView mWebView = (WebView) findViewById(R.id.faq_webview);
-        mWebView.loadUrl(UrlBuilder.getBaseUrl() + "/commonQuestions.html");
+        if (HDBNetworkState.isWifiNetwork()) {
+            mWebView.loadUrl(UrlBuilder.getBaseUrl() + "/commonQuestions.html");
+        } else {
+            mWebView.loadUrl("file:///android_asset/commonQuestions.html");
+        }
     }
-
 }

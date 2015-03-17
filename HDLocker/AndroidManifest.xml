@@ -34,24 +34,17 @@
         android:label="@string/app_name"
         android:largeHeap="true" >
         <activity
-            android:name=".splash.SplashActivity"
+            android:name=".settings.MainSettingActivity"
             android:excludeFromRecents="true"
+            android:label="@string/pandora_setting_general"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@style/Theme.AppCompat" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".settings.MainSettingActivity"
-            android:exported="false"
-            android:label="通用"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat" >
         </activity>
         <activity
             android:name=".settings.BaseActivity"
