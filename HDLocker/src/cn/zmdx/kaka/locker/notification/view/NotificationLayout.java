@@ -49,6 +49,7 @@ public class NotificationLayout extends FrameLayout {
     private void init() {
         mRecyclerView = new RecyclerView(getContext());
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setVerticalFadingEdgeEnabled(true);
         mRecyclerView.setFadingEdgeLength(BaseInfoHelper.dip2px(getContext(), 3));

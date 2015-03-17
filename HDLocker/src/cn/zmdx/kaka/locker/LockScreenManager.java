@@ -41,6 +41,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.BatteryView;
+import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
@@ -265,6 +266,18 @@ public class LockScreenManager {
         mMainPage = LayoutInflater.from(mContext).inflate(R.layout.pandora_main_pager_layout, null);
         mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
+        mDate = (TextView) mMainPage.findViewById(R.id.lock_date);
+        setDate();
+
+        mBatteryInfo = (TextView) mMainPage.findViewById(R.id.battery_info);
+        batteryView = (BatteryView) mMainPage.findViewById(R.id.batteryView);
+        batteryView.setLevelListener(new ILevelCallBack() {
+
+            @Override
+            public void onLevelChanged(int level) {
+                mBatteryInfo.setText(level + "%");
+            }
+        });
         pages.add(page1);
         pages.add(mMainPage);
         LockerPagerAdapter pagerAdapter = new LockerPagerAdapter(mContext, mPager, pages);
