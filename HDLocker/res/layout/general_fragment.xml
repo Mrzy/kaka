@@ -75,6 +75,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/setting_close_system_lock_item_line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="17dp"

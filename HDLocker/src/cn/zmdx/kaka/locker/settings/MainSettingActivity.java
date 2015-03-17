@@ -90,6 +90,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         setContentView(R.layout.main_setting_activity);
 
         setBackground(getResources().getDrawable(R.drawable.action_bar_bg_blue));
+        getSupportActionBar().setTitle(getResources().getString(R.string.pandora_setting_general));
         // getWindow().getAttributes().flags |=
         // LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         getSupportFragmentManager().beginTransaction().add(R.id.content, new MainSettingFragment())

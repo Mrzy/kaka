@@ -6,11 +6,13 @@
     android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/wallpaper_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical" >
 
         <cn.zmdx.kaka.locker.widget.BaseLinearLayout
+            android:id="@+id/wallpaper_top_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
@@ -73,7 +75,8 @@
                     android:layout_marginLeft="17dp"
                     android:layout_marginRight="17dp"
                     android:background="@drawable/setting_line"
-                    android:contentDescription="@string/contentDescription" />
+                    android:contentDescription="@string/contentDescription"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/notify_local_wallpaper_item"
@@ -101,16 +104,10 @@
         <LinearLayout
             android:id="@+id/setting_online_wallpaper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="vertical" >
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/setting_online_detail_wallpaper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
     </LinearLayout>
 
 </FrameLayout>
