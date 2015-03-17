@@ -4,7 +4,9 @@ package cn.zmdx.kaka.locker.settings;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
+import android.webkit.WebView;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.network.UrlBuilder;
 
 public class FAQActivity extends ActionBarActivity {
 
@@ -15,6 +17,8 @@ public class FAQActivity extends ActionBarActivity {
         getSupportActionBar().setBackgroundDrawable(
                 getResources().getDrawable(R.drawable.action_bar_bg_blue));
         setContentView(R.layout.activity_faq);
+        WebView mWebView = (WebView) findViewById(R.id.faq_webview);
+        mWebView.loadUrl(UrlBuilder.getBaseUrl() + "/commonQuestions.html");
     }
 
 }
