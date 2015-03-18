@@ -175,4 +175,10 @@ public class SwipeLayout extends ViewPager {
         public void onPageScrollStateChanged(int state) {
         }
     };
+
+    public void reset() {
+        setVisibility(View.INVISIBLE);
+        setCurrentItem(1);
+        setVisibility(View.VISIBLE);
+    }
 }

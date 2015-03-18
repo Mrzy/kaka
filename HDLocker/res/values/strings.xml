@@ -268,4 +268,7 @@
     <string name="init_setting_xiaomi_prompt">小米用户必备设置</string>
     <string name="init_setting_recommended_setting_prompt">推荐设置</string>
 
+    <string name="open_notification">打开</string>
+    <string name="remove_notification">忽略</string>
+
 </resources>

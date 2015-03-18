@@ -74,7 +74,7 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
         }
         holder.mTimeTv.setText(time);
         Picasso picasso = Picasso.with(mContext);
-        picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
+//        picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
         picasso.load(data.getUrl()).transform(new Transformation() {
 
             @Override

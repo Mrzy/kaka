@@ -26,6 +26,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.database.CustomNotificationModel;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -91,11 +92,28 @@ public class NotificationInterceptor extends Handler {
     public void handleMessage(android.os.Message msg) {
         switch (msg.what) {
             case MSG_NOTIFICATION_POST:
+                if (!PandoraConfig.newInstance(mContext).isNotificationRemindOn()) {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("未开启拦取通知功能，忽略收到的通知");
+                    }
+                    return;
+                }
+
                 if (!(msg.obj instanceof StatusBarNotification)) {
                     return;
                 }
                 final StatusBarNotification sbn = (StatusBarNotification) msg.obj;
                 if (sbn == null || !checkIntercept(sbn.getPackageName())) {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("忽略未设置拦截的应用通知，包名：" + sbn.getPackageName());
+                    }
+                    return;
+                }
+
+                if (!sbn.isClearable()) {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("忽略不能clear的应用通知，包名：" + sbn.getPackageName());
+                    }
                     return;
                 }
 
@@ -106,14 +124,12 @@ public class NotificationInterceptor extends Handler {
                     Bitmap largeIcon = (Bitmap) bundle.getParcelable("android.largeIcon");
                     long postTime = sbn.getPostTime();
 
-                    // TODO 有的通知不是用的标准通知接口开发，所有title都为null，针对这种情况，可以自定义通知标题处理，而不是忽略
+                    // TODO
+                    // 有的通知不是用的标准通知接口开发，所有title都为null，针对这种情况，可以自定义通知标题处理，而不是忽略
                     if (TextUtils.isEmpty(title) && TextUtils.isEmpty(content)) {
                         title = mContext.getString(R.string.new_message_title);
                     }
 
-                    if (!checkMessageValid(sbn.getPackageName(), title, content)) {
-                        return;
-                    }
                     final NotificationInfo ni = new NotificationInfo();
                     ni.setLargeIcon(largeIcon);
                     ni.setTitle(title);
@@ -190,24 +206,6 @@ public class NotificationInterceptor extends Handler {
 
         }
     };
-
-    /**
-     * 拦截的应用有些通知(一般为非未读消息的，比如下载，正在运行的通知等)不适合显示到锁屏上，这里做统一排查
-     * 
-     * @param pkg
-     * @param title
-     * @param content
-     * @return
-     */
-    private boolean checkMessageValid(String pkg, String title, String content) {
-        // 如果为qq且title包含正在运行
-        if (pkg.equals(Constants.PKGNAME_QQ)
-                && ((title.contains("正在运行") && content.contains("触摸即可了解详情或停止应用")) || content
-                        .equals("QQ正在后台运行"))) {
-            return false;
-        }
-        return true;
-    }
 
     private void handleDispatchCustomNotification() {
         // 删除过期自定义通知

@@ -386,7 +386,7 @@ public class PandoraConfig {
 
     //
     public boolean isNotificationRemindOn() {
-        return mSp.getBoolean(KEY_OPEN_NOTIFICATION_REMIND, false);
+        return mSp.getBoolean(KEY_OPEN_NOTIFICATION_REMIND, true);
     }
 
     public void saveNotificationRemindState(boolean isEnable) {

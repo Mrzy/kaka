@@ -339,14 +339,6 @@ public class LockScreenManager {
         @Override
         public void onPageSelected(int position) {
             if (position == 0) {
-                if (mNeedPassword) {
-                    NotificationLayout notificationLayout = (NotificationLayout) mMainPage
-                            .findViewById(R.id.lock_bottom_notification_layout);
-                    if (notificationLayout != null) {
-                        notificationLayout.restoreItemsPosition();
-                    }
-                }
-
                 // dismiss news panel
                 mSlidingUpView.hidePanel();
             } else if (position == 1) {

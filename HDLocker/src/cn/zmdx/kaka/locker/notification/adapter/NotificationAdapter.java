@@ -12,6 +12,7 @@ import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -28,7 +29,6 @@ import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.notification.guide.NotificationGuideHelper;
-import cn.zmdx.kaka.locker.notification.view.NotificationLayout;
 import cn.zmdx.kaka.locker.notification.view.SwipeLayout;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -37,7 +37,7 @@ import cn.zmdx.kaka.locker.utils.TimeUtils;
 
 public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder> {
 
-    private static final int ITEM_HEIGHT = BaseInfoHelper.dip2px(HDApplication.getContext(), 70);
+    private static final int ITEM_HEIGHT = BaseInfoHelper.dip2px(HDApplication.getContext(), 66);
 
     private Context mContext;
 
@@ -72,16 +72,16 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
             } else if (direction == SwipeLayout.OPEN_DIRECTION_RIGHT) {
                 remove(info);
             }
+            swipeLayout.setAlpha(0);
+            swipeLayout.reset();
         }
 
         @Override
         public void onClosed() {
-
         }
 
         @Override
         public void onSlide(SwipeLayout layout, float offset) {
-
         }
     }
 
@@ -90,9 +90,31 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
         mData = data;
     }
 
-    public void add(NotificationInfo info, int position) {
+    public void replace(NotificationInfo oldInfo, NotificationInfo info) {
+        final int position = mData.indexOf(oldInfo);
+        if (position != -1) {
+            mData.remove(position);
+            HDBThreadUtils.runOnUi(new Runnable() {
+
+                @Override
+                public void run() {
+                    notifyItemRemoved(position);
+                }
+            });
+
+            add(info, 0);
+        }
+    }
+
+    public void add(NotificationInfo info, final int position) {
         mData.add(position, info);
-        notifyItemInserted(position);
+        HDBThreadUtils.runOnUi(new Runnable() {
+
+            @Override
+            public void run() {
+                notifyItemInserted(position);
+            }
+        });
     }
 
     public void remove(NotificationInfo info) {
@@ -114,9 +136,17 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
             }
         }
-        int position = mData.indexOf(info);
-        mData.remove(position);
-        notifyItemRemoved(position);
+        final int position = mData.indexOf(info);
+        if (position != -1) {
+            mData.remove(position);
+            HDBThreadUtils.runOnUi(new Runnable() {
+
+                @Override
+                public void run() {
+                    notifyItemRemoved(position);
+                }
+            });
+        }
     }
 
     private void openNotification(final NotificationInfo info) {

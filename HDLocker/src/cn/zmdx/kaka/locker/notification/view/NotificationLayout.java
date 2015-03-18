@@ -50,9 +50,9 @@ public class NotificationLayout extends FrameLayout {
         mRecyclerView.setVerticalFadingEdgeEnabled(true);
         mRecyclerView.setFadingEdgeLength(BaseInfoHelper.dip2px(getContext(), 3));
         mAdapter = new NotificationAdapter(getContext(), mActiveNotification);
-        mRecyclerView.setAdapter(mAdapter);
         addView(mRecyclerView, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
+        mRecyclerView.setAdapter(mAdapter);
         mInterceptor = NotificationInterceptor.getInstance(getContext());
         mInterceptor.setNotificationListener(mNotificationListener);
     }
@@ -96,23 +96,12 @@ public class NotificationLayout extends FrameLayout {
             }
 
             if (index != -1) {
-                mAdapter.remove(oldInfo);
+                mAdapter.replace(oldInfo, info);
+            } else {
+                mAdapter.add(info, 0);
             }
-            mAdapter.add(info, 0);
         }
     };
-
-    // 通知item会恢复为初始化的位置
-    public void restoreItemsPosition() {
-        int count = getChildCount();
-        for (int i = 0; i < count; i++) {
-            final View childView = getChildAt(i);
-            if (childView instanceof SwipeLayout) {
-                SwipeLayout sl = (SwipeLayout) childView;
-                sl.close(false);
-            }
-        }
-    }
 
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         return false;

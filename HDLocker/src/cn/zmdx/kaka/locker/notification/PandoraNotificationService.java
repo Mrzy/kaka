@@ -216,10 +216,10 @@ public final class PandoraNotificationService extends NotificationListenerServic
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        NotificationInterceptor interceptor = NotificationInterceptor.getInstance(this);
-        Message msg = interceptor.obtainMessage();
-        msg.what = NotificationInterceptor.MSG_NOTIFICATION_REMOVED;
-        msg.obj = sbn;
-        interceptor.sendMessage(msg);
+//        NotificationInterceptor interceptor = NotificationInterceptor.getInstance(this);
+//        Message msg = interceptor.obtainMessage();
+//        msg.what = NotificationInterceptor.MSG_NOTIFICATION_REMOVED;
+//        msg.obj = sbn;
+//        interceptor.sendMessage(msg);
     }
 }

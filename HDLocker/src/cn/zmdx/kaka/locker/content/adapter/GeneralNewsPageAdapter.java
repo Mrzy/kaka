@@ -83,7 +83,7 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
             holder.mImageView.setVisibility(View.GONE);
         } else {
             Picasso picasso = Picasso.with(mContext);
-            picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
+//            picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
             picasso.load(data.getUrl()).into(holder.mImageView);
         }
     }
