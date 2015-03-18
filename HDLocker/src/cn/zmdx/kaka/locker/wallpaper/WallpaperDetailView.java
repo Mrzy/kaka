@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker.wallpaper;
 
+import java.util.Calendar;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
@@ -15,6 +18,7 @@ import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.network.ByteArrayRequest;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
@@ -59,6 +63,8 @@ public class WallpaperDetailView extends LinearLayout {
 
     private IWallpaperDetailListener mListener;
 
+    private TextView mDate;
+
     public WallpaperDetailView(Context context, boolean isScreen) {
         super(context);
         mContext = context;
@@ -70,6 +76,8 @@ public class WallpaperDetailView extends LinearLayout {
         mView = LayoutInflater.from(mContext).inflate(R.layout.wallpaper_detail, null);
         addView(mView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
+        mDate = (TextView) mView.findViewById(R.id.lock_date);
+        setDate();
         mLoadingView = (ProgressBarMaterial) mView.findViewById(R.id.wallpaper_loading);
         mContentView = (FrameLayout) mView.findViewById(R.id.wallpaper_content);
         mImageView = (SensorImageView) mView.findViewById(R.id.wallpaper_detail_image);
@@ -111,6 +119,15 @@ public class WallpaperDetailView extends LinearLayout {
                 }
             }
         });
+    }
+
+    public void setDate() {
+        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        int week = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        String weekString = PandoraUtils.getWeekString(mContext, week);
+        String dateString = "" + month + "月" + "" + day + "日 " + weekString;
+        mDate.setText(dateString);
     }
 
     public void setData(String imageUrl, String desc) {
