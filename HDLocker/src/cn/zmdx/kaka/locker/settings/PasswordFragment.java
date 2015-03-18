@@ -26,6 +26,7 @@ import cn.zmdx.kaka.locker.widget.PandoraNumberLockView;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.umeng.analytics.MobclickAgent;
 
 public class PasswordFragment extends Fragment implements OnClickListener {
 
@@ -473,5 +474,16 @@ public class PasswordFragment extends Fragment implements OnClickListener {
 
         mMidsummerStyleSelect.setVisibility(view == mMidsummerStyle ? View.VISIBLE : View.GONE);
         mMidsummerStylePrompt.setTextColor(view == mMidsummerStyle ? greyColor : normalColor);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("PasswordFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("PasswordFragment");
     }
 }

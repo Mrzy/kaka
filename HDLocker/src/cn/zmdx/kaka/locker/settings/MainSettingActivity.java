@@ -110,13 +110,11 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("MainSettingsActivity");
         MobclickAgent.onResume(this);
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("MainSettingsActivity");
         MobclickAgent.onPause(this);
     }
 

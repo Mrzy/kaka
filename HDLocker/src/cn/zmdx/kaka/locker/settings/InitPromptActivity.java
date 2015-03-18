@@ -84,7 +84,7 @@ public class InitPromptActivity extends Activity {
             findViewById(R.id.init_setting_MIUI_V6).setVisibility(View.GONE);
             mCloseSystemLockerView = (LinearLayout) findViewById(R.id.init_setting_close_systemlocker_prompt);
         }
-        
+
         mReadNotificationView = (LinearLayout) findViewById(R.id.init_setting_read_notification_prompt);
     }
 
@@ -162,15 +162,13 @@ public class InitPromptActivity extends Activity {
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("InitPromptActivity"); // 统计页面
-        MobclickAgent.onResume(this); // 统计时长
+        MobclickAgent.onPageStart("InitPromptActivity");
+        MobclickAgent.onResume(this);
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("InitPromptActivity"); // 保证 onPageEnd
-                                                       // 在onPause之前调用,因为
-        // onPause 中会保存信息
+        MobclickAgent.onPageEnd("InitPromptActivity");
         MobclickAgent.onPause(this);
     }
 }

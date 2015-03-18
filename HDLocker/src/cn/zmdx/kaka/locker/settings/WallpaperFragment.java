@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -99,6 +101,17 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("WallpaperFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("WallpaperFragment");
+    }
+    
     @Override
     public void onClick(View v) {
         PandoraUtils.gotoGalleryActivity(getActivity(), PandoraUtils.REQUEST_CODE_GALLERY);

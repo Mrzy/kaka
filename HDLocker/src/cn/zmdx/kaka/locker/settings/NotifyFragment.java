@@ -79,12 +79,12 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("MainSettingsFragment");
+        MobclickAgent.onPageStart("NotifyFragment");
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("MainSettingsFragment");
+        MobclickAgent.onPageEnd("NotifyFragment");
     }
 
     @Override

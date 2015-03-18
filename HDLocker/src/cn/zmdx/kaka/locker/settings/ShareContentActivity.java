@@ -29,6 +29,7 @@ import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
+import com.umeng.analytics.MobclickAgent;
 
 public class ShareContentActivity extends BaseActivity implements TextWatcher, OnClickListener {
 
@@ -230,4 +231,16 @@ public class ShareContentActivity extends BaseActivity implements TextWatcher, O
             mSendPb.setVisibility(View.GONE);
         }
     };
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("ShareContentActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("ShareContentActivity");
+        MobclickAgent.onPause(this);
+    }
 }

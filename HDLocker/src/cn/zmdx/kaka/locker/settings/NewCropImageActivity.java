@@ -4,6 +4,8 @@ package cn.zmdx.kaka.locker.settings;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -133,5 +135,17 @@ public class NewCropImageActivity extends Activity implements OnClickListener {
         finish();
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                 R.anim.umeng_fb_slide_out_from_right);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("NewCropImageActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("NewCropImageActivity");
+        MobclickAgent.onPause(this);
     }
 }

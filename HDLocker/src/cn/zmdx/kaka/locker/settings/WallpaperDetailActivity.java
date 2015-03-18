@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView.IWallpaperDetailListener;
@@ -38,5 +40,17 @@ public class WallpaperDetailActivity extends Activity {
         });
         setContentView(detailView, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("WallpaperDetailActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("WallpaperDetailActivity");
+        MobclickAgent.onPause(this);
     }
 }
