@@ -184,12 +184,12 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("MainSettingsFragment");
+        MobclickAgent.onPageStart("GeneralFragment");
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("MainSettingsFragment");
+        MobclickAgent.onPageEnd("GeneralFragment");
     }
 
     @Override

@@ -37,20 +37,42 @@
             android:id="@+id/wallpaper_element"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="9dp"
+            android:layout_marginTop="20dp"
             android:orientation="vertical" >
 
             <cn.zmdx.kaka.locker.widget.DigitalClocks
                 xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
                 android:id="@+id/digitalClock"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:gravity="center_horizontal"
+                android:shadowColor="#30000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="1"
                 android:textColor="@color/white"
                 android:textSize="65sp"
                 clock:format="24" />
+
+            <LinearLayout
+                android:id="@+id/lock_date_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-8dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    android:id="@+id/lock_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="#30000000"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="1"
+                    android:textColor="#d0ffffff"
+                    android:textSize="15dp" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

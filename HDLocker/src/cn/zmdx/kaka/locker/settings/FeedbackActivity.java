@@ -25,8 +25,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.widget.BaseButton;
 
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.fb.SyncListener;
 import com.umeng.fb.model.Conversation;
@@ -253,5 +253,17 @@ public class FeedbackActivity extends ActionBarActivity {
         finish();
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                 R.anim.umeng_fb_slide_out_from_right);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("FeedbackActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("FeedbackActivity");
+        MobclickAgent.onPause(this);
     }
 }

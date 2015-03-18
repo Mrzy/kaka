@@ -16,7 +16,6 @@ import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.guide.GuideActivity;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.MainSettingFragment.IMainSettingListener;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -30,7 +29,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
 
     boolean isFirstIn = false;
 
-    private static final int GO_GUIDE = 1001;
+    private static final int GO_INIT_SETTING = 1001;
 
     private int[] mBackgroundDrawable = {
             R.drawable.action_bar_bg_blue, R.drawable.action_bar_bg_purple,
@@ -61,8 +60,8 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         public void handleMessage(Message msg) {
             MainSettingActivity activity = mActivity.get();
             switch (msg.what) {
-                case GO_GUIDE:
-                    activity.goGuide();
+                case GO_INIT_SETTING:
+                    activity.goInitSetting();
                     break;
             }
             super.handleMessage(msg);
@@ -100,24 +99,22 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
     private void init() {
         isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
         if (isFirstIn) {
-            mHandler.sendEmptyMessage(GO_GUIDE);
+            mHandler.sendEmptyMessage(GO_INIT_SETTING);
         }
     }
 
-    private void goGuide() {
-        Intent intent = new Intent(this, GuideActivity.class);
+    private void goInitSetting() {
+        Intent intent = new Intent(this, InitSettingActivity.class);
         startActivity(intent);
     }
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("MainSettingsActivity");
         MobclickAgent.onResume(this);
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("MainSettingsActivity");
         MobclickAgent.onPause(this);
     }
 

@@ -45,6 +45,7 @@ import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersSimpleArrayAdapter;
+import com.umeng.analytics.MobclickAgent;
 
 public class NotifyManagerActivity extends ActionBarActivity implements OnItemClickListener {
 
@@ -518,5 +519,17 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
             notifyFilterApp += (String) iterator.next() + "|";
         }
         // UmengCustomEventManager.statisticalNotifyFilterApps(notifyFilterApp);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("NotifyManagerActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("NotifyManagerActivity");
+        MobclickAgent.onPause(this);
     }
 }

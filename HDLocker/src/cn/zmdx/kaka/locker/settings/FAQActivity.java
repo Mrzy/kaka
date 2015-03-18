@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
@@ -24,5 +26,17 @@ public class FAQActivity extends ActionBarActivity {
         } else {
             mWebView.loadUrl("file:///android_asset/commonQuestions.html");
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("FAQActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("FAQActivity");
+        MobclickAgent.onPause(this);
     }
 }

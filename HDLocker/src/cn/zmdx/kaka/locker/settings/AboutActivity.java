@@ -32,8 +32,8 @@ public class AboutActivity extends ActionBarActivity {
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("MAboutActivity"); // 统计页面
-        MobclickAgent.onResume(this); // 统计时长
+        MobclickAgent.onPageStart("MAboutActivity");
+        MobclickAgent.onResume(this);
     }
 
     public void onPause() {
