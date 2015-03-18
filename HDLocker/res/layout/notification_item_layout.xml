@@ -38,6 +38,10 @@
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/title"
+        android:shadowColor="#30000000"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -79,7 +83,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_alignLeft="@id/title"
+        android:layout_alignLeft="@id/largeIcon"
         android:layout_marginRight="10dp"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="5dp"

@@ -62,12 +62,19 @@
             android:textSize="15dp" />
     </LinearLayout>
 
-    <cn.zmdx.kaka.locker.notification.view.NotificationLayout
-        android:id="@+id/lock_bottom_notification_layout"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="160dp"
-        android:paddingTop="5dp" >
-    </cn.zmdx.kaka.locker.notification.view.NotificationLayout>
+        android:layout_height="wrap_content" >
+
+        <cn.zmdx.kaka.locker.notification.view.NotificationListView
+            android:id="@+id/lock_bottom_notification_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="160dp"
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:paddingTop="5dp" >
+        </cn.zmdx.kaka.locker.notification.view.NotificationListView>
+    </FrameLayout>
 
 </LinearLayout>

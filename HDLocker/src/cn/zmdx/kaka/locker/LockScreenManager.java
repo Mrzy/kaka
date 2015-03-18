@@ -22,6 +22,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,7 +45,7 @@ import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
-import cn.zmdx.kaka.locker.notification.view.NotificationLayout;
+import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager.IUnlockListener;
@@ -287,9 +288,9 @@ public class LockScreenManager {
         mPager.setOnPageChangeListener(mViewPagerChangeListener);
 
         // 监听是否有通知，以处理背景模糊效果
-        NotificationLayout nl = (NotificationLayout) mMainPage
+        NotificationListView nl = (NotificationListView) mMainPage
                 .findViewById(R.id.lock_bottom_notification_layout);
-        nl.getRecyclerView().setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
+        nl.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
 
             @Override
             public void onChildViewAdded(View parent, View child) {
