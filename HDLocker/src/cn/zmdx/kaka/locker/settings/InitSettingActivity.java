@@ -34,6 +34,8 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
     private static boolean isMIUI = false;
 
     private static String mMIUIVersion;
+    
+    private static boolean isMeizu = false;
 
     private static final int MSG_CLOSE_SYSTEM_LOCKER = 0;
 
@@ -53,6 +55,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
         super.onCreate(savedInstanceState);
         mMIUIVersion = PandoraUtils.getSystemProperty();
         isMIUI = PandoraUtils.isMIUI(this);
+        isMeizu = PandoraUtils.isMeizu(this);
         setContentView(R.layout.init_setting_fragment);
         initView();
     }
@@ -127,7 +130,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
                 break;
 
             case R.id.init_setting_read_notification_bar_to_set:
-                mReadNotificationBtn.setBackgroundResource(R.drawable.feedback_button_press);
+                PandoraUtils.setAllowReadNotification(InitSettingActivity.this, isMIUI, mMIUIVersion, isMeizu);
                 if (mHandler.hasMessages(MSG_READ_NOTIFICATION)) {
                     mHandler.removeMessages(MSG_READ_NOTIFICATION);
                 }
@@ -179,8 +182,8 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
     public void onBackPressed() {
         if (isMIUIAllowFolat) {
             finish();
-            overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                    R.anim.umeng_fb_slide_out_from_left);
+            overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                    R.anim.umeng_fb_slide_out_from_right);
         }
     }
 
