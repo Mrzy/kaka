@@ -166,4 +166,8 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
             }
         }
     }
+
+    public RecyclerView getRecyclerView() {
+        return mRecyclerView;
+    }
 }

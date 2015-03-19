@@ -1,12 +1,12 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import com.umeng.analytics.MobclickAgent;
-
+import it.carlom.stikkyheader.core.StikkyHeaderBuilder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,7 +21,10 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
+import cn.zmdx.kaka.locker.widget.BaseLinearLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
+
+import com.umeng.analytics.MobclickAgent;
 
 public class WallpaperFragment extends Fragment implements OnClickListener, OnCheckedChangeListener {
 
@@ -44,7 +47,6 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
     }
 
     private void initView() {
-
         mGravitySenorSButton = (SwitchButton) mEntireView
                 .findViewById(R.id.notify_open_gravity_sensor_switch_button);
         mGravitySenorSButton.setOnCheckedChangeListener(this);
@@ -90,6 +92,9 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
         });
         view.addView(onlineWallpaperView, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
+        RecyclerView mRecyclerView = onlineWallpaperView.getRecyclerView();
+        StikkyHeaderBuilder.stickTo(mRecyclerView)
+                .setHeader(R.id.wallpaper_top_layout, (ViewGroup) mEntireView).build();
     }
 
     @Override
@@ -111,7 +116,7 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
         super.onPause();
         MobclickAgent.onPageEnd("WallpaperFragment");
     }
-    
+
     @Override
     public void onClick(View v) {
         PandoraUtils.gotoGalleryActivity(getActivity(), PandoraUtils.REQUEST_CODE_GALLERY);
