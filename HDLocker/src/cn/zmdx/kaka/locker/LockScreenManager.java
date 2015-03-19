@@ -73,6 +73,8 @@ import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
 
@@ -145,6 +147,10 @@ public class LockScreenManager {
 
     private boolean mKeepBlurEffect = false;
 
+    private ShimmerTextView mShimmerTextView;
+
+    private Shimmer mShimmer;
+
     public interface ILockScreenListener {
         void onLock();
 
@@ -165,7 +171,6 @@ public class LockScreenManager {
         mKeyguard = keyguard.newKeyguardLock("pandora");
         mPandoraConfig = PandoraConfig.newInstance(mContext);
         disableSystemLock();
-        // processWeatherInfo();
     }
 
     public void disableSystemLock() {
@@ -248,6 +253,14 @@ public class LockScreenManager {
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
     }
 
+    private void toggleAnimation(View target) {
+        if (mShimmer != null) {
+            mShimmer.setDuration(5000);// 默认是1s
+            mShimmer.setStartDelay(1800);// 默认间隔为0
+            mShimmer.start(mShimmerTextView);
+        }
+    }
+
     private void initNewLockScreenViews() {
         mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.new_pandora_lockscreen, null);
@@ -272,6 +285,10 @@ public class LockScreenManager {
                 R.layout.pandora_password_pager_layout, null);
         initSecurePanel(page1);
         mMainPage = LayoutInflater.from(mContext).inflate(R.layout.pandora_main_pager_layout, null);
+        mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
+        mShimmer = new Shimmer();
+        toggleAnimation(mMainPage);
+
         mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         mDate = (TextView) mMainPage.findViewById(R.id.lock_date);

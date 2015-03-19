@@ -192,7 +192,6 @@
         <attr name="rv_zoom" format="boolean" />
         <attr name="rv_zoomScale" format="float" />
     </declare-styleable>
-
     <declare-styleable name="FloatingActionButton">
         <attr name="fab_colorPressed" format="color" />
         <attr name="fab_colorNormal" format="color" />
@@ -204,4 +203,8 @@
             <enum name="mini" value="1" />
         </attr>
     </declare-styleable>
+    <declare-styleable name="ShimmerView">
+        <attr name="reflectionColor" format="color" />
+    </declare-styleable>
+
 </resources>

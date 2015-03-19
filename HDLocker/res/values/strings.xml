@@ -250,5 +250,6 @@
     <string name="pandora_setting_wallpaper_detail_back">返回</string>
     <string name="pandora_setting_wallpaper_detail_apply">应用壁纸</string>
     <string name="new_message_title">一条新消息</string>
+    <string name="pandora_locker_shimmer_unlock_str">> 滑动来解锁</string>
 
 </resources>

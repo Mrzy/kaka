@@ -62,12 +62,29 @@
             android:textSize="15dp" />
     </LinearLayout>
 
-    <cn.zmdx.kaka.locker.notification.view.NotificationLayout
-        android:id="@+id/lock_bottom_notification_layout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="160dp"
-        android:paddingTop="5dp" >
-    </cn.zmdx.kaka.locker.notification.view.NotificationLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <cn.zmdx.kaka.locker.notification.view.NotificationLayout
+            android:id="@+id/lock_bottom_notification_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="160dp"
+            android:paddingTop="5dp" >
+        </cn.zmdx.kaka.locker.notification.view.NotificationLayout>
+
+        <com.romainpiel.shimmer.ShimmerTextView
+            android:id="@+id/unlockShimmerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="90dp"
+            android:text="@string/pandora_locker_shimmer_unlock_str"
+            android:textColor="#444"
+            android:textSize="25sp" />
+    </RelativeLayout>
 
 </LinearLayout>
