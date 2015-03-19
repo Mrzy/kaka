@@ -4,10 +4,15 @@ package cn.zmdx.kaka.locker.content;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,12 +21,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnAttachStateChangeListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.ImageView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
@@ -33,6 +39,7 @@ import cn.zmdx.kaka.locker.content.box.IPandoraBox;
 import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.database.ServerImageDataModel;
+import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -60,6 +67,8 @@ public class PandoraBoxManager implements View.OnClickListener {
     private FloatingActionButton mBackBtn;
 
     private OnlineWallpaperView mWallpaperView;
+
+    private ImageView mNotifyTip;
 
     private static final int[] mTabColors = new int[] {
             Color.parseColor("#26a69a"), Color.parseColor("#e84e40"), Color.parseColor("#ab47bc"),
@@ -103,6 +112,19 @@ public class PandoraBoxManager implements View.OnClickListener {
         mBackBtn.setColorNormal(mFloatingButtonColors[1]);
         mBackBtn.setColorPressed(mFloatingButtonColors[1]);
         mBackBtn.setOnClickListener(this);
+        mNotifyTip = (ImageView) mEntireView.findViewById(R.id.noti_tip);
+        mNotifyTip.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                IntentFilter filter = new IntentFilter(NotificationListView.ACTION_NOTIFICATION_POSTED);
+                LocalBroadcastManager.getInstance(mContext).registerReceiver(mNotifyReceiver, filter);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mNotifyReceiver);
+            }
+        });
 
         final ViewPagerCompat viewPager = (ViewPagerCompat) mEntireView
                 .findViewById(R.id.newsViewPager);
@@ -137,14 +159,23 @@ public class PandoraBoxManager implements View.OnClickListener {
         });
     }
 
+    private BroadcastReceiver mNotifyReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bitmap bitmap = (Bitmap)intent.getParcelableExtra("BITMAP"); 
+            mNotifyTip.setImageBitmap(bitmap);
+        }
+    };
+
     public void refreshAllNews() {
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mJokeAdapter, mHotNews,
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
                 mHotRefreshView, true);
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mJokeAdapter, mHotNews,
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
                 mGossipRefreshView, true);
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mJokeAdapter, mMicroMediaNews,
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter, mMicroMediaNews,
                 mMicroMediaRefreshView, true);
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mJokeAdapter, mBeautyNews,
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
                 mBeautyRefreshView, true);
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
                 mJokeRefreshView, true);

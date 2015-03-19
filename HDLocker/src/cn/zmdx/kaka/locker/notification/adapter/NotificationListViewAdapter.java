@@ -64,11 +64,13 @@ public class NotificationListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        final int pos = position;
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
             SwipeLayout itemView = new SwipeLayout(mContext);
-            itemView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, ITEM_HEIGHT));
+            itemView.setLayoutParams(new AbsListView.LayoutParams(
+                    AbsListView.LayoutParams.MATCH_PARENT, ITEM_HEIGHT));
             View leftView = View
                     .inflate(mContext, R.layout.notification_item_leftview_layout, null);
             View rightView = View.inflate(mContext, R.layout.notification_item_rightview_layout,
@@ -117,15 +119,18 @@ public class NotificationListViewAdapter extends BaseAdapter {
             holder.contentTv.setText(info.getContent());
         }
 
+        holder.swipeLayout.reset();
         holder.swipeLayout.setOnSwipeLayoutListener(new OnSwipeLayoutListener() {
 
             @Override
             public void onOpened(SwipeLayout swipeLayout, int direction) {
-                ViewHolder holder = (ViewHolder) swipeLayout.getTag();
-                NotificationInfo info = (NotificationInfo) holder.titleTv.getTag();
+                // ViewHolder holder = (ViewHolder) swipeLayout.getTag();
+                // NotificationInfo info = (NotificationInfo)
+                // holder.titleTv.getTag();
+                NotificationInfo info = mData.get(pos);
                 if (direction == SwipeLayout.OPEN_DIRECTION_LEFT) {
                     openNotification(info);
-                    remove(info);
+                    // remove(info);
                 } else if (direction == SwipeLayout.OPEN_DIRECTION_RIGHT) {
                     remove(info);
                 }
@@ -171,6 +176,9 @@ public class NotificationListViewAdapter extends BaseAdapter {
                         }
                     }, 200);
                 }
+
+                remove(info);
+
                 UmengCustomEventManager.statisticalOpenNotification(info.getId(), info.getPkg(),
                         info.getType());
             }

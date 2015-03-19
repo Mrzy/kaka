@@ -133,8 +133,13 @@ public class SwipeLayout extends ViewPager {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(mPages.get(position));
-            return mPages.get(position);
+            View view = mPages.get(position);
+            if (view.getParent() != null) {
+                ViewGroup vg = (ViewGroup) view.getParent();
+                vg.removeView(view);
+            }
+            container.addView(view);
+            return view;
         }
 
         @Override
@@ -177,8 +182,6 @@ public class SwipeLayout extends ViewPager {
     };
 
     public void reset() {
-        setVisibility(View.INVISIBLE);
-        setCurrentItem(1);
-        setVisibility(View.VISIBLE);
+        setCurrentItem(1, false);
     }
 }

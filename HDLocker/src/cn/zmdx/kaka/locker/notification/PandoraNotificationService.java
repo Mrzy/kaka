@@ -59,6 +59,11 @@ public final class PandoraNotificationService extends NotificationListenerServic
         sNotificationServiceRunning = true;
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
     private void initInterceptPackages() {
         final NotificationPreferences np = NotificationPreferences
                 .getInstance(getApplicationContext());
@@ -207,19 +212,20 @@ public final class PandoraNotificationService extends NotificationListenerServic
         msg.what = NotificationInterceptor.MSG_NOTIFICATION_POST;
         msg.obj = sbn;
         // 如果是qq，延迟200ms，以解决连续收到qq消息时会remove两次导致消息被移除的问题
-//        if (sbn.getPackageName().equals(Constants.PKGNAME_QQ)) {
-            interceptor.sendMessageDelayed(msg, 400);
-//        } else {
-//            interceptor.sendMessage(msg);
-//        }
+        // if (sbn.getPackageName().equals(Constants.PKGNAME_QQ)) {
+        interceptor.sendMessageDelayed(msg, 400);
+        // } else {
+        // interceptor.sendMessage(msg);
+        // }
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-//        NotificationInterceptor interceptor = NotificationInterceptor.getInstance(this);
-//        Message msg = interceptor.obtainMessage();
-//        msg.what = NotificationInterceptor.MSG_NOTIFICATION_REMOVED;
-//        msg.obj = sbn;
-//        interceptor.sendMessage(msg);
+        // NotificationInterceptor interceptor =
+        // NotificationInterceptor.getInstance(this);
+        // Message msg = interceptor.obtainMessage();
+        // msg.what = NotificationInterceptor.MSG_NOTIFICATION_REMOVED;
+        // msg.obj = sbn;
+        // interceptor.sendMessage(msg);
     }
 }

@@ -22,7 +22,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,6 +34,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -139,6 +139,8 @@ public class LockScreenManager {
     private SlidingUpPanelLayout mSlidingUpView;
 
     private boolean mKeepBlurEffect = false;
+
+    private NotificationListView mNotificationListView;
 
     public interface ILockScreenListener {
         void onLock();
@@ -288,9 +290,9 @@ public class LockScreenManager {
         mPager.setOnPageChangeListener(mViewPagerChangeListener);
 
         // 监听是否有通知，以处理背景模糊效果
-        NotificationListView nl = (NotificationListView) mMainPage
+        mNotificationListView = (NotificationListView) mMainPage
                 .findViewById(R.id.lock_bottom_notification_layout);
-        nl.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
+        mNotificationListView.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
 
             @Override
             public void onChildViewAdded(View parent, View child) {
@@ -346,6 +348,12 @@ public class LockScreenManager {
                 if (mNeedPassword) {
                     // 如果从密码页滑回锁屏页，将之前设置的解锁后执行动作清除。即此处认为用户没有输入密码解锁，又滑回了锁屏页
                     setRunnableAfterUnLock(null);
+
+                    // 刷新通知的items恢复原位
+                    if (mNotificationListView != null) {
+                        BaseAdapter adapter = (BaseAdapter) mNotificationListView.getAdapter();
+                        adapter.notifyDataSetChanged();
+                    }
                 }
 
                 mSlidingUpView.showPanel();

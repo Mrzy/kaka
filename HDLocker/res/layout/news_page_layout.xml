@@ -48,14 +48,24 @@
                     android:id="@+id/newsViewPager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-                <cn.zmdx.kaka.locker.widget.FloatingActionButton
-                    android:id="@+id/backBtn"
-                    android:layout_gravity="right|bottom"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginBottom="40dp"
+
+                <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    />
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginBottom="40dp"
+                    android:layout_marginRight="30dp" >
+
+                    <ImageView
+                        android:id="@+id/noti_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <cn.zmdx.kaka.locker.widget.FloatingActionButton
+                        android:id="@+id/backBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>

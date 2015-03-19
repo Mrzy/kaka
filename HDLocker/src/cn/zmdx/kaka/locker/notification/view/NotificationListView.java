@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.widget.ListView;
 import cn.zmdx.kaka.locker.BuildConfig;
@@ -20,6 +22,8 @@ public class NotificationListView extends ListView {
     private List<NotificationInfo> mActiveNotification = new ArrayList<NotificationInfo>();
 
     private NotificationListViewAdapter mAdapter;
+
+    public static final String ACTION_NOTIFICATION_POSTED = "action_notification_posted";
 
     public NotificationListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -63,7 +67,7 @@ public class NotificationListView extends ListView {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("notification onPosted, info:" + info.toString());
             }
-            
+
             boolean has = false;
             final int id = info.getId();
             int index = -1;
@@ -82,6 +86,11 @@ public class NotificationListView extends ListView {
                 mActiveNotification.add(0, info);
             }
             mAdapter.notifyDataSetChanged();
+
+            // 将收到新通知的事件以广播形式派发出去
+            Intent in = new Intent(ACTION_NOTIFICATION_POSTED);
+            in.putExtra("icon", info.getLargeIcon());
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(in);
         }
     };
 }
