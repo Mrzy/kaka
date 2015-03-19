@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 public class NewsDetailLayout extends FrameLayout implements View.OnClickListener, OnTouchListener,
@@ -33,6 +34,8 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
     private PandoraBoxManager mPbManager;
 
     private ContentLoadingProgressBar mProgressBar;
+
+    private ServerImageData mData;
 
     private static final int SWIPE_MIN_DISTANCE = BaseInfoHelper.dip2px(HDApplication.getContext(), 50);
 
@@ -51,9 +54,11 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         this(context, null);
     }
 
-    public NewsDetailLayout(PandoraBoxManager pbManager) {
+    public NewsDetailLayout(PandoraBoxManager pbManager, ServerImageData sid) {
         this(HDApplication.getContext());
         mPbManager = pbManager;
+        mData = sid;
+        load(sid.getUrl());
     }
 
     private void init() {
@@ -90,7 +95,7 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         mShareBtn.setOnClickListener(this);
     }
 
-    public void loadUrl(String url) {
+    private void load(String url) {
         mWebView.loadUrl(url);
     }
 

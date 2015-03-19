@@ -23,7 +23,6 @@ import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnAttachStateChangeListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
@@ -113,18 +112,9 @@ public class PandoraBoxManager implements View.OnClickListener {
         mBackBtn.setColorPressed(mFloatingButtonColors[1]);
         mBackBtn.setOnClickListener(this);
         mNotifyTip = (ImageView) mEntireView.findViewById(R.id.noti_tip);
-        mNotifyTip.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(View v) {
-                IntentFilter filter = new IntentFilter(NotificationListView.ACTION_NOTIFICATION_POSTED);
-                LocalBroadcastManager.getInstance(mContext).registerReceiver(mNotifyReceiver, filter);
-            }
 
-            @Override
-            public void onViewDetachedFromWindow(View v) {
-                LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mNotifyReceiver);
-            }
-        });
+        IntentFilter filter = new IntentFilter(NotificationListView.ACTION_NOTIFICATION_POSTED);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mNotifyReceiver, filter);
 
         final ViewPagerCompat viewPager = (ViewPagerCompat) mEntireView
                 .findViewById(R.id.newsViewPager);
@@ -159,11 +149,15 @@ public class PandoraBoxManager implements View.OnClickListener {
         });
     }
 
+    public void onFinish() {
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mNotifyReceiver);
+    }
+
     private BroadcastReceiver mNotifyReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Bitmap bitmap = (Bitmap)intent.getParcelableExtra("BITMAP"); 
+            Bitmap bitmap = (Bitmap) intent.getParcelableExtra("icon");
             mNotifyTip.setImageBitmap(bitmap);
         }
     };
@@ -173,8 +167,8 @@ public class PandoraBoxManager implements View.OnClickListener {
                 mHotRefreshView, true);
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
                 mGossipRefreshView, true);
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter, mMicroMediaNews,
-                mMicroMediaRefreshView, true);
+        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
+                mMicroMediaNews, mMicroMediaRefreshView, true);
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
                 mBeautyRefreshView, true);
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
@@ -247,8 +241,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             public void onItemClicked(View view, int position) {
                 final ServerImageData sid = mJokeNews.get(position);
                 String url = sid.getImageDesc();
-                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this);
-                ndl.loadUrl(url);
+                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this, sid);
                 openDetailPage(ndl);
             }
         });
@@ -309,8 +302,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             public void onItemClicked(View view, int position) {
                 final ServerImageData sid = mBeautyNews.get(position);
                 String url = sid.getImageDesc();
-                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this);
-                ndl.loadUrl(url);
+                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this, sid);
                 openDetailPage(ndl);
             }
         });
@@ -369,8 +361,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             public void onItemClicked(View view, int position) {
                 final ServerImageData sid = mMicroMediaNews.get(position);
                 String url = sid.getImageDesc();
-                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this);
-                ndl.loadUrl(url);
+                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this, sid);
                 openDetailPage(ndl);
             }
         });
@@ -423,8 +414,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             public void onItemClicked(View view, int position) {
                 final ServerImageData sid = mGossipNews.get(position);
                 String url = sid.getImageDesc();
-                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this);
-                ndl.loadUrl(url);
+                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this, sid);
                 openDetailPage(ndl);
             }
         });
@@ -483,8 +473,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             public void onItemClicked(View view, int position) {
                 final ServerImageData sid = mHotNews.get(position);
                 String url = sid.getImageDesc();
-                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this);
-                ndl.loadUrl(url);
+                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this, sid);
                 openDetailPage(ndl);
             }
         });
