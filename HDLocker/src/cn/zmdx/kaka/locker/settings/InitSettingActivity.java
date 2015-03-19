@@ -182,7 +182,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
 
     @Override
     public void onBackPressed() {
-        if (isMIUIAllowFolat) {
+        if (!isMIUI || isMIUIAllowFolat) {
             PandoraConfig.newInstance(this).saveHasGuided();
             finish();
             overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
