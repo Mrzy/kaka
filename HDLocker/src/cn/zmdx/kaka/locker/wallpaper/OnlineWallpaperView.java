@@ -107,7 +107,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
 
     private long publishDATE;
 
-    private void pullWallpaperData() {
+    public void pullWallpaperData() {
         OnlineWallpaperManager.getInstance().pullWallpaperData(mContext, this, publishDATE);
     }
 

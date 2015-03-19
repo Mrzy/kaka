@@ -59,6 +59,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private FloatingActionButton mBackBtn;
 
+    private OnlineWallpaperView mWallpaperView;
+
     private static final int[] mTabColors = new int[] {
             Color.parseColor("#26a69a"), Color.parseColor("#e84e40"), Color.parseColor("#ab47bc"),
             Color.parseColor("#8bc34a"), Color.parseColor("#ea861c"), Color.parseColor("#3db7ff")
@@ -146,6 +148,9 @@ public class PandoraBoxManager implements View.OnClickListener {
                 mBeautyRefreshView, true);
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
                 mJokeRefreshView, true);
+        if (null != mWallpaperView) {
+            mWallpaperView.pullWallpaperData();
+        }
     }
 
     private void initTitles(List<String> titles) {
@@ -484,8 +489,8 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     private View initWallPaperView() {
-        OnlineWallpaperView view = new OnlineWallpaperView(mContext, true);
-        view.setOnlineWallpaperListener(new IOnlineWallpaperListener() {
+        mWallpaperView = new OnlineWallpaperView(mContext, true);
+        mWallpaperView.setOnlineWallpaperListener(new IOnlineWallpaperListener() {
 
             @Override
             public void onOpenDetailPage(View view) {
@@ -502,7 +507,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
             }
         });
-        return view;
+        return mWallpaperView;
     }
 
     public void openDetailPage(View view) {
