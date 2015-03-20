@@ -163,14 +163,13 @@ public class PandoraBoxManager implements View.OnClickListener {
             featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
             featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
             tvWeatherWind.setText(daytimeWind);
-            tvWeatherWindForce.setText(",风力" + daytimeWindForce);
+            tvWeatherWindForce.setText(" 风力" + daytimeWindForce);
         }
         tvWeatherFeature.setText(featureNameByNo);
         ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
         tvWeatherCentTemp.setText(centTemp + "℃");
         String lunarCal = SmartWeatherUtils.getLunarCal();
-        String cyclicalm = SmartWeatherUtils.getCyclicalm();
-        tvLunarCalendar.setText(cyclicalm + lunarCal);
+        tvLunarCalendar.setText(lunarCal);
     }
 
     private boolean mInitBody = false;

@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.json.JSONObject;
-
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
@@ -23,7 +21,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -63,7 +60,6 @@ import cn.zmdx.kaka.locker.wallpaper.OldOnlineWallpaperView;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
-import cn.zmdx.kaka.locker.weather.utils.ParseWeatherJsonUtils;
 import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
 import cn.zmdx.kaka.locker.widget.DigitalClocks;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
@@ -519,44 +515,15 @@ public class LockScreenManager {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("检查天气条件不满足,使用缓存数据");
             }
-            final String info = mPandoraConfig.getLastWeatherInfo();
-            if (!TextUtils.isEmpty(info)) {
-                try {
-                    JSONObject weatherObj = new JSONObject(info);
-                    SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
-                            .parseWeatherJson(weatherObj);
-                    PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
-                } catch (Exception e) {
-                    PandoraBoxManager.newInstance(mContext).updateView(null);
-                }
+            SmartWeatherInfo smartWeatherInfo = PandoraWeatherManager.getInstance()
+                    .getWeatherFromCache();
+            if (smartWeatherInfo != null) {
+                PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
             } else {
                 PandoraBoxManager.newInstance(mContext).updateView(null);
             }
-            return;
         } else {
-
-            String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
-                    .getInstance().get(Calendar.HOUR_OF_DAY));
-            // mWeatherSummary.setText(promptString);
-            // mWeatherSummary.setVisibility(View.VISIBLE);
-            if (null != mOnlineWallpaperView) {
-                mOnlineWallpaperView.setWeatherString(promptString);
-            }
-            // PandoraWeatherManager.getInstance().getCurrentSmartWeather(new
-            // ISmartWeatherCallback() {
-            //
-            // @Override
-            // public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
-            // PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
-            // }
-            //
-            // @Override
-            // public void onFailure() {
-            // PandoraBoxManager.newInstance(mContext).updateView(null);
-            // }
-            // });
-
-            PandoraWeatherManager.getInstance().getWeatherFormCache(new ISmartWeatherCallback() {
+            PandoraWeatherManager.getInstance().getWeatherFromNetwork(new ISmartWeatherCallback() {
 
                 @Override
                 public void onSuccess(SmartWeatherInfo smartWeatherInfo) {

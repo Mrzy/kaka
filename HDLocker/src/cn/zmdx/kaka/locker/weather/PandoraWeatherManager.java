@@ -6,12 +6,11 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.RequestManager;
-import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
@@ -58,27 +57,26 @@ public class PandoraWeatherManager {
      */
     public interface IGetSmartWeatherCallback {
         // 从本地获取天气
-        void getWeatherFormCache(final ISmartWeatherCallback callback);
+        SmartWeatherInfo getWeatherFormCache();
 
         // 从网络获取天气
         void getCurrentSmartWeather(final ISmartWeatherCallback callback);
     }
 
-    public void getWeatherFormCache(final ISmartWeatherCallback callback) {
+    public SmartWeatherInfo getWeatherFromCache() {
+        SmartWeatherInfo smartWeatherInfo = null;
         String lastWeatherInfo = PandoraConfig.newInstance(mContext).getLastWeatherInfo();
-        if (!TextUtils.isEmpty(lastWeatherInfo)) {
-            try {
-                JSONObject weatherObj = new JSONObject(lastWeatherInfo);
-                SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
-                        .parseWeatherJson(weatherObj);
-                PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        JSONObject weatherObj;
+        try {
+            weatherObj = new JSONObject(lastWeatherInfo);
+            smartWeatherInfo = ParseWeatherJsonUtils.parseWeatherJson(weatherObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        return smartWeatherInfo;
     }
 
-    public void getCurrentSmartWeather(final ISmartWeatherCallback callback) {
+    public void getWeatherFromNetwork(final ISmartWeatherCallback callback) {
         HDBThreadUtils.runOnWorker(new Runnable() {
             @Override
             public void run() {
@@ -104,6 +102,9 @@ public class PandoraWeatherManager {
                     return;
                 } else {
                     String date = SmartWeatherUtils.getDate();
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("--response-->>" + response);
+                    }
                     PandoraConfig.newInstance(mContext).saveLastCheckWeatherTime(date);
                     SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
                             .parseWeatherJson(response);
@@ -134,8 +135,8 @@ public class PandoraWeatherManager {
         }
         weatherUrl = SmartWeatherUtils.getWeatherUrl(areaId);
         if (BuildConfig.DEBUG) {
-            Log.i(TAG, "--areaid-->>" + areaId + "\n--weatherUrl-->>" + weatherUrl);
-            Log.e(TAG, "cityNameStr: ---->" + cityNameStr);
+            HDBLOG.logD("--areaid-->>" + areaId + "\n--weatherUrl-->>" + weatherUrl);
+            HDBLOG.logD("cityNameStr: ---->" + cityNameStr);
         }
         return weatherUrl;
     }

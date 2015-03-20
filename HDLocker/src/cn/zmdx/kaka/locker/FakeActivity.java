@@ -105,7 +105,6 @@ public class FakeActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        PandoraLocationManager.getInstance(this).stopMonitor();
         super.onDestroy();
     }
 

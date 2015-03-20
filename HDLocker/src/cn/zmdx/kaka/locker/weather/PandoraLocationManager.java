@@ -2,10 +2,10 @@
 package cn.zmdx.kaka.locker.weather;
 
 import android.content.Context;
-import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -13,8 +13,6 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 
 public class PandoraLocationManager {
-    private static final String TAG = "PandoraLocationManager";
-
     private static PandoraLocationManager INSTANCE = null;
 
     private BDLocation mBdLocation = null;
@@ -40,9 +38,9 @@ public class PandoraLocationManager {
 
     private LocationClient mLocationClient;
 
-    public void startMonitor() {
+    public void requestLocation() {
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "start monitor location");
+            HDBLOG.logD("start request location");
         }
         if (!mLocationClient.isStarted()) {
             mLocationClient.start();
@@ -50,13 +48,15 @@ public class PandoraLocationManager {
         if (mLocationClient != null && mLocationClient.isStarted()) {
             mLocationClient.requestLocation();
         } else {
-            Log.d("LocSDK3", "locClient is null or not started");
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("locClient is null or not started");
+            }
         }
     }
 
-    public void stopMonitor() {
+    private void stopRequestLocation() {
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "stop monitor location");
+            HDBLOG.logD("stop request location");
         }
         if (mLocationClient != null && mLocationClient.isStarted()) {
             mLocationClient.stop();
@@ -65,7 +65,7 @@ public class PandoraLocationManager {
 
     public BDLocation getLocation() {
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "baidu get getLocation-->");
+            HDBLOG.logD("baidu get getLocation-->");
         }
         return mBdLocation;
     }
@@ -95,6 +95,9 @@ public class PandoraLocationManager {
             }
             mBdLocation = location;
             PandoraConfig.newInstance(mContext).saveLastCityName(mBdLocation.getCity());
+            PandoraConfig.newInstance(mContext).saveLastCheckLocationTime(
+                    System.currentTimeMillis());
+            stopRequestLocation();
         }
 
         public void onReceivePoi(BDLocation poiLocation) {

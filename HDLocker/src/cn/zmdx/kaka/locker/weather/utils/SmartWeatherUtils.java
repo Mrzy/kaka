@@ -86,6 +86,11 @@ public class SmartWeatherUtils {
         return formatDate;
     }
 
+    /**
+     * 得到农历日期
+     * 
+     * @return
+     */
     public static String getLunarCal() {
         Calendar today = Calendar.getInstance();
         String todayFormatDate = String.valueOf(today.get(Calendar.YEAR)) + "年"
@@ -102,6 +107,11 @@ public class SmartWeatherUtils {
         return lunar;
     }
 
+    /**
+     * 得到干支纪年
+     * 
+     * @return
+     */
     public static String getCyclicalm() {
         Calendar today = Calendar.getInstance();
         int year = today.get(Calendar.YEAR);
@@ -122,12 +132,6 @@ public class SmartWeatherUtils {
             e.printStackTrace();
         }
         return timeMillis;
-    }
-
-    public static String getHourFromString(String str) {
-        // 201503061100
-        String hour = str.substring(8, 10);
-        return hour;
     }
 
     public static boolean isNight(String hour) {

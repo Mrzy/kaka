@@ -14,6 +14,8 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
+import cn.zmdx.kaka.locker.policy.PandoraPolicy;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
@@ -33,7 +35,6 @@ public class PandoraService extends Service {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("PandoraService is startup");
         }
-        PandoraLocationManager.getInstance(mContext).startMonitor();
         registerBroadcastReceiver();
         TelephonyManager manager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
         manager.listen(new MyPhoneListener(), PhoneStateListener.LISTEN_CALL_STATE);
@@ -77,6 +78,16 @@ public class PandoraService extends Service {
 
     private void unRegisterBroadcastReceiver() {
         unregisterReceiver(mReceiver);
+    }
+
+    public void timingUpdateCurLocation() {
+        long lastCheckLocationTime = PandoraConfig.newInstance(mContext).getLastCheckLocationTime();
+        if (System.currentTimeMillis() - lastCheckLocationTime >= PandoraPolicy.MIN_UPDATE_LOCATION_TIME) {
+            PandoraLocationManager.getInstance(mContext).requestLocation();
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("---Timing update CurLocation-->>");
+            }
+        }
     }
 
     private static boolean isComingCall = false;
@@ -141,6 +152,7 @@ public class PandoraService extends Service {
                 LockScreenManager.getInstance().lock();
                 LockScreenManager.getInstance().onScreenOff();
                 sendObtainActiveNotificationMsg();
+                timingUpdateCurLocation();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 LockScreenManager.getInstance().onScreenOn();
             }

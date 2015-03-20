@@ -89,6 +89,8 @@ public class PandoraConfig {
 
     private static final String KEY_LAST_CITY_NAME = "klcn";
 
+    private static final String KEY_LAST_CHECK_LOCATION = "klcl";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -224,6 +226,16 @@ public class PandoraConfig {
 
     public String getLastWeatherInfo() {
         return mSp.getString(KEY_LAST_WEATHER_INFO, null);
+    }
+
+    public void saveLastCheckLocationTime(long lastCheckTime) {
+        Editor editor = mSp.edit();
+        editor.putLong(KEY_LAST_CHECK_LOCATION, lastCheckTime);
+        editor.commit();
+    }
+
+    public long getLastCheckLocationTime() {
+        return mSp.getLong(KEY_LAST_CHECK_LOCATION, 0l);
     }
 
     public void saveHasGuided() {
