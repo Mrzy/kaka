@@ -2,18 +2,21 @@
 package cn.zmdx.kaka.locker.share;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.Toast;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
-import cn.zmdx.kaka.locker.settings.ShareContentActivity;
 
 public class PandoraShareManager {
 
@@ -31,7 +34,10 @@ public class PandoraShareManager {
 
     public static final String PACKAGE_QQ_STRING = "com.tencent.mobileqq";
 
-    public static void shareContent(final Context mContext, ServerImageData data, int shareType) {
+    private static Context mContext;
+
+    public static void shareContent(final Context context, ServerImageData data, int shareType) {
+        mContext = context;
         final PandoraShareData shareData = new PandoraShareData();
         shareData.bulidShareParam(data);
         switch (shareType) {
@@ -41,7 +47,7 @@ public class PandoraShareManager {
                     @Override
                     public void run() {
                         PandoraWechatShareManager.getInstance().shareToWechat(mContext, true,
-                                shareData);
+                                shareData, mPlatformActionListener);
                     }
                 });
                 break;
@@ -51,7 +57,7 @@ public class PandoraShareManager {
                     @Override
                     public void run() {
                         PandoraWechatShareManager.getInstance().shareToWechat(mContext, false,
-                                shareData);
+                                shareData, mPlatformActionListener);
                     }
                 });
                 break;
@@ -60,12 +66,8 @@ public class PandoraShareManager {
 
                     @Override
                     public void run() {
-                        Intent sinaIntent = new Intent();
-                        sinaIntent.putExtra("type", PandoraShareManager.TYPE_SHARE_SINA);
-                        sinaIntent.putExtra("shareData", shareData);
-                        sinaIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        sinaIntent.setClass(mContext, ShareContentActivity.class);
-                        mContext.startActivity(sinaIntent);
+                        PandoraSinaShareManager.getInstance().shareToSina(mContext, shareData,
+                                mPlatformActionListener);
                     }
                 });
                 break;
@@ -74,12 +76,8 @@ public class PandoraShareManager {
 
                     @Override
                     public void run() {
-                        Intent qqIntent = new Intent();
-                        qqIntent.putExtra("type", PandoraShareManager.TYPE_SHARE_QQ);
-                        qqIntent.putExtra("shareData", shareData);
-                        qqIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        qqIntent.setClass(mContext, ShareContentActivity.class);
-                        mContext.startActivity(qqIntent);
+                        PandoraQQShareManager.getInstance().shareToQzone(mContext, shareData,
+                                mPlatformActionListener);
                     }
                 });
                 break;
@@ -87,7 +85,45 @@ public class PandoraShareManager {
             default:
                 break;
         }
+        LockScreenManager.getInstance().unLock();
     }
+
+    private static PlatformActionListener mPlatformActionListener = new PlatformActionListener() {
+
+        @Override
+        public void onError(Platform platform, int action, Throwable t) {
+            ((Activity) mContext).runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(mContext, "分享失败，请重试!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+        @Override
+        public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
+            ((Activity) mContext).runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(mContext, "分享成功", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+        @Override
+        public void onCancel(Platform platform, int action) {
+            ((Activity) mContext).runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(mContext, "已取消分享", Toast.LENGTH_LONG).show();
+                }
+            });
+
+        }
+    };
 
     public static boolean isAvilible(Context context, String packageName) {
         final PackageManager packageManager = context.getPackageManager();

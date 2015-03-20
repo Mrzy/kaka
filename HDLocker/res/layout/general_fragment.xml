@@ -341,24 +341,24 @@
                         android:text="@string/pandora_setting_general_evaluation" />
 
                     <Button
-                        android:id="@+id/setting_evaluation_praise"
+                        android:id="@+id/setting_evaluation_bad_review"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:background="@drawable/setting_evaluation_praise_bg"
+                        android:background="@drawable/setting_evaluation_bad_review_selector"
                         android:gravity="center"
-                        android:text="@string/pandora_setting_general_evaluation_praise"
+                        android:text="@string/pandora_setting_general_evaluation_bad_review"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
 
                     <Button
-                        android:id="@+id/setting_evaluation_bad_review"
+                        android:id="@+id/setting_evaluation_praise"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="22dp"
-                        android:background="@drawable/setting_evaluation_bad_review_bg"
+                        android:background="@drawable/setting_evaluation_praise_selector"
                         android:gravity="center"
-                        android:text="@string/pandora_setting_general_evaluation_bad_review"
+                        android:text="@string/pandora_setting_general_evaluation_praise"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
                 </LinearLayout>

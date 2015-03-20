@@ -28,11 +28,6 @@
 }
 -keep public class pl.droidsonroids.gif.GifIOException{*;}
 
--keep public interface com.tencent.**
--keep public class com.tencent.** {*;}
--keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
--keep class com.tencent.mm.sdk.modelmsg.** implements com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
-
 -dontshrink
 -dontoptimize
 -dontwarn com.umeng.**
@@ -44,6 +39,15 @@
 -keep public class com.umeng.socialize.* {*;}
 
 -keep class com.umeng.socialize.sensor.**
+
+-keep class cn.sharesdk.**{*;}
+-keep class com.sina.**{*;}
+-keep class **.R$* {*;}
+-keep class **.R{*;}
+-dontwarn cn.sharesdk.**
+-dontwarn **.R$*
+-dontwarn com.squareup.**
+
 
 -keep public class [cn.zmdx.kaka.locker].R$*{
     public static final int *;

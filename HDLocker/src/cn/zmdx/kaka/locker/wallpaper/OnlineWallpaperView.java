@@ -38,6 +38,8 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
 
     private boolean isLockScreen;
 
+    private boolean isPressed;
+
     private IOnlineWallpaperListener mListener;
 
     public interface IOnlineWallpaperListener {
@@ -139,6 +141,10 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
     @Override
     public void onItemClick(View view, int position) {
         if (isLockScreen) {
+            if (isPressed) {
+                return;
+            }
+            isPressed = true;
             WallpaperDetailView detailView = new WallpaperDetailView(mContext, isLockScreen);
             detailView.setData(mList.get(position).getImageURL(), mList.get(position).getDesc());
             detailView.setWallpaperDetailListener(new IWallpaperDetailListener() {
@@ -146,6 +152,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
                 @Override
                 public void onBack() {
                     if (null != mListener) {
+                        isPressed = false;
                         mListener.onCloseDetailPage();
                     }
                 }
@@ -153,6 +160,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
                 @Override
                 public void onApplyWallpaper() {
                     if (null != mListener) {
+                        isPressed = false;
                         mListener.onCloseDetailPage();
                     }
                 }

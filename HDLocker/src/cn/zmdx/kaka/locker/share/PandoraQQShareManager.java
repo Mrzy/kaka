@@ -1,19 +1,15 @@
 
 package cn.zmdx.kaka.locker.share;
 
-import java.util.ArrayList;
-
-import android.app.Activity;
-import android.os.Bundle;
+import android.content.Context;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.Platform.ShareParams;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.tencent.qzone.QZone;
 import cn.zmdx.kaka.locker.share.PandoraShareManager.PandoraShareData;
 
-import com.tencent.connect.share.QzoneShare;
-import com.tencent.tauth.IUiListener;
-import com.tencent.tauth.Tencent;
-
 public class PandoraQQShareManager {
-
-    private static final String QQ_APPID = "1103193086";
 
     private static PandoraQQShareManager mInstance;
 
@@ -24,16 +20,18 @@ public class PandoraQQShareManager {
         return mInstance;
     }
 
-    public void shareToQzone(Activity activity, PandoraShareData shareData, IUiListener listener) {
-        final Bundle params = new Bundle();
-        params.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
-        params.putString(QzoneShare.SHARE_TO_QQ_TITLE, shareData.mTitle);
-        params.putString(QzoneShare.SHARE_TO_QQ_SUMMARY, shareData.mDesc);
-        params.putString(QzoneShare.SHARE_TO_QQ_TARGET_URL, shareData.mWebUrl);
-        ArrayList<String> imageUrls = new ArrayList<String>();
-        imageUrls.add(shareData.mImageUrl);
-        params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, imageUrls);
-        Tencent mTencent = Tencent.createInstance(QQ_APPID, activity);
-        mTencent.shareToQzone(activity, params, listener);
+    public void shareToQzone(final Context context, PandoraShareData shareData,
+            PlatformActionListener mPlatformActionListener) {
+        ShareParams sp = new ShareParams();
+        sp.setTitle(shareData.mTitle);
+        sp.setTitleUrl(shareData.mWebUrl); // 标题的超链接
+        sp.setText(shareData.mDesc);
+        sp.setImageUrl(shareData.mImageUrl);
+        sp.setSite("潘多拉锁屏");
+        sp.setSiteUrl("http://www.hdlocker.com");
+
+        Platform qzone = ShareSDK.getPlatform(QZone.NAME);
+        qzone.setPlatformActionListener(mPlatformActionListener);
+        qzone.share(sp);
     }
 }

@@ -1,8 +1,12 @@
 
 package cn.zmdx.kaka.locker.content.view;
 
+import org.json.JSONObject;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.AttributeSet;
@@ -16,18 +20,38 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import cn.sharesdk.framework.ShareSDK;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.network.UrlBuilder;
+import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.widget.TypefaceTextView;
+
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response.Listener;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.JsonObjectRequest;
 
 public class NewsDetailLayout extends FrameLayout implements View.OnClickListener, OnTouchListener,
         OnGestureListener {
 
+    private static String URL = UrlBuilder.getBaseUrl() + "locker!addDataImgTableTop.action?";
+
     private WebView mWebView;
 
-    private View mBackBtn, mForwardBtn, mLikeBtn, mShareBtn;
+    private ImageView mBackImageView, mLikeImageView, mShareImageView;
+
+    private LinearLayout mShareLayout;
+
+    private TypefaceTextView mLikeNumber;
+
+    private ImageView mWecharShareIcon, mWecharCircleShareIcon, mQQShareIcon, mSinaShareIcon;
 
     private GestureDetector mGestureDetector;// 实例化手势对象
 
@@ -37,9 +61,11 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
     private ServerImageData mData;
 
-    private static final int SWIPE_MIN_DISTANCE = BaseInfoHelper.dip2px(HDApplication.getContext(), 50);
+    private static final int SWIPE_MIN_DISTANCE = BaseInfoHelper.dip2px(HDApplication.getContext(),
+            50);
 
-    private static final int SWIPE_THRESHOLD_VELOCITY = BaseInfoHelper.dip2px(HDApplication.getContext(), 500);
+    private static final int SWIPE_THRESHOLD_VELOCITY = BaseInfoHelper.dip2px(
+            HDApplication.getContext(), 500);
 
     public NewsDetailLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -58,7 +84,12 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         this(HDApplication.getContext());
         mPbManager = pbManager;
         mData = sid;
-        load(sid.getUrl());
+        load(sid.getImageDesc());
+        ShareSDK.initSDK(HDApplication.getContext());
+        if (mData.isLiked()) {
+            mLikeImageView.setImageDrawable(getResources().getDrawable(
+                    R.drawable.news_detail_like_icon));
+        }
     }
 
     private void init() {
@@ -84,15 +115,42 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
         mGestureDetector = new GestureDetector(getContext(), this);
 
-        mBackBtn = view.findViewById(R.id.back);
-        mForwardBtn = view.findViewById(R.id.forward);
-        mLikeBtn = view.findViewById(R.id.like);
-        mShareBtn = view.findViewById(R.id.share);
+        mBackImageView = (ImageView) view.findViewById(R.id.back);
+        mLikeImageView = (ImageView) view.findViewById(R.id.like);
+        mShareImageView = (ImageView) view.findViewById(R.id.share);
 
-        mBackBtn.setOnClickListener(this);
-        mForwardBtn.setOnClickListener(this);
-        mLikeBtn.setOnClickListener(this);
-        mShareBtn.setOnClickListener(this);
+        mBackImageView.setOnClickListener(this);
+        mLikeImageView.setOnClickListener(this);
+        mShareImageView.setOnClickListener(this);
+
+        mLikeNumber = (TypefaceTextView) view.findViewById(R.id.like_number);
+
+        initShareLayout(view);
+    }
+
+    private void initShareLayout(View view) {
+
+        if (PandoraShareManager.isAvilible(getContext(), PandoraShareManager.PACKAGE_WECHAR_STRING)) {
+            view.findViewById(R.id.share_wechat_icon_layout).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.share_wechat_circle_icon_layout).setVisibility(View.VISIBLE);
+        }
+        if (PandoraShareManager.isAvilible(getContext(), PandoraShareManager.PACKAGE_QQ_STRING)) {
+            view.findViewById(R.id.share_wechat_qq_icon_layout).setVisibility(View.VISIBLE);
+        }
+        if (PandoraShareManager.isAvilible(getContext(), PandoraShareManager.PACKAGE_SINA_STRING)) {
+            view.findViewById(R.id.share_wechat_sina_icon_layout).setVisibility(View.VISIBLE);
+        }
+        mShareLayout = (LinearLayout) view.findViewById(R.id.share_detail_layout);
+        mWecharShareIcon = (ImageView) view.findViewById(R.id.share_wechat_icon);
+        mWecharCircleShareIcon = (ImageView) view.findViewById(R.id.share_wechat_circle_icon);
+        mQQShareIcon = (ImageView) view.findViewById(R.id.share_wechat_qq_icon);
+        mSinaShareIcon = (ImageView) view.findViewById(R.id.share_wechat_sina_icon);
+
+        mShareLayout.setOnClickListener(this);
+        mWecharShareIcon.setOnClickListener(this);
+        mWecharCircleShareIcon.setOnClickListener(this);
+        mQQShareIcon.setOnClickListener(this);
+        mSinaShareIcon.setOnClickListener(this);
     }
 
     private void load(String url) {
@@ -103,27 +161,84 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         if (mWebView.canGoBack()) {
             mWebView.goBack();
         } else {
-            animate().translationX(getWidth()).setDuration(300).setListener(new AnimatorListenerAdapter() {
+            animate().translationX(getWidth()).setDuration(300)
+                    .setListener(new AnimatorListenerAdapter() {
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mPbManager.closeDetailPage();
-                }
-            }).start();
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mPbManager.closeDetailPage();
+                        }
+                    }).start();
         }
     }
 
     @Override
     public void onClick(View v) {
-        if (v == mBackBtn) {
+        if (v == mBackImageView) {
             back();
-        } else if (v == mForwardBtn) {
-            mWebView.goForward();
-        } else if (v == mLikeBtn) {
-
-        } else if (v == mShareBtn) {
-
+        } else if (v == mLikeImageView) {
+            if (!mData.isLiked()) {
+                mData.setLiked(true);
+                mLikeImageView.setImageDrawable(getResources().getDrawable(
+                        R.drawable.news_detail_like_icon));
+                showLikeNumber();
+                toLikeNews();
+            }
+        } else if (v == mShareImageView) {
+            mShareLayout.setVisibility(View.VISIBLE);
+        } else if (v == mShareLayout) {
+            mShareLayout.setVisibility(View.GONE);
+        } else if (v == mWecharShareIcon) {
+            PandoraShareManager.shareContent(getContext(), mData,
+                    PandoraShareManager.TYPE_SHARE_WECHAT);
+        } else if (v == mWecharCircleShareIcon) {
+            PandoraShareManager.shareContent(getContext(), mData,
+                    PandoraShareManager.TYPE_SHARE_WECHAT_CIRCLE);
+        } else if (v == mQQShareIcon) {
+            PandoraShareManager
+                    .shareContent(getContext(), mData, PandoraShareManager.TYPE_SHARE_QQ);
+        } else if (v == mSinaShareIcon) {
+            PandoraShareManager.shareContent(getContext(), mData,
+                    PandoraShareManager.TYPE_SHARE_SINA);
         }
+    }
+
+    private void showLikeNumber() {
+        mLikeNumber.setText("+1");
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(mLikeNumber, "scaleX", 0, 1f);
+        scaleXAnimator.setDuration(300);
+
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(mLikeNumber, "scaleY", 0, 1f);
+        scaleYAnimator.setDuration(300);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleXAnimator, scaleYAnimator);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator anim) {
+                ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(mLikeNumber, "alpha", 1, 0);
+                scaleXAnimator.setDuration(200);
+                scaleXAnimator.start();
+            }
+        });
+        animatorSet.start();
+    }
+
+    private void toLikeNews() {
+        JsonObjectRequest request = new JsonObjectRequest(URL + "?id=" + mData.getCloudId(), null,
+                new Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                }, new ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        RequestManager.getRequestQueue().add(request);
     }
 
     @Override
