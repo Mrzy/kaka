@@ -209,6 +209,7 @@
     <string name="pandora_setting_general_close_system_lock">关闭系统锁屏</string>
     <string name="pandora_setting_general_open_lock_sound">开启锁屏声音</string>
     <string name="pandora_setting_general_show_notify">显示通知栏</string>
+    <string name="pandora_setting_general_download_image_with_wifi">仅在Wifi下下载图片</string>
     <string name="pandora_setting_general_xiaomi_setting">小米用户专用设置</string>
     <string name="pandora_setting_general_allow_floating_window">允许显示悬浮窗</string>
     <string name="pandora_setting_general_trust">信任程序和允许自动启动</string>

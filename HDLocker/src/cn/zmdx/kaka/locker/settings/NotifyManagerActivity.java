@@ -77,7 +77,7 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
 
     private InterceptAdapter mInterceptAdapter;
 
-    private boolean isEditMode = false;
+    private boolean isEditMode = true;
 
     private boolean isSearchMode = false;
 
@@ -161,11 +161,11 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
         }
 
         mSearchView.setOnQueryTextListener(mOnQueryTextListener);
-        if (mCurType == TYPE_SELECT) {
-            menu.findItem(R.id.action_edit).setVisible(false);
-        } else {
-            menu.findItem(R.id.action_edit).setVisible(true);
-        }
+        // if (mCurType == TYPE_SELECT) {
+        menu.findItem(R.id.action_edit).setVisible(false);
+        // } else {
+        // menu.findItem(R.id.action_edit).setVisible(true);
+        // }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -492,10 +492,7 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
 
     @Override
     public void onBackPressed() {
-        if (isEditMode) {
-            isEditMode = !isEditMode;
-            mInterceptAdapter.notifyDataSetChanged();
-        } else if (isSearchMode) {
+        if (isSearchMode) {
             if (mNotifyFilterAdapter != null) {
                 new ListFilter().filter("");
                 mSearchView.setIconified(true);

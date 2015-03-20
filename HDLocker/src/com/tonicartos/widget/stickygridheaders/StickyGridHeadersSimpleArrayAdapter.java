@@ -84,6 +84,8 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
         String usName = item.getNotifyUSName();
         if (usName.contains(NotifyFilterManager.RECENT_TASK_MARK)) {
             holder.textView.setText(NotifyFilterManager.RECENT_TASK_MARK_PROMPT);
+        } else if (usName.contains(NotifyFilterManager.APP_NUMBER_TASK_MARK)) {
+            holder.textView.setText(NotifyFilterManager.RECENT_TASK_MARK);
         } else {
             holder.textView.setText(item.getNotifyUSName().substring(0, 1)
                     .toUpperCase(Locale.getDefault()));
