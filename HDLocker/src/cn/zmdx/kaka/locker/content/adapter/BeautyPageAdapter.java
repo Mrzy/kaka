@@ -15,10 +15,14 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.utils.TimeUtils;
 
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Transformation;
 
 public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.ViewHolder> {
@@ -74,25 +78,33 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
         }
         holder.mTimeTv.setText(time);
         Picasso picasso = Picasso.with(mContext);
-//        picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
-        picasso.load(data.getUrl()).transform(new Transformation() {
+        picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
+        RequestCreator rc = picasso.load(data.getUrl());
+        int errorRes = R.drawable.icon_newsimage_load_error;
+        if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
+                && !HDBNetworkState.isWifiNetwork()) {
+            rc.networkPolicy(NetworkPolicy.OFFLINE);
+            errorRes = R.drawable.icon_newsimage_loading;
+        }
+        rc.placeholder(R.drawable.icon_newsimage_loading)
+                .error(errorRes).transform(new Transformation() {
 
-            @Override
-            public String key() {
-                return "matrix()";
-            }
+                    @Override
+                    public String key() {
+                        return "matrix()";
+                    }
 
-            @Override
-            public Bitmap transform(Bitmap source) {
-                int cardWidth = holder.mCardView.getWidth();
-                int imgWidth = source.getWidth();
-                int imgHeight = source.getHeight();
-                float scaleRate = (float) cardWidth / (float) imgWidth;
-                int newHeight = (int) (scaleRate * imgHeight);
-                Bitmap result = ImageUtils.scaleTo(source, cardWidth, newHeight, true);
-                return result == null ? source : result;
-            }
-        }).into(holder.mImageView);
+                    @Override
+                    public Bitmap transform(Bitmap source) {
+                        int cardWidth = holder.mCardView.getWidth();
+                        int imgWidth = source.getWidth();
+                        int imgHeight = source.getHeight();
+                        float scaleRate = (float) cardWidth / (float) imgWidth;
+                        int newHeight = (int) (scaleRate * imgHeight);
+                        Bitmap result = ImageUtils.scaleTo(source, cardWidth, newHeight, true);
+                        return result == null ? source : result;
+                    }
+                }).into(holder.mImageView);
     }
 
     public interface OnItemClickListener {

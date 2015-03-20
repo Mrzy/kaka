@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter.OnItemClickListener;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager.IPullWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView.IWallpaperDetailListener;
@@ -76,6 +77,8 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         mRecyclerView = (RecyclerView) mEntireView.findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setVerticalFadingEdgeEnabled(true);
+        mRecyclerView.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setOnScrollListener(mScrollListener);
         mAdapter = new WallpaperPageAdapter(mContext, mRecyclerView, mList);

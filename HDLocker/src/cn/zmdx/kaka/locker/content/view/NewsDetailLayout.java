@@ -8,8 +8,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
@@ -37,6 +39,8 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.JsonObjectRequest;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
 public class NewsDetailLayout extends FrameLayout implements View.OnClickListener, OnTouchListener,
         OnGestureListener {
@@ -60,6 +64,8 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
     private ContentLoadingProgressBar mProgressBar;
 
     private ServerImageData mData;
+
+    private boolean isLoadError = false;
 
     private static final int SWIPE_MIN_DISTANCE = BaseInfoHelper.dip2px(HDApplication.getContext(),
             50);
@@ -97,6 +103,11 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         mProgressBar = (ContentLoadingProgressBar) view.findViewById(R.id.progress);
         mWebView = (WebView) view.findViewById(R.id.webView);
         mWebView.getSettings().setJavaScriptEnabled(true);
+        if (Build.VERSION.SDK_INT >= 19) {
+            mWebView.getSettings().setLoadsImagesAutomatically(true);
+        } else {
+            mWebView.getSettings().setLoadsImagesAutomatically(false);
+        }
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -108,9 +119,33 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
                 super.onProgressChanged(view, newProgress);
             }
         });
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
+                    mWebView.getSettings().setLoadsImagesAutomatically(true);
+                }
+                super.onPageFinished(view, url);
+            }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description,
+                    String failingUrl) {
+                isLoadError = true;
+                if (HDBNetworkState.isNetworkAvailable()) {
+                    view.loadData(getContext().getString(R.string.newsdetail_tip_press_try_again), "text/html; charset=UTF-8", null);
+                } else {
+                    view.loadData(getContext().getString(R.string.newsdetail_tip_please_check_network), "text/html; charset=UTF-8", null);
+                }
+                super.onReceivedError(view, errorCode, description, failingUrl);
+            }
+        });
         mWebView.getSettings().setSupportZoom(true);
         mWebView.getSettings().setBuiltInZoomControls(false);
+        if (PandoraConfig.newInstance(getContext()).isOnlyWifiLoadImage()
+                && !HDBNetworkState.isWifiNetwork()) {
+            mWebView.getSettings().setBlockNetworkImage(true);
+        }
         mWebView.setOnTouchListener(this);
 
         mGestureDetector = new GestureDetector(getContext(), this);
@@ -158,17 +193,28 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
     }
 
     private void back() {
+        if (isLoadError) {
+            exit(true);
+        }
         if (mWebView.canGoBack()) {
             mWebView.goBack();
         } else {
-            animate().translationX(getWidth()).setDuration(300)
-                    .setListener(new AnimatorListenerAdapter() {
+            exit(true);
+        }
+    }
 
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mPbManager.closeDetailPage();
-                        }
-                    }).start();
+    private void exit(boolean withAnimator) {
+        if (withAnimator) {
+            animate().translationX(getWidth()).setDuration(300)
+            .setListener(new AnimatorListenerAdapter() {
+                
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mPbManager.closeDetailPage();
+                }
+            }).start();
+        } else {
+            mPbManager.closeDetailPage();
         }
     }
 

@@ -151,6 +151,7 @@ public class NotificationInterceptor extends Handler {
                     }
                     ni.setType(NotificationInfo.NOTIFICATION_TYPE_SYSTEM);
                     ni.setPendingIntent(sbn.getNotification().contentIntent);
+
                     dispatchNotificationPostedEvent(ni);
                 }
                 break;
@@ -332,7 +333,6 @@ public class NotificationInterceptor extends Handler {
                 }
             }
         });
-        request.setShouldCache(false);
         RequestManager.getRequestQueue().add(request);
     }
 
@@ -411,29 +411,15 @@ public class NotificationInterceptor extends Handler {
     }
 
     /**
-     * 检查拦截通知功能是否可用。只有android4.3及以上设备才可用
+     * 检查该设备是否支持读取通知功能。只有android4.3及以上设备才可用
      * 
      * @return
      */
     public boolean isDeviceAvailable() {
-        // TODO
-        return false;
+        return Build.VERSION.SDK_INT >= 18;
     }
 
     public Set<StatusBarNotification> getActiveNotifications() {
         return mNotificationSet;
-    }
-
-    public Set<String> getInterceptPackages() {
-        // TODO
-        return null;
-    }
-
-    public void cancelIntercept(String pkgName) {
-        // TODO
-    }
-
-    public void addIntercept(String pkgName) {
-
     }
 }

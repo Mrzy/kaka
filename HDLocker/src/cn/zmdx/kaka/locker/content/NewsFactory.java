@@ -9,9 +9,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
@@ -130,8 +132,12 @@ public class NewsFactory {
 
     private static String getUrl(int type, String lastModified, boolean older) {
         final String flag = older ? "1" : "0";
+        int limit = 20;
+        if (!HDBNetworkState.isWifiNetwork()) {
+            limit = 10;
+        }
         return UrlBuilder.getBaseUrl() + "locker!queryDataImgTableNew.action?type=" + type
-                + "&lastModified=" + lastModified + "&flag=" + flag;
+                + "&lastModified=" + lastModified + "&flag=" + flag + "&limit=" + limit;
     }
 
     private static String getLastModified(List<ServerImageData> data, boolean older) {

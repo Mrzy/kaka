@@ -269,7 +269,10 @@
     <string name="init_setting_xiaomi_prompt">小米用户必备设置</string>
     <string name="init_setting_recommended_setting_prompt">推荐设置</string>
 
-    <string name="open_notification">打开</string>
-    <string name="remove_notification">忽略</string>
-    
+    <string name="open_notification">右划打开</string>
+    <string name="remove_notification">左划忽略</string>
+
+    <string name="newsdetail_tip_press_try_again">加载失败，返回重试</string>
+    <string name="newsdetail_tip_please_check_network">加载失败，请检查您的网络</string>
+
 </resources>

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
@@ -63,7 +64,8 @@ public class NotificationPreferences {
     }
 
     private void write(Set<String> interceptPkgs) {
-        mSp.edit().clear().putStringSet(KEY_ACTIVE_NOTIFICATIONS, interceptPkgs).commit();
+        mSp.edit().remove(KEY_ACTIVE_NOTIFICATIONS).commit();
+        mSp.edit().putStringSet(KEY_ACTIVE_NOTIFICATIONS, interceptPkgs).commit();
     }
 
     public Set<String> getInterceptPkgNames() {

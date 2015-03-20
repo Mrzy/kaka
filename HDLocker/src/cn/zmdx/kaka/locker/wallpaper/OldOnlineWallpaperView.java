@@ -214,7 +214,7 @@ public class OldOnlineWallpaperView extends LinearLayout {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
             }
-            if (!PandoraConfig.newInstance(mContext).is3G4GNetworkOn()
+            if (!PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
                     && !HDBNetworkState.isWifiNetwork()) {
                 pullWallpaperFromSP(lastPullJson);
             } else {
@@ -402,7 +402,7 @@ public class OldOnlineWallpaperView extends LinearLayout {
         Bitmap cacheBitmap = ImageLoaderManager.getOnlineImageCache(mContext).getBitmap(
                 HDBHashUtils.getStringMD5(serverOnlineWallpaper.getImageURL()));
         if (null == cacheBitmap) {
-            if (!PandoraConfig.newInstance(mContext).is3G4GNetworkOn()
+            if (!PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
                     && !HDBNetworkState.isWifiNetwork()) {
                 String promptString = mContext.getResources().getString(
                         R.string.setting_network_error);

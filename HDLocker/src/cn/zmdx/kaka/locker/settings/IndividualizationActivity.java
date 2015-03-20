@@ -162,15 +162,15 @@ public class IndividualizationActivity extends BaseActivity implements OnClickLi
     }
 
     private void closeMobileNetwork() {
-        PandoraConfig.newInstance(this).save3G4GNetworkState(false);
+        PandoraConfig.newInstance(this).saveOnlyWifiLoadImage(false);
     }
 
     private void openMobileNetwork() {
-        PandoraConfig.newInstance(this).save3G4GNetworkState(true);
+        PandoraConfig.newInstance(this).saveOnlyWifiLoadImage(true);
     }
 
     private boolean isMobileNetwork() {
-        return PandoraConfig.newInstance(this).is3G4GNetworkOn();
+        return PandoraConfig.newInstance(this).isOnlyWifiLoadImage();
     }
 
     private void closeLocksScreenVoice() {

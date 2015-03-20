@@ -4,7 +4,6 @@ package cn.zmdx.kaka.locker.content.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.text.TextUtils;
@@ -16,9 +15,13 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.TimeUtils;
 
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewHolder> {
 
@@ -83,8 +86,16 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
             holder.mImageView.setVisibility(View.GONE);
         } else {
             Picasso picasso = Picasso.with(mContext);
-//            picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
-            picasso.load(data.getUrl()).into(holder.mImageView);
+            picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
+            RequestCreator rc = picasso.load(data.getUrl());
+            int errorRes = R.drawable.icon_newsimage_load_error;
+            if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
+                    && !HDBNetworkState.isWifiNetwork()) {
+                rc.networkPolicy(NetworkPolicy.OFFLINE);
+                errorRes = R.drawable.icon_newsimage_loading;
+            }
+            rc.placeholder(R.drawable.icon_newsimage_loading)
+                    .error(errorRes).into(holder.mImageView);
         }
     }
 

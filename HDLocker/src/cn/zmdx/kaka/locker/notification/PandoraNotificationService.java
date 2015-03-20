@@ -61,6 +61,9 @@ public final class PandoraNotificationService extends NotificationListenerServic
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("Notification service onStartCommand");
+        }
         return START_STICKY;
     }
 

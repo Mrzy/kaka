@@ -469,7 +469,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             if (shouldSizeBigger || shouldChangeTextColor) {
                 setTextSizeBigger(position);
             }
-
         }
     }
 
@@ -491,7 +490,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                     tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
                 }
             }
-
         }
     }
 

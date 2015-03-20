@@ -134,7 +134,7 @@ public class LockScreenManager {
 
     private SensorImageView mSensorImageView, mBlurImageView;
 
-    private View mMainPage;
+    private View mMainPage, mDimBg;
 
     private SlidingUpPanelLayout mSlidingUpView;
 
@@ -258,6 +258,9 @@ public class LockScreenManager {
         mBlurImageView.setAlpha(0.0f);// 默认模糊的view不显示，透明度设置为0
         mSensorImageView = (SensorImageView) mEntireView.findViewById(R.id.lockerBg);
 
+        mDimBg = mEntireView.findViewById(R.id.dimBg);
+        mDimBg.setAlpha(0);
+
         initWallpaper();
 
         // 初始化右划解锁的viewpager
@@ -292,6 +295,11 @@ public class LockScreenManager {
         // 监听是否有通知，以处理背景模糊效果
         mNotificationListView = (NotificationListView) mMainPage
                 .findViewById(R.id.lock_bottom_notification_layout);
+        if (mNotificationListView.getChildCount() > 0) {
+            mKeepBlurEffect = true;
+        } else {
+            mKeepBlurEffect = false;
+        }
         mNotificationListView.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
 
             @Override
@@ -435,6 +443,8 @@ public class LockScreenManager {
 
         public void onPanelCollapsed(View panel) {
             resumeWallpaperTranslation();
+            PandoraBoxManager.newInstance(mContext).closeDetailPage();
+            PandoraBoxManager.newInstance(mContext).reset();
         };
     };
 
@@ -442,11 +452,18 @@ public class LockScreenManager {
         if (mBlurImageView != null) {
             mBlurImageView.animate().alpha(1).setDuration(500).start();
         }
+
+        if (mDimBg != null) {
+            mDimBg.animate().alpha(1).setDuration(500).start();
+        }
     }
 
     private void fadeOutWallpaperBlurAnimator() {
         if (mBlurImageView != null) {
             mBlurImageView.animate().alpha(0).setDuration(500).start();
+        }
+        if (mDimBg != null) {
+            mDimBg.animate().alpha(0).setDuration(500).start();
         }
     }
 
@@ -1023,6 +1040,8 @@ public class LockScreenManager {
         cancelAnimatorIfNeeded();
 
         unRegistBackPressedListener(mBackPressedListener);
+
+        PandoraBoxManager.newInstance(mContext).onFinish();
 
         mWinManager.removeView(mEntireView);
         mEntireView = null;

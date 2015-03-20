@@ -225,13 +225,13 @@ public class PandoraConfig {
         return mSp.getBoolean(KEY_HAS_GUIDED, false);
     }
 
-    public void save3G4GNetworkState(boolean isEnable) {
+    public void saveOnlyWifiLoadImage(boolean isEnable) {
         Editor editor = mSp.edit();
         editor.putBoolean(KEY_NEED_MOBILE_NETWORK, isEnable);
         editor.commit();
     }
 
-    public boolean is3G4GNetworkOn() {
+    public boolean isOnlyWifiLoadImage() {
         return mSp.getBoolean(KEY_NEED_MOBILE_NETWORK, false);
     }
 

@@ -4,5 +4,5 @@
     android:layout_height="match_parent"
     android:gravity="right|center_vertical"
     android:text="@string/open_notification"
-    android:textColor="#ffffff"
-    android:textSize="17dp" />
+    android:textColor="#a0ffffff"
+    android:textSize="12dp" />

@@ -82,39 +82,6 @@ public class ServerImageDataManager {
         }
     }
 
-    /**
-     * 拉取今日数据，不加参数，数据数量和类型有服务端决定
-     */
-    public void pullTodayData(long lastModified) {
-        JsonObjectRequest request = null;
-        final String url = getUrl(lastModified);
-        request = new JsonObjectRequest(url, null, new Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                final List<ServerImageData> sdList = ServerImageData.parseJson(response);
-                if (sdList.size() <= 0) {
-                    return;
-                }
-                Message msg = Message.obtain();
-                msg.what = PandoraBoxDispatcher.MSG_ORIGINAL_DATA_ARRIVED;
-                msg.obj = sdList;
-                PandoraBoxDispatcher.getInstance().sendMessage(msg);
-            }
-
-        }, new ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (BuildConfig.DEBUG) {
-                    error.printStackTrace();
-                }
-            }
-        });
-        request.setShouldCache(false);
-        RequestManager.getRequestQueue().add(request);
-    }
-
     public String getUrl(long lastModified) {
         StringBuilder sb = new StringBuilder(UrlBuilder.getBaseUrl());
         sb.append("locker!queryDataImgTable.action?");

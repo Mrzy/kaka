@@ -33,8 +33,8 @@
                 android:paddingBottom="3dp"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
-                android:textColor="#ffffff"
                 android:textSize="14dp"
+                android:textColor="#ffffff"
                 psts:pstsDividerColor="@android:color/transparent"
                 psts:pstsIndicatorColor="#a0ffffff"
                 psts:pstsIndicatorHeight="2dp"
@@ -49,23 +49,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|bottom"
-                    android:layout_marginBottom="40dp"
-                    android:layout_marginRight="30dp" >
 
                     <ImageView
                         android:id="@+id/noti_tip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="35dp"
+                        android:layout_gravity="right|bottom"
+                        android:layout_marginRight="42dp"
+                        android:layout_marginBottom="50dp"
+                        android:layout_height="35dp" />
 
                     <cn.zmdx.kaka.locker.widget.FloatingActionButton
                         android:id="@+id/backBtn"
+                        android:layout_gravity="right|bottom"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginBottom="40dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-                </FrameLayout>
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>

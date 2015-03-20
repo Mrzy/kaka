@@ -12,6 +12,8 @@ import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
 import cn.zmdx.kaka.locker.LockScreenManager.ILockScreenListener;
+import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
+import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.settings.MainSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
@@ -68,6 +70,14 @@ public class FakeActivity extends Activity {
                 finish();
             }
         });
+
+        startNotificationServiceIfNeeded();
+    }
+
+    private void startNotificationServiceIfNeeded() {
+        if (NotificationInterceptor.getInstance(this).isDeviceAvailable()) {
+            startService(new Intent(this, PandoraNotificationService.class));
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

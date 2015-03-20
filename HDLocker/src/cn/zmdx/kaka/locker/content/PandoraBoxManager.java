@@ -4,6 +4,10 @@ package cn.zmdx.kaka.locker.content;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +28,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -42,6 +47,7 @@ import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
@@ -68,6 +74,8 @@ public class PandoraBoxManager implements View.OnClickListener {
     private OnlineWallpaperView mWallpaperView;
 
     private ImageView mNotifyTip;
+
+    private ViewPagerCompat mViewPager;
 
     private static final int[] mTabColors = new int[] {
             Color.parseColor("#26a69a"), Color.parseColor("#e84e40"), Color.parseColor("#ab47bc"),
@@ -116,22 +124,22 @@ public class PandoraBoxManager implements View.OnClickListener {
         IntentFilter filter = new IntentFilter(NotificationListView.ACTION_NOTIFICATION_POSTED);
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mNotifyReceiver, filter);
 
-        final ViewPagerCompat viewPager = (ViewPagerCompat) mEntireView
-                .findViewById(R.id.newsViewPager);
+        mViewPager = (ViewPagerCompat) mEntireView.findViewById(R.id.newsViewPager);
         List<View> pages = new ArrayList<View>();
         initNewsPages(pages);
         List<String> titles = new ArrayList<String>();
         initTitles(titles);
         NewsPagerAdapter pagerAdapter = new NewsPagerAdapter(pages, titles);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(1);
+        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setCurrentItem(1);
 
         final PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) mEntireView
                 .findViewById(R.id.newsTabStrip);
-        tabStrip.setViewPager(viewPager);
+        tabStrip.setViewPager(mViewPager);
         tabStrip.setTabBgColors(mTabColors);
         tabStrip.setShouldExpand(false);
-        tabStrip.setShouldSizeBigger(true);
+        // tabStrip.setShouldSizeBigger(true);
+        // tabStrip.setTextPressColor(Color.WHITE);
         tabStrip.setOnPageChangeListener(new OnPageChangeListener() {
 
             @Override
@@ -158,22 +166,90 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("received notification at news detail page");
+            }
             Bitmap bitmap = (Bitmap) intent.getParcelableExtra("icon");
             mNotifyTip.setImageBitmap(bitmap);
+            startNotificationTip(mNotifyTip);
         }
+
     };
 
+    private void startNotificationTip(final ImageView mNotifyTip) {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(mNotifyTip, "scaleX", 0, 1.2f, 1.0f);
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(mNotifyTip, "scaleY", 0, 1.2f, 1.0f);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(animator1, animator);
+        set.setDuration(500);
+        set.setInterpolator(new AccelerateInterpolator());
+        set.addListener(new AnimatorListenerAdapter() {
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mNotifyTip.setVisibility(View.VISIBLE);
+                super.onAnimationStart(animation);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mNotifyTip.setVisibility(View.INVISIBLE);
+                    }
+                }, 3000);
+                super.onAnimationEnd(animation);
+            }
+        });
+        set.start();
+    }
+
+    public void refreshNewsByCategory(int category) {
+        if (category == NewsFactory.NEWS_TYPE_HEADLINE) {
+            NewsFactory.updateNews(category, mHotAdapter, mHotNews, mHotRefreshView, true);
+        } else if (category == NewsFactory.NEWS_TYPE_GOSSIP) {
+            NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
+                    mGossipRefreshView, true);
+        } else if (category == NewsFactory.NEWS_TYPE_MICRO_CHOICE) {
+            NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
+                    mMicroMediaNews, mMicroMediaRefreshView, true);
+        } else if (category == NewsFactory.NEWS_TYPE_BEAUTY) {
+            NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
+                    mBeautyRefreshView, true);
+        } else if (category == NewsFactory.NEWS_TYPE_JOKE) {
+            NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
+                    mJokeRefreshView, true);
+        } else {
+            throw new IllegalArgumentException("invalide news category");
+        }
+    }
+
+    /**
+     * 立即拉取热门和八卦的数据，3秒后，加载微精选和美女的数据，5秒后加载搞笑的数据.
+     */
     public void refreshAllNews() {
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
                 mHotRefreshView, true);
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
                 mGossipRefreshView, true);
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
-                mMicroMediaNews, mMicroMediaRefreshView, true);
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
-                mBeautyRefreshView, true);
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
-                mJokeRefreshView, true);
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+            @Override
+            public void run() {
+                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
+                        mMicroMediaNews, mMicroMediaRefreshView, true);
+                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
+                        mBeautyRefreshView, true);
+            }
+        }, 3000);
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+            @Override
+            public void run() {
+                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
+                        mJokeRefreshView, true);
+            }
+        }, 5000);
         if (null != mWallpaperView) {
             mWallpaperView.pullWallpaperData();
         }
@@ -637,6 +713,12 @@ public class PandoraBoxManager implements View.OnClickListener {
     public void onClick(View v) {
         if (v == mBackBtn) {
             LockScreenManager.getInstance().collapseNewsPanel();
+        }
+    }
+
+    public void reset() {
+        if (mViewPager != null) {
+            mViewPager.setCurrentItem(1, false);
         }
     }
 }
