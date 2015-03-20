@@ -127,6 +127,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     private boolean shouldSizeBigger = false;
 
+    private boolean shouldChangeTextColor = false;
+
     public PagerSlidingTabStrip(Context context) {
         this(context, null);
     }
@@ -323,7 +325,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
                 tab.setTypeface(tabTypeface, tabTypefaceStyle);
                 tab.setTextColor(tabTextColor);
-                if (shouldSizeBigger) {
+                if (shouldSizeBigger || shouldChangeTextColor) {
                     setTextSizeBigger(0);
                 }
                 // setAllCaps() is only available from API 14, so the upper case
@@ -464,9 +466,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             if (delegatePageListener != null) {
                 delegatePageListener.onPageSelected(position);
             }
-            if (shouldSizeBigger) {
+            if (shouldSizeBigger || shouldChangeTextColor) {
                 setTextSizeBigger(position);
             }
+
         }
     }
 
@@ -477,10 +480,14 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             if (v instanceof TextView) {
                 TextView tab = (TextView) v;
                 if (v == currentTab) {
-                    tab.setTextColor(tabPressTextColor);
+                    if (shouldChangeTextColor) {
+                        tab.setTextColor(tabPressTextColor);
+                    }
                     setTextAnimator(tab, tabTextSize, tabPressTextSize);
                 } else {
-                    tab.setTextColor(tabTextColor);
+                    if (shouldChangeTextColor) {
+                        tab.setTextColor(tabTextColor);
+                    }
                     tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
                 }
             }
@@ -593,6 +600,14 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public boolean getShouldSizeBigger() {
         return shouldSizeBigger;
+    }
+
+    public boolean isShouldChangeTextColor() {
+        return shouldChangeTextColor;
+    }
+
+    public void setShouldChangeTextColor(boolean shouldChangeTextColor) {
+        this.shouldChangeTextColor = shouldChangeTextColor;
     }
 
     public boolean isTextAllCaps() {

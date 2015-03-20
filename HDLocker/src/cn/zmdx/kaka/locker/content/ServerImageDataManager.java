@@ -135,6 +135,16 @@ public class ServerImageDataManager {
         private String mImageDesc;
 
         public int mIsImageDownloaded;
+        
+        public boolean isLiked = false;
+
+        public boolean isLiked() {
+            return isLiked;
+        }
+
+        public void setLiked(boolean isLiked) {
+            this.isLiked = isLiked;
+        }
 
         /**
          * 图片或者说文章的收藏状态
@@ -196,6 +206,7 @@ public class ServerImageDataManager {
                                 serverImageData
                                         .setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_FALSE);
                             }
+                            serverImageData.setLiked(false);
                             sdList.add(serverImageData);
                         }
                     }

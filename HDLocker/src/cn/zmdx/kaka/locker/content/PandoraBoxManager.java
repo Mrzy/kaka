@@ -131,6 +131,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         tabStrip.setViewPager(viewPager);
         tabStrip.setTabBgColors(mTabColors);
         tabStrip.setShouldExpand(false);
+        tabStrip.setShouldSizeBigger(true);
         tabStrip.setOnPageChangeListener(new OnPageChangeListener() {
 
             @Override

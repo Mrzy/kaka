@@ -37,10 +37,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="-10dp"
-                    android:shadowColor="#77000000"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="1"
                     android:textColor="#ffffff"
                     android:textSize="15dp" />
 
@@ -48,10 +44,6 @@
                     android:id="@+id/wallpaper_date_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:shadowColor="#77000000"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="1"
                     android:textColor="#ffffff"
                     android:textSize="40dp" />
             </LinearLayout>
@@ -61,10 +53,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:shadowColor="#77000000"
-                android:shadowDx="1"
-                android:shadowDy="1"
-                android:shadowRadius="1"
                 android:textSize="12sp"
                 android:visibility="gone" />
         </LinearLayout>

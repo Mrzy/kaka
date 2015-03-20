@@ -21,7 +21,6 @@ import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
-import cn.zmdx.kaka.locker.widget.BaseLinearLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -35,6 +34,8 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
     private SwitchButton mRandomReplacementSButton;
 
     private LinearLayout mLocalWallpaper;
+
+    private boolean isPressed = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
@@ -81,6 +82,9 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
             @Override
             public void onGoToDetailClick(ServerOnlineWallpaper item) {
+                if (isPressed) {
+                    return;
+                }
                 Intent in = new Intent();
                 in.putExtra("imageUrl", item.getImageURL());
                 in.putExtra("desc", item.getDesc());
@@ -110,11 +114,13 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("WallpaperFragment");
+        isPressed = false;
     }
 
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("WallpaperFragment");
+        isPressed = true;
     }
 
     @Override
