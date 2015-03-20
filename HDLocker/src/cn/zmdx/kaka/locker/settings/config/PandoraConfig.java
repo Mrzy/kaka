@@ -232,7 +232,7 @@ public class PandoraConfig {
     }
 
     public boolean is3G4GNetworkOn() {
-        return mSp.getBoolean(KEY_NEED_MOBILE_NETWORK, true);
+        return mSp.getBoolean(KEY_NEED_MOBILE_NETWORK, false);
     }
 
     public void saveLockSoundState(boolean isEnable) {

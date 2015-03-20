@@ -17,6 +17,8 @@ import cn.zmdx.kaka.locker.R;
 
 public class NotifyFilterManager {
 
+    public final static String APP_NUMBER_TASK_MARK = "@";
+
     public final static String RECENT_TASK_MARK = "#";
 
     public final static String RECENT_TASK_MARK_PROMPT = "最近使用";
@@ -31,22 +33,21 @@ public class NotifyFilterManager {
         ArrayList<NotifyFilterEntity> list = new ArrayList<NotifyFilterEntity>();
         for (String pkgName : pkgNameSet) {
             try {
-//                if (list.size() <= MAX_NOTIFY_FILTER_COUNT) {
-                    NotifyFilterEntity interceptEntity = new NotifyFilterEntity();
-                    Drawable icon = packageManager.getApplicationIcon(pkgName);
-                    String appName = packageManager.getApplicationLabel(
-                            packageManager
-                                    .getApplicationInfo(pkgName, PackageManager.GET_META_DATA))
-                            .toString();
-                    interceptEntity.setNotifyCHName(appName);
-                    interceptEntity.setNotifyUSName(NotifyFilterUtil.getChinesePinyinStr(appName));
-                    interceptEntity.setPkgName(pkgName);
-                    interceptEntity.setSelect(true);
-                    interceptEntity.setNotifyIcon(icon);
-                    list.add(interceptEntity);
-//                } else {
-//                    break;
-//                }
+                // if (list.size() <= MAX_NOTIFY_FILTER_COUNT) {
+                NotifyFilterEntity interceptEntity = new NotifyFilterEntity();
+                Drawable icon = packageManager.getApplicationIcon(pkgName);
+                String appName = packageManager.getApplicationLabel(
+                        packageManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA))
+                        .toString();
+                interceptEntity.setNotifyCHName(appName);
+                interceptEntity.setNotifyUSName(NotifyFilterUtil.getChinesePinyinStr(appName));
+                interceptEntity.setPkgName(pkgName);
+                interceptEntity.setSelect(true);
+                interceptEntity.setNotifyIcon(icon);
+                list.add(interceptEntity);
+                // } else {
+                // break;
+                // }
             } catch (NameNotFoundException e) {
                 e.printStackTrace();
             }
@@ -72,7 +73,11 @@ public class NotifyFilterManager {
             Drawable icon = reInfo.loadIcon(pm);
             NotifyFilterEntity myAppInfo = new NotifyFilterEntity();
             myAppInfo.setNotifyCHName(appLabel);
-            myAppInfo.setNotifyUSName(NotifyFilterUtil.getChinesePinyinStr(appLabel));
+            String usName = NotifyFilterUtil.getChinesePinyinStr(appLabel);
+            if (Character.isDigit(usName.charAt(0))) {
+                usName = APP_NUMBER_TASK_MARK + usName;
+            }
+            myAppInfo.setNotifyUSName(usName);
             myAppInfo.setPkgName(pkgName);
             myAppInfo.setNotifyIcon(icon);
             myAppInfo.setSelect(isNeedSelect == true ? pkgNameSet.contains(pkgName) : false);

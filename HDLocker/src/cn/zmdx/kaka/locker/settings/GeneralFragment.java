@@ -39,6 +39,8 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
     private SwitchButton mShowNotifySButton;
 
+    private SwitchButton mAllow3G4GSButton;
+
     private SwitchButton mOpenSoundSButton;
 
     private LinearLayout mCloseSystemLock;
@@ -91,6 +93,10 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
         mShowNotifySButton = (SwitchButton) mEntireView
                 .findViewById(R.id.setting_show_notify_switch_button);
         mShowNotifySButton.setOnCheckedChangeListener(this);
+
+        mAllow3G4GSButton = (SwitchButton) mEntireView
+                .findViewById(R.id.setting_allow_3g4g_switch_button);
+        mAllow3G4GSButton.setOnCheckedChangeListener(this);
 
         mOpenSoundSButton = (SwitchButton) mEntireView
                 .findViewById(R.id.setting_open_lock_sound_switch_button);
@@ -148,6 +154,7 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
     private void initSwitchButtonState() {
         mPandoraLockerSButton.setChecked(isPandoraLockerOn());
         mShowNotifySButton.setChecked(isNotifyFunctionOn());
+        mAllow3G4GSButton.setChecked(is3G4GNetworkOn());
         mOpenSoundSButton.setChecked(isLockSoundOn());
     }
 
@@ -168,6 +175,14 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
             } else {
                 disableNotifyFunction();
                 UmengCustomEventManager.statisticalCloseNotifyTimes();
+            }
+        } else if (buttonView == mAllow3G4GSButton) {
+            if (isChecked) {
+                enable3G4GNetwork();
+                UmengCustomEventManager.statisticalAllowAutoDownload();
+            } else {
+                disable3G4GNetwork();
+                UmengCustomEventManager.statisticalDisallowAutoDownload();
             }
         } else if (buttonView == mOpenSoundSButton) {
             if (isChecked) {
@@ -303,6 +318,18 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
     private void disableNotifyFunction() {
         mPandoraConfig.saveNotifyFunctionState(false);
+    }
+
+    private boolean is3G4GNetworkOn() {
+        return mPandoraConfig.is3G4GNetworkOn();
+    }
+
+    private void enable3G4GNetwork() {
+        mPandoraConfig.save3G4GNetworkState(true);
+    }
+
+    private void disable3G4GNetwork() {
+        mPandoraConfig.save3G4GNetworkState(false);
     }
 
     private boolean isLockSoundOn() {
