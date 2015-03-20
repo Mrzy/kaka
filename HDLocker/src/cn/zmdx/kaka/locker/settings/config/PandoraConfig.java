@@ -87,6 +87,10 @@ public class PandoraConfig {
 
     private static final String KEY_RANDOM_REPLACEMENT = "krp";
 
+    private static final String KEY_LAST_CITY_NAME = "klcn";
+
+    private static final String KEY_LAST_CHECK_LOCATION = "klcl";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -193,13 +197,14 @@ public class PandoraConfig {
         return mSp.getString(KEY_CURRENT_WALLPAPER, "");
     }
 
-    public long getLastCheckWeatherTime() {
-        return mSp.getLong(KEY_LAST_CHECK_WEATHER, 0);
+    public String getLastCheckWeatherTime() {
+
+        return mSp.getString(KEY_LAST_CHECK_WEATHER, String.valueOf(System.currentTimeMillis()));
     }
 
-    public void saveLastCheckWeatherTime(long time) {
+    public void saveLastCheckWeatherTime(String time) {
         Editor editor = mSp.edit();
-        editor.putLong(KEY_LAST_CHECK_WEATHER, time);
+        editor.putString(KEY_LAST_CHECK_WEATHER, time);
         editor.commit();
     }
 
@@ -209,8 +214,28 @@ public class PandoraConfig {
         editor.commit();
     }
 
+    public void saveLastCityName(String cityName) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_LAST_CITY_NAME, cityName);
+        editor.commit();
+    }
+
+    public String getLastCityName() {
+        return mSp.getString(KEY_LAST_CITY_NAME, "");
+    }
+
     public String getLastWeatherInfo() {
         return mSp.getString(KEY_LAST_WEATHER_INFO, null);
+    }
+
+    public void saveLastCheckLocationTime(long lastCheckTime) {
+        Editor editor = mSp.edit();
+        editor.putLong(KEY_LAST_CHECK_LOCATION, lastCheckTime);
+        editor.commit();
+    }
+
+    public long getLastCheckLocationTime() {
+        return mSp.getLong(KEY_LAST_CHECK_LOCATION, 0l);
     }
 
     public void saveHasGuided() {

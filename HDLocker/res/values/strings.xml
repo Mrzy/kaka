@@ -274,5 +274,6 @@
 
     <string name="newsdetail_tip_press_try_again">加载失败，返回重试</string>
     <string name="newsdetail_tip_please_check_network">加载失败，请检查您的网络</string>
+    <string name="pandora_locker_shimmer_unlock_str">> 滑动来解锁</string>
 
 </resources>

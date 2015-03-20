@@ -2,124 +2,106 @@
 package cn.zmdx.kaka.locker.weather;
 
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
-public class PandoraLocationManager {
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 
+public class PandoraLocationManager {
     private static PandoraLocationManager INSTANCE = null;
 
-    private LocationManager mLocationManager;
+    private BDLocation mBdLocation = null;
 
-    private static Location mRecentLocation;
+    private String cityName = null;
 
-    private PandoraLocationManager() {
-        mLocationManager = (LocationManager) HDApplication.getContext().getSystemService(
-                Context.LOCATION_SERVICE);
+    private Context mContext = HDApplication.getContext();
+
+    private PandoraLocationManager(Context context) {
+        mLocationClient = new LocationClient(context.getApplicationContext());
+        initParams();
+        mLocationClient.registerLocationListener(bdLocationListener);
     }
 
-    public static PandoraLocationManager getInstance() {
+    public static PandoraLocationManager getInstance(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new PandoraLocationManager();
+            INSTANCE = new PandoraLocationManager(context);
         }
         return INSTANCE;
     }
 
-    public void registLocationUpdates() {
-        boolean isNetworkProvider = false;
-        boolean isGpsProvider = false;
-        try {
-            isNetworkProvider = mLocationManager
-                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            isGpsProvider = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    public BDLocationListener bdLocationListener = new MyLocationListener();
 
-        } catch (Exception e) {
-            return;
+    private LocationClient mLocationClient;
+
+    public void requestLocation() {
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("start request location");
         }
-
-        if (!isNetworkProvider && !isGpsProvider) {
+        if (!mLocationClient.isStarted()) {
+            mLocationClient.start();
+        }
+        if (mLocationClient != null && mLocationClient.isStarted()) {
+            mLocationClient.requestLocation();
+        } else {
             if (BuildConfig.DEBUG) {
-                HDBLOG.logD("没有可用的provider，注册位置更新监听失败");
+                HDBLOG.logD("locClient is null or not started");
             }
-            return;
         }
+    }
 
-        if (isNetworkProvider) {
-            Location loc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (loc == null) {
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1,
-                        mLocaitonListener);
-            } else {
-                mRecentLocation = loc;
+    private void stopRequestLocation() {
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("stop request location");
+        }
+        if (mLocationClient != null && mLocationClient.isStarted()) {
+            mLocationClient.stop();
+        }
+    }
+
+    public BDLocation getLocation() {
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("baidu get getLocation-->");
+        }
+        return mBdLocation;
+    }
+
+    private void initParams() {
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true);// 打开GPS
+        option.setAddrType("all");// 返回的定位结果包含地址信息
+        option.setCoorType("bd09ll");// 设置坐标系为百度经纬度坐标系,默认值gcj02
+        option.setScanSpan(5000);// 设置发起定位请求的间隔时间为5000ms
+        mLocationClient.setLocOption(option);
+    }
+
+    public String getCityName() {
+        if (mBdLocation != null) {
+            cityName = mBdLocation.getCity();
+        }
+        return cityName;
+    }
+
+    public class MyLocationListener implements BDLocationListener {
+
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            if (location == null) {
                 return;
             }
-            return;
+            mBdLocation = location;
+            PandoraConfig.newInstance(mContext).saveLastCityName(mBdLocation.getCity());
+            PandoraConfig.newInstance(mContext).saveLastCheckLocationTime(
+                    System.currentTimeMillis());
+            stopRequestLocation();
         }
 
-        if (isGpsProvider) {
-            Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (loc == null) {
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1,
-                        mLocaitonListener);
-            } else {
-                mRecentLocation = loc;
-                return;
-            }
+        public void onReceivePoi(BDLocation poiLocation) {
         }
     }
 
-    public void unRegistLocationUpdates() {
-        if (mLocaitonListener != null) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("unRegistLocationUpdates()");
-            }
-            mLocationManager.removeUpdates(mLocaitonListener);
-        }
-    }
-
-    /**
-     * 获取当前位置
-     * 
-     * @return 没有位置信息时返回null
-     */
-    public static Location getRecentLocation() {
-        return mRecentLocation;
-    }
-
-    private LocationListener mLocaitonListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("onLocationChanged");
-            }
-            mRecentLocation = location;
-            // mLocationManager.removeUpdates(mLocaitonListener);
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("onStatusChanged");
-            }
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("onProviderEnabled");
-            }
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("onProviderDisabled");
-            }
-        }
-    };
 }

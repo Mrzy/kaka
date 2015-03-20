@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xml>
+
+    <d
+        d1="00"
+        d2="晴"
+        d3="Sunny" />
+
+    <d
+        d1="01"
+        d2="多云"
+        d3="Cloudy" />
+
+    <d
+        d1="02"
+        d2="阴"
+        d3="Overcast" />
+
+    <d
+        d1="04"
+        d2="雷阵雨"
+        d3="Thundershower" />
+
+    <d
+        d1="06"
+        d2="雨夹雪"
+        d3="Sleet" />
+
+    <d
+        d1="07"
+        d2="小雨"
+        d3="Light rain" />
+
+    <d
+        d1="08"
+        d2="中雨"
+        d3="Moderate rain" />
+
+    <d
+        d1="09"
+        d2="大雨"
+        d3="Heavy rain" />
+
+    <d
+        d1="10"
+        d2="暴雨"
+        d3="Storm" />
+
+    <d
+        d1="14"
+        d2="小雪"
+        d3="Light snow" />
+
+    <d
+        d1="15"
+        d2="中雪"
+        d3="Moderate snow" />
+
+    <d
+        d1="16"
+        d2="大雪"
+        d3="Heavy snow" />
+
+    <d
+        d1="17"
+        d2="暴雪"
+        d3="Snowstorm" />
+
+    <d
+        d1="18"
+        d2="雾"
+        d3="Foggy" />
+
+    <d
+        d1="29"
+        d2="浮尘"
+        d3="Dust" />
+
+    <d
+        d1="53"
+        d2="霾"
+        d3="Haze" />
+
+    <d
+        d1="000"
+        d2="夜间晴"
+        d3="Sunny night" />
+
+    <d
+        d1="001"
+        d2="夜间多云"
+        d3="Cloudy night" />
+
+</xml>

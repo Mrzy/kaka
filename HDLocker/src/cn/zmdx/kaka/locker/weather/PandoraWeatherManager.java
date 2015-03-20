@@ -1,36 +1,40 @@
 
 package cn.zmdx.kaka.locker.weather;
 
-import java.text.NumberFormat;
-
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.location.Location;
+import android.content.Context;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.RequestManager;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
+import cn.zmdx.kaka.locker.weather.utils.ParseWeatherJsonUtils;
+import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
+import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
 
-import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.JsonObjectRequest;
 
 public class PandoraWeatherManager {
+    private static final String TAG = "PandoraWeatherManager";
 
-    private static final String BASE_WEATHER_URL = "http://caiyunapp.com/fcgi-bin/v1/api.py?";
-
-    private static final String TOKEN = BuildConfig.DEBUG ? "TAkhjf8d1nlSlspN" : "D8u1CU4iFc-lVDci";
+    private Context mContext = HDApplication.getContext();
 
     private static PandoraWeatherManager INSTANCE = null;
 
-    public interface IWeatherCallback {
-        void onSuccess(PandoraWeather pw);
+    private String weatherUrl;
 
-        void onFailed();
-    }
+    private String cityNameStr = null;
+
+    private String areaId = null;
 
     private PandoraWeatherManager() {
     }
@@ -42,157 +46,98 @@ public class PandoraWeatherManager {
         return INSTANCE;
     }
 
-    public void getCurrentWeather(final IWeatherCallback callback) {
-        HDBThreadUtils.runOnWorker(new Runnable() {
+    public interface ISmartWeatherCallback {
+        void onSuccess(SmartWeatherInfo smartWeatherInfo);
 
+        void onFailure();
+    }
+
+    /**
+     * 获取气象台天气接口
+     */
+    public interface IGetSmartWeatherCallback {
+        // 从本地获取天气
+        SmartWeatherInfo getWeatherFormCache();
+
+        // 从网络获取天气
+        void getCurrentSmartWeather(final ISmartWeatherCallback callback);
+    }
+
+    public SmartWeatherInfo getWeatherFromCache() {
+        SmartWeatherInfo smartWeatherInfo = null;
+        String lastWeatherInfo = PandoraConfig.newInstance(mContext).getLastWeatherInfo();
+        JSONObject weatherObj;
+        try {
+            weatherObj = new JSONObject(lastWeatherInfo);
+            smartWeatherInfo = ParseWeatherJsonUtils.parseWeatherJson(weatherObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return smartWeatherInfo;
+    }
+
+    public void getWeatherFromNetwork(final ISmartWeatherCallback callback) {
+        HDBThreadUtils.runOnWorker(new Runnable() {
             @Override
             public void run() {
-                internalGetCurrentWeather(callback);
+                internalGetCurrentSmartWeather(callback);
             }
         });
     }
 
-    private void internalGetCurrentWeather(final IWeatherCallback callback) {
+    private void internalGetCurrentSmartWeather(final ISmartWeatherCallback callback) {
         if (callback == null) {
             throw new IllegalArgumentException("the callback must not be null");
         }
-
         if (!HDBNetworkState.isNetworkAvailable()) {
-            callback.onFailed();
-            return;
-        }
-        Location loc = PandoraLocationManager.getRecentLocation();
-        final String lonlat = makeLocationString(loc);
-        if (TextUtils.isEmpty(lonlat)) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("未获得位置信息，中断请求天气数据");
-            }
-            callback.onFailed();
+            callback.onFailure();
             return;
         }
         JsonObjectRequest request = null;
-        request = new JsonObjectRequest(getUrl(lonlat), null, new Listener<JSONObject>() {
-
+        request = new JsonObjectRequest(getCurWeatherURL(), null, new Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 if (response == null) {
-                    callback.onFailed();
+                    callback.onFailure();
                     return;
-                }
-                String status = response.optString("status");
-                if (!TextUtils.isEmpty(status) && status.equals("ok")) {
-                    PandoraWeather pw = new PandoraWeather();
-                    pw.setTemp(response.optInt("temp"));
-                    pw.setServerTime(response.optString("server_time"));
-                    pw.setDescriptNow(response.optString("descript_now"));
-                    pw.setSummary(response.optString("summary"));
-                    callback.onSuccess(pw);
-                    if (BuildConfig.DEBUG) {
-                        HDBLOG.logD("caiyun weather data returned:" + pw.toString());
-                    }
                 } else {
+                    String date = SmartWeatherUtils.getDate();
                     if (BuildConfig.DEBUG) {
-                        HDBLOG.logD("获取天气数据失败, status code:" + status);
+                        HDBLOG.logD("--response-->>" + response);
                     }
-                    callback.onFailed();
+                    PandoraConfig.newInstance(mContext).saveLastCheckWeatherTime(date);
+                    SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
+                            .parseWeatherJson(response);
+                    PandoraConfig.newInstance(mContext).saveLastWeatherInfo(response.toString());
+                    callback.onSuccess(smartWeatherInfo);
                 }
             }
-
-        }, new ErrorListener() {
-
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (BuildConfig.DEBUG) {
                     error.printStackTrace();
                 }
-                callback.onFailed();
+                callback.onFailure();
             }
         });
         request.setShouldCache(false);
         RequestManager.getRequestQueue().add(request);
     }
 
-    /**
-     * 返回的字符串格式为：[经度],[纬度] 精确到小数点后4位
-     */
-    private String makeLocationString(Location location) {
-        if (location == null) {
-            return null;
+    private String getCurWeatherURL() {
+        cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
+        if (!TextUtils.isEmpty(cityNameStr)) {
+            areaId = XMLParserUtils.getAreaId(cityNameStr);
+        } else {
+            String lastCityName = PandoraConfig.newInstance(mContext).getLastCityName();
+            areaId = XMLParserUtils.getAreaId(lastCityName);
         }
-        final double latitude = location.getLatitude(); // 经度
-        final double longitude = location.getLongitude(); // 纬度
-//        final double altitude = location.getAltitude(); // 海拔
-
-        final NumberFormat format = NumberFormat.getNumberInstance();
-        format.setMaximumFractionDigits(4);
+        weatherUrl = SmartWeatherUtils.getWeatherUrl(areaId);
         if (BuildConfig.DEBUG) {
-            HDBLOG.logD("latitude " + latitude + "  longitude:" + longitude);
+            HDBLOG.logD("--areaid-->>" + areaId + "\n--weatherUrl-->>" + weatherUrl);
+            HDBLOG.logD("cityNameStr: ---->" + cityNameStr);
         }
-        return format.format(longitude) + "," + format.format(latitude);
-    }
-
-    private String getUrl(String lonlat) {
-        StringBuilder sb = new StringBuilder(BASE_WEATHER_URL);
-        sb.append("token=" + TOKEN);
-        sb.append("&product=minutes_prec");
-        sb.append("&format=json");
-        sb.append("&lonlat=" + lonlat);
-        return sb.toString();
-    }
-
-    public static final class PandoraWeather {
-        // 当前温度
-        private int temp;
-
-        // 当前天气和风力的描述
-        private String descriptNow;
-
-        // 未来一小时雨量描述
-        private String summary;
-
-        // 服务器时间
-        private String serverTime;
-
-        public int getTemp() {
-            return temp;
-        }
-
-        public void setTemp(int temp) {
-            this.temp = temp;
-        }
-
-        public String getDescriptNow() {
-            return descriptNow;
-        }
-
-        public void setDescriptNow(String descriptNow) {
-            this.descriptNow = descriptNow;
-        }
-
-        public String getSummary() {
-            return summary;
-        }
-
-        public void setSummary(String summary) {
-            this.summary = summary;
-        }
-
-        public String getServerTime() {
-            return serverTime;
-        }
-
-        public void setServerTime(String serverTime) {
-            this.serverTime = serverTime;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append("temp:" + temp);
-            sb.append(", descriptNow" + descriptNow);
-            sb.append(", summary" + summary);
-            sb.append(", serverTime" + serverTime);
-            return sb.toString();
-        }
+        return weatherUrl;
     }
 }

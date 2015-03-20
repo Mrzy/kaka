@@ -60,8 +60,9 @@ import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.OldOnlineWallpaperView;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
-import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.IWeatherCallback;
-import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.PandoraWeather;
+import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
+import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
+import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
 import cn.zmdx.kaka.locker.widget.DigitalClocks;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
 import cn.zmdx.kaka.locker.widget.SlidingPaneLayout;
@@ -70,6 +71,8 @@ import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 import cn.zmdx.kaka.locker.widget.WallpaperPanelLayout;
 
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
 
@@ -77,6 +80,8 @@ import com.umeng.update.UpdateStatus;
 public class LockScreenManager {
 
     protected static final int MAX_TIMES_SHOW_GUIDE = 3;
+
+    protected static final String TAG = "LockScreenManager";
 
     private SlidingUpPanelLayout mSliderView;
 
@@ -141,6 +146,9 @@ public class LockScreenManager {
     private boolean mKeepBlurEffect = false;
 
     private NotificationListView mNotificationListView;
+    private ShimmerTextView mShimmerTextView;
+
+    private Shimmer mShimmer;
 
     public interface ILockScreenListener {
         void onLock();
@@ -244,6 +252,14 @@ public class LockScreenManager {
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
     }
 
+    private void toggleAnimation(View target) {
+        if (mShimmer != null) {
+            mShimmer.setDuration(5000);// 默认是1s
+            mShimmer.setStartDelay(1800);// 默认间隔为0
+            mShimmer.start(mShimmerTextView);
+        }
+    }
+
     private void initNewLockScreenViews() {
         mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.new_pandora_lockscreen, null);
@@ -271,6 +287,10 @@ public class LockScreenManager {
                 R.layout.pandora_password_pager_layout, null);
         initSecurePanel(page1);
         mMainPage = LayoutInflater.from(mContext).inflate(R.layout.pandora_main_pager_layout, null);
+        mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
+        mShimmer = new Shimmer();
+        toggleAnimation(mMainPage);
+
         mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         mDate = (TextView) mMainPage.findViewById(R.id.lock_date);
@@ -512,95 +532,34 @@ public class LockScreenManager {
         mContext.startActivity(intent);
     }
 
-    private void processWeatherInfo() {
-        final long lastCheckTime = mPandoraConfig.getLastCheckWeatherTime();
-        if (System.currentTimeMillis() - lastCheckTime < PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
+    public void processWeatherInfo() {
+        long str2TimeMillis = SmartWeatherUtils.str2TimeMillis(mPandoraConfig
+                .getLastCheckWeatherTime());
+        if (System.currentTimeMillis() - str2TimeMillis < PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("检查天气条件不满足,使用缓存数据");
             }
-            final String info = mPandoraConfig.getLastWeatherInfo();
-            if (!TextUtils.isEmpty(info)) {
-                try {
-                    String[] wi = info.split("#");
-                    PandoraWeather pw = new PandoraWeather();
-                    pw.setTemp(Integer.parseInt(wi[0]));
-                    pw.setSummary(wi[1]);
-                    updateWeatherInfo(pw);
-                } catch (Exception e) {
-                    updateWeatherInfo(null);
-                }
+            SmartWeatherInfo smartWeatherInfo = PandoraWeatherManager.getInstance()
+                    .getWeatherFromCache();
+            if (smartWeatherInfo != null) {
+                PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
             } else {
-                updateWeatherInfo(null);
+                PandoraBoxManager.newInstance(mContext).updateView(null);
             }
-            return;
-        }
-        // TODO
-        String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar.getInstance()
-                .get(Calendar.HOUR_OF_DAY));
-        mWeatherSummary.setText(promptString);
-        mWeatherSummary.setVisibility(View.VISIBLE);
-        if (null != mOnlineWallpaperView) {
-            mOnlineWallpaperView.setWeatherString(promptString);
-        }
-        PandoraWeatherManager.getInstance().getCurrentWeather(new IWeatherCallback() {
+        } else {
+            PandoraWeatherManager.getInstance().getWeatherFromNetwork(new ISmartWeatherCallback() {
 
-            @Override
-            public void onSuccess(PandoraWeather pw) {
-                final int temp = pw.getTemp();
-                final String summary = pw.getSummary();
-                mPandoraConfig.saveLastWeatherInfo(temp + "#" + summary);
-                updateWeatherInfo(pw);
-                mPandoraConfig.saveLastCheckWeatherTime(System.currentTimeMillis());
-            }
-
-            @Override
-            public void onFailed() {
-                updateWeatherInfo(null);
-            }
-        });
-
-    }
-
-    private void updateWeatherInfo(final PandoraWeather pw) {
-        HDBThreadUtils.runOnUi(new Runnable() {
-
-            @Override
-            public void run() {
-                if (mWeatherSummary == null) {
-                    return;
+                @Override
+                public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
+                    PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
                 }
-                if (pw == null) {
-                    String promptString = PandoraUtils.getTimeQuantumString(mContext, Calendar
-                            .getInstance().get(Calendar.HOUR_OF_DAY));
-                    mWeatherSummary.setText(promptString);
-                    mWeatherSummary.setVisibility(View.VISIBLE);
-                    if (null != mOnlineWallpaperView) {
-                        mOnlineWallpaperView.setWeatherString(promptString);
-                    }
-                } else {
-                    int temp = pw.getTemp();
-                    String summary = pw.getSummary();
-                    if (mTemperature != null) {
-                        if (mTemperature.getText() != null
-                                && !mTemperature.getText().toString().endsWith("ºC")) {
-                            mTemperature.append(" " + temp + "ºC");
-                            if (null != mOnlineWallpaperView) {
-                                mOnlineWallpaperView.setTemperature(" " + temp + "ºC");
-                            }
-                        }
-                    }
-                    if (mWeatherSummary == null) {
-                        return;
-                    }
-                    mWeatherSummary.setVisibility(View.VISIBLE);
-                    mWeatherSummary.setText(summary);
-                    if (null != mOnlineWallpaperView) {
-                        mOnlineWallpaperView.setWeatherString(summary);
-                    }
-                }
-            }
-        });
 
+                @Override
+                public void onFailure() {
+                    PandoraBoxManager.newInstance(mContext).updateView(null);
+                }
+            });
+        }
     }
 
     /**

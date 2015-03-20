@@ -11,10 +11,13 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
-import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
+import cn.zmdx.kaka.locker.policy.PandoraPolicy;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
 public class PandoraService extends Service {
 
@@ -24,6 +27,8 @@ public class PandoraService extends Service {
      * 中兴手机闹钟的action
      */
     public static final String ALARMALERT_ACTION_ZX = "com.zdworks.android.zdclock.ACTION_ALARM_ALERT";
+
+    private Context mContext = HDApplication.getContext();
 
     @Override
     public void onCreate() {
@@ -73,6 +78,16 @@ public class PandoraService extends Service {
 
     private void unRegisterBroadcastReceiver() {
         unregisterReceiver(mReceiver);
+    }
+
+    public void timingUpdateCurLocation() {
+        long lastCheckLocationTime = PandoraConfig.newInstance(mContext).getLastCheckLocationTime();
+        if (System.currentTimeMillis() - lastCheckLocationTime >= PandoraPolicy.MIN_UPDATE_LOCATION_TIME) {
+            PandoraLocationManager.getInstance(mContext).requestLocation();
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("---Timing update CurLocation-->>");
+            }
+        }
     }
 
     private static boolean isComingCall = false;
@@ -137,6 +152,7 @@ public class PandoraService extends Service {
                 LockScreenManager.getInstance().lock();
                 LockScreenManager.getInstance().onScreenOff();
                 sendObtainActiveNotificationMsg();
+                timingUpdateCurLocation();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 LockScreenManager.getInstance().onScreenOn();
             }
