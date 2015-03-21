@@ -179,8 +179,8 @@
     <string name="pandora_share_to_sina">分享到新浪微博</string>
     <string name="pandora_share_to_qq">分享到QQ空间</string>
     <string name="notification_service_name">潘多拉锁屏</string>
-    <string name="notify_guide_openpermission_title">请开启通知权限！</string>
-    <string name="notify_guide_openpermission_content">开启通知权限后，这里才会显示您qq、微信的未读消息</string>
+    <string name="notify_guide_openpermission_title">请开启通知权限！（强烈建议）</string>
+    <string name="notify_guide_openpermission_content">未接来电未读微信不再错过</string>
     <string name="notify_guide_opendetail_title">右划查看通知详情</string>
     <string name="notify_guide_opendetail_content">这是一个示例通知，打开后会帮您跳转到潘多拉设置页面</string>
     <string name="notify_guide_remove_title">这是什么？</string>

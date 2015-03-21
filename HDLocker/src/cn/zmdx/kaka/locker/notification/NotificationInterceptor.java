@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -20,6 +21,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.service.notification.StatusBarNotification;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
@@ -54,6 +56,10 @@ public class NotificationInterceptor extends Handler {
             : 2 * 60 * 60 * 1000;
 
     private static final int MSG_DISPATCH_CUSTOM_NOTIFICATION = 6;
+
+    protected static final int MSG_CHECK_PERMISSION_RESULT = 7;
+
+    private static final long CHECK_PERMISSION_DURATION = BuildConfig.DEBUG ? 60 * 1000 : 24 * 60 * 60 * 1000;
 
     private static NotificationInterceptor INSTANCE;
 
@@ -203,10 +209,38 @@ public class NotificationInterceptor extends Handler {
                 }
                 handleDispatchCustomNotification();
                 break;
+            case MSG_CHECK_PERMISSION_RESULT:
+                boolean granted = msg.arg1 == 1;
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("----返回是否开启通知权限的结果:" + granted);
+                }
+                if (!granted) {
+                    long lastTime = NotificationPreferences.getInstance(mContext).getLastTimeCheckNotificationPermission();
+                    long cur = System.currentTimeMillis();
+                    if (cur - lastTime > CHECK_PERMISSION_DURATION) {
+                        final NotificationInfo info = PandoraNotificationFactory.createGuideOpenNotifyPermissionNotification();
+                        sendCustomNotification(info);
+                        NotificationPreferences.getInstance(mContext).saveLastTimeCheckNotificationPermission(cur);
+                    }
+                }
+                break;
             default:
 
         }
     };
+
+    /**
+     * 检查是否开启了读取通知的权限。检查结果会发送 MSG_CHECK_PERMISSION_RESULT 的消息
+     */
+    public void checkPermission() {
+        if (!isDeviceAvailable()) {
+            return;
+        }
+
+        Intent intent = new Intent();
+        intent.setAction(PandoraNotificationService.ACTION_CHECK_PERMISSION);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
 
     private void handleDispatchCustomNotification() {
         // 删除过期自定义通知

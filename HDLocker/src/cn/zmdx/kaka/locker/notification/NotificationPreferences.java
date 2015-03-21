@@ -6,7 +6,6 @@ import java.util.Set;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
@@ -22,6 +21,8 @@ public class NotificationPreferences {
     private static final String KEY_CUSTOM_NOTIFICATION_DATA = "kcnd";
 
     private static final String KEY_LAST_SHOW_GUIDE_OPEN_NOTIFICATION = "klsgon";
+
+    private static final String KEY_LAST_CHECK_NOTIFICATION_TIME = "klcnt";
 
     private Context mContext;
 
@@ -102,5 +103,13 @@ public class NotificationPreferences {
 
     public void saveLastShowGuideOpenNotificationServiceTime(long currentTime) {
         mSp.edit().putLong(KEY_LAST_SHOW_GUIDE_OPEN_NOTIFICATION, currentTime).commit();
+    }
+
+    public long getLastTimeCheckNotificationPermission() {
+        return mSp.getLong(KEY_LAST_CHECK_NOTIFICATION_TIME, 0);
+    }
+
+    public void saveLastTimeCheckNotificationPermission(long time) {
+        mSp.edit().putLong(KEY_LAST_CHECK_NOTIFICATION_TIME, time).commit();
     }
 }

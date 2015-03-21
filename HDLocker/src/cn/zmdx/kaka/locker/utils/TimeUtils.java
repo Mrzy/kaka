@@ -11,6 +11,10 @@ import android.content.Context;
 public class TimeUtils {
 
     public static String getInterval(Context context, long createAt) {
+        if (createAt <= 0) {
+            return "";
+        }
+
         // 定义最终返回的结果字符串。
         String interval = null;
 
@@ -36,11 +40,11 @@ public class TimeUtils {
             long day = ((second / 60) / 60) / 24;
             interval = day + context.getString(R.string.day);
         } else if (second >= 60 * 60 * 24 * 7) {
-            interval = getFormatTime(new Date(createAt), "MM-dd hh:mm");
+            interval = getFormatTime(new Date(createAt), "MM-dd");
         } else if (second >= 60 * 60 * 24 * 365) {
-            interval = getFormatTime(new Date(createAt), "YYYY-MM-dd hh:mm");
+            interval = getFormatTime(new Date(createAt), "YYYY-MM-dd");
         } else {
-            interval = "0";
+            interval = "";
         }
         // 最后返回处理后的结果。
         return interval;

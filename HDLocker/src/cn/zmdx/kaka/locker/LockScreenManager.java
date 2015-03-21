@@ -44,6 +44,7 @@ import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
@@ -145,6 +146,7 @@ public class LockScreenManager {
     private boolean mKeepBlurEffect = false;
 
     private NotificationListView mNotificationListView;
+
     private ShimmerTextView mShimmerTextView;
 
     private Shimmer mShimmer;
@@ -1080,6 +1082,9 @@ public class LockScreenManager {
         if (mDigitalClockView != null) {
             mDigitalClockView.setTickerStoped(true);
         }
+
+        // 检查是否有读取通知权限
+        NotificationInterceptor.getInstance(mContext).checkPermission();
     }
 
     public void onScreenOn() {
