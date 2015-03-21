@@ -265,7 +265,7 @@
     <string name="pandora_wallpaper_month_october">Oct</string>
     <string name="pandora_wallpaper_month_november">Nov</string>
     <string name="pandora_wallpaper_month_december">Dec</string>
-    
+
     <string name="init_setting_xiaomi_prompt">小米用户必备设置</string>
     <string name="init_setting_recommended_setting_prompt">推荐设置</string>
 
@@ -276,4 +276,5 @@
     <string name="newsdetail_tip_please_check_network">加载失败，请检查您的网络</string>
     <string name="pandora_locker_shimmer_unlock_str">> 滑动来解锁</string>
 
+    <string name="tip_no_news">暂无爆点</string>
 </resources>

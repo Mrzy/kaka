@@ -9,11 +9,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
-import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
-import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
@@ -141,11 +139,11 @@ public class NewsFactory {
     }
 
     private static String getLastModified(List<ServerImageData> data, boolean older) {
-        long time = 0;
-        if (older) {
-            time = System.currentTimeMillis();
+        if (data != null && data.size() == 0) {
+            return String.valueOf(System.currentTimeMillis());
         }
 
+        long time = 0;
         if (data != null && data.size() > 0) {
             for (ServerImageData sid : data) {
                 final String modifyTime = sid.getCollectTime();

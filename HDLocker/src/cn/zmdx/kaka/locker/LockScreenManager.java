@@ -469,7 +469,7 @@ public class LockScreenManager {
 
         public void onPanelCollapsed(View panel) {
             resumeWallpaperTranslation();
-            PandoraBoxManager.newInstance(mContext).closeDetailPage(true);
+            PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
             PandoraBoxManager.newInstance(mContext).reset();
         };
     };
