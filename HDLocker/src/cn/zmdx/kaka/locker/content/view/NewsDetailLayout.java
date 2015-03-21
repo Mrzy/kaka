@@ -89,7 +89,14 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         this(HDApplication.getContext());
         mPbManager = pbManager;
         mData = sid;
-        load(sid.getImageDesc());
+        // 这里delay300ms之后再加载网页，以解决详细页出场动画卡顿的问题
+        postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                load(mData.getImageDesc());
+            }
+        }, 300);
         ShareSDK.initSDK(HDApplication.getContext());
         if (mData.isLiked()) {
             mLikeImageView.setImageDrawable(getResources().getDrawable(
