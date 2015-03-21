@@ -678,7 +678,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
             @Override
             public void onCloseDetailPage() {
-                closeDetailPage();
+                closeDetailPage(true);
             }
 
             @Override
@@ -699,9 +699,20 @@ public class PandoraBoxManager implements View.OnClickListener {
         view.animate().translationX(0).setDuration(300).start();
     }
 
-    public void closeDetailPage() {
-        mDetailLayout.setVisibility(View.INVISIBLE);
-        mDetailLayout.removeAllViews();
+    public void closeDetailPage(boolean withAnimator) {
+        if (withAnimator) {
+            mDetailLayout.animate().translationX(mDetailLayout.getWidth()).setDuration(300)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mDetailLayout.setVisibility(View.INVISIBLE);
+                            mDetailLayout.removeAllViews();
+                        }
+                    }).start();
+        } else {
+            mDetailLayout.setVisibility(View.INVISIBLE);
+            mDetailLayout.removeAllViews();
+        }
     }
 
     private static class NewsPagerAdapter extends PagerAdapter {

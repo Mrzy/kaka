@@ -33,8 +33,6 @@ public final class PandoraNotificationService extends NotificationListenerServic
 
     public static final String ACTION_OBTAIN_ACTIVE_NOTIFICATIONS = "action_obtain_active_notification";
 
-    public static boolean sNotificationServiceRunning = false;
-
     @Override
     public IBinder onBind(Intent intent) {
         return super.onBind(intent);
@@ -56,7 +54,6 @@ public final class PandoraNotificationService extends NotificationListenerServic
         filter.addAction(ACTION_OBTAIN_ACTIVE_NOTIFICATIONS);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
         super.onCreate();
-        sNotificationServiceRunning = true;
     }
 
     @Override
@@ -172,7 +169,6 @@ public final class PandoraNotificationService extends NotificationListenerServic
     public void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
         super.onDestroy();
-        sNotificationServiceRunning = false;
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("PandoraNotificationService onDestroy");
         }
@@ -197,7 +193,17 @@ public final class PandoraNotificationService extends NotificationListenerServic
                     cancelNotification(key);
                 }
             } else if (action.equals(ACTION_OBTAIN_ACTIVE_NOTIFICATIONS)) {
-                StatusBarNotification[] sbns = getActiveNotifications();
+                StatusBarNotification[] sbns = null;
+                try {
+                    sbns = getActiveNotifications();
+                } catch (Exception e) {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logE("getActiveNotifications error, may be not obtain notification permission");
+                    }
+                }
+                if (sbns == null) {
+                    return;
+                }
                 NotificationInterceptor interceptor = NotificationInterceptor
                         .getInstance(getApplicationContext());
                 Message msg = interceptor.obtainMessage();

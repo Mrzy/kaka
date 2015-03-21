@@ -79,32 +79,40 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
         holder.mTimeTv.setText(time);
         Picasso picasso = Picasso.with(mContext);
         picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
-        RequestCreator rc = picasso.load(data.getUrl());
-        int errorRes = R.drawable.icon_newsimage_load_error;
-        if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
-                && !HDBNetworkState.isWifiNetwork()) {
-            rc.networkPolicy(NetworkPolicy.OFFLINE);
-            errorRes = R.drawable.icon_newsimage_loading;
+        RequestCreator rc = null;
+        try {
+            rc = picasso.load(data.getUrl());
+        } catch (Exception e) {
         }
-        rc.placeholder(R.drawable.icon_newsimage_loading)
-                .error(errorRes).transform(new Transformation() {
-
-                    @Override
-                    public String key() {
-                        return "matrix()";
-                    }
-
-                    @Override
-                    public Bitmap transform(Bitmap source) {
-                        int cardWidth = holder.mCardView.getWidth();
-                        int imgWidth = source.getWidth();
-                        int imgHeight = source.getHeight();
-                        float scaleRate = (float) cardWidth / (float) imgWidth;
-                        int newHeight = (int) (scaleRate * imgHeight);
-                        Bitmap result = ImageUtils.scaleTo(source, cardWidth, newHeight, true);
-                        return result == null ? source : result;
-                    }
-                }).into(holder.mImageView);
+        if (rc == null) {
+            picasso.load(R.drawable.icon_newsimage_load_error).into(holder.mImageView);
+        } else {
+            int errorRes = R.drawable.icon_newsimage_load_error;
+            if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
+                    && !HDBNetworkState.isWifiNetwork()) {
+                rc.networkPolicy(NetworkPolicy.OFFLINE);
+                errorRes = R.drawable.icon_newsimage_loading;
+            }
+            rc.placeholder(R.drawable.icon_newsimage_loading).error(errorRes)
+            .transform(new Transformation() {
+                
+                @Override
+                public String key() {
+                    return "matrix()";
+                }
+                
+                @Override
+                public Bitmap transform(Bitmap source) {
+                    int cardWidth = holder.mCardView.getWidth();
+                    int imgWidth = source.getWidth();
+                    int imgHeight = source.getHeight();
+                    float scaleRate = (float) cardWidth / (float) imgWidth;
+                    int newHeight = (int) (scaleRate * imgHeight);
+                    Bitmap result = ImageUtils.scaleTo(source, cardWidth, newHeight, true);
+                    return result == null ? source : result;
+                }
+            }).into(holder.mImageView);
+        }
     }
 
     public interface OnItemClickListener {

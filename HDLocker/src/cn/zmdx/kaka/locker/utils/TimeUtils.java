@@ -22,19 +22,16 @@ public class TimeUtils {
             second = 0;
         }
 
-        if (second <= 300) {
+        if (second <= 60) {
             interval = context.getString(R.string.justnow);
         } else if (second < 60 * 60) {
             interval = second / 60 + context.getString(R.string.minute);
         } else if (second >= 60 * 60 && second < 60 * 60 * 24) {
             long hour = (second / 60) / 60;
-            if (hour <= 3) {
-                interval = hour + context.getString(R.string.hours);
-            } else {
-                interval = context.getString(R.string.today) + getFormatTime(new Date(createAt), "hh:mm");
-            }
+            interval = hour + context.getString(R.string.hours);
         } else if (second >= 60 * 60 * 24 && second <= 60 * 60 * 24 * 2) {
-            interval = context.getString(R.string.yesterday) + getFormatTime(new Date(createAt), "hh:mm");
+            interval = context.getString(R.string.yesterday)
+                    + getFormatTime(new Date(createAt), "hh:mm");
         } else if (second >= 60 * 60 * 24 * 2 && second <= 60 * 60 * 24 * 7) {
             long day = ((second / 60) / 60) / 24;
             interval = day + context.getString(R.string.day);

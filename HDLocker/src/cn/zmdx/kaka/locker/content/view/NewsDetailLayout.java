@@ -133,9 +133,12 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
                     String failingUrl) {
                 isLoadError = true;
                 if (HDBNetworkState.isNetworkAvailable()) {
-                    view.loadData(getContext().getString(R.string.newsdetail_tip_press_try_again), "text/html; charset=UTF-8", null);
+                    view.loadData(getContext().getString(R.string.newsdetail_tip_press_try_again),
+                            "text/html; charset=UTF-8", null);
                 } else {
-                    view.loadData(getContext().getString(R.string.newsdetail_tip_please_check_network), "text/html; charset=UTF-8", null);
+                    view.loadData(
+                            getContext().getString(R.string.newsdetail_tip_please_check_network),
+                            "text/html; charset=UTF-8", null);
                 }
                 super.onReceivedError(view, errorCode, description, failingUrl);
             }
@@ -204,18 +207,7 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
     }
 
     private void exit(boolean withAnimator) {
-        if (withAnimator) {
-            animate().translationX(getWidth()).setDuration(300)
-            .setListener(new AnimatorListenerAdapter() {
-                
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mPbManager.closeDetailPage();
-                }
-            }).start();
-        } else {
-            mPbManager.closeDetailPage();
-        }
+        mPbManager.closeDetailPage(withAnimator);
     }
 
     @Override

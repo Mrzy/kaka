@@ -26,9 +26,6 @@ public class NotificationGuideHelper {
             case 0:// 通知功能说明，提示双击移除
                 return PandoraNotificationFactory.createGuideRemoveNotification();
             case 1:// 教学开启通知教程
-                if (PandoraNotificationService.sNotificationServiceRunning) {
-                    return null;
-                }
                 long lastPromptTime = NotificationPreferences.getInstance(context)
                         .getLastShowGuideOpenNotificationServiceTime();
                 long currentTime = System.currentTimeMillis();

@@ -87,15 +87,24 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
         } else {
             Picasso picasso = Picasso.with(mContext);
             picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
-            RequestCreator rc = picasso.load(data.getUrl());
-            int errorRes = R.drawable.icon_newsimage_load_error;
-            if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
-                    && !HDBNetworkState.isWifiNetwork()) {
-                rc.networkPolicy(NetworkPolicy.OFFLINE);
-                errorRes = R.drawable.icon_newsimage_loading;
+            RequestCreator rc = null;
+            try {
+                rc = picasso.load(data.getUrl());
+            } catch (Exception e) {
             }
-            rc.placeholder(R.drawable.icon_newsimage_loading)
-                    .error(errorRes).into(holder.mImageView);
+            
+            if (rc == null) {
+                picasso.load(R.drawable.icon_newsimage_load_error).into(holder.mImageView);
+            } else {
+                int errorRes = R.drawable.icon_newsimage_load_error;
+                if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
+                        && !HDBNetworkState.isWifiNetwork()) {
+                    rc.networkPolicy(NetworkPolicy.OFFLINE);
+                    errorRes = R.drawable.icon_newsimage_loading;
+                }
+                rc.placeholder(R.drawable.icon_newsimage_loading)
+                .error(errorRes).into(holder.mImageView);
+            }
         }
     }
 
