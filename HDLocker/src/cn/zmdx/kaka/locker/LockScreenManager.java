@@ -272,6 +272,13 @@ public class LockScreenManager {
         mBlurImageView = (SensorImageView) mEntireView.findViewById(R.id.blurImageView);
         mBlurImageView.setAlpha(0.0f);// 默认模糊的view不显示，透明度设置为0
         mSensorImageView = (SensorImageView) mEntireView.findViewById(R.id.lockerBg);
+        if (!PandoraConfig.newInstance(mContext).isGravitySenorOn()) {
+            mBlurImageView.setTransitionMode(SensorImageView.TRANSITION_MODE_STATIC);
+            mSensorImageView.setTransitionMode(SensorImageView.TRANSITION_MODE_STATIC);
+        } else {
+            mBlurImageView.setTransitionMode(SensorImageView.TRANSITION_MODE_SENSOR);
+            mSensorImageView.setTransitionMode(SensorImageView.TRANSITION_MODE_SENSOR);
+        }
 
         mDimBg = mEntireView.findViewById(R.id.dimBg);
         mDimBg.setAlpha(0);

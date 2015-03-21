@@ -435,7 +435,7 @@ public class PandoraConfig {
     }
 
     public boolean isGravitySenorOn() {
-        return mSp.getBoolean(KEY_GRAVITY_SENOR, false);
+        return mSp.getBoolean(KEY_GRAVITY_SENOR, true);
     }
 
     public void saveGravitySenorState(boolean isEnable) {
