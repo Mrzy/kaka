@@ -42,7 +42,6 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.BatteryView;
 import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
-import cn.zmdx.kaka.locker.content.box.DefaultBox;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
@@ -235,7 +234,6 @@ public class LockScreenManager {
         mWinManager.addView(mEntireView, mWinParams);
         startFakeActivity();
 
-        registBackPressedListener(mBackPressedListener);
         // refreshContent();
         // setDate();
 
@@ -861,24 +859,6 @@ public class LockScreenManager {
         }
     }
 
-    /**
-     * 设置拉开后内容的背景图片，如果onlyDisplayCustomImage为true，则只有当设置了个性化背景时才会显示，否则不显示任何东西（
-     * 包括引导设置页）；如果onlyDisplayCustomImage为false，则可能会显示引导设置页
-     * 
-     * @param onlyDisplayCustomImage
-     */
-    private void initDefaultPhoto(boolean onlyDisplayCustomImage) {
-        final DefaultBox box = (DefaultBox) PandoraBoxManager.newInstance(mContext).getDefaultBox();
-        if (onlyDisplayCustomImage) {
-            if (box.isSetCustomImage()) {
-                View defaultView = box.getRenderedView();
-                mBoxView.addView(defaultView);
-            }
-        } else {
-            mBoxView.addView(box.getRenderedView());
-        }
-    }
-
     private void initSecurePanel(ViewGroup container) {
         final KeyguardLockerManager klm = new KeyguardLockerManager(mContext);
         final View view = klm.getCurrentLockerView(new IUnlockListener() {
@@ -999,8 +979,6 @@ public class LockScreenManager {
             notifyUnLocked();
         cancelAnimatorIfNeeded();
 
-        unRegistBackPressedListener(mBackPressedListener);
-
         PandoraBoxManager.newInstance(mContext).onFinish();
 
         mWinManager.removeView(mEntireView);
@@ -1016,18 +994,6 @@ public class LockScreenManager {
             mUnLockRunnable = null;
         }
     }
-
-    private OnBackPressedListener mBackPressedListener = new OnBackPressedListener() {
-
-        @Override
-        public void onBackPressed() {
-            if (mSlidingUpView != null) {
-                if (mSlidingUpView.isPanelExpanded()) {
-                    mSlidingUpView.collapsePanel();
-                }
-            }
-        }
-    };
 
     private void cancelAnimatorIfNeeded() {
         if (null != mObjectAnimator) {

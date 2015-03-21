@@ -8,14 +8,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.BroadcastReceiver;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
@@ -36,19 +34,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
+import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.GeneralNewsPageAdapter;
-import cn.zmdx.kaka.locker.content.box.DefaultBox;
-import cn.zmdx.kaka.locker.content.box.IPandoraBox;
-import cn.zmdx.kaka.locker.content.box.IPandoraBox.PandoraData;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
-import cn.zmdx.kaka.locker.database.ServerImageDataModel;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
-import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
@@ -238,11 +232,25 @@ public class PandoraBoxManager implements View.OnClickListener {
             public void onPageScrollStateChanged(int arg0) {
             }
         });
+
+        LockScreenManager.getInstance().registBackPressedListener(mBackPressedListener);
     }
 
     public void onFinish() {
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mNotifyReceiver);
     }
+
+    private OnBackPressedListener mBackPressedListener = new OnBackPressedListener() {
+
+        @Override
+        public void onBackPressed() {
+            if (isDetailPageOpened()) {
+                closeDetailPage(true);
+            } else {
+                LockScreenManager.getInstance().collapseNewsPanel();
+            }
+        }
+    };
 
     private BroadcastReceiver mNotifyReceiver = new BroadcastReceiver() {
 
@@ -304,7 +312,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
                     mJokeRefreshView, true);
         } else {
-            throw new IllegalArgumentException("invalide news category");
+            throw new IllegalArgumentException("invalid news category");
         }
     }
 
@@ -689,6 +697,10 @@ public class PandoraBoxManager implements View.OnClickListener {
         return mWallpaperView;
     }
 
+    public boolean isDetailPageOpened() {
+        return mDetailLayout.getChildCount() > 0;
+    }
+
     public void openDetailPage(View view) {
         mDetailLayout.removeAllViews();
         mDetailLayout.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT,
@@ -762,48 +774,6 @@ public class PandoraBoxManager implements View.OnClickListener {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
-    }
-
-    public List<ServerImageData> cursorToList(Cursor cursor, List<ServerImageData> list) {
-        if (null != cursor) {
-            try {
-                while (cursor.moveToNext()) {
-                    ServerImageData imgData = new ServerImageData();
-                    imgData.setId(cursor.getInt(0));
-                    imgData.setImageDesc(cursor.getString(1));
-                    imgData.setTitle(cursor.getString(2));
-                    imgData.setUrl(cursor.getString(3));
-                    imgData.setCollectTime(cursor.getString(4));
-                    imgData.setCollectWebsite(cursor.getString(5));
-                    imgData.setReleaseTime(cursor.getString(6));
-                    imgData.setCloudId(cursor.getString(7));
-                    imgData.setDataType(cursor.getString(8));
-                    list.add(imgData);
-                }
-            } catch (Exception e) {
-                // TODO: handle exception
-            } finally {
-                cursor.close();
-            }
-        }
-        return list;
-    }
-
-    public List<ServerImageData> getDataFormLocalDB(int count) {
-        boolean containHtml = HDBNetworkState.isNetworkAvailable()
-                && HDBNetworkState.isWifiNetwork();
-        return ServerImageDataModel.getInstance().queryByRandom(count, containHtml);
-    }
-
-    public IPandoraBox getDefaultBox() {
-        if (BuildConfig.DEBUG) {
-            HDBLOG.logD("获得默认页面");
-        }
-        PandoraData pd = new PandoraData();
-        pd.setmImage(BitmapFactory.decodeResource(mContext.getResources(),
-                R.drawable.pandora_box_default));
-        pd.setDataType("DEFAULT_PAGE");
-        return new DefaultBox(mContext, pd);
     }
 
     public View getEntireView() {
