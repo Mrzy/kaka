@@ -693,14 +693,22 @@ public class PandoraBoxManager implements View.OnClickListener {
         mDetailLayout.removeAllViews();
         mDetailLayout.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
-        view.setTranslationX(mDetailLayout.getWidth());
-        mDetailLayout.bringChildToFront(view);
+        mDetailLayout.setTranslationX(mDetailLayout.getWidth());
+        mDetailLayout.bringToFront();
         mDetailLayout.setVisibility(View.VISIBLE);
-        view.animate().translationX(0).setDuration(300).start();
+        mDetailLayout.animate().translationX(0).setDuration(300)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mDetailLayout.setVisibility(View.VISIBLE);
+                        super.onAnimationEnd(animation);
+                    }
+                }).start();
     }
 
     public void closeDetailPage(boolean withAnimator) {
         if (withAnimator) {
+            mDetailLayout.getChildAt(0);
             mDetailLayout.animate().translationX(mDetailLayout.getWidth()).setDuration(300)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
