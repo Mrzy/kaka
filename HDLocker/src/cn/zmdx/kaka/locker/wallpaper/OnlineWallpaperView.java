@@ -31,6 +31,8 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
 
     private RecyclerView mRecyclerView;
 
+    private View mErrorView;
+
     private LinearLayoutManager mLayoutManager;
 
     private WallpaperPageAdapter mAdapter;
@@ -40,6 +42,8 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
     private boolean isLockScreen;
 
     private boolean isPressed;
+
+    private boolean isNetWorkError = false;
 
     private IOnlineWallpaperListener mListener;
 
@@ -74,6 +78,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
     private void initView() {
         mEntireView = LayoutInflater.from(mContext).inflate(R.layout.pager_wallpaper_layout, null);
         addView(mEntireView);
+        mErrorView = mEntireView.findViewById(R.id.error_view);
         mRecyclerView = (RecyclerView) mEntireView.findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -118,6 +123,9 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
 
     @Override
     public void onSuccecc(List<ServerOnlineWallpaper> list) {
+        isNetWorkError = false;
+        mErrorView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
         isLoadMore = false;
         if (list == null) {
             return;
@@ -139,10 +147,16 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
 
     @Override
     public void onFail() {
+        isNetWorkError = true;
+        mErrorView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
     }
 
     @Override
     public void onItemClick(View view, int position) {
+        if (isNetWorkError) {
+            return;
+        }
         if (isLockScreen) {
             if (isPressed) {
                 return;

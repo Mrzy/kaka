@@ -11,7 +11,6 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
@@ -31,16 +30,16 @@ import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.share.PandoraShareManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.JsonObjectRequest;
-import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
 public class NewsDetailLayout extends FrameLayout implements View.OnClickListener, OnTouchListener,
         OnGestureListener {
@@ -167,15 +166,20 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
     }
 
     private void initShareLayout(View view) {
-
-        if (PandoraShareManager.isAvilible(getContext(), PandoraShareManager.PACKAGE_WECHAR_STRING)) {
+        boolean isWecharAvilible = PandoraShareManager.isAvilible(getContext(),
+                PandoraShareManager.PACKAGE_WECHAR_STRING);
+        boolean isQQAvilible = PandoraShareManager.isAvilible(getContext(),
+                PandoraShareManager.PACKAGE_QQ_STRING);
+        boolean isSinaAvilible = PandoraShareManager.isAvilible(getContext(),
+                PandoraShareManager.PACKAGE_SINA_STRING);
+        if (isWecharAvilible) {
             view.findViewById(R.id.share_wechat_icon_layout).setVisibility(View.VISIBLE);
             view.findViewById(R.id.share_wechat_circle_icon_layout).setVisibility(View.VISIBLE);
         }
-        if (PandoraShareManager.isAvilible(getContext(), PandoraShareManager.PACKAGE_QQ_STRING)) {
+        if (isQQAvilible) {
             view.findViewById(R.id.share_wechat_qq_icon_layout).setVisibility(View.VISIBLE);
         }
-        if (PandoraShareManager.isAvilible(getContext(), PandoraShareManager.PACKAGE_SINA_STRING)) {
+        if ((!isWecharAvilible && !isQQAvilible) || isSinaAvilible) {
             view.findViewById(R.id.share_wechat_sina_icon_layout).setVisibility(View.VISIBLE);
         }
         mShareLayout = (LinearLayout) view.findViewById(R.id.share_detail_layout);

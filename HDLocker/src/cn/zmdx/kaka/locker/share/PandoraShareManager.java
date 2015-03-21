@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -15,8 +14,10 @@ import android.widget.Toast;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.zmdx.kaka.locker.LockScreenManager;
+import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerDataMapping;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
 public class PandoraShareManager {
 
@@ -85,6 +86,8 @@ public class PandoraShareManager {
             default:
                 break;
         }
+        PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
+        LockScreenManager.getInstance().collapseNewsPanel();
         LockScreenManager.getInstance().unLock();
     }
 
@@ -92,7 +95,7 @@ public class PandoraShareManager {
 
         @Override
         public void onError(Platform platform, int action, Throwable t) {
-            ((Activity) mContext).runOnUiThread(new Runnable() {
+            HDBThreadUtils.runOnUi(new Runnable() {
 
                 @Override
                 public void run() {
@@ -103,7 +106,7 @@ public class PandoraShareManager {
 
         @Override
         public void onComplete(Platform platform, int action, HashMap<String, Object> arg2) {
-            ((Activity) mContext).runOnUiThread(new Runnable() {
+            HDBThreadUtils.runOnUi(new Runnable() {
 
                 @Override
                 public void run() {
@@ -114,7 +117,7 @@ public class PandoraShareManager {
 
         @Override
         public void onCancel(Platform platform, int action) {
-            ((Activity) mContext).runOnUiThread(new Runnable() {
+            HDBThreadUtils.runOnUi(new Runnable() {
 
                 @Override
                 public void run() {
