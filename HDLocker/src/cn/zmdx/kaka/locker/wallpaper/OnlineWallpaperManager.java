@@ -15,6 +15,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,8 +117,8 @@ public class OnlineWallpaperManager {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
         }
-        if (!PandoraConfig.newInstance(context).isOnlyWifiLoadImage()
-                && !HDBNetworkState.isWifiNetwork()) {
+        if ((!PandoraConfig.newInstance(context).isOnlyWifiLoadImage() && HDBNetworkState
+                .isNetworkAvailable()) && !HDBNetworkState.isWifiNetwork()) {
             parseWallpaperJson(lastPullJson, listener);
         } else {
             getWallpaperFromServer(listener, lastPullJson, publishDATE);
@@ -131,6 +132,7 @@ public class OnlineWallpaperManager {
      * @param listener
      */
     private void parseWallpaperJson(String lastPullJson, IPullWallpaperListener listener) {
+        Log.d("syc", "lastPullJson=" + lastPullJson);
         try {
             List<ServerOnlineWallpaper> list = ServerOnlineWallpaperManager
                     .parseJson(new JSONObject(lastPullJson));
