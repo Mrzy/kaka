@@ -7,7 +7,6 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.os.Message;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
@@ -21,7 +20,6 @@ import com.android.volley.Request;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.error.VolleyError;
-import com.android.volley.request.JsonObjectRequest;
 
 public class ServerImageDataManager {
 
@@ -97,12 +95,12 @@ public class ServerImageDataManager {
         private String mUrl;
 
         /**
-         * 图片的自己服务器地址
+         * 网页服务器地址
          */
         private String mImageDesc;
 
         public int mIsImageDownloaded;
-        
+
         public boolean isLiked = false;
 
         public boolean isLiked() {
@@ -126,6 +124,9 @@ public class ServerImageDataManager {
             this.mIsImageFavorited = mIsImageFavorited;
         }
 
+        /**
+         * 图片的原地址
+         */
         public String getUrl() {
             return mUrl;
         }
@@ -134,6 +135,9 @@ public class ServerImageDataManager {
             this.mUrl = mUrl;
         }
 
+        /**
+         * 网页服务器地址
+         */
         public String getImageDesc() {
             return mImageDesc;
         }
