@@ -93,12 +93,8 @@ public class PandoraLocationManager {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
-            int maxRequestTimes = 0;
             if (location == null) {
-                for (; maxRequestTimes < 3;) {
-                    requestLocation();
-                }
-                maxRequestTimes++;
+                requestLocation();
                 return;
             }
             mBdLocation = location;
@@ -115,7 +111,6 @@ public class PandoraLocationManager {
 
                 @Override
                 public void onFailure() {
-                    PandoraBoxManager.newInstance(mContext).updateView(null);
                 }
             });
         }
