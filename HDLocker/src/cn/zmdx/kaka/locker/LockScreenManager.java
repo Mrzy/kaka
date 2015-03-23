@@ -541,18 +541,18 @@ public class LockScreenManager {
     public void processWeatherInfo() {
         long str2TimeMillis = SmartWeatherUtils.str2TimeMillis(mPandoraConfig
                 .getLastCheckWeatherTime());
-        if (System.currentTimeMillis() - str2TimeMillis < PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("检查天气条件不满足,使用缓存数据");
-            }
-            SmartWeatherInfo smartWeatherInfo = PandoraWeatherManager.getInstance()
-                    .getWeatherFromCache();
-            if (smartWeatherInfo != null) {
-                PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
-            } else {
-                PandoraBoxManager.newInstance(mContext).updateView(null);
-            }
+
+        SmartWeatherInfo smartWeatherInfo = PandoraWeatherManager.getInstance()
+                .getWeatherFromCache();
+        if (smartWeatherInfo != null) {
+            PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
         } else {
+            PandoraBoxManager.newInstance(mContext).updateView(null);
+        }
+        if (System.currentTimeMillis() - str2TimeMillis >= PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("检查天气条件满足,请求网络数据");
+            }
             PandoraWeatherManager.getInstance().getWeatherFromNetwork(new ISmartWeatherCallback() {
 
                 @Override

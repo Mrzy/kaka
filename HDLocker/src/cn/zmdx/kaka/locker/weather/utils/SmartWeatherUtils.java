@@ -144,6 +144,23 @@ public class SmartWeatherUtils {
         return isNightTime;
     }
 
+    public static boolean isSunsetTime(String sunsetTime) {
+        // 18:21
+        boolean isSunsetTime = false;
+        Calendar cal = Calendar.getInstance();
+        int hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
+        int minuteOfDay = cal.get(Calendar.MINUTE);
+        String[] split = sunsetTime.split(":");
+        int hour = Integer.parseInt(split[0]);
+        int minute = Integer.parseInt(split[1]);
+        if ((hourOfDay == hour && minuteOfDay >= minute) || hourOfDay > hour) {
+            isSunsetTime = true;
+        } else {
+            isSunsetTime = false;
+        }
+        return isSunsetTime;
+    }
+
     private static String getKey(String areaid) {
         String key = null;
         try {

@@ -37,7 +37,7 @@ public class MeteorologicalCodeConstant {
 
     // 风向数组
     public static final String[] meterologicalWindFeatures = new String[] {
-            "无风向",// 0
+            "",// 0
             "东北风",// 1
             "东风",// 2
             "东南风",// 3

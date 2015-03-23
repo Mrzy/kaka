@@ -35,6 +35,7 @@ public class PandoraService extends Service {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("PandoraService is startup");
         }
+        timingUpdateCurLocation();
         registerBroadcastReceiver();
         TelephonyManager manager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
         manager.listen(new MyPhoneListener(), PhoneStateListener.LISTEN_CALL_STATE);
@@ -80,7 +81,7 @@ public class PandoraService extends Service {
         unregisterReceiver(mReceiver);
     }
 
-    public void timingUpdateCurLocation() {
+    private void timingUpdateCurLocation() {
         long lastCheckLocationTime = PandoraConfig.newInstance(mContext).getLastCheckLocationTime();
         if (System.currentTimeMillis() - lastCheckLocationTime >= PandoraPolicy.MIN_UPDATE_LOCATION_TIME) {
             PandoraLocationManager.getInstance(mContext).requestLocation();

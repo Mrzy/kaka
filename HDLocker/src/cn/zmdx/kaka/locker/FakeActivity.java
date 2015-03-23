@@ -17,7 +17,6 @@ import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.settings.MainSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
-import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
 import com.umeng.analytics.MobclickAgent;
 

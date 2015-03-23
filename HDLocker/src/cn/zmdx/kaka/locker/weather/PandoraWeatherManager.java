@@ -24,8 +24,6 @@ import com.android.volley.error.VolleyError;
 import com.android.volley.request.JsonObjectRequest;
 
 public class PandoraWeatherManager {
-    private static final String TAG = "PandoraWeatherManager";
-
     private Context mContext = HDApplication.getContext();
 
     private static PandoraWeatherManager INSTANCE = null;
@@ -68,8 +66,10 @@ public class PandoraWeatherManager {
         String lastWeatherInfo = PandoraConfig.newInstance(mContext).getLastWeatherInfo();
         JSONObject weatherObj;
         try {
-            weatherObj = new JSONObject(lastWeatherInfo);
-            smartWeatherInfo = ParseWeatherJsonUtils.parseWeatherJson(weatherObj);
+            if (!TextUtils.isEmpty(lastWeatherInfo)) {
+                weatherObj = new JSONObject(lastWeatherInfo);
+                smartWeatherInfo = ParseWeatherJsonUtils.parseWeatherJson(weatherObj);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
