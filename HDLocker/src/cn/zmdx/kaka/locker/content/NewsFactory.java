@@ -32,11 +32,6 @@ public class NewsFactory {
 
     public static final int NEWS_TYPE_JOKE = 5;
 
-    // public static final String TMPURL =
-    // "http://192.168.1.111:8080/pandora/locker!queryDataImgTableNew.action?";
-
-    private static boolean mLoadingOlder = false;
-
     /**
      * @param type 新闻类型
      * @param adapter
@@ -82,9 +77,8 @@ public class NewsFactory {
             return;
         }
 
-        String lastModified = getLastModified(data, older);
         JsonObjectRequest request = null;
-        final String url = getUrl(type, lastModified, older);
+        final String url = getUrl(type, data, older);
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("加载新闻url:" + url);
         }
@@ -128,39 +122,44 @@ public class NewsFactory {
         RequestManager.getRequestQueue().add(request);
     }
 
-    private static String getUrl(int type, String lastModified, boolean older) {
-        final String flag = older ? "1" : "0";
-        int limit = 20;
-        if (!HDBNetworkState.isWifiNetwork()) {
-            limit = 10;
-        }
-        return UrlBuilder.getBaseUrl() + "locker!queryDataImgTableNew.action?type=" + type
-                + "&lastModified=" + lastModified + "&flag=" + flag + "&limit=" + limit;
-    }
-
-    private static String getLastModified(List<ServerImageData> data, boolean older) {
+    private static String getUrl(int type, List<ServerImageData> data, boolean older) {
+        long time = -1;
         if (data != null && data.size() == 0) {
-            return String.valueOf(System.currentTimeMillis());
-        }
-
-        long time = 0;
-        if (data != null && data.size() > 0) {
+            time = System.currentTimeMillis();
+        } else if (data != null && data.size() > 0) {
             for (ServerImageData sid : data) {
                 final String modifyTime = sid.getCollectTime();
                 if (!TextUtils.isEmpty(modifyTime)) {
                     long lm = Long.valueOf(modifyTime);
-                    if (older) {
-                        if (lm < time) {
-                            time = lm;
-                        }
+                    if (time == -1) {
+                        time = lm;
                     } else {
-                        if (lm > time) {
-                            time = lm;
+                        if (older) {
+                            if (lm < time) {
+                                time = lm;
+                            }
+                        } else {
+                            if (lm > time) {
+                                time = lm;
+                            }
                         }
                     }
                 }
             }
         }
-        return String.valueOf(time);
+
+        String flag = null;
+        if (data.size() == 0) {
+            flag = "1"; // 第一次加载新闻，flag为1
+        } else {
+            flag = older ? "1" : "0";
+        }
+
+        int limit = 20;
+        if (!HDBNetworkState.isWifiNetwork()) {
+            limit = 10;
+        }
+        return UrlBuilder.getBaseUrl() + "locker!queryDataImgTableNew.action?type=" + type
+                + "&lastModified=" + time + "&flag=" + flag + "&limit=" + limit;
     }
 }

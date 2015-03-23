@@ -44,6 +44,7 @@ import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
@@ -393,7 +394,11 @@ public class PandoraBoxManager implements View.OnClickListener {
         TextView view = new TextView(mContext);
         view.setGravity(Gravity.CENTER);
         view.setTextColor(Color.parseColor("#a0000000"));
-        view.setText(mContext.getString(R.string.tip_no_news));
+        if (HDBNetworkState.isNetworkAvailable()) {
+            view.setText(mContext.getString(R.string.tip_loading_news));
+        } else {
+            view.setText(mContext.getString(R.string.tip_no_news));
+        }
         view.setTextSize(18f);
         return view;
     }
@@ -622,7 +627,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         mGossipRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
         mGossipRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[2]);
-        
+
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
                 mGossipRefreshView, true);
 
@@ -671,7 +676,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         View emptyView = createEmptyView();
         rv.setEmptyView(emptyView);
-        view.addView(emptyView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        view.addView(emptyView, new LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT));
 
         mHotAdapter.setOnItemClickListener(new GeneralNewsPageAdapter.OnItemClickListener() {
 
@@ -726,7 +732,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
             @Override
             public void onCloseDetailPage() {
-                closeDetailPage(false);
+                closeDetailPage(true);
             }
 
             @Override
@@ -760,7 +766,6 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     public void closeDetailPage(boolean withAnimator) {
         if (withAnimator) {
-            mDetailLayout.getChildAt(0);
             mDetailLayout.animate().translationX(mDetailLayout.getWidth()).setDuration(300)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override

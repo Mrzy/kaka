@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.zmdx.kaka.locker.LockScreenManager;
+
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -80,10 +82,12 @@ public class CrashHandler implements UncaughtExceptionHandler {
             mDefaultHandler.uncaughtException(thread, ex);
         } else {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 Log.e(TAG, "error : ", e);
             }
+
+            LockScreenManager.getInstance().unLock(true, true);
             // 退出程序
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);

@@ -139,12 +139,14 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
                     String failingUrl) {
                 isLoadError = true;
                 if (HDBNetworkState.isNetworkAvailable()) {
-                    view.loadData(getContext().getString(R.string.newsdetail_tip_press_try_again),
-                            "text/html; charset=UTF-8", null);
+//                    view.loadData(getContext().getString(R.string.newsdetail_tip_press_try_again),
+//                            "text/html; charset=UTF-8", null);
+                    view.loadUrl("file:///android_asset/error.html");
                 } else {
-                    view.loadData(
-                            getContext().getString(R.string.newsdetail_tip_please_check_network),
-                            "text/html; charset=UTF-8", null);
+//                    view.loadData(
+//                            getContext().getString(R.string.newsdetail_tip_please_check_network),
+//                            "text/html; charset=UTF-8", null);
+                    view.loadUrl("file:///android_asset/NetworkError.html");
                 }
                 super.onReceivedError(view, errorCode, description, failingUrl);
             }

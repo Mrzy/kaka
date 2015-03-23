@@ -277,4 +277,5 @@
     <string name="pandora_locker_shimmer_unlock_str">> 滑动来解锁</string>
 
     <string name="tip_no_news">暂无爆点</string>
+    <string name="tip_loading_news">正在加载</string>
 </resources>

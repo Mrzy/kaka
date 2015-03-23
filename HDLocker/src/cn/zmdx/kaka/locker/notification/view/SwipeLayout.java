@@ -29,7 +29,7 @@ public class SwipeLayout extends ViewPager {
         /**
          * @param offset Value from [0, 1)
          */
-        public void onSlide(SwipeLayout layout, float offset);
+        public void onSlide(SwipeLayout layout,int position, float offset);
     }
 
     private OnSwipeLayoutListener mCallback;
@@ -153,7 +153,7 @@ public class SwipeLayout extends ViewPager {
         @Override
         public void onPageScrolled(int position, float offset, int positionOffsetPixels) {
             if (mCallback != null) {
-                mCallback.onSlide(SwipeLayout.this, offset);
+                mCallback.onSlide(SwipeLayout.this, position, offset);
             }
 
             if (position == 0 && offset == 0) {

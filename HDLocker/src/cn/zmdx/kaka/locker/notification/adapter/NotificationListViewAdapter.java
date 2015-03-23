@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -141,7 +142,20 @@ public class NotificationListViewAdapter extends BaseAdapter {
             }
 
             @Override
-            public void onSlide(SwipeLayout layout, float offset) {
+            public void onSlide(SwipeLayout layout, int position, float offset) {
+                if (position == 0) {
+                    if (offset < 0.9) {
+                        layout.getLeftView().setAlpha(offset);
+                        layout.getLeftView().setScaleX(Math.max(offset, 0.7f) + 0.1f);
+                        layout.getLeftView().setScaleY(Math.max(offset, 0.7f) + 0.1f);
+                    }
+                } else if (position == 1) {
+                    if (offset > 0.1) {
+                        layout.getRightView().setAlpha(1.0f - offset);
+                        layout.getRightView().setScaleX(Math.max(1.0f - offset, 0.7f) + 0.1f);
+                        layout.getRightView().setScaleY(Math.max(1.0f - offset, 0.7f) + 0.1f);
+                    }
+                }
             }
         });
         return convertView;

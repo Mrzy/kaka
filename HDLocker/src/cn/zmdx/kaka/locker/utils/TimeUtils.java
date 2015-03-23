@@ -34,8 +34,7 @@ public class TimeUtils {
             long hour = (second / 60) / 60;
             interval = hour + context.getString(R.string.hours);
         } else if (second >= 60 * 60 * 24 && second <= 60 * 60 * 24 * 2) {
-            interval = context.getString(R.string.yesterday)
-                    + getFormatTime(new Date(createAt), "hh:mm");
+            interval = context.getString(R.string.yesterday);
         } else if (second >= 60 * 60 * 24 * 2 && second <= 60 * 60 * 24 * 7) {
             long day = ((second / 60) / 60) / 24;
             interval = day + context.getString(R.string.day);

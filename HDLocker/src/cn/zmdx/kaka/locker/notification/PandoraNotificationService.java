@@ -72,15 +72,17 @@ public final class PandoraNotificationService extends NotificationListenerServic
                 .getInstance(getApplicationContext());
         np.putInterceptPkgName(Constants.PKGNAME_WEIXIN);// 微信
         np.putInterceptPkgName(Constants.PKGNAME_QQ);// qq
+        np.putInterceptPkgName("com.android.phone");
         // 获取拨号的包名
         Set<String> dialerPkgNameSet = getDialerPkgName(this, Intent.ACTION_DIAL);
 
-        for (Iterator<String> iterator = dialerPkgNameSet.iterator(); iterator.hasNext();) {
-            String nextPkgName = iterator.next();
-            boolean systemApp = isSystemApp(this, nextPkgName);
-            if (systemApp) {
-                // 显示系统级别的拨号软件包名
-                np.putInterceptPkgName(nextPkgName);
+        if (dialerPkgNameSet != null) {
+            for (String str : dialerPkgNameSet) {
+                boolean systemApp = isSystemApp(this, str);
+                if (systemApp) {
+                    // 显示系统级别的拨号软件包名
+                    np.putInterceptPkgName(str);
+                }
             }
         }
 
@@ -95,16 +97,17 @@ public final class PandoraNotificationService extends NotificationListenerServic
             String androidOrigin = "com.google.android.talk";
             Set<String> smsPkgNameSet = getSmsPkgName(this);
 
-            for (Iterator<String> iterator = smsPkgNameSet.iterator(); iterator.hasNext();) {
-                String nextPkgName = iterator.next();
-                boolean systemApp = isSystemApp(this, nextPkgName);
-                if (systemApp) {
-                    if (smsPkgNameSet.contains(androidOrigin)) {
-                        np.putInterceptPkgName(androidOrigin);
-                        return;
-                    } else {
-                        np.putInterceptPkgName(nextPkgName);
-                        return;
+            if (smsPkgNameSet != null) {
+                for (String str : smsPkgNameSet) {
+                    boolean systemApp = isSystemApp(this, str);
+                    if (systemApp) {
+                        if (smsPkgNameSet.contains(androidOrigin)) {
+                            np.putInterceptPkgName(androidOrigin);
+                            return;
+                        } else {
+                            np.putInterceptPkgName(str);
+                            return;
+                        }
                     }
                 }
             }
@@ -119,7 +122,7 @@ public final class PandoraNotificationService extends NotificationListenerServic
         PackageManager sPackageManager = context.getPackageManager();
         Intent dialerIntent = new Intent(intentStr);
         List<ResolveInfo> intentResolveInfos = sPackageManager.queryIntentActivities(dialerIntent,
-                PackageManager.GET_RECEIVERS);
+                PackageManager.MATCH_DEFAULT_ONLY);
         int size = intentResolveInfos.size();
         if (size < 1) {
             return null;
@@ -163,6 +166,11 @@ public final class PandoraNotificationService extends NotificationListenerServic
                 return false;
             }
         } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            startService(new Intent(this, PandoraNotificationService.class));
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return true;

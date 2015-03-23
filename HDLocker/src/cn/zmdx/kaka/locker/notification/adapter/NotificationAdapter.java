@@ -12,7 +12,6 @@ import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -81,7 +80,7 @@ public class NotificationAdapter extends Adapter<NotificationAdapter.ViewHolder>
         }
 
         @Override
-        public void onSlide(SwipeLayout layout, float offset) {
+        public void onSlide(SwipeLayout layout,int position, float offset) {
         }
     }
 

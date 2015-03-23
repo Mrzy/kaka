@@ -5,4 +5,4 @@
     android:gravity="right|center_vertical"
     android:text="@string/open_notification"
     android:textColor="#a0ffffff"
-    android:textSize="12dp" />
+    android:textSize="18dp" />
