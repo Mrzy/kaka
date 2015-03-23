@@ -18,6 +18,7 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.adapter.NotificationListViewAdapter;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class NotificationListView extends ListView {
@@ -47,6 +48,8 @@ public class NotificationListView extends ListView {
         mAdapter = new NotificationListViewAdapter(getContext(), mActiveNotification);
         setAdapter(mAdapter);
         setLayoutAnimation(getAnimationController());
+        setVerticalFadingEdgeEnabled(true);
+        setFadingEdgeLength(BaseInfoHelper.dip2px(getContext(), 3));
         mInterceptor = NotificationInterceptor.getInstance(getContext());
         mInterceptor.setNotificationListener(mNotificationListener);
     }
