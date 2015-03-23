@@ -78,7 +78,7 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
             }
 
             @Override
-            public void onCloseDetailPage() {
+            public void onCloseDetailPage(boolean withAnimator) {
             }
 
             @Override

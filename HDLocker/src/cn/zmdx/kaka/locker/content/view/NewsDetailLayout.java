@@ -44,7 +44,7 @@ import com.android.volley.request.JsonObjectRequest;
 public class NewsDetailLayout extends FrameLayout implements View.OnClickListener, OnTouchListener,
         OnGestureListener {
 
-    private static String URL = UrlBuilder.getBaseUrl() + "locker!addDataImgTableTop.action?";
+    private static String URL = UrlBuilder.getBaseUrl() + "locker!addDataImgTableTop.action";
 
     private WebView mWebView;
 
