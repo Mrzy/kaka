@@ -44,7 +44,7 @@ public class ImageLoaderManager {
     public static BitmapCache getImageMemCache() {
         if (sBmpCache == null) {
             // 使用可用RAM的15%作为图片的内存缓存
-            sBmpCache = BitmapCache.getInstance(null, 0.15f);
+            sBmpCache = BitmapCache.getInstance(null, 0.7f);
         }
         return sBmpCache;
     }

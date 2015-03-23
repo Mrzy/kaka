@@ -5,4 +5,4 @@
     android:gravity="left|center_vertical"
     android:text="@string/remove_notification"
     android:textColor="#a0ffffff"
-    android:textSize="18dp" />
+    android:textSize="12dp" />

@@ -6,8 +6,6 @@ import java.util.List;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,11 +22,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnAttachStateChangeListener;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -40,6 +39,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.GeneralNewsPageAdapter;
+import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -55,7 +55,6 @@ import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
 import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
 import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
-import cn.zmdx.kaka.locker.widget.FloatingActionButton;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.PandoraRecyclerView;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
@@ -74,11 +73,11 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private FrameLayout mDetailLayout;
 
-    private FloatingActionButton mBackBtn;
+    private CircleSpiritButton mBackBtn;
 
     private OnlineWallpaperView mWallpaperView;
 
-    private ImageView mNotifyTip;
+//    private ImageView mNotifyTip;
 
     private ViewPagerCompat mViewPager;
 
@@ -229,12 +228,25 @@ public class PandoraBoxManager implements View.OnClickListener {
             return;
         }
         mInitBody = true;
-        mBackBtn = (FloatingActionButton) mEntireView.findViewById(R.id.backBtn);
+        mBackBtn = (CircleSpiritButton) mEntireView.findViewById(R.id.backBtn);
         mBackBtn.setColorNormal(mFloatingButtonColors[1]);
         mBackBtn.setColorPressed(mFloatingButtonColors[1]);
         mBackBtn.setOnClickListener(this);
-        mNotifyTip = (ImageView) mEntireView.findViewById(R.id.noti_tip);
+        mBackBtn.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
 
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mNotifyReceiver);
+                IntentFilter filter = new IntentFilter(NotificationListView.ACTION_NOTIFICATION_POSTED);
+                LocalBroadcastManager.getInstance(mContext).registerReceiver(mNotifyReceiver, filter);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mNotifyReceiver);
+            }
+        });
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mNotifyReceiver);
         IntentFilter filter = new IntentFilter(NotificationListView.ACTION_NOTIFICATION_POSTED);
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mNotifyReceiver, filter);
 
@@ -274,10 +286,6 @@ public class PandoraBoxManager implements View.OnClickListener {
         LockScreenManager.getInstance().registBackPressedListener(mBackPressedListener);
     }
 
-    public void onFinish() {
-        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mNotifyReceiver);
-    }
-
     private OnBackPressedListener mBackPressedListener = new OnBackPressedListener() {
 
         @Override
@@ -298,40 +306,23 @@ public class PandoraBoxManager implements View.OnClickListener {
                 HDBLOG.logD("received notification at news detail page");
             }
             Bitmap bitmap = (Bitmap) intent.getParcelableExtra("icon");
-            mNotifyTip.setImageBitmap(bitmap);
-            startNotificationTip(mNotifyTip);
+            mBackBtn.notifyNewFeed(bitmap);
         }
-
     };
 
-    private void startNotificationTip(final ImageView mNotifyTip) {
-        ObjectAnimator animator = ObjectAnimator.ofFloat(mNotifyTip, "scaleX", 0, 1.2f, 1.0f);
-        ObjectAnimator animator1 = ObjectAnimator.ofFloat(mNotifyTip, "scaleY", 0, 1.2f, 1.0f);
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(animator1, animator);
-        set.setDuration(500);
-        set.setInterpolator(new AccelerateInterpolator());
-        set.addListener(new AnimatorListenerAdapter() {
+    /**
+     * 新闻面板完全展开时会调用该方法
+     */
+    public void notifyNewsPanelExpanded() {
+        refreshAllNews();
+        initBody();
+        mBackBtn.startAppearAnimator();
+    }
 
-            @Override
-            public void onAnimationStart(Animator animation) {
-                mNotifyTip.setVisibility(View.VISIBLE);
-                super.onAnimationStart(animation);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                HDBThreadUtils.postOnUiDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        mNotifyTip.setVisibility(View.INVISIBLE);
-                    }
-                }, 3000);
-                super.onAnimationEnd(animation);
-            }
-        });
-        set.start();
+    public void notifyNewsPanelCollapsed() {
+        PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
+        PandoraBoxManager.newInstance(mContext).resetDefaultPage();
+        mBackBtn.setTranslationY(BaseInfoHelper.dip2px(mContext, 100));
     }
 
     public void refreshNewsByCategory(int category) {
@@ -867,7 +858,10 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
     }
 
-    public void reset() {
+    /**
+     * 将新闻频道定位到“头条”页
+     */
+    public void resetDefaultPage() {
         if (mViewPager != null) {
             mViewPager.setCurrentItem(1, false);
         }

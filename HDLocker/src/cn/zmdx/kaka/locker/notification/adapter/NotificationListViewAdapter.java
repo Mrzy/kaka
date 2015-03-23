@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -144,17 +143,21 @@ public class NotificationListViewAdapter extends BaseAdapter {
             @Override
             public void onSlide(SwipeLayout layout, int position, float offset) {
                 if (position == 0) {
-                    if (offset < 0.9) {
+                    if (offset < 0.2) {
                         layout.getLeftView().setAlpha(offset);
-                        layout.getLeftView().setScaleX(Math.max(offset, 0.7f) + 0.1f);
-                        layout.getLeftView().setScaleY(Math.max(offset, 0.7f) + 0.1f);
                     }
+                    layout.getLeftView().setPivotX(layout.getLeftView().getWidth());
+                    layout.getLeftView().setPivotY(layout.getLeftView().getHeight() / 2);
+                    layout.getLeftView().setScaleX(1 + Math.min((1.0f - offset), 0.45f));
+                    layout.getLeftView().setScaleY(1 + Math.min((1.0f - offset), 0.45f));
                 } else if (position == 1) {
-                    if (offset > 0.1) {
+                    if (offset > 0.8) {
                         layout.getRightView().setAlpha(1.0f - offset);
-                        layout.getRightView().setScaleX(Math.max(1.0f - offset, 0.7f) + 0.1f);
-                        layout.getRightView().setScaleY(Math.max(1.0f - offset, 0.7f) + 0.1f);
                     }
+                    layout.getRightView().setPivotX(0);
+                    layout.getRightView().setPivotY(layout.getRightView().getHeight() / 2);
+                    layout.getRightView().setScaleX(1 + Math.min(offset, 0.45f));
+                    layout.getRightView().setScaleY(1 + Math.min(offset, 0.45f));
                 }
             }
         });

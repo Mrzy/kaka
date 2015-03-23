@@ -462,15 +462,13 @@ public class LockScreenManager {
         };
 
         public void onPanelExpanded(View panel) {
-            PandoraBoxManager.newInstance(mContext).refreshAllNews();
-            PandoraBoxManager.newInstance(mContext).initBody();
+            PandoraBoxManager.newInstance(mContext).notifyNewsPanelExpanded();
             pauseWallpaperTranslation();
         };
 
         public void onPanelCollapsed(View panel) {
+            PandoraBoxManager.newInstance(mContext).notifyNewsPanelCollapsed();
             resumeWallpaperTranslation();
-            PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
-            PandoraBoxManager.newInstance(mContext).reset();
         };
     };
 
@@ -981,8 +979,6 @@ public class LockScreenManager {
         if (isCloseFakeActivity)
             notifyUnLocked();
         cancelAnimatorIfNeeded();
-
-        PandoraBoxManager.newInstance(mContext).onFinish();
 
         mWinManager.removeView(mEntireView);
         mEntireView = null;

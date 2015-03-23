@@ -22,10 +22,10 @@ import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 
-public class FloatingActionButton extends ImageButton {
+public class FloatingActionButton extends LinearLayout {
     private static final int TRANSLATE_DURATION_MILLIS = 200;
 
     @IntDef({TYPE_NORMAL, TYPE_MINI})
@@ -146,7 +146,7 @@ public class FloatingActionButton extends ImageButton {
         return getResources().getColor(id);
     }
 
-    private int getDimension(@DimenRes int id) {
+    protected int getDimension(@DimenRes int id) {
         return getResources().getDimensionPixelSize(id);
     }
 
