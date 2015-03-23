@@ -19,6 +19,10 @@ public abstract class StikkyHeaderBuilder {
 
     protected HeaderAnimator mAnimator;
 
+    public interface IOnLoadMoreData {
+        void onLoadMore();
+    }
+
     protected StikkyHeaderBuilder(final Context context) {
         mContext = context;
         mMinHeight = 0;
@@ -72,7 +76,7 @@ public abstract class StikkyHeaderBuilder {
         return this;
     }
 
-    public abstract StikkyHeader build();
+    public abstract StikkyHeader build(IOnLoadMoreData mListener);
 
     public static class RecyclerViewBuilder extends StikkyHeaderBuilder {
 
@@ -84,17 +88,18 @@ public abstract class StikkyHeaderBuilder {
         }
 
         @Override
-        public StikkyHeaderRecyclerView build() {
+        public StikkyHeaderRecyclerView build(IOnLoadMoreData mListener) {
 
             // if the animator has not been set, the default one is used
             if (mAnimator == null) {
                 mAnimator = new HeaderStikkyAnimator();
             }
 
-            return new StikkyHeaderRecyclerView(mContext, mRecyclerView, mHeader, mMinHeight,
-                    mAnimator);
+            StikkyHeaderRecyclerView stikkyHeaderRecyclerView = new StikkyHeaderRecyclerView(
+                    mContext, mRecyclerView, mHeader, mMinHeight, mAnimator);
+            stikkyHeaderRecyclerView.setListener(mListener);
+            return stikkyHeaderRecyclerView;
         }
-
     }
 
 }

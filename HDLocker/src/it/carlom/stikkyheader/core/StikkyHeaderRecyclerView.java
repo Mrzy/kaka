@@ -1,5 +1,7 @@
+
 package it.carlom.stikkyheader.core;
 
+import it.carlom.stikkyheader.core.StikkyHeaderBuilder.IOnLoadMoreData;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,13 +9,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-
 public class StikkyHeaderRecyclerView extends StikkyHeader {
 
     private RecyclerView mRecyclerView;
+
     private int mScrolledY;
 
-    StikkyHeaderRecyclerView(final Context context, final RecyclerView recyclerView, final View header, final int mMinHeightHeader, final HeaderAnimator headerAnimator) {
+    StikkyHeaderRecyclerView(final Context context, final RecyclerView recyclerView,
+            final View header, final int mMinHeightHeader, final HeaderAnimator headerAnimator) {
 
         this.mContext = context;
         this.mRecyclerView = recyclerView;
@@ -24,7 +27,6 @@ public class StikkyHeaderRecyclerView extends StikkyHeader {
 
         init();
     }
-
 
     private void init() {
         measureHeaderHeight();
@@ -52,7 +54,8 @@ public class StikkyHeaderRecyclerView extends StikkyHeader {
 
                     mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
                         @Override
-                        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                RecyclerView.State state) {
                             super.getItemOffsets(outRect, view, parent, state);
 
                             int position = parent.getChildPosition(view);
@@ -66,7 +69,7 @@ public class StikkyHeaderRecyclerView extends StikkyHeader {
                     break;
 
                 case LinearLayoutManager.HORIZONTAL:
-                    //TODO
+                    // TODO
                     break;
             }
 
@@ -79,7 +82,8 @@ public class StikkyHeaderRecyclerView extends StikkyHeader {
 
                     mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
                         @Override
-                        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                RecyclerView.State state) {
                             super.getItemOffsets(outRect, view, parent, state);
 
                             int position = parent.getChildPosition(view);
@@ -93,11 +97,10 @@ public class StikkyHeaderRecyclerView extends StikkyHeader {
                     break;
 
                 case LinearLayoutManager.HORIZONTAL:
-                    //TODO
+                    // TODO
                     break;
 
             }
-
 
         }
     }
@@ -110,15 +113,28 @@ public class StikkyHeaderRecyclerView extends StikkyHeader {
 
     private class OnScrollListenerRecycler extends RecyclerView.OnScrollListener {
 
-
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
+            int lastVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                    .findLastVisibleItemPosition();
+            int totalItemCount = mRecyclerView.getLayoutManager().getItemCount();
+
+            if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
+                if (null != mListener) {
+                    mListener.onLoadMore();
+                }
+            }
 
             mScrolledY += dy;
             mHeaderAnimator.onScroll(-mScrolledY);
         }
     }
 
+    private IOnLoadMoreData mListener;
+
+    public void setListener(IOnLoadMoreData mLoadMoreDataListener) {
+        mListener = mLoadMoreDataListener;
+    }
 
 }
