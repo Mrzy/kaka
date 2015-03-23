@@ -183,5 +183,7 @@ public class SwipeLayout extends ViewPager {
 
     public void reset() {
         setCurrentItem(1, false);
+        mLeftView.setAlpha(1f);
+        mRightView.setAlpha(1);
     }
 }
