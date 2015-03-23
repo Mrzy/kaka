@@ -731,8 +731,8 @@ public class PandoraBoxManager implements View.OnClickListener {
             }
 
             @Override
-            public void onCloseDetailPage() {
-                closeDetailPage(true);
+            public void onCloseDetailPage(boolean withAnimator) {
+                closeDetailPage(withAnimator);
             }
 
             @Override

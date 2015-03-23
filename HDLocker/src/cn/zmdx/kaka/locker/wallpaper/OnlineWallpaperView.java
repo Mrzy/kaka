@@ -48,7 +48,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
     private IOnlineWallpaperListener mListener;
 
     public interface IOnlineWallpaperListener {
-        void onCloseDetailPage();
+        void onCloseDetailPage(boolean withAnimator);
 
         void onOpenDetailPage(View view);
 
@@ -169,7 +169,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
                 public void onBack() {
                     if (null != mListener) {
                         isPressed = false;
-                        mListener.onCloseDetailPage();
+                        mListener.onCloseDetailPage(true);
                     }
                 }
 
@@ -177,7 +177,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
                 public void onApplyWallpaper() {
                     if (null != mListener) {
                         isPressed = false;
-                        mListener.onCloseDetailPage();
+                        mListener.onCloseDetailPage(false);
                     }
                 }
             });

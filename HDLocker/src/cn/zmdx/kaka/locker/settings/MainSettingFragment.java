@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -58,7 +59,9 @@ public class MainSettingFragment extends Fragment {
     private List<String> initFragmentTitleList() {
         List<String> titleList = new ArrayList<String>();
         titleList.add(getResources().getString(R.string.pandora_setting_general));
-        titleList.add(getResources().getString(R.string.pandora_setting_notify));
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            titleList.add(getResources().getString(R.string.pandora_setting_notify));
+        }
         titleList.add(getResources().getString(R.string.pandora_setting_password));
         titleList.add(getResources().getString(R.string.pandora_setting_wallpaper));
         return titleList;
@@ -67,11 +70,13 @@ public class MainSettingFragment extends Fragment {
     private List<Fragment> initFragmentList() {
         List<Fragment> fragmentList = new ArrayList<Fragment>();
         GeneralFragment mainSettingsFragment = new GeneralFragment();
-        NotifyFragment notifyFragment = new NotifyFragment();
         PasswordFragment passwordFragment = new PasswordFragment();
         WallpaperFragment wallpaperFragment = new WallpaperFragment();
         fragmentList.add(mainSettingsFragment);
-        fragmentList.add(notifyFragment);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            NotifyFragment notifyFragment = new NotifyFragment();
+            fragmentList.add(notifyFragment);
+        }
         fragmentList.add(passwordFragment);
         fragmentList.add(wallpaperFragment);
         return fragmentList;
