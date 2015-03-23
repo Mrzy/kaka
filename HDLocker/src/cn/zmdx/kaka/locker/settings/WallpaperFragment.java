@@ -2,6 +2,7 @@
 package cn.zmdx.kaka.locker.settings;
 
 import it.carlom.stikkyheader.core.StikkyHeaderBuilder;
+import it.carlom.stikkyheader.core.StikkyHeaderBuilder.IOnLoadMoreData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -94,11 +95,19 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
                         R.anim.umeng_fb_slide_out_from_left);
             }
         });
+        onlineWallpaperView.pullWallpaperData();
         view.addView(onlineWallpaperView, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
         RecyclerView mRecyclerView = onlineWallpaperView.getRecyclerView();
         StikkyHeaderBuilder.stickTo(mRecyclerView)
-                .setHeader(R.id.wallpaper_top_layout, (ViewGroup) mEntireView).build();
+                .setHeader(R.id.wallpaper_top_layout, (ViewGroup) mEntireView)
+                .build(new IOnLoadMoreData() {
+
+                    @Override
+                    public void onLoadMore() {
+                        onlineWallpaperView.loadMore();
+                    }
+                });
     }
 
     @Override

@@ -132,7 +132,6 @@ public class OnlineWallpaperManager {
      * @param listener
      */
     private void parseWallpaperJson(String lastPullJson, IPullWallpaperListener listener) {
-        Log.d("syc", "lastPullJson=" + lastPullJson);
         try {
             List<ServerOnlineWallpaper> list = ServerOnlineWallpaperManager
                     .parseJson(new JSONObject(lastPullJson));
