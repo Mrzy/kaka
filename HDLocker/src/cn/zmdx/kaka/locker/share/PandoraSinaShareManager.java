@@ -7,7 +7,7 @@ import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.zmdx.kaka.locker.share.PandoraShareManager.PandoraShareData;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 
 public class PandoraSinaShareManager {
 
@@ -20,18 +20,18 @@ public class PandoraSinaShareManager {
         return mInstance;
     }
 
-    public void shareToSina(final Context context, final PandoraShareData shareData,
+    public void shareToSina(final Context context, final ServerImageData date,
             PlatformActionListener mPlatformActionListener) {
         ShareParams sina = new ShareParams();
-        sina.setText(getSinaShareContent(shareData));
-        sina.setImageUrl(shareData.mImageUrl);
+        sina.setText(getSinaShareContent(date));
+        sina.setImageUrl(date.getUrl());
         Platform weibo = ShareSDK.getPlatform(SinaWeibo.NAME);
         weibo.setPlatformActionListener(mPlatformActionListener);
         weibo.share(sina);
     }
 
-    private String getSinaShareContent(PandoraShareData shareData) {
-        return "【" + shareData.mTitle + "】 " + shareData.mWebUrl + " " + "(分享自@潘多拉锁屏)";
+    private String getSinaShareContent(ServerImageData shareData) {
+        return "【" + shareData.mTitle + "】 " + shareData.getImageDesc() + " " + "(分享自@潘多拉锁屏)";
     }
 
 }

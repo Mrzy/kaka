@@ -8,7 +8,7 @@ import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
-import cn.zmdx.kaka.locker.share.PandoraShareManager.PandoraShareData;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 
 public class PandoraWechatShareManager {
 
@@ -22,12 +22,12 @@ public class PandoraWechatShareManager {
     }
 
     public void shareToWechat(final Context mContext, boolean isToWechatCircle,
-            PandoraShareData pandoraShare, PlatformActionListener mPlatformActionListener) {
+            ServerImageData date, PlatformActionListener mPlatformActionListener) {
         ShareParams wechat = new ShareParams();
-        wechat.setTitle(pandoraShare.mTitle);
-        wechat.setText(pandoraShare.mDesc);
-        wechat.setImageUrl(pandoraShare.mImageUrl);
-        wechat.setUrl(pandoraShare.mWebUrl);
+        wechat.setTitle(date.getTitle());
+        wechat.setText(date.getTitle());
+        wechat.setImageUrl(date.getUrl());
+        wechat.setUrl(date.getImageDesc());
         wechat.setShareType(Platform.SHARE_WEBPAGE);
 
         Platform weixin = ShareSDK.getPlatform(mContext, isToWechatCircle ? WechatMoments.NAME

@@ -37,10 +37,8 @@ public class PandoraShareManager {
 
     private static Context mContext;
 
-    public static void shareContent(final Context context, ServerImageData data, int shareType) {
+    public static void shareContent(final Context context, final ServerImageData data, int shareType) {
         mContext = context;
-        final PandoraShareData shareData = new PandoraShareData();
-        shareData.bulidShareParam(data);
         switch (shareType) {
             case TYPE_SHARE_WECHAT_CIRCLE:
                 LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
@@ -48,7 +46,7 @@ public class PandoraShareManager {
                     @Override
                     public void run() {
                         PandoraWechatShareManager.getInstance().shareToWechat(mContext, true,
-                                shareData, mPlatformActionListener);
+                                data, mPlatformActionListener);
                     }
                 });
                 break;
@@ -58,7 +56,7 @@ public class PandoraShareManager {
                     @Override
                     public void run() {
                         PandoraWechatShareManager.getInstance().shareToWechat(mContext, false,
-                                shareData, mPlatformActionListener);
+                                data, mPlatformActionListener);
                     }
                 });
                 break;
@@ -67,7 +65,7 @@ public class PandoraShareManager {
 
                     @Override
                     public void run() {
-                        PandoraSinaShareManager.getInstance().shareToSina(mContext, shareData,
+                        PandoraSinaShareManager.getInstance().shareToSina(mContext, data,
                                 mPlatformActionListener);
                     }
                 });
@@ -77,7 +75,7 @@ public class PandoraShareManager {
 
                     @Override
                     public void run() {
-                        PandoraQQShareManager.getInstance().shareToQzone(mContext, shareData,
+                        PandoraQQShareManager.getInstance().shareToQzone(mContext, data,
                                 mPlatformActionListener);
                     }
                 });
