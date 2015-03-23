@@ -544,11 +544,7 @@ public class LockScreenManager {
 
         SmartWeatherInfo smartWeatherInfo = PandoraWeatherManager.getInstance()
                 .getWeatherFromCache();
-        if (smartWeatherInfo != null) {
-            PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
-        } else {
-            PandoraBoxManager.newInstance(mContext).updateView(null);
-        }
+        PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
         if (System.currentTimeMillis() - str2TimeMillis >= PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("检查天气条件满足,请求网络数据");
@@ -562,7 +558,7 @@ public class LockScreenManager {
 
                 @Override
                 public void onFailure() {
-                    PandoraBoxManager.newInstance(mContext).updateView(null);
+
                 }
             });
         }
