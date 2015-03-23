@@ -4,8 +4,11 @@ package cn.zmdx.kaka.locker.weather;
 import android.content.Context;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
+import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -91,6 +94,7 @@ public class PandoraLocationManager {
         @Override
         public void onReceiveLocation(BDLocation location) {
             if (location == null) {
+                requestLocation();
                 return;
             }
             mBdLocation = location;
@@ -98,6 +102,17 @@ public class PandoraLocationManager {
             PandoraConfig.newInstance(mContext).saveLastCheckLocationTime(
                     System.currentTimeMillis());
             stopRequestLocation();
+            PandoraWeatherManager.getInstance().getWeatherFromNetwork(new ISmartWeatherCallback() {
+
+                @Override
+                public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
+                    PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
+                }
+
+                @Override
+                public void onFailure() {
+                }
+            });
         }
 
         public void onReceivePoi(BDLocation poiLocation) {

@@ -105,6 +105,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private TextView tvWeatherWindForce;
 
+    private TextView tvNoWeatherInfo;
+
     private int featureIndexPicResId;
 
     private String featureNameByNo;
@@ -135,6 +137,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         tvUnreadNews = (TextView) mHeaderView.findViewById(R.id.tvUnreadNews);
         tvWeatherWind = (TextView) mHeaderView.findViewById(R.id.tvWeatherWind);
         tvWeatherWindForce = (TextView) mHeaderView.findViewById(R.id.tvWeatherWindForce);
+        tvNoWeatherInfo = (TextView) mHeaderView.findViewById(R.id.tvNoWeatherInfo);
         ivWeatherFeaturePic = (ImageView) mHeaderView.findViewById(R.id.ivWeatherFeaturePic);
 
         return mHeaderView;
@@ -143,7 +146,17 @@ public class PandoraBoxManager implements View.OnClickListener {
     @SuppressLint("NewApi")
     public void updateView(SmartWeatherInfo smartWeatherInfo) {
         if (smartWeatherInfo == null) {
+            String lunarCal = SmartWeatherUtils.getLunarCal();
+            if (tvLunarCalendar != null) {
+                tvLunarCalendar.setText(lunarCal);
+            }
+            if ((tvNoWeatherInfo != null)) {
+                tvNoWeatherInfo.setVisibility(View.VISIBLE);
+            }
             return;
+        }
+        if ((tvNoWeatherInfo != null)) {
+            tvNoWeatherInfo.setVisibility(View.GONE);
         }
         SmartWeatherFeatureInfo smartWeatherFeatureInfo = smartWeatherInfo
                 .getSmartWeatherFeatureInfo();
@@ -161,30 +174,52 @@ public class PandoraBoxManager implements View.OnClickListener {
         String nightWind = SmartWeatherUtils.getWindByNo(smartWeatherFeatureIndexInfo
                 .getNightWindNo());// 夜间风向
         String forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
+        String sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
+        String[] split = sunriseAndSunset.split("\\|");
+        String sunset = split[1];
         boolean isNight = SmartWeatherUtils.isNight(forecastReleasedTime);
+        boolean isSunsetTime = SmartWeatherUtils.isSunsetTime(sunset);
         if (isNight) {
             String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
             centTemp = smartWeatherFeatureIndexInfo.getNightCentTemp();
             featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
             featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
-            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
+            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])
+                    && isSunsetTime) {
                 featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
             }
-            tvWeatherWind.setText(nightWind);
-            tvWeatherWindForce.setText(",风力" + nightWindForce);
+            if (tvWeatherWind != null) {
+                tvWeatherWind.setText(nightWind == null ? "" : nightWind);
+            }
+            if (tvWeatherWindForce != null) {
+                tvWeatherWindForce.setText(" " + (nightWindForce == null ? "" : nightWindForce));
+            }
         } else {
             String daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
             centTemp = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
             featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
             featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
-            tvWeatherWind.setText(daytimeWind);
-            tvWeatherWindForce.setText(" 风力" + daytimeWindForce);
+            if (tvWeatherWind != null) {
+                tvWeatherWind.setText(daytimeWind == null ? "" : daytimeWind);
+            }
+            if (tvWeatherWindForce != null) {
+                tvWeatherWindForce
+                        .setText(" " + (daytimeWindForce == null ? "" : daytimeWindForce));
+            }
         }
-        tvWeatherFeature.setText(featureNameByNo);
-        ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
-        tvWeatherCentTemp.setText(centTemp + "℃");
+        if (tvWeatherFeature != null) {
+            tvWeatherFeature.setText(featureNameByNo);
+        }
+        if (ivWeatherFeaturePic != null) {
+            ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
+        }
+        if (tvWeatherCentTemp != null) {
+            tvWeatherCentTemp.setText(centTemp + "℃");
+        }
         String lunarCal = SmartWeatherUtils.getLunarCal();
-        tvLunarCalendar.setText(lunarCal);
+        if (tvLunarCalendar != null) {
+            tvLunarCalendar.setText(lunarCal);
+        }
     }
 
     private boolean mInitBody = false;
