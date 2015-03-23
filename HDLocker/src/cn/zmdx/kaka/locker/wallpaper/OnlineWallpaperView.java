@@ -93,6 +93,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
 
     public void setOnlineWallpaperListener(IOnlineWallpaperListener listener) {
         mListener = listener;
+        pullWallpaperData();
     }
 
     private boolean isLoadMore = false;
