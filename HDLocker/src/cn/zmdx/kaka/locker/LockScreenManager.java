@@ -642,7 +642,8 @@ public class LockScreenManager {
             if (mSlidingUpView.isPanelExpanded()) {
                 mSlidingUpView.collapsePanel();
             }
-            if (mSlidingUpView.getSliderView() != null) {
+            // 如果当前页在锁屏主页（而不是密码锁页），在关闭屏幕时将底部新闻栏缩回到屏幕底部
+            if (mSlidingUpView.getSliderView() != null && mPager.getCurrentItem() == 1) {
                 mSlidingUpView.getSliderView().setTranslationY(mSlidingUpView.getHeight());
             }
         }
@@ -666,7 +667,8 @@ public class LockScreenManager {
 
             startShimmer();
 
-            if (mSlidingUpView != null) {
+            // 将缩到屏幕底部的新闻栏展开
+            if (mSlidingUpView != null && mPager.getCurrentItem() == 1) {
                 mSlidingUpView.getSliderView().animate().translationY(0).setDuration(400)
                         .setInterpolator(new DecelerateInterpolator()).start();
             }
