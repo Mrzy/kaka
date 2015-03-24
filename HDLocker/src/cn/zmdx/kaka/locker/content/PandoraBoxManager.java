@@ -42,6 +42,8 @@ import cn.zmdx.kaka.locker.content.adapter.GeneralNewsPageAdapter;
 import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
+import cn.zmdx.kaka.locker.policy.PandoraPolicy;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -115,6 +117,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private ImageView ivWeatherFeaturePic;
 
+    private ImageView ivArrowUp;
+
     private DigitalClocks mDigitalClockNowView;
 
     private LinearLayout mWeatherWindLayout;
@@ -144,6 +148,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         tvWeatherWindForce = (TextView) mHeaderView.findViewById(R.id.tvWeatherWindForce);
         tvNoWeatherInfo = (TextView) mHeaderView.findViewById(R.id.tvNoWeatherInfo);
         ivWeatherFeaturePic = (ImageView) mHeaderView.findViewById(R.id.ivWeatherFeaturePic);
+        ivArrowUp = (ImageView) mHeaderView.findViewById(R.id.ivArrowUp);
         mDigitalClockNowView = (DigitalClocks) mHeaderView.findViewById(R.id.digitalClockDateNow);
         return mHeaderView;
     }
@@ -362,11 +367,20 @@ public class PandoraBoxManager implements View.OnClickListener {
         refreshAllNews();
         initBody();
         showDateView();
+        PandoraConfig.newInstance(mContext).saveLastShowUnreadNews(System.currentTimeMillis());
+        tvUnreadNews.setVisibility(View.INVISIBLE);
+        ivArrowUp.animate().rotation(180).setDuration(200);
         mBackBtn.startAppearAnimator();
     }
 
     public void notifyNewsPanelCollapsed() {
         hideDateView();
+        ivArrowUp.animate().rotation(0).setDuration(200);
+        long lastShowUnreadNews = PandoraConfig.newInstance(mContext).getLastShowUnreadNews();
+        if (System.currentTimeMillis() - lastShowUnreadNews >= PandoraPolicy.MIN_SHOW_UNREAD_NEWS_TIME
+                && HDBNetworkState.isNetworkAvailable()) {
+            tvUnreadNews.setVisibility(View.VISIBLE);
+        }
         PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
         PandoraBoxManager.newInstance(mContext).resetDefaultPage();
         if (mBackBtn != null) {

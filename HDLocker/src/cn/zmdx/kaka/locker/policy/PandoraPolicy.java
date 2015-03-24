@@ -25,6 +25,8 @@ public class PandoraPolicy {
 
     public static final long MIN_UPDATE_LOCATION_TIME = 2 * 60 * 60 * 1000;// 2h
 
+    public static final long MIN_SHOW_UNREAD_NEWS_TIME = 1 * 60 * 60 * 1000;// 1h
+
     /**
      * 锁屏页下滑速率，值越小，越灵敏，即越容易下滑解锁
      */
