@@ -15,23 +15,18 @@ import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.OnHierarchyChangeListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
@@ -56,8 +51,6 @@ import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.utils.ImageUtils;
-import cn.zmdx.kaka.locker.wallpaper.OldOnlineWallpaperView;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
@@ -123,8 +116,6 @@ public class LockScreenManager {
     private boolean isInit = false;
 
     private WallpaperPanelLayout mOnlinePanel;
-
-    private OldOnlineWallpaperView mOnlineWallpaperView;
 
     private LinearLayout mOnlineViewContainer, mLockDataView;
 
@@ -696,59 +687,59 @@ public class LockScreenManager {
     };
 
     private void initCamera() {
-        final View outerView = mEntireView.findViewById(R.id.camera_outline);
-        mCameraIcon = (ImageView) mEntireView.findViewById(R.id.camera);
-        outerView.setOnTouchListener(new OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        mCameraIcon.setImageResource(R.drawable.camera_press_icon);
-                        setRunnableAfterUnLock(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                try {
-                                    Intent intent = new Intent(
-                                            MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA); // 启动照相机
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    mContext.startActivity(intent);
-                                    UmengCustomEventManager.statisticalEnterCamera();
-                                } catch (Exception e) {
-                                }
-                            }
-                        });
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        break;
-                    case MotionEvent.ACTION_CANCEL:
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        setRunnableAfterUnLock(null);
-                        mCameraIcon.setImageResource(R.drawable.camera_icon);
-                        break;
-                }
-                return false;
-            }
-        });
+//        final View outerView = mEntireView.findViewById(R.id.camera_outline);
+//        mCameraIcon = (ImageView) mEntireView.findViewById(R.id.camera);
+//        outerView.setOnTouchListener(new OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        mCameraIcon.setImageResource(R.drawable.camera_press_icon);
+//                        setRunnableAfterUnLock(new Runnable() {
+//
+//                            @Override
+//                            public void run() {
+//                                try {
+//                                    Intent intent = new Intent(
+//                                            MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA); // 启动照相机
+//                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                    mContext.startActivity(intent);
+//                                    UmengCustomEventManager.statisticalEnterCamera();
+//                                } catch (Exception e) {
+//                                }
+//                            }
+//                        });
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        break;
+//                    case MotionEvent.ACTION_CANCEL:
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        setRunnableAfterUnLock(null);
+//                        mCameraIcon.setImageResource(R.drawable.camera_icon);
+//                        break;
+//                }
+//                return false;
+//            }
+//        });
         final int distance = BaseInfoHelper.dip2px(mContext, 35);
-        outerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ObjectAnimator animator1 = ObjectAnimator.ofFloat(outerView, "translationX",
-                        distance);
-                animator1.setDuration(300);
-
-                ObjectAnimator animator = ObjectAnimator.ofFloat(outerView, "translationX", 0);
-                animator.setInterpolator(new BounceInterpolator());
-                animator.setDuration(700);
-
-                AnimatorSet set = new AnimatorSet();
-                set.playSequentially(animator1, animator);
-                set.start();
-            }
-        });
+//        outerView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ObjectAnimator animator1 = ObjectAnimator.ofFloat(outerView, "translationX",
+//                        distance);
+//                animator1.setDuration(300);
+//
+//                ObjectAnimator animator = ObjectAnimator.ofFloat(outerView, "translationX", 0);
+//                animator.setInterpolator(new BounceInterpolator());
+//                animator.setDuration(700);
+//
+//                AnimatorSet set = new AnimatorSet();
+//                set.playSequentially(animator1, animator);
+//                set.start();
+//            }
+//        });
     }
 
     private void initGuideView() {
@@ -771,7 +762,7 @@ public class LockScreenManager {
                 PandoraConfig.newInstance(mContext).saveLockScreenTimes(1);
             }
         });
-        guideView.setImageResource(R.drawable.pandora_lock_screen_guide);
+//        guideView.setImageResource(R.drawable.pandora_lock_screen_guide);
     }
 
     /**
@@ -851,9 +842,9 @@ public class LockScreenManager {
     }
 
     private void dispatchMainPanelClosed() {
-        if (null != mCameraIcon) {
-            mCameraIcon.setImageResource(R.drawable.camera_icon);
-        }
+//        if (null != mCameraIcon) {
+//            mCameraIcon.setImageResource(R.drawable.camera_icon);
+//        }
         synchronized (mMainPanelCallback) {
             for (IMainPanelListener listener : mMainPanelCallback) {
                 listener.onMainPanelClosed();
@@ -894,11 +885,11 @@ public class LockScreenManager {
     }
 
     protected void initOnlinePaperPanelView() {
-        if (null == mOnlineWallpaperView) {
-            mOnlineWallpaperView = new OldOnlineWallpaperView(mContext);
-        }
-        mOnlineViewContainer.removeAllViews();
-        mOnlineViewContainer.addView(mOnlineWallpaperView);
+//        if (null == mOnlineWallpaperView) {
+//            mOnlineWallpaperView = new OldOnlineWallpaperView(mContext);
+//        }
+//        mOnlineViewContainer.removeAllViews();
+//        mOnlineViewContainer.addView(mOnlineWallpaperView);
     }
 
     public void setDate() {
@@ -908,9 +899,9 @@ public class LockScreenManager {
         String weekString = PandoraUtils.getWeekString(mContext, week);
         String dateString = "" + month + "月" + "" + day + "日 " + weekString;
         mDate.setText(dateString);
-        if (null != mOnlineWallpaperView) {
-            mOnlineWallpaperView.setDate(dateString);
-        }
+//        if (null != mOnlineWallpaperView) {
+//            mOnlineWallpaperView.setDate(dateString);
+//        }
     }
 
     public void initWallpaper() {
@@ -923,9 +914,9 @@ public class LockScreenManager {
     }
 
     private void doFastBlur(Drawable bgDrawable) {
-        Bitmap bitmap = PandoraUtils.doFastBlur(mContext, mSlidingPanelLayout.getOverhangSize(),
-                ImageUtils.drawable2Bitmap(bgDrawable), mSlidingPanelLayout);
-        mSlidingBehindBlurView.setImageBitmap(bitmap);
+//        Bitmap bitmap = PandoraUtils.doFastBlur(mContext, mSlidingPanelLayout.getOverhangSize(),
+//                ImageUtils.drawable2Bitmap(bgDrawable), mSlidingPanelLayout);
+//        mSlidingBehindBlurView.setImageBitmap(bitmap);
     }
 
     /**
@@ -986,7 +977,7 @@ public class LockScreenManager {
         mIsLocked = false;
         isInit = false;
 
-        mOnlineWallpaperView = null;
+//        mOnlineWallpaperView = null;
         // mOnlineViewContainer.removeAllViews();
 
         if (mUnLockRunnable != null) {

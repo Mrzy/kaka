@@ -6,8 +6,6 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -18,16 +16,11 @@ import android.widget.ImageView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.MainSettingActivity;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
-import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 public class SplashActivity extends Activity {
-
-    private View mRootView;
 
     private TypefaceTextView mVersion;
 
@@ -48,8 +41,6 @@ public class SplashActivity extends Activity {
         }
         setContentView(R.layout.pandora_splash);
 
-        mRootView = findViewById(R.id.pandora_splash_background);
-//        initDesktopDrawable();
         mIcon = (ImageView) findViewById(R.id.pandora_splash_icon);
         mAppName = (TypefaceTextView) findViewById(R.id.pandora_splash_app_name);
         mVersion = (TypefaceTextView) findViewById(R.id.pandora_splash_version);
@@ -122,14 +113,6 @@ public class SplashActivity extends Activity {
     private void initVersion() {
         String version = BaseInfoHelper.getPkgVersionName(this);
         mVersion.setText("V " + version);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void initDesktopDrawable() {
-        Drawable drawable = ThemeManager.getCurrentTheme().getCurDrawable();
-        Bitmap bitmap = PandoraUtils.doFastBlur(SplashActivity.this, 0,
-                ImageUtils.drawable2Bitmap(drawable), mRootView);
-        mRootView.setBackgroundDrawable(ImageUtils.bitmap2Drawable(SplashActivity.this, bitmap));
     }
 
 }

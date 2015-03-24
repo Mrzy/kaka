@@ -65,8 +65,7 @@
         android:id="@+id/fb_reply_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/fb_input_layout"
-        android:layout_below="@+id/pandora_feedback_title" >
+        android:layout_above="@id/fb_input_layout" >
 
         <ListView
             android:id="@+id/fb_reply_list"

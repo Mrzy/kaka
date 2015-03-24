@@ -49,18 +49,18 @@ public class SingleImageBox implements IPandoraBox, View.OnClickListener {
     }
 
     private void initViews() {
-        mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
-                R.layout.pandora_box_single_image, null);
-        mScrollView = (BaseScrollView) mEntireView.findViewById(R.id.scrollView);
+//        mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
+//                R.layout.pandora_box_single_image, null);
+//        mScrollView = (BaseScrollView) mEntireView.findViewById(R.id.scrollView);
         // mScrollView.setOnScrollListener(listener)
         // mScrollView.setOnTouchListener(new
         // ScrollTouchListener(mScrollListener));
-        mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
+//        mSingleImgView = (ImageView) mEntireView.findViewById(R.id.single_img);
         setImageViewSize(mSingleImgView);
-        mDescView = (TextView) mEntireView.findViewById(R.id.desc);
+//        mDescView = (TextView) mEntireView.findViewById(R.id.desc);
         mDescView.getPaint().setFakeBoldText(true);
-        mFromPlatformText = (TextView) mEntireView.findViewById(R.id.from_platform_text);
-        mImageNewsContent = (TextView) mEntireView.findViewById(R.id.image_news_content);
+//        mFromPlatformText = (TextView) mEntireView.findViewById(R.id.from_platform_text);
+//        mImageNewsContent = (TextView) mEntireView.findViewById(R.id.image_news_content);
         // mBackBtn =
         // mEntireView.findViewById(R.id.pandora_box_single_back_btn);
         // mBackBtn.setOnClickListener(this);

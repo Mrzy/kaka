@@ -22,8 +22,7 @@
             android:id="@+id/pandora_splash_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/contentDescription"
-            android:src="@drawable/pandora_splash_icon" />
+            android:contentDescription="@string/contentDescription" />
 
         <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:id="@+id/pandora_splash_app_name"

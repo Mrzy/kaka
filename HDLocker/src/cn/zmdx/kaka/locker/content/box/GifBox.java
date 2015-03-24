@@ -34,10 +34,10 @@ public class GifBox implements IPandoraBox {
 
     public GifBox(Context context, PandoraData data) {
         mData = data;
-        mEntireView = LayoutInflater.from(context).inflate(R.layout.pandora_box_gif_image, null);
-        mImageView = (GifImageView) mEntireView.findViewById(R.id.gif_image);
-        mTextView = (TextView) mEntireView.findViewById(R.id.gif_desc);
-        mFromPlatformText = (TextView) mEntireView.findViewById(R.id.gif_from_platform_text);
+//        mEntireView = LayoutInflater.from(context).inflate(R.layout.pandora_box_gif_image, null);
+//        mImageView = (GifImageView) mEntireView.findViewById(R.id.gif_image);
+//        mTextView = (TextView) mEntireView.findViewById(R.id.gif_desc);
+//        mFromPlatformText = (TextView) mEntireView.findViewById(R.id.gif_from_platform_text);
     }
 
     @Override

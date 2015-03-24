@@ -20,27 +20,16 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
-import android.view.View;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.settings.CropImageActivity;
-import cn.zmdx.kaka.locker.settings.IndividualizationActivity;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
-import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class PandoraUtils {
     private PandoraUtils() {
@@ -51,64 +40,9 @@ public class PandoraUtils {
 
     public static final String MUIU_V6 = "V6";
 
-    public static Bitmap sLockDefaultThumbBitmap;
-
     public static final int REQUEST_CODE_CROP_IMAGE = 0;
 
     public static final int REQUEST_CODE_GALLERY = 1;
-
-    public static final int WARM_PROMPT_6 = 6;
-
-    public static final int WARM_PROMPT_10 = 10;
-
-    public static final int WARM_PROMPT_12 = 12;
-
-    public static final int WARM_PROMPT_13 = 13;
-
-    public static final int WARM_PROMPT_15 = 15;
-
-    public static final int WARM_PROMPT_17 = 17;
-
-    public static final int WARM_PROMPT_19 = 19;
-
-    public static final int WARM_PROMPT_23 = 23;
-
-    public static final int WARM_PROMPT_1 = 1;
-
-    // public static Bitmap fastBlur(View decorView) {
-    // decorView.setDrawingCacheEnabled(true);
-    // decorView.buildDrawingCache();
-    // Bitmap bitmap = decorView.getDrawingCache();
-    // return doFastBlur(bitmap, decorView);
-    //
-    // }
-
-    /**
-     * @deprecated 参数设计不合理，不建议使用
-     * @param context
-     * @param overhangSize
-     * @param bkg
-     * @param view
-     * @return
-     */
-    public static Bitmap doFastBlur(Context context, int overhangSize, Bitmap bkg, View view) {
-        float scaleFactor = 8;
-        float radius = 10;
-        int screenWidth = BaseInfoHelper.getRealWidth(context);
-        int screenHeight = BaseInfoHelper.getRealHeight(context);
-        int width = screenWidth - overhangSize;
-        Bitmap overlay = Bitmap.createBitmap((int) (width / scaleFactor),
-                (int) (screenHeight / scaleFactor), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(overlay);
-        canvas.translate(-view.getLeft() / scaleFactor, -view.getTop() / scaleFactor);
-        canvas.scale(1 / scaleFactor, 1 / scaleFactor);
-        Paint paint = new Paint();
-        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
-        canvas.drawBitmap(bkg, new Rect(0, 0, bkg.getWidth(), bkg.getHeight()), new Rect(0, 0,
-                width, screenHeight), paint);
-        // canvas.drawBitmap(bkg, 0, 0, paint);
-        return FastBlur.doBlur(overlay, (int) radius, true);
-    }
 
     public static void closeSystemLocker(Context context, boolean isMIUI) {
         try {
@@ -418,136 +352,6 @@ public class PandoraUtils {
         } catch (Exception e) {
             Toast.makeText(activity, R.string.error, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public static void gotoCropActivity(Activity activity, Uri uri, int mAspectRatioX,
-            int mAspectRatioY, boolean isWallpaper) {
-        Intent intent = new Intent();
-        intent.setClass(activity, CropImageActivity.class);
-        intent.setData(uri);
-        Bundle bundle = new Bundle();
-        bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_X, mAspectRatioX);
-        bundle.putInt(CropImageActivity.KEY_BUNDLE_ASPECTRATIO_Y, mAspectRatioY);
-        bundle.putBoolean(CropImageActivity.KEY_BUNDLE_IS_WALLPAPER, isWallpaper);
-        intent.putExtras(bundle);
-        activity.startActivityForResult(intent, PandoraUtils.REQUEST_CODE_CROP_IMAGE);
-        activity.overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                R.anim.umeng_fb_slide_out_from_left);
-    }
-
-    public static BitmapDrawable getLockDefaultBitmap(Context context) {
-        String fileName = PandoraConfig.newInstance(context).getLockDefaultFileName();
-        if (!TextUtils.isEmpty(fileName)) {
-            String path = IndividualizationActivity.LOCK_DEFAULT_SDCARD_LOCATION + fileName
-                    + ".jpg";
-            Bitmap bitmap = ImageUtils.getBitmapFromFile(path, null);
-            BitmapDrawable drawable = null;
-            if (null != bitmap) {
-                drawable = new BitmapDrawable(context.getResources(), bitmap);
-            }
-            return drawable;
-        }
-        return null;
-    }
-
-    private static int getTimeQuantum(int currentHour) {
-        if (currentHour < WARM_PROMPT_10 && currentHour >= WARM_PROMPT_6) {
-            return WARM_PROMPT_6;
-        } else if (currentHour < WARM_PROMPT_12 && currentHour >= WARM_PROMPT_10) {
-            return WARM_PROMPT_10;
-        } else if (currentHour < WARM_PROMPT_13 && currentHour >= WARM_PROMPT_12) {
-            return WARM_PROMPT_12;
-        } else if (currentHour < WARM_PROMPT_15 && currentHour >= WARM_PROMPT_13) {
-            return WARM_PROMPT_13;
-        } else if (currentHour < WARM_PROMPT_17 && currentHour >= WARM_PROMPT_15) {
-            return WARM_PROMPT_15;
-        } else if (currentHour < WARM_PROMPT_19 && currentHour >= WARM_PROMPT_17) {
-            return WARM_PROMPT_17;
-        } else if (currentHour < WARM_PROMPT_23 && currentHour >= WARM_PROMPT_19) {
-            return WARM_PROMPT_19;
-        } else if (currentHour < WARM_PROMPT_1 || currentHour >= WARM_PROMPT_23) {
-            return WARM_PROMPT_23;
-        } else if (currentHour < WARM_PROMPT_6 || currentHour >= WARM_PROMPT_1) {
-            return WARM_PROMPT_1;
-        } else {
-            return WARM_PROMPT_6;
-        }
-    }
-
-    public static String getTimeQuantumString(Context mContext, int currentHour) {
-        String promptString = "";
-        int currentQuantum = getTimeQuantum(currentHour);
-        int random = (int) Math.round(Math.random());
-        switch (currentQuantum) {
-            case WARM_PROMPT_6:
-                if (random == 0) {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_6_10_1);
-                } else {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_6_10_2);
-                }
-                break;
-            case WARM_PROMPT_10:
-                if (random == 0) {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_10_12_1);
-                } else {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_10_12_2);
-                }
-                break;
-            case WARM_PROMPT_12:
-                if (random == 0) {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_12_13_1);
-                } else {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_12_13_2);
-                }
-                break;
-            case WARM_PROMPT_13:
-                if (random == 0) {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_13_15_1);
-                } else {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_13_15_2);
-                }
-                break;
-            case WARM_PROMPT_15:
-                if (random == 0) {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_15_17_1);
-                } else {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_15_17_2);
-                }
-                break;
-            case WARM_PROMPT_17:
-                if (random == 0) {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_17_19_1);
-                } else {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_17_19_2);
-                }
-                break;
-            case WARM_PROMPT_19:
-                if (random == 0) {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_19_23_1);
-                } else {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_19_23_2);
-                }
-                break;
-
-            case WARM_PROMPT_23:
-                if (random == 0) {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_23_1_1);
-                } else {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_23_1_2);
-                }
-                break;
-            case WARM_PROMPT_1:
-                if (random == 0) {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_1_6_1);
-                } else {
-                    promptString = mContext.getResources().getString(R.string.warm_prompt_1_6_2);
-                }
-                break;
-
-            default:
-                break;
-        }
-        return promptString;
     }
 
     public static boolean isHaveFile(String path) {

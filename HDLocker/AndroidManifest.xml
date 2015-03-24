@@ -61,70 +61,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".settings.BaseActivity"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
-        </activity>
-        <activity
-            android:name=".guide.GuideActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".settings.InitSettingActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".settings.InitPromptActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/init_prompt_style" >
-        </activity>
-        <activity
-            android:name=".settings.WallPaperActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".settings.CropImageActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
-        </activity>
-        <activity
-            android:name=".FakeActivity"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name=".settings.IndividualizationActivity"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".settings.LockerPasswordActivity"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".settings.LockerPasswordTypeActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/locker_password_dialog_theme" >
-        </activity>
-        <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
 
         <service android:name=".service.PandoraService" />
         <!-- umeng -->
@@ -141,31 +77,12 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
-
         <receiver android:name=".receiver.PandoraReceiver" >
             <intent-filter android:priority="1000" >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="54212a7ffd98c5157e02f6b2" >
-        </meta-data>
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="pandora" />
-
-        <activity
-            android:name="cn.zmdx.kaka.locker.settings.FavoritesActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" >
-        </activity>
 
         <!-- activitys -->
         <activity
@@ -198,7 +115,27 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.NewCropImageActivity"
+            android:name=".settings.CropImageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FakeActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".settings.InitPromptActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/init_prompt_style" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".settings.InitSettingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <!-- 分享 -->
@@ -208,6 +145,17 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="54212a7ffd98c5157e02f6b2" >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="pandora" />
     </application>
 
 </manifest>

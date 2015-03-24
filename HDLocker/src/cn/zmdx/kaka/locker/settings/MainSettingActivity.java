@@ -153,7 +153,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         switch (requestCode) {
             case PandoraUtils.REQUEST_CODE_GALLERY: {
                 Intent intent = new Intent();
-                intent.setClass(MainSettingActivity.this, NewCropImageActivity.class);
+                intent.setClass(MainSettingActivity.this, CropImageActivity.class);
                 intent.setData(data.getData());
                 startActivity(intent);
                 overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,

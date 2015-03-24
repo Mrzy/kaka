@@ -8,76 +8,12 @@
 <!-- ############################################################################################## -->
 <resources>
 
-    <dimen name="setting_padding_top">13dp</dimen>
-    <dimen name="setting_wallpaper_bg_height">133dp</dimen>
-    <dimen name="setting_wallpaper_bg_margin_left">8dp</dimen>
-    <dimen name="setting_wallpaper_bg_margin_right">8dp</dimen>
-    <dimen name="setting_wallpaper_height">96dp</dimen>
-    <dimen name="setting_wallpaper_width">54dp</dimen>
-    <dimen name="setting_wallpaper_margin_left">17dp</dimen>
-    <dimen name="setting_wallpaper_margin_right">17dp</dimen>
-    <dimen name="setting_wallpaper_border_height">98dp</dimen>
-    <dimen name="setting_wallpaper_border_width">56dp</dimen>
-    <dimen name="setting_MIUI_item_height">120dp</dimen>
-    
-    <dimen name="gusture_view_padding_top">125dp</dimen>
-    <dimen name="gusture_pattern_lock_width">300dp</dimen>
-    <dimen name="gusture_pattern_lock_height">300dp</dimen>
     <dimen name="gusture_pattern_lock_margin_top">10dp</dimen>
-    <dimen name="gusture_view_button_view_width">253dp</dimen>
-    <dimen name="gusture_view_button_margin_top">10dp</dimen>
-    <dimen name="gusture_view_button_height">44dp</dimen>
-    <dimen name="gusture_view_button_margin_left">10dp</dimen>
-    <dimen name="setting_fb_contact_height">46dp</dimen>
-    <dimen name="setting_about_us_height">60dp</dimen>
-    <dimen name="setting_about_pandora_imageview_width">121dp</dimen>
-    <dimen name="setting_about_pandora_imageview_height">90dp</dimen>
-    <dimen name="setting_about_us_textview_height">40dp</dimen>
-    <dimen name="setting_about_us_textview_margin_top">10dp</dimen>
     <dimen name="setting_about_pandora_height">84dp</dimen>
-    <dimen name="setting_about_pandora_text_height">195dp</dimen>
     <dimen name="setting_about_pandora_margin">4dp</dimen>
-    <dimen name="setting_about_pandora_version_height">30dp</dimen>
     <dimen name="setting_about_pandora_margin_one">17dp</dimen>
-    <dimen name="setting_about_cooperation_margin">0dp</dimen>
-    
-    <dimen name="pandora_box_nodata_show_image_width">100dp</dimen>
-    <dimen name="pandora_box_nodata_show_image_height">100dp</dimen>
-    <dimen name="pandora_box_nodata_show_image_top_height">150dp</dimen>
-
-    <dimen name="locker_key_padding_top">35dp</dimen>
-    <dimen name="lockscreen_gusture_padding_top">25dp</dimen>
-    
-    <dimen name="init_setting_title_layout_margin_bottom">8dp</dimen>
-    <dimen name="init_setting_title_layout_margin_top">12dp</dimen>
-    <dimen name="init_setting_title_textview_margin_bottom">13dp</dimen>
-    <dimen name="init_setting_title_textview_margin_top">25dp</dimen>
-    <dimen name="init_setting_title_textview_margin_left">13.5dp</dimen>
     <dimen name="init_setting_title_line_height">1px</dimen>
-    <dimen name="init_setting_item_margin_left">33dp</dimen>
-    <dimen name="init_setting_item_margin_right">33dp</dimen>
-    <dimen name="init_setting_item_margin_top">23dp</dimen>
-    <dimen name="init_setting_button_height">33dp</dimen>
-    <dimen name="init_setting_button_margin_top">10dp</dimen>
-    <dimen name="init_setting_complete_button_width">157dp</dimen>
-    <dimen name="init_setting_complete_button_margin_top">106dp</dimen>
-    
-    <dimen name="locker_key_prompt_padding_top">35dp</dimen>
-    <dimen name="locker_key_prompt_padding_right">10dp</dimen>
-    <dimen name="locker_arrow_move_lenght">16dp</dimen>
-    <dimen name="panelHeight">130dp</dimen>
-    
-    <dimen name="pandora_wallpaper_height_poor_half">7.5dp</dimen> 
-    
     <dimen name="setting_title_textview_margin_bottom">13dp</dimen>
     <dimen name="setting_title_textview_margin_top">25dp</dimen>
-    <dimen name="setting_title_line_height">1px</dimen>
-    
-    <dimen name="pandora_wallpaper_textview_margin_top">23dp</dimen>
-    <dimen name="pandora_wallpaper_textview_margin_bottom">17dp</dimen>
-    <dimen name="pandora_wallpaper_default_line_margin_top">21dp</dimen>
-    <dimen name="init_setting_complete_button_margin_right">10dp</dimen>
-    
-    <dimen name="pandora_linearLayout_padding">13.5dp</dimen>
-    
+
 </resources>

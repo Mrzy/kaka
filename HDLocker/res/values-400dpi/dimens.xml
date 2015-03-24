@@ -3,17 +3,10 @@
 <!-- 以下资源内容适配如下机型 [2014.09.11 11:13]   shiyc -->
 <!--  -->
 <!-- 为方便以后的维护，如果此文件适配的机型未在下方列表，请您补全: -->
-<!-- M1        854x480          240dpi   px/dp = 1.5 -->
+<!-- 魅族                  400dpi   -->
 <!--  -->
 <!-- ############################################################################################## -->
 <resources>
 
-    <!-- onlinePaper -->
-    <dimen name="pandora_online_wallpaper_preview_imageview_width">180dp</dimen>
-    <dimen name="pandora_online_wallpaper_preview_imageview_height">320dp</dimen>
-    <dimen name="pandora_online_wallpaper_gridview_item_width">90dp</dimen>
-    <dimen name="pandora_online_wallpaper_gridview_item_height">162dp</dimen>
-    <dimen name="pandora_online_wallpaper_gridview_margin_left">20dp</dimen>
-    <dimen name="pandora_online_wallpaper_margin_bottom">18dp</dimen>
     
 </resources>
