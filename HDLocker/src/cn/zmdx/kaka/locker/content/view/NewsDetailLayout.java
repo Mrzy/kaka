@@ -230,6 +230,7 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         } else if (v == mLikeImageView) {
             if (!mData.isLiked()) {
                 mData.setLiked(true);
+                mData.setTop("" + (Integer.parseInt(mData.getTop()) + 1));
                 mLikeImageView.setImageDrawable(getResources().getDrawable(
                         R.drawable.news_detail_like_icon));
                 showLikeNumber();
