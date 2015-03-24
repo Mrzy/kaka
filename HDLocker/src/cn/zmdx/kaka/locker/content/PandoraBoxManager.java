@@ -22,7 +22,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.LockScreenManager;
@@ -55,6 +55,7 @@ import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
 import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
 import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
+import cn.zmdx.kaka.locker.widget.DigitalClocks;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.PandoraRecyclerView;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
@@ -77,7 +78,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private OnlineWallpaperView mWallpaperView;
 
-//    private ImageView mNotifyTip;
+    // private ImageView mNotifyTip;
 
     private ViewPagerCompat mViewPager;
 
@@ -114,6 +115,10 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private ImageView ivWeatherFeaturePic;
 
+    private DigitalClocks mDigitalClockNowView;
+
+    private LinearLayout mWeatherWindLayout;
+
     private PandoraBoxManager(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -134,11 +139,12 @@ public class PandoraBoxManager implements View.OnClickListener {
         tvWeatherFeature = (TextView) mHeaderView.findViewById(R.id.tvWeatherFeature);
         tvWeatherCentTemp = (TextView) mHeaderView.findViewById(R.id.tvWeatherCentTemp);
         tvUnreadNews = (TextView) mHeaderView.findViewById(R.id.tvUnreadNews);
+        mWeatherWindLayout = (LinearLayout) mHeaderView.findViewById(R.id.llWeatherWind);
         tvWeatherWind = (TextView) mHeaderView.findViewById(R.id.tvWeatherWind);
         tvWeatherWindForce = (TextView) mHeaderView.findViewById(R.id.tvWeatherWindForce);
         tvNoWeatherInfo = (TextView) mHeaderView.findViewById(R.id.tvNoWeatherInfo);
         ivWeatherFeaturePic = (ImageView) mHeaderView.findViewById(R.id.ivWeatherFeaturePic);
-
+        mDigitalClockNowView = (DigitalClocks) mHeaderView.findViewById(R.id.digitalClockDateNow);
         return mHeaderView;
     }
 
@@ -221,6 +227,43 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
     }
 
+    /**
+     * 显示当前时间
+     */
+    private void showDateView() {
+        if (mWeatherWindLayout != null) {
+            mWeatherWindLayout.setVisibility(View.GONE);
+        }
+        boolean locked = LockScreenManager.getInstance().isLocked();
+        if (locked) {
+            if (mDigitalClockNowView != null) {
+                mDigitalClockNowView.setTickerStoped(true);
+            }
+        }
+        if (mDigitalClockNowView != null) {
+            mDigitalClockNowView.setVisibility(View.VISIBLE);
+            mDigitalClockNowView.setTickerStoped(false);
+        }
+        mWeatherWindLayout.animate().alpha(0).setDuration(500);
+        mDigitalClockNowView.animate().alpha(1).setDuration(500);
+    }
+
+    /**
+     * 隐藏当前时间
+     */
+    private void hideDateView() {
+        if (mWeatherWindLayout != null) {
+            mWeatherWindLayout.setVisibility(View.VISIBLE);
+        }
+        LockScreenManager.getInstance().onScreenOn();
+        if (mDigitalClockNowView != null) {
+            mDigitalClockNowView.setVisibility(View.GONE);
+            mDigitalClockNowView.setTickerStoped(true);
+        }
+        mWeatherWindLayout.animate().alpha(1).setDuration(500);
+        mDigitalClockNowView.animate().alpha(0).setDuration(500);
+    }
+
     private boolean mInitBody = false;
 
     public void initBody() {
@@ -237,8 +280,10 @@ public class PandoraBoxManager implements View.OnClickListener {
             @Override
             public void onViewAttachedToWindow(View v) {
                 LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mNotifyReceiver);
-                IntentFilter filter = new IntentFilter(NotificationListView.ACTION_NOTIFICATION_POSTED);
-                LocalBroadcastManager.getInstance(mContext).registerReceiver(mNotifyReceiver, filter);
+                IntentFilter filter = new IntentFilter(
+                        NotificationListView.ACTION_NOTIFICATION_POSTED);
+                LocalBroadcastManager.getInstance(mContext).registerReceiver(mNotifyReceiver,
+                        filter);
             }
 
             @Override
@@ -316,10 +361,12 @@ public class PandoraBoxManager implements View.OnClickListener {
     public void notifyNewsPanelExpanded() {
         refreshAllNews();
         initBody();
+        showDateView();
         mBackBtn.startAppearAnimator();
     }
 
     public void notifyNewsPanelCollapsed() {
+        hideDateView();
         PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
         PandoraBoxManager.newInstance(mContext).resetDefaultPage();
         if (mBackBtn != null) {
