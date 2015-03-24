@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.settings.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -448,6 +449,14 @@ public class PandoraConfig {
 
     public void saveRandomReplacementState(boolean isEnable) {
         mSp.edit().putBoolean(KEY_RANDOM_REPLACEMENT, isEnable).commit();
+    }
+
+    /**
+     * TODO
+     * @return
+     */
+    public boolean isOpenForegroundService() {
+        return BuildConfig.DEBUG;
     }
 
 }

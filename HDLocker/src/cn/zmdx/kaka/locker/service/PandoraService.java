@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker.service;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,8 +15,10 @@ import android.telephony.TelephonyManager;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
+import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
+import cn.zmdx.kaka.locker.settings.MainSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
@@ -22,6 +26,8 @@ import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 public class PandoraService extends Service {
 
     public static final String ALARM_ALERT_ACTION = "com.android.deskclock.ALARM_ALERT";
+
+    private static final int FOREGROUND_SERVICE_ID = 123465;
 
     /**
      * 中兴手机闹钟的action
@@ -39,7 +45,22 @@ public class PandoraService extends Service {
         registerBroadcastReceiver();
         TelephonyManager manager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
         manager.listen(new MyPhoneListener(), PhoneStateListener.LISTEN_CALL_STATE);
+
+        if (PandoraConfig.newInstance(this).isOpenForegroundService()) {
+            Notification noti = createNotification();
+            startForeground(FOREGROUND_SERVICE_ID, noti);
+        }
         super.onCreate();
+    }
+
+    @SuppressWarnings("deprecation")
+    private Notification createNotification() {
+        Notification notification = new Notification(R.drawable.ic_launcher, "",
+                System.currentTimeMillis());
+        Intent notificationIntent = new Intent(this, MainSettingActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        notification.setLatestEventInfo(this, "潘多拉锁屏正在运行", "关闭此通知可能导致锁屏不能正常使用", pendingIntent);
+        return notification;
     }
 
     @Override
@@ -49,12 +70,21 @@ public class PandoraService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if ("stop".equals(intent.getStringExtra("action"))) {
+            stopForeground(true);
+        }
         return START_STICKY;
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         return super.onUnbind(intent);
+    }
+
+    public static void stopForegroundService(Context context) {
+        Intent in = new Intent();
+        in.putExtra("action", "stop");
+        context.startService(in);
     }
 
     @Override
@@ -64,6 +94,7 @@ public class PandoraService extends Service {
         }
         super.onDestroy();
         unRegisterBroadcastReceiver();
+        stopForeground(true);
         startService(new Intent(this, PandoraService.class));
     }
 

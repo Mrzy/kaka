@@ -251,10 +251,8 @@ public class LockScreenManager {
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
     }
 
-    private void toggleAnimation(View target) {
+    private void startShimmer() {
         if (mShimmer != null) {
-            mShimmer.setDuration(5000);// 默认是1s
-            mShimmer.setStartDelay(1800);// 默认间隔为0
             mShimmer.start(mShimmerTextView);
         }
     }
@@ -295,7 +293,10 @@ public class LockScreenManager {
         mMainPage = LayoutInflater.from(mContext).inflate(R.layout.pandora_main_pager_layout, null);
         mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
         mShimmer = new Shimmer();
-        toggleAnimation(mMainPage);
+        mShimmer.setDuration(5000);// 默认是1s
+        mShimmer.setStartDelay(1800);// 默认间隔为0
+
+        startShimmer();
 
         mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -1048,6 +1049,9 @@ public class LockScreenManager {
             mDigitalClockView.setTickerStoped(true);
         }
 
+        if (mShimmer != null) {
+            mShimmer.cancel();
+        }
         // 检查是否有读取通知权限
         NotificationInterceptor.getInstance(mContext).checkPermission();
     }
@@ -1060,6 +1064,8 @@ public class LockScreenManager {
             if (mDigitalClockView != null) {
                 mDigitalClockView.setTickerStoped(false);
             }
+
+            startShimmer();
         }
     }
 

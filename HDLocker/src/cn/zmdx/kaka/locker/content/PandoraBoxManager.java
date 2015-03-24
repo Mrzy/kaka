@@ -322,7 +322,9 @@ public class PandoraBoxManager implements View.OnClickListener {
     public void notifyNewsPanelCollapsed() {
         PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
         PandoraBoxManager.newInstance(mContext).resetDefaultPage();
-        mBackBtn.setTranslationY(BaseInfoHelper.dip2px(mContext, 100));
+        if (mBackBtn != null) {
+            mBackBtn.setTranslationY(BaseInfoHelper.dip2px(mContext, 100));
+        }
     }
 
     public void refreshNewsByCategory(int category) {
