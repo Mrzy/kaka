@@ -92,6 +92,8 @@ public class PandoraConfig {
 
     private static final String KEY_LAST_CHECK_LOCATION = "klcl";
 
+    private static final String KEY_LAST_SHOW_UNREAD_NEWS = "klsun";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -106,6 +108,16 @@ public class PandoraConfig {
 
     public boolean isPandolaLockerOn() {
         return mSp.getBoolean(PANDORA_LOCKER_SP_NAME, true);
+    }
+
+    public void saveLastShowUnreadNews(long curTime) {
+        Editor editor = mSp.edit();
+        editor.putLong(KEY_LAST_SHOW_UNREAD_NEWS, curTime);
+        editor.commit();
+    }
+
+    public long getLastShowUnreadNews() {
+        return mSp.getLong(KEY_LAST_SHOW_UNREAD_NEWS, 0);
     }
 
     public void savePandolaLockerState(boolean isEnable) {
@@ -453,6 +465,7 @@ public class PandoraConfig {
 
     /**
      * TODO
+     * 
      * @return
      */
     public boolean isOpenForegroundService() {
