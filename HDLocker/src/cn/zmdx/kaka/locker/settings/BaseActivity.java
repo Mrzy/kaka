@@ -16,7 +16,7 @@ import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
  * 
  * @author syc
  */
-public class BaseActivity extends Activity {
+public abstract class BaseActivity extends Activity {
 
     @SuppressLint("InlinedApi")
     @SuppressWarnings("deprecation")

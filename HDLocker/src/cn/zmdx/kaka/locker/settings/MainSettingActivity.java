@@ -16,6 +16,7 @@ import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.MainSettingFragment.IMainSettingListener;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -104,6 +105,10 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
     }
 
     private void goInitSetting() {
+        boolean isMeizu = PandoraUtils.isMeizu(this);
+        if (isMeizu && !NotificationInterceptor.getInstance(this).isDeviceAvailable()) {
+            return;
+        }
         Intent intent = new Intent(this, InitSettingActivity.class);
         startActivity(intent);
     }

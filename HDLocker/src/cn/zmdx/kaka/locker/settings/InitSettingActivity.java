@@ -82,6 +82,9 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
             findViewById(R.id.init_setting_MIUI_line).setVisibility(View.VISIBLE);
             mTrustLayout.setVisibility(View.VISIBLE);
         }
+        if (isMeizu) {
+            mCloseSystemLockLayout.setVisibility(View.GONE);
+        }
         mRootView = findViewById(R.id.init_setting_background);
         LinearLayout titleView = (LinearLayout) findViewById(R.id.init_setting_title);
         initBackground(mRootView);
