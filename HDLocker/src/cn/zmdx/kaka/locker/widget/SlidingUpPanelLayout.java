@@ -15,6 +15,7 @@ import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1084,6 +1085,14 @@ public class SlidingUpPanelLayout extends ViewGroup {
             return true;
         }
         return false;
+    }
+
+    public void smoothSlideTo(int offset, int velocity) {
+        mSlideableView.setTranslationY(offset);
+    }
+
+    public View getSliderView() {
+        return mSlideableView;
     }
 
     @Override

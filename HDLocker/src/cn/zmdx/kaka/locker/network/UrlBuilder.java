@@ -1,8 +1,6 @@
 
 package cn.zmdx.kaka.locker.network;
 
-import java.util.Map;
-
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -25,14 +23,5 @@ public class UrlBuilder {
                 return sBaseProdUrl;
             }
         }
-    }
-
-    /**@deprecated 暂不可用
-     * @param params url参数
-     * @return
-     */
-    public static String getUrl(Map<String, String> params) {
-        // TODO
-        return null;
     }
 }

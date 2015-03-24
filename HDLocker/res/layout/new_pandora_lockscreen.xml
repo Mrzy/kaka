@@ -15,7 +15,7 @@
         supl:slidingOverlay="true"
         supl:slidingPanelHeight="80dp"
         supl:slidingParalaxOffset="0dp"
-        supl:slidingShadowHeight="5dp" >
+        supl:slidingShadowHeight="0dp" >
 
         <FrameLayout
             android:layout_width="match_parent"
