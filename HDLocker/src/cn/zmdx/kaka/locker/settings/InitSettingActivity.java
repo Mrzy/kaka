@@ -87,7 +87,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
         }
         mRootView = findViewById(R.id.init_setting_background);
         LinearLayout titleView = (LinearLayout) findViewById(R.id.init_setting_title);
-        initBackground(mRootView);
+        fullScreen();
         initTitleHeight(titleView);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             mReadNotificationLayout.setVisibility(View.VISIBLE);
