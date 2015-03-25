@@ -25,6 +25,8 @@ public class MainSettingFragment extends Fragment {
 
     private PagerSlidingTabStrip mTabStrip;
 
+    private PasswordFragment mPasswordFragment;
+
     public interface IMainSettingListener {
         void onItemClick(String title, int position);
     }
@@ -70,14 +72,14 @@ public class MainSettingFragment extends Fragment {
     private List<Fragment> initFragmentList() {
         List<Fragment> fragmentList = new ArrayList<Fragment>();
         GeneralFragment mainSettingsFragment = new GeneralFragment();
-        PasswordFragment passwordFragment = new PasswordFragment();
+        mPasswordFragment = new PasswordFragment();
         WallpaperFragment wallpaperFragment = new WallpaperFragment();
         fragmentList.add(mainSettingsFragment);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             NotifyFragment notifyFragment = new NotifyFragment();
             fragmentList.add(notifyFragment);
         }
-        fragmentList.add(passwordFragment);
+        fragmentList.add(mPasswordFragment);
         fragmentList.add(wallpaperFragment);
         return fragmentList;
     }
@@ -124,6 +126,12 @@ public class MainSettingFragment extends Fragment {
                 mTabStrip.setIndicatorColor(((MainSettingActivity) (getActivity()))
                         .getBackgroundColor()[position]);
             }
+        }
+    }
+
+    public void resetPasswordState() {
+        if (null != mPasswordFragment) {
+            mPasswordFragment.reset();
         }
     }
 

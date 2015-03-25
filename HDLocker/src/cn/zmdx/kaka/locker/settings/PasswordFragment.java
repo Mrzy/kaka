@@ -1,8 +1,7 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,12 +19,8 @@ import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.widget.BaseLinearLayout;
-import cn.zmdx.kaka.locker.widget.PandoraLockPatternView;
-import cn.zmdx.kaka.locker.widget.PandoraLockPatternView.ILockPatternListener;
-import cn.zmdx.kaka.locker.widget.PandoraNumberLockView;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.umeng.analytics.MobclickAgent;
 
 public class PasswordFragment extends Fragment implements OnClickListener {
@@ -36,8 +31,6 @@ public class PasswordFragment extends Fragment implements OnClickListener {
 
     private ImageView mNoneItemSelect;
 
-    private BaseLinearLayout mLockPatternItem;
-
     private ImageView mLockPatternItemSelect;
 
     private BaseLinearLayout mNumberLockItem;
@@ -45,10 +38,6 @@ public class PasswordFragment extends Fragment implements OnClickListener {
     private ImageView mNumberLockItemSelect;
 
     private LinearLayout mLockPatternLayout;
-
-    private LinearLayout mLockPatternStyleLineOne;
-
-    private LinearLayout mLockPatternStyleLineTwo;
 
     private FrameLayout mPureStyle;
 
@@ -73,10 +62,6 @@ public class PasswordFragment extends Fragment implements OnClickListener {
     private FrameLayout mMidsummerStyle;
 
     private ImageView mMidsummerStyleSelect;
-
-    private MaterialDialog mNumberLockDialog;
-
-    private MaterialDialog mLockPatternDialog;
 
     private TypefaceTextView mPureStylePrompt;
 
@@ -103,8 +88,6 @@ public class PasswordFragment extends Fragment implements OnClickListener {
         mNoneItem = (BaseLinearLayout) mEntireView.findViewById(R.id.setting_password_none_item);
         mNoneItem.setOnClickListener(this);
         mNoneItemSelect = (ImageView) mEntireView.findViewById(R.id.setting_password_none_select);
-        mLockPatternItem = (BaseLinearLayout) mEntireView
-                .findViewById(R.id.setting_password_lock_pattern_item);
         mLockPatternItemSelect = (ImageView) mEntireView
                 .findViewById(R.id.setting_password_lock_pattern_select);
         mNumberLockItem = (BaseLinearLayout) mEntireView
@@ -119,10 +102,6 @@ public class PasswordFragment extends Fragment implements OnClickListener {
     private void initLockPatternLayout() {
         mLockPatternLayout = (LinearLayout) mEntireView
                 .findViewById(R.id.setting_password_lock_pattern_layout);
-        mLockPatternStyleLineOne = (LinearLayout) mEntireView
-                .findViewById(R.id.setting_password_lock_pattern_style_line_one);
-        mLockPatternStyleLineTwo = (LinearLayout) mEntireView
-                .findViewById(R.id.setting_password_lock_pattern_style_line_two);
 
         mPureStyle = (FrameLayout) mEntireView
                 .findViewById(R.id.setting_password_lock_pattern_pure_style);
@@ -244,12 +223,7 @@ public class PasswordFragment extends Fragment implements OnClickListener {
             setLockTypeNone(lockPatternStyle);
             setLockPatternViewSelectState(mNoneItemSelect);
             setStyleViewSelectState(null);
-        }
-        // else if (view == mLockPatternItem) {
-        // setLockTypePattern();
-        // initPasswordType();
-        // }
-        else if (view == mNumberLockItem) {
+        } else if (view == mNumberLockItem) {
             int lockPatternStyle = PandoraConfig.newInstance(getActivity()).getLockPatternStyle(
                     LockPatternManager.LOCK_PATTERN_STYLE_PURE);
             setLockTypeNumber(lockPatternStyle);
@@ -305,145 +279,19 @@ public class PasswordFragment extends Fragment implements OnClickListener {
     }
 
     private void gotoLockerPasswordTypeActivity(int curType, int targetType, int lockPatternStyle) {
-        switch (curType) {
-            case KeyguardLockerManager.UNLOCKER_TYPE_NONE:
-                if (targetType == KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN) {
-                    setLockPatternViewVisibleWithLockPatternListener(
-                            PandoraLockPatternView.TYPE_LOCK_PATTERN_OPEN, lockPatternStyle);
-                } else if (targetType == KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK) {
-                    setNumberLockViewVisibleWithNumberLockListener(PandoraNumberLockView.LOCK_NUMBER_TYPE_OPEN);
-                }
-                break;
-            case KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN:
-                if (targetType == KeyguardLockerManager.UNLOCKER_TYPE_NONE) {
-                    setLockPatternViewVisibleWithLockPatternListener(
-                            PandoraLockPatternView.TYPE_LOCK_PATTERN_CLOSE, lockPatternStyle);
-                } else if (targetType == KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK) {
-                    setLockPatternViewVisibleWithVerifyListener(true, lockPatternStyle);
-                }
-                break;
-            case KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK:
-                if (targetType == KeyguardLockerManager.UNLOCKER_TYPE_NONE) {
-                    setNumberLockViewVisibleWithNumberLockListener(PandoraNumberLockView.LOCK_NUMBER_TYPE_CLOSE);
-                } else if (targetType == KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN) {
-                    setNumberLockViewVisibleWithVerifyListener(true, lockPatternStyle);
-                }
-                break;
-
-            default:
-                break;
-        }
-
+        Intent in = new Intent();
+        in.setClass(getActivity(), PasswordPromptActivity.class);
+        in.putExtra("targetType", targetType);
+        in.putExtra("lockPatternStyle", lockPatternStyle);
+        getActivity().startActivityForResult(in,
+                PasswordPromptActivity.REQUEST_LOCKER_PASSWORD_TYPE_CODE);
+        getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                R.anim.umeng_fb_slide_out_from_left);
     }
 
-    private void setLockPatternViewVisibleWithVerifyListener(final boolean isNeedNumberLockView,
-            int lockPatternStyle) {
-        PandoraLockPatternView mLockPatternView = new PandoraLockPatternView(getActivity(),
-                PandoraLockPatternView.TYPE_LOCK_PATTERN_VERIFY, lockPatternStyle,
-                new PandoraLockPatternView.IVerifyListener() {
-
-                    @Override
-                    public void onVerifySuccess() {
-                        // TODO
-                        if (isNeedNumberLockView) {
-                            setNumberLockViewVisibleWithNumberLockListener(PandoraNumberLockView.LOCK_NUMBER_TYPE_OPEN);
-                        } else {
-                            dismissLockPatternDialog();
-                        }
-                    }
-                }, false);
-        createLockPatternDialog(mLockPatternView);
-    }
-
-    private void setLockPatternViewVisibleWithLockPatternListener(int type, int lockPatternStyle) {
-        PandoraLockPatternView mLockPatternView = new PandoraLockPatternView(getActivity(), type,
-                lockPatternStyle, new ILockPatternListener() {
-
-                    @Override
-                    public void onPatternDetected(int type, boolean success) {
-                        // TODO
-                        dismissLockPatternDialog();
-                    }
-                });
-        createLockPatternDialog(mLockPatternView);
-    }
-
-    private void setNumberLockViewVisibleWithVerifyListener(final boolean isNeedLockPatternView,
-            final int lockPatternStyle) {
-        PandoraNumberLockView mNumberLockView = new PandoraNumberLockView(getActivity(),
-                PandoraNumberLockView.LOCK_NUMBER_TYPE_VERIFY,
-                new PandoraNumberLockView.IVerifyListener() {
-
-                    @Override
-                    public void onVerifySuccess() {
-                        // TODO
-                        if (isNeedLockPatternView) {
-                            setLockPatternViewVisibleWithLockPatternListener(
-                                    PandoraLockPatternView.TYPE_LOCK_PATTERN_OPEN, lockPatternStyle);
-                        } else {
-                            dismissNumberLockDialog();
-                        }
-                    }
-
-                }, false);
-        createNumberLockDialog(mNumberLockView);
-    }
-
-    private void setNumberLockViewVisibleWithNumberLockListener(int type) {
-        PandoraNumberLockView mNumberLockView = new PandoraNumberLockView(getActivity(), type,
-                new PandoraNumberLockView.INumberLockListener() {
-
-                    @Override
-                    public void onSetNumberLock(int type, boolean success) {
-                        // TODO
-                        dismissNumberLockDialog();
-                    }
-                });
-        createNumberLockDialog(mNumberLockView);
-    }
-
-    private void createLockPatternDialog(View customView) {
-        dismissNumberLockDialog();
-        mLockPatternDialog = new MaterialDialog.Builder(getActivity()).customView(customView, true)
-                .dismissListener(mOnDismissListener).build();
-        mLockPatternDialog.show();
-        int screenWidth = BaseInfoHelper.getRealWidth(getActivity());
-        int lockWidth = (int) (screenWidth * PandoraLockPatternView.SCALE_LOCK_PATTERN_WIDTH);
-        int padding = (int) (screenWidth * PandoraLockPatternView.SCALE_LOCK_PATTERN_PADDING * 2);
-        int width = lockWidth + padding;
-        mLockPatternDialog.getWindow().setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
-    }
-
-    private void createNumberLockDialog(View customView) {
-        dismissLockPatternDialog();
-        mNumberLockDialog = new MaterialDialog.Builder(getActivity()).customView(customView, true)
-                .dismissListener(mOnDismissListener).build();
-        mNumberLockDialog.show();
-    }
-
-    private void dismissLockPatternDialog() {
-        if (null != mLockPatternDialog) {
-            mLockPatternDialog.cancel();
-        }
-    }
-
-    private void dismissNumberLockDialog() {
-        if (null != mNumberLockDialog) {
-            mNumberLockDialog.cancel();
-        }
-    }
-
-    private void reset() {
+    public void reset() {
         initPasswordTypeState();
     }
-
-    private OnDismissListener mOnDismissListener = new OnDismissListener() {
-
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            reset();
-        }
-    };
 
     private void setLockPatternViewSelectState(View view) {
         mNoneItemSelect.setVisibility(view == mNoneItemSelect ? View.VISIBLE : View.GONE);

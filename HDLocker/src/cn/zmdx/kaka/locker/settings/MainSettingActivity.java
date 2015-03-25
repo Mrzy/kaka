@@ -48,6 +48,8 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
 
     private int mLastPosition;
 
+    private MainSettingFragment mMainSettingFragment;
+
     private MyHandler mHandler = new MyHandler(this);
 
     private static class MyHandler extends Handler {
@@ -93,7 +95,8 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         getSupportActionBar().setTitle(getResources().getString(R.string.pandora_setting_general));
         // getWindow().getAttributes().flags |=
         // LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-        getSupportFragmentManager().beginTransaction().add(R.id.content, new MainSettingFragment())
+        mMainSettingFragment = new MainSettingFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.content, mMainSettingFragment)
                 .commit();
     }
 
@@ -163,6 +166,12 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
                 startActivity(intent);
                 overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                         R.anim.umeng_fb_slide_out_from_left);
+                break;
+            }
+            case PasswordPromptActivity.REQUEST_LOCKER_PASSWORD_TYPE_CODE: {
+                if (null != mMainSettingFragment) {
+                    mMainSettingFragment.resetPasswordState();
+                }
                 break;
             }
             default: {

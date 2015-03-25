@@ -138,6 +138,10 @@
             android:name=".settings.InitSettingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.PasswordPromptActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/password_prompt_style" />
         <!-- 分享 -->
         <activity
             android:name="cn.sharesdk.framework.ShareSDKUIShell"
