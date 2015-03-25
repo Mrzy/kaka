@@ -101,15 +101,19 @@ public class PandoraWeatherManager {
                     callback.onFailure();
                     return;
                 } else {
-                    String date = SmartWeatherUtils.getDate();
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("--response-->>" + response);
                     }
-                    PandoraConfig.newInstance(mContext).saveLastCheckWeatherTime(date);
+                    PandoraConfig.newInstance(mContext).saveLastCheckWeatherTime(
+                            System.currentTimeMillis());
                     SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
                             .parseWeatherJson(response);
                     PandoraConfig.newInstance(mContext).saveLastWeatherInfo(response.toString());
-                    callback.onSuccess(smartWeatherInfo);
+                    if (smartWeatherInfo != null) {
+                        callback.onSuccess(smartWeatherInfo);
+                    } else {
+                        callback.onFailure();
+                    }
                 }
             }
         }, new Response.ErrorListener() {
@@ -121,7 +125,6 @@ public class PandoraWeatherManager {
                 callback.onFailure();
             }
         });
-        request.setShouldCache(false);
         RequestManager.getRequestQueue().add(request);
     }
 

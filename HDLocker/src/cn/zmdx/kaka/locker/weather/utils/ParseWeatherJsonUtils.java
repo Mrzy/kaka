@@ -14,13 +14,11 @@ import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
 
 public class ParseWeatherJsonUtils {
-    private static SmartWeatherInfo smartWeatherInfo;
 
     public static SmartWeatherInfo parseWeatherJson(JSONObject weatherObj) {
-        smartWeatherInfo = new SmartWeatherInfo();
+        SmartWeatherInfo smartWeatherInfo = new SmartWeatherInfo();
         if (weatherObj != null) {
             try {
-                // JSONObject weatherObj = new JSONObject(jsonObj);
                 JSONObject cityInfoObj = weatherObj.getJSONObject("c");
                 SmartWeatherCityInfo cityInfo = new SmartWeatherCityInfo();
                 cityInfo.setCityId(cityInfoObj.optString("c1"));
@@ -55,7 +53,7 @@ public class ParseWeatherJsonUtils {
                     smartWeatherInfo.setSmartWeatherFeatureInfo(featureInfo);
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+                return null;
             }
         }
         return smartWeatherInfo;

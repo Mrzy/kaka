@@ -15,7 +15,7 @@ public class PandoraPolicy {
 
     public static final int COUNT_DOWNLOAD_IMAGE_NON_WIFI = 10;
 
-    public static final long MIN_CHECK_WEATHER_DURAION = 1 * 60 * 1000;
+    public static final long MIN_CHECK_WEATHER_DURAION = 10 * 60 * 1000;
 
     public static final int MIN_DURATION_SYNC_DATA_TIME = 60 * 1000;
 

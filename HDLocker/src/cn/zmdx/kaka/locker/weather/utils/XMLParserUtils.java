@@ -81,7 +81,7 @@ public class XMLParserUtils {
             xmlStream = asset.open("cityInfo.xml");
             String cityProvinceName = PandoraLocationManager.getInstance(mContext)
                     .getCityProvince();
-            if (!TextUtils.isEmpty(cityNameStr)) {
+            if (!TextUtils.isEmpty(cityNameStr) && !TextUtils.isEmpty(cityProvinceName)) {
                 List<CityInfo> cityInfos = pullCityInfoParseXML(xmlStream);
                 for (CityInfo cityInfo : cityInfos) {
                     String cityName = cityInfo.getCityName();

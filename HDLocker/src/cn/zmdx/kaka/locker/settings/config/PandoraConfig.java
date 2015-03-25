@@ -38,7 +38,7 @@ public class PandoraConfig {
 
     private static final String KEY_CURRENT_WALLPAPER = "g";
 
-    private static final String KEY_LAST_CHECK_WEATHER = "h";
+    private static final String KEY_LAST_CHECK_WEATHER = "klcw";
 
     private static final String KEY_LAST_WEATHER_INFO = "i";
 
@@ -210,14 +210,13 @@ public class PandoraConfig {
         return mSp.getString(KEY_CURRENT_WALLPAPER, "");
     }
 
-    public String getLastCheckWeatherTime() {
-
-        return mSp.getString(KEY_LAST_CHECK_WEATHER, String.valueOf(System.currentTimeMillis()));
+    public long getLastCheckWeatherTime() {
+        return mSp.getLong(KEY_LAST_CHECK_WEATHER, 0);
     }
 
-    public void saveLastCheckWeatherTime(String time) {
+    public void saveLastCheckWeatherTime(long time) {
         Editor editor = mSp.edit();
-        editor.putString(KEY_LAST_CHECK_WEATHER, time);
+        editor.putLong(KEY_LAST_CHECK_WEATHER, time);
         editor.commit();
     }
 
