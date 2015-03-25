@@ -95,12 +95,12 @@ public class NotificationListViewAdapter extends BaseAdapter {
 
         final NotificationInfo info = mData.get(position);
         holder.dateTv.setText(TimeUtils.getInterval(mContext, info.getPostTime()));
-        boolean showMsg = PandoraConfig.newInstance(mContext).isShowNotificationMessage();
+        boolean hideMsg = PandoraConfig.newInstance(mContext).isHideNotifyContent();
         Bitmap largeBmp = info.getLargeIcon();
         Drawable smallDrawable = info.getSmallIcon();
         holder.titleTv.setText(info.getTitle());
         holder.titleTv.setTag(info);
-        if (!showMsg && isWinxinOrQQ(info)) {
+        if (hideMsg) {
             holder.largeIconIv.setImageDrawable(smallDrawable);
             holder.contentTv.setText(mContext.getString(R.string.hide_message_tip));
             holder.smallIconIv.setVisibility(View.GONE);

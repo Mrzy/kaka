@@ -49,6 +49,7 @@ public class NotificationListView extends ListView {
         setAdapter(mAdapter);
         setLayoutAnimation(getAnimationController());
         setVerticalFadingEdgeEnabled(true);
+        setVerticalScrollBarEnabled(true);
         setFadingEdgeLength(BaseInfoHelper.dip2px(getContext(), 3));
         mInterceptor = NotificationInterceptor.getInstance(getContext());
         mInterceptor.setNotificationListener(mNotificationListener);

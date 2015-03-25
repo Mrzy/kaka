@@ -34,7 +34,7 @@ public class SensorImageView extends ImageView {
 
     public static final int TRANSITION_MODE_STATIC = 3;
 
-    private static final int DEFAULT_TRANSITION_SPEED = 3;
+    private static final int DEFAULT_TRANSITION_SPEED = 1;
 
     private int mCurMode = TRANSITION_MODE_SENSOR;
 
