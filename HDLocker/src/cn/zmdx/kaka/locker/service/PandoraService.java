@@ -70,7 +70,7 @@ public class PandoraService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if ("stop".equals(intent.getStringExtra("action"))) {
+        if (intent != null && "stop".equals(intent.getStringExtra("action"))) {
             stopForeground(true);
         }
         return START_STICKY;

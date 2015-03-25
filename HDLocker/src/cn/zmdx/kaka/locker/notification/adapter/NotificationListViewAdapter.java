@@ -26,7 +26,6 @@ import cn.zmdx.kaka.locker.notification.Constants;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
-import cn.zmdx.kaka.locker.notification.guide.NotificationGuideHelper;
 import cn.zmdx.kaka.locker.notification.view.SwipeLayout;
 import cn.zmdx.kaka.locker.notification.view.SwipeLayout.OnSwipeLayoutListener;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -177,9 +176,7 @@ public class NotificationListViewAdapter extends BaseAdapter {
                 } catch (Exception e) {
                 }
                 int id = Integer.valueOf(info.getId());
-                if (Integer.valueOf(id) == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_GUIDE_HIDE_MESSAGE) {
-                    NotificationGuideHelper.markAlreadyPromptHideNotificationMsg(mContext);
-                } else if (id == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_OPEN_PERMISSION) {
+                if (id == PandoraNotificationFactory.ID_CUSTOM_NOTIFICATION_OPEN_PERMISSION) {
                     // 启动设置通知权限引导界面
                     HDBThreadUtils.postOnUiDelayed(new Runnable() {
 
@@ -207,7 +204,7 @@ public class NotificationListViewAdapter extends BaseAdapter {
         if (info != null) {
             // 如果是自定义通知，要从本地数据库删除通知
             if (info.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
-                CustomNotificationModel.getInstance().deleteById(info.getId());
+                CustomNotificationModel.getInstance().deleteByCloudId(info.getCloudId());
             } else if (info.getType() == NotificationInfo.NOTIFICATION_TYPE_SYSTEM) {
                 // 如果为系统通知，清除通知栏中的这个通知
                 Intent intent = new Intent();

@@ -50,14 +50,13 @@ public class ImageUtils {
      *         width/height.
      */
     public static Bitmap drawable2Bitmap(Drawable drawable) {
-        return drawable2Bitmap(drawable, false);
+        return drawable2Bitmap(drawable, true);
     }
 
     public static Bitmap drawable2Bitmap(Drawable drawable, boolean directReturn) {
         if (drawable == null) {
             return null;
         }
-        ;
 
         /**
          * In that case, we cannot release the returned Bitmap anymore.

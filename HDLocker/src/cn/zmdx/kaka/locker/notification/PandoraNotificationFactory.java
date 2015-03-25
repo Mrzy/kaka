@@ -77,7 +77,7 @@ public class PandoraNotificationFactory {
         }
         ni.setTitle(entity.getTitle());
         ni.setContent(entity.getContent());
-        ni.setId(entity.getCloudId());
+        ni.setId(entity.getId());
         ni.setCloudId(entity.getCloudId());
         ni.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
         ni.setPostTime(System.currentTimeMillis());
