@@ -108,7 +108,7 @@
     <string name="notify_guide_remove_content">这里会显示您的微信、qq等未读消息\n(双击移除通知)</string>
     <string name="notify_guide_hide_message_title">我要隐藏头像及消息内容</string>
     <string name="notify_guide_hide_message_content">右划此处解锁立即设置隐藏，如果暂时不设置双击移除此通知</string>
-    <string name="hide_message_tip">未读消息</string>
+    <string name="hide_message_tip">[隐藏]</string>
     <string name="notification_item_handleTip">右划查看\n双击忽略</string>
     <string name="tip_open_notification_permission">请勾选【潘多拉锁屏】</string>
     
@@ -171,7 +171,7 @@
     <string name="pandora_setting_wallpaper_detail_back">返回</string>
     <string name="pandora_setting_wallpaper_detail_apply">应用壁纸</string>
     
-    <string name="new_message_title">一条新消息</string>
+    <string name="new_message_title">新消息</string>
     
     <string name="pandora_wallpaper_month_january">Jan</string>
     <string name="pandora_wallpaper_month_february">Feb</string>

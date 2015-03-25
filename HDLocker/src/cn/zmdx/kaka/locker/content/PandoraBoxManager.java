@@ -95,9 +95,9 @@ public class PandoraBoxManager implements View.OnClickListener {
     };
 
     private static final int[] mFloatingButtonColors = new int[] {
-            Color.parseColor("#8026a69a"), Color.parseColor("#80e84e40"),
-            Color.parseColor("#80ab47bc"), Color.parseColor("#808bc34a"),
-            Color.parseColor("#80ea861c"), Color.parseColor("#803db7ff")
+            Color.parseColor("#a026a69a"), Color.parseColor("#a0e84e40"),
+            Color.parseColor("#a0ab47bc"), Color.parseColor("#a08bc34a"),
+            Color.parseColor("#a0ea861c"), Color.parseColor("#a03db7ff")
     };
 
     private TextView tvLunarCalendar;
@@ -578,6 +578,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         mJokeRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
         mJokeRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[5]);
+        mJokeRefreshView.setColorSchemeColors(Color.WHITE);
 
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
                 mJokeRefreshView, true);
@@ -644,6 +645,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         mBeautyRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
         mBeautyRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[4]);
+        mBeautyRefreshView.setColorSchemeColors(Color.WHITE);
 
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
                 mBeautyRefreshView, true);
@@ -709,6 +711,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         mMicroMediaRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
         mMicroMediaRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[3]);
+        mMicroMediaRefreshView.setColorSchemeColors(Color.WHITE);
 
         mMicroMediaRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
@@ -769,6 +772,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         mGossipRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
         mGossipRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[2]);
+        mGossipRefreshView.setColorSchemeColors(Color.WHITE);
 
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
                 mGossipRefreshView, true);
@@ -834,6 +838,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         mHotRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
         mHotRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[1]);
+        mHotRefreshView.setColorSchemeColors(Color.WHITE);
+
         mHotRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override

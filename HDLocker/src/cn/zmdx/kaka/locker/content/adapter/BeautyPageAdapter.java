@@ -94,24 +94,31 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
                 errorRes = R.drawable.icon_newsimage_loading;
             }
             rc.placeholder(R.drawable.icon_newsimage_loading).error(errorRes)
-            .transform(new Transformation() {
-                
-                @Override
-                public String key() {
-                    return "matrix()";
-                }
-                
-                @Override
-                public Bitmap transform(Bitmap source) {
-                    int cardWidth = holder.mCardView.getWidth();
-                    int imgWidth = source.getWidth();
-                    int imgHeight = source.getHeight();
-                    float scaleRate = (float) cardWidth / (float) imgWidth;
-                    int newHeight = (int) (scaleRate * imgHeight);
-                    Bitmap result = ImageUtils.scaleTo(source, cardWidth, newHeight, true);
-                    return result == null ? source : result;
-                }
-            }).into(holder.mImageView);
+                    .transform(new Transformation() {
+
+                        @Override
+                        public String key() {
+                            return "matrix()";
+                        }
+
+                        @Override
+                        public Bitmap transform(Bitmap source) {
+                            int cardWidth = holder.mCardView.getWidth();
+                            int imgWidth = source.getWidth();
+                            int imgHeight = source.getHeight();
+                            float scaleRate = (float) cardWidth / (float) imgWidth;
+                            int newHeight = (int) (scaleRate * imgHeight);
+                            Bitmap result = ImageUtils.scaleTo(source, cardWidth, newHeight, false);
+                            if (newHeight > 800) {
+                                result = Bitmap.createBitmap(result, 0, 0, cardWidth, 800);
+                            }
+                            if (source != result) {
+                                source.recycle();
+                                source = null;
+                            }
+                            return result == null ? source : result;
+                        }
+                    }).into(holder.mImageView);
         }
     }
 
