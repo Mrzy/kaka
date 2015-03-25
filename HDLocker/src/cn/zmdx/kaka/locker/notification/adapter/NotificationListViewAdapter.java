@@ -100,7 +100,7 @@ public class NotificationListViewAdapter extends BaseAdapter {
         Drawable smallDrawable = info.getSmallIcon();
         holder.titleTv.setText(info.getTitle());
         holder.titleTv.setTag(info);
-        if (hideMsg) {
+        if (hideMsg && info.getType() == NotificationInfo.NOTIFICATION_TYPE_SYSTEM) {
             holder.largeIconIv.setImageDrawable(smallDrawable);
             holder.contentTv.setText(mContext.getString(R.string.hide_message_tip));
             holder.smallIconIv.setVisibility(View.GONE);

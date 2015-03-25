@@ -92,7 +92,7 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
                 rc = picasso.load(data.getUrl());
             } catch (Exception e) {
             }
-            
+
             if (rc == null) {
                 picasso.load(R.drawable.icon_newsimage_load_error).into(holder.mImageView);
             } else {
@@ -103,7 +103,7 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
                     errorRes = R.drawable.icon_newsimage_loading;
                 }
                 rc.placeholder(R.drawable.icon_newsimage_loading)
-                .error(errorRes).into(holder.mImageView);
+                .error(errorRes).fit().centerInside().into(holder.mImageView);
             }
         }
     }
