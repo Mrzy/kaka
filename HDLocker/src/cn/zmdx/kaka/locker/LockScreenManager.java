@@ -594,6 +594,10 @@ public class LockScreenManager {
      */
     public void unLock(boolean isCloseFakeActivity, boolean forceClose) {
         if (forceClose) {
+            // 修复，锁屏时，来电话后，再次打开锁屏时，底部新闻栏会显示新闻详情的问题，这里要关闭详情页
+            if (PandoraBoxManager.newInstance(mContext).isDetailPageOpened()) {
+                PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
+            }
             internalUnLock();
             return;
         }

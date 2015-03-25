@@ -1,8 +1,6 @@
 
 package cn.zmdx.kaka.locker.policy;
 
-import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 public class PandoraPolicy {
 
@@ -27,11 +25,4 @@ public class PandoraPolicy {
 
     public static final long MIN_SHOW_UNREAD_NEWS_TIME = 1 * 60 * 60 * 1000;// 1h
 
-    /**
-     * 锁屏页下滑速率，值越小，越灵敏，即越容易下滑解锁
-     */
-    public static final float DEFAULT_MAX_YVEL = 1500.0f * BaseInfoHelper.getDensity(HDApplication
-            .getContext());
-
-    public static final int MIN_COUNT_FOLDABLE_BOX = 5;
 }
