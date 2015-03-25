@@ -272,10 +272,14 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
     private void gotoEvaluationPraise() {
         String locale = BaseInfoHelper.getLocale(getActivity());
         if (locale.equals(Locale.CHINA.toString())) {
-            Uri uri = Uri.parse("market://details?id=" + BaseInfoHelper.getPkgName(getActivity()));
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            try {
+                Uri uri = Uri.parse("market://details?id="
+                        + BaseInfoHelper.getPkgName(getActivity()));
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } catch (Exception e) {
+            }
         } else {
             try {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
@@ -286,11 +290,14 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
                 browserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(browserIntent);
             } catch (Exception e) {
-                Uri uri = Uri.parse("market://details?id="
-                        + BaseInfoHelper.getPkgName(getActivity()));
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                try {
+                    Uri uri = Uri.parse("market://details?id="
+                            + BaseInfoHelper.getPkgName(getActivity()));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } catch (Exception e2) {
+                }
             }
         }
 
