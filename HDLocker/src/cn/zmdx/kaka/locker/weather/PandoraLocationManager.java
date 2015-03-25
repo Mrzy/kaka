@@ -22,6 +22,8 @@ public class PandoraLocationManager {
 
     private String cityName = null;
 
+    private String cityProvince = null;
+
     private Context mContext = HDApplication.getContext();
 
     private PandoraLocationManager(Context context) {
@@ -84,9 +86,16 @@ public class PandoraLocationManager {
 
     public String getCityName() {
         if (mBdLocation != null) {
-            cityName = mBdLocation.getCity();
+            cityName = mBdLocation.getDistrict();
         }
         return cityName;
+    }
+
+    public String getCityProvince() {
+        if (mBdLocation != null) {
+            cityProvince = mBdLocation.getProvince();
+        }
+        return cityProvince;
     }
 
     public class MyLocationListener implements BDLocationListener {
@@ -98,7 +107,7 @@ public class PandoraLocationManager {
                 return;
             }
             mBdLocation = location;
-            PandoraConfig.newInstance(mContext).saveLastCityName(mBdLocation.getCity());
+            PandoraConfig.newInstance(mContext).saveLastCityName(mBdLocation.getDistrict());
             PandoraConfig.newInstance(mContext).saveLastCheckLocationTime(
                     System.currentTimeMillis());
             stopRequestLocation();

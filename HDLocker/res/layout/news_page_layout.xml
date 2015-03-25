@@ -79,14 +79,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
-                    android:orientation="vertical" >
+                    android:orientation="vertical"
+                    android:paddingTop="5dp" >
 
                     <ImageView
                         android:id="@+id/ivArrowUp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="16dp"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/arrow_up" />
 
@@ -94,9 +95,13 @@
                         android:id="@+id/tvUnreadNews"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="有爆点"
-                        android:textStyle="bold" />
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/has_unread_news"
+                        android:gravity="center_horizontal"
+                        android:onClick="false"
+                        android:padding="2dp"
+                        android:text="爆点"
+                        android:textSize="10dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -144,7 +149,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="20dp" >
+                    android:layout_marginRight="16dp" >
 
                     <cn.zmdx.kaka.locker.widget.DigitalClocks
                         xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
@@ -152,7 +157,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="10dp"
-                        android:gravity="center_horizontal"
+                        android:gravity="center"
                         android:paddingLeft="15dp"
                         android:shadowColor="#30000000"
                         android:shadowDx="2"

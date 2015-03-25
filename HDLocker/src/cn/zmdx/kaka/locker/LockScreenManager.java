@@ -49,7 +49,6 @@ import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
-import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
 import cn.zmdx.kaka.locker.widget.DigitalClocks;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
@@ -482,8 +481,7 @@ public class LockScreenManager {
     }
 
     public void processWeatherInfo() {
-        long str2TimeMillis = SmartWeatherUtils.str2TimeMillis(mPandoraConfig
-                .getLastCheckWeatherTime());
+        long str2TimeMillis = mPandoraConfig.getLastCheckWeatherTime();
 
         SmartWeatherInfo smartWeatherInfo = PandoraWeatherManager.getInstance()
                 .getWeatherFromCache();

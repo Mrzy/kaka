@@ -6,6 +6,8 @@ import java.util.List;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,11 +24,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -191,9 +196,11 @@ public class PandoraBoxManager implements View.OnClickListener {
         boolean isSunsetTime = SmartWeatherUtils.isSunsetTime(sunset);
         if (isNight) {
             String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
+            if (!TextUtils.isEmpty(nightFeatureNo)) {
+                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
+                featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
+            }
             centTemp = smartWeatherFeatureIndexInfo.getNightCentTemp();
-            featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
-            featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
             if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])
                     && isSunsetTime) {
                 featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
@@ -206,9 +213,11 @@ public class PandoraBoxManager implements View.OnClickListener {
             }
         } else {
             String daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
+            if (!TextUtils.isEmpty(daytimeFeatureNo)) {
+                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
+                featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
+            }
             centTemp = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
-            featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
-            featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
             if (tvWeatherWind != null) {
                 tvWeatherWind.setText(daytimeWind == null ? "" : daytimeWind);
             }
@@ -218,13 +227,17 @@ public class PandoraBoxManager implements View.OnClickListener {
             }
         }
         if (tvWeatherFeature != null) {
-            tvWeatherFeature.setText(featureNameByNo);
+            tvWeatherFeature.setText(featureNameByNo == null ? "" : featureNameByNo);
         }
         if (ivWeatherFeaturePic != null) {
             ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
         }
         if (tvWeatherCentTemp != null) {
-            tvWeatherCentTemp.setText(centTemp + "℃");
+            if (!TextUtils.isEmpty(centTemp)) {
+                tvWeatherCentTemp.setText(centTemp + "℃");
+            } else {
+                tvWeatherCentTemp.setText("");
+            }
         }
         String lunarCal = SmartWeatherUtils.getLunarCal();
         if (tvLunarCalendar != null) {
@@ -249,7 +262,13 @@ public class PandoraBoxManager implements View.OnClickListener {
             mDigitalClockNowView.setVisibility(View.VISIBLE);
             mDigitalClockNowView.setTickerStoped(false);
         }
-        mWeatherWindLayout.animate().alpha(0).setDuration(500);
+        float windDimenUp = mContext.getResources()
+                .getDimension(R.dimen.weather_wind_margin_top_up);
+        float clockDimenUp = mContext.getResources().getDimension(
+                R.dimen.weather_clock_margin_top_up);
+        mWeatherWindLayout.animate().translationY(-windDimenUp);
+        mWeatherWindLayout.animate().alpha(0).setDuration(2000);
+        mDigitalClockNowView.animate().translationY(clockDimenUp);
         mDigitalClockNowView.animate().alpha(1).setDuration(500);
     }
 
@@ -265,7 +284,13 @@ public class PandoraBoxManager implements View.OnClickListener {
             mDigitalClockNowView.setVisibility(View.GONE);
             mDigitalClockNowView.setTickerStoped(true);
         }
+        float windDimenDown = mContext.getResources().getDimension(
+                R.dimen.weather_wind_margin_top_down);
+        float clockDimenDown = mContext.getResources().getDimension(
+                R.dimen.weather_clock_margin_top_down);
+        mWeatherWindLayout.animate().translationY(windDimenDown);
         mWeatherWindLayout.animate().alpha(1).setDuration(500);
+        mDigitalClockNowView.animate().translationY(clockDimenDown);
         mDigitalClockNowView.animate().alpha(0).setDuration(500);
     }
 
@@ -360,6 +385,32 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
     };
 
+    private void animateHideUnreadNews() {
+        ObjectAnimator animTransY = ObjectAnimator.ofFloat(tvUnreadNews, "translationY", 0, -50);
+        animTransY.setInterpolator(new DecelerateInterpolator());
+        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(tvUnreadNews, "alpha", 1f, 0f);
+        ObjectAnimator animX1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleX", 1f, 0f);
+        ObjectAnimator animY1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleY", 1f, 0f);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(animAlpha, animTransY, animX1, animY1);
+        set.setDuration(600);
+        set.start();
+    }
+
+    private void animateShowUnreadNews() {
+        ObjectAnimator animX1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleX", 0f, 1f);
+        animX1.setInterpolator(new OvershootInterpolator());
+        ObjectAnimator animY1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleY", 0f, 1f);
+        animY1.setInterpolator(new OvershootInterpolator());
+        ObjectAnimator animTransY = ObjectAnimator.ofFloat(tvUnreadNews, "translationY", 100, 0);
+        animTransY.setInterpolator(new OvershootInterpolator());
+        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(tvUnreadNews, "alpha", 0.4f, 1f);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(animX1, animY1, animAlpha, animTransY);
+        set.setDuration(700);
+        set.start();
+    }
+
     /**
      * 新闻面板完全展开时会调用该方法
      */
@@ -369,17 +420,19 @@ public class PandoraBoxManager implements View.OnClickListener {
         showDateView();
         PandoraConfig.newInstance(mContext).saveLastShowUnreadNews(System.currentTimeMillis());
         tvUnreadNews.setVisibility(View.INVISIBLE);
-        ivArrowUp.animate().rotation(180).setDuration(200);
+        animateHideUnreadNews();
+        ivArrowUp.animate().rotation(180).setDuration(300);
         mBackBtn.startAppearAnimator();
     }
 
     public void notifyNewsPanelCollapsed() {
         hideDateView();
-        ivArrowUp.animate().rotation(0).setDuration(200);
+        tvUnreadNews.setVisibility(View.VISIBLE);
+        ivArrowUp.animate().rotation(0).setDuration(300);
         long lastShowUnreadNews = PandoraConfig.newInstance(mContext).getLastShowUnreadNews();
         if (System.currentTimeMillis() - lastShowUnreadNews >= PandoraPolicy.MIN_SHOW_UNREAD_NEWS_TIME
                 && HDBNetworkState.isNetworkAvailable()) {
-            tvUnreadNews.setVisibility(View.VISIBLE);
+            animateShowUnreadNews();
         }
         PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
         PandoraBoxManager.newInstance(mContext).resetDefaultPage();
