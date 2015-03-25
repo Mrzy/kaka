@@ -10,6 +10,16 @@ public class CityInfo {
 
     private String cityName;
 
+    private String cityProvince;
+
+    public String getCityProvince() {
+        return cityProvince;
+    }
+
+    public void setCityProvince(String cityProvince) {
+        this.cityProvince = cityProvince;
+    }
+
     public String getAreaId() {
         return areaId;
     }
@@ -28,6 +38,8 @@ public class CityInfo {
 
     @Override
     public String toString() {
-        return "CityInfo{" + "areaId='" + areaId + '\'' + ", cityName='" + cityName + '\'' + '}';
+        return "CityInfo [areaId=" + areaId + ", cityName=" + cityName + ", cityProvince="
+                + cityProvince + "]";
     }
+
 }
