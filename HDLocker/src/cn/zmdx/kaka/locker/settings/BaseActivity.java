@@ -19,25 +19,8 @@ import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 public abstract class BaseActivity extends Activity {
 
     @SuppressLint("InlinedApi")
-    @SuppressWarnings("deprecation")
-    protected void initBackground(final View rootView) {
+    protected void fullScreen() {
         getWindow().getAttributes().flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-        Theme theme = ThemeManager.getCurrentTheme();
-        rootView.setBackgroundDrawable(theme.getCurDrawable());
-        // if (theme.isDefaultTheme()) {
-        // rootView.setBackgroundResource(theme.getmBackgroundResId());
-        // } else {
-        // WallpaperUtils.loadBackgroundBitmap(this, theme.getFilePath(),
-        // new ILoadBitmapCallback() {
-        //
-        // @SuppressWarnings("deprecation")
-        // @Override
-        // public void imageLoaded(Bitmap bitmap, String filePath) {
-        // rootView.setBackgroundDrawable(new BitmapDrawable(getResources(),
-        // bitmap));
-        // }
-        // });
-        // }
         if (Build.VERSION.SDK_INT >= 19) {
             Window window = getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,

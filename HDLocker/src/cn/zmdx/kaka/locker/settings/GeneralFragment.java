@@ -325,11 +325,11 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
     }
 
     private void enable3G4GNetwork() {
-        mPandoraConfig.saveOnlyWifiLoadImage(false);
+        mPandoraConfig.saveOnlyWifiLoadImage(true);
     }
 
     private void disable3G4GNetwork() {
-        mPandoraConfig.saveOnlyWifiLoadImage(true);
+        mPandoraConfig.saveOnlyWifiLoadImage(false);
     }
 
     private boolean isLockSoundOn() {
