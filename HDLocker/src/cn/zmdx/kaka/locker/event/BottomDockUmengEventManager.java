@@ -46,13 +46,13 @@ public class BottomDockUmengEventManager {
     }
 
     /**
-     * 统计新闻详情页点击喜欢按钮次数
+     * 统计新闻详情页点击喜欢按钮
      */
     public static void statisticalNewsDetailFavoriteClicked(String newsId) {
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("newsId", newsId);
         MobclickAgent.onEvent(HDApplication.getContext(),
-                BottomDockUmengEventManager.EVENT_NEWS_DETAIL_PAGE_FAVORITE_CLICKED, newsId);
+                BottomDockUmengEventManager.EVENT_NEWS_DETAIL_PAGE_FAVORITE_CLICKED, map);
     }
 
     /**
