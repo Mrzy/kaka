@@ -424,12 +424,12 @@ public class PandoraBoxManager implements View.OnClickListener {
         refreshAllNews();
         initBody();
         showDateView();
-        BottomDockUmengEventManager.statisticalNewsPanelExpanded();
         PandoraConfig.newInstance(mContext).saveLastShowUnreadNews(System.currentTimeMillis());
         tvUnreadNews.setVisibility(View.INVISIBLE);
         animateHideUnreadNews();
         ivArrowUp.animate().rotation(180).setDuration(300);
         mBackBtn.startAppearAnimator();
+        BottomDockUmengEventManager.statisticalNewsPanelExpanded();
     }
 
     public void notifyNewsPanelCollapsed() {
@@ -441,12 +441,12 @@ public class PandoraBoxManager implements View.OnClickListener {
                 && HDBNetworkState.isNetworkAvailable()) {
             animateShowUnreadNews();
         }
-        BottomDockUmengEventManager.statisticalNewsPanelCollapsed();
         PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
         PandoraBoxManager.newInstance(mContext).resetDefaultPage();
         if (mBackBtn != null) {
             mBackBtn.setTranslationY(BaseInfoHelper.dip2px(mContext, 100));
         }
+        BottomDockUmengEventManager.statisticalNewsPanelCollapsed();
     }
 
     public void refreshNewsByCategory(int category) {
