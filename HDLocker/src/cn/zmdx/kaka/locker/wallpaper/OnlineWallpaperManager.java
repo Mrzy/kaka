@@ -95,14 +95,18 @@ public class OnlineWallpaperManager {
     public void pullWallpaperData(Context context, IPullWallpaperListener listener, long publishDATE) {
         final String lastPullJson = PandoraConfig.newInstance(context)
                 .getLastOnlineServerJsonData();
-        if (BuildConfig.DEBUG) {
-            HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
-        }
-        if ((!PandoraConfig.newInstance(context).isOnlyWifiLoadImage() && HDBNetworkState
-                .isNetworkAvailable()) && !HDBNetworkState.isWifiNetwork()) {
-            parseWallpaperJson(lastPullJson, listener);
-        } else {
+        if (HDBNetworkState.isWifiNetwork()
+                || ((HDBNetworkState.isNetworkAvailable() && !HDBNetworkState.isWifiNetwork()) && !PandoraConfig
+                        .newInstance(context).isOnlyWifiLoadImage())) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
+            }
             getWallpaperFromServer(listener, lastPullJson, publishDATE);
+        } else {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("不满足获取数据条件，获取缓存壁纸数据中...");
+            }
+            parseWallpaperJson(lastPullJson, listener);
         }
     }
 
