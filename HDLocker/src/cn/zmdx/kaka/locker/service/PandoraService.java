@@ -39,6 +39,15 @@ public class PandoraService extends Service {
     // 三星手机闹钟action
     private static final String ALARMALERT_ACTION_SAMSUNG = "com.samsung.sec.android.clockpackage.alarm.ALARM_ALERT";
 
+    // 索尼手机闹钟action
+    private static final String ALARMALERT_ACTION_SONY = "com.sonyericsson.alarm.ALARM_ALERT";
+    // 联想手机闹钟action
+    private static final String ALARMALERT_ACTION_LENOVO = "com.lenovo.deskclock.ALARM_ALERT";
+    // vivo手机闹钟action
+    private static final String ALARMALERT_ACTION_VIVO = "com.cn.google.AlertClock.ALARM_ALERT";
+    // 魅族手机闹钟action
+    private static final String ALARMALERT_ACTION_MEIZU = "com.android.alarmclock.ALARM_ALERT";
+
     private static final int FOREGROUND_SERVICE_ID = 123465;
 
     private Context mContext = HDApplication.getContext();
@@ -67,6 +76,10 @@ public class PandoraService extends Service {
         mAlarmActions.add(ALARM_ALERT_ACTION);
         mAlarmActions.add(ALARMALERT_ACTION_ZX);
         mAlarmActions.add(ALARMALERT_ACTION_SAMSUNG);
+        mAlarmActions.add(ALARMALERT_ACTION_SONY);
+        mAlarmActions.add(ALARMALERT_ACTION_LENOVO);
+        mAlarmActions.add(ALARMALERT_ACTION_VIVO);
+        mAlarmActions.add(ALARMALERT_ACTION_MEIZU);
     }
 
     @SuppressWarnings("deprecation")
