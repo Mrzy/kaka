@@ -106,16 +106,18 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
         if (buttonView == mOpenNotificationRemindSButton) {
             if (isChecked) {
                 enableNotificationRemind();
+                UmengCustomEventManager.statisticalOpenNotificationRemindTimes();
             } else {
+                UmengCustomEventManager.statisticalCloseNotificationRemindTimes();
                 disableNotificationRemind();
             }
         } else if (buttonView == mHideNotifyContentSButton) {
             if (isChecked) {
                 enableHideNotifyContent();
-                UmengCustomEventManager.statisticalShowNotifyTimes();
+                UmengCustomEventManager.statisticalshowNotifyContentTimes();
             } else {
                 disableHideNotifyContent();
-                UmengCustomEventManager.statisticalCloseNotifyTimes();
+                UmengCustomEventManager.statisticalHideNotifyContentTimes();
             }
         }
     }

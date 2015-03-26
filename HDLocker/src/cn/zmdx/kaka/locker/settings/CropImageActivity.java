@@ -4,8 +4,6 @@ package cn.zmdx.kaka.locker.settings;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import com.umeng.analytics.MobclickAgent;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -33,6 +31,8 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.widget.BaseButton;
+
+import com.umeng.analytics.MobclickAgent;
 
 public class CropImageActivity extends Activity implements OnClickListener {
 
@@ -85,10 +85,10 @@ public class CropImageActivity extends Activity implements OnClickListener {
         if (view == mBackButton) {
             setResult(Activity.RESULT_CANCELED);
         } else if (view == mApplyButton) {
-            UmengCustomEventManager.statisticalSuccessSetCustomTimes();
             ThemeManager.saveTheme(ThemeManager.THEME_ID_CUSTOM);
             ThemeManager.addBitmapToCache(mCropBitmap);
             saveBitmapForWallpaper();
+            UmengCustomEventManager.statisticalSuccessSetLocalWallpaperTimes();
             setResult(Activity.RESULT_OK);
         }
         onBackPressed();

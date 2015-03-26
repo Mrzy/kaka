@@ -2,9 +2,12 @@
 package cn.zmdx.kaka.locker.event;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.notification.NotificationPreferences;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -20,15 +23,9 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_PANDORA_SWITCH_CLOSE_TIMES = "pandoraSwitchClose"; // 打开/关闭锁屏开关，上报对应事件；
 
-    public static final String EVENT_SET_CUSTOM_WALLPAPER_TIMES = "setCustomWallpaperTimes"; // 用户通过在个性化设置界面中自定义壁纸功能时上报一次事件；
+    public static final String EVENT_LOCKSCREEN_WALLPAPER_DETAIL_TIMES = "lockScreenWallpaperDetailTimes";// 用户在新闻屏进入壁纸详情页的次数
 
-    public static final String EVENT_SET_CUSTOM_WALLPAPER_SUCCESS_TIMES = "setCustomWallpaperSuccessTimes"; // 成功设置自定义主题壁纸时上报一次事件；
-
-    public static final String EVENT_SET_LOCKSCREEN_WALLPAPER_TIMES = "setLockScreenWallpaperTimes";// 用户在新闻屏设置壁纸
-
-    public static final String EVENT_APPLY_LOCKSCREEN_WALLPAPER_TIMES = "applyLockScreenWallpaperTimes";// 用户点击应用壁纸按钮进行设置壁纸
-
-    public static final String EVENT_SELECT_LOCKSCREEN_WALLPAPER_COUNT = "selectLockScreenWallpaperCount";// 在个性化设置界面选择某张壁纸的次数
+    public static final String EVENT_LOCKSCREEN_WALLPAPER_DETAIL_APPLY_TIMES = "applyLockScreenWallpaperDetailTimes";// 用户点击应用壁纸按钮进行设置壁纸
 
     public static final String EVENT_SHOW_NOTIFY_TIMES = "showNotifyTimes";// 用户设置显示通知栏次数
 
@@ -52,40 +49,57 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_PULL_REFRESH_NEWS = "pullRefreshNews";// 下拉刷新
 
+    private static final String EVENT_OPEN_NOTIFICATION_REMIND = "openNotificationRemind";// 开启通知提醒
+
+    private static final String EVENT_CLOSE_NOTIFICATION_REMIND = "closeNotificationRemind";// 关闭通知提醒
+
+    private static final String EVENT_SHOW_NOTIFY_CONTENT = "showNotifyContent";// 显示通知内容
+
+    private static final String EVENT_HIDE_NOTIFY_CONTENT = "hideNotifyContent";// 隐藏通知内容
+
+    private static final String EVENT_NEED_INTERCEPT_APP = "needInterceptApp";// 被用户拦截的应用
+
+    private static final String EVENT_OPEN_GRAVITY_SENOR = "openGravitySenor";// 打开重力感应
+
+    private static final String EVENT_CLOSE_GRAVITY_SENOR = "closeGravitySenor";// 关闭重力感应
+
+    private static final String EVENT_SYCCESS_SET_LOCAL_WALLPAPER = "successSetLocalWallpaperTimes";// 成功设置本地壁纸
+
     public static void statisticalOpenNewsDetail(int id, String newsType) {
-        HashMap<String,String> map = new HashMap<String,String>();
-        map.put("newsId",String.valueOf(id));
-        map.put("newsType",String.valueOf(newsType));
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("newsId", String.valueOf(id));
+        map.put("newsType", String.valueOf(newsType));
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_SEE_CONTENT_DETAILS, map);
     }
 
     public static void statisticalPullRefreshNews(String newsType) {
-        HashMap<String,String> map = new HashMap<String,String>();
-        map.put("newsType",newsType);
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("newsType", newsType);
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_PULL_REFRESH_NEWS, map);
     }
+
     public static void statisticalPostNotification(int id, String pkgName, int type) {
-        HashMap<String,String> map = new HashMap<String,String>();
-        map.put("pkgName",pkgName);
-        map.put("type",String.valueOf(type));
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("pkgName", pkgName);
+        map.put("type", String.valueOf(type));
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_POST_NOTIFICATION, map);
     }
 
     public static void statisticalRemoveNotification(int id, String pkgName, int type) {
-        HashMap<String,String> map = new HashMap<String,String>();
-        map.put("pkgName",pkgName);
-        map.put("type",String.valueOf(type));
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("pkgName", pkgName);
+        map.put("type", String.valueOf(type));
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_REMOVE_NOTIFICATION, map);
     }
 
     public static void statisticalOpenNotification(int id, String pkgName, int type) {
-        HashMap<String,String> map = new HashMap<String,String>();
-        map.put("pkgName",pkgName);
-        map.put("type",String.valueOf(type));
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("pkgName", pkgName);
+        map.put("type", String.valueOf(type));
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_OPEN_NOTIFICATION, map);
     }
@@ -95,12 +109,12 @@ public class UmengCustomEventManager {
      * 
      * @param mCloudId
      */
-//    public static void statisticalCardIsFavorited(String mCloudId) {
-//        if (null != mCloudId) {
-//            MobclickAgent.onEvent(HDApplication.getContext(),
-//                    UmengCustomEventManager.EVENT_CARD_IS_FAVORITED, mCloudId);
-//        }
-//    }
+    // public static void statisticalCardIsFavorited(String mCloudId) {
+    // if (null != mCloudId) {
+    // MobclickAgent.onEvent(HDApplication.getContext(),
+    // UmengCustomEventManager.EVENT_CARD_IS_FAVORITED, mCloudId);
+    // }
+    // }
 
     /**
      * 统计查看新闻条目的详情
@@ -131,29 +145,19 @@ public class UmengCustomEventManager {
     }
 
     /**
-     * 统计用户在新闻屏设置壁纸的次数
+     * 统计用户在新闻屏进入壁纸详情的次数
      */
-    public static void statisticalSetLockScreenWallpaperTimes() {
+    public static void statisticalLockScreenWallpaperDetailTimes() {
         MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_SET_LOCKSCREEN_WALLPAPER_TIMES);
+                UmengCustomEventManager.EVENT_LOCKSCREEN_WALLPAPER_DETAIL_TIMES);
     }
 
     /**
-     * 统计用户点击应用壁纸按钮进行设置壁纸的次数
+     * 统计用户在新闻屏进入壁纸详情并应用壁纸的次数
      */
-    public static void statisticalApplyLockScreenWallpaperTimes() {
+    public static void statisticalLockScreenWallpaperDetailApplyTimes() {
         MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_APPLY_LOCKSCREEN_WALLPAPER_TIMES);
-    }
-
-    /**
-     * 统计个性化设置界面某张壁纸的选择次数
-     */
-    public static void statisticalSelectLockScreenWallpaperCount(String fileName) {
-        if (null != fileName) {
-            MobclickAgent.onEvent(HDApplication.getContext(),
-                    UmengCustomEventManager.EVENT_SELECT_LOCKSCREEN_WALLPAPER_COUNT, fileName);
-        }
+                UmengCustomEventManager.EVENT_LOCKSCREEN_WALLPAPER_DETAIL_APPLY_TIMES);
     }
 
     /**
@@ -222,26 +226,6 @@ public class UmengCustomEventManager {
     }
 
     /**
-     * 统计点击自定义壁纸按钮的次数
-     * 
-     * @param themeId
-     */
-    public static void statisticalClickCustomButtonTimes() {
-        MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_SET_CUSTOM_WALLPAPER_TIMES);
-    }
-
-    /**
-     * 统计成功设置自定义壁纸的次数
-     * 
-     * @param themeId
-     */
-    public static void statisticalSuccessSetCustomTimes() {
-        MobclickAgent.onEvent(HDApplication.getContext(),
-                UmengCustomEventManager.EVENT_SET_CUSTOM_WALLPAPER_SUCCESS_TIMES);
-    }
-
-    /**
      * 统计打开锁屏开关次数
      */
     public static void statisticalPandoraSwitchOpenTimes() {
@@ -257,4 +241,79 @@ public class UmengCustomEventManager {
                 UmengCustomEventManager.EVENT_PANDORA_SWITCH_CLOSE_TIMES);
     }
 
+    /**
+     * 统计用户开启通知提醒
+     */
+    public static void statisticalOpenNotificationRemindTimes() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_OPEN_NOTIFICATION_REMIND);
+    }
+
+    /**
+     * 统计用户关闭通知提醒
+     */
+    public static void statisticalCloseNotificationRemindTimes() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_CLOSE_NOTIFICATION_REMIND);
+    }
+
+    /**
+     * 统计用户显示通知内容
+     */
+    public static void statisticalshowNotifyContentTimes() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_SHOW_NOTIFY_CONTENT);
+    }
+
+    /**
+     * 统计用户隐藏通知内容
+     */
+    public static void statisticalHideNotifyContentTimes() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_HIDE_NOTIFY_CONTENT);
+    }
+
+    /**
+     * 统计用户需要拦截消息的App 每日一次
+     */
+    public static void statisticalNeedInterceptApp() {
+        String saveDate = PandoraConfig.newInstance(HDApplication.getContext())
+                .getEventNeedInterceptAppDailyString();
+        String currentDate = BaseInfoHelper.getCurrentDate();
+        if (!currentDate.equals(saveDate)) {
+            Set<String> pkgNameSet = NotificationPreferences
+                    .getInstance(HDApplication.getContext()).getInterceptPkgNames();
+            HashMap<String, String> map = new HashMap<String, String>();
+            for (String pkgName : pkgNameSet) {
+                map.put("pkgName", pkgName);
+            }
+            MobclickAgent.onEvent(HDApplication.getContext(),
+                    UmengCustomEventManager.EVENT_NEED_INTERCEPT_APP, map);
+        }
+
+    }
+
+    /**
+     * 统计用户开启重力感应壁纸
+     */
+    public static void statisticalOpenGravitySenorTimes() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_OPEN_GRAVITY_SENOR);
+    }
+
+    /**
+     * 统计用户关闭重力感应壁纸
+     */
+    public static void statisticalCloseGravitySenorTimes() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_CLOSE_GRAVITY_SENOR);
+    }
+
+    /**
+     * 统计用户成功设置本地壁纸的次数
+     */
+    public static void statisticalSuccessSetLocalWallpaperTimes() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_SYCCESS_SET_LOCAL_WALLPAPER);
+    }
 }

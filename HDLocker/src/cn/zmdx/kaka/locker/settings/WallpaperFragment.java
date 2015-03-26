@@ -17,6 +17,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
@@ -107,7 +108,13 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (buttonView == mGravitySenorSButton) {
-            saveGravitySenorState(isChecked);
+            if (isChecked) {
+                enableGravitySenorState();
+                UmengCustomEventManager.statisticalOpenGravitySenorTimes();
+            } else {
+                disableGravitySenorState();
+                UmengCustomEventManager.statisticalCloseGravitySenorTimes();
+            }
         } else if (buttonView == mRandomReplacementSButton) {
             saveRandomReplacementState(isChecked);
         }
@@ -133,8 +140,12 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
         return PandoraConfig.newInstance(getActivity()).isGravitySenorOn();
     }
 
-    private void saveGravitySenorState(boolean isEnable) {
-        PandoraConfig.newInstance(getActivity()).saveGravitySenorState(isEnable);
+    private void enableGravitySenorState() {
+        PandoraConfig.newInstance(getActivity()).saveGravitySenorState(true);
+    }
+
+    private void disableGravitySenorState() {
+        PandoraConfig.newInstance(getActivity()).saveGravitySenorState(false);
     }
 
     private boolean isRandomReplacementOn() {

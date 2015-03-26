@@ -16,6 +16,7 @@ import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.MainSettingFragment.IMainSettingListener;
@@ -98,6 +99,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         mMainSettingFragment = new MainSettingFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.content, mMainSettingFragment)
                 .commit();
+        UmengCustomEventManager.statisticalNeedInterceptApp();
     }
 
     private void init() {

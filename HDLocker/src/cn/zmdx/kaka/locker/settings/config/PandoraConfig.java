@@ -8,6 +8,7 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 public class PandoraConfig {
 
@@ -93,6 +94,8 @@ public class PandoraConfig {
     private static final String KEY_LAST_CHECK_LOCATION = "klcl";
 
     private static final String KEY_LAST_SHOW_UNREAD_NEWS = "klsun";
+
+    private static final String KEY_EVENT_NEED_INTERCEPT_APP_DAILY = "kenipd";
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -469,6 +472,14 @@ public class PandoraConfig {
      */
     public boolean isOpenForegroundService() {
         return BuildConfig.DEBUG;
+    }
+
+    public String getEventNeedInterceptAppDailyString() {
+        return mSp.getString(KEY_EVENT_NEED_INTERCEPT_APP_DAILY, BaseInfoHelper.getCurrentDate());
+    }
+
+    public void saveEventNeedInterceptAppDailyData(String time) {
+        mSp.edit().putString(KEY_EVENT_NEED_INTERCEPT_APP_DAILY, time).commit();
     }
 
 }

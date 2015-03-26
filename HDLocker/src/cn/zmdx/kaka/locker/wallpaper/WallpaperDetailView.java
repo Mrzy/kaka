@@ -70,6 +70,9 @@ public class WallpaperDetailView extends LinearLayout {
         mContext = context;
         isLockScreen = isScreen;
         initView();
+        if (isScreen) {
+            UmengCustomEventManager.statisticalLockScreenWallpaperDetailTimes();
+        }
     }
 
     private void initView() {
@@ -109,7 +112,9 @@ public class WallpaperDetailView extends LinearLayout {
                 PandoraConfig.newInstance(mContext).saveOnlineWallPaperDesc(md5ImageUrl, mDesc);
                 ImageUtils.saveImageToFile(previewBitmap, OnlineWallpaperManager.getInstance()
                         .getFilePath(md5ImageUrl));
-                UmengCustomEventManager.statisticalApplyLockScreenWallpaperTimes();
+                if (isLockScreen) {
+                    UmengCustomEventManager.statisticalLockScreenWallpaperDetailApplyTimes();
+                }
                 if (null != mListener) {
                     mListener.onApplyWallpaper();
                     if (isLockScreen) {
