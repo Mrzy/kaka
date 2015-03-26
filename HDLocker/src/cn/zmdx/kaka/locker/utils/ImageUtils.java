@@ -253,7 +253,7 @@ public class ImageUtils {
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(src, rect, rect, paint);
 
-        if (recycle) {
+        if (recycle && src != target) {
             src.recycle();
         }
 

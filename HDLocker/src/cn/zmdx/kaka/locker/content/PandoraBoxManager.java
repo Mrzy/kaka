@@ -53,6 +53,7 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
@@ -381,7 +382,9 @@ public class PandoraBoxManager implements View.OnClickListener {
                 HDBLOG.logD("received notification at news detail page");
             }
             Bitmap bitmap = (Bitmap) intent.getParcelableExtra("icon");
-            mBackBtn.notifyNewFeed(bitmap);
+            // 转变为圆形
+            Bitmap roundBmp = ImageUtils.getRoundBitmap(bitmap, 100, true);
+            mBackBtn.notifyNewFeed(roundBmp);
         }
     };
 
