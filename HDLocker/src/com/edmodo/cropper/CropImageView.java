@@ -310,7 +310,9 @@ public class CropImageView extends FrameLayout {
             final Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                     bitmap.getHeight(), matrix, true);
             setImageBitmap(rotatedBitmap);
-            bitmap.recycle();
+            if (bitmap != rotatedBitmap) {
+                bitmap.recycle();
+            }
         }
     }
 

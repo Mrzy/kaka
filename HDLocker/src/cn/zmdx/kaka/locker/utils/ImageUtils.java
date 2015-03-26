@@ -323,8 +323,9 @@ public class ImageUtils {
         canvas.drawColor(bkgColor);
         canvas.drawBitmap(src, 0, 0, paint);
 
-        if (recycle) {
+        if (recycle && src != target) {
             src.recycle();
+            src = null;
         }
 
         return target;
