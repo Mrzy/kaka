@@ -1,6 +1,9 @@
 
 package cn.zmdx.kaka.locker.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -25,16 +28,22 @@ import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
 public class PandoraService extends Service {
 
-    public static final String ALARM_ALERT_ACTION = "com.android.deskclock.ALARM_ALERT";
-
-    private static final int FOREGROUND_SERVICE_ID = 123465;
+    // 安卓原生系统闹钟action
+    private static final String ALARM_ALERT_ACTION = "com.android.deskclock.ALARM_ALERT";
 
     /**
      * 中兴手机闹钟的action
      */
-    public static final String ALARMALERT_ACTION_ZX = "com.zdworks.android.zdclock.ACTION_ALARM_ALERT";
+    private static final String ALARMALERT_ACTION_ZX = "com.zdworks.android.zdclock.ACTION_ALARM_ALERT";
+
+    // 三星手机闹钟action
+    private static final String ALARMALERT_ACTION_SAMSUNG = "com.samsung.sec.android.clockpackage.alarm.ALARM_ALERT";
+
+    private static final int FOREGROUND_SERVICE_ID = 123465;
 
     private Context mContext = HDApplication.getContext();
+
+    private List<String> mAlarmActions = new ArrayList<String>();
 
     @Override
     public void onCreate() {
@@ -42,6 +51,7 @@ public class PandoraService extends Service {
             HDBLOG.logD("PandoraService is startup");
         }
         timingUpdateCurLocation();
+        loadAlarmActions();
         registerBroadcastReceiver();
         TelephonyManager manager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
         manager.listen(new MyPhoneListener(), PhoneStateListener.LISTEN_CALL_STATE);
@@ -51,6 +61,12 @@ public class PandoraService extends Service {
             startForeground(FOREGROUND_SERVICE_ID, noti);
         }
         super.onCreate();
+    }
+
+    private void loadAlarmActions() {
+        mAlarmActions.add(ALARM_ALERT_ACTION);
+        mAlarmActions.add(ALARMALERT_ACTION_ZX);
+        mAlarmActions.add(ALARMALERT_ACTION_SAMSUNG);
     }
 
     @SuppressWarnings("deprecation")
@@ -102,10 +118,15 @@ public class PandoraService extends Service {
         IntentFilter filter = new IntentFilter();
         filter.setPriority(1000);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
-        filter.addAction(ALARM_ALERT_ACTION);
-        filter.addAction(ALARMALERT_ACTION_ZX);
         filter.addAction(Intent.ACTION_SCREEN_ON);
+        addAlarmActions(filter);
         registerReceiver(mReceiver, filter);
+    }
+
+    private void addAlarmActions(IntentFilter filter) {
+        for (String action : mAlarmActions) {
+            filter.addAction(action);
+        }
     }
 
     private void unRegisterBroadcastReceiver() {
@@ -178,7 +199,7 @@ public class PandoraService extends Service {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("receive broadcast,action=" + action);
             }
-            if (action.contains(ALARM_ALERT_ACTION) || action.contains(ALARMALERT_ACTION_ZX)) {
+            if (mAlarmActions.contains(action)) {
                 LockScreenManager.getInstance().unLock(true, true);
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 LockScreenManager.getInstance().lock();
