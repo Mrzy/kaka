@@ -132,6 +132,8 @@ public class NotificationListViewAdapter extends BaseAdapter {
                     // remove(info);
                 } else if (direction == SwipeLayout.OPEN_DIRECTION_RIGHT) {
                     remove(info);
+
+                    UmengCustomEventManager.statisticalRemoveNotification(info.getId(), info.getPkg(), info.getType());
                 }
             }
 

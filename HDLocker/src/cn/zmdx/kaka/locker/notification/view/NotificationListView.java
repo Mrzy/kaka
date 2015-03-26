@@ -15,6 +15,7 @@ import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
 import android.widget.ListView;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.adapter.NotificationListViewAdapter;
@@ -125,6 +126,8 @@ public class NotificationListView extends ListView {
             Intent in = new Intent(ACTION_NOTIFICATION_POSTED);
             in.putExtra("icon", info.getLargeIcon());
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(in);
+
+            UmengCustomEventManager.statisticalPostNotification(info.getId(), info.getPkg(), info.getType());
         }
     };
 }
