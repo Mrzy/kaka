@@ -120,25 +120,25 @@ public class SmartWeatherUtils {
         return cyclical;
     }
 
-    public static long str2TimeMillis(String dataStr) {
+    public static int str2TimeHour(String dataStr) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
-        long timeMillis = 0;
+        int hours = 0;
         try {
             if (dataStr != null) {
                 Date date = dateFormat.parse(dataStr);
-                timeMillis = date.getTime();
+                hours = date.getHours();
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return timeMillis;
+        return hours;
     }
 
-    public static boolean isNight(String hour) {
+    public static boolean isNight() {
         boolean isNightTime = false;
         Calendar cal = Calendar.getInstance();
         int hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
-        if (hourOfDay >= 18 && hourOfDay <= 24 || hourOfDay >= 1 && hourOfDay <= 7) {
+        if (hourOfDay >= 18 && hourOfDay <= 24 || hourOfDay >= 0 && hourOfDay <= 7) {
             return !isNightTime;
         }
         return isNightTime;
