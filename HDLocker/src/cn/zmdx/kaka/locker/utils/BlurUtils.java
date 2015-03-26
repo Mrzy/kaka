@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build.VERSION;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import cn.zmdx.kaka.locker.BuildConfig;

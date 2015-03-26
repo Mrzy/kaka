@@ -16,6 +16,8 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 public class SensorImageView extends ImageView {
 
@@ -51,12 +53,20 @@ public class SensorImageView extends ImageView {
         // Attention to the super call here!
         super.setScaleType(ImageView.ScaleType.MATRIX);
         mTransSpeed = -DEFAULT_TRANSITION_SPEED;
+        if (mSensor == null) {
+            mSensor = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+        }
     }
 
     public SensorImageView(Context context, int mode) {
         this(context, null);
         ensureValidMode(mode);
         mCurMode = mode;
+        if (mode == TRANSITION_MODE_SENSOR) {
+            if (!isSupportSensor()) {
+                mCurMode = TRANSITION_MODE_AUTO;
+            }
+        }
     }
 
     private void ensureValidMode(int mode) {
@@ -70,6 +80,14 @@ public class SensorImageView extends ImageView {
     public void setTransitionMode(int mode) {
         ensureValidMode(mode);
         mCurMode = mode;
+        if (mode == TRANSITION_MODE_SENSOR) {
+            if (!isSupportSensor()) {
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logE("没有找到合适的传感器支持重力感应，更换为AUTO模式");
+                }
+                mCurMode = TRANSITION_MODE_AUTO;
+            }
+        }
     }
 
     public int getCurTransitionMode() {
@@ -158,18 +176,33 @@ public class SensorImageView extends ImageView {
             return;
         }
         unRegistSensorListener();
-        if (mSensor == null) {
-            mSensor = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+        Sensor sensor = getRightSensor(mSensor);
+
+        if (isSupportSensor()) {
+            mSensor.registerListener(mSensorEventListener, sensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        } else {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logE("没有找到合适的传感器，不支持重力感应");
+            }
         }
-        Sensor gravitySensor = mSensor.getDefaultSensor(Sensor.TYPE_GRAVITY);
-        mSensor.registerListener(mSensorEventListener, gravitySensor,
-                SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    private boolean isSupportSensor() {
+        return getRightSensor(mSensor) != null;
+    }
+
+    private Sensor getRightSensor(SensorManager sm) {
+        Sensor sensor = sm.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        if (sensor == null) {
+            sensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }
+        return sensor;
     }
 
     private void unRegistSensorListener() {
         if (mSensor != null) {
             mSensor.unregisterListener(mSensorEventListener);
-            mSensor = null;
         }
     }
 
