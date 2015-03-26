@@ -29,6 +29,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.share.PandoraShareManager;
@@ -139,13 +140,13 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
                     String failingUrl) {
                 isLoadError = true;
                 if (HDBNetworkState.isNetworkAvailable()) {
-//                    view.loadData(getContext().getString(R.string.newsdetail_tip_press_try_again),
-//                            "text/html; charset=UTF-8", null);
+                    // view.loadData(getContext().getString(R.string.newsdetail_tip_press_try_again),
+                    // "text/html; charset=UTF-8", null);
                     view.loadUrl("file:///android_asset/error.html");
                 } else {
-//                    view.loadData(
-//                            getContext().getString(R.string.newsdetail_tip_please_check_network),
-//                            "text/html; charset=UTF-8", null);
+                    // view.loadData(
+                    // getContext().getString(R.string.newsdetail_tip_please_check_network),
+                    // "text/html; charset=UTF-8", null);
                     view.loadUrl("file:///android_asset/NetworkError.html");
                 }
                 super.onReceivedError(view, errorCode, description, failingUrl);
@@ -227,6 +228,7 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
     public void onClick(View v) {
         if (v == mBackImageView) {
             back();
+            BottomDockUmengEventManager.statisticalNewsDetailPageBackClicked();
         } else if (v == mLikeImageView) {
             if (!mData.isLiked()) {
                 mData.setLiked(true);
@@ -235,6 +237,8 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
                         R.drawable.news_detail_like_icon));
                 showLikeNumber();
                 toLikeNews();
+                BottomDockUmengEventManager
+                        .statisticalNewsDetailFavoriteClicked(mData.getCloudId());
             }
         } else if (v == mShareImageView) {
             mShareLayout.setVisibility(View.VISIBLE);
@@ -330,6 +334,7 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         if (xDistance > SWIPE_MIN_DISTANCE && xDistance > yDistance
                 && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
             back();
+            BottomDockUmengEventManager.statisticalNewsDetailPageRightSlideToBack();
         }
         return false;
     }

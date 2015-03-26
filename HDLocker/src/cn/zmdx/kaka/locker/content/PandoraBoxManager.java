@@ -46,6 +46,7 @@ import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.GeneralNewsPageAdapter;
 import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
+import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
@@ -194,9 +195,10 @@ public class PandoraBoxManager implements View.OnClickListener {
         String sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
         String[] split = sunriseAndSunset.split("\\|");
         String sunset = split[1];
-        boolean isNight = SmartWeatherUtils.isNight(forecastReleasedTime);
+        int timeHour = SmartWeatherUtils.str2TimeHour(forecastReleasedTime);
+        boolean isNight = SmartWeatherUtils.isNight();
         boolean isSunsetTime = SmartWeatherUtils.isSunsetTime(sunset);
-        if (isNight) {
+        if (isNight || timeHour == 18) {
             String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
             if (!TextUtils.isEmpty(nightFeatureNo)) {
                 featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
@@ -422,6 +424,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         refreshAllNews();
         initBody();
         showDateView();
+        BottomDockUmengEventManager.statisticalNewsPanelExpanded();
         PandoraConfig.newInstance(mContext).saveLastShowUnreadNews(System.currentTimeMillis());
         tvUnreadNews.setVisibility(View.INVISIBLE);
         animateHideUnreadNews();
@@ -438,6 +441,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                 && HDBNetworkState.isNetworkAvailable()) {
             animateShowUnreadNews();
         }
+        BottomDockUmengEventManager.statisticalNewsPanelCollapsed();
         PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
         PandoraBoxManager.newInstance(mContext).resetDefaultPage();
         if (mBackBtn != null) {
@@ -991,6 +995,7 @@ public class PandoraBoxManager implements View.OnClickListener {
     public void onClick(View v) {
         if (v == mBackBtn) {
             LockScreenManager.getInstance().collapseNewsPanel();
+            BottomDockUmengEventManager.statisticalNewsPanelBackClicked();
         }
     }
 
