@@ -36,8 +36,6 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
     private LinearLayout mLocalWallpaper;
 
-    private boolean isPressed = false;
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
     ViewGroup container, @Nullable
@@ -83,9 +81,6 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
             @Override
             public void onGoToDetailClick(ServerOnlineWallpaper item) {
-                if (isPressed) {
-                    return;
-                }
                 Intent in = new Intent();
                 in.putExtra("imageUrl", item.getImageURL());
                 in.putExtra("desc", item.getDesc());
@@ -122,13 +117,11 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart("WallpaperFragment");
-        isPressed = false;
     }
 
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("WallpaperFragment");
-        isPressed = true;
     }
 
     @Override
