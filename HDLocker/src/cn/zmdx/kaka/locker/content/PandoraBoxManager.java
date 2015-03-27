@@ -44,6 +44,7 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.GeneralNewsPageAdapter;
+import cn.zmdx.kaka.locker.content.adapter.O2oPageAdapter;
 import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
@@ -502,6 +503,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         titles.add(mContext.getResources().getString(R.string.pandora_news_classify_wallpaper));
         titles.add(mContext.getResources().getString(R.string.pandora_news_classify_headlines));
         titles.add(mContext.getResources().getString(R.string.pandora_news_classify_gossip));
+        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_o2o));
         titles.add(mContext.getResources().getString(R.string.pandora_news_classify_micro_choice));
         titles.add(mContext.getResources().getString(R.string.pandora_news_classify_beauty));
         titles.add(mContext.getResources().getString(R.string.pandora_news_classify_funny));
@@ -511,6 +513,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         View wallPaperView = initWallPaperView();
         View hotNewsView = initHotNewsView();
         View gossipView = initGossipView();
+        View o2oView = initO2OView();
         View microMediaView = initMicroMediaView();
         View beautyView = initBeautyView();
         View jokeView = initJokeView();
@@ -518,6 +521,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         data.add(wallPaperView);
         data.add(hotNewsView);
         data.add(gossipView);
+        data.add(o2oView);
         data.add(microMediaView);
         data.add(beautyView);
         data.add(jokeView);
@@ -526,6 +530,8 @@ public class PandoraBoxManager implements View.OnClickListener {
     private List<ServerImageData> mHotNews = new ArrayList<ServerImageData>();
 
     private List<ServerImageData> mGossipNews = new ArrayList<ServerImageData>();
+
+    private List<String> mO2oNews = new ArrayList<String>();
 
     private List<ServerImageData> mMicroMediaNews = new ArrayList<ServerImageData>();
 
@@ -537,8 +543,10 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private GeneralNewsPageAdapter mMicroMediaAdapter, mHotAdapter;
 
+    private O2oPageAdapter mO2oAdapter;
+
     private SwipeRefreshLayout mJokeRefreshView, mBeautyRefreshView, mMicroMediaRefreshView,
-            mGossipRefreshView, mHotRefreshView;
+            mGossipRefreshView, mHotRefreshView, mO2oRefreshView;
 
     private View createEmptyView() {
         TextView view = new TextView(mContext);
@@ -550,6 +558,37 @@ public class PandoraBoxManager implements View.OnClickListener {
             view.setText(mContext.getString(R.string.tip_no_news));
         }
         view.setTextSize(18f);
+        return view;
+    }
+
+    private View initO2OView() {
+        ViewGroup view = (ViewGroup) mInflater.inflate(R.layout.pager_news_layout, null);
+        PandoraRecyclerView rv = (PandoraRecyclerView) view.findViewById(R.id.recyclerView);
+        rv.setEmptyView(createEmptyView());
+        rv.setVerticalFadingEdgeEnabled(true);
+        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
+        final LinearLayoutManager llm = new LinearLayoutManager(mContext,
+                LinearLayoutManager.VERTICAL, false);
+        rv.setLayoutManager(llm);
+        rv.setHasFixedSize(true);
+
+        mO2oAdapter = new O2oPageAdapter(mContext, mO2oNews);
+        rv.setAdapter(mO2oAdapter);
+
+        View emptyView = createEmptyView();
+        rv.setEmptyView(emptyView);
+        view.addView(emptyView);
+
+        mO2oRefreshView = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
+        mO2oRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[5]);
+        mO2oRefreshView.setColorSchemeColors(Color.WHITE);
+
+        mO2oRefreshView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+            }
+        });
         return view;
     }
 
