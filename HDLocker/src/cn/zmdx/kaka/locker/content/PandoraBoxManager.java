@@ -386,7 +386,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             }
             Bitmap bitmap = (Bitmap) intent.getParcelableExtra("icon");
             // 转变为圆形
-            Bitmap roundBmp = ImageUtils.getRoundBitmap(bitmap, 100, true);
+            Bitmap roundBmp = ImageUtils.getRoundBitmap(bitmap, 100, false);
             mBackBtn.notifyNewFeed(roundBmp);
         }
     };
