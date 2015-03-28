@@ -408,11 +408,13 @@ public class LockScreenManager {
         public void onPanelExpanded(View panel) {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelExpanded();
             pauseWallpaperTranslation();
+            pauseShimmer();
         };
 
         public void onPanelCollapsed(View panel) {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelCollapsed();
             resumeWallpaperTranslation();
+            startShimmer();
         };
     };
 
@@ -653,12 +655,16 @@ public class LockScreenManager {
             mDigitalClockView.setTickerStoped(true);
         }
 
-        if (mShimmer != null) {
-            mShimmer.cancel();
-        }
+        pauseShimmer();
 
         // 检查是否有读取通知权限
         NotificationInterceptor.getInstance(mContext).checkPermission();
+    }
+
+    public void pauseShimmer() {
+        if (mShimmer != null) {
+            mShimmer.cancel();
+        }
     }
 
     public void onScreenOn() {

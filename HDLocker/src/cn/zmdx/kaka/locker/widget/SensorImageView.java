@@ -162,8 +162,8 @@ public class SensorImageView extends ImageView {
 
         updateTransX();
         mMatrix.postTranslate(mCurTransX, 0);
-        setImageMatrix(mMatrix);
         if (!mPause) {
+            setImageMatrix(mMatrix);
             postInvalidateDelayed(FRAME_DELAY);
         }
         super.onDraw(canvas);

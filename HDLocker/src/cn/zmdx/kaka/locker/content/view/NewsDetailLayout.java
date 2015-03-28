@@ -8,15 +8,18 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewStub;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -47,6 +50,8 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
     private static String URL = UrlBuilder.getBaseUrl() + "locker!addDataImgTableTop.action";
 
+    private View mEntireView, mShareViewStub;
+
     private WebView mWebView;
 
     private ImageView mBackImageView, mLikeImageView, mShareImageView;
@@ -64,6 +69,8 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
     private ContentLoadingProgressBar mProgressBar;
 
     private ServerImageData mData;
+
+    private View mLoadingView;
 
     private boolean isLoadError = false;
 
@@ -87,28 +94,17 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
     }
 
     public NewsDetailLayout(PandoraBoxManager pbManager, ServerImageData sid) {
-        this(HDApplication.getContext());
+        super(HDApplication.getContext());
         mPbManager = pbManager;
         mData = sid;
-        // 这里delay300ms之后再加载网页，以解决详细页出场动画卡顿的问题
-        postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                load(mData.getImageDesc());
-            }
-        }, 300);
-        ShareSDK.initSDK(HDApplication.getContext());
-        if (mData.isLiked()) {
-            mLikeImageView.setImageDrawable(getResources().getDrawable(
-                    R.drawable.news_detail_like_icon));
-        }
+        init();
     }
 
     private void init() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.news_detail_layout, this);
-        mProgressBar = (ContentLoadingProgressBar) view.findViewById(R.id.progress);
-        mWebView = (WebView) view.findViewById(R.id.webView);
+        mEntireView = LayoutInflater.from(getContext()).inflate(R.layout.news_detail_layout, this);
+        mProgressBar = (ContentLoadingProgressBar) mEntireView.findViewById(R.id.progress);
+        mLoadingView = mEntireView.findViewById(R.id.loading);
+        mWebView = (WebView) mEntireView.findViewById(R.id.webView);
         mWebView.getSettings().setJavaScriptEnabled(true);
         if (Build.VERSION.SDK_INT >= 19) {
             mWebView.getSettings().setLoadsImagesAutomatically(true);
@@ -127,6 +123,10 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
             }
         });
         mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
             @Override
             public void onPageFinished(WebView view, String url) {
                 if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
@@ -162,20 +162,37 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
         mGestureDetector = new GestureDetector(getContext(), this);
 
-        mBackImageView = (ImageView) view.findViewById(R.id.back);
-        mLikeImageView = (ImageView) view.findViewById(R.id.like);
-        mShareImageView = (ImageView) view.findViewById(R.id.share);
+        mBackImageView = (ImageView) mEntireView.findViewById(R.id.back);
+        mLikeImageView = (ImageView) mEntireView.findViewById(R.id.like);
+        mShareImageView = (ImageView) mEntireView.findViewById(R.id.share);
 
         mBackImageView.setOnClickListener(this);
         mLikeImageView.setOnClickListener(this);
         mShareImageView.setOnClickListener(this);
 
-        mLikeNumber = (TypefaceTextView) view.findViewById(R.id.like_number);
+        mLikeNumber = (TypefaceTextView) mEntireView.findViewById(R.id.like_number);
 
-        initShareLayout(view);
+        // 这里delay300ms之后再加载网页，以解决详细页出场动画卡顿的问题
+        postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                mLoadingView.setVisibility(View.GONE);
+                load(mData.getImageDesc());
+            }
+        }, 300);
+
+        if (mData.isLiked()) {
+            mLikeImageView.setImageDrawable(getResources().getDrawable(
+                    R.drawable.news_detail_like_icon));
+        }
     }
 
-    private void initShareLayout(View view) {
+    private void initShareLayout() {
+        if (mShareViewStub == null) {
+            ViewStub vs = (ViewStub) mEntireView.findViewById(R.id.shareViewStub);
+            mShareViewStub = vs.inflate();
+        }
         boolean isWecharAvilible = PandoraShareManager.isAvilible(getContext(),
                 PandoraShareManager.PACKAGE_WECHAR_STRING);
         boolean isQQAvilible = PandoraShareManager.isAvilible(getContext(),
@@ -183,26 +200,28 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         boolean isSinaAvilible = PandoraShareManager.isAvilible(getContext(),
                 PandoraShareManager.PACKAGE_SINA_STRING);
         if (isWecharAvilible) {
-            view.findViewById(R.id.share_wechat_icon_layout).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.share_wechat_circle_icon_layout).setVisibility(View.VISIBLE);
+            mShareViewStub.findViewById(R.id.share_wechat_icon_layout).setVisibility(View.VISIBLE);
+            mShareViewStub.findViewById(R.id.share_wechat_circle_icon_layout).setVisibility(View.VISIBLE);
         }
         if (isQQAvilible) {
-            view.findViewById(R.id.share_wechat_qq_icon_layout).setVisibility(View.VISIBLE);
+            mShareViewStub.findViewById(R.id.share_wechat_qq_icon_layout).setVisibility(View.VISIBLE);
         }
         if ((!isWecharAvilible && !isQQAvilible) || isSinaAvilible) {
-            view.findViewById(R.id.share_wechat_sina_icon_layout).setVisibility(View.VISIBLE);
+            mShareViewStub.findViewById(R.id.share_wechat_sina_icon_layout).setVisibility(View.VISIBLE);
         }
-        mShareLayout = (LinearLayout) view.findViewById(R.id.share_detail_layout);
-        mWecharShareIcon = (ImageView) view.findViewById(R.id.share_wechat_icon);
-        mWecharCircleShareIcon = (ImageView) view.findViewById(R.id.share_wechat_circle_icon);
-        mQQShareIcon = (ImageView) view.findViewById(R.id.share_wechat_qq_icon);
-        mSinaShareIcon = (ImageView) view.findViewById(R.id.share_wechat_sina_icon);
+        mShareLayout = (LinearLayout) mShareViewStub.findViewById(R.id.share_detail_layout);
+        mWecharShareIcon = (ImageView) mShareViewStub.findViewById(R.id.share_wechat_icon);
+        mWecharCircleShareIcon = (ImageView) mShareViewStub.findViewById(R.id.share_wechat_circle_icon);
+        mQQShareIcon = (ImageView) mShareViewStub.findViewById(R.id.share_wechat_qq_icon);
+        mSinaShareIcon = (ImageView) mShareViewStub.findViewById(R.id.share_wechat_sina_icon);
 
         mShareLayout.setOnClickListener(this);
         mWecharShareIcon.setOnClickListener(this);
         mWecharCircleShareIcon.setOnClickListener(this);
         mQQShareIcon.setOnClickListener(this);
         mSinaShareIcon.setOnClickListener(this);
+
+        ShareSDK.initSDK(HDApplication.getContext());
     }
 
     private void load(String url) {
@@ -241,6 +260,7 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
                         .statisticalNewsDetailFavoriteClicked(mData.getCloudId());
             }
         } else if (v == mShareImageView) {
+            initShareLayout();
             mShareLayout.setVisibility(View.VISIBLE);
         } else if (v == mShareLayout) {
             mShareLayout.setVisibility(View.GONE);
