@@ -392,7 +392,8 @@ public class PandoraBoxManager implements View.OnClickListener {
     };
 
     private void animateHideUnreadNews() {
-        ObjectAnimator animTransY = ObjectAnimator.ofFloat(tvUnreadNews, "translationY", 0, -50);
+        ObjectAnimator animTransY = ObjectAnimator.ofFloat(tvUnreadNews, "translationY", 0,
+                -BaseInfoHelper.dip2px(mContext, 20));
         animTransY.setInterpolator(new DecelerateInterpolator());
         ObjectAnimator animAlpha = ObjectAnimator.ofFloat(tvUnreadNews, "alpha", 1f, 0f);
         ObjectAnimator animX1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleX", 1f, 0f);
@@ -400,6 +401,13 @@ public class PandoraBoxManager implements View.OnClickListener {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(animAlpha, animTransY, animX1, animY1);
         set.setDuration(600);
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                tvUnreadNews.setAlpha(0f);
+                super.onAnimationEnd(animation);
+            }
+        });
         set.start();
     }
 
@@ -408,12 +416,14 @@ public class PandoraBoxManager implements View.OnClickListener {
         animX1.setInterpolator(new OvershootInterpolator());
         ObjectAnimator animY1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleY", 0f, 1f);
         animY1.setInterpolator(new OvershootInterpolator());
-        ObjectAnimator animTransY = ObjectAnimator.ofFloat(tvUnreadNews, "translationY", 100, 0);
+        ObjectAnimator animTransY = ObjectAnimator.ofFloat(tvUnreadNews, "translationY",
+                BaseInfoHelper.dip2px(mContext, 33), 0);
         animTransY.setInterpolator(new OvershootInterpolator());
         ObjectAnimator animAlpha = ObjectAnimator.ofFloat(tvUnreadNews, "alpha", 0.4f, 1f);
         AnimatorSet set = new AnimatorSet();
         set.playTogether(animX1, animY1, animAlpha, animTransY);
         set.setDuration(700);
+        set.setStartDelay(500);
         set.start();
     }
 
@@ -425,7 +435,6 @@ public class PandoraBoxManager implements View.OnClickListener {
         initBody();
         showDateView();
         PandoraConfig.newInstance(mContext).saveLastShowUnreadNews(System.currentTimeMillis());
-        tvUnreadNews.setVisibility(View.INVISIBLE);
         animateHideUnreadNews();
         ivArrowUp.animate().rotation(180).setDuration(300);
         mBackBtn.startAppearAnimator();
@@ -436,11 +445,6 @@ public class PandoraBoxManager implements View.OnClickListener {
         hideDateView();
         tvUnreadNews.setVisibility(View.VISIBLE);
         ivArrowUp.animate().rotation(0).setDuration(300);
-        long lastShowUnreadNews = PandoraConfig.newInstance(mContext).getLastShowUnreadNews();
-        if (System.currentTimeMillis() - lastShowUnreadNews >= PandoraPolicy.MIN_SHOW_UNREAD_NEWS_TIME
-                && HDBNetworkState.isNetworkAvailable()) {
-            animateShowUnreadNews();
-        }
         PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
         PandoraBoxManager.newInstance(mContext).resetDefaultPage();
         if (mBackBtn != null) {
@@ -1005,6 +1009,20 @@ public class PandoraBoxManager implements View.OnClickListener {
     public void resetDefaultPage() {
         if (mViewPager != null) {
             mViewPager.setCurrentItem(1, false);
+        }
+    }
+
+    public void onScreenOn() {
+        long lastShowUnreadNews = PandoraConfig.newInstance(mContext).getLastShowUnreadNews();
+        if (System.currentTimeMillis() - lastShowUnreadNews >= PandoraPolicy.MIN_SHOW_UNREAD_NEWS_TIME
+                && HDBNetworkState.isNetworkAvailable()) {
+            animateShowUnreadNews();
+        }
+    }
+
+    public void onScreenOff() {
+        if (tvUnreadNews != null) {
+            tvUnreadNews.setAlpha(0f);
         }
     }
 }

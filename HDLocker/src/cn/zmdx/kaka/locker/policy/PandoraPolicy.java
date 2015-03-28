@@ -1,6 +1,8 @@
 
 package cn.zmdx.kaka.locker.policy;
 
+import cn.zmdx.kaka.locker.BuildConfig;
+
 
 public class PandoraPolicy {
 
@@ -23,6 +25,6 @@ public class PandoraPolicy {
 
     public static final long MIN_UPDATE_LOCATION_TIME = 2 * 60 * 60 * 1000;// 2h
 
-    public static final long MIN_SHOW_UNREAD_NEWS_TIME = 1 * 60 * 60 * 1000;// 1h
+    public static final long MIN_SHOW_UNREAD_NEWS_TIME = BuildConfig.DEBUG ? 30 * 1000 : 1 * 60 * 60 * 1000;// 1h
 
 }

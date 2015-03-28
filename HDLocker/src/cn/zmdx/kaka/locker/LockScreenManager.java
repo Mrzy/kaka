@@ -659,6 +659,8 @@ public class LockScreenManager {
 
         // 检查是否有读取通知权限
         NotificationInterceptor.getInstance(mContext).checkPermission();
+
+        PandoraBoxManager.newInstance(mContext).onScreenOff();
     }
 
     public void pauseShimmer() {
@@ -681,6 +683,8 @@ public class LockScreenManager {
                         .setInterpolator(new DecelerateInterpolator()).start();
             }
         }
+
+        PandoraBoxManager.newInstance(mContext).onScreenOn();
     }
 
     private Set<OnBackPressedListener> mBackPressedListeners = new HashSet<OnBackPressedListener>();
