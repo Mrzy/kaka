@@ -292,7 +292,11 @@ public class PandoraConfig {
     }
 
     public boolean isNotifyFunctionOn() {
-        return mSp.getBoolean(KEY_NEED_NOTICE, false);
+        boolean defaultValue = false;
+        if (PandoraUtils.isMIUI(mContext)) {
+            defaultValue = true;
+        }
+        return mSp.getBoolean(KEY_NEED_NOTICE, defaultValue);
     }
 
     public void saveMessageNotification(boolean isMessage) {

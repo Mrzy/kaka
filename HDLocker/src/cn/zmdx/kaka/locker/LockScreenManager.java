@@ -172,15 +172,18 @@ public class LockScreenManager {
         } else {
             mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
         }
-        mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
-                | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
+        mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS
                 | LayoutParams.FLAG_FULLSCREEN;
+        if (!mIsNeedNotice || Build.VERSION.SDK_INT >= 19) { // 如果不显示通知栏或者系统版本大于等于19(支持透明通知栏),则添加下面flag从屏幕顶部开始绘制
+            mWinParams.flags |= LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        }
 
         mWinParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 
-        final Display display = mWinManager.getDefaultDisplay();
-        mWinParams.height = BaseInfoHelper.getRealHeight(display);
+        // final Display display = mWinManager.getDefaultDisplay();
+        // mWinParams.height = BaseInfoHelper.getRealHeight(display);
+        mWinParams.height = WindowManager.LayoutParams.MATCH_PARENT;
 
         mWinParams.x = 0;
         mWinParams.y = 0;

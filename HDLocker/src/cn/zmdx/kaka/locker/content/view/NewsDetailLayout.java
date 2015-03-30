@@ -18,7 +18,9 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.View.OnTouchListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.ViewStub;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -102,6 +104,21 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
     private void init() {
         mEntireView = LayoutInflater.from(getContext()).inflate(R.layout.news_detail_layout, this);
+        final ViewTreeObserver vto = mEntireView.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int[] location = new int[2];
+                mEntireView.getLocationOnScreen(location);
+                if (location[1] > 0
+                        && location[1] <= BaseInfoHelper.getStatusBarHeight(getContext())
+                        && !PandoraConfig.newInstance(getContext()).isNotifyFunctionOn()) {
+                    mEntireView.setPadding(0, 0, 0, location[1]);
+                } else {
+                    mEntireView.setPadding(0, 0, 0, 0);
+                }
+            }
+        });
         mProgressBar = (ContentLoadingProgressBar) mEntireView.findViewById(R.id.progress);
         mLoadingView = mEntireView.findViewById(R.id.loading);
         mWebView = (WebView) mEntireView.findViewById(R.id.webView);
@@ -127,6 +144,7 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
             }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
@@ -201,17 +219,21 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
                 PandoraShareManager.PACKAGE_SINA_STRING);
         if (isWecharAvilible) {
             mShareViewStub.findViewById(R.id.share_wechat_icon_layout).setVisibility(View.VISIBLE);
-            mShareViewStub.findViewById(R.id.share_wechat_circle_icon_layout).setVisibility(View.VISIBLE);
+            mShareViewStub.findViewById(R.id.share_wechat_circle_icon_layout).setVisibility(
+                    View.VISIBLE);
         }
         if (isQQAvilible) {
-            mShareViewStub.findViewById(R.id.share_wechat_qq_icon_layout).setVisibility(View.VISIBLE);
+            mShareViewStub.findViewById(R.id.share_wechat_qq_icon_layout).setVisibility(
+                    View.VISIBLE);
         }
         if ((!isWecharAvilible && !isQQAvilible) || isSinaAvilible) {
-            mShareViewStub.findViewById(R.id.share_wechat_sina_icon_layout).setVisibility(View.VISIBLE);
+            mShareViewStub.findViewById(R.id.share_wechat_sina_icon_layout).setVisibility(
+                    View.VISIBLE);
         }
         mShareLayout = (LinearLayout) mShareViewStub.findViewById(R.id.share_detail_layout);
         mWecharShareIcon = (ImageView) mShareViewStub.findViewById(R.id.share_wechat_icon);
-        mWecharCircleShareIcon = (ImageView) mShareViewStub.findViewById(R.id.share_wechat_circle_icon);
+        mWecharCircleShareIcon = (ImageView) mShareViewStub
+                .findViewById(R.id.share_wechat_circle_icon);
         mQQShareIcon = (ImageView) mShareViewStub.findViewById(R.id.share_wechat_qq_icon);
         mSinaShareIcon = (ImageView) mShareViewStub.findViewById(R.id.share_wechat_sina_icon);
 
