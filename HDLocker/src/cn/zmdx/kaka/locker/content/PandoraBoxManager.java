@@ -121,7 +121,9 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private String featureNameByNo;
 
-    private String centTemp;
+    private String centTempDay;
+
+    private String centTempNight;
 
     private ImageView ivWeatherFeaturePic;
 
@@ -195,6 +197,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         String sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
         String[] split = sunriseAndSunset.split("\\|");
         String sunset = split[1];
+        centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
+        centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
         int timeHour = SmartWeatherUtils.str2TimeHour(forecastReleasedTime);
         boolean isNight = SmartWeatherUtils.isNight();
         boolean isSunsetTime = SmartWeatherUtils.isSunsetTime(sunset);
@@ -204,10 +208,12 @@ public class PandoraBoxManager implements View.OnClickListener {
                 featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
                 featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
             }
-            centTemp = smartWeatherFeatureIndexInfo.getNightCentTemp();
             if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])
                     && isSunsetTime) {
                 featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
+            } else if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[1])
+                    && isSunsetTime) {
+                featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[17];
             }
             if (tvWeatherWind != null) {
                 tvWeatherWind.setText(nightWind == null ? "" : nightWind);
@@ -221,7 +227,6 @@ public class PandoraBoxManager implements View.OnClickListener {
                 featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
                 featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
             }
-            centTemp = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
             if (tvWeatherWind != null) {
                 tvWeatherWind.setText(daytimeWind == null ? "" : daytimeWind);
             }
@@ -237,10 +242,9 @@ public class PandoraBoxManager implements View.OnClickListener {
             ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
         }
         if (tvWeatherCentTemp != null) {
-            if (!TextUtils.isEmpty(centTemp)) {
-                tvWeatherCentTemp.setText(centTemp + "℃");
-            } else {
-                tvWeatherCentTemp.setText("");
+            if (!TextUtils.isEmpty(centTempDay)) {
+                tvWeatherCentTemp.setText((centTempDay == null ? "" : (centTempDay + "℃"))
+                        + (centTempNight == null ? "" : ("~" + centTempNight + "℃")));
             }
         }
         String lunarCal = SmartWeatherUtils.getLunarCal();

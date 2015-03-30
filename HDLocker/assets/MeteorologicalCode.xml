@@ -17,9 +17,19 @@
         d3="Overcast" />
 
     <d
+        d1="03"
+        d2="阵雨"
+        d3="Shower" />
+
+    <d
         d1="04"
         d2="雷阵雨"
         d3="Thundershower" />
+
+    <d
+        d1="05"
+        d2="雷阵雨伴有冰雹"
+        d3="Thundershower with hail" />
 
     <d
         d1="06"
@@ -47,6 +57,21 @@
         d3="Storm" />
 
     <d
+        d1="11"
+        d2="大暴雨"
+        d3="Heavy storm" />
+
+    <d
+        d1="12"
+        d2="特大暴雨"
+        d3="Severe storm" />
+
+    <d
+        d1="13"
+        d2="阵雪"
+        d3="Snow flurry" />
+
+    <d
         d1="14"
         d2="小雪"
         d3="Light snow" />
@@ -72,9 +97,69 @@
         d3="Foggy" />
 
     <d
+        d1="19"
+        d2="冻雨"
+        d3="Ice rain" />
+
+    <d
+        d1="20"
+        d2="沙尘暴"
+        d3="Duststorm" />
+
+    <d
+        d1="21"
+        d2="小到中雨"
+        d3="Light to moderate rain" />
+
+    <d
+        d1="22"
+        d2="中到大雨"
+        d3="Moderate to heavy rain" />
+
+    <d
+        d1="23"
+        d2="大到暴雨"
+        d3="Heavy rain to storm" />
+
+    <d
+        d1="24"
+        d2="暴雨到大暴雨"
+        d3="Storm to heavy storm" />
+
+    <d
+        d1="25"
+        d2="大暴雨到特大暴雨"
+        d3="Heavy to severe storm" />
+
+    <d
+        d1="26"
+        d2="小到中雪"
+        d3="Light to moderate snow" />
+
+    <d
+        d1="27"
+        d2="中到大雪"
+        d3="Moderate to heavy snow" />
+
+    <d
+        d1="28"
+        d2="大到暴雪"
+        d3="Heavy snow to snowstorm" />
+
+    <d
         d1="29"
         d2="浮尘"
         d3="Dust" />
+
+    <d
+        d1="30"
+        d2="扬沙"
+        d3="Sand" />
+
+    <d
+        d1="31"
+        d2="强沙尘暴"
+        d3="Sandstorm" />
 
     <d
         d1="53"
@@ -82,13 +167,8 @@
         d3="Haze" />
 
     <d
-        d1="000"
-        d2="夜间晴"
-        d3="Sunny night" />
-
-    <d
-        d1="001"
-        d2="夜间多云"
-        d3="Cloudy night" />
+        d1="99"
+        d2="无"
+        d3="Unknown" />
 
 </xml>
