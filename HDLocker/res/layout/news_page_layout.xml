@@ -151,8 +151,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="16dp" >
 
-                    <cn.zmdx.kaka.locker.widget.DigitalClocks
-                        xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
+                    <cn.zmdx.kaka.locker.widget.TextClockCompat
                         android:id="@+id/digitalClockDateNow"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -165,8 +164,7 @@
                         android:shadowRadius="1"
                         android:textColor="@color/white"
                         android:textSize="45sp"
-                        android:visibility="gone"
-                        clock:format="24" />
+                        android:visibility="gone" />
                 </FrameLayout>
             </RelativeLayout>
         </LinearLayout>

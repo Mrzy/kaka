@@ -33,6 +33,7 @@ import cn.zmdx.kaka.locker.battery.BatteryView;
 import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.font.FontManager;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
@@ -49,10 +50,10 @@ import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
-import cn.zmdx.kaka.locker.widget.DigitalClocks;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
+import cn.zmdx.kaka.locker.widget.TextClockCompat;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
 import com.romainpiel.shimmer.Shimmer;
@@ -81,8 +82,6 @@ public class LockScreenManager {
 
     private TextView mDate, mBatteryInfo;
 
-    private DigitalClocks mDigitalClockView;
-
     private KeyguardLock mKeyguard;
 
     private Context mContext;
@@ -110,6 +109,8 @@ public class LockScreenManager {
     private ShimmerTextView mShimmerTextView;
 
     private Shimmer mShimmer;
+
+    private TextClockCompat mClock;
 
     public interface ILockScreenListener {
         void onLock();
@@ -255,6 +256,8 @@ public class LockScreenManager {
         mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         mDate = (TextView) mMainPage.findViewById(R.id.lock_date);
+        mClock = (TextClockCompat) mMainPage.findViewById(R.id.clock);
+        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
         setDate();
 
         mBatteryInfo = (TextView) mMainPage.findViewById(R.id.battery_info);
@@ -651,9 +654,6 @@ public class LockScreenManager {
                 mSlidingUpView.getSliderView().setTranslationY(mSlidingUpView.getHeight());
             }
         }
-        if (mDigitalClockView != null) {
-            mDigitalClockView.setTickerStoped(true);
-        }
 
         pauseShimmer();
 
@@ -671,9 +671,6 @@ public class LockScreenManager {
 
     public void onScreenOn() {
         if (mIsLocked) {
-            if (mDigitalClockView != null) {
-                mDigitalClockView.setTickerStoped(false);
-            }
 
             startShimmer();
 

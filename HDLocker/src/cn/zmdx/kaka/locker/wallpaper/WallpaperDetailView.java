@@ -16,6 +16,7 @@ import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.font.FontManager;
 import cn.zmdx.kaka.locker.network.ByteArrayRequest;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -27,6 +28,7 @@ import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.BaseButton;
 import cn.zmdx.kaka.locker.widget.ProgressBarMaterial;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
+import cn.zmdx.kaka.locker.widget.TextClockCompat;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -65,6 +67,8 @@ public class WallpaperDetailView extends LinearLayout {
 
     private TextView mDate;
 
+    private TextClockCompat mClock;
+
     public WallpaperDetailView(Context context, boolean isScreen) {
         super(context);
         mContext = context;
@@ -80,6 +84,8 @@ public class WallpaperDetailView extends LinearLayout {
         addView(mView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         mDate = (TextView) mView.findViewById(R.id.lock_date);
+        mClock = (TextClockCompat) mView.findViewById(R.id.digitalClock);
+        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
         setDate();
         mLoadingView = (ProgressBarMaterial) mView.findViewById(R.id.wallpaper_loading);
         mContentView = (FrameLayout) mView.findViewById(R.id.wallpaper_content);

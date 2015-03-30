@@ -48,6 +48,7 @@ import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.font.FontManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -65,9 +66,9 @@ import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
 import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
 import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
-import cn.zmdx.kaka.locker.widget.DigitalClocks;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.PandoraRecyclerView;
+import cn.zmdx.kaka.locker.widget.TextClockCompat;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
 public class PandoraBoxManager implements View.OnClickListener {
@@ -129,7 +130,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private ImageView ivArrowUp;
 
-    private DigitalClocks mDigitalClockNowView;
+    private TextClockCompat mClock;
 
     private LinearLayout mWeatherWindLayout;
 
@@ -159,7 +160,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         tvNoWeatherInfo = (TextView) mHeaderView.findViewById(R.id.tvNoWeatherInfo);
         ivWeatherFeaturePic = (ImageView) mHeaderView.findViewById(R.id.ivWeatherFeaturePic);
         ivArrowUp = (ImageView) mHeaderView.findViewById(R.id.ivArrowUp);
-        mDigitalClockNowView = (DigitalClocks) mHeaderView.findViewById(R.id.digitalClockDateNow);
+        mClock = (TextClockCompat) mHeaderView.findViewById(R.id.digitalClockDateNow);
+        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
         return mHeaderView;
     }
 
@@ -260,15 +262,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         if (mWeatherWindLayout != null) {
             mWeatherWindLayout.setVisibility(View.GONE);
         }
-        boolean locked = LockScreenManager.getInstance().isLocked();
-        if (locked) {
-            if (mDigitalClockNowView != null) {
-                mDigitalClockNowView.setTickerStoped(true);
-            }
-        }
-        if (mDigitalClockNowView != null) {
-            mDigitalClockNowView.setVisibility(View.VISIBLE);
-            mDigitalClockNowView.setTickerStoped(false);
+        if (mClock != null) {
+            mClock.setVisibility(View.VISIBLE);
         }
         float windDimenUp = mContext.getResources()
                 .getDimension(R.dimen.weather_wind_margin_top_up);
@@ -276,8 +271,8 @@ public class PandoraBoxManager implements View.OnClickListener {
                 R.dimen.weather_clock_margin_top_up);
         mWeatherWindLayout.animate().translationY(-windDimenUp);
         mWeatherWindLayout.animate().alpha(0).setDuration(2000);
-        mDigitalClockNowView.animate().translationY(clockDimenUp);
-        mDigitalClockNowView.animate().alpha(1).setDuration(500);
+        mClock.animate().translationY(clockDimenUp);
+        mClock.animate().alpha(1).setDuration(500);
     }
 
     /**
@@ -288,9 +283,8 @@ public class PandoraBoxManager implements View.OnClickListener {
             mWeatherWindLayout.setVisibility(View.VISIBLE);
         }
         LockScreenManager.getInstance().onScreenOn();
-        if (mDigitalClockNowView != null) {
-            mDigitalClockNowView.setVisibility(View.GONE);
-            mDigitalClockNowView.setTickerStoped(true);
+        if (mClock != null) {
+            mClock.setVisibility(View.GONE);
         }
         float windDimenDown = mContext.getResources().getDimension(
                 R.dimen.weather_wind_margin_top_down);
@@ -298,8 +292,8 @@ public class PandoraBoxManager implements View.OnClickListener {
                 R.dimen.weather_clock_margin_top_down);
         mWeatherWindLayout.animate().translationY(windDimenDown);
         mWeatherWindLayout.animate().alpha(1).setDuration(500);
-        mDigitalClockNowView.animate().translationY(clockDimenDown);
-        mDigitalClockNowView.animate().alpha(0).setDuration(500);
+        mClock.animate().translationY(clockDimenDown);
+        mClock.animate().alpha(0).setDuration(500);
     }
 
     private boolean mInitBody = false;
@@ -396,6 +390,10 @@ public class PandoraBoxManager implements View.OnClickListener {
     };
 
     private void animateHideUnreadNews() {
+        if (tvUnreadNews != null && tvUnreadNews.getVisibility() == View.INVISIBLE) {
+            return;
+        }
+
         ObjectAnimator animTransY = ObjectAnimator.ofFloat(tvUnreadNews, "translationY", 0,
                 -BaseInfoHelper.dip2px(mContext, 20));
         animTransY.setInterpolator(new DecelerateInterpolator());
@@ -408,7 +406,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                tvUnreadNews.setAlpha(0f);
+                tvUnreadNews.setVisibility(View.INVISIBLE);
                 super.onAnimationEnd(animation);
             }
         });
@@ -428,6 +426,14 @@ public class PandoraBoxManager implements View.OnClickListener {
         set.playTogether(animX1, animY1, animAlpha, animTransY);
         set.setDuration(700);
         set.setStartDelay(500);
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                tvUnreadNews.setAlpha(0f);
+                tvUnreadNews.setVisibility(View.VISIBLE);
+                super.onAnimationStart(animation);
+            }
+        });
         set.start();
     }
 
@@ -447,7 +453,6 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     public void notifyNewsPanelCollapsed() {
         hideDateView();
-        tvUnreadNews.setVisibility(View.VISIBLE);
         ivArrowUp.animate().rotation(0).setDuration(300);
         PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
         PandoraBoxManager.newInstance(mContext).resetDefaultPage();
@@ -568,7 +573,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         final StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
-        // sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+         sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         // sglm.offsetChildrenHorizontal(100);
         rv.setLayoutManager(sglm);
         rv.setHasFixedSize(true);

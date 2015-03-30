@@ -40,8 +40,7 @@
             android:layout_marginTop="20dp"
             android:orientation="vertical" >
 
-            <cn.zmdx.kaka.locker.widget.DigitalClocks
-                xmlns:clock="http://schemas.android.com/apk/res/cn.zmdx.kaka.locker"
+            <cn.zmdx.kaka.locker.widget.TextClockCompat
                 android:id="@+id/digitalClock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,8 +50,7 @@
                 android:shadowDy="2"
                 android:shadowRadius="1"
                 android:textColor="@color/white"
-                android:textSize="65sp"
-                clock:format="24" />
+                android:textSize="65sp" />
 
             <LinearLayout
                 android:id="@+id/lock_date_view"
