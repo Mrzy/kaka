@@ -32,7 +32,7 @@ public class MeteorologicalCodeConstant {
 
     public static final String[] meterologicalNames = new String[] {
             "晴", "多云", "阴", "雷阵雨", "雨夹雪", "小雨", "中雨", "大雨", "暴雨", "小雪", "中雪", "大雪", "暴雪", "雾",
-            "扬尘", "霾", "夜间晴", "夜间多云",
+            "扬尘", "霾", "夜间晴", "夜间多云"
     };
 
     // 风向数组

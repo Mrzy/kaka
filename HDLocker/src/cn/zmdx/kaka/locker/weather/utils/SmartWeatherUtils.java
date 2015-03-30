@@ -185,36 +185,36 @@ public class SmartWeatherUtils {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[1];
         } else if (featureNoStr.equals("02")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[2];
-        } else if (featureNoStr.equals("04")) {
+        } else if (featureNoStr.equals("03") || featureNoStr.equals("04")
+                || featureNoStr.equals("05")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[3];
-        } else if (featureNoStr.equals("06")) {
+        } else if (featureNoStr.equals("06") || featureNoStr.equals("19")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[4];
         } else if (featureNoStr.equals("07")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[5];
-        } else if (featureNoStr.equals("08")) {
+        } else if (featureNoStr.equals("08") || featureNoStr.equals("21")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[6];
-        } else if (featureNoStr.equals("09")) {
+        } else if (featureNoStr.equals("09") || featureNoStr.equals("22")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[7];
-        } else if (featureNoStr.equals("10")) {
+        } else if (featureNoStr.equals("10") || featureNoStr.equals("11")
+                || featureNoStr.equals("12") || featureNoStr.equals("23")
+                || featureNoStr.equals("24") || featureNoStr.equals("25")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[8];
-        } else if (featureNoStr.equals("14")) {
+        } else if (featureNoStr.equals("13") || featureNoStr.equals("14")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[9];
-        } else if (featureNoStr.equals("15")) {
+        } else if (featureNoStr.equals("15") || featureNoStr.equals("26")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[10];
-        } else if (featureNoStr.equals("16")) {
+        } else if (featureNoStr.equals("16") || featureNoStr.equals("27")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[11];
-        } else if (featureNoStr.equals("17")) {
+        } else if (featureNoStr.equals("17") || featureNoStr.equals("28")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[12];
         } else if (featureNoStr.equals("18")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[13];
-        } else if (featureNoStr.equals("29")) {
+        } else if (featureNoStr.equals("29") || featureNoStr.equals("30")
+                || featureNoStr.equals("20") || featureNoStr.equals("31")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[14];
         } else if (featureNoStr.equals("53")) {
             result = MeteorologicalCodeConstant.meteorologicalCodePics[15];
-        } else if (featureNoStr.equals("000")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[16];
-        } else if (featureNoStr.equals("001")) {
-            result = MeteorologicalCodeConstant.meteorologicalCodePics[17];
         }
         return result;
     }
