@@ -47,6 +47,10 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
         @Override
         public void onClick(View v) {
             if (mListener != null) {
+                int position = getAdapterPosition();
+                if (position < 0 || position >= getItemCount()) {
+                    return;
+                }
                 mListener.onItemClicked(v, getAdapterPosition());
             }
         }

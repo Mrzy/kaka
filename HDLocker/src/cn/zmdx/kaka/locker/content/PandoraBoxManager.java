@@ -30,6 +30,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
@@ -139,6 +141,19 @@ public class PandoraBoxManager implements View.OnClickListener {
         mInflater = LayoutInflater.from(context);
         mEntireView = mInflater.inflate(R.layout.news_page_layout, null);
         mDetailLayout = (FrameLayout) mEntireView.findViewById(R.id.detailLayout);
+        final ViewTreeObserver vto = mDetailLayout.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int[] location = new int[2];
+                mDetailLayout.getLocationOnScreen(location);
+                if (location[1] > 0 && location[1] <= BaseInfoHelper.getStatusBarHeight(mContext)) {
+                    mDetailLayout.setPadding(0, 0, 0, location[1]);
+                } else {
+                    mDetailLayout.setPadding(0, 0, 0, 0);
+                }
+            }
+        });
     }
 
     public synchronized static PandoraBoxManager newInstance(Context context) {
@@ -573,7 +588,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         final StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
-         sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        sglm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         // sglm.offsetChildrenHorizontal(100);
         rv.setLayoutManager(sglm);
         rv.setHasFixedSize(true);

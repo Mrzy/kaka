@@ -174,7 +174,8 @@ public class LockScreenManager {
         }
         mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_LAYOUT_IN_SCREEN
-                | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+                | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                | LayoutParams.FLAG_FULLSCREEN;
 
         mWinParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 
@@ -262,13 +263,18 @@ public class LockScreenManager {
 
         mBatteryInfo = (TextView) mMainPage.findViewById(R.id.battery_info);
         batteryView = (BatteryView) mMainPage.findViewById(R.id.batteryView);
-        batteryView.setLevelListener(new ILevelCallBack() {
+        if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
+            mBatteryInfo.setVisibility(View.GONE);
+            batteryView.setVisibility(View.GONE);
+        } else {
+            batteryView.setLevelListener(new ILevelCallBack() {
 
-            @Override
-            public void onLevelChanged(int level) {
-                mBatteryInfo.setText(level + "%");
-            }
-        });
+                @Override
+                public void onLevelChanged(int level) {
+                    mBatteryInfo.setText(level + "%");
+                }
+            });
+        }
         pages.add(page1);
         pages.add(mMainPage);
         LockerPagerAdapter pagerAdapter = new LockerPagerAdapter(mContext, mPager, pages);

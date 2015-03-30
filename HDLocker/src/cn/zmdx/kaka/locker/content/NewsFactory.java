@@ -11,6 +11,8 @@ import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
+import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
+import cn.zmdx.kaka.locker.content.adapter.GeneralNewsPageAdapter;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -69,6 +71,7 @@ public class NewsFactory {
         }
         if (!HDBNetworkState.isNetworkAvailable()) {
             srl.setRefreshing(false);
+
             isLoadingOlder = false;
             srl.setTag(isLoadingOlder);
             if (BuildConfig.DEBUG) {
