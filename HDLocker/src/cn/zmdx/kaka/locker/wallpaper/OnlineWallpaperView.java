@@ -124,7 +124,6 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         isNetWorkError = false;
         mErrorView.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
-        isLoadMore = false;
         if (list == null) {
             return;
         }
@@ -132,7 +131,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         publishDATE = list.get(list.size() - 1).getPublishDATE();
         mList.addAll(list);
         mAdapter.notifyDataSetChanged();
-
+        isLoadMore = false;
     }
 
     public static Comparator<ServerOnlineWallpaper> comparator = new Comparator<ServerOnlineWallpaper>() {
@@ -148,6 +147,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         isNetWorkError = true;
         mErrorView.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
+        isLoadMore = false;
     }
 
     @Override
