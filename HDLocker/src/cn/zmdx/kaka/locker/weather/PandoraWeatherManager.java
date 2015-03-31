@@ -133,9 +133,8 @@ public class PandoraWeatherManager {
             areaId = XMLParserUtils.getAreaId(cityNameStr, cityProvince);
         } else {
             String lastCityName = PandoraConfig.newInstance(mContext).getLastCityName();
-            String cityProvinceName = PandoraLocationManager.getInstance(mContext)
-                    .getCityProvince();
-            areaId = XMLParserUtils.getAreaId(lastCityName,cityProvinceName);
+            String cityProvinceName = PandoraConfig.newInstance(mContext).getLastCityProvinceName();
+            areaId = XMLParserUtils.getAreaId(lastCityName, cityProvinceName);
         }
         weatherUrl = SmartWeatherUtils.getWeatherUrl(areaId);
         if (BuildConfig.DEBUG) {
