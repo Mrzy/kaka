@@ -245,8 +245,14 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
         if (tvWeatherCentTemp != null) {
             if (!TextUtils.isEmpty(centTempDay)) {
-                tvWeatherCentTemp.setText((centTempDay == null ? "" : (centTempDay + "℃"))
+                tvWeatherCentTemp.setText(centTempDay + "℃"
                         + (centTempNight == null ? "" : ("~" + centTempNight + "℃")));
+            } else {
+                if (!TextUtils.isEmpty(centTempNight)) {
+                    tvWeatherCentTemp.setText(centTempNight + "℃");
+                } else {
+                    tvWeatherCentTemp.setText("");
+                }
             }
         }
         String lunarCal = SmartWeatherUtils.getLunarCal();
