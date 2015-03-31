@@ -587,4 +587,12 @@ public class BaseInfoHelper {
         int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         return "" + year + "" + month + "" + day;
     }
+
+    /**
+     * 判断该设备是否支持通知栏导航栏透明
+     * @return
+     */
+    public static boolean isSupportTranslucentStatus() {
+        return Build.VERSION.SDK_INT >= 19;
+    }
 }

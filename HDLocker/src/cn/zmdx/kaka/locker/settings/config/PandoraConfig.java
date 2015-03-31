@@ -293,7 +293,7 @@ public class PandoraConfig {
 
     public boolean isNotifyFunctionOn() {
         boolean defaultValue = false;
-        if (PandoraUtils.isMIUI(mContext)) {
+        if (PandoraUtils.isMIUI(mContext) || BaseInfoHelper.isSupportTranslucentStatus()) {
             defaultValue = true;
         }
         return mSp.getBoolean(KEY_NEED_NOTICE, defaultValue);
