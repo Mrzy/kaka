@@ -26,8 +26,6 @@ public class MeteorologicalCodeConstant {
             R.drawable.weather_dust,// 扬尘14
             R.drawable.weather_haze,// 霾15
             R.drawable.weather_sunny_night,// 夜间晴16
-            R.drawable.weather_cloudy_night
-    // 夜间多云17
     };
 
     public static final String[] meterologicalNames = new String[] {

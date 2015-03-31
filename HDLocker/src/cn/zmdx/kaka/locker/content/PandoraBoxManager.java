@@ -213,9 +213,6 @@ public class PandoraBoxManager implements View.OnClickListener {
             if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])
                     && isSunsetTime) {
                 featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
-            } else if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[1])
-                    && isSunsetTime) {
-                featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[17];
             }
             if (tvWeatherWind != null) {
                 tvWeatherWind.setText(nightWind == null ? "" : nightWind);
