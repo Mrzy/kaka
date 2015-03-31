@@ -393,7 +393,7 @@ public class PandoraBoxManager implements View.OnClickListener {
     };
 
     private void animateHideUnreadNews() {
-        if (tvUnreadNews != null && tvUnreadNews.getVisibility() == View.INVISIBLE) {
+        if (tvUnreadNews == null || tvUnreadNews.getVisibility() == View.INVISIBLE) {
             return;
         }
 
@@ -417,7 +417,7 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     private void animateShowUnreadNews() {
-        if (tvUnreadNews != null && tvUnreadNews.getVisibility() == View.INVISIBLE) {
+        if (tvUnreadNews == null || tvUnreadNews.getVisibility() == View.INVISIBLE) {
             return;
         }
         
