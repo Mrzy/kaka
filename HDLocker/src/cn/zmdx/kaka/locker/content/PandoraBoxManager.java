@@ -414,6 +414,10 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     private void animateShowUnreadNews() {
+        if (tvUnreadNews != null && tvUnreadNews.getVisibility() == View.INVISIBLE) {
+            return;
+        }
+        
         ObjectAnimator animX1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleX", 0f, 1f);
         animX1.setInterpolator(new OvershootInterpolator());
         ObjectAnimator animY1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleY", 0f, 1f);
