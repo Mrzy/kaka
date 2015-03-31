@@ -213,9 +213,6 @@ public class PandoraBoxManager implements View.OnClickListener {
             if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])
                     && isSunsetTime) {
                 featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
-            } else if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[1])
-                    && isSunsetTime) {
-                featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[17];
             }
             if (tvWeatherWind != null) {
                 tvWeatherWind.setText(nightWind == null ? "" : nightWind);
@@ -245,8 +242,14 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
         if (tvWeatherCentTemp != null) {
             if (!TextUtils.isEmpty(centTempDay)) {
-                tvWeatherCentTemp.setText((centTempDay == null ? "" : (centTempDay + "℃"))
+                tvWeatherCentTemp.setText(centTempDay + "℃"
                         + (centTempNight == null ? "" : ("~" + centTempNight + "℃")));
+            } else {
+                if (!TextUtils.isEmpty(centTempNight)) {
+                    tvWeatherCentTemp.setText(centTempNight + "℃");
+                } else {
+                    tvWeatherCentTemp.setText("");
+                }
             }
         }
         String lunarCal = SmartWeatherUtils.getLunarCal();
