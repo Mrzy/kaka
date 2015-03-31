@@ -45,8 +45,11 @@ import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.GeneralNewsPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.O2oPageAdapter;
+import cn.zmdx.kaka.locker.content.adapter.O2oPageAdapter.OnItemClickListener;
 import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
+import cn.zmdx.kaka.locker.content.view.O2oMarketDetailLayout;
+import cn.zmdx.kaka.locker.content.view.O2oMarketItemInfo;
 import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
@@ -531,7 +534,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private List<ServerImageData> mGossipNews = new ArrayList<ServerImageData>();
 
-    private List<String> mO2oNews = new ArrayList<String>();
+    private List<O2oMarketItemInfo> mO2oNews = new ArrayList<O2oMarketItemInfo>();
 
     private List<ServerImageData> mMicroMediaNews = new ArrayList<ServerImageData>();
 
@@ -571,8 +574,47 @@ public class PandoraBoxManager implements View.OnClickListener {
                 LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);
+        int[] marketIcons = new int[] {
+                R.drawable.kfc, R.drawable.dudumeijia, R.drawable.xiongmaojia,
+                R.drawable.daojiameishihui, R.drawable.muwushaokao, R.drawable.bishengke
+        };
+        String[] marketCoupons = new String[] {
+                "肯德基5元套餐抵用券", "嘟嘟美甲免费体验券", "熊猫家按摩免费体验券", "到家美食会80元代金券", "木屋烧烤100元代金券",
+                "必胜客10元套餐抵用券"
+        };
+        String[] marketCouponEffectiveDates = new String[] {
+                "2015.3.5-2015.5.1", "2015.3.15-2015.6.6", "2015.2.12-2015.4.26",
+                "2015.4.5-2015.7.1", "2015.5.3-2015.8.8", "2015.8.9-2015.10.1"
+        };
 
+        String[] marketCouponNum = new String[] {
+                "1002 3405 4345 994", "2344 5454 2323 509", "3455 2323 4545 546",
+                "2344 5534 3453 634", "6345 2344 4543 233", "5435 3444 2342 004"
+        };
+        for (int i = 0; i < marketCoupons.length; i++) {
+            O2oMarketItemInfo sMarketItemInfo = new O2oMarketItemInfo();
+            sMarketItemInfo.setMarketCoupon(marketCoupons[i]);
+            sMarketItemInfo.setMarketIcon(marketIcons[i]);
+            sMarketItemInfo.setMarketCouponEffectiveDate(marketCouponEffectiveDates[i]);
+            sMarketItemInfo.setMarketCouponNum(marketCouponNum[i]);
+            if (i == 3 || i == 5) {
+                sMarketItemInfo.setEffective(false);
+            } else {
+                sMarketItemInfo.setEffective(true);
+            }
+            mO2oNews.add(sMarketItemInfo);
+        }
         mO2oAdapter = new O2oPageAdapter(mContext, mO2oNews);
+        mO2oAdapter.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClicked(View view, int position) {
+                O2oMarketItemInfo o2oMarketItemInfo = mO2oNews.get(position);
+                O2oMarketDetailLayout omdl = new O2oMarketDetailLayout(PandoraBoxManager.this,
+                        o2oMarketItemInfo);
+                openDetailPage(omdl);
+            }
+        });
         rv.setAdapter(mO2oAdapter);
 
         View emptyView = createEmptyView();
