@@ -13,7 +13,6 @@ import android.content.res.AssetManager;
 import android.text.TextUtils;
 import android.util.Xml;
 import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 import cn.zmdx.kaka.locker.weather.entity.CityInfo;
 import cn.zmdx.kaka.locker.weather.entity.MeteorologicalInfo;
 
@@ -74,19 +73,17 @@ public class XMLParserUtils {
      * @param cityNameStr
      * @return
      */
-    public static String getAreaId(String cityNameStr) {
+    public static String getAreaId(String cityNameStr, String provinceNameStr) {
         AssetManager asset = mContext.getAssets();
         InputStream xmlStream;
         try {
             xmlStream = asset.open("cityInfo.xml");
-            String cityProvinceName = PandoraLocationManager.getInstance(mContext)
-                    .getCityProvince();
-            if (!TextUtils.isEmpty(cityNameStr) && !TextUtils.isEmpty(cityProvinceName)) {
+            if (!TextUtils.isEmpty(cityNameStr) && !TextUtils.isEmpty(provinceNameStr)) {
                 List<CityInfo> cityInfos = pullCityInfoParseXML(xmlStream);
                 for (CityInfo cityInfo : cityInfos) {
                     String cityName = cityInfo.getCityName();
                     String cityProvince = cityInfo.getCityProvince();
-                    if (cityNameStr.contains(cityName) && cityProvinceName.contains(cityProvince)) {
+                    if (cityNameStr.contains(cityName) && provinceNameStr.contains(cityProvince)) {
                         areaIdInXml = cityInfo.getAreaId();
                         return areaIdInXml;
                     }

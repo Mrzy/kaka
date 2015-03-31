@@ -30,8 +30,6 @@ public class PandoraWeatherManager {
 
     private String weatherUrl;
 
-    private String cityNameStr = null;
-
     private String areaId = null;
 
     private PandoraWeatherManager() {
@@ -94,7 +92,11 @@ public class PandoraWeatherManager {
             return;
         }
         JsonObjectRequest request = null;
-        request = new JsonObjectRequest(getCurWeatherURL(), null, new Listener<JSONObject>() {
+        String curWeatherURL = getCurWeatherURL();
+        if (TextUtils.isEmpty(curWeatherURL)) {
+            return;
+        }
+        request = new JsonObjectRequest(curWeatherURL, null, new Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 if (response == null) {
@@ -129,12 +131,17 @@ public class PandoraWeatherManager {
     }
 
     private String getCurWeatherURL() {
-        cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
-        if (!TextUtils.isEmpty(cityNameStr)) {
-            areaId = XMLParserUtils.getAreaId(cityNameStr);
+        String cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
+        String cityProvince = PandoraLocationManager.getInstance(mContext).getCityProvince();
+        if (!TextUtils.isEmpty(cityNameStr) && !TextUtils.isEmpty(cityProvince)) {
+            areaId = XMLParserUtils.getAreaId(cityNameStr, cityProvince);
         } else {
             String lastCityName = PandoraConfig.newInstance(mContext).getLastCityName();
-            areaId = XMLParserUtils.getAreaId(lastCityName);
+            String cityProvinceName = PandoraConfig.newInstance(mContext).getLastCityProvinceName();
+            areaId = XMLParserUtils.getAreaId(lastCityName, cityProvinceName);
+        }
+        if (TextUtils.isEmpty(areaId)) {
+            return null;
         }
         weatherUrl = SmartWeatherUtils.getWeatherUrl(areaId);
         if (BuildConfig.DEBUG) {
