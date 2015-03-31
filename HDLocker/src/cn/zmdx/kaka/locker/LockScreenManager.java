@@ -178,16 +178,13 @@ public class LockScreenManager {
                 | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         if (!mIsNeedNotice || BaseInfoHelper.isSupportTranslucentStatus()) { // 如果不显示通知栏或者系统版本大于等于19(支持透明通知栏),则添加下面flag从屏幕顶部开始绘制
             mWinParams.flags |= LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+            final Display display = mWinManager.getDefaultDisplay();
+            mWinParams.height = BaseInfoHelper.getRealHeight(display);
+        } else {
+            mWinParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         }
 
         mWinParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-
-        if (mIsNeedNotice && ViewConfiguration.get(mContext).hasPermanentMenuKey()) {
-            mWinParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-        } else {
-            final Display display = mWinManager.getDefaultDisplay();
-            mWinParams.height = BaseInfoHelper.getRealHeight(display);
-        }
 
         mWinParams.x = 0;
         mWinParams.y = 0;
