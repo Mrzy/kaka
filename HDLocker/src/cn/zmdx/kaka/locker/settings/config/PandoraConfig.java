@@ -91,6 +91,8 @@ public class PandoraConfig {
 
     private static final String KEY_LAST_CITY_NAME = "klcn";
 
+    private static final String KEY_LAST_CITY_PROVINCE_NAME = "klcpn";
+
     private static final String KEY_LAST_CHECK_LOCATION = "klcl";
 
     private static final String KEY_LAST_SHOW_UNREAD_NEWS = "klsun";
@@ -237,6 +239,16 @@ public class PandoraConfig {
 
     public String getLastCityName() {
         return mSp.getString(KEY_LAST_CITY_NAME, "");
+    }
+
+    public void saveLastCityProvinceName(String cityProvinceName) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_LAST_CITY_PROVINCE_NAME, cityProvinceName);
+        editor.commit();
+    }
+
+    public String getLastCityProvinceName() {
+        return mSp.getString(KEY_LAST_CITY_PROVINCE_NAME, "");
     }
 
     public String getLastWeatherInfo() {

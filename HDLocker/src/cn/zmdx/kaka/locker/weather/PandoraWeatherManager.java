@@ -30,8 +30,6 @@ public class PandoraWeatherManager {
 
     private String weatherUrl;
 
-    private String cityNameStr = null;
-
     private String areaId = null;
 
     private PandoraWeatherManager() {
@@ -129,12 +127,15 @@ public class PandoraWeatherManager {
     }
 
     private String getCurWeatherURL() {
-        cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
-        if (!TextUtils.isEmpty(cityNameStr)) {
-            areaId = XMLParserUtils.getAreaId(cityNameStr);
+        String cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
+        String cityProvince = PandoraLocationManager.getInstance(mContext).getCityProvince();
+        if (!TextUtils.isEmpty(cityNameStr) && !TextUtils.isEmpty(cityProvince)) {
+            areaId = XMLParserUtils.getAreaId(cityNameStr, cityProvince);
         } else {
             String lastCityName = PandoraConfig.newInstance(mContext).getLastCityName();
-            areaId = XMLParserUtils.getAreaId(lastCityName);
+            String cityProvinceName = PandoraLocationManager.getInstance(mContext)
+                    .getCityProvince();
+            areaId = XMLParserUtils.getAreaId(lastCityName,cityProvinceName);
         }
         weatherUrl = SmartWeatherUtils.getWeatherUrl(areaId);
         if (BuildConfig.DEBUG) {
