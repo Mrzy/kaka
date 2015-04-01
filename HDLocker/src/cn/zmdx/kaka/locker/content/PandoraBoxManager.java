@@ -535,7 +535,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             }
         }, 4000);
         if (null != mWallpaperView) {
-            mWallpaperView.pullWallpaperData(0);
+            mWallpaperView.pullWallpaperData();
         }
     }
 

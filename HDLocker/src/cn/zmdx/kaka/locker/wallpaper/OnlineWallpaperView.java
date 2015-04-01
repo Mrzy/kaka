@@ -119,10 +119,6 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         OnlineWallpaperManager.getInstance().pullWallpaperData(mContext, this, mPublishDate);
     }
 
-    public void pullWallpaperData(int publishDate) {
-        OnlineWallpaperManager.getInstance().pullWallpaperData(mContext, this, publishDate);
-    }
-
     @Override
     public void onSuccecc(List<ServerOnlineWallpaper> list) {
         isNetWorkError = false;
