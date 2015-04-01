@@ -134,6 +134,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private LinearLayout mWeatherWindLayout;
 
+    private boolean isNight;
+
     private PandoraBoxManager(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -202,21 +204,20 @@ public class PandoraBoxManager implements View.OnClickListener {
                 .getNightWindNo());// 夜间风向
         String forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
         String sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
-        String[] split = sunriseAndSunset.split("\\|");
-        String sunset = split[1];
+        if (!TextUtils.isEmpty(sunriseAndSunset)) {
+            isNight = SmartWeatherUtils.isNight(sunriseAndSunset);
+        }
         centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
         centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
         int timeHour = SmartWeatherUtils.str2TimeHour(forecastReleasedTime);
-        boolean isNight = SmartWeatherUtils.isNight();
-        boolean isSunsetTime = SmartWeatherUtils.isSunsetTime(sunset);
+
         if (isNight || timeHour == 18) {
             String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
             if (!TextUtils.isEmpty(nightFeatureNo)) {
                 featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
                 featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
             }
-            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])
-                    && isSunsetTime) {
+            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
                 featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
             }
             if (tvWeatherWind != null) {
