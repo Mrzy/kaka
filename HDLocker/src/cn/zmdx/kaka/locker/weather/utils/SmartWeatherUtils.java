@@ -134,19 +134,22 @@ public class SmartWeatherUtils {
         return hours;
     }
 
-    public static boolean isNight() {
-        boolean isNightTime = false;
+    public static boolean isNight(String sunriseTime) {
         Calendar cal = Calendar.getInstance();
         int hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
-        if (hourOfDay >= 18 && hourOfDay <= 24 || hourOfDay >= 0 && hourOfDay <= 7) {
-            return !isNightTime;
+        int minuteOfDay = cal.get(Calendar.MINUTE);
+        String[] split = sunriseTime.split(":");
+        int hour = Integer.parseInt(split[0]);
+        int minute = Integer.parseInt(split[1]);
+        if ((hourOfDay >= 18 && hourOfDay <= 24) || (hourOfDay >= 0 && hourOfDay < hour)
+                || (hourOfDay == hour && minuteOfDay <= minute)) {
+            return true;
         }
-        return isNightTime;
+        return false;
     }
 
     public static boolean isSunsetTime(String sunsetTime) {
         // 18:21
-        boolean isSunsetTime = false;
         Calendar cal = Calendar.getInstance();
         int hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
         int minuteOfDay = cal.get(Calendar.MINUTE);
@@ -154,11 +157,9 @@ public class SmartWeatherUtils {
         int hour = Integer.parseInt(split[0]);
         int minute = Integer.parseInt(split[1]);
         if ((hourOfDay == hour && minuteOfDay >= minute) || hourOfDay > hour) {
-            isSunsetTime = true;
-        } else {
-            isSunsetTime = false;
+            return true;
         }
-        return isSunsetTime;
+        return false;
     }
 
     private static String getKey(String areaid) {

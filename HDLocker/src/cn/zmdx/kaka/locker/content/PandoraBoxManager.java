@@ -198,11 +198,12 @@ public class PandoraBoxManager implements View.OnClickListener {
         String forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
         String sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
         String[] split = sunriseAndSunset.split("\\|");
+        String sunrise = split[0];
         String sunset = split[1];
         centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
         centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
         int timeHour = SmartWeatherUtils.str2TimeHour(forecastReleasedTime);
-        boolean isNight = SmartWeatherUtils.isNight();
+        boolean isNight = SmartWeatherUtils.isNight(sunrise);
         boolean isSunsetTime = SmartWeatherUtils.isSunsetTime(sunset);
         if (isNight || timeHour == 18) {
             String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
@@ -420,7 +421,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         if (tvUnreadNews == null || tvUnreadNews.getVisibility() == View.INVISIBLE) {
             return;
         }
-        
+
         ObjectAnimator animX1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleX", 0f, 1f);
         animX1.setInterpolator(new OvershootInterpolator());
         ObjectAnimator animY1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleY", 0f, 1f);
