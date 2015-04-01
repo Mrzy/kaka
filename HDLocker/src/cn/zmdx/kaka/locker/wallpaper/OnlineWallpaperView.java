@@ -113,10 +113,14 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         };
     };
 
-    private long publishDATE;
+    private long mPublishDate;
 
     public void pullWallpaperData() {
-        OnlineWallpaperManager.getInstance().pullWallpaperData(mContext, this, publishDATE);
+        OnlineWallpaperManager.getInstance().pullWallpaperData(mContext, this, mPublishDate);
+    }
+
+    public void pullWallpaperData(int publishDate) {
+        OnlineWallpaperManager.getInstance().pullWallpaperData(mContext, this, publishDate);
     }
 
     @Override
@@ -128,7 +132,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
             return;
         }
         Collections.sort(list, comparator);
-        publishDATE = list.get(list.size() - 1).getPublishDATE();
+        mPublishDate = list.get(list.size() - 1).getPublishDATE();
         mList.addAll(list);
         mAdapter.notifyDataSetChanged();
         isLoadMore = false;
