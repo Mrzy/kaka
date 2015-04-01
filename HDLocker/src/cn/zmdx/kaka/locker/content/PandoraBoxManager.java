@@ -134,6 +134,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private LinearLayout mWeatherWindLayout;
 
+    private boolean isNight;
+
     private PandoraBoxManager(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -198,11 +200,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         String forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
         String sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
         if (!TextUtils.isEmpty(sunriseAndSunset)) {
-            String[] split = sunriseAndSunset.split("\\|");
-            String sunrise = split[0];
-            String sunset = split[1];
-            isNight = SmartWeatherUtils.isNight(sunrise);
-            isSunsetTime = SmartWeatherUtils.isSunsetTime(sunset);
+            isNight = SmartWeatherUtils.isNight(sunriseAndSunset);
         }
         centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
         centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
@@ -214,8 +212,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                 featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
                 featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
             }
-            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])
-                    && isSunsetTime) {
+            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
                 featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
             }
             if (tvWeatherWind != null) {
@@ -563,10 +560,6 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private SwipeRefreshLayout mJokeRefreshView, mBeautyRefreshView, mMicroMediaRefreshView,
             mGossipRefreshView, mHotRefreshView;
-
-    private boolean isNight;
-
-    private boolean isSunsetTime;
 
     private View createEmptyView() {
         TextView view = new TextView(mContext);

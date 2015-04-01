@@ -134,29 +134,23 @@ public class SmartWeatherUtils {
         return hours;
     }
 
-    public static boolean isNight(String sunriseTime) {
+    public static boolean isNight(String sunriseAndSunset) {
+        String[] split = sunriseAndSunset.split("\\|");
+        String sunrise = split[0];
+        String sunset = split[1];
         Calendar cal = Calendar.getInstance();
         int hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
         int minuteOfDay = cal.get(Calendar.MINUTE);
-        String[] split = sunriseTime.split(":");
-        int hour = Integer.parseInt(split[0]);
-        int minute = Integer.parseInt(split[1]);
-        if ((hourOfDay >= 18 && hourOfDay <= 24) || (hourOfDay >= 0 && hourOfDay < hour)
-                || (hourOfDay == hour && minuteOfDay <= minute)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean isSunsetTime(String sunsetTime) {
-        // 18:21
-        Calendar cal = Calendar.getInstance();
-        int hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
-        int minuteOfDay = cal.get(Calendar.MINUTE);
-        String[] split = sunsetTime.split(":");
-        int hour = Integer.parseInt(split[0]);
-        int minute = Integer.parseInt(split[1]);
-        if ((hourOfDay == hour && minuteOfDay >= minute) || hourOfDay > hour) {
+        String[] sunriseSplit = sunrise.split(":");
+        int sunriseHour = Integer.parseInt(sunriseSplit[0]);
+        int sunriseMinute = Integer.parseInt(sunriseSplit[1]);
+        String[] sunsetSplit = sunset.split(":");
+        int sunsetHour = Integer.parseInt(sunsetSplit[0]);
+        int sunsetMinute = Integer.parseInt(sunsetSplit[1]);
+        if ((hourOfDay == sunsetHour && minuteOfDay >= sunsetMinute)
+                || (hourOfDay > sunsetHour && hourOfDay <= 24)
+                || (hourOfDay >= 0 && hourOfDay < sunriseHour)
+                || (hourOfDay == sunriseHour && minuteOfDay <= sunriseMinute)) {
             return true;
         }
         return false;
