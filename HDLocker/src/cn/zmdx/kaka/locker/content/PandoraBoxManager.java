@@ -472,6 +472,21 @@ public class PandoraBoxManager implements View.OnClickListener {
         if (mBackBtn != null) {
             mBackBtn.setTranslationY(BaseInfoHelper.dip2px(mContext, 100));
         }
+        if (mJokeRefreshView != null) {
+            mJokeRefreshView.setRefreshing(false);
+        }
+        if (mBeautyRefreshView != null) {
+            mBeautyRefreshView.setRefreshing(false);
+        }
+        if (mMicroMediaRefreshView != null) {
+            mMicroMediaRefreshView.setRefreshing(false);
+        }
+        if (mGossipRefreshView != null) {
+            mGossipRefreshView.setRefreshing(false);
+        }
+        if (mHotRefreshView != null) {
+            mHotRefreshView.setRefreshing(false);
+        }
         BottomDockUmengEventManager.statisticalNewsPanelCollapsed();
     }
 
