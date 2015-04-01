@@ -197,14 +197,17 @@ public class PandoraBoxManager implements View.OnClickListener {
                 .getNightWindNo());// 夜间风向
         String forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
         String sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
-        String[] split = sunriseAndSunset.split("\\|");
-        String sunrise = split[0];
-        String sunset = split[1];
+        if (!TextUtils.isEmpty(sunriseAndSunset)) {
+            String[] split = sunriseAndSunset.split("\\|");
+            String sunrise = split[0];
+            String sunset = split[1];
+            isNight = SmartWeatherUtils.isNight(sunrise);
+            isSunsetTime = SmartWeatherUtils.isSunsetTime(sunset);
+        }
         centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
         centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
         int timeHour = SmartWeatherUtils.str2TimeHour(forecastReleasedTime);
-        boolean isNight = SmartWeatherUtils.isNight(sunrise);
-        boolean isSunsetTime = SmartWeatherUtils.isSunsetTime(sunset);
+
         if (isNight || timeHour == 18) {
             String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
             if (!TextUtils.isEmpty(nightFeatureNo)) {
@@ -560,6 +563,10 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private SwipeRefreshLayout mJokeRefreshView, mBeautyRefreshView, mMicroMediaRefreshView,
             mGossipRefreshView, mHotRefreshView;
+
+    private boolean isNight;
+
+    private boolean isSunsetTime;
 
     private View createEmptyView() {
         TextView view = new TextView(mContext);
