@@ -70,7 +70,6 @@ public class FakeActivity extends Activity {
                 finish();
             }
         });
-        LockScreenManager.getInstance().processWeatherInfo();
         startNotificationServiceIfNeeded();
     }
 

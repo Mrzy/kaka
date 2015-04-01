@@ -65,7 +65,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
                     android:layout_marginBottom="22dp"
-                    android:text="@string/no_weather_info_str"
                     android:textColor="#c0ffffff"
                     android:textSize="12dp"
                     android:visibility="gone" />

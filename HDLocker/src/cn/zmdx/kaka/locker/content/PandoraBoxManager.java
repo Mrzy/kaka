@@ -173,6 +173,11 @@ public class PandoraBoxManager implements View.OnClickListener {
                 tvLunarCalendar.setText(lunarCal);
             }
             if ((tvNoWeatherInfo != null)) {
+                if (!HDBNetworkState.isNetworkAvailable()) {
+                    tvNoWeatherInfo.setText(mContext.getString(R.string.get_weather_failure));
+                } else {
+                    tvNoWeatherInfo.setText(mContext.getString(R.string.no_weather_info_str));
+                }
                 tvNoWeatherInfo.setVisibility(View.VISIBLE);
             }
             return;
@@ -420,7 +425,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         if (tvUnreadNews == null || tvUnreadNews.getVisibility() == View.INVISIBLE) {
             return;
         }
-        
+
         ObjectAnimator animX1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleX", 0f, 1f);
         animX1.setInterpolator(new OvershootInterpolator());
         ObjectAnimator animY1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleY", 0f, 1f);
