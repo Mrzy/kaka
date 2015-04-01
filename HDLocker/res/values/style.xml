@@ -85,7 +85,7 @@
 
     <style name="pandora_init_setting_detail_textview">
         <item name="android:textColor">@color/init_setting_small_textview_color</item>
-        <item name="android:textSize">11sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="pandora_init_setting_set_textview">

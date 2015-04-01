@@ -4,7 +4,7 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="setting_about_pandora_color">#2f3035</color>
-    <color name="init_setting_small_textview_color">#60ffffff</color>
+    <color name="init_setting_small_textview_color">#90ffffff</color>
     <color name="setting_black_translucent">#99000000</color>
     <color name="guide_button_background_press">#0277da</color>
     <color name="guide_button_background_normal">#0096ff</color>
