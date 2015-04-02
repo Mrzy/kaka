@@ -92,7 +92,8 @@ public class OnlineWallpaperManager {
      * @param context
      * @param listener
      */
-    public void pullWallpaperData(Context context, IPullWallpaperListener listener, long publishDATE) {
+    public void pullWallpaperData(Context context, IPullWallpaperListener listener, long flag,
+            long lastModified) {
         final String lastPullJson = PandoraConfig.newInstance(context)
                 .getLastOnlineServerJsonData();
         if (HDBNetworkState.isWifiNetwork()
@@ -101,7 +102,7 @@ public class OnlineWallpaperManager {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
             }
-            getWallpaperFromServer(listener, lastPullJson, publishDATE);
+            getWallpaperFromServer(listener, lastPullJson, flag, lastModified);
         } else {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("不满足获取数据条件，获取缓存壁纸数据中...");
@@ -134,9 +135,9 @@ public class OnlineWallpaperManager {
      * @param lastPullJson
      */
     public void getWallpaperFromServer(final IPullWallpaperListener listener,
-            final String lastPullJson, long lastModified) {
+            final String lastPullJson, long flag, long lastModified) {
         JsonObjectRequest request = null;
-        request = new JsonObjectRequest(URL + "?lastModified=" + lastModified, null,
+        request = new JsonObjectRequest(URL + getParam(flag, lastModified), null,
                 new Listener<JSONObject>() {
 
                     @Override
@@ -154,7 +155,18 @@ public class OnlineWallpaperManager {
                         }
                     }
                 });
+        request.setShouldCache(!BuildConfig.DEBUG);
         RequestManager.getRequestQueue().add(request);
+    }
+
+    /**
+     * @param flag 0代表刷新，即获取最新的 1代表加载更多，即获取老的
+     * @param lastModified
+     * @return
+     */
+    private String getParam(long flag, long lastModified) {
+        boolean isDebug = BuildConfig.DEBUG ? true : false;
+        return "?flag=" + flag + "&lastModified=" + lastModified + "&isDebug=" + isDebug;
     }
 
     public boolean isHaveOnlineWallpaper() {
