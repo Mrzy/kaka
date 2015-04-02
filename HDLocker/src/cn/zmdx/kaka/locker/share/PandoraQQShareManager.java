@@ -25,7 +25,7 @@ public class PandoraQQShareManager {
         ShareParams sp = new ShareParams();
         sp.setTitle(date.getTitle());
         sp.setTitleUrl(date.getImageDesc()); // 标题的超链接
-        sp.setText(date.getTitle());
+        sp.setText("↓精彩继续↓");
         sp.setImageUrl(date.getUrl());
         sp.setSite("潘多拉锁屏");
         sp.setSiteUrl("http://www.hdlocker.com");

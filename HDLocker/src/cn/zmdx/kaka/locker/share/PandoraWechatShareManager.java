@@ -25,7 +25,7 @@ public class PandoraWechatShareManager {
             ServerImageData date, PlatformActionListener mPlatformActionListener) {
         ShareParams wechat = new ShareParams();
         wechat.setTitle(date.getTitle());
-        wechat.setText(date.getTitle());
+        wechat.setText("↓精彩继续↓");
         wechat.setImageUrl(date.getUrl());
         wechat.setUrl(date.getImageDesc());
         wechat.setShareType(Platform.SHARE_WEBPAGE);
