@@ -65,7 +65,7 @@
 
     <style name="init_setting_big_textview">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">21sp</item>
+        <item name="android:textSize">21dp</item>
     </style>
 
     <style name="init_setting_small_textview">
@@ -79,18 +79,18 @@
     </style>
 
     <style name="pandora_init_setting_textview">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="pandora_init_setting_detail_textview">
         <item name="android:textColor">@color/init_setting_small_textview_color</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">12dp</item>
     </style>
 
     <style name="pandora_init_setting_set_textview">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">14dp</item>
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_marginBottom">10dp</item>

@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -193,6 +194,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
     @Override
     public void onBackPressed() {
         if (!isMIUI || isMIUIAllowFolat) {
+            LockScreenManager.getInstance().lock();
             PandoraConfig.newInstance(this).saveHasGuided();
             finish();
             overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,

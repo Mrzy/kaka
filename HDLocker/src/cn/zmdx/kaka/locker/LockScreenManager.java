@@ -206,6 +206,8 @@ public class LockScreenManager {
 
         checkNewVersion();
 
+        processWeatherInfo();
+        
         String currentDate = BaseInfoHelper.getCurrentDate();
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
     }

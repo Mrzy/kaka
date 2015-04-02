@@ -289,6 +289,8 @@
                     android:background="@drawable/setting_item_selector"
                     android:clickable="true"
                     android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:text="@string/init_setting_complete_to_set"
                     android:textColor="@color/white" />
             </LinearLayout>
