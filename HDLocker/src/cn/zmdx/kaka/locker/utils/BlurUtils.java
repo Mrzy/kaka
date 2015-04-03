@@ -15,7 +15,7 @@ import cn.zmdx.kaka.locker.BuildConfig;
 public class BlurUtils {
 
     /**
-     * 将bitmap做模糊处理后设置为view的background。scaleFactor默认为8，此值越小性能越佳，但效果越差。
+     * 将bitmap做模糊处理后设置为view的background。scaleFactor默认为10，此值越小性能越佳，但效果越差。
      * TODO 此方法为同步方法，若对程序性能要求极高，需要将模糊步骤改为异步计算，待实现。
      * @param context
      * @param bkg
@@ -25,9 +25,9 @@ public class BlurUtils {
      */
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
-    public static void doFastBlur(Context context, Bitmap bkg, View view, float radius) {
+    public static Bitmap doFastBlur(Context context, Bitmap bkg, View view, float radius) {
         long start = System.currentTimeMillis();
-        float scaleFactor = 8;
+        float scaleFactor = 10;
         Bitmap overlay = Bitmap.createBitmap((int) (bkg.getWidth() / scaleFactor),
                 (int) (bkg.getHeight() / scaleFactor), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(overlay);
@@ -51,6 +51,7 @@ public class BlurUtils {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("blur processor takes time :" + (System.currentTimeMillis() - start) + "ms");
         }
+        return overlay;
     }
 
     @SuppressLint("NewApi")
@@ -302,6 +303,9 @@ public class BlurUtils {
 
         bitmap.setPixels(pix, 0, w, 0, 0, w, h);
 
+        r = null;
+        g = null;
+        b = null;
         return (bitmap);
     }
 }

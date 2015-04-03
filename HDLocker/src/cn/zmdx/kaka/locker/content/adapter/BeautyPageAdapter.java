@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -51,7 +52,7 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
                 if (position < 0 || position >= getItemCount()) {
                     return;
                 }
-                mListener.onItemClicked(v, getAdapterPosition());
+                mListener.onItemClicked(v, position);
             }
         }
     }
@@ -81,7 +82,7 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
         } catch (Exception e) {
         }
         holder.mTimeTv.setText(time);
-        Picasso picasso = Picasso.with(mContext);
+        Picasso picasso = PicassoHelper.getPicasso(mContext);
         picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
         RequestCreator rc = null;
         try {

@@ -12,6 +12,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -90,7 +91,7 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final ServerOnlineWallpaper item = mData.get(position);
-        RequestCreator rc = Picasso.with(mContext).load(item.getThumbURL());
+        RequestCreator rc = PicassoHelper.getPicasso(mContext).load(item.getThumbURL());
         if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
                 && !HDBNetworkState.isWifiNetwork()) {
             rc.networkPolicy(NetworkPolicy.OFFLINE);

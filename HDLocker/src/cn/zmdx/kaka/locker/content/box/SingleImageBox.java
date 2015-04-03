@@ -131,7 +131,7 @@ public class SingleImageBox implements IPandoraBox, View.OnClickListener {
         pd.setmFromWebSite(data.getCollectWebsite());
         pd.setmTitle(data.getTitle());
         pd.setmContent(data.getImageDesc());
-        Bitmap bmp = ImageLoaderManager.getImageMemCache().getBitmap(data.getUrl());
+        Bitmap bmp = null;
         if (bmp == null) {
             bmp = DiskImageHelper.getBitmapByUrl(data.getUrl(), null);
         }

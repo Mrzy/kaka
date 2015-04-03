@@ -25,7 +25,6 @@ public class HDApplication extends Application {
 
             @Override
             public void run() {
-                ImageLoaderManager.init(instance);
                 LockSoundManager.initSoundPool();
             }
         });

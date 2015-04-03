@@ -13,6 +13,7 @@ import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -21,7 +22,6 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewGroup.OnHierarchyChangeListener;
 import android.view.WindowManager;
@@ -33,6 +33,7 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.BatteryView;
 import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.font.FontManager;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
@@ -48,6 +49,7 @@ import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
@@ -59,6 +61,7 @@ import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
+import com.squareup.picasso.Picasso;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
 
@@ -188,7 +191,7 @@ public class LockScreenManager {
 
         mWinParams.x = 0;
         mWinParams.y = 0;
-        mWinParams.format = PixelFormat.TRANSPARENT;
+        mWinParams.format = PixelFormat.RGBA_8888;
         // params.format=PixelFormat.RGBA_8888;
         mWinParams.windowAnimations = R.style.anim_locker_window;
         // mWinParams.softInputMode = WindowManager.LayoutParams.SOFT_INPU
@@ -207,14 +210,16 @@ public class LockScreenManager {
         checkNewVersion();
 
         processWeatherInfo();
-        
+
         String currentDate = BaseInfoHelper.getCurrentDate();
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
     }
 
     private void startShimmer() {
         if (mShimmer != null) {
-            mShimmer.start(mShimmerTextView);
+            if (!mShimmer.isAnimating()) {
+                mShimmer.start(mShimmerTextView);
+            }
         }
     }
 
@@ -256,9 +261,7 @@ public class LockScreenManager {
         mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
         mShimmer = new Shimmer();
         mShimmer.setDuration(5000);// 默认是1s
-        mShimmer.setStartDelay(1800);// 默认间隔为0
-
-        startShimmer();
+        mShimmer.setStartDelay(1000);// 默认间隔为0
 
         mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -364,7 +367,7 @@ public class LockScreenManager {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            if (positionOffset == 0.0 && position == 0) {
+            if (positionOffset == 0 && position == 0) {
                 HDBThreadUtils.runOnUi(new Runnable() {
 
                     @Override
@@ -575,13 +578,15 @@ public class LockScreenManager {
         mDate.setText(dateString);
     }
 
+    private Bitmap mWallpaperBg;
     public void initWallpaper() {
         mCurTheme = ThemeManager.getCurrentTheme();
         final Drawable curWallpaper = mCurTheme.getCurDrawable();
-        Drawable lockBg = LockerUtils.renderScreenLockerWallpaper(
-                ((ImageView) mEntireView.findViewById(R.id.lockerBg)), curWallpaper);
+        mWallpaperBg = ImageUtils.drawable2Bitmap(curWallpaper, true);
+        LockerUtils.renderScreenLockerWallpaper(
+                ((ImageView) mEntireView.findViewById(R.id.lockerBg)), mWallpaperBg);
 
-        LockerUtils.renderScreenLockerBlurEffect(mBlurImageView, lockBg);
+        LockerUtils.renderScreenLockerBlurEffect(mBlurImageView, mWallpaperBg);
     }
 
     /**
@@ -640,7 +645,9 @@ public class LockScreenManager {
         if (isCloseFakeActivity)
             notifyUnLocked();
 
+        pauseShimmer();
         mWinManager.removeView(mEntireView);
+        mEntireView.removeAllViews();
         mEntireView = null;
         mIsLocked = false;
 
@@ -648,6 +655,21 @@ public class LockScreenManager {
             HDBThreadUtils.runOnUi(mUnLockRunnable);
             mUnLockRunnable = null;
         }
+
+        PandoraBoxManager.newInstance(mContext).freeMemory();
+
+        ThemeManager.recycle();
+
+        INSTANCE = null;
+
+        HDBThreadUtils.postOnWorkerDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                LockerUtils.recycleBlurBitmap();
+                System.gc();
+            }
+        }, 300);
     }
 
     public boolean isLocked() {
@@ -668,9 +690,6 @@ public class LockScreenManager {
         }
 
         pauseShimmer();
-
-        // 检查是否有读取通知权限
-        NotificationInterceptor.getInstance(mContext).checkPermission();
 
         PandoraBoxManager.newInstance(mContext).onScreenOff();
     }
@@ -696,6 +715,9 @@ public class LockScreenManager {
         PandoraBoxManager.newInstance(mContext).onScreenOn();
 
         LockScreenManager.getInstance().processWeatherInfo();
+
+     // 检查是否有读取通知权限
+        NotificationInterceptor.getInstance(mContext).checkPermission();
     }
 
     private Set<OnBackPressedListener> mBackPressedListeners = new HashSet<OnBackPressedListener>();

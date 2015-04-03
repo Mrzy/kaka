@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -46,7 +47,7 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
                 if (position < 0 || position >= getItemCount()) {
                     return;
                 }
-                mListener.onItemClicked(v, getAdapterPosition());
+                mListener.onItemClicked(v, position);
             }
         }
     }
@@ -89,7 +90,7 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
         if (TextUtils.isEmpty(data.getUrl())) {
             holder.mImageView.setVisibility(View.GONE);
         } else {
-            Picasso picasso = Picasso.with(mContext);
+            Picasso picasso = PicassoHelper.getPicasso(mContext);
             picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
             RequestCreator rc = null;
             try {

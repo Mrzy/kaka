@@ -60,7 +60,8 @@ public class ThemeManager {
 
     private static Theme getThemeByThemeId(Context context, int themeId) {
         Theme theme = null;
-        Bitmap cacheBmp = ImageLoaderManager.getImageMemCache().getBitmap(CURRENT_THEME_CACHE_KEY);
+//        Bitmap cacheBmp = ImageLoaderManager.getImageMemCache().getBitmap(CURRENT_THEME_CACHE_KEY);
+        Bitmap cacheBmp = null;
         if (null == cacheBmp) {
             String fileName = PandoraConfig.newInstance(context).getCurrentWallpaperFileName();
             if (TextUtils.isEmpty(fileName)) {
@@ -125,6 +126,10 @@ public class ThemeManager {
         return theme;
     }
 
+    public static void recycle() {
+        getCurrentTheme().mCurDrawable = null;
+    }
+
     private static String getFilePathByThemeId(int themeId, String fileName) {
         String filePath = "";
         switch (themeId) {
@@ -150,12 +155,12 @@ public class ThemeManager {
     }
 
     public static void addBitmapToCache(Bitmap bitmap) {
-        invalidateBitmapCache();
-        ImageLoaderManager.getImageMemCache().putBitmap(CURRENT_THEME_CACHE_KEY, bitmap);
+//        invalidateBitmapCache();
+//        ImageLoaderManager.getImageMemCache().putBitmap(CURRENT_THEME_CACHE_KEY, bitmap);
     }
 
     public static void invalidateBitmapCache() {
-        ImageLoaderManager.getImageMemCache().invalidateBitmap(CURRENT_THEME_CACHE_KEY);
+//        ImageLoaderManager.getImageMemCache().invalidateBitmap(CURRENT_THEME_CACHE_KEY);
     }
 
     // public static Theme getThemeById(int themeId) {

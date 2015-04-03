@@ -18,6 +18,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class SensorImageView extends ImageView {
 
@@ -165,6 +166,10 @@ public class SensorImageView extends ImageView {
         if (!mPause) {
             setImageMatrix(mMatrix);
             postInvalidateDelayed(FRAME_DELAY);
+        }
+
+        if (ImageUtils.drawable2Bitmap(getDrawable(), true).isRecycled()) {
+            return;
         }
         super.onDraw(canvas);
     }

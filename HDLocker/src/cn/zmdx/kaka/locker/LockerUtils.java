@@ -16,11 +16,12 @@ import cn.zmdx.kaka.locker.utils.ImageUtils;
 public class LockerUtils {
 
     private static Context sContext;
+    private static Bitmap sBlurBmp;
     static {
         sContext = HDApplication.getContext();
     }
 
-    static Drawable renderScreenLockerWallpaper(ImageView view, String fileName) {
+    static Bitmap renderScreenLockerWallpaper(ImageView view, String fileName) {
         if (TextUtils.isEmpty(fileName)) {
             if (BuildConfig.DEBUG) {
                 throw new NullPointerException("fileName must not be null");
@@ -42,16 +43,10 @@ public class LockerUtils {
         return renderScreenLockerWallpaper(view, bitmap);
     }
 
-    static Drawable renderScreenLockerWallpaper(ImageView view, Drawable resDrawable) {
-        final Bitmap bmp = ImageUtils.drawable2Bitmap(resDrawable);
-        return renderScreenLockerWallpaper(view, bmp);
-    }
-
-    static Drawable renderScreenLockerWallpaper(ImageView view, Bitmap resBmp) {
-        Drawable finalDrawable = ImageUtils.bitmap2Drawable(sContext, resBmp);
+    static Bitmap renderScreenLockerWallpaper(ImageView view, Bitmap resBmp) {
         ImageView iv = (ImageView) view;
-        iv.setImageDrawable(finalDrawable);
-        return finalDrawable;
+        iv.setImageBitmap(resBmp);
+        return resBmp;
     }
 
     public static Bitmap getViewBitmap(View v) {
@@ -63,7 +58,14 @@ public class LockerUtils {
         return b;
     }
 
-    static void renderScreenLockerBlurEffect(ImageView mBlurImageView, Drawable bgDrawable) {
-        BlurUtils.doFastBlur(sContext, ImageUtils.drawable2Bitmap(bgDrawable), mBlurImageView, 15);
+    static void renderScreenLockerBlurEffect(ImageView mBlurImageView, Bitmap bmp) {
+        sBlurBmp = BlurUtils.doFastBlur(sContext, bmp, mBlurImageView, 15);
+    }
+
+    static void recycleBlurBitmap() {
+        if (sBlurBmp != null && !sBlurBmp.isRecycled()) {
+            sBlurBmp.recycle();
+            sBlurBmp = null;
+        }
     }
 }

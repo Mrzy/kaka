@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
@@ -147,7 +146,7 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                if (!mWebView.getSettings().getLoadsImagesAutomatically()) {
+                if (mWebView != null && !mWebView.getSettings().getLoadsImagesAutomatically()) {
                     mWebView.getSettings().setLoadsImagesAutomatically(true);
                 }
                 super.onPageFinished(view, url);
@@ -248,7 +247,9 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
     }
 
     private void load(String url) {
-        mWebView.loadUrl(url);
+        if (mWebView != null) {
+            mWebView.loadUrl(url);
+        }
     }
 
     private void back() {
@@ -264,6 +265,22 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
     private void exit(boolean withAnimator) {
         mPbManager.closeDetailPage(withAnimator);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    protected void onDetachedFromWindow() {
+        mWebView.stopLoading();
+        mWebView.clearCache(false);
+        mWebView.loadUrl("about:blank");
+        mWebView.onPause();
+        if (Build.VERSION.SDK_INT < 19) {
+            mWebView.freeMemory();
+        }
+        mWebView.pauseTimers();
+        mWebView.destroy();
+        mWebView = null;
+        super.onDetachedFromWindow();
     }
 
     @Override
