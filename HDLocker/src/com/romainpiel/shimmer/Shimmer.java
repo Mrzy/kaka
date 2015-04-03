@@ -17,7 +17,7 @@ public class Shimmer {
     public static final int ANIMATION_DIRECTION_LTR = 0;
     public static final int ANIMATION_DIRECTION_RTL = 1;
 
-    private static final int DEFAULT_REPEAT_COUNT = ValueAnimator.RESTART;
+    private static final int DEFAULT_REPEAT_COUNT = ValueAnimator.INFINITE;
     private static final long DEFAULT_DURATION = 1000;
     private static final long DEFAULT_START_DELAY = 0;
     private static final int DEFAULT_DIRECTION = ANIMATION_DIRECTION_LTR;
