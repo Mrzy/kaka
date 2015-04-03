@@ -61,12 +61,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:gravity="center"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone" >
 
         <ImageView
             android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:src="@drawable/qq_icon" />
+            android:layout_height="30dp" />
 
         <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:layout_width="wrap_content"
