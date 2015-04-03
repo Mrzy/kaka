@@ -24,6 +24,7 @@ import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.BaseButton;
 import cn.zmdx.kaka.locker.widget.ProgressBarMaterial;
@@ -69,6 +70,8 @@ public class WallpaperDetailView extends LinearLayout {
 
     private TextClockCompat mClock;
 
+    private Bitmap mPreBitmap;
+
     public WallpaperDetailView(Context context, boolean isScreen) {
         super(context);
         mContext = context;
@@ -106,18 +109,25 @@ public class WallpaperDetailView extends LinearLayout {
 
             @Override
             public void onClick(View v) {
+                if (null == mPreBitmap || null == mContext) {
+                    return;
+                }
                 OnlineWallpaperManager.getInstance().mkDirs();
-                String md5ImageUrl = HDBHashUtils.getStringMD5(mImageUrl);
+                final String md5ImageUrl = HDBHashUtils.getStringMD5(mImageUrl);
                 OnlineWallpaperManager.getInstance().saveThemeId(mContext,
                         ThemeManager.THEME_ID_ONLINE);
-                Bitmap previewBitmap = ImageLoaderManager.getOnlineImageCache(mContext).getBitmap(
-                        md5ImageUrl);
-                ThemeManager.addBitmapToCache(previewBitmap);
+                ThemeManager.addBitmapToCache(mPreBitmap);
                 OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(mContext,
                         md5ImageUrl);
                 PandoraConfig.newInstance(mContext).saveOnlineWallPaperDesc(md5ImageUrl, mDesc);
-                ImageUtils.saveImageToFile(previewBitmap, OnlineWallpaperManager.getInstance()
-                        .getFilePath(md5ImageUrl));
+                HDBThreadUtils.runOnWorker(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        ImageUtils.saveImageToFile(mPreBitmap, OnlineWallpaperManager.getInstance()
+                                .getFilePath(md5ImageUrl));
+                    }
+                });
                 if (isLockScreen) {
                     UmengCustomEventManager.statisticalLockScreenWallpaperDetailApplyTimes();
                 }
@@ -173,8 +183,6 @@ public class WallpaperDetailView extends LinearLayout {
         if (null == cacheBitmap) {
             if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
                     && !HDBNetworkState.isWifiNetwork()) {
-                String promptString = mContext.getResources().getString(
-                        R.string.setting_network_error);
                 return;
             }
             showView(true);
@@ -186,8 +194,9 @@ public class WallpaperDetailView extends LinearLayout {
                             BaseInfoHelper.getRealHeight(mContext));
                     if (null != previewBitmap) {
                         setImageBitmap(previewBitmap);
+                        mPreBitmap = previewBitmap;
                         ImageLoaderManager.getOnlineImageCache(mContext).putBitmap(
-                                HDBHashUtils.getStringMD5(mImageUrl), previewBitmap);
+                                HDBHashUtils.getStringMD5(mImageUrl), mPreBitmap);
                     }
                     showView(false);
                 }
@@ -203,6 +212,7 @@ public class WallpaperDetailView extends LinearLayout {
         } else {
             showView(true);
             setImageBitmap(cacheBitmap);
+            mPreBitmap = cacheBitmap;
             showView(false);
         }
     }
