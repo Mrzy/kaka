@@ -5,7 +5,6 @@ import android.content.Context;
 
 import cn.zmdx.kaka.locker.BuildConfig;
 
-import com.squareup.picasso.Cache;
 import com.squareup.picasso.Picasso;
 
 public class PicassoHelper {
@@ -14,8 +13,9 @@ public class PicassoHelper {
 
     public static Picasso getPicasso(Context context) {
         if (sPicasso == null) {
-            sPicasso = new Picasso.Builder(context).memoryCache(Cache.NONE)
-                    .loggingEnabled(BuildConfig.DEBUG).indicatorsEnabled(BuildConfig.DEBUG).build();
+            sPicasso = Picasso.with(context);
+            sPicasso.setLoggingEnabled(BuildConfig.DEBUG);
+            sPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
         }
         return sPicasso;
     }
