@@ -24,7 +24,6 @@ import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
-import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.BaseButton;
 import cn.zmdx.kaka.locker.widget.ProgressBarMaterial;
@@ -120,14 +119,14 @@ public class WallpaperDetailView extends LinearLayout {
                 OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(mContext,
                         md5ImageUrl);
                 PandoraConfig.newInstance(mContext).saveOnlineWallPaperDesc(md5ImageUrl, mDesc);
-                HDBThreadUtils.runOnWorker(new Runnable() {
-
-                    @Override
-                    public void run() {
+//                HDBThreadUtils.runOnWorker(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
                         ImageUtils.saveImageToFile(mPreBitmap, OnlineWallpaperManager.getInstance()
                                 .getFilePath(md5ImageUrl));
-                    }
-                });
+//                    }
+//                });
                 if (isLockScreen) {
                     UmengCustomEventManager.statisticalLockScreenWallpaperDetailApplyTimes();
                 }
