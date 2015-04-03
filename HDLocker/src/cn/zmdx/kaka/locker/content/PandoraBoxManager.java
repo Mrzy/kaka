@@ -130,6 +130,18 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private ImageView ivArrowUp;
 
+    private String daytimeWindForce;
+
+    private String nightWindForce;
+
+    private String daytimeWind;
+
+    private String nightWind;
+
+    private String forecastReleasedTime;
+
+    private String sunriseAndSunset;
+
     private TextClockCompat mClock;
 
     private LinearLayout mWeatherWindLayout;
@@ -171,19 +183,19 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     @SuppressLint("NewApi")
     public void updateView(SmartWeatherInfo smartWeatherInfo) {
+        String lunarCal = SmartWeatherUtils.getLunarCal();
+        if (tvLunarCalendar != null) {
+            tvLunarCalendar.setText(lunarCal);
+        }
         if (smartWeatherInfo == null) {
-            String lunarCal = SmartWeatherUtils.getLunarCal();
-            if (tvLunarCalendar != null) {
-                tvLunarCalendar.setText(lunarCal);
-            }
-            if ((tvNoWeatherInfo != null)) {
-                if (!HDBNetworkState.isNetworkAvailable()) {
-                    tvNoWeatherInfo.setText(mContext.getString(R.string.get_weather_failure));
-                } else {
-                    tvNoWeatherInfo.setText(mContext.getString(R.string.no_weather_info_str));
-                }
-                tvNoWeatherInfo.setVisibility(View.VISIBLE);
-            }
+            // if ((tvNoWeatherInfo != null)) {
+            // if (!HDBNetworkState.isNetworkAvailable()) {
+            // tvNoWeatherInfo.setText(mContext.getString(R.string.get_weather_failure));
+            // } else {
+            // tvNoWeatherInfo.setText(mContext.getString(R.string.no_weather_info_str));
+            // }
+            // tvNoWeatherInfo.setVisibility(View.VISIBLE);
+            // }
             return;
         }
         if ((tvNoWeatherInfo != null)) {
@@ -196,16 +208,20 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
                 .get(0);
-        String daytimeWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
-                .getDaytimeWindForceNo());// 白天风力
-        String nightWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
-                .getNightWindForceNo());// 夜间风力
-        String daytimeWind = SmartWeatherUtils.getWindByNo(smartWeatherFeatureIndexInfo
-                .getDaytimeWindNo());// 白天风向
-        String nightWind = SmartWeatherUtils.getWindByNo(smartWeatherFeatureIndexInfo
-                .getNightWindNo());// 夜间风向
-        String forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
-        String sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
+        if (smartWeatherFeatureIndexInfo != null) {
+            daytimeWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
+                    .getDaytimeWindForceNo());
+            nightWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
+                    .getNightWindForceNo());
+            daytimeWind = SmartWeatherUtils.getWindByNo(smartWeatherFeatureIndexInfo
+                    .getDaytimeWindNo());
+            nightWind = SmartWeatherUtils
+                    .getWindByNo(smartWeatherFeatureIndexInfo.getNightWindNo());
+        }
+        if (smartWeatherFeatureInfo != null) {
+            forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
+            sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
+        }
         if (!TextUtils.isEmpty(sunriseAndSunset)) {
             isNight = SmartWeatherUtils.isNight(sunriseAndSunset);
         }
@@ -259,10 +275,6 @@ public class PandoraBoxManager implements View.OnClickListener {
                     tvWeatherCentTemp.setText("");
                 }
             }
-        }
-        String lunarCal = SmartWeatherUtils.getLunarCal();
-        if (tvLunarCalendar != null) {
-            tvLunarCalendar.setText(lunarCal);
         }
     }
 
