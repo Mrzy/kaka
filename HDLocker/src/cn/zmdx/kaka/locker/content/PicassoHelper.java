@@ -9,21 +9,10 @@ import com.squareup.picasso.Picasso;
 
 public class PicassoHelper {
 
-    private static Picasso sPicasso;
-
     public static Picasso getPicasso(Context context) {
-        if (sPicasso == null) {
-            sPicasso = Picasso.with(context);
-            sPicasso.setLoggingEnabled(BuildConfig.DEBUG);
-            sPicasso.setIndicatorsEnabled(BuildConfig.DEBUG);
-        }
-        return sPicasso;
-    }
-
-    public void shutdown() {
-        if (sPicasso != null) {
-            sPicasso.shutdown();
-            sPicasso = null;
-        }
+        Picasso picasso = Picasso.with(context);
+        picasso.setLoggingEnabled(BuildConfig.DEBUG);
+        picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
+        return picasso;
     }
 }

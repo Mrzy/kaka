@@ -61,6 +61,7 @@ import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
+import com.romainpiel.shimmer.ShimmerViewHelper;
 import com.squareup.picasso.Picasso;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
