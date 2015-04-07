@@ -192,9 +192,10 @@ public class LockScreenManager {
 
         mWinParams.x = 0;
         mWinParams.y = 0;
-        mWinParams.format = PixelFormat.TRANSLUCENT;
-        // params.format=PixelFormat.RGBA_8888;
+//        mWinParams.format = PixelFormat.TRANSLUCENT;
+        mWinParams.format=PixelFormat.RGBA_8888;
         mWinParams.windowAnimations = R.style.anim_locker_window;
+//        mWinParams.windowAnimations = R.style.anim_slide_locker_window;
         // mWinParams.softInputMode = WindowManager.LayoutParams.SOFT_INPU
         mWinParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         mWinParams.gravity = Gravity.TOP | Gravity.START;
@@ -648,7 +649,6 @@ public class LockScreenManager {
 
         pauseShimmer();
         mWinManager.removeView(mEntireView);
-        mEntireView.removeAllViews();
         mEntireView = null;
         mIsLocked = false;
 
