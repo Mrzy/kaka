@@ -149,6 +149,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private boolean isNight;
 
+    private int timeHour;
+
     private boolean isAppearedUnreadNews = true;
 
     private List<View> mPages;
@@ -227,10 +229,11 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
         if (!TextUtils.isEmpty(sunriseAndSunset)) {
             isNight = SmartWeatherUtils.isNight(sunriseAndSunset);
+        } else {
+            timeHour = SmartWeatherUtils.str2TimeHour(forecastReleasedTime);
         }
         centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
         centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
-        int timeHour = SmartWeatherUtils.str2TimeHour(forecastReleasedTime);
 
         if (isNight || timeHour == 18) {
             String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
@@ -488,6 +491,7 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     private PowerManager.WakeLock mWakeLock;
+
     @SuppressWarnings("deprecation")
     private void requestWakeLock() {
         if (mWakeLock == null) {
