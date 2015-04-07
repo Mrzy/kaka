@@ -702,7 +702,7 @@ public class LockScreenManager {
             startShimmer();
 
             // 将缩到屏幕底部的新闻栏展开
-            if (mSlidingUpView != null && mPager.getCurrentItem() == 1) {
+            if (mSlidingUpView != null && mPager != null && mPager.getCurrentItem() == 1) {
                 mSlidingUpView.getSliderView().animate().translationY(0).setDuration(400)
                         .setInterpolator(new DecelerateInterpolator()).start();
             }
