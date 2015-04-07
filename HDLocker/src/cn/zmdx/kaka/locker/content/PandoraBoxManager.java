@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.PowerManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -475,7 +476,27 @@ public class PandoraBoxManager implements View.OnClickListener {
         animateHideUnreadNews();
         ivArrowUp.animate().rotation(180).setDuration(300);
         mBackBtn.startAppearAnimator();
+
+        requestWakeLock();
+
         BottomDockUmengEventManager.statisticalNewsPanelExpanded();
+    }
+
+    private PowerManager.WakeLock mWakeLock;
+    @SuppressWarnings("deprecation")
+    private void requestWakeLock() {
+        if (mWakeLock == null) {
+            PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "pandora");
+            mWakeLock.setReferenceCounted(false);
+        }
+        mWakeLock.acquire();
+    }
+
+    private void releaseWakeLock() {
+        if (mWakeLock != null) {
+            mWakeLock.release();
+        }
     }
 
     public void notifyNewsPanelCollapsed() {
@@ -501,24 +522,26 @@ public class PandoraBoxManager implements View.OnClickListener {
         if (mHotRefreshView != null) {
             mHotRefreshView.setRefreshing(false);
         }
+
+        releaseWakeLock();
         BottomDockUmengEventManager.statisticalNewsPanelCollapsed();
     }
 
     public void refreshNewsByCategory(int category) {
         if (category == NewsFactory.NEWS_TYPE_HEADLINE) {
-            NewsFactory.updateNews(category, mHotAdapter, mHotNews, mHotRefreshView, false);
+            NewsFactory.updateNews(category, mHotAdapter, mHotNews, mHotRefreshView, false, false);
         } else if (category == NewsFactory.NEWS_TYPE_GOSSIP) {
             NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
-                    mGossipRefreshView, false);
+                    mGossipRefreshView, false, false);
         } else if (category == NewsFactory.NEWS_TYPE_MICRO_CHOICE) {
             NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
-                    mMicroMediaNews, mMicroMediaRefreshView, false);
+                    mMicroMediaNews, mMicroMediaRefreshView, false, false);
         } else if (category == NewsFactory.NEWS_TYPE_BEAUTY) {
             NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
-                    mBeautyRefreshView, false);
+                    mBeautyRefreshView, false, false);
         } else if (category == NewsFactory.NEWS_TYPE_JOKE) {
             NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
-                    mJokeRefreshView, false);
+                    mJokeRefreshView, false, false);
         } else {
             throw new IllegalArgumentException("invalid news category");
         }
@@ -529,23 +552,23 @@ public class PandoraBoxManager implements View.OnClickListener {
      */
     public void refreshAllNews() {
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
-                mHotRefreshView, false);
+                mHotRefreshView, false, false);
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
-                mGossipRefreshView, false);
+                mGossipRefreshView, false, false);
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
             @Override
             public void run() {
                 NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
-                        mMicroMediaNews, mMicroMediaRefreshView, false);
+                        mMicroMediaNews, mMicroMediaRefreshView, false, false);
                 NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
-                        mBeautyRefreshView, false);
+                        mBeautyRefreshView, false, false);
             }
         }, 2000);
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
             @Override
             public void run() {
                 NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
-                        mJokeRefreshView, false);
+                        mJokeRefreshView, false, false);
             }
         }, 4000);
         if (null != mWallpaperView) {
@@ -658,14 +681,14 @@ public class PandoraBoxManager implements View.OnClickListener {
         mJokeRefreshView.setColorSchemeColors(Color.WHITE);
 
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
-                mJokeRefreshView, true);
+                mJokeRefreshView, true, true);
 
         mJokeRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
                 NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
-                        mJokeRefreshView, false);
+                        mJokeRefreshView, false, true);
                 UmengCustomEventManager.statisticalPullRefreshNews("joke");
             }
         });
@@ -683,7 +706,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                 // dy>0 表示向下滑动
                 if (lastItem >= totalItemCount - 4 && dy > 0) {
                     NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
-                            mJokeRefreshView, true);
+                            mJokeRefreshView, true, false);
                 }
             }
         });
@@ -727,14 +750,14 @@ public class PandoraBoxManager implements View.OnClickListener {
         mBeautyRefreshView.setColorSchemeColors(Color.WHITE);
 
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
-                mBeautyRefreshView, true);
+                mBeautyRefreshView, true, true);
 
         mBeautyRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
                 NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
-                        mBeautyRefreshView, false);
+                        mBeautyRefreshView, false, true);
                 UmengCustomEventManager.statisticalPullRefreshNews("beauty");
             }
         });
@@ -752,7 +775,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                 // dy>0 表示向下滑动
                 if (lastItem >= totalItemCount - 4 && dy > 0) {
                     NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter,
-                            mBeautyNews, mBeautyRefreshView, true);
+                            mBeautyNews, mBeautyRefreshView, true, false);
                 }
             }
         });
@@ -799,12 +822,12 @@ public class PandoraBoxManager implements View.OnClickListener {
             @Override
             public void onRefresh() {
                 NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
-                        mMicroMediaNews, mMicroMediaRefreshView, false);
+                        mMicroMediaNews, mMicroMediaRefreshView, false, true);
                 UmengCustomEventManager.statisticalPullRefreshNews("microMedia");
             }
         });
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
-                mMicroMediaNews, mMicroMediaRefreshView, true);
+                mMicroMediaNews, mMicroMediaRefreshView, true, true);
 
         rv.setOnScrollListener(new OnScrollListener() {
             @Override
@@ -816,7 +839,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                 // dy>0 表示向下滑动
                 if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
                     NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
-                            mMicroMediaNews, mMicroMediaRefreshView, true);
+                            mMicroMediaNews, mMicroMediaRefreshView, true, false);
                 }
             }
         });
@@ -858,14 +881,14 @@ public class PandoraBoxManager implements View.OnClickListener {
         mGossipRefreshView.setColorSchemeColors(Color.WHITE);
 
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
-                mGossipRefreshView, true);
+                mGossipRefreshView, true, true);
 
         mGossipRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
                 NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
-                        mGossipRefreshView, false);
+                        mGossipRefreshView, false, true);
                 UmengCustomEventManager.statisticalPullRefreshNews("gossip");
             }
         });
@@ -883,7 +906,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                 // dy>0 表示向下滑动
                 if (lastItem >= totalItemCount - 4 && dy > 0) {
                     NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter,
-                            mGossipNews, mGossipRefreshView, true);
+                            mGossipNews, mGossipRefreshView, true, false);
                 }
             }
         });
@@ -930,12 +953,12 @@ public class PandoraBoxManager implements View.OnClickListener {
             @Override
             public void onRefresh() {
                 NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
-                        mHotRefreshView, false);
+                        mHotRefreshView, false, true);
                 UmengCustomEventManager.statisticalPullRefreshNews("headline");
             }
         });
         NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
-                mHotRefreshView, true);
+                mHotRefreshView, true, true);
 
         rv.setOnScrollListener(new OnScrollListener() {
 
@@ -948,7 +971,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                 // dy>0 表示向下滑动
                 if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
                     NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
-                            mHotRefreshView, true);
+                            mHotRefreshView, true, false);
                 }
             }
         });

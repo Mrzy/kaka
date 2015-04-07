@@ -70,7 +70,7 @@ public class PandoraService extends Service {
 
         if (PandoraConfig.newInstance(this).isOpenForegroundService()) {
             Notification noti = createNotification();
-            startForeground(FOREGROUND_SERVICE_ID, noti);
+//            startForeground(FOREGROUND_SERVICE_ID, noti);
         }
         super.onCreate();
     }

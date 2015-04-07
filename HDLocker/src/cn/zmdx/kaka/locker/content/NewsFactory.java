@@ -11,8 +11,6 @@ import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
-import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
-import cn.zmdx.kaka.locker.content.adapter.GeneralNewsPageAdapter;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -42,12 +40,12 @@ public class NewsFactory {
      * @param older 是要显示更老的数据还是更新的数据
      */
     static void updateNews(int type, final RecyclerView.Adapter adapter,
-            final List<ServerImageData> data, final SwipeRefreshLayout srl, final boolean older) {
+            final List<ServerImageData> data, final SwipeRefreshLayout srl, final boolean older, boolean showRefresh) {
         if (adapter == null || data == null) {
             return;
         }
 
-        if (srl != null && !older) {
+        if (showRefresh) {
             srl.setRefreshing(true);
         }
 
