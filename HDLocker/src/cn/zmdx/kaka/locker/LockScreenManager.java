@@ -586,7 +586,7 @@ public class LockScreenManager {
         final Drawable curWallpaper = mCurTheme.getCurDrawable();
         mWallpaperBg = ImageUtils.drawable2Bitmap(curWallpaper, true);
         LockerUtils.renderScreenLockerWallpaper(
-                ((ImageView) mEntireView.findViewById(R.id.lockerBg)), mWallpaperBg);
+                ((ImageView) mEntireView.findViewById(R.id.lockerBg)), mWallpaperBg, true);
 
         LockerUtils.renderScreenLockerBlurEffect(mBlurImageView, mWallpaperBg);
     }

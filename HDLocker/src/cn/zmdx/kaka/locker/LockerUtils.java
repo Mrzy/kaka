@@ -1,16 +1,21 @@
 
 package cn.zmdx.kaka.locker;
 
+import com.android.volley.misc.ViewCompat;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Drawable.Callback;
+import android.graphics.drawable.TransitionDrawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.BlurUtils;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 public class LockerUtils {
@@ -40,12 +45,26 @@ public class LockerUtils {
             }
             return null;
         }
-        return renderScreenLockerWallpaper(view, bitmap);
+        return renderScreenLockerWallpaper(view, bitmap, true);
     }
 
-    static Bitmap renderScreenLockerWallpaper(ImageView view, Bitmap resBmp) {
-        ImageView iv = (ImageView) view;
-        iv.setImageBitmap(resBmp);
+    static Bitmap renderScreenLockerWallpaper(ImageView view, final Bitmap resBmp, boolean withAnimator) {
+        final ImageView iv = (ImageView) view;
+        Drawable drawable = iv.getDrawable();
+        if (drawable != null && withAnimator) {
+            Drawable[] drawables = new Drawable[]{drawable, ImageUtils.bitmap2Drawable(sContext, resBmp)};
+            TransitionDrawable td = new TransitionDrawable(drawables);
+            iv.setImageDrawable(td);
+            td.startTransition(300);
+            HDBThreadUtils.postOnUiDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    iv.setImageBitmap(resBmp);
+                }
+            }, 300);
+        } else {
+            iv.setImageBitmap(resBmp);
+        }
         return resBmp;
     }
 

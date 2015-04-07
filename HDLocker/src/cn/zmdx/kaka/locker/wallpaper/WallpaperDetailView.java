@@ -134,8 +134,13 @@ public class WallpaperDetailView extends LinearLayout {
                 if (null != mListener) {
                     mListener.onApplyWallpaper();
                     if (isLockScreen) {
-                        LockScreenManager.getInstance().initWallpaper();
                         LockScreenManager.getInstance().collapseNewsPanel();
+                        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                LockScreenManager.getInstance().initWallpaper();
+                            }
+                        }, 300);
                     }
                 }
             }
