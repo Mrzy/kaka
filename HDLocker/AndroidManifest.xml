@@ -140,7 +140,9 @@
         <activity
             android:name=".settings.InitSettingActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:label="@string/init_setting_title"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".settings.PasswordPromptActivity"
             android:screenOrientation="portrait"

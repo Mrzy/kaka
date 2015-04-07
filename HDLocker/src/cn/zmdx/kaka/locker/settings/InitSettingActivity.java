@@ -2,6 +2,7 @@
 package cn.zmdx.kaka.locker.settings;
 
 import java.lang.ref.WeakReference;
+import java.text.DecimalFormat;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,24 +10,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class InitSettingActivity extends BaseActivity implements OnClickListener {
+public class InitSettingActivity extends ActionBarActivity implements OnClickListener {
 
     private TypefaceTextView mCompleteBtn;
 
-    private View mRootView;
+    private TypefaceTextView mCompleteProgress;
 
     private static boolean isMIUI = false;
 
@@ -44,7 +47,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
 
     private static final int MSG_SETTING_DELAY = 500;
 
-    private boolean isMIUIAllowFolat = false;
+    private boolean isCanCancled = false;
 
     private RelativeLayout mFolatfingWindowLayout;
 
@@ -54,10 +57,24 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
 
     private RelativeLayout mReadNotificationLayout;
 
+    private ImageView mFolatfingWindowArrow;
+
+    private ImageView mTrustArrow;
+
+    private ImageView mCloseSystemLockArrow;
+
+    private ImageView mReadNotificationArrow;
+
+    private float mSettingCount;
+
+    private float mSettingComCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setBackgroundDrawable(
+                getResources().getDrawable(R.drawable.action_bar_bg_blue));
         mMIUIVersion = PandoraUtils.getSystemProperty();
         isMIUI = PandoraUtils.isMIUI(this);
         isMeizu = PandoraUtils.isMeizu(this);
@@ -68,30 +85,35 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
     private void initView() {
         mCompleteBtn = (TypefaceTextView) findViewById(R.id.init_setting_complete);
         mCompleteBtn.setOnClickListener(this);
+        mCompleteProgress = (TypefaceTextView) findViewById(R.id.init_setting_progress);
 
         mFolatfingWindowLayout = (RelativeLayout) findViewById(R.id.init_setting_MIUI_allow_floating_window_guide);
         mFolatfingWindowLayout.setOnClickListener(this);
+        mFolatfingWindowArrow = (ImageView) findViewById(R.id.init_setting_MIUI_allow_floating_window_arrow);
         mTrustLayout = (RelativeLayout) findViewById(R.id.init_setting_MIUI_trust_guide);
         mTrustLayout.setOnClickListener(this);
-        mCloseSystemLockLayout = (RelativeLayout) findViewById(R.id.init_setting_close_systemlocker);
+        mTrustArrow = (ImageView) findViewById(R.id.init_setting_MIUI_trust_arrow);
+        mCloseSystemLockLayout = (RelativeLayout) findViewById(R.id.init_setting_close_systemlocker_guide);
         mCloseSystemLockLayout.setOnClickListener(this);
+        mCloseSystemLockArrow = (ImageView) findViewById(R.id.init_setting_close_systemlocker_arrow);
         mReadNotificationLayout = (RelativeLayout) findViewById(R.id.init_setting_read_notification_bar_guide);
         mReadNotificationLayout.setOnClickListener(this);
+        mReadNotificationArrow = (ImageView) findViewById(R.id.init_setting_read_notification_bar_arrow);
 
+        mCloseSystemLockLayout.setVisibility(View.VISIBLE);
+        mSettingCount = mSettingCount + 1;
         if (isMIUI) {
             mFolatfingWindowLayout.setVisibility(View.VISIBLE);
-            findViewById(R.id.init_setting_MIUI_line).setVisibility(View.VISIBLE);
             mTrustLayout.setVisibility(View.VISIBLE);
+            mSettingCount = mSettingCount + 2;
         }
         if (isMeizu) {
             mCloseSystemLockLayout.setVisibility(View.GONE);
+            mSettingCount = mSettingCount - 1;
         }
-        mRootView = findViewById(R.id.init_setting_background);
-        LinearLayout titleView = (LinearLayout) findViewById(R.id.init_setting_title);
-        fullScreen();
-        initTitleHeight(titleView);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             mReadNotificationLayout.setVisibility(View.VISIBLE);
+            mSettingCount = mSettingCount + 1;
         }
     }
 
@@ -106,16 +128,19 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
                 R.anim.umeng_fb_slide_out_from_left);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onClick(View view) {
         if (view == mCompleteBtn) {
-            onBackPressed();
+            if (isCanCancled) {
+                LockScreenManager.getInstance().lock();
+                PandoraConfig.newInstance(this).saveHasGuided();
+                finish();
+                overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                        R.anim.umeng_fb_slide_out_from_right);
+            }
         } else if (view == mFolatfingWindowLayout) {
             PandoraUtils.setAllowFolatWindow(InitSettingActivity.this, mMIUIVersion);
-            mFolatfingWindowLayout.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.init_setting_item_bg_pressed));
-            isMIUIAllowFolat = true;
+            setViewPressed(mFolatfingWindowLayout, mFolatfingWindowArrow);
             if (mHandler.hasMessages(MSG_ALLOW_FOLAT_WINDOW)) {
                 mHandler.removeMessages(MSG_ALLOW_FOLAT_WINDOW);
             }
@@ -124,8 +149,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
             mHandler.sendMessageDelayed(allowFloatWindow, MSG_SETTING_DELAY);
         } else if (view == mTrustLayout) {
             PandoraUtils.setTrust(InitSettingActivity.this, mMIUIVersion);
-            mTrustLayout.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.init_setting_item_bg_pressed));
+            setViewPressed(mTrustLayout, mTrustArrow);
             if (mHandler.hasMessages(MSG_TRUST)) {
                 mHandler.removeMessages(MSG_TRUST);
             }
@@ -134,8 +158,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
             mHandler.sendMessageDelayed(setTrust, MSG_SETTING_DELAY);
         } else if (view == mCloseSystemLockLayout) {
             PandoraUtils.closeSystemLocker(InitSettingActivity.this, isMIUI);
-            mCloseSystemLockLayout.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.init_setting_item_bg_pressed));
+            setViewPressed(mCloseSystemLockLayout, mCloseSystemLockArrow);
             if (mHandler.hasMessages(MSG_CLOSE_SYSTEM_LOCKER)) {
                 mHandler.removeMessages(MSG_CLOSE_SYSTEM_LOCKER);
             }
@@ -145,8 +168,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
         } else if (view == mReadNotificationLayout) {
             PandoraUtils.setAllowReadNotification(InitSettingActivity.this, isMIUI, mMIUIVersion,
                     isMeizu);
-            mReadNotificationLayout.setBackgroundDrawable(getResources().getDrawable(
-                    R.drawable.init_setting_item_bg_pressed));
+            setViewPressed(mReadNotificationLayout, mReadNotificationArrow);
             if (mHandler.hasMessages(MSG_READ_NOTIFICATION)) {
                 mHandler.removeMessages(MSG_READ_NOTIFICATION);
             }
@@ -155,6 +177,28 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
             mHandler.sendMessageDelayed(readNotification, MSG_SETTING_DELAY);
         }
 
+    }
+
+    private void setViewPressed(final View bgView, final ImageView view) {
+        isCanCancled = true;
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void run() {
+                mSettingComCount++;
+                bgView.setBackgroundDrawable(getResources().getDrawable(
+                        R.drawable.init_setting_item_bg_press));
+                view.setImageDrawable(getResources().getDrawable(R.drawable.init_setting_select));
+                mCompleteBtn.setBackgroundDrawable(getResources().getDrawable(
+                        R.drawable.init_setting_com_selector));
+                mCompleteProgress.setTextColor(getResources().getColor(
+                        R.color.init_setting_progress));
+                float result = mSettingComCount / mSettingCount;
+                DecimalFormat fmt = new DecimalFormat("##%");
+                mCompleteProgress.setText("进度" + fmt.format(result));
+            }
+        }, 500);
     }
 
     private MyHandler mHandler = new MyHandler(this);
@@ -193,13 +237,7 @@ public class InitSettingActivity extends BaseActivity implements OnClickListener
 
     @Override
     public void onBackPressed() {
-        if (!isMIUI || isMIUIAllowFolat) {
-            LockScreenManager.getInstance().lock();
-            PandoraConfig.newInstance(this).saveHasGuided();
-            finish();
-            overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
-                    R.anim.umeng_fb_slide_out_from_right);
-        }
+
     }
 
     public void onResume() {

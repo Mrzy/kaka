@@ -31,4 +31,8 @@
     <color name="material_blue_500">#5677fc</color>
     <color name="material_blue_600">#4e6cef</color>
     <color name="password_key_pressed">#30ffffff</color>
+    
+    <color name="init_setting_no_progress">#bcbcbc</color>
+    <color name="init_setting_progress">#3db7ff</color>
+    
 </resources>
