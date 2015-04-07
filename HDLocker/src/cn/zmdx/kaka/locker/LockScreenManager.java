@@ -33,7 +33,6 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.BatteryView;
 import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
-import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.font.FontManager;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
@@ -61,8 +60,6 @@ import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
-import com.romainpiel.shimmer.ShimmerViewHelper;
-import com.squareup.picasso.Picasso;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
 
@@ -219,7 +216,7 @@ public class LockScreenManager {
     private void startShimmer() {
         if (mShimmer != null) {
             if (!mShimmer.isAnimating()) {
-//                mShimmer.start(mShimmerTextView);
+                // mShimmer.start(mShimmerTextView);
             }
         }
     }
@@ -580,6 +577,7 @@ public class LockScreenManager {
     }
 
     private Bitmap mWallpaperBg;
+
     public void initWallpaper() {
         mCurTheme = ThemeManager.getCurrentTheme();
         final Drawable curWallpaper = mCurTheme.getCurDrawable();
@@ -671,6 +669,7 @@ public class LockScreenManager {
                 System.gc();
             }
         }, 300);
+        UmengCustomEventManager.statisticalGuestureUnLockSuccess();
     }
 
     public boolean isLocked() {
@@ -717,7 +716,7 @@ public class LockScreenManager {
 
         LockScreenManager.getInstance().processWeatherInfo();
 
-     // 检查是否有读取通知权限
+        // 检查是否有读取通知权限
         NotificationInterceptor.getInstance(mContext).checkPermission();
     }
 
