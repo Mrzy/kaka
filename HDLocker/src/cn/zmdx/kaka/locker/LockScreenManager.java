@@ -169,11 +169,7 @@ public class LockScreenManager {
         mWinParams = new WindowManager.LayoutParams();
 
         mIsNeedNotice = mPandoraConfig.isNotifyFunctionOn();
-        if (mIsNeedNotice) {
-            mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        } else {
-            mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
-        }
+        mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_HARDWARE_ACCELERATED
                 | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
@@ -189,10 +185,10 @@ public class LockScreenManager {
 
         mWinParams.x = 0;
         mWinParams.y = 0;
-//        mWinParams.format = PixelFormat.TRANSLUCENT;
-        mWinParams.format=PixelFormat.RGBA_8888;
+        // mWinParams.format = PixelFormat.TRANSLUCENT;
+        mWinParams.format = PixelFormat.RGBA_8888;
         mWinParams.windowAnimations = R.style.anim_locker_window;
-//        mWinParams.windowAnimations = R.style.anim_slide_locker_window;
+        // mWinParams.windowAnimations = R.style.anim_slide_locker_window;
         // mWinParams.softInputMode = WindowManager.LayoutParams.SOFT_INPU
         mWinParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         mWinParams.gravity = Gravity.TOP | Gravity.START;
