@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,10 +161,10 @@ public class WallpaperDetailView extends LinearLayout {
     }
 
     public void setData(String imageUrl, String desc) {
-        // mData = serverOnlineWallpaper;
         mImageUrl = imageUrl;
         mDesc = desc;
-        downloadImage();
+        ImageLoadAsyn mDataAsyn = new ImageLoadAsyn();
+        mDataAsyn.execute();
     }
 
     public void setWallpaperDetailListener(IWallpaperDetailListener listener) {
@@ -197,43 +198,52 @@ public class WallpaperDetailView extends LinearLayout {
 
     }
 
-    private void downloadImage() {
-        Bitmap cacheBitmap = ImageLoaderManager.getOnlineImageCache(mContext).getBitmap(
-                HDBHashUtils.getStringMD5(mImageUrl));
-        if (null == cacheBitmap) {
-            if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
-                    && !HDBNetworkState.isWifiNetwork()) {
-                return;
-            }
-            showView(true);
-            ByteArrayRequest mRequest = new ByteArrayRequest(mImageUrl, new Listener<byte[]>() {
+    class ImageLoadAsyn extends AsyncTask<Void, Void, Bitmap> {
 
-                @Override
-                public void onResponse(byte[] data) {
-                    Bitmap previewBitmap = doParse(data, BaseInfoHelper.getRealWidth(mContext),
-                            BaseInfoHelper.getRealHeight(mContext));
-                    if (null != previewBitmap) {
-                        setImageBitmap(previewBitmap);
-                        mPreBitmap = previewBitmap;
-                        ImageLoaderManager.getOnlineImageCache(mContext).putBitmap(
-                                HDBHashUtils.getStringMD5(mImageUrl), mPreBitmap);
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            Bitmap cacheBitmap = ImageLoaderManager.getOnlineImageCache(mContext).getBitmap(
+                    HDBHashUtils.getStringMD5(mImageUrl));
+            return cacheBitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            if (null == result) {
+                if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
+                        && !HDBNetworkState.isWifiNetwork()) {
+                    return;
+                }
+                showView(true);
+                ByteArrayRequest mRequest = new ByteArrayRequest(mImageUrl, new Listener<byte[]>() {
+
+                    @Override
+                    public void onResponse(byte[] data) {
+                        Bitmap previewBitmap = doParse(data, BaseInfoHelper.getRealWidth(mContext),
+                                BaseInfoHelper.getRealHeight(mContext));
+                        if (null != previewBitmap) {
+                            setImageBitmap(previewBitmap);
+                            mPreBitmap = previewBitmap;
+                            ImageLoaderManager.getOnlineImageCache(mContext).putBitmap(
+                                    HDBHashUtils.getStringMD5(mImageUrl), mPreBitmap);
+                        }
+                        showView(false);
                     }
-                    showView(false);
-                }
-            }, new ErrorListener() {
+                }, new ErrorListener() {
 
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    mLoadingView.setVisibility(View.GONE);
-                }
-            });
-            mRequest.setShouldCache(false);
-            RequestManager.getRequestQueue().add(mRequest);
-        } else {
-            // showView(true);
-            setImageBitmap(cacheBitmap);
-            mPreBitmap = cacheBitmap;
-            // showView(false);
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mLoadingView.setVisibility(View.GONE);
+                    }
+                });
+                mRequest.setShouldCache(false);
+                RequestManager.getRequestQueue().add(mRequest);
+            } else {
+                // showView(true);
+                setImageBitmap(result);
+                mPreBitmap = result;
+                // showView(false);
+            }
         }
     }
 

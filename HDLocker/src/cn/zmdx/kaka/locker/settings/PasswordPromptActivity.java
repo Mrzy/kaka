@@ -3,6 +3,7 @@ package cn.zmdx.kaka.locker.settings;
 
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
@@ -182,6 +183,11 @@ public class PasswordPromptActivity extends BaseActivity {
                 R.anim.umeng_fb_slide_out_from_right);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        finishWithResult();
+        return false;
+    }
     @Override
     public void onBackPressed() {
         finishWithResult();
