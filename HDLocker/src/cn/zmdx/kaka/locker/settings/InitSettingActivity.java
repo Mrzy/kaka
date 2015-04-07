@@ -69,6 +69,14 @@ public class InitSettingActivity extends ActionBarActivity implements OnClickLis
 
     private float mSettingComCount;
 
+    private boolean isFolatfingWindow;
+
+    private boolean isTrust;
+
+    private boolean isCloseSystemLock;
+
+    private boolean isReadNotification;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -140,6 +148,10 @@ public class InitSettingActivity extends ActionBarActivity implements OnClickLis
             }
         } else if (view == mFolatfingWindowLayout) {
             PandoraUtils.setAllowFolatWindow(InitSettingActivity.this, mMIUIVersion);
+            if (!isFolatfingWindow) {
+                isFolatfingWindow = !isFolatfingWindow;
+                mSettingComCount++;
+            }
             setViewPressed(mFolatfingWindowLayout, mFolatfingWindowArrow);
             if (mHandler.hasMessages(MSG_ALLOW_FOLAT_WINDOW)) {
                 mHandler.removeMessages(MSG_ALLOW_FOLAT_WINDOW);
@@ -149,6 +161,10 @@ public class InitSettingActivity extends ActionBarActivity implements OnClickLis
             mHandler.sendMessageDelayed(allowFloatWindow, MSG_SETTING_DELAY);
         } else if (view == mTrustLayout) {
             PandoraUtils.setTrust(InitSettingActivity.this, mMIUIVersion);
+            if (!isTrust) {
+                isTrust = !isTrust;
+                mSettingComCount++;
+            }
             setViewPressed(mTrustLayout, mTrustArrow);
             if (mHandler.hasMessages(MSG_TRUST)) {
                 mHandler.removeMessages(MSG_TRUST);
@@ -158,6 +174,10 @@ public class InitSettingActivity extends ActionBarActivity implements OnClickLis
             mHandler.sendMessageDelayed(setTrust, MSG_SETTING_DELAY);
         } else if (view == mCloseSystemLockLayout) {
             PandoraUtils.closeSystemLocker(InitSettingActivity.this, isMIUI);
+            if (!isCloseSystemLock) {
+                isCloseSystemLock = !isCloseSystemLock;
+                mSettingComCount++;
+            }
             setViewPressed(mCloseSystemLockLayout, mCloseSystemLockArrow);
             if (mHandler.hasMessages(MSG_CLOSE_SYSTEM_LOCKER)) {
                 mHandler.removeMessages(MSG_CLOSE_SYSTEM_LOCKER);
@@ -168,6 +188,10 @@ public class InitSettingActivity extends ActionBarActivity implements OnClickLis
         } else if (view == mReadNotificationLayout) {
             PandoraUtils.setAllowReadNotification(InitSettingActivity.this, isMIUI, mMIUIVersion,
                     isMeizu);
+            if (!isReadNotification) {
+                isReadNotification = !isReadNotification;
+                mSettingComCount++;
+            }
             setViewPressed(mReadNotificationLayout, mReadNotificationArrow);
             if (mHandler.hasMessages(MSG_READ_NOTIFICATION)) {
                 mHandler.removeMessages(MSG_READ_NOTIFICATION);
@@ -186,7 +210,6 @@ public class InitSettingActivity extends ActionBarActivity implements OnClickLis
             @SuppressWarnings("deprecation")
             @Override
             public void run() {
-                mSettingComCount++;
                 bgView.setBackgroundDrawable(getResources().getDrawable(
                         R.drawable.init_setting_item_bg_press));
                 view.setImageDrawable(getResources().getDrawable(R.drawable.init_setting_select));
