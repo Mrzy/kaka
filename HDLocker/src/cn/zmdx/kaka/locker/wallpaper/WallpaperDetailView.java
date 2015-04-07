@@ -3,9 +3,12 @@ package cn.zmdx.kaka.locker.wallpaper;
 
 import java.util.Calendar;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -167,8 +170,20 @@ public class WallpaperDetailView extends LinearLayout {
         mListener = listener;
     }
 
-    private void setImageBitmap(Bitmap bitmap) {
+    private void setImageBitmap(final Bitmap bitmap) {
+        ViewCompat.setAlpha(mImageView, 0);
         mImageView.setImageBitmap(bitmap);
+        ObjectAnimator animatorAlphaVisible = ObjectAnimator.ofInt(mImageView, "alpha", 100, 255);
+        animatorAlphaVisible.setDuration(300);
+        animatorAlphaVisible.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int t = (Integer) animation.getAnimatedValue();
+                ViewCompat.setAlpha(mImageView, t);
+            }
+        });
+        animatorAlphaVisible.start();
+
     }
 
     private void showView(boolean isLoading) {
@@ -215,10 +230,10 @@ public class WallpaperDetailView extends LinearLayout {
             mRequest.setShouldCache(false);
             RequestManager.getRequestQueue().add(mRequest);
         } else {
-            showView(true);
+            // showView(true);
             setImageBitmap(cacheBitmap);
             mPreBitmap = cacheBitmap;
-            showView(false);
+            // showView(false);
         }
     }
 

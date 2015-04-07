@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.settings;
 import com.umeng.analytics.MobclickAgent;
 
 import cn.zmdx.kaka.locker.LockScreenManager;
+import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView.IWallpaperDetailListener;
 import android.app.Activity;

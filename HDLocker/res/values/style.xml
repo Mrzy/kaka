@@ -42,7 +42,7 @@
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
-     <style name="password_prompt_style" parent="@android:style/Theme.Dialog">
+    <style name="password_prompt_style" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@android:color/transparent</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -51,6 +51,13 @@
         <item name="android:backgroundDimAmount">0.60</item>
         <item name="android:windowAnimationStyle">@null</item>
     </style>
+
+    <style name="wallpaper_detail_style">
+        <item name="android:windowBackground">@color/setting_black_translucent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
+    </style>
+
     <style name="anim_locker_window">
 
         <!-- <item name="android:windowEnterAnimation">@android:anim/fade_in</item> -->

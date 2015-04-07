@@ -114,7 +114,8 @@
             android:name=".settings.WallpaperDetailActivity"
             android:exported="false"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" 
+            android:theme="@style/wallpaper_detail_style"/>
         <activity
             android:name=".settings.CropImageActivity"
             android:exported="false"
