@@ -224,6 +224,12 @@ public class KeyboardView extends View implements View.OnClickListener {
     private float mOldPointerY;
 
     private Drawable mKeyBackground;
+    
+
+    public void setKeyBackground(Drawable keyBackground) {
+        this.mKeyBackground = keyBackground;
+        invalidate();
+    }
 
     private static final int REPEAT_INTERVAL = 50; // ~20 keys per second
     private static final int REPEAT_START_DELAY = 400;

@@ -112,6 +112,7 @@ public class PandoraNumberLockView extends LinearLayout {
             mNumberFour.setImageResource(R.drawable.pandora_number_lock_white_line);
             mKeyboardView.setKeyboard(new Keyboard(mContext,
                     R.layout.pandora_number_lock_white_content));
+            mKeyboardView.setKeyBackground(getResources().getDrawable(R.drawable.pandora_number_lock_screen_key_selector));
         } else {
             mKeyboardView.setKeyboard(new Keyboard(mContext, R.layout.pandora_number_lock_content));
         }
