@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +27,7 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.CustomWallpaperManager;
 import cn.zmdx.kaka.locker.widget.BaseButton;
@@ -86,7 +86,7 @@ public class CropImageActivity extends Activity implements OnClickListener {
             setResult(Activity.RESULT_CANCELED);
         } else if (view == mApplyButton) {
             ThemeManager.saveTheme(ThemeManager.THEME_ID_CUSTOM);
-//            ThemeManager.addBitmapToCache(mCropBitmap);
+            ThemeManager.addBitmapToCache(mCropBitmap);
             saveBitmapForWallpaper();
             UmengCustomEventManager.statisticalSuccessSetLocalWallpaperTimes();
             setResult(Activity.RESULT_OK);
@@ -95,11 +95,17 @@ public class CropImageActivity extends Activity implements OnClickListener {
     }
 
     private void saveBitmapForWallpaper() {
-        String fileName = PandoraUtils.getRandomString();
+        final String fileName = PandoraUtils.getRandomString();
         PandoraConfig.newInstance(this).saveCurrentWallpaperFileName(fileName);
         CustomWallpaperManager.getInstance().mkDirs();
-        ImageUtils.saveImageToFile(mCropBitmap, CustomWallpaperManager
-                .getInstance().getFilePath(fileName));
+        HDBThreadUtils.runOnWorker(new Runnable() {
+
+            @Override
+            public void run() {
+                ImageUtils.saveImageToFile(mCropBitmap, CustomWallpaperManager.getInstance()
+                        .getFilePath(fileName));
+            }
+        });
         LockScreenManager.getInstance().lock();
     }
 
