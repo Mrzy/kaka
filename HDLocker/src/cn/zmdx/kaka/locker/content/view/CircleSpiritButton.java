@@ -89,7 +89,7 @@ public class CircleSpiritButton extends FloatingActionButton {
         Animator animator2 = ObjectAnimator.ofFloat(this, "scaleY", 1.2f, 1f);
         AnimatorSet set = new AnimatorSet();
         set.playTogether(animator1, animator2);
-        set.setDuration(1000);
+        set.setDuration(2000);
         set.setInterpolator(new BounceInterpolator());
         set.addListener(new AnimatorListenerAdapter() {
 
@@ -101,7 +101,7 @@ public class CircleSpiritButton extends FloatingActionButton {
                     public void run() {
                         mArrawView.setImageResource(mArrowRes);
                     }
-                }, 3000);
+                }, 5000);
                 super.onAnimationEnd(animation);
             }
         });
