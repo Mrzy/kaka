@@ -86,7 +86,7 @@ public class CropImageActivity extends Activity implements OnClickListener {
             setResult(Activity.RESULT_CANCELED);
         } else if (view == mApplyButton) {
             ThemeManager.saveTheme(ThemeManager.THEME_ID_CUSTOM);
-            ThemeManager.addBitmapToCache(mCropBitmap);
+//            ThemeManager.addBitmapToCache(mCropBitmap);
             saveBitmapForWallpaper();
             UmengCustomEventManager.statisticalSuccessSetLocalWallpaperTimes();
             setResult(Activity.RESULT_OK);
@@ -98,8 +98,7 @@ public class CropImageActivity extends Activity implements OnClickListener {
         String fileName = PandoraUtils.getRandomString();
         PandoraConfig.newInstance(this).saveCurrentWallpaperFileName(fileName);
         CustomWallpaperManager.getInstance().mkDirs();
-        Drawable curDrawable = ThemeManager.getCurrentTheme().getCurDrawable();
-        ImageUtils.saveImageToFile(ImageUtils.drawable2Bitmap(curDrawable), CustomWallpaperManager
+        ImageUtils.saveImageToFile(mCropBitmap, CustomWallpaperManager
                 .getInstance().getFilePath(fileName));
         LockScreenManager.getInstance().lock();
     }
