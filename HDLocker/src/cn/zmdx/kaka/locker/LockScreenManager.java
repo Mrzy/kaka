@@ -213,7 +213,7 @@ public class LockScreenManager {
     private void startShimmer() {
         if (mShimmer != null) {
             if (!mShimmer.isAnimating()) {
-                // mShimmer.start(mShimmerTextView);
+                 mShimmer.start(mShimmerTextView);
             }
         }
     }
