@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keyWidth="100dp"
-    android:keyHeight="65dp"
+    android:keyHeight="70dp"
     android:horizontalGap="0px"
     android:verticalGap="0px" >
 
