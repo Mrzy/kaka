@@ -149,6 +149,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private boolean isNight;
 
+    private boolean isAppearedUnreadNews = true;
+
     private List<View> mPages;
 
     private PandoraBoxManager(Context context) {
@@ -435,6 +437,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             }
         });
         set.start();
+        isAppearedUnreadNews = false;
     }
 
     private void animateShowUnreadNews() {
@@ -473,7 +476,9 @@ public class PandoraBoxManager implements View.OnClickListener {
         initBody();
         showDateView();
         PandoraConfig.newInstance(mContext).saveLastShowUnreadNews(System.currentTimeMillis());
-        animateHideUnreadNews();
+        if (isAppearedUnreadNews) {
+            animateHideUnreadNews();
+        }
         ivArrowUp.animate().rotation(180).setDuration(300);
         mBackBtn.startAppearAnimator();
 
@@ -618,7 +623,6 @@ public class PandoraBoxManager implements View.OnClickListener {
     private SwipeRefreshLayout mJokeRefreshView, mBeautyRefreshView, mMicroMediaRefreshView,
             mGossipRefreshView, mHotRefreshView;
 
-
     public void freeMemory() {
         if (mPages != null) {
             mPages.clear();
@@ -630,7 +634,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         mJokeNews.clear();
         mPbManager = null;
     }
-    
+
     private View createEmptyView() {
         TextView view = new TextView(mContext);
         view.setGravity(Gravity.CENTER);
@@ -1104,12 +1108,14 @@ public class PandoraBoxManager implements View.OnClickListener {
         if (System.currentTimeMillis() - lastShowUnreadNews >= PandoraPolicy.MIN_SHOW_UNREAD_NEWS_TIME
                 && HDBNetworkState.isNetworkAvailable()) {
             animateShowUnreadNews();
+            isAppearedUnreadNews = true;
         }
     }
 
     public void onScreenOff() {
         if (tvUnreadNews != null) {
             tvUnreadNews.setAlpha(0f);
+            isAppearedUnreadNews = false;
         }
     }
 }
