@@ -22,10 +22,10 @@ import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.database.CustomNotificationModel;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
-import cn.zmdx.kaka.locker.notification.Constants;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
+import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.notification.view.SwipeLayout;
 import cn.zmdx.kaka.locker.notification.view.SwipeLayout.OnSwipeLayoutListener;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -41,9 +41,12 @@ public class NotificationListViewAdapter extends BaseAdapter {
 
     private List<NotificationInfo> mData;
 
-    public NotificationListViewAdapter(Context context, List<NotificationInfo> data) {
+    private NotificationListView mListView;
+
+    public NotificationListViewAdapter(Context context, List<NotificationInfo> data, NotificationListView listView) {
         mContext = context;
         mData = data;
+        mListView = listView;
     }
 
     @Override
@@ -202,6 +205,15 @@ public class NotificationListViewAdapter extends BaseAdapter {
         LockScreenManager.getInstance().unLock();
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        if (mData.size() > 1) {
+            mListView.setClearButtonVisibility(View.VISIBLE);
+        } else {
+            mListView.setClearButtonVisibility(View.GONE);
+        }
+        super.notifyDataSetChanged();
+    }
     public void remove(NotificationInfo info) {
         if (info != null) {
             // 如果是自定义通知，要从本地数据库删除通知
@@ -224,11 +236,6 @@ public class NotificationListViewAdapter extends BaseAdapter {
         if (mData.remove(info)) {
             notifyDataSetChanged();
         }
-    }
-
-    private boolean isWinxinOrQQ(NotificationInfo ni) {
-        return Constants.PKGNAME_QQ.equals(ni.getPkg())
-                || Constants.PKGNAME_WEIXIN.equals(ni.getPkg());
     }
 
     static final class ViewHolder {

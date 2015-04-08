@@ -29,6 +29,7 @@ import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.BatteryView;
 import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
@@ -106,7 +107,7 @@ public class LockScreenManager {
 
     private boolean mKeepBlurEffect = false;
 
-    private NotificationListView mNotificationListView;
+    private ListView mNotificationListView;
 
     private ShimmerTextView mShimmerTextView;
 
@@ -287,8 +288,8 @@ public class LockScreenManager {
         mPager.setOnPageChangeListener(mViewPagerChangeListener);
 
         // 监听是否有通知，以处理背景模糊效果
-        mNotificationListView = (NotificationListView) mMainPage
-                .findViewById(R.id.lock_bottom_notification_layout);
+        mNotificationListView = ((NotificationListView) mMainPage
+                .findViewById(R.id.lock_bottom_notification_layout)).getListView();
         if (mNotificationListView.getChildCount() > 0) {
             mKeepBlurEffect = true;
         } else {

@@ -6,23 +6,33 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
+import android.widget.AbsListView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.adapter.NotificationListViewAdapter;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 
-public class NotificationListView extends ListView {
+public class NotificationListView extends FrameLayout {
 
     private NotificationInterceptor mInterceptor;
 
@@ -31,6 +41,10 @@ public class NotificationListView extends ListView {
     private NotificationListViewAdapter mAdapter;
 
     public static final String ACTION_NOTIFICATION_POSTED = "action_notification_posted";
+
+    private View mFooterView;
+
+    private ListView mListView;
 
     public NotificationListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -46,14 +60,50 @@ public class NotificationListView extends ListView {
     }
 
     private void init() {
-        mAdapter = new NotificationListViewAdapter(getContext(), mActiveNotification);
-        setAdapter(mAdapter);
-        setLayoutAnimation(getAnimationController());
-        setVerticalFadingEdgeEnabled(true);
-        setVerticalScrollBarEnabled(true);
-        setFadingEdgeLength(BaseInfoHelper.dip2px(getContext(), 3));
+        View view = View.inflate(getContext(), R.layout.notification_layout, this);
+        mListView = (ListView) view.findViewById(R.id.notificationListView);
+        mFooterView = view.findViewById(R.id.notificationFooterView);
+        mFooterView.setVisibility(View.GONE);
+        mFooterView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clear();
+            }
+        });
+        mAdapter = new NotificationListViewAdapter(getContext(), mActiveNotification, this);
+        mListView.setAdapter(mAdapter);
+        mListView.setLayoutAnimation(getAnimationController());
+        mListView.setVerticalFadingEdgeEnabled(true);
+        mListView.setVerticalScrollBarEnabled(true);
+        mListView.setFadingEdgeLength(BaseInfoHelper.dip2px(getContext(), 3));
         mInterceptor = NotificationInterceptor.getInstance(getContext());
         mInterceptor.setNotificationListener(mNotificationListener);
+    }
+
+    private void clear() {
+        int first = mListView.getFirstVisiblePosition();
+        int count = mAdapter.getCount();
+        int delay = 0;
+        for (int i = count - 1; i >= 0; i--) {
+            View itemView = mListView.getChildAt(i);
+            if (itemView != null) {
+                itemView.animate().translationX(-itemView.getWidth()).setDuration(300)
+                        .setStartDelay(delay).start();
+                delay += 200;
+            }
+        }
+
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (mActiveNotification) {
+                    for (int i = mActiveNotification.size() - 1; i >= 0; i--) {
+                        mAdapter.remove(mActiveNotification.get(i));
+                    }
+                    mFooterView.setVisibility(View.GONE);
+                }
+            }
+        }, delay);
     }
 
     /**
@@ -62,7 +112,7 @@ public class NotificationListView extends ListView {
      * @return
      */
     private LayoutAnimationController getAnimationController() {
-        int duration=300;
+        int duration = 300;
         AnimationSet set = new AnimationSet(true);
 
         Animation animation = new AlphaAnimation(0.0f, 1.0f);
@@ -70,8 +120,8 @@ public class NotificationListView extends ListView {
         set.addAnimation(animation);
 
         animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                -1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f);
         animation.setDuration(duration);
         set.addAnimation(animation);
 
@@ -127,7 +177,16 @@ public class NotificationListView extends ListView {
             in.putExtra("icon", info.getLargeIcon());
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(in);
 
-            UmengCustomEventManager.statisticalPostNotification(info.getId(), info.getPkg(), info.getType());
+            UmengCustomEventManager.statisticalPostNotification(info.getId(), info.getPkg(),
+                    info.getType());
         }
     };
+
+    public ListView getListView() {
+        return mListView;
+    }
+
+    public void setClearButtonVisibility(int visible) {
+        mFooterView.setVisibility(visible);
+    }
 }

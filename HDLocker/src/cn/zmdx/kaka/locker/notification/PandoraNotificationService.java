@@ -200,6 +200,9 @@ public final class PandoraNotificationService extends NotificationListenerServic
                     if (!TextUtils.isEmpty(pkg)) {
                         cancelNotification(pkg, tag, id);
                     }
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("notification---------,cancel notification,pkgName:" + pkg);
+                    }
                 } else {
                     cancelNotification(key);
                 }
