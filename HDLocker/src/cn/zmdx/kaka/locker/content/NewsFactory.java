@@ -22,6 +22,8 @@ import com.android.volley.request.JsonObjectRequest;
 
 public class NewsFactory {
 
+    public static final int NEWS_TYPE_WALLPAPER = 0;
+
     public static final int NEWS_TYPE_HEADLINE = 1;
 
     public static final int NEWS_TYPE_GOSSIP = 2;
@@ -31,6 +33,7 @@ public class NewsFactory {
     public static final int NEWS_TYPE_BEAUTY = 4;
 
     public static final int NEWS_TYPE_JOKE = 5;
+
 
     /**
      * @param type 新闻类型

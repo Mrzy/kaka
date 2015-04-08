@@ -13,6 +13,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.PowerManager;
@@ -363,7 +364,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         initTitles(titles);
         NewsPagerAdapter pagerAdapter = new NewsPagerAdapter(mPages, titles);
         mViewPager.setAdapter(pagerAdapter);
-        mViewPager.setCurrentItem(1);
+        mViewPager.setCurrentItem(2);
 
         final PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) mEntireView
                 .findViewById(R.id.newsTabStrip);
@@ -378,6 +379,9 @@ public class PandoraBoxManager implements View.OnClickListener {
             public void onPageSelected(int position) {
                 mBackBtn.setColorNormal(mFloatingButtonColors[position]);
                 mBackBtn.setColorPressed(mFloatingButtonColors[position]);
+
+                int category = position;
+                refreshNewsByCategory(category);
             }
 
             @Override
@@ -475,8 +479,13 @@ public class PandoraBoxManager implements View.OnClickListener {
      * 新闻面板完全展开时会调用该方法
      */
     public void notifyNewsPanelExpanded() {
-        refreshAllNews();
         initBody();
+
+        if (mViewPager != null) {
+            int position = mViewPager.getCurrentItem();
+            int category = position;
+            refreshNewsByCategory(category);
+        }
         showDateView();
         PandoraConfig.newInstance(mContext).saveLastShowUnreadNews(System.currentTimeMillis());
         if (isAppearedUnreadNews) {
@@ -512,7 +521,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         hideDateView();
         ivArrowUp.animate().rotation(0).setDuration(300);
         PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
-        PandoraBoxManager.newInstance(mContext).resetDefaultPage();
+//        PandoraBoxManager.newInstance(mContext).resetDefaultPage();
         if (mBackBtn != null) {
             mBackBtn.setTranslationY(BaseInfoHelper.dip2px(mContext, 100));
         }
@@ -551,6 +560,10 @@ public class PandoraBoxManager implements View.OnClickListener {
         } else if (category == NewsFactory.NEWS_TYPE_JOKE) {
             NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
                     mJokeRefreshView, false, false);
+        } else if (category == NewsFactory.NEWS_TYPE_WALLPAPER) {
+            if (null != mWallpaperView) {
+                mWallpaperView.refreshData();
+            }
         } else {
             throw new IllegalArgumentException("invalid news category");
         }
@@ -586,12 +599,13 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     private void initTitles(List<String> titles) {
-        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_wallpaper));
-        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_headlines));
-        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_gossip));
-        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_micro_choice));
-        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_beauty));
-        titles.add(mContext.getResources().getString(R.string.pandora_news_classify_funny));
+        final Resources res = mContext.getResources();
+        titles.add(res.getString(R.string.pandora_news_classify_wallpaper));
+        titles.add(res.getString(R.string.pandora_news_classify_headlines));
+        titles.add(res.getString(R.string.pandora_news_classify_gossip));
+        titles.add(res.getString(R.string.pandora_news_classify_micro_choice));
+        titles.add(res.getString(R.string.pandora_news_classify_beauty));
+        titles.add(res.getString(R.string.pandora_news_classify_funny));
     }
 
     private void initNewsPages() {
@@ -688,8 +702,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         mJokeRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[5]);
         mJokeRefreshView.setColorSchemeColors(Color.WHITE);
 
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
-                mJokeRefreshView, true, true);
+//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
+//                mJokeRefreshView, true, true);
 
         mJokeRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
@@ -757,8 +771,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         mBeautyRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[4]);
         mBeautyRefreshView.setColorSchemeColors(Color.WHITE);
 
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
-                mBeautyRefreshView, true, true);
+//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
+//                mBeautyRefreshView, true, true);
 
         mBeautyRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
@@ -834,8 +848,8 @@ public class PandoraBoxManager implements View.OnClickListener {
                 UmengCustomEventManager.statisticalPullRefreshNews("microMedia");
             }
         });
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
-                mMicroMediaNews, mMicroMediaRefreshView, true, true);
+//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
+//                mMicroMediaNews, mMicroMediaRefreshView, true, true);
 
         rv.setOnScrollListener(new OnScrollListener() {
             @Override
@@ -888,8 +902,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         mGossipRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[2]);
         mGossipRefreshView.setColorSchemeColors(Color.WHITE);
 
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
-                mGossipRefreshView, true, true);
+//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
+//                mGossipRefreshView, true, true);
 
         mGossipRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
@@ -965,8 +979,8 @@ public class PandoraBoxManager implements View.OnClickListener {
                 UmengCustomEventManager.statisticalPullRefreshNews("headline");
             }
         });
-        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
-                mHotRefreshView, true, true);
+//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
+//                mHotRefreshView, true, true);
 
         rv.setOnScrollListener(new OnScrollListener() {
 
