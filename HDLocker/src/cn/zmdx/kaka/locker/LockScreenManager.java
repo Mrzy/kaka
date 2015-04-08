@@ -213,7 +213,7 @@ public class LockScreenManager {
     private void startShimmer() {
         if (mShimmer != null) {
             if (!mShimmer.isAnimating()) {
-                 mShimmer.start(mShimmerTextView);
+                mShimmer.start(mShimmerTextView);
             }
         }
     }
@@ -653,8 +653,6 @@ public class LockScreenManager {
 
         PandoraBoxManager.newInstance(mContext).freeMemory();
 
-        ThemeManager.recycle();
-
         INSTANCE = null;
 
         HDBThreadUtils.postOnWorkerDelayed(new Runnable() {
@@ -703,14 +701,17 @@ public class LockScreenManager {
 
             // 将缩到屏幕底部的新闻栏展开
             if (mSlidingUpView != null && mPager != null && mPager.getCurrentItem() == 1) {
-                mSlidingUpView.getSliderView().animate().translationY(0).setDuration(400)
-                        .setInterpolator(new DecelerateInterpolator()).start();
+                View sliderView = mSlidingUpView.getSliderView();
+                if (sliderView != null) {
+                    sliderView.animate().translationY(0).setDuration(400)
+                            .setInterpolator(new DecelerateInterpolator()).start();
+                }
             }
         }
 
         PandoraBoxManager.newInstance(mContext).onScreenOn();
 
-        LockScreenManager.getInstance().processWeatherInfo();
+        processWeatherInfo();
 
         // 检查是否有读取通知权限
         NotificationInterceptor.getInstance(mContext).checkPermission();

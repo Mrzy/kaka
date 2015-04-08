@@ -132,10 +132,6 @@ public class ThemeManager {
         return theme;
     }
 
-    public static void recycle() {
-        getCurrentTheme().mCurDrawable = null;
-    }
-
     private static String getFilePathByThemeId(int themeId, String fileName) {
         String filePath = "";
         switch (themeId) {

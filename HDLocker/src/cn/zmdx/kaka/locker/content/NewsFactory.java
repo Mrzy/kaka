@@ -34,7 +34,6 @@ public class NewsFactory {
 
     public static final int NEWS_TYPE_JOKE = 5;
 
-
     /**
      * @param type 新闻类型
      * @param adapter
@@ -43,42 +42,38 @@ public class NewsFactory {
      * @param older 是要显示更老的数据还是更新的数据
      */
     static void updateNews(int type, final RecyclerView.Adapter adapter,
-            final List<ServerImageData> data, final SwipeRefreshLayout srl, final boolean older, boolean showRefresh) {
+            final List<ServerImageData> data, final SwipeRefreshLayout srl, final boolean older,
+            boolean showRefresh) {
         if (adapter == null || data == null) {
+            return;
+        }
+
+        boolean isLoading = false;
+        if (srl.getTag() != null) {
+            isLoading = (Boolean) srl.getTag();
+        }
+
+        if (isLoading) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("正在加载数据，中断此次请求");
+            }
+            return;
+        }
+        isLoading = true;
+        srl.setTag(isLoading);
+        if (!HDBNetworkState.isNetworkAvailable()) {
+            srl.setRefreshing(false);
+
+            isLoading = false;
+            srl.setTag(isLoading);
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("无网络，中断请求新闻数据");
+            }
             return;
         }
 
         if (showRefresh) {
             srl.setRefreshing(true);
-        }
-
-        boolean isLoadingOlder = false;
-        if (srl.getTag() != null) {
-            isLoadingOlder = (Boolean) srl.getTag();
-        }
-
-        if (isLoadingOlder) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("正在加载更早的数据，中断此次请求");
-            }
-            return;
-        }
-        if (older) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("开始加载更早的数据");
-            }
-            isLoadingOlder = true;
-            srl.setTag(isLoadingOlder);
-        }
-        if (!HDBNetworkState.isNetworkAvailable()) {
-            srl.setRefreshing(false);
-
-            isLoadingOlder = false;
-            srl.setTag(isLoadingOlder);
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD("无网络，中断请求新闻数据");
-            }
-            return;
         }
 
         JsonObjectRequest request = null;
