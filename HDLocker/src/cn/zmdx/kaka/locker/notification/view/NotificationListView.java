@@ -5,8 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.animation.LayoutTransition;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.view.View;
@@ -175,8 +179,36 @@ public class NotificationListView extends FrameLayout {
 
             UmengCustomEventManager.statisticalPostNotification(info.getId(), info.getPkg(),
                     info.getType());
+
+            wakeLockIfNeeded();
         }
     };
+
+    private void wakeLockIfNeeded() {
+        PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+        if (!isScreenOn(pm)) {
+            final WakeLock powerWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+                    | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK
+                    | PowerManager.ON_AFTER_RELEASE, "notification");
+            powerWakeLock.acquire();
+            HDBThreadUtils.postOnUiDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    powerWakeLock.release();
+                }
+            }, 3000);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @SuppressLint("NewApi")
+    private boolean isScreenOn(PowerManager pm) {
+        if (Build.VERSION.SDK_INT < 20) {
+            return pm.isScreenOn();
+        } else {
+            return pm.isInteractive();
+        }
+    }
 
     public ListView getListView() {
         return mListView;

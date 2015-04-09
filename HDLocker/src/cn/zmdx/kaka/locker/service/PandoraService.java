@@ -220,17 +220,10 @@ public class PandoraService extends Service {
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 LockScreenManager.getInstance().lock();
                 LockScreenManager.getInstance().onScreenOff();
-                sendObtainActiveNotificationMsg();
                 timingUpdateCurLocation();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 LockScreenManager.getInstance().onScreenOn();
             }
         }
     };
-
-    private void sendObtainActiveNotificationMsg() {
-        Intent intent = new Intent();
-        intent.setAction(PandoraNotificationService.ACTION_OBTAIN_ACTIVE_NOTIFICATIONS);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
 }

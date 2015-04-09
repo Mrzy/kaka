@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.Display;
 import android.view.Gravity;
@@ -38,6 +39,7 @@ import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.font.FontManager;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
+import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
@@ -719,6 +721,8 @@ public class LockScreenManager {
                             .setInterpolator(new DecelerateInterpolator()).start();
                 }
             }
+
+            sendObtainActiveNotificationMsg();
         }
 
         PandoraBoxManager.newInstance(mContext).onScreenOn();
@@ -727,6 +731,12 @@ public class LockScreenManager {
 
         // 检查是否有读取通知权限
         NotificationInterceptor.getInstance(mContext).checkPermission();
+    }
+
+    private void sendObtainActiveNotificationMsg() {
+        Intent intent = new Intent();
+        intent.setAction(PandoraNotificationService.ACTION_OBTAIN_ACTIVE_NOTIFICATIONS);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     private Set<OnBackPressedListener> mBackPressedListeners = new HashSet<OnBackPressedListener>();

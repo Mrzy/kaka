@@ -21,16 +21,16 @@ public class AppUninstall {
 
         Intent intent = new Intent();
         ComponentName[] activities = new ComponentName[] {
-                new ComponentName("com.tencent.mtt", "com.tencent.mtt.SplashActivity"),
+                new ComponentName("com.android.browser", "com.android.browser.BrowserActivity"),
                 new ComponentName("com.android.chrome", "com.google.android.apps.chrome.Main"),
-                new ComponentName("com.qihoo.browser", "com.qihoo.browser.BrowserActivity"),
                 new ComponentName("com.UCMobile", "com.UCMobile.main.UCMobile"),
+                new ComponentName("com.tencent.mtt", "com.tencent.mtt.SplashActivity"),
+                new ComponentName("com.qihoo.browser", "com.qihoo.browser.BrowserActivity"),
                 new ComponentName("com.baidu.browser.apps",
                         "com.baidu.browser.framework.BdBrowserActivity"),
                 new ComponentName("sogou.mobile.explorer", "sogou.mobile.explorer.BrowserActivity"),
                 new ComponentName("com.ijinshan.browser_fast",
-                        "com.ijinshan.browser.screen.BrowserActivity"),
-                new ComponentName("com.android.browser", "com.android.browser.BrowserActivity")
+                        "com.ijinshan.browser.screen.BrowserActivity")
         };
         for (ComponentName cn : activities) {
             intent.setComponent(cn);
