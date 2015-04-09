@@ -9,7 +9,6 @@ import android.animation.ValueAnimator;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
@@ -20,26 +19,20 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.font.FontManager;
-import cn.zmdx.kaka.locker.network.ByteArrayRequest;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.IDownLoadWallpaper;
 import cn.zmdx.kaka.locker.widget.BaseButton;
 import cn.zmdx.kaka.locker.widget.ProgressBarMaterial;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
 import cn.zmdx.kaka.locker.widget.TextClockCompat;
-
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.error.VolleyError;
 
 public class WallpaperDetailView extends LinearLayout {
     private Context mContext;
@@ -229,45 +222,30 @@ public class WallpaperDetailView extends LinearLayout {
                         && !HDBNetworkState.isWifiNetwork()) {
                     return;
                 }
-                ByteArrayRequest mRequest = new ByteArrayRequest(mImageUrl, new Listener<byte[]>() {
+                WallpaperUtils.downloadWallpaper(mContext, mImageUrl, new IDownLoadWallpaper() {
 
                     @Override
-                    public void onResponse(byte[] data) {
-                        Bitmap previewBitmap = doParse(data, BaseInfoHelper.getRealWidth(mContext),
-                                BaseInfoHelper.getRealHeight(mContext));
-                        if (null != previewBitmap) {
-                            setImageBitmap(previewBitmap);
-                            mPreBitmap = previewBitmap;
+                    public void onSuccess(Bitmap bitmap) {
+                        if (null != bitmap) {
+                            setImageBitmap(bitmap);
+                            mPreBitmap = bitmap;
                             ImageLoaderManager.getOnlineImageCache(mContext).putBitmap(
                                     HDBHashUtils.getStringMD5(mImageUrl), mPreBitmap);
                         }
                         showView(false);
                     }
-                }, new ErrorListener() {
 
                     @Override
-                    public void onErrorResponse(VolleyError error) {
+                    public void onFail() {
                         showView(false);
                     }
                 });
-                mRequest.setShouldCache(false);
-                RequestManager.getRequestQueue().add(mRequest);
             } else {
                 setImageBitmap(result);
                 mPreBitmap = result;
                 showView(false);
             }
         }
-    }
-
-    private Bitmap doParse(byte[] data, int mMaxWidth, int mMaxHeight) {
-        BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
-        decodeOptions.inInputShareable = true;
-        decodeOptions.inPurgeable = true;
-        decodeOptions.inPreferredConfig = Bitmap.Config.RGB_565;
-        Bitmap bitmap = null;
-        bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, decodeOptions);
-        return bitmap;
     }
 
 }

@@ -99,6 +99,8 @@ public class PandoraConfig {
 
     private static final String KEY_EVENT_NEED_INTERCEPT_APP_DAILY = "kenipd";
 
+    private static final String KEY_AUTO_CHANGE_WALLPAPER_DATE = "kacwd";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -496,6 +498,14 @@ public class PandoraConfig {
 
     public void saveEventNeedInterceptAppDailyData(String time) {
         mSp.edit().putString(KEY_EVENT_NEED_INTERCEPT_APP_DAILY, time).commit();
+    }
+
+    public String getAutoChangeWallapperDate() {
+        return mSp.getString(KEY_AUTO_CHANGE_WALLPAPER_DATE, "");
+    }
+
+    public void saveAutoChangeWallapperDate(String date) {
+        mSp.edit().putString(KEY_AUTO_CHANGE_WALLPAPER_DATE, date).commit();
     }
 
 }

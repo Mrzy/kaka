@@ -22,6 +22,7 @@ import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.MainSettingFragment.IMainSettingListener;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -100,6 +101,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         getSupportFragmentManager().beginTransaction().add(R.id.content, mMainSettingFragment)
                 .commit();
         UmengCustomEventManager.statisticalNeedInterceptApp();
+        WallpaperUtils.autoChangeWallpaper();
     }
 
     private void init() {

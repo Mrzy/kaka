@@ -134,7 +134,7 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
             return;
         }
         mList.addAll(list);
-        Collections.sort(mList, comparator);
+        Collections.sort(mList, WallpaperUtils.comparator);
         mNewModified = mList.get(0).getPublishDATE();
         mLastModified = mList.get(mList.size() - 1).getPublishDATE();
         mAdapter.notifyDataSetChanged();
@@ -143,14 +143,6 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         }
         isLoadMore = false;
     }
-
-    public static Comparator<ServerOnlineWallpaper> comparator = new Comparator<ServerOnlineWallpaper>() {
-
-        @Override
-        public int compare(ServerOnlineWallpaper lhs, ServerOnlineWallpaper rhs) {
-            return (lhs.getPublishDATE() - rhs.getPublishDATE()) > 0 ? -1 : 1;
-        }
-    };
 
     @Override
     public void onFail() {
