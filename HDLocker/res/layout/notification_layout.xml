@@ -15,11 +15,10 @@
 
     <ImageView
         android:id="@+id/notificationFooterView"
-        android:layout_width="20dp"
+        android:layout_width="22dp"
         android:layout_height="15dp"
         android:layout_gravity="right"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginRight="11dp"
+        android:layout_marginTop="6dp"
         android:src="@drawable/one_key_clear_button_selector" />
-
 </LinearLayout>

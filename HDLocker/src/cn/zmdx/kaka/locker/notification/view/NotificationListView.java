@@ -4,23 +4,18 @@ package cn.zmdx.kaka.locker.notification.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
-import android.widget.AbsListView;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
@@ -76,6 +71,7 @@ public class NotificationListView extends FrameLayout {
         mListView.setVerticalFadingEdgeEnabled(true);
         mListView.setVerticalScrollBarEnabled(true);
         mListView.setFadingEdgeLength(BaseInfoHelper.dip2px(getContext(), 3));
+        mListView.setLayoutTransition(new LayoutTransition());
         mInterceptor = NotificationInterceptor.getInstance(getContext());
         mInterceptor.setNotificationListener(mNotificationListener);
     }
@@ -98,7 +94,7 @@ public class NotificationListView extends FrameLayout {
             public void run() {
                 synchronized (mActiveNotification) {
                     for (int i = mActiveNotification.size() - 1; i >= 0; i--) {
-                        mAdapter.remove(mActiveNotification.get(i));
+                        mAdapter.remove(mActiveNotification.get(i), false);
                     }
                     mFooterView.setVisibility(View.GONE);
                 }

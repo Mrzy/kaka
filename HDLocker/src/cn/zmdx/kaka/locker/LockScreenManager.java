@@ -37,6 +37,7 @@ import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.font.FontManager;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
+import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
@@ -690,6 +691,13 @@ public class LockScreenManager {
         pauseShimmer();
 
         PandoraBoxManager.newInstance(mContext).onScreenOff();
+
+        if (BuildConfig.DEBUG && false) {
+            for (int i = 0; i < 20; i++) {
+                NotificationInterceptor.getInstance(mContext).sendCustomNotification(
+                        PandoraNotificationFactory.createTestNotification());
+            }
+        }
     }
 
     public void pauseShimmer() {

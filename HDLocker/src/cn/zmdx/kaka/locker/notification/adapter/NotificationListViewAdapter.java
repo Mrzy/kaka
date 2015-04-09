@@ -43,7 +43,8 @@ public class NotificationListViewAdapter extends BaseAdapter {
 
     private NotificationListView mListView;
 
-    public NotificationListViewAdapter(Context context, List<NotificationInfo> data, NotificationListView listView) {
+    public NotificationListViewAdapter(Context context, List<NotificationInfo> data,
+            NotificationListView listView) {
         mContext = context;
         mData = data;
         mListView = listView;
@@ -110,7 +111,10 @@ public class NotificationListViewAdapter extends BaseAdapter {
             if (largeBmp != null) {
                 holder.largeIconIv.setImageBitmap(largeBmp);
                 if (smallDrawable != null) {
+                    holder.smallIconIv.setVisibility(View.VISIBLE);
                     holder.smallIconIv.setImageDrawable(smallDrawable);
+                } else {
+                    holder.smallIconIv.setVisibility(View.GONE);
                 }
             } else {
                 if (smallDrawable != null) {
@@ -132,11 +136,11 @@ public class NotificationListViewAdapter extends BaseAdapter {
                 NotificationInfo info = mData.get(pos);
                 if (direction == SwipeLayout.OPEN_DIRECTION_LEFT) {
                     openNotification(info);
-                    // remove(info);
                 } else if (direction == SwipeLayout.OPEN_DIRECTION_RIGHT) {
-                    remove(info);
+                    remove(info, true);
 
-                    UmengCustomEventManager.statisticalRemoveNotification(info.getId(), info.getPkg(), info.getType());
+                    UmengCustomEventManager.statisticalRemoveNotification(info.getId(),
+                            info.getPkg(), info.getType());
                 }
             }
 
@@ -196,7 +200,7 @@ public class NotificationListViewAdapter extends BaseAdapter {
                     }, 200);
                 }
 
-                remove(info);
+                remove(info, false);
 
                 UmengCustomEventManager.statisticalOpenNotification(info.getId(), info.getPkg(),
                         info.getType());
@@ -214,7 +218,13 @@ public class NotificationListViewAdapter extends BaseAdapter {
         }
         super.notifyDataSetChanged();
     }
-    public void remove(NotificationInfo info) {
+
+    /**
+     * 
+     * @param info
+     * @param tweenAnimator 此参数暂时无效
+     */
+    public void remove(final NotificationInfo info, boolean tweenAnimator) {
         if (info != null) {
             // 如果是自定义通知，要从本地数据库删除通知
             if (info.getType() == NotificationInfo.NOTIFICATION_TYPE_CUSTOM) {
@@ -233,8 +243,41 @@ public class NotificationListViewAdapter extends BaseAdapter {
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
             }
         }
-        if (mData.remove(info)) {
-            notifyDataSetChanged();
+
+        if (tweenAnimator) {
+            if (mData.remove(info)) {
+                notifyDataSetChanged();
+            }
+//            int position = mData.indexOf(info);
+//            final ListView lv = mListView.getListView();
+//            int first = lv.getFirstVisiblePosition();
+//            int last = lv.getLastVisiblePosition();
+//            if (last - position > 0) { // 做补间动画
+//                for (int i = position + 1; i <= last; i++) {
+//                    View item = lv.getChildAt(i - first);
+//                    if (item != null) {
+//                        item.animate().translationY(-item.getHeight()).setDuration(300)
+//                                .setListener(new AnimatorListenerAdapter() {
+//                                    @Override
+//                                    public void onAnimationEnd(Animator animation) {
+//                                        if (mData.remove(info)) {
+//                                            notifyDataSetChanged();
+//                                        }
+//                                        super.onAnimationEnd(animation);
+//                                    }
+//                                }).start();
+//                    }
+//
+//                }
+//            } else {
+//                if (mData.remove(info)) {
+//                    notifyDataSetChanged();
+//                }
+//            }
+        } else {
+            if (mData.remove(info)) {
+                notifyDataSetChanged();
+            }
         }
     }
 

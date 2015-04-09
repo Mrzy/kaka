@@ -106,8 +106,19 @@ public class PandoraNotificationFactory {
     }
 
     public static NotificationInfo createTestNotification() {
-        // TODO
-        return null;
+        Context context = HDApplication.getContext();
+        final NotificationInfo ni = new NotificationInfo();
+        ni.setId(ni.hashCode());
+        ni.setTitle(context.getString(R.string.notify_guide_openpermission_title));
+        ni.setContent(context.getString(R.string.notify_guide_openpermission_content));
+        ni.setType(NotificationInfo.NOTIFICATION_TYPE_CUSTOM);
+        Intent intent = PandoraUtils.getReadNotificationPermissionIntent(context);
+        PendingIntent pi = PendingIntent.getActivity(context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        ni.setPendingIntent(pi);
+        ni.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.notification_custom_youhua_icon));
+        return ni;
     }
 
     public static NotificationInfo createGuideOpenNotifyPermissionNotification() {
