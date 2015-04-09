@@ -1,10 +1,12 @@
 
 package cn.zmdx.kaka.locker.wallpaper;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -130,6 +132,11 @@ public class WallpaperDetailView extends LinearLayout {
                     public void run() {
                         ImageUtils.saveImageToFile(mPreBitmap, OnlineWallpaperManager.getInstance()
                                 .getFilePath(md5ImageUrl));
+                        try {
+                            WallpaperManager.getInstance(mContext).setBitmap(mPreBitmap);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 if (isLockScreen) {
@@ -149,6 +156,7 @@ public class WallpaperDetailView extends LinearLayout {
                 }
             }
         });
+
     }
 
     public void setDate() {
@@ -163,8 +171,15 @@ public class WallpaperDetailView extends LinearLayout {
     public void setData(String imageUrl, String desc) {
         mImageUrl = imageUrl;
         mDesc = desc;
-        ImageLoadAsyn mDataAsyn = new ImageLoadAsyn();
-        mDataAsyn.execute();
+        showView(true);
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                ImageLoadAsyn mDataAsyn = new ImageLoadAsyn();
+                mDataAsyn.execute();
+            }
+        }, 300);
     }
 
     public void setWallpaperDetailListener(IWallpaperDetailListener listener) {
@@ -214,7 +229,6 @@ public class WallpaperDetailView extends LinearLayout {
                         && !HDBNetworkState.isWifiNetwork()) {
                     return;
                 }
-                showView(true);
                 ByteArrayRequest mRequest = new ByteArrayRequest(mImageUrl, new Listener<byte[]>() {
 
                     @Override
@@ -233,16 +247,15 @@ public class WallpaperDetailView extends LinearLayout {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        mLoadingView.setVisibility(View.GONE);
+                        showView(false);
                     }
                 });
                 mRequest.setShouldCache(false);
                 RequestManager.getRequestQueue().add(mRequest);
             } else {
-                // showView(true);
                 setImageBitmap(result);
                 mPreBitmap = result;
-                // showView(false);
+                showView(false);
             }
         }
     }
