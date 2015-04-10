@@ -68,9 +68,9 @@ public class PandoraService extends Service {
         TelephonyManager manager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
         manager.listen(new MyPhoneListener(), PhoneStateListener.LISTEN_CALL_STATE);
 
-        if (PandoraConfig.newInstance(this).isOpenForegroundService()) {
+        if (PandoraConfig.newInstance(this).isPandoraProtectOn()) {
             Notification noti = createNotification();
-//            startForeground(FOREGROUND_SERVICE_ID, noti);
+            startForeground(FOREGROUND_SERVICE_ID, noti);
         }
         super.onCreate();
     }
@@ -87,11 +87,11 @@ public class PandoraService extends Service {
 
     @SuppressWarnings("deprecation")
     private Notification createNotification() {
-        Notification notification = new Notification(R.drawable.ic_launcher, "",
+        Notification notification = new Notification(R.drawable.ic_launcher, "开启成功",
                 System.currentTimeMillis());
         Intent notificationIntent = new Intent(this, MainSettingActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-        notification.setLatestEventInfo(this, "潘多拉锁屏正在运行", "关闭此通知可能导致锁屏不能正常使用", pendingIntent);
+        notification.setLatestEventInfo(this, "潘多拉守护神", "点击可关闭守护", pendingIntent);
         return notification;
     }
 
@@ -104,6 +104,9 @@ public class PandoraService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && "stop".equals(intent.getStringExtra("action"))) {
             stopForeground(true);
+        } else if (intent != null && "startGuard".equals(intent.getStringExtra("action"))) {
+            Notification noti = createNotification();
+            startForeground(FOREGROUND_SERVICE_ID, noti);
         }
         return START_STICKY;
     }
@@ -113,8 +116,14 @@ public class PandoraService extends Service {
         return super.onUnbind(intent);
     }
 
+    public static void startForegroudService(Context context) {
+        Intent in = new Intent(context, PandoraService.class);
+        in.putExtra("action", "startGuard");
+        context.startService(in);
+    }
+
     public static void stopForegroundService(Context context) {
-        Intent in = new Intent();
+        Intent in = new Intent(context, PandoraService.class);
         in.putExtra("action", "stop");
         context.startService(in);
     }
@@ -219,11 +228,13 @@ public class PandoraService extends Service {
                 LockScreenManager.getInstance().unLock(true, true);
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 // 如果开启延迟锁定，则1.5s后再锁屏
-                if (PandoraConfig.newInstance(mContext).isDelayLockScreenOn() && !LockScreenManager.getInstance().isLocked()) {
+                if (PandoraConfig.newInstance(mContext).isDelayLockScreenOn()
+                        && !LockScreenManager.getInstance().isLocked()) {
                     HDBThreadUtils.postOnUiDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+                            PowerManager pm = (PowerManager) mContext
+                                    .getSystemService(Context.POWER_SERVICE);
                             if (!pm.isScreenOn()) {
                                 LockScreenManager.getInstance().lock();
                                 LockScreenManager.getInstance().onScreenOff();

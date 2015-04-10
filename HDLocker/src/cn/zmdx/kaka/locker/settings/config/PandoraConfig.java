@@ -7,6 +7,7 @@ import android.content.SharedPreferences.Editor;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
+import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
@@ -104,11 +105,11 @@ public class PandoraConfig {
     private static final String KEY_OPEN_PANDORA_PROTECT = "kopp";
 
     private static final String KEY_SAVE_CITY_NAME = "kscname";
-    
+
     private static final String KEY_DELAY_LOCK_SCREEN = "kdlsc";
-    
+
     private static final String KEY_LIGHT_SCREEN = "klcre";
-    
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -522,6 +523,11 @@ public class PandoraConfig {
 
     public void savePandoraProtecttState(boolean isEnable) {
         mSp.edit().putBoolean(KEY_OPEN_PANDORA_PROTECT, isEnable).commit();
+        if (isEnable) {
+            PandoraService.startForegroudService(mContext);
+        } else {
+            PandoraService.stopForegroundService(mContext);
+        }
     }
 
     public String getWeatherCity() {
@@ -539,7 +545,7 @@ public class PandoraConfig {
     public void saveDelayLockScreenState(boolean isEnable) {
         mSp.edit().putBoolean(KEY_DELAY_LOCK_SCREEN, isEnable).commit();
     }
-    
+
     public boolean isLightScreenOn() {
         return mSp.getBoolean(KEY_LIGHT_SCREEN, true);
     }
