@@ -12,18 +12,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
+import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.MainSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 
 public class PandoraService extends Service {
@@ -218,8 +218,22 @@ public class PandoraService extends Service {
             if (mAlarmActions.contains(action)) {
                 LockScreenManager.getInstance().unLock(true, true);
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-                LockScreenManager.getInstance().lock();
-                LockScreenManager.getInstance().onScreenOff();
+                // 如果开启延迟锁定，则1.5s后再锁屏
+                if (PandoraConfig.newInstance(mContext).isDelayLockScreenOn() && !LockScreenManager.getInstance().isLocked()) {
+                    HDBThreadUtils.postOnUiDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+                            if (!pm.isScreenOn()) {
+                                LockScreenManager.getInstance().lock();
+                                LockScreenManager.getInstance().onScreenOff();
+                            }
+                        };
+                    }, 1500);
+                } else {
+                    LockScreenManager.getInstance().lock();
+                    LockScreenManager.getInstance().onScreenOff();
+                }
                 timingUpdateCurLocation();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 LockScreenManager.getInstance().onScreenOn();
