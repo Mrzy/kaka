@@ -31,6 +31,7 @@ import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.NotificationInfo;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.adapter.NotificationListViewAdapter;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
@@ -196,8 +197,12 @@ public class NotificationListView extends FrameLayout {
     };
 
     private void wakeLockIfNeeded() {
-        if (!isScreenOn()) {
+        // 如果未开启来消息点亮屏幕，则直接返回
+        if (!PandoraConfig.newInstance(getContext()).isLightScreenOn()) {
+            return;
+        }
 
+        if (!isScreenOn()) {
             Sensor sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
             if (sensor == null) {
                 doScreenOn();
@@ -230,6 +235,9 @@ public class NotificationListView extends FrameLayout {
         }
     };
 
+    /**
+     * 电量屏幕，3s后释放
+     */
     private void doScreenOn() {
         final WakeLock powerWakeLock = mPowerManager.newWakeLock(
                 PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP
@@ -245,6 +253,10 @@ public class NotificationListView extends FrameLayout {
         }, 3000);
     }
 
+    /**
+     * 判断当前屏幕是否处于电量状态
+     * @return
+     */
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
     private boolean isScreenOn() {
