@@ -112,6 +112,10 @@ public class PandoraConfig {
 
     private static final String KEY_APPLY_DESKTOP_WALLPAPER = "kadwall";
 
+    private static final String KEY_OPEN_LUNAR_CALENDAR = "kolcal";
+
+    private static final String KEY_OPEN_NIGHT_MODE = "konmode";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -562,6 +566,22 @@ public class PandoraConfig {
 
     public void saveApplyDesktopState(boolean isEnable) {
         mSp.edit().putBoolean(KEY_APPLY_DESKTOP_WALLPAPER, isEnable).commit();
+    }
+
+    public boolean isLunarCalendarOn() {
+        return mSp.getBoolean(KEY_OPEN_LUNAR_CALENDAR, true);
+    }
+
+    public void saveLunarCalendarState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_OPEN_LUNAR_CALENDAR, isEnable).commit();
+    }
+
+    public boolean isNightModeOn() {
+        return mSp.getBoolean(KEY_OPEN_NIGHT_MODE, false);
+    }
+
+    public void saveNightModeState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_OPEN_NIGHT_MODE, isEnable).commit();
     }
 
 }

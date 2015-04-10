@@ -200,11 +200,15 @@
     <string name="tip_loading_news">正在加载</string>
     
     <string name="pandora_setting_general_protect">开启潘多拉守护神</string>
-    <string name="pandora_setting_general_weather_prompt">天气设置</string>
+    <string name="pandora_setting_general_weather_prompt">时间天气设置</string>
+    <string name="pandora_setting_general_lunar_calendar">是否显示农历</string>
     <string name="pandora_setting_general_weather">是否显示天气</string>
     <string name="pandora_setting_general_choose_city">选择所在城市</string>
     <string name="pandora_setting_password_delay_lockscreen">开启延时锁定屏幕</string>
     
     <string name="pandora_setting_notify_light_screen">收到消息点亮屏幕</string>
     <string name="pandora_setting_wallpaper_to_desktop">同时应用壁纸到桌面</string>
+    
+    <string name="pandora_setting_general_news_item">新闻选项</string>
+    <string name="pandora_setting_general_night_mode">开启夜间模式</string>
 </resources>

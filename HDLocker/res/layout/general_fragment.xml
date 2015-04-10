@@ -22,35 +22,34 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:orientation="horizontal" >
+
+                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    style="@style/setting_textview"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/pandora_setting_general_pandoralocker" />
+
+                <cn.zmdx.kaka.locker.widget.SwitchButton
+                    android:id="@+id/setting_pandoralocker_switch_button"
+                    style="@style/setting_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
+
+        <cn.zmdx.kaka.locker.widget.BaseLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical" >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/setting_item_height"
-                    android:orientation="horizontal" >
-
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        style="@style/setting_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="@string/pandora_setting_general_pandoralocker" />
-
-                    <cn.zmdx.kaka.locker.widget.SwitchButton
-                        android:id="@+id/setting_pandoralocker_switch_button"
-                        style="@style/setting_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="17dp"
-                    android:layout_marginRight="17dp"
-                    android:background="@drawable/setting_line"
-                    android:contentDescription="@string/contentDescription" />
 
                 <LinearLayout
                     android:id="@+id/setting_close_system_lock_item"
@@ -129,24 +128,13 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <LinearLayout
+                <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/setting_item_height"
-                    android:orientation="horizontal" >
-
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        style="@style/setting_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="@string/pandora_setting_general_download_image_with_wifi" />
-
-                    <cn.zmdx.kaka.locker.widget.SwitchButton
-                        android:id="@+id/setting_allow_3g4g_switch_button"
-                        style="@style/setting_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginRight="17dp"
+                    android:background="@drawable/setting_line"
+                    android:contentDescription="@string/contentDescription" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -269,6 +257,33 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:text="@string/pandora_setting_general_lunar_calendar" />
+
+                    <cn.zmdx.kaka.locker.widget.SwitchButton
+                        android:id="@+id/setting_lunar_calendar_switch_button"
+                        style="@style/setting_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginRight="17dp"
+                    android:background="@drawable/setting_line"
+                    android:contentDescription="@string/contentDescription" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_item_height"
+                    android:orientation="horizontal" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/setting_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:text="@string/pandora_setting_general_weather" />
 
                     <cn.zmdx.kaka.locker.widget.SwitchButton
@@ -314,6 +329,71 @@
                         android:layout_marginRight="42dp"
                         android:contentDescription="@string/contentDescription"
                         android:src="@drawable/setting_arrow" />
+                </LinearLayout>
+            </LinearLayout>
+        </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
+
+        <cn.zmdx.kaka.locker.widget.BaseLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    style="@style/setting_textview_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_sub_item_height"
+                    android:text="@string/pandora_setting_general_news_item" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_item_height"
+                    android:orientation="horizontal" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/setting_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/pandora_setting_general_night_mode" />
+
+                    <cn.zmdx.kaka.locker.widget.SwitchButton
+                        android:id="@+id/setting_night_mode_switch_button"
+                        style="@style/setting_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginRight="17dp"
+                    android:background="@drawable/setting_line"
+                    android:contentDescription="@string/contentDescription" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/setting_item_height"
+                    android:orientation="horizontal" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/setting_textview"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/pandora_setting_general_download_image_with_wifi" />
+
+                    <cn.zmdx.kaka.locker.widget.SwitchButton
+                        android:id="@+id/setting_allow_3g4g_switch_button"
+                        style="@style/setting_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
         </cn.zmdx.kaka.locker.widget.BaseLinearLayout>

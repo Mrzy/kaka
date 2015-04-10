@@ -22,7 +22,7 @@ public class SwitchButtonUtil implements Cloneable {
     static class Default {
         static int DEFAULT_OFF_COLOR = Color.parseColor("#E3E3E3");
 
-        static int DEFAULT_ON_COLOR = Color.parseColor("#56a5e7");
+        static int DEFAULT_ON_COLOR = Color.parseColor("#3db7ff");
 
         static int DEFAULT_THUMB_COLOR = Color.parseColor("#FFFFFF");
 

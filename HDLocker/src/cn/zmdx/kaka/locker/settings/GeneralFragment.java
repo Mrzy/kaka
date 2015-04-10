@@ -71,6 +71,10 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
     private Button mEvaluationBadReview;
 
+    private SwitchButton mLunarCalendarSButton;
+
+    private SwitchButton mNightModeSButton;
+
     private static boolean isMeizu;
 
     @Override
@@ -115,6 +119,14 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
         mWeatherSButton = (SwitchButton) mEntireView
                 .findViewById(R.id.setting_weather_switch_button);
         mWeatherSButton.setOnCheckedChangeListener(this);
+
+        mLunarCalendarSButton = (SwitchButton) mEntireView
+                .findViewById(R.id.setting_lunar_calendar_switch_button);
+        mLunarCalendarSButton.setOnCheckedChangeListener(this);
+
+        mNightModeSButton = (SwitchButton) mEntireView
+                .findViewById(R.id.setting_night_mode_switch_button);
+        mNightModeSButton.setOnCheckedChangeListener(this);
 
         initSettingMeizu();
 
@@ -176,6 +188,8 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
         mOpenSoundSButton.setChecked(isLockSoundOn());
         mProtectSButton.setChecked(isPandoraProtectOn());
         mWeatherSButton.setChecked(!getWeatherCity().equals(""));
+        mLunarCalendarSButton.setChecked(isLunarCalendarOn());
+        mNightModeSButton.setChecked(isNightModeOn());
     }
 
     @Override
@@ -220,6 +234,18 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
             }
         } else if (buttonView == mWeatherSButton) {
             showCity(isChecked);
+        } else if (buttonView == mLunarCalendarSButton) {
+            if (isChecked) {
+                enableLunarCalendar();
+            } else {
+                disableLunarCalendar();
+            }
+        } else if (buttonView == mNightModeSButton) {
+            if (isChecked) {
+                enableNightMode();
+            } else {
+                disableNightMode();
+            }
         }
 
     }
@@ -403,4 +429,27 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
         mPandoraConfig.saveWeatherCity(city);
     }
 
+    private boolean isLunarCalendarOn() {
+        return mPandoraConfig.isLunarCalendarOn();
+    }
+
+    private void enableLunarCalendar() {
+        mPandoraConfig.saveLunarCalendarState(true);
+    }
+
+    private void disableLunarCalendar() {
+        mPandoraConfig.saveLunarCalendarState(false);
+    }
+
+    private boolean isNightModeOn() {
+        return mPandoraConfig.isNightModeOn();
+    }
+
+    private void enableNightMode() {
+        mPandoraConfig.saveNightModeState(true);
+    }
+
+    private void disableNightMode() {
+        mPandoraConfig.saveNightModeState(false);
+    }
 }
