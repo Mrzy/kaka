@@ -13,6 +13,8 @@ import android.os.AsyncTask;
 import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,11 +32,12 @@ import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils.IDownLoadWallpaper;
 import cn.zmdx.kaka.locker.widget.BaseButton;
+import cn.zmdx.kaka.locker.widget.CheckBox;
 import cn.zmdx.kaka.locker.widget.ProgressBarMaterial;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
 import cn.zmdx.kaka.locker.widget.TextClockCompat;
 
-public class WallpaperDetailView extends LinearLayout {
+public class WallpaperDetailView extends LinearLayout implements OnCheckedChangeListener {
     private Context mContext;
 
     private View mView;
@@ -44,6 +47,8 @@ public class WallpaperDetailView extends LinearLayout {
     private FrameLayout mContentView;
 
     private SensorImageView mImageView;
+
+    private CheckBox mWallpaperDesktop;
 
     private BaseButton mBackButton;
 
@@ -71,6 +76,8 @@ public class WallpaperDetailView extends LinearLayout {
 
     private Bitmap mPreBitmap;
 
+    private boolean isApplyDesktop;
+
     public WallpaperDetailView(Context context, boolean isScreen) {
         super(context);
         mContext = context;
@@ -93,6 +100,11 @@ public class WallpaperDetailView extends LinearLayout {
         mContentView = (FrameLayout) mView.findViewById(R.id.wallpaper_content);
         mImageView = (SensorImageView) mView.findViewById(R.id.wallpaper_detail_image);
         mImageView.setTransitionMode(SensorImageView.TRANSITION_MODE_AUTO);
+
+        mWallpaperDesktop = (CheckBox) mView.findViewById(R.id.wallpaper_to_desktop);
+        mWallpaperDesktop.setOnCheckedChangeListener(this);
+        mWallpaperDesktop.setChecked(isApplyDesktopOn());
+        
         mBackButton = (BaseButton) mView.findViewById(R.id.wallpaper_return);
         mBackButton.setOnClickListener(new OnClickListener() {
 
@@ -125,10 +137,12 @@ public class WallpaperDetailView extends LinearLayout {
                     public void run() {
                         ImageUtils.saveImageToFile(mPreBitmap, OnlineWallpaperManager.getInstance()
                                 .getFilePath(md5ImageUrl));
-                        try {
-                            WallpaperManager.getInstance(mContext).setBitmap(mPreBitmap);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (isApplyDesktop) {
+                            try {
+                                WallpaperManager.getInstance(mContext).setBitmap(mPreBitmap);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
@@ -248,4 +262,27 @@ public class WallpaperDetailView extends LinearLayout {
         }
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (buttonView == mWallpaperDesktop) {
+            if (isChecked) {
+                enableApplyDesktop();
+            } else {
+                disableApplyDesktop();
+            }
+            isApplyDesktop = isChecked;
+        }
+    }
+
+    private boolean isApplyDesktopOn() {
+        return PandoraConfig.newInstance(getContext()).isApplyDesktopOn();
+    }
+
+    private void enableApplyDesktop() {
+        PandoraConfig.newInstance(getContext()).saveApplyDesktopState(true);
+    }
+
+    private void disableApplyDesktop() {
+        PandoraConfig.newInstance(getContext()).saveApplyDesktopState(false);
+    }
 }

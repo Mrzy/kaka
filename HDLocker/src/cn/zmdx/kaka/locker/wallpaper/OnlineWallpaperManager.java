@@ -18,7 +18,6 @@ import cn.zmdx.kaka.locker.network.UrlBuilder;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
-import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
@@ -96,9 +95,7 @@ public class OnlineWallpaperManager {
             long lastModified) {
         final String lastPullJson = PandoraConfig.newInstance(context)
                 .getLastOnlineServerJsonData();
-        if (HDBNetworkState.isWifiNetwork()
-                || ((HDBNetworkState.isNetworkAvailable() && !HDBNetworkState.isWifiNetwork()) && !PandoraConfig
-                        .newInstance(context).isOnlyWifiLoadImage())) {
+        if (WallpaperUtils.isShouldDownloadWallpaper(context)) {
             if (BuildConfig.DEBUG) {
                 HDBLOG.logD("满足获取数据条件，获取网路壁纸数据中...");
             }

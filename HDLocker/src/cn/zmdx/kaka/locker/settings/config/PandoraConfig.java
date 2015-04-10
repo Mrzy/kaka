@@ -110,6 +110,8 @@ public class PandoraConfig {
 
     private static final String KEY_LIGHT_SCREEN = "klcre";
 
+    private static final String KEY_APPLY_DESKTOP_WALLPAPER = "kadwall";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -553,4 +555,13 @@ public class PandoraConfig {
     public void saveLightScreenState(boolean isEnable) {
         mSp.edit().putBoolean(KEY_LIGHT_SCREEN, isEnable).commit();
     }
+
+    public boolean isApplyDesktopOn() {
+        return mSp.getBoolean(KEY_APPLY_DESKTOP_WALLPAPER, true);
+    }
+
+    public void saveApplyDesktopState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_APPLY_DESKTOP_WALLPAPER, isEnable).commit();
+    }
+
 }

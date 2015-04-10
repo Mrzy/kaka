@@ -206,4 +206,5 @@
     <string name="pandora_setting_password_delay_lockscreen">开启延时锁定屏幕</string>
     
     <string name="pandora_setting_notify_light_screen">收到消息点亮屏幕</string>
+    <string name="pandora_setting_wallpaper_to_desktop">同时应用壁纸到桌面</string>
 </resources>

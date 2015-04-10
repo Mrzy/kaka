@@ -23,6 +23,7 @@ import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager.IPullWallpaperListener;
@@ -223,44 +224,39 @@ public class WallpaperUtils {
 
             @Override
             public void run() {
-                final Context context = HDApplication.getContext();
-                String saveDate = PandoraConfig.newInstance(context).getAutoChangeWallapperDate();
-                final String curDate = BaseInfoHelper.getCurrentDate();
-                if (!curDate.equals(saveDate)) {
-                    OnlineWallpaperManager.getInstance().pullWallpaperData(context,
-                            new IPullWallpaperListener() {
-
-                                @Override
-                                public void onSuccecc(List<ServerOnlineWallpaper> list) {
-                                    Collections.sort(list, WallpaperUtils.comparator);
-                                    final ServerOnlineWallpaper item = list.get(0);
-                                    if (isNeedToChangeWallpaper(curDate, item.getPublishDATE())) {
-                                        downloadWallpaper(context, item.getImageURL(),
-                                                new IDownLoadWallpaper() {
-
-                                                    @Override
-                                                    public void onSuccess(final Bitmap bitmap) {
-                                                        changeWallpaper(bitmap, item.getImageURL(),
-                                                                curDate, item.getDesc());
-                                                    }
-
-                                                    @Override
-                                                    public void onFail() {
-
-                                                    }
-                                                });
-                                    }
-
-                                }
-
-                                @Override
-                                public void onFail() {
-
-                                }
-                            }, 1, System.currentTimeMillis());
-                }
+                handleToAuto();
             }
         });
+    }
+
+    private static void handleToAuto() {
+        final Context context = HDApplication.getContext();
+        if (!PandoraConfig.newInstance(context).isAutoChangeOn()
+                || !isShouldDownloadWallpaper(context)) {
+            return;
+        }
+        String saveDate = PandoraConfig.newInstance(context).getAutoChangeWallapperDate();
+        final String curDate = BaseInfoHelper.getCurrentDate();
+        if (!curDate.equals(saveDate)) {
+            OnlineWallpaperManager.getInstance().pullWallpaperData(context,
+                    new IPullWallpaperListener() {
+
+                        @Override
+                        public void onSuccecc(List<ServerOnlineWallpaper> list) {
+                            Collections.sort(list, WallpaperUtils.comparator);
+                            final ServerOnlineWallpaper item = list.get(0);
+                            if (isNeedToChangeWallpaper(curDate, item.getPublishDATE())) {
+                                downloadAutoWallpaper(context, item.getImageURL(), curDate,
+                                        item.getDesc());
+                            }
+                        }
+
+                        @Override
+                        public void onFail() {
+
+                        }
+                    }, 1, System.currentTimeMillis());
+        }
 
     }
 
@@ -270,6 +266,22 @@ public class WallpaperUtils {
         int year = getDayByTime(date, Calendar.YEAR);
         String newWallpaperDate = "" + year + month + day;
         return newWallpaperDate.equals(curDate);
+    }
+
+    private static void downloadAutoWallpaper(Context context, final String imageUrl,
+            final String curDate, final String desc) {
+        downloadWallpaper(context, imageUrl, new IDownLoadWallpaper() {
+
+            @Override
+            public void onSuccess(final Bitmap bitmap) {
+                changeWallpaper(bitmap, imageUrl, curDate, desc);
+            }
+
+            @Override
+            public void onFail() {
+
+            }
+        });
     }
 
     private static void changeWallpaper(Bitmap bitmap, String imageUrl, String curDate, String desc) {
@@ -302,4 +314,10 @@ public class WallpaperUtils {
             return (lhs.getPublishDATE() - rhs.getPublishDATE()) > 0 ? -1 : 1;
         }
     };
+
+    public static boolean isShouldDownloadWallpaper(Context context) {
+        return HDBNetworkState.isWifiNetwork()
+                || ((HDBNetworkState.isNetworkAvailable() && !HDBNetworkState.isWifiNetwork()) && !PandoraConfig
+                        .newInstance(context).isOnlyWifiLoadImage());
+    }
 }

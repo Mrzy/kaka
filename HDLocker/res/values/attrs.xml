@@ -206,5 +206,9 @@
     <declare-styleable name="ShimmerView">
         <attr name="reflectionColor" format="color" />
     </declare-styleable>
+    <declare-styleable name="CheckBox">
+        <attr name="checkbox_color" format="color" />
+        <attr name="checkbox_checked_color" format="color" />
+    </declare-styleable>
 
 </resources>

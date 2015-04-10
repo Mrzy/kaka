@@ -36,4 +36,20 @@
     <color name="init_setting_no_progress">#bcbcbc</color>
     <color name="init_setting_progress">#3db7ff</color>
     
+    <!-- CheckBox Default -->
+    <dimen name="checkbox_width">17dp</dimen>
+    <dimen name="checkbox_height">17dp</dimen>
+    <dimen name="checkbox_thumb_size">15dp</dimen>
+    <dimen name="checkbox_corner_radius">2dp</dimen>
+    <dimen name="checkbox_border_width">1dp</dimen>
+    <dimen name="checkbox_mark_width">1.5dp</dimen>
+    <dimen name="checkbox_ripple_radius">0dp</dimen>
+    <dimen name="checkbox_mark_left_right_padding">2dp</dimen>
+    <dimen name="checkbox_mark_top_padding">2dp</dimen>
+    <dimen name="checkbox_mark_bottom_padding">3dp</dimen>
+    <color name="checkbox_color">#ffffff</color>
+    <color name="checkbox_checked_color">#3db7ff</color>
+    <color name="checkbox_mark_color">#eeeeee</color>
+    
+    
 </resources>
