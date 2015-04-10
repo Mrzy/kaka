@@ -52,3 +52,7 @@
 -keep public class [cn.zmdx.kaka.locker].R$*{
     public static final int *;
 }
+
+#保证class文件中的行号等信息，确保友盟上报的错误log能够定位到行号
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable

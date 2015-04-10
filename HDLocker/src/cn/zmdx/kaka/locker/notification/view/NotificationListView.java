@@ -8,6 +8,10 @@ import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -45,6 +49,10 @@ public class NotificationListView extends FrameLayout {
 
     private ListView mListView;
 
+    private PowerManager mPowerManager;
+
+    private SensorManager mSensorManager;
+
     public NotificationListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
@@ -78,6 +86,9 @@ public class NotificationListView extends FrameLayout {
         mListView.setLayoutTransition(new LayoutTransition());
         mInterceptor = NotificationInterceptor.getInstance(getContext());
         mInterceptor.setNotificationListener(mNotificationListener);
+
+        mPowerManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+        mSensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
     }
 
     private void clear() {
@@ -185,28 +196,62 @@ public class NotificationListView extends FrameLayout {
     };
 
     private void wakeLockIfNeeded() {
-        PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
-        if (!isScreenOn(pm)) {
-            final WakeLock powerWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-                    | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK
-                    | PowerManager.ON_AFTER_RELEASE, "notification");
-            powerWakeLock.acquire();
-            HDBThreadUtils.postOnUiDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    powerWakeLock.release();
-                }
-            }, 3000);
+        if (!isScreenOn()) {
+
+            Sensor sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+            if (sensor == null) {
+                doScreenOn();
+                return;
+            }
+
+            mSensorManager.unregisterListener(mSensorEventListener);
+            mSensorManager.registerListener(mSensorEventListener, sensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
         }
+    }
+
+    private SensorEventListener mSensorEventListener = new SensorEventListener() {
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            float distance = event.values[0];
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("----------距离传感器:distance=" + distance);
+            }
+            if (distance > 0.0) {
+                //屏幕前没有遮挡物，点亮屏幕
+                doScreenOn();
+            }
+            mSensorManager.unregisterListener(mSensorEventListener);
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
+
+    private void doScreenOn() {
+        final WakeLock powerWakeLock = mPowerManager.newWakeLock(
+                PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP
+                        | PowerManager.FULL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE,
+                "notification");
+        powerWakeLock.setReferenceCounted(false);
+        powerWakeLock.acquire();
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+            @Override
+            public void run() {
+                powerWakeLock.release();
+            }
+        }, 3000);
     }
 
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
-    private boolean isScreenOn(PowerManager pm) {
+    private boolean isScreenOn() {
         if (Build.VERSION.SDK_INT < 20) {
-            return pm.isScreenOn();
+            return mPowerManager.isScreenOn();
         } else {
-            return pm.isInteractive();
+            return mPowerManager.isInteractive();
         }
     }
 
