@@ -2,6 +2,7 @@
 package cn.zmdx.kaka.locker.content;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.animation.Animator;
@@ -32,14 +33,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.view.animation.Transformation;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
@@ -70,10 +76,15 @@ import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
 import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.PandoraRecyclerView;
+import cn.zmdx.kaka.locker.widget.SwitchButton;
 import cn.zmdx.kaka.locker.widget.TextClockCompat;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
 public class PandoraBoxManager implements View.OnClickListener {
+
+    public static final int NEWS_THEME_DAY = 1;
+
+    public static final int NEWS_THEME_NIGHT = 2;
 
     private static PandoraBoxManager mPbManager;
 
@@ -105,6 +116,11 @@ public class PandoraBoxManager implements View.OnClickListener {
             Color.parseColor("#a0ab47bc"), Color.parseColor("#a08bc34a"),
             Color.parseColor("#a0ea861c"), Color.parseColor("#a03db7ff")
     };
+
+    private static final int NEWS_TIP_HEIGHT = BaseInfoHelper
+            .dip2px(HDApplication.getContext(), 40);
+
+    protected static final int KEEP_TIP_TIME_DEFAULT = 4000;
 
     private TextView tvLunarCalendar;
 
@@ -155,6 +171,8 @@ public class PandoraBoxManager implements View.OnClickListener {
     private boolean isAppearedUnreadNews = true;
 
     private List<View> mPages;
+
+    private FrameLayout mTipLayout;
 
     private PandoraBoxManager(Context context) {
         mContext = context;
@@ -333,6 +351,9 @@ public class PandoraBoxManager implements View.OnClickListener {
             return;
         }
         mInitBody = true;
+
+        mTipLayout = (FrameLayout) mEntireView.findViewById(R.id.news_tip_layout);
+
         mBackBtn = (CircleSpiritButton) mEntireView.findViewById(R.id.backBtn);
         mBackBtn.setColorNormal(mFloatingButtonColors[1]);
         mBackBtn.setColorPressed(mFloatingButtonColors[1]);
@@ -380,8 +401,13 @@ public class PandoraBoxManager implements View.OnClickListener {
                 mBackBtn.setColorNormal(mFloatingButtonColors[position]);
                 mBackBtn.setColorPressed(mFloatingButtonColors[position]);
 
-                int category = position;
-                refreshNewsByCategory(category);
+                final int category = position;
+                // 延迟加载，保证切换tab流畅
+                HDBThreadUtils.postOnUiDelayed(new Runnable() {
+                    public void run() {
+                        refreshNewsByCategory(category);
+                    };
+                }, 500);
             }
 
             @Override
@@ -394,6 +420,88 @@ public class PandoraBoxManager implements View.OnClickListener {
         });
 
         LockScreenManager.getInstance().registBackPressedListener(mBackPressedListener);
+        int theme = PandoraConfig.newInstance(mContext).isNightModeOn() ? NEWS_THEME_NIGHT
+                : NEWS_THEME_DAY;
+        switchNewsTheme(theme);
+    }
+
+    /**
+     * 打开页面顶部的提示区
+     * 
+     * @param contentView 提示内容
+     * @param withAnimator 是否需要动画
+     * @param keepTime 保持时间，如果小于等于0则默认为4s，4s后将自动关闭这个提示区
+     */
+    private void openTipLayout(View contentView, boolean withAnimator, final int keepTime) {
+        if (mTipLayout != null) {
+            mTipLayout.addView(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+            if (!withAnimator) {
+                mTipLayout.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            final int targetHeight = NEWS_TIP_HEIGHT;
+            ViewGroup.LayoutParams lp = mTipLayout.getLayoutParams();
+            lp.height = 0;
+            mTipLayout.setVisibility(View.VISIBLE);
+            Animation anim = new Animation() {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if (interpolatedTime == 1) {
+                        int time = (keepTime <= 0) ? KEEP_TIP_TIME_DEFAULT : keepTime;
+                        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+                            public void run() {
+                                closeTipLayout(true);
+                            };
+                        }, time);
+                    } else {
+                        mTipLayout.getLayoutParams().height = (int) (targetHeight * interpolatedTime);
+                        mTipLayout.requestLayout();
+                    }
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            anim.setDuration(500);
+            mTipLayout.startAnimation(anim);
+        }
+    }
+
+    private void closeTipLayout(boolean withAnimator) {
+        if (mTipLayout != null && mTipLayout.getVisibility() != View.GONE) {
+            if (!withAnimator) {
+                mTipLayout.setVisibility(View.GONE);
+                mTipLayout.removeAllViews();
+                return;
+            }
+
+            final int initHeight = NEWS_TIP_HEIGHT;
+            Animation a = new Animation() {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if (interpolatedTime == 1) {
+                        mTipLayout.setVisibility(View.GONE);
+                    } else {
+                        mTipLayout.getLayoutParams().height = initHeight
+                                - (int) (initHeight * interpolatedTime);
+                        mTipLayout.requestLayout();
+                    }
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            a.setDuration(300);
+            mTipLayout.startAnimation(a);
+        }
     }
 
     private OnBackPressedListener mBackPressedListener = new OnBackPressedListener() {
@@ -475,6 +583,10 @@ public class PandoraBoxManager implements View.OnClickListener {
         set.start();
     }
 
+    private boolean isNewsPanelExpanded() {
+        return LockScreenManager.getInstance().isNewsPanelExpanded();
+    }
+
     /**
      * 新闻面板完全展开时会调用该方法
      */
@@ -496,7 +608,45 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         requestWakeLock();
 
+        // 提示用户开启夜间模式
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+            @Override
+            public void run() {
+                long lastTipTime = PandoraConfig.newInstance(mContext)
+                        .getLastTipOpenNightModeTime();
+                long current = System.currentTimeMillis();
+                if (isNewsPanelExpanded()
+                        && !PandoraConfig.newInstance(mContext).isNightModeOn()
+                        && current - lastTipTime > (BuildConfig.DEBUG ? 60 * 1000
+                                : 5 * 60 * 60 * 1000)) {
+                    Calendar cal = Calendar.getInstance();
+                    int hour = cal.get(Calendar.HOUR_OF_DAY);
+                    if (hour > (BuildConfig.DEBUG ? 5 : 21)) {
+                        // 当前时间是晚上21点之后，则开启提示，是否打开夜间模式
+                        openTipLayout(createOpenNightModeView(), true, 8000);
+                        PandoraConfig.newInstance(mContext).saveLastTipOpenNightModeTime(current);
+                    }
+                }
+            }
+        }, 10000);
+
         BottomDockUmengEventManager.statisticalNewsPanelExpanded();
+    }
+
+    private View createOpenNightModeView() {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.news_tip_layout, null);
+        SwitchButton sb = (SwitchButton) view.findViewById(R.id.news_tip_switch);
+        sb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PandoraConfig.newInstance(mContext).saveNightModeState(isChecked);
+                if (isChecked) {
+                    switchNewsTheme(NEWS_THEME_NIGHT);
+                    closeTipLayout(true);
+                }
+            }
+        });
+        return view;
     }
 
     private PowerManager.WakeLock mWakeLock;
@@ -521,7 +671,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         hideDateView();
         ivArrowUp.animate().rotation(0).setDuration(300);
         PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
-//        PandoraBoxManager.newInstance(mContext).resetDefaultPage();
+        // PandoraBoxManager.newInstance(mContext).resetDefaultPage();
         if (mBackBtn != null) {
             mBackBtn.setTranslationY(BaseInfoHelper.dip2px(mContext, 100));
         }
@@ -656,7 +806,12 @@ public class PandoraBoxManager implements View.OnClickListener {
     private View createEmptyView() {
         TextView view = new TextView(mContext);
         view.setGravity(Gravity.CENTER);
-        view.setTextColor(Color.parseColor("#a0000000"));
+        boolean isNightMode = PandoraConfig.newInstance(mContext).isNightModeOn();
+        if (isNightMode) {
+            view.setTextColor(Color.parseColor("#a0ffffff"));
+        } else {
+            view.setTextColor(Color.parseColor("#a0000000"));
+        }
         if (HDBNetworkState.isNetworkAvailable()) {
             view.setText(mContext.getString(R.string.tip_loading_news));
         } else {
@@ -702,8 +857,9 @@ public class PandoraBoxManager implements View.OnClickListener {
         mJokeRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[5]);
         mJokeRefreshView.setColorSchemeColors(Color.WHITE);
 
-//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
-//                mJokeRefreshView, true, true);
+        // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter,
+        // mJokeNews,
+        // mJokeRefreshView, true, true);
 
         mJokeRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
@@ -771,8 +927,9 @@ public class PandoraBoxManager implements View.OnClickListener {
         mBeautyRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[4]);
         mBeautyRefreshView.setColorSchemeColors(Color.WHITE);
 
-//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
-//                mBeautyRefreshView, true, true);
+        // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter,
+        // mBeautyNews,
+        // mBeautyRefreshView, true, true);
 
         mBeautyRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
@@ -848,8 +1005,9 @@ public class PandoraBoxManager implements View.OnClickListener {
                 UmengCustomEventManager.statisticalPullRefreshNews("microMedia");
             }
         });
-//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
-//                mMicroMediaNews, mMicroMediaRefreshView, true, true);
+        // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE,
+        // mMicroMediaAdapter,
+        // mMicroMediaNews, mMicroMediaRefreshView, true, true);
 
         rv.setOnScrollListener(new OnScrollListener() {
             @Override
@@ -902,8 +1060,9 @@ public class PandoraBoxManager implements View.OnClickListener {
         mGossipRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[2]);
         mGossipRefreshView.setColorSchemeColors(Color.WHITE);
 
-//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
-//                mGossipRefreshView, true, true);
+        // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter,
+        // mGossipNews,
+        // mGossipRefreshView, true, true);
 
         mGossipRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
@@ -979,8 +1138,9 @@ public class PandoraBoxManager implements View.OnClickListener {
                 UmengCustomEventManager.statisticalPullRefreshNews("headline");
             }
         });
-//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
-//                mHotRefreshView, true, true);
+        // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter,
+        // mHotNews,
+        // mHotRefreshView, true, true);
 
         rv.setOnScrollListener(new OnScrollListener() {
 
@@ -998,6 +1158,34 @@ public class PandoraBoxManager implements View.OnClickListener {
             }
         });
         return view;
+    }
+
+    private void switchNewsTheme(int theme) {
+        final Resources res = mContext.getResources();
+        int bgColor = res.getColor(R.color.news_day_mode_behind_color);
+        if (theme == NEWS_THEME_DAY) {
+            bgColor = res.getColor(R.color.news_day_mode_behind_color);
+        } else if (theme == NEWS_THEME_NIGHT) {
+            bgColor = res.getColor(R.color.news_night_mode_behind_color);
+        }
+        if (mViewPager != null) {
+            mViewPager.setBackgroundColor(bgColor);
+
+            mHotAdapter.setTheme(theme);
+            mHotAdapter.notifyDataSetChanged();
+
+            mMicroMediaAdapter.setTheme(theme);
+            mMicroMediaAdapter.notifyDataSetChanged();
+
+            mBeautyAdapter.setTheme(theme);
+            mBeautyAdapter.notifyDataSetChanged();
+
+            mJokeAdapter.setTheme(theme);
+            mJokeAdapter.notifyDataSetChanged();
+
+            mGossipAdapter.setTheme(theme);
+            mGossipAdapter.notifyDataSetChanged();
+        }
     }
 
     private View initWallPaperView() {

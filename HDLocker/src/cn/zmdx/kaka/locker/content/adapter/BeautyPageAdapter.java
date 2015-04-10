@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.content.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -61,9 +63,14 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
 
     private List<ServerImageData> mData;
 
+    private Resources mRes;
+
     public BeautyPageAdapter(Context context, List<ServerImageData> data) {
         mContext = context;
         mData = data;
+        mRes = context.getResources();
+        mTheme = PandoraConfig.newInstance(context).isNightModeOn() ? PandoraBoxManager.NEWS_THEME_NIGHT
+                : PandoraBoxManager.NEWS_THEME_DAY;
     }
 
     @Override
@@ -73,6 +80,28 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        if (mTheme == PandoraBoxManager.NEWS_THEME_DAY) {
+            holder.mCardView.setCardBackgroundColor(mRes
+                    .getColor(R.color.beauty_news_day_mode_card_color));
+            holder.mTextView.setTextColor(mRes.getColor(R.color.beauty_news_day_mode_title_color));
+            holder.mTimeTv.setTextColor(mRes.getColor(R.color.beauty_news_day_mode_time_color));
+            holder.mLikeCount.setTextColor(mRes.getColor(R.color.beauty_news_day_mode_time_color));
+        } else if (mTheme == PandoraBoxManager.NEWS_THEME_NIGHT) {
+            holder.mCardView.setCardBackgroundColor(mRes
+                    .getColor(R.color.beauty_news_night_mode_card_color));
+            holder.mTextView
+                    .setTextColor(mRes.getColor(R.color.beauty_news_night_mode_title_color));
+            holder.mTimeTv.setTextColor(mRes.getColor(R.color.beauty_news_night_mode_time_color));
+            holder.mLikeCount
+                    .setTextColor(mRes.getColor(R.color.beauty_news_night_mode_time_color));
+        } else {
+            holder.mCardView.setBackgroundColor(mRes
+                    .getColor(R.color.beauty_news_day_mode_card_color));
+            holder.mTextView.setTextColor(mRes.getColor(R.color.beauty_news_day_mode_title_color));
+            holder.mTimeTv.setTextColor(mRes.getColor(R.color.beauty_news_day_mode_time_color));
+            holder.mLikeCount.setTextColor(mRes.getColor(R.color.beauty_news_day_mode_time_color));
+        }
+
         ServerImageData data = mData.get(position);
         holder.mTextView.setText(data.getTitle());
         holder.mLikeCount.setText(data.getTop());
@@ -143,5 +172,11 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
                 R.layout.news_page_beauty_item_layout, vg, false);
         ViewHolder vh = new ViewHolder(view);
         return vh;
+    }
+
+    private int mTheme;
+
+    public void setTheme(int theme) {
+        mTheme = theme;
     }
 }

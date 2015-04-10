@@ -4,7 +4,6 @@ package cn.zmdx.kaka.locker.utils;
 import static cn.zmdx.kaka.locker.utils.HDBConfig.LOGE_ENABLED;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
@@ -13,6 +12,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -22,8 +23,6 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.os.Environment;
-import android.os.StatFs;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -253,24 +252,24 @@ public class BaseInfoHelper {
         }
     }
 
-    public static String getRam(Context context) {
-        try {
-            File root = Environment.getDataDirectory();
-            StatFs sf = new StatFs(root.getPath());
-
-            long blockSize = sf.getBlockSize();
-            long blockCount = sf.getBlockCount();
-
-            String ret = Long.toString(blockSize * blockCount);
-            return ret;
-        } catch (Exception e) {
-            if (LOGE_ENABLED) {
-                Log.e(TAG, "Failed to get the hw info.", e);
-            }
-            return "";
-        }
-
-    }
+//    public static String getRam(Context context) {
+//        try {
+//            File root = Environment.getDataDirectory();
+//            StatFs sf = new StatFs(root.getPath());
+//
+//            long blockSize = sf.getBlockSize();
+//            long blockCount = sf.getBlockCount();
+//
+//            String ret = Long.toString(blockSize * blockCount);
+//            return ret;
+//        } catch (Exception e) {
+//            if (LOGE_ENABLED) {
+//                Log.e(TAG, "Failed to get the hw info.", e);
+//            }
+//            return "";
+//        }
+//
+//    }
 
     public static String getResolution(Context context) {
         try {

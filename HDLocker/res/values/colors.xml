@@ -35,7 +35,7 @@
     
     <color name="init_setting_no_progress">#bcbcbc</color>
     <color name="init_setting_progress">#3db7ff</color>
-    
+
     <!-- CheckBox Default -->
     <dimen name="checkbox_width">17dp</dimen>
     <dimen name="checkbox_height">17dp</dimen>
@@ -50,6 +50,21 @@
     <color name="checkbox_color">#ffffff</color>
     <color name="checkbox_checked_color">#3db7ff</color>
     <color name="checkbox_mark_color">#eeeeee</color>
-    
-    
+
+    <color name="news_night_mode_behind_color">#131e22</color>
+    <color name="news_day_mode_behind_color">#ffffff</color>
+
+    <color name="beauty_news_night_mode_card_color">#263d45</color>
+    <color name="beauty_news_night_mode_title_color">#dbdbdb</color>
+    <color name="beauty_news_night_mode_time_color">#999d9e</color>
+    <color name="beauty_news_day_mode_card_color">#ffffff</color>
+    <color name="beauty_news_day_mode_title_color">#ab000000</color>
+    <color name="beauty_news_day_mode_time_color">#50000000</color>
+
+    <color name="general_news_night_mode_divider_color">#395660</color>
+    <color name="general_news_night_mode_title_color">#dbdbdb</color>
+    <color name="general_news_night_mode_time_color">#999d9e</color>
+    <color name="general_news_day_mode_divider_color">#50000000</color>
+    <color name="general_news_day_mode_title_color">#ab000000</color>
+    <color name="general_news_day_mode_time_color">#50000000</color>
 </resources>

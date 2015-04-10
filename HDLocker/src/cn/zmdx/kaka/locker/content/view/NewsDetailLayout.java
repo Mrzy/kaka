@@ -196,7 +196,9 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
             public void run() {
                 mLoadingView.setVisibility(View.GONE);
                 // 增加from的key表明此请求是来自pandora客户端的
-                load(mData.getImageDesc() + "&from=pandora");
+                String theme = PandoraConfig.newInstance(getContext()).isNightModeOn() ? "night"
+                        : "day";
+                load(mData.getImageDesc() + "&from=pandora&theme=" + theme);
             }
         }, 300);
 

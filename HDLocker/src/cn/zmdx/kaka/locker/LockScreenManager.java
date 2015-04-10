@@ -225,6 +225,10 @@ public class LockScreenManager {
         }
     }
 
+    public boolean isNewsPanelExpanded() {
+        return (mSlidingUpView != null) && mSlidingUpView.isPanelExpanded();
+    }
+
     private void initNewLockScreenViews() {
         mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.new_pandora_lockscreen, null);

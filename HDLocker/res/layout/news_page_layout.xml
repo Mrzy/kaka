@@ -13,8 +13,8 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:paddingTop="8dp"
-            android:background="#50000000" >
+            android:background="#50000000"
+            android:paddingTop="8dp" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -171,6 +171,13 @@
             android:background="#ffffff"
             android:orientation="vertical" >
 
+            <FrameLayout
+                android:id="@+id/news_tip_layout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:visibility="gone" >
+            </FrameLayout>
+
             <cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip
                 xmlns:psts="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/newsTabStrip"
@@ -192,6 +199,7 @@
 
                 <cn.zmdx.kaka.locker.widget.ViewPagerCompat
                     android:id="@+id/newsViewPager"
+                    android:background="@color/news_day_mode_behind_color"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

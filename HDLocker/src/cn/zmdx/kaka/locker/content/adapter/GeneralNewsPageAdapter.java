@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker.content.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -31,12 +33,15 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
 
         public ImageView mImageView;
 
+        public View mDivider;
+
         public ViewHolder(View view) {
             super(view);
             mTextView = (TextView) view.findViewById(R.id.text);
             mFromTv = (TextView) view.findViewById(R.id.from);
             mTimeTv = (TextView) view.findViewById(R.id.time);
             mImageView = (ImageView) view.findViewById(R.id.image);
+            mDivider = view.findViewById(R.id.general_news_divider);
             view.setOnClickListener(this);
         }
 
@@ -56,9 +61,16 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
 
     private List<ServerImageData> mData;
 
+    private int mTheme;
+
+    private Resources mRes;
+
     public GeneralNewsPageAdapter(Context context, List<ServerImageData> data) {
         mContext = context;
         mData = data;
+        mTheme = PandoraConfig.newInstance(context).isNightModeOn() ? PandoraBoxManager.NEWS_THEME_NIGHT
+                : PandoraBoxManager.NEWS_THEME_DAY;
+        mRes = context.getResources();
     }
 
     public interface OnItemClickListener {
@@ -78,6 +90,27 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if (mTheme == PandoraBoxManager.NEWS_THEME_DAY) {
+            holder.mTextView.setTextColor(mRes.getColor(R.color.general_news_day_mode_title_color));
+            holder.mTimeTv.setTextColor(mRes.getColor(R.color.general_news_day_mode_time_color));
+            holder.mFromTv.setTextColor(mRes.getColor(R.color.general_news_day_mode_time_color));
+            holder.mDivider.setBackgroundColor(mRes
+                    .getColor(R.color.general_news_day_mode_divider_color));
+        } else if (mTheme == PandoraBoxManager.NEWS_THEME_NIGHT) {
+            holder.mTextView.setTextColor(mRes
+                    .getColor(R.color.general_news_night_mode_title_color));
+            holder.mTimeTv.setTextColor(mRes.getColor(R.color.general_news_night_mode_time_color));
+            holder.mFromTv.setTextColor(mRes.getColor(R.color.general_news_night_mode_time_color));
+            holder.mDivider.setBackgroundColor(mRes
+                    .getColor(R.color.general_news_night_mode_divider_color));
+        } else {
+            holder.mTextView.setTextColor(mRes.getColor(R.color.general_news_day_mode_title_color));
+            holder.mTimeTv.setTextColor(mRes.getColor(R.color.general_news_day_mode_time_color));
+            holder.mFromTv.setTextColor(mRes.getColor(R.color.general_news_day_mode_time_color));
+            holder.mDivider.setBackgroundColor(mRes
+                    .getColor(R.color.general_news_day_mode_divider_color));
+        }
+
         ServerImageData data = mData.get(position);
         holder.mTextView.setText(data.getTitle());
         holder.mFromTv.setText(data.getCollectWebsite());
@@ -111,6 +144,10 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
                         .centerInside().into(holder.mImageView);
             }
         }
+    }
+
+    public void setTheme(int theme) {
+        mTheme = theme;
     }
 
     @Override

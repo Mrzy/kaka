@@ -116,6 +116,8 @@ public class PandoraConfig {
 
     private static final String KEY_OPEN_NIGHT_MODE = "konmode";
 
+    private static final String KEY_LAST_TIME_OPEN_NIGHT_MODE = "kltonm";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -584,4 +586,11 @@ public class PandoraConfig {
         mSp.edit().putBoolean(KEY_OPEN_NIGHT_MODE, isEnable).commit();
     }
 
+    public long getLastTipOpenNightModeTime() {
+        return mSp.getLong(KEY_LAST_TIME_OPEN_NIGHT_MODE, 0);
+    }
+
+    public void saveLastTipOpenNightModeTime(long time) {
+        mSp.edit().putLong(KEY_LAST_TIME_OPEN_NIGHT_MODE, time).commit();
+    }
 }

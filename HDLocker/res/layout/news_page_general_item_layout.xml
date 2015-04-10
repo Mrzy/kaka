@@ -60,6 +60,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/general_news_divider"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginTop="10dp"

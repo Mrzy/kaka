@@ -211,4 +211,5 @@
     
     <string name="pandora_setting_general_news_item">新闻选项</string>
     <string name="pandora_setting_general_night_mode">开启夜间模式</string>
+    <string name="news_tip_open_nightmode">保护眼睛，建议开启夜间模式</string>
 </resources>
