@@ -43,6 +43,10 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
     private SwitchButton mOpenSoundSButton;
 
+    private SwitchButton mProtectSButton;
+
+    private SwitchButton mWeatherSButton;
+
     private LinearLayout mCloseSystemLock;
 
     private LinearLayout mFloatingWindow;
@@ -56,6 +60,8 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
     private LinearLayout mCheckNewVersion;
 
     private LinearLayout mAboutPandora;
+
+    private LinearLayout mChooseCity;
 
     private Context mContext;
 
@@ -102,9 +108,21 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
                 .findViewById(R.id.setting_open_lock_sound_switch_button);
         mOpenSoundSButton.setOnCheckedChangeListener(this);
 
+        mProtectSButton = (SwitchButton) mEntireView
+                .findViewById(R.id.setting_protect_switch_button);
+        mProtectSButton.setOnCheckedChangeListener(this);
+
+        mWeatherSButton = (SwitchButton) mEntireView
+                .findViewById(R.id.setting_weather_switch_button);
+        mWeatherSButton.setOnCheckedChangeListener(this);
+
         initSettingMeizu();
 
         initSettingXiaomi();
+
+        mChooseCity = (LinearLayout) mEntireView
+                .findViewById(R.id.pandora_setting_general_choose_city);
+        mChooseCity.setOnClickListener(this);
 
         mFAQ = (LinearLayout) mEntireView.findViewById(R.id.setting_faq_item);
         mFAQ.setOnClickListener(this);
@@ -156,6 +174,8 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
         mShowNotifySButton.setChecked(isNotifyFunctionOn());
         mAllow3G4GSButton.setChecked(is3G4GNetworkOn());
         mOpenSoundSButton.setChecked(isLockSoundOn());
+        mProtectSButton.setChecked(isPandoraProtectOn());
+        mWeatherSButton.setChecked(!getWeatherCity().equals(""));
     }
 
     @Override
@@ -192,8 +212,20 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
                 disableLockSound();
                 UmengCustomEventManager.statisticalDisableLockScreenSound();
             }
+        } else if (buttonView == mProtectSButton) {
+            if (isChecked) {
+                enablePandoraProtect();
+            } else {
+                disablePandoraProtect();
+            }
+        } else if (buttonView == mWeatherSButton) {
+            showCity(isChecked);
         }
 
+    }
+
+    private void showCity(boolean isChecked) {
+        // TODO
     }
 
     @Override
@@ -349,6 +381,26 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
     private void disableLockSound() {
         mPandoraConfig.saveLockSoundState(false);
+    }
+
+    private boolean isPandoraProtectOn() {
+        return mPandoraConfig.isPandoraProtectOn();
+    }
+
+    private void enablePandoraProtect() {
+        mPandoraConfig.savePandoraProtecttState(true);
+    }
+
+    private void disablePandoraProtect() {
+        mPandoraConfig.savePandoraProtecttState(false);
+    }
+
+    private String getWeatherCity() {
+        return mPandoraConfig.getWeatherCity();
+    }
+
+    private void saveWeatherCity(String city) {
+        mPandoraConfig.saveWeatherCity(city);
     }
 
 }

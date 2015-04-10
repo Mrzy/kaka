@@ -29,6 +29,8 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
 
     private SwitchButton mHideNotifyContentSButton;
 
+    private SwitchButton mLightScreenSButton;
+
     private LinearLayout mNotifyPermission;
 
     private LinearLayout mNotifyManager;
@@ -63,6 +65,10 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
                 .findViewById(R.id.setting_hide_content_switch_button);
         mHideNotifyContentSButton.setOnCheckedChangeListener(this);
 
+        mLightScreenSButton = (SwitchButton) mEntireView
+                .findViewById(R.id.setting_light_screen_switch_button);
+        mLightScreenSButton.setOnCheckedChangeListener(this);
+
         mNotifyPermission = (LinearLayout) mEntireView
                 .findViewById(R.id.setting_open_permissions_item);
         mNotifyPermission.setOnClickListener(this);
@@ -74,6 +80,7 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
     private void initSwitchButtonState() {
         mOpenNotificationRemindSButton.setChecked(isNotificationRemindOn());
         mHideNotifyContentSButton.setChecked(isHideNotifyContent());
+        mLightScreenSButton.setChecked(isLightScreenOn());
     }
 
     @Override
@@ -119,6 +126,12 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
                 disableHideNotifyContent();
                 UmengCustomEventManager.statisticalHideNotifyContentTimes();
             }
+        } else if (buttonView == mLightScreenSButton) {
+            if (isChecked) {
+                enableLightScreen();
+            } else {
+                disableLightScreen();
+            }
         }
     }
 
@@ -145,4 +158,17 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
     private void disableHideNotifyContent() {
         mPandoraConfig.saveHideNotifyContentState(false);
     }
+
+    private boolean isLightScreenOn() {
+        return mPandoraConfig.isLightScreenOn();
+    }
+
+    private void enableLightScreen() {
+        mPandoraConfig.saveLightScreenState(true);
+    }
+
+    private void disableLightScreen() {
+        mPandoraConfig.saveLightScreenState(false);
+    }
+
 }

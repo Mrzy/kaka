@@ -36,7 +36,7 @@
                     android:text="@string/pandora_setting_wallpaper_open_gravity_sensor" />
 
                 <cn.zmdx.kaka.locker.widget.SwitchButton
-                    android:id="@+id/notify_open_gravity_sensor_switch_button"
+                    android:id="@+id/wallpaper_open_gravity_sensor_switch_button"
                     style="@style/setting_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -53,18 +53,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/setting_item_height"
-                android:orientation="horizontal"
-                android:visibility="gone" >
+                android:orientation="horizontal" >
 
                 <cn.zmdx.kaka.locker.widget.TypefaceTextView
                     style="@style/setting_textview"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="@string/pandora_setting_wallpaper_replacement_wallpaper" />
+                    android:text="@string/pandora_setting_wallpaper_auto_change" />
 
                 <cn.zmdx.kaka.locker.widget.SwitchButton
-                    android:id="@+id/notify_random_replacement_wallpaper_switch_button"
+                    android:id="@+id/wallpaper_auto_change_switch_button"
                     style="@style/setting_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -80,7 +79,7 @@
                 android:visibility="gone" />
 
             <LinearLayout
-                android:id="@+id/notify_local_wallpaper_item"
+                android:id="@+id/wallpaper_local_wallpaper_item"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/setting_item_height"
                 android:orientation="horizontal" >

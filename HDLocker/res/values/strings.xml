@@ -159,7 +159,7 @@
     <string name="pandora_setting_password_midsummer">盛夏</string>
     
     <string name="pandora_setting_wallpaper_open_gravity_sensor">开启重力感应壁纸</string>
-    <string name="pandora_setting_wallpaper_replacement_wallpaper">随机更换壁纸</string>
+    <string name="pandora_setting_wallpaper_auto_change">每天自动更换壁纸</string>
     <string name="pandora_setting_wallpaper_local_wallpaper">使用本地壁纸</string>
 
     <string name="justnow">刚刚</string>
@@ -198,4 +198,12 @@
 
     <string name="tip_no_news">请检查网络</string>
     <string name="tip_loading_news">正在加载</string>
+    
+    <string name="pandora_setting_general_protect">开启潘多拉守护神</string>
+    <string name="pandora_setting_general_weather_prompt">天气设置</string>
+    <string name="pandora_setting_general_weather">是否显示天气</string>
+    <string name="pandora_setting_general_choose_city">选择所在城市</string>
+    <string name="pandora_setting_password_delay_lockscreen">开启延时锁定屏幕</string>
+    
+    <string name="pandora_setting_notify_light_screen">收到消息点亮屏幕</string>
 </resources>

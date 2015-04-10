@@ -87,7 +87,7 @@ public class PandoraConfig {
 
     private static final String KEY_GRAVITY_SENOR = "kgs";
 
-    private static final String KEY_RANDOM_REPLACEMENT = "krp";
+    private static final String KEY_AUTO_CHANGE = "kachan";
 
     private static final String KEY_LAST_CITY_NAME = "klcn";
 
@@ -101,6 +101,14 @@ public class PandoraConfig {
 
     private static final String KEY_AUTO_CHANGE_WALLPAPER_DATE = "kacwd";
 
+    private static final String KEY_OPEN_PANDORA_PROTECT = "kopp";
+
+    private static final String KEY_SAVE_CITY_NAME = "kscname";
+    
+    private static final String KEY_DELAY_LOCK_SCREEN = "kdlsc";
+    
+    private static final String KEY_LIGHT_SCREEN = "klcre";
+    
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -475,12 +483,12 @@ public class PandoraConfig {
         mSp.edit().putBoolean(KEY_GRAVITY_SENOR, isEnable).commit();
     }
 
-    public boolean isRandomReplacementOn() {
-        return mSp.getBoolean(KEY_RANDOM_REPLACEMENT, false);
+    public boolean isAutoChangeOn() {
+        return mSp.getBoolean(KEY_AUTO_CHANGE, false);
     }
 
-    public void saveRandomReplacementState(boolean isEnable) {
-        mSp.edit().putBoolean(KEY_RANDOM_REPLACEMENT, isEnable).commit();
+    public void saveAutoChangeState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_AUTO_CHANGE, isEnable).commit();
     }
 
     /**
@@ -508,4 +516,35 @@ public class PandoraConfig {
         mSp.edit().putString(KEY_AUTO_CHANGE_WALLPAPER_DATE, date).commit();
     }
 
+    public boolean isPandoraProtectOn() {
+        return mSp.getBoolean(KEY_OPEN_PANDORA_PROTECT, false);
+    }
+
+    public void savePandoraProtecttState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_OPEN_PANDORA_PROTECT, isEnable).commit();
+    }
+
+    public String getWeatherCity() {
+        return mSp.getString(KEY_SAVE_CITY_NAME, "");
+    }
+
+    public void saveWeatherCity(String city) {
+        mSp.edit().putString(KEY_SAVE_CITY_NAME, city).commit();
+    }
+
+    public boolean isDelayLockScreenOn() {
+        return mSp.getBoolean(KEY_DELAY_LOCK_SCREEN, false);
+    }
+
+    public void saveDelayLockScreenState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_DELAY_LOCK_SCREEN, isEnable).commit();
+    }
+    
+    public boolean isLightScreenOn() {
+        return mSp.getBoolean(KEY_LIGHT_SCREEN, true);
+    }
+
+    public void saveLightScreenState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_LIGHT_SCREEN, isEnable).commit();
+    }
 }

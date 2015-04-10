@@ -33,7 +33,7 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
     private SwitchButton mGravitySenorSButton;
 
-    private SwitchButton mRandomReplacementSButton;
+    private SwitchButton mAutoChangeSButton;
 
     private LinearLayout mLocalWallpaper;
 
@@ -49,13 +49,14 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
     private void initView() {
         mGravitySenorSButton = (SwitchButton) mEntireView
-                .findViewById(R.id.notify_open_gravity_sensor_switch_button);
+                .findViewById(R.id.wallpaper_open_gravity_sensor_switch_button);
         mGravitySenorSButton.setOnCheckedChangeListener(this);
-        mRandomReplacementSButton = (SwitchButton) mEntireView
-                .findViewById(R.id.notify_random_replacement_wallpaper_switch_button);
-        mRandomReplacementSButton.setOnCheckedChangeListener(this);
+        mAutoChangeSButton = (SwitchButton) mEntireView
+                .findViewById(R.id.wallpaper_auto_change_switch_button);
+        mAutoChangeSButton.setOnCheckedChangeListener(this);
 
-        mLocalWallpaper = (LinearLayout) mEntireView.findViewById(R.id.notify_local_wallpaper_item);
+        mLocalWallpaper = (LinearLayout) mEntireView
+                .findViewById(R.id.wallpaper_local_wallpaper_item);
         mLocalWallpaper.setOnClickListener(this);
 
         initWallpaperListView();
@@ -63,7 +64,7 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
     private void initSwitchButtonState() {
         mGravitySenorSButton.setChecked(isGravitySenorOn());
-        mRandomReplacementSButton.setChecked(isRandomReplacementOn());
+        mAutoChangeSButton.setChecked(isAutoChangeOn());
     }
 
     private void initWallpaperListView() {
@@ -115,8 +116,8 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
                 disableGravitySenorState();
                 UmengCustomEventManager.statisticalCloseGravitySenorTimes();
             }
-        } else if (buttonView == mRandomReplacementSButton) {
-            saveRandomReplacementState(isChecked);
+        } else if (buttonView == mAutoChangeSButton) {
+            saveAutoChangeState(isChecked);
         }
     }
 
@@ -148,12 +149,12 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
         PandoraConfig.newInstance(getActivity()).saveGravitySenorState(false);
     }
 
-    private boolean isRandomReplacementOn() {
-        return PandoraConfig.newInstance(getActivity()).isRandomReplacementOn();
+    private boolean isAutoChangeOn() {
+        return PandoraConfig.newInstance(getActivity()).isAutoChangeOn();
     }
 
-    private void saveRandomReplacementState(boolean isEnable) {
-        PandoraConfig.newInstance(getActivity()).saveRandomReplacementState(isEnable);
+    private void saveAutoChangeState(boolean isEnable) {
+        PandoraConfig.newInstance(getActivity()).saveAutoChangeState(isEnable);
     }
 
 }

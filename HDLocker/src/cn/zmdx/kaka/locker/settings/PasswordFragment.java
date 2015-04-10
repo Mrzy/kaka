@@ -10,20 +10,24 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.pattern.LockPatternManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.widget.BaseLinearLayout;
+import cn.zmdx.kaka.locker.widget.SwitchButton;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class PasswordFragment extends Fragment implements OnClickListener {
+public class PasswordFragment extends Fragment implements OnClickListener, OnCheckedChangeListener {
 
     private View mEntireView;
 
@@ -75,6 +79,8 @@ public class PasswordFragment extends Fragment implements OnClickListener {
 
     private TypefaceTextView mMidsummerStylePrompt;
 
+    private SwitchButton mDelayLockScreen;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
     ViewGroup container, @Nullable
@@ -85,6 +91,12 @@ public class PasswordFragment extends Fragment implements OnClickListener {
     }
 
     private void initView() {
+        mDelayLockScreen = (SwitchButton) mEntireView
+                .findViewById(R.id.setting_delay_lockscreen_switch_button);
+        mDelayLockScreen.setOnCheckedChangeListener(this);
+
+        mDelayLockScreen.setChecked(isDelayLockScreenOn());
+
         mNoneItem = (BaseLinearLayout) mEntireView.findViewById(R.id.setting_password_none_item);
         mNoneItem.setOnClickListener(this);
         mNoneItemSelect = (ImageView) mEntireView.findViewById(R.id.setting_password_none_select);
@@ -333,5 +345,30 @@ public class PasswordFragment extends Fragment implements OnClickListener {
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd("PasswordFragment");
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (buttonView == mDelayLockScreen) {
+            if (isChecked) {
+                enableDelayLockScreen();
+                UmengCustomEventManager.statisticalPandoraSwitchOpenTimes();
+            } else {
+                disableDelayLockScreen();
+                UmengCustomEventManager.statisticalPandoraSwitchCloseTimes();
+            }
+        }
+    }
+
+    private boolean isDelayLockScreenOn() {
+        return PandoraConfig.newInstance(getActivity()).isDelayLockScreenOn();
+    }
+
+    private void enableDelayLockScreen() {
+        PandoraConfig.newInstance(getActivity()).saveDelayLockScreenState(true);
+    }
+
+    private void disableDelayLockScreen() {
+        PandoraConfig.newInstance(getActivity()).saveDelayLockScreenState(false);
     }
 }

@@ -83,6 +83,34 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:text="@string/pandora_setting_notify_light_screen" />
+
+                <cn.zmdx.kaka.locker.widget.SwitchButton
+                    android:id="@+id/setting_light_screen_switch_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="22dp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
+                android:background="@drawable/setting_line"
+                android:contentDescription="@string/contentDescription" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:orientation="horizontal" >
+
+                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    style="@style/setting_textview"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:text="@string/pandora_setting_notify_hide_content" />
 
                 <cn.zmdx.kaka.locker.widget.SwitchButton
