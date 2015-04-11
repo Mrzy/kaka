@@ -14,9 +14,7 @@ import android.view.WindowManager;
 import cn.zmdx.kaka.locker.LockScreenManager.ILockScreenListener;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
-import cn.zmdx.kaka.locker.settings.MainSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.sound.LockSoundManager;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -37,40 +35,18 @@ public class FakeActivity extends Activity {
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
+        startNotificationServiceIfNeeded();
+
         LockScreenManager.getInstance().setOnLockScreenListener(new ILockScreenListener() {
-            PandoraConfig config = PandoraConfig.newInstance(getApplicationContext());
-
-            @Override
-            public void onLock() {
-                boolean lockScreenVoice = config.isLockSoundOn();
-                if (lockScreenVoice) {
-                    LockSoundManager.play(LockSoundManager.SOUND_ID_LOCK);
-                }
-            }
-
             @Override
             public void onUnLock() {
                 finish();
-                overridePendingTransition(0, 0);
-                boolean lockScreenVoice = config.isLockSoundOn();
-                if (lockScreenVoice) {
-                    LockSoundManager.play(LockSoundManager.SOUND_ID_UNLOCK);
-                }
             }
 
             @Override
-            public void onInitDefaultImage() {
-                Intent intent = new Intent();
-                intent.setClass(FakeActivity.this, MainSettingActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-                        R.anim.umeng_fb_slide_out_from_left);
-                finish();
+            public void onLock() {
             }
         });
-        startNotificationServiceIfNeeded();
     }
 
     private void startNotificationServiceIfNeeded() {

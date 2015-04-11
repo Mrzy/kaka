@@ -47,6 +47,7 @@ import cn.zmdx.kaka.locker.security.KeyguardLockerManager.IUnlockListener;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -123,8 +124,6 @@ public class LockScreenManager {
         void onLock();
 
         void onUnLock();
-
-        void onInitDefaultImage();
     }
 
     public void setOnLockScreenListener(ILockScreenListener listener) {
@@ -175,9 +174,8 @@ public class LockScreenManager {
 
         mIsNeedNotice = mPandoraConfig.isNotifyFunctionOn();
         mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
-                | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_HARDWARE_ACCELERATED
-                | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         if (!mIsNeedNotice || BaseInfoHelper.isSupportTranslucentStatus()) { // 如果不显示通知栏或者系统版本大于等于19(支持透明通知栏),则添加下面flag从屏幕顶部开始绘制
             mWinParams.flags |= LayoutParams.FLAG_LAYOUT_IN_SCREEN;
             final Display display = mWinManager.getDefaultDisplay();
@@ -194,7 +192,7 @@ public class LockScreenManager {
         mWinParams.format = PixelFormat.RGBA_8888;
         mWinParams.windowAnimations = R.style.anim_locker_window;
         // mWinParams.windowAnimations = R.style.anim_slide_locker_window;
-        // mWinParams.softInputMode = WindowManager.LayoutParams.SOFT_INPU
+        mWinParams.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_MASK_ADJUST;
         mWinParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         mWinParams.gravity = Gravity.TOP | Gravity.START;
 
@@ -211,10 +209,14 @@ public class LockScreenManager {
 
         processWeatherInfo();
 
+        if (PandoraConfig.newInstance(mContext).isLockSoundOn()) {
+            LockSoundManager.play(LockSoundManager.SOUND_ID_LOCK);
+        }
+
+        WallpaperUtils.autoChangeWallpaper();
         String currentDate = BaseInfoHelper.getCurrentDate();
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
-        
-        WallpaperUtils.autoChangeWallpaper();
+
     }
 
     private void startShimmer() {
@@ -656,6 +658,10 @@ public class LockScreenManager {
         mWinManager.removeView(mEntireView);
         mEntireView = null;
         mIsLocked = false;
+
+        if (PandoraConfig.newInstance(mContext).isLockSoundOn()) {
+            LockSoundManager.play(LockSoundManager.SOUND_ID_UNLOCK);
+        }
 
         if (mUnLockRunnable != null) {
             HDBThreadUtils.runOnUi(mUnLockRunnable);

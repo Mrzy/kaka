@@ -25,13 +25,7 @@ public class HDApplication extends Application {
         instance = getApplicationContext();
         HDBEventSource.startup(getApplicationContext(), null);
         RequestManager.init(this);
-        HDBThreadUtils.runOnWorker(new Runnable() {
 
-            @Override
-            public void run() {
-                LockSoundManager.initSoundPool();
-            }
-        });
         // PandoraBoxDispatcher.getInstance().pullData();
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());

@@ -5,6 +5,7 @@
     android:orientation="horizontal" >
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/news_tip_title"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:textSize="14dp"

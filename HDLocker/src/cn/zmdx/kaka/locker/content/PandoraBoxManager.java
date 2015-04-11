@@ -608,7 +608,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         requestWakeLock();
 
-        // 提示用户开启夜间模式
+        // 提示用户开启夜间模式或自动切换到白昼模式
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
             @Override
             public void run() {
@@ -616,15 +616,22 @@ public class PandoraBoxManager implements View.OnClickListener {
                         .getLastTipOpenNightModeTime();
                 long current = System.currentTimeMillis();
                 if (isNewsPanelExpanded()
-                        && !PandoraConfig.newInstance(mContext).isNightModeOn()
                         && current - lastTipTime > (BuildConfig.DEBUG ? 60 * 1000
-                                : 5 * 60 * 60 * 1000)) {
+                                : 3 * 60 * 60 * 1000)) {
                     Calendar cal = Calendar.getInstance();
                     int hour = cal.get(Calendar.HOUR_OF_DAY);
-                    if (hour > (BuildConfig.DEBUG ? 5 : 21)) {
-                        // 当前时间是晚上21点之后，则开启提示，是否打开夜间模式
-                        openTipLayout(createOpenNightModeView(), true, 8000);
-                        PandoraConfig.newInstance(mContext).saveLastTipOpenNightModeTime(current);
+                    if (PandoraConfig.newInstance(mContext).isNightModeOn()) {
+                        if (hour > 6 && hour < 21) {
+                            // 如果当前是白昼，且当前模式为夜间模式，则自动切换为白昼模式
+                            switchNewsTheme(NEWS_THEME_DAY);
+                        }
+                    } else {
+                        if (hour >= 21) {
+                            // 当前时间是晚上21点之后，则开启提示，是否打开夜间模式
+                            openTipLayout(createOpenNightModeView(), true, 8000);
+                            PandoraConfig.newInstance(mContext).saveLastTipOpenNightModeTime(
+                                    current);
+                        }
                     }
                 }
             }
@@ -635,11 +642,11 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private View createOpenNightModeView() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.news_tip_layout, null);
+        TextView tv = (TextView) view.findViewById(R.id.news_tip_title);
         SwitchButton sb = (SwitchButton) view.findViewById(R.id.news_tip_switch);
         sb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                PandoraConfig.newInstance(mContext).saveNightModeState(isChecked);
                 if (isChecked) {
                     switchNewsTheme(NEWS_THEME_NIGHT);
                     closeTipLayout(true);
@@ -1165,8 +1172,10 @@ public class PandoraBoxManager implements View.OnClickListener {
         int bgColor = res.getColor(R.color.news_day_mode_behind_color);
         if (theme == NEWS_THEME_DAY) {
             bgColor = res.getColor(R.color.news_day_mode_behind_color);
+            PandoraConfig.newInstance(mContext).saveNightModeState(false);
         } else if (theme == NEWS_THEME_NIGHT) {
             bgColor = res.getColor(R.color.news_night_mode_behind_color);
+            PandoraConfig.newInstance(mContext).saveNightModeState(true);
         }
         if (mViewPager != null) {
             mViewPager.setBackgroundColor(bgColor);
