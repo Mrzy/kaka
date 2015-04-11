@@ -510,7 +510,7 @@ public class PandoraConfig {
     }
 
     public String getEventNeedInterceptAppDailyString() {
-        return mSp.getString(KEY_EVENT_NEED_INTERCEPT_APP_DAILY, BaseInfoHelper.getCurrentDate());
+        return mSp.getString(KEY_EVENT_NEED_INTERCEPT_APP_DAILY, "");
     }
 
     public void saveEventNeedInterceptAppDailyData(String time) {

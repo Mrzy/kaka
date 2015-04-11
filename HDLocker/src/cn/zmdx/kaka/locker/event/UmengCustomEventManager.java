@@ -289,6 +289,8 @@ public class UmengCustomEventManager {
             }
             MobclickAgent.onEvent(HDApplication.getContext(),
                     UmengCustomEventManager.EVENT_NEED_INTERCEPT_APP, map);
+            PandoraConfig.newInstance(HDApplication.getContext())
+                    .saveEventNeedInterceptAppDailyData(currentDate);
         }
 
     }
