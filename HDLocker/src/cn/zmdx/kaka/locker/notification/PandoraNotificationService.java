@@ -2,7 +2,6 @@
 package cn.zmdx.kaka.locker.notification;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -72,6 +71,31 @@ public final class PandoraNotificationService extends NotificationListenerServic
                 .getInstance(getApplicationContext());
         np.putInterceptPkgName(Constants.PKGNAME_WEIXIN);// 微信
         np.putInterceptPkgName(Constants.PKGNAME_QQ);// qq
+        np.putInterceptPkgName(Constants.PKGNAME_QQ_LIVE);
+        np.putInterceptPkgName(Constants.PKGNAME_SOHU_VIDEO);
+        np.putInterceptPkgName(Constants.PKGNAME_YY);
+        np.putInterceptPkgName(Constants.PKGNAME_AIQIYI);
+        np.putInterceptPkgName(Constants.PKGNAME_TAOBAO);
+        np.putInterceptPkgName(Constants.PKGNAME_QQ_MUSIC);
+        np.putInterceptPkgName(Constants.PKGNAME_ALIPAY_GPHONE);
+        np.putInterceptPkgName(Constants.PKGNAME_BAIDU_TIEBA);
+        np.putInterceptPkgName(Constants.PKGNAME_ZHIHU);
+        np.putInterceptPkgName(Constants.PKGNAME_MOMO);
+        np.putInterceptPkgName(Constants.PKGNAME_MAIMAI);
+        np.putInterceptPkgName(Constants.PKGNAME_WUMI);
+        np.putInterceptPkgName(Constants.PKGNAME_DAZHIHUI);
+        np.putInterceptPkgName(Constants.PKGNAME_TONGHUASHUN);
+        np.putInterceptPkgName(Constants.PKGNAME_TMAILL);
+        np.putInterceptPkgName(Constants.PKGNAME_MEITUAN);
+        np.putInterceptPkgName(Constants.PKGNAME_JINGDONG);
+        np.putInterceptPkgName(Constants.PKGNAME_NUOMI);
+        np.putInterceptPkgName(Constants.PKGNAME_YOUKU);
+        np.putInterceptPkgName(Constants.PKGNAME_CHANGEBA);
+        np.putInterceptPkgName(Constants.PKGNAME_KUGOU);
+        np.putInterceptPkgName(Constants.PKGNAME_MEIPAI);
+        np.putInterceptPkgName(Constants.PKGNAME_WUBA);
+        np.putInterceptPkgName(Constants.PKGNAME_GANJI);
+        
         np.putInterceptPkgName("com.android.phone");
         // 获取拨号的包名
         Set<String> dialerPkgNameSet = getDialerPkgName(this, Intent.ACTION_DIAL);
