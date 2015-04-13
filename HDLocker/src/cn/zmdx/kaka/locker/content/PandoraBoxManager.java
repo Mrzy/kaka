@@ -256,18 +256,20 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         if (isNight || timeHour == 18) {
             String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
-            if (!TextUtils.isEmpty(nightFeatureNo)) {
+            if (!TextUtils.isEmpty(nightFeatureNo) && !TextUtils.isEmpty(nightWind)
+                    && !TextUtils.isEmpty(nightWindForce) && !TextUtils.isEmpty(centTempNight)) {
                 featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
                 featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
-            }
-            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
-                featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
-            }
-            if (tvWeatherWind != null) {
-                tvWeatherWind.setText(nightWind == null ? "" : nightWind);
-            }
-            if (tvWeatherWindForce != null) {
-                tvWeatherWindForce.setText(" " + (nightWindForce == null ? "" : nightWindForce));
+                if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
+                    featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
+                }
+                if (tvWeatherWind != null) {
+                    tvWeatherWind.setText(nightWind == null ? "" : nightWind);
+                }
+                if (tvWeatherWindForce != null) {
+                    tvWeatherWindForce
+                            .setText(" " + (nightWindForce == null ? "" : nightWindForce));
+                }
             }
         } else {
             String daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
@@ -283,21 +285,23 @@ public class PandoraBoxManager implements View.OnClickListener {
                         .setText(" " + (daytimeWindForce == null ? "" : daytimeWindForce));
             }
         }
-        if (tvWeatherFeature != null) {
-            tvWeatherFeature.setText(featureNameByNo == null ? "" : featureNameByNo);
-        }
-        if (ivWeatherFeaturePic != null) {
-            ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
-        }
-        if (tvWeatherCentTemp != null) {
-            if (!TextUtils.isEmpty(centTempDay)) {
-                tvWeatherCentTemp.setText(centTempDay + "℃"
-                        + (centTempNight == null ? "" : ("~" + centTempNight + "℃")));
-            } else {
-                if (!TextUtils.isEmpty(centTempNight)) {
-                    tvWeatherCentTemp.setText(centTempNight + "℃");
+        if (!TextUtils.isEmpty(featureNameByNo) && !TextUtils.isEmpty(centTempDay)) {
+            if (tvWeatherFeature != null) {
+                tvWeatherFeature.setText(featureNameByNo);
+            }
+            if (ivWeatherFeaturePic != null) {
+                ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
+            }
+            if (tvWeatherCentTemp != null) {
+                if (!TextUtils.isEmpty(centTempDay)) {
+                    tvWeatherCentTemp.setText(centTempDay + "℃"
+                            + (centTempNight == null ? "" : ("~" + centTempNight + "℃")));
                 } else {
-                    tvWeatherCentTemp.setText("");
+                    if (!TextUtils.isEmpty(centTempNight)) {
+                        tvWeatherCentTemp.setText(centTempNight + "℃");
+                    } else {
+                        tvWeatherCentTemp.setText("");
+                    }
                 }
             }
         }

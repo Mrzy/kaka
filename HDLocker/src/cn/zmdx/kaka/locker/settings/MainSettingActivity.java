@@ -163,7 +163,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
             return;
         }
         switch (requestCode) {
-            case PandoraUtils.REQUEST_CODE_GALLERY: {
+            case PandoraUtils.REQUEST_CODE_GALLERY:
                 Intent intent = new Intent();
                 intent.setClass(MainSettingActivity.this, CropImageActivity.class);
                 intent.setData(data.getData());
@@ -171,13 +171,19 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
                 overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                         R.anim.umeng_fb_slide_out_from_left);
                 break;
-            }
-            case PasswordPromptActivity.REQUEST_LOCKER_PASSWORD_TYPE_CODE: {
+
+            case PasswordPromptActivity.REQUEST_LOCKER_PASSWORD_TYPE_CODE:
                 if (null != mMainSettingFragment) {
                     mMainSettingFragment.resetPasswordState();
                 }
                 break;
-            }
+
+            case GeneralFragment.REQUEST_CITY_CHOSEN_CODE:
+                if (null != mMainSettingFragment) {
+                    String cityName = data.getStringExtra("cityNameChosen");
+                    mMainSettingFragment.sendChosenCityName(cityName);
+                }
+                break;
             default: {
                 break;
             }

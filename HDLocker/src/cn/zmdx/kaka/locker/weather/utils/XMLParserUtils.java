@@ -24,6 +24,10 @@ public class XMLParserUtils {
 
     private static String areaIdInXml = null;
 
+    private static List<CityInfo> possibleCityInfos;
+
+    private static List<String> cityAndProvinceNameList;
+
     /**
      * 解析CityInfo.xml
      * 
@@ -67,6 +71,34 @@ public class XMLParserUtils {
     }
 
     /**
+     * 得到xml中所有省名的列表和所有城市名的列表
+     * 
+     * @param cityNameStr
+     * @return
+     */
+    public static List<String> getCityAndProvinceNameList() {
+        AssetManager asset = mContext.getAssets();
+        InputStream xmlStream;
+        try {
+            xmlStream = asset.open("cityInfo.xml");
+            cityAndProvinceNameList = new ArrayList<String>();
+            List<CityInfo> cityInfos = pullCityInfoParseXML(xmlStream);
+            for (CityInfo cityInfo : cityInfos) {
+                String cityName = cityInfo.getCityName();
+                String cityProvince = cityInfo.getCityProvince();
+                if (cityAndProvinceNameList != null) {
+                    cityAndProvinceNameList.add(cityName);
+                    cityAndProvinceNameList.add(cityProvince);
+                }
+            }
+            return cityAndProvinceNameList;
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return cityAndProvinceNameList;
+    }
+
+    /**
      * 根据城市名得到区域id
      * 
      * @param xmlStream
@@ -93,6 +125,64 @@ public class XMLParserUtils {
             e.printStackTrace();
         }
         return areaIdInXml;
+    }
+
+    /**
+     * 根据输入的城市名得到省名
+     * 
+     * @param cityNameStr
+     * @return
+     */
+    public static String getProvinceByCity(String cityNameStr) {
+        AssetManager asset = mContext.getAssets();
+        InputStream xmlStream;
+        try {
+            xmlStream = asset.open("cityInfo.xml");
+            if (!TextUtils.isEmpty(cityNameStr)) {
+                List<CityInfo> cityInfos = pullCityInfoParseXML(xmlStream);
+                for (CityInfo cityInfo : cityInfos) {
+                    String cityName = cityInfo.getCityName();
+                    String cityProvince = cityInfo.getCityProvince();
+                    if (cityNameStr.contains(cityName)) {
+                        return cityProvince;
+                    }
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 根据输入的城市名匹配相关城市
+     * 
+     * @param cityNameStr
+     * @return
+     */
+    public static List<CityInfo> getLocationCityInfos(String cityNameStr) {
+        AssetManager asset = mContext.getAssets();
+        InputStream xmlStream;
+        try {
+            xmlStream = asset.open("cityInfo.xml");
+            if (!TextUtils.isEmpty(cityNameStr)) {
+                possibleCityInfos = new ArrayList<CityInfo>();
+                List<CityInfo> cityInfos = pullCityInfoParseXML(xmlStream);
+                for (CityInfo cityInfo : cityInfos) {
+                    String cityName = cityInfo.getCityName();
+                    String cityProvince = cityInfo.getCityProvince();
+                    if (cityNameStr.contains(cityName) || cityName.startsWith(cityNameStr)
+                            || cityNameStr.contains(cityProvince)
+                            || cityProvince.startsWith(cityNameStr)) {
+                        possibleCityInfos.add(cityInfo);
+                    }
+                }
+                return possibleCityInfos;
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return possibleCityInfos;
     }
 
     /**

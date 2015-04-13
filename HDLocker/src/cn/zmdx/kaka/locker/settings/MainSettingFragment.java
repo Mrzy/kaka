@@ -33,6 +33,8 @@ public class MainSettingFragment extends Fragment {
 
     private IMainSettingListener mCallback;
 
+    private GeneralFragment mGeneralFragment;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -71,10 +73,10 @@ public class MainSettingFragment extends Fragment {
 
     private List<Fragment> initFragmentList() {
         List<Fragment> fragmentList = new ArrayList<Fragment>();
-        GeneralFragment mainSettingsFragment = new GeneralFragment();
+        mGeneralFragment = new GeneralFragment();
         mPasswordFragment = new PasswordFragment();
         WallpaperFragment wallpaperFragment = new WallpaperFragment();
-        fragmentList.add(mainSettingsFragment);
+        fragmentList.add(mGeneralFragment);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             NotifyFragment notifyFragment = new NotifyFragment();
             fragmentList.add(notifyFragment);
@@ -135,4 +137,9 @@ public class MainSettingFragment extends Fragment {
         }
     }
 
+    public void sendChosenCityName(String cityName) {
+        if (null != mGeneralFragment) {
+            mGeneralFragment.setChosenCity(cityName);
+        }
+    }
 }

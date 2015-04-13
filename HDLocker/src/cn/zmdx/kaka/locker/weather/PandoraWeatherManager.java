@@ -131,9 +131,17 @@ public class PandoraWeatherManager {
     }
 
     private String getCurWeatherURL() {
+        String aimCityName = PandoraConfig.newInstance(mContext).getTheCityHasSet();
         String cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
         String cityProvince = PandoraLocationManager.getInstance(mContext).getCityProvince();
-        if (!TextUtils.isEmpty(cityNameStr) && !TextUtils.isEmpty(cityProvince)) {
+        if (!TextUtils.isEmpty(aimCityName)) {
+            String[] split = aimCityName.split(",");
+            String city = split[0];
+            String province = split[1];
+            if (!TextUtils.isEmpty(city) && !TextUtils.isEmpty(province)) {
+                areaId = XMLParserUtils.getAreaId(city, province);
+            }
+        } else if (!TextUtils.isEmpty(cityNameStr) && !TextUtils.isEmpty(cityProvince)) {
             areaId = XMLParserUtils.getAreaId(cityNameStr, cityProvince);
         } else {
             String lastCityName = PandoraConfig.newInstance(mContext).getLastCityName();
@@ -147,6 +155,7 @@ public class PandoraWeatherManager {
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("--areaid-->>" + areaId + "\n--weatherUrl-->>" + weatherUrl);
             HDBLOG.logD("cityNameStr: ---->" + cityNameStr);
+            HDBLOG.logD("aimCityName: ---->" + aimCityName);
         }
         return weatherUrl;
     }

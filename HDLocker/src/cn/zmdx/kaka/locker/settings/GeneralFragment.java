@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
@@ -63,6 +65,8 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
     private LinearLayout mChooseCity;
 
+    private TextView mShowCityTextView;
+
     private Context mContext;
 
     private PandoraConfig mPandoraConfig;
@@ -76,6 +80,10 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
     private SwitchButton mNightModeSButton;
 
     private static boolean isMeizu;
+
+    private boolean isShowWeatherChecked = false;
+
+    public static final int REQUEST_CITY_CHOSEN_CODE = 453;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -136,6 +144,9 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
                 .findViewById(R.id.pandora_setting_general_choose_city);
         mChooseCity.setOnClickListener(this);
 
+        mShowCityTextView = (TextView) mEntireView
+                .findViewById(R.id.pandora_setting_general_show_city);
+        initShowCityTextView();
         mFAQ = (LinearLayout) mEntireView.findViewById(R.id.setting_faq_item);
         mFAQ.setOnClickListener(this);
 
@@ -187,9 +198,9 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
         mAllow3G4GSButton.setChecked(is3G4GNetworkOn());
         mOpenSoundSButton.setChecked(isLockSoundOn());
         mProtectSButton.setChecked(isPandoraProtectOn());
-        mWeatherSButton.setChecked(!getWeatherCity().equals(""));
         mLunarCalendarSButton.setChecked(isLunarCalendarOn());
         mNightModeSButton.setChecked(isNightModeOn());
+        mWeatherSButton.setChecked(isShowWeather());
     }
 
     @Override
@@ -251,7 +262,12 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
     }
 
     private void showCity(boolean isChecked) {
-        // TODO
+        isShowWeatherChecked = isChecked;
+        if (isChecked) {
+            enableShowWeather();
+        } else {
+            disableShowWeather();
+        }
     }
 
     @Override
@@ -290,6 +306,33 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
             gotoEvaluationPraise();
         } else if (view == mEvaluationBadReview) {
             startActivity(FeedbackActivity.class);
+        } else if (view == mChooseCity) {
+            if (isShowWeatherChecked) {
+                startChooseCityActivity();
+            }
+        }
+    }
+
+    private void startChooseCityActivity() {
+        Intent intent = new Intent(getActivity(), ChooseCityActivity.class);
+        getActivity().startActivityForResult(intent, REQUEST_CITY_CHOSEN_CODE);
+    }
+
+    private void initShowCityTextView() {
+        String theCityHasSet = mPandoraConfig.getTheCityHasSet();
+        if (!TextUtils.isEmpty(theCityHasSet)) {
+            if (mShowCityTextView != null) {
+                String[] split = theCityHasSet.split(",");
+                mShowCityTextView.setText(split[0]);
+            }
+        }
+    }
+
+    public void setChosenCity(String cityNameChosen) {
+        if (!TextUtils.isEmpty(cityNameChosen)) {
+            if (mShowCityTextView != null) {
+                mShowCityTextView.setText(cityNameChosen);
+            }
         }
     }
 
@@ -451,5 +494,17 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
     private void disableNightMode() {
         mPandoraConfig.saveNightModeState(false);
+    }
+
+    private void enableShowWeather() {
+        mPandoraConfig.saveWeatherState(true);
+    }
+
+    private void disableShowWeather() {
+        mPandoraConfig.saveWeatherState(false);
+    }
+
+    private boolean isShowWeather() {
+        return mPandoraConfig.isShowWeather();
     }
 }
