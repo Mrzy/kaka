@@ -269,17 +269,20 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         mPbManager.closeDetailPage(withAnimator);
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        mWebView.resumeTimers();
+        super.onAttachedToWindow();
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     protected void onDetachedFromWindow() {
-        mWebView.stopLoading();
-        mWebView.clearCache(false);
-        mWebView.loadUrl("about:blank");
-        mWebView.onPause();
         if (Build.VERSION.SDK_INT < 19) {
             mWebView.freeMemory();
         }
         mWebView.pauseTimers();
+        mWebView.stopLoading();
         mWebView.destroy();
         mWebView = null;
         super.onDetachedFromWindow();

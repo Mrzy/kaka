@@ -337,7 +337,7 @@ public class LockScreenManager {
                 vg.removeView(newsView);
             }
             newsLayout.addView(newsView);
-            mSlidingUpView.setDragView(newsLayout.findViewById(R.id.header_part1));
+            mSlidingUpView.setDragView(newsLayout.findViewById(R.id.header_circle));
         }
         // 初始化新闻页header
         PandoraBoxManager.newInstance(mContext).initHeader();
@@ -437,12 +437,14 @@ public class LockScreenManager {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelExpanded();
             pauseWallpaperTranslation();
             pauseShimmer();
+            mSlidingUpView.setDragView(panel.findViewById(R.id.header_part2));
         };
 
         public void onPanelCollapsed(View panel) {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelCollapsed();
             resumeWallpaperTranslation();
             startShimmer();
+            mSlidingUpView.setDragView(panel.findViewById(R.id.header_circle));
         };
     };
 

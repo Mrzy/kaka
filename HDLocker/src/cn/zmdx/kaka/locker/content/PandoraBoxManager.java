@@ -27,7 +27,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +55,7 @@ import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.font.FontManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -197,8 +197,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 //        tvNoWeatherInfo = (TextView) mHeaderView.findViewById(R.id.tvNoWeatherInfo);
 //        ivWeatherFeaturePic = (ImageView) mHeaderView.findViewById(R.id.ivWeatherFeaturePic);
 //        ivArrowUp = (ImageView) mHeaderView.findViewById(R.id.ivArrowUp);
-//        mClock = (TextClockCompat) mHeaderView.findViewById(R.id.digitalClockDateNow);
-//        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
+        mClock = (TextClockCompat) mHeaderPart2.findViewById(R.id.digitalClockDateNow);
+        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
     }
 
     @SuppressLint("NewApi")
