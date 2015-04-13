@@ -4,164 +4,46 @@
     android:layout_height="match_parent" >
 
     <LinearLayout
-        android:id="@+id/stickyLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <RelativeLayout
-            android:id="@+id/header"
+        <LinearLayout
+            android:id="@+id/header_part1"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/header_part2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:background="#50000000"
-            android:paddingTop="8dp" >
+            android:orientation="horizontal"
+            android:paddingTop="5dp" >
 
-            <LinearLayout
+            <cn.zmdx.kaka.locker.widget.TextClockCompat
+                android:id="@+id/digitalClockDateNow"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="20dp" >
-
-                <ImageView
-                    android:id="@+id/ivWeatherFeaturePic"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:scaleType="centerInside" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/tvWeatherFeature"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textColor="#c0ffffff"
-                        android:textSize="15dp" />
-
-                    <TextView
-                        android:id="@+id/tvWeatherCentTemp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#c0ffffff"
-                        android:textSize="12dp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="20dp" >
-
-                <TextView
-                    android:id="@+id/tvNoWeatherInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|left"
-                    android:layout_marginBottom="22dp"
-                    android:textColor="#c0ffffff"
-                    android:textSize="12dp"
-                    android:visibility="gone" />
-            </FrameLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:orientation="vertical"
-                android:paddingTop="5dp" >
-
-                <ImageView
-                    android:id="@+id/ivArrowUp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/arrow_up" />
-
-                <TextView
-                    android:id="@+id/tvUnreadNews"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/has_unread_news"
-                    android:gravity="center_horizontal"
-                    android:onClick="false"
-                    android:padding="2dp"
-                    android:text="爆点"
-                    android:textSize="10dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llWeatherWind"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:orientation="vertical" >
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal" >
-
-                    <TextView
-                        android:id="@+id/tvWeatherWind"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#c0ffffff"
-                        android:textSize="12dp" />
-
-                    <TextView
-                        android:id="@+id/tvWeatherWindForce"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#c0ffffff"
-                        android:textSize="12dp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvLunarCalendar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginBottom="8dp"
-                    android:textColor="#c0ffffff"
-                    android:textSize="12dp" />
-            </LinearLayout>
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="16dp" >
-
-                <cn.zmdx.kaka.locker.widget.TextClockCompat
-                    android:id="@+id/digitalClockDateNow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:paddingLeft="15dp"
-                    android:shadowColor="#30000000"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="1"
-                    android:textColor="@color/white"
-                    android:textSize="45sp"
-                    android:visibility="gone" />
-            </FrameLayout>
-        </RelativeLayout>
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:paddingLeft="15dp"
+                android:shadowColor="#30000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="1"
+                android:textColor="@color/white"
+                android:textSize="45sp"
+                android:visibility="gone" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/content"
@@ -199,9 +81,9 @@
 
                 <cn.zmdx.kaka.locker.widget.ViewPagerCompat
                     android:id="@+id/newsViewPager"
-                    android:background="@color/news_day_mode_behind_color"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:background="@color/news_day_mode_behind_color" />
 
                 <cn.zmdx.kaka.locker.content.view.CircleSpiritButton
                     android:id="@+id/backBtn"

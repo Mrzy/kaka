@@ -337,7 +337,7 @@ public class LockScreenManager {
                 vg.removeView(newsView);
             }
             newsLayout.addView(newsView);
-            mSlidingUpView.setDragView(newsLayout.findViewById(R.id.header));
+            mSlidingUpView.setDragView(newsLayout.findViewById(R.id.header_part1));
         }
         // 初始化新闻页header
         PandoraBoxManager.newInstance(mContext).initHeader();
@@ -428,6 +428,8 @@ public class LockScreenManager {
                 }
                 // 渐隐时间，天气文字
                 setMainPageAlpha(1.0f - slideOffset);
+                
+                PandoraBoxManager.newInstance(mContext).notifyNewsPanelSlide(panel, slideOffset);
             }
         };
 
