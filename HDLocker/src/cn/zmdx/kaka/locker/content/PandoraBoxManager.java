@@ -27,7 +27,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +56,6 @@ import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
-import cn.zmdx.kaka.locker.font.FontManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -68,12 +67,7 @@ import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
-import cn.zmdx.kaka.locker.weather.entity.MeteorologicalCodeConstant;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureIndexInfo;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
-import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
-import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.PandoraRecyclerView;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
@@ -92,7 +86,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private LayoutInflater mInflater;
 
-    private View mHeaderView;
+    private View mHeaderPart1, mHeaderPart2;
 
     private View mEntireView;
 
@@ -119,6 +113,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private static final int NEWS_TIP_HEIGHT = BaseInfoHelper
             .dip2px(HDApplication.getContext(), 40);
+    private static final int NEWS_TOP_CIRCLE_HEIGHT = BaseInfoHelper
+            .dip2px(HDApplication.getContext(), 80);
 
     protected static final int KEEP_TIP_TIME_DEFAULT = 4000;
 
@@ -188,164 +184,160 @@ public class PandoraBoxManager implements View.OnClickListener {
         return mPbManager;
     }
 
-    public View initHeader() {
-        mHeaderView = mEntireView.findViewById(R.id.header);
-        tvLunarCalendar = (TextView) mHeaderView.findViewById(R.id.tvLunarCalendar);
-        tvWeatherFeature = (TextView) mHeaderView.findViewById(R.id.tvWeatherFeature);
-        tvWeatherCentTemp = (TextView) mHeaderView.findViewById(R.id.tvWeatherCentTemp);
-        tvUnreadNews = (TextView) mHeaderView.findViewById(R.id.tvUnreadNews);
-        mWeatherWindLayout = (LinearLayout) mHeaderView.findViewById(R.id.llWeatherWind);
-        tvWeatherWind = (TextView) mHeaderView.findViewById(R.id.tvWeatherWind);
-        tvWeatherWindForce = (TextView) mHeaderView.findViewById(R.id.tvWeatherWindForce);
-        tvNoWeatherInfo = (TextView) mHeaderView.findViewById(R.id.tvNoWeatherInfo);
-        ivWeatherFeaturePic = (ImageView) mHeaderView.findViewById(R.id.ivWeatherFeaturePic);
-        ivArrowUp = (ImageView) mHeaderView.findViewById(R.id.ivArrowUp);
-        mClock = (TextClockCompat) mHeaderView.findViewById(R.id.digitalClockDateNow);
-        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
-        return mHeaderView;
+    public void initHeader() {
+        mHeaderPart1 = mEntireView.findViewById(R.id.header_part1);
+        mHeaderPart2 = mEntireView.findViewById(R.id.header_part2);
+//        tvLunarCalendar = (TextView) mHeaderView.findViewById(R.id.tvLunarCalendar);
+//        tvWeatherFeature = (TextView) mHeaderView.findViewById(R.id.tvWeatherFeature);
+//        tvWeatherCentTemp = (TextView) mHeaderView.findViewById(R.id.tvWeatherCentTemp);
+//        tvUnreadNews = (TextView) mHeaderView.findViewById(R.id.tvUnreadNews);
+//        mWeatherWindLayout = (LinearLayout) mHeaderView.findViewById(R.id.llWeatherWind);
+//        tvWeatherWind = (TextView) mHeaderView.findViewById(R.id.tvWeatherWind);
+//        tvWeatherWindForce = (TextView) mHeaderView.findViewById(R.id.tvWeatherWindForce);
+//        tvNoWeatherInfo = (TextView) mHeaderView.findViewById(R.id.tvNoWeatherInfo);
+//        ivWeatherFeaturePic = (ImageView) mHeaderView.findViewById(R.id.ivWeatherFeaturePic);
+//        ivArrowUp = (ImageView) mHeaderView.findViewById(R.id.ivArrowUp);
+//        mClock = (TextClockCompat) mHeaderView.findViewById(R.id.digitalClockDateNow);
+//        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
     }
 
     @SuppressLint("NewApi")
     public void updateView(SmartWeatherInfo smartWeatherInfo) {
-        String lunarCal = SmartWeatherUtils.getLunarCal();
-        if (tvLunarCalendar != null) {
-            tvLunarCalendar.setText(lunarCal);
-        }
-        if (smartWeatherInfo == null) {
-            // if ((tvNoWeatherInfo != null)) {
-            // if (!HDBNetworkState.isNetworkAvailable()) {
-            // tvNoWeatherInfo.setText(mContext.getString(R.string.get_weather_failure));
-            // } else {
-            // tvNoWeatherInfo.setText(mContext.getString(R.string.no_weather_info_str));
-            // }
-            // tvNoWeatherInfo.setVisibility(View.VISIBLE);
-            // }
-            return;
-        }
-        if ((tvNoWeatherInfo != null)) {
-            tvNoWeatherInfo.setVisibility(View.GONE);
-        }
-        SmartWeatherFeatureInfo smartWeatherFeatureInfo = smartWeatherInfo
-                .getSmartWeatherFeatureInfo();
-        List<SmartWeatherFeatureIndexInfo> smartWeatherFeatureIndexInfoList = smartWeatherFeatureInfo
-                .getSmartWeatherFeatureIndexInfoList();
-
-        SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
-                .get(0);
-        if (smartWeatherFeatureIndexInfo != null) {
-            daytimeWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
-                    .getDaytimeWindForceNo());
-            nightWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
-                    .getNightWindForceNo());
-            daytimeWind = SmartWeatherUtils.getWindByNo(smartWeatherFeatureIndexInfo
-                    .getDaytimeWindNo());
-            nightWind = SmartWeatherUtils
-                    .getWindByNo(smartWeatherFeatureIndexInfo.getNightWindNo());
-        }
-        if (smartWeatherFeatureInfo != null) {
-            forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
-            sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
-        }
-        if (!TextUtils.isEmpty(sunriseAndSunset)) {
-            isNight = SmartWeatherUtils.isNight(sunriseAndSunset);
-        } else {
-            timeHour = SmartWeatherUtils.str2TimeHour(forecastReleasedTime);
-        }
-        centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
-        centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
-
-        if (isNight || timeHour == 18) {
-            String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
-            if (!TextUtils.isEmpty(nightFeatureNo) && !TextUtils.isEmpty(nightWind)
-                    && !TextUtils.isEmpty(nightWindForce) && !TextUtils.isEmpty(centTempNight)) {
-                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
-                featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
-                if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
-                    featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
-                }
-                if (tvWeatherWind != null) {
-                    tvWeatherWind.setText(nightWind == null ? "" : nightWind);
-                }
-                if (tvWeatherWindForce != null) {
-                    tvWeatherWindForce
-                            .setText(" " + (nightWindForce == null ? "" : nightWindForce));
-                }
-            }
-        } else {
-            String daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
-            if (!TextUtils.isEmpty(daytimeFeatureNo)) {
-                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
-                featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
-            }
-            if (tvWeatherWind != null) {
-                tvWeatherWind.setText(daytimeWind == null ? "" : daytimeWind);
-            }
-            if (tvWeatherWindForce != null) {
-                tvWeatherWindForce
-                        .setText(" " + (daytimeWindForce == null ? "" : daytimeWindForce));
-            }
-        }
-        if (!TextUtils.isEmpty(featureNameByNo) && !TextUtils.isEmpty(centTempDay)) {
-            if (tvWeatherFeature != null) {
-                tvWeatherFeature.setText(featureNameByNo);
-            }
-            if (ivWeatherFeaturePic != null) {
-                ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
-            }
-            if (tvWeatherCentTemp != null) {
-                if (!TextUtils.isEmpty(centTempDay)) {
-                    tvWeatherCentTemp.setText(centTempDay + "℃"
-                            + (centTempNight == null ? "" : ("~" + centTempNight + "℃")));
-                } else {
-                    if (!TextUtils.isEmpty(centTempNight)) {
-                        tvWeatherCentTemp.setText(centTempNight + "℃");
-                    } else {
-                        tvWeatherCentTemp.setText("");
-                    }
-                }
-            }
-        }
+//        String lunarCal = SmartWeatherUtils.getLunarCal();
+//        if (tvLunarCalendar != null) {
+//            tvLunarCalendar.setText(lunarCal);
+//        }
+//        if (smartWeatherInfo == null) {
+//            // if ((tvNoWeatherInfo != null)) {
+//            // if (!HDBNetworkState.isNetworkAvailable()) {
+//            // tvNoWeatherInfo.setText(mContext.getString(R.string.get_weather_failure));
+//            // } else {
+//            // tvNoWeatherInfo.setText(mContext.getString(R.string.no_weather_info_str));
+//            // }
+//            // tvNoWeatherInfo.setVisibility(View.VISIBLE);
+//            // }
+//            return;
+//        }
+//        if ((tvNoWeatherInfo != null)) {
+//            tvNoWeatherInfo.setVisibility(View.GONE);
+//        }
+//        SmartWeatherFeatureInfo smartWeatherFeatureInfo = smartWeatherInfo
+//                .getSmartWeatherFeatureInfo();
+//        List<SmartWeatherFeatureIndexInfo> smartWeatherFeatureIndexInfoList = smartWeatherFeatureInfo
+//                .getSmartWeatherFeatureIndexInfoList();
+//
+//        SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
+//                .get(0);
+//        if (smartWeatherFeatureIndexInfo != null) {
+//            daytimeWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
+//                    .getDaytimeWindForceNo());
+//            nightWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
+//                    .getNightWindForceNo());
+//            daytimeWind = SmartWeatherUtils.getWindByNo(smartWeatherFeatureIndexInfo
+//                    .getDaytimeWindNo());
+//            nightWind = SmartWeatherUtils
+//                    .getWindByNo(smartWeatherFeatureIndexInfo.getNightWindNo());
+//        }
+//        if (smartWeatherFeatureInfo != null) {
+//            forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
+//            sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
+//        }
+//        if (!TextUtils.isEmpty(sunriseAndSunset)) {
+//            isNight = SmartWeatherUtils.isNight(sunriseAndSunset);
+//        } else {
+//            timeHour = SmartWeatherUtils.str2TimeHour(forecastReleasedTime);
+//        }
+//        centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
+//        centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
+//
+//        if (isNight || timeHour == 18) {
+//            String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
+//            if (!TextUtils.isEmpty(nightFeatureNo)) {
+//                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
+//                featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
+//            }
+//            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
+//                featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
+//            }
+//            if (tvWeatherWind != null) {
+//                tvWeatherWind.setText(nightWind == null ? "" : nightWind);
+//            }
+//            if (tvWeatherWindForce != null) {
+//                tvWeatherWindForce.setText(" " + (nightWindForce == null ? "" : nightWindForce));
+//            }
+//        } else {
+//            String daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
+//            if (!TextUtils.isEmpty(daytimeFeatureNo)) {
+//                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
+//                featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
+//            }
+//            if (tvWeatherWind != null) {
+//                tvWeatherWind.setText(daytimeWind == null ? "" : daytimeWind);
+//            }
+//            if (tvWeatherWindForce != null) {
+//                tvWeatherWindForce
+//                        .setText(" " + (daytimeWindForce == null ? "" : daytimeWindForce));
+//            }
+//        }
+//        if (tvWeatherFeature != null) {
+//            tvWeatherFeature.setText(featureNameByNo == null ? "" : featureNameByNo);
+//        }
+//        if (ivWeatherFeaturePic != null) {
+//            ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
+//        }
+//        if (tvWeatherCentTemp != null) {
+//            if (!TextUtils.isEmpty(centTempDay)) {
+//                tvWeatherCentTemp.setText(centTempDay + "℃"
+//                        + (centTempNight == null ? "" : ("~" + centTempNight + "℃")));
+//            } else {
+//                if (!TextUtils.isEmpty(centTempNight)) {
+//                    tvWeatherCentTemp.setText(centTempNight + "℃");
+//                } else {
+//                    tvWeatherCentTemp.setText("");
+//                }
+//            }
+//        }
     }
 
     /**
      * 显示当前时间
      */
     private void showDateView() {
-        if (mWeatherWindLayout != null) {
-            mWeatherWindLayout.setVisibility(View.GONE);
-        }
-        if (mClock != null) {
-            mClock.setVisibility(View.VISIBLE);
-        }
-        float windDimenUp = mContext.getResources()
-                .getDimension(R.dimen.weather_wind_margin_top_up);
-        float clockDimenUp = mContext.getResources().getDimension(
-                R.dimen.weather_clock_margin_top_up);
-        mWeatherWindLayout.animate().translationY(-windDimenUp);
-        mWeatherWindLayout.animate().alpha(0).setDuration(2000);
-        mClock.animate().translationY(clockDimenUp);
-        mClock.animate().alpha(1).setDuration(500);
+//        if (mWeatherWindLayout != null) {
+//            mWeatherWindLayout.setVisibility(View.GONE);
+//        }
+//        if (mClock != null) {
+//            mClock.setVisibility(View.VISIBLE);
+//        }
+//        float windDimenUp = mContext.getResources()
+//                .getDimension(R.dimen.weather_wind_margin_top_up);
+//        float clockDimenUp = mContext.getResources().getDimension(
+//                R.dimen.weather_clock_margin_top_up);
+//        mWeatherWindLayout.animate().translationY(-windDimenUp);
+//        mWeatherWindLayout.animate().alpha(0).setDuration(2000);
+//        mClock.animate().translationY(clockDimenUp);
+//        mClock.animate().alpha(1).setDuration(500);
     }
 
     /**
      * 隐藏当前时间
      */
     private void hideDateView() {
-        if (mWeatherWindLayout != null) {
-            mWeatherWindLayout.setVisibility(View.VISIBLE);
-        }
-        LockScreenManager.getInstance().onScreenOn();
-        if (mClock != null) {
-            mClock.setVisibility(View.GONE);
-        }
-        float windDimenDown = mContext.getResources().getDimension(
-                R.dimen.weather_wind_margin_top_down);
-        float clockDimenDown = mContext.getResources().getDimension(
-                R.dimen.weather_clock_margin_top_down);
-        mWeatherWindLayout.animate().translationY(windDimenDown);
-        mWeatherWindLayout.animate().alpha(1).setDuration(500);
-        mClock.animate().translationY(clockDimenDown);
-        mClock.animate().alpha(0).setDuration(500);
+//        if (mWeatherWindLayout != null) {
+//            mWeatherWindLayout.setVisibility(View.VISIBLE);
+//        }
+//        LockScreenManager.getInstance().onScreenOn();
+//        if (mClock != null) {
+//            mClock.setVisibility(View.GONE);
+//        }
+//        float windDimenDown = mContext.getResources().getDimension(
+//                R.dimen.weather_wind_margin_top_down);
+//        float clockDimenDown = mContext.getResources().getDimension(
+//                R.dimen.weather_clock_margin_top_down);
+//        mWeatherWindLayout.animate().translationY(windDimenDown);
+//        mWeatherWindLayout.animate().alpha(1).setDuration(500);
+//        mClock.animate().translationY(clockDimenDown);
+//        mClock.animate().alpha(0).setDuration(500);
     }
 
     private boolean mInitBody = false;
@@ -591,10 +583,75 @@ public class PandoraBoxManager implements View.OnClickListener {
         return LockScreenManager.getInstance().isNewsPanelExpanded();
     }
 
+    private void expandTopCircle() {
+        if (mHeaderPart1 != null) {
+            final int targetHeight = NEWS_TOP_CIRCLE_HEIGHT;
+            ViewGroup.LayoutParams lp = mTipLayout.getLayoutParams();
+            lp.height = 0;
+            mHeaderPart1.setVisibility(View.VISIBLE);
+            Animation anim = new Animation() {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if (interpolatedTime == 1) {
+                    } else {
+                        mHeaderPart1.getLayoutParams().height = (int) (targetHeight * interpolatedTime);
+                        mHeaderPart1.requestLayout();
+                    }
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            anim.setDuration(600);
+            mHeaderPart1.startAnimation(anim);
+        }
+    }
+
+    private void shrinkTopCircle() {
+        if (mHeaderPart1 != null) {
+            final int initHeight = mHeaderPart1.getHeight();
+            Animation a = new Animation() {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if (interpolatedTime == 1) {
+                        mHeaderPart1.setVisibility(View.GONE);
+                    } else {
+                        mHeaderPart1.getLayoutParams().height = initHeight
+                                - (int) (initHeight * interpolatedTime);
+                        mHeaderPart1.requestLayout();
+                    }
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            a.setDuration(600);
+            mHeaderPart1.startAnimation(a);
+        }
+    }
+
+    private boolean isNewsExpanded = false;
+
+    public void notifyNewsPanelSlide(View panel, float slideOffset) {
+        ViewGroup.LayoutParams lp = mHeaderPart1.getLayoutParams();
+        lp.height = (int) (NEWS_TOP_CIRCLE_HEIGHT * (1.0f - slideOffset));
+        mHeaderPart1.requestLayout();
+    }
+
     /**
      * 新闻面板完全展开时会调用该方法
      */
     public void notifyNewsPanelExpanded() {
+        isNewsExpanded = true;
+        // 缩小顶部区域
+//        shrinkTopCircle();
+
         initBody();
 
         if (mViewPager != null) {
@@ -602,12 +659,12 @@ public class PandoraBoxManager implements View.OnClickListener {
             int category = position;
             refreshNewsByCategory(category);
         }
-        showDateView();
+//        showDateView();
         PandoraConfig.newInstance(mContext).saveLastShowUnreadNews(System.currentTimeMillis());
-        if (isAppearedUnreadNews) {
-            animateHideUnreadNews();
-        }
-        ivArrowUp.animate().rotation(180).setDuration(300);
+//        if (isAppearedUnreadNews) {
+//            animateHideUnreadNews();
+//        }
+//        ivArrowUp.animate().rotation(180).setDuration(300);
         mBackBtn.startAppearAnimator();
 
         requestWakeLock();
@@ -616,34 +673,38 @@ public class PandoraBoxManager implements View.OnClickListener {
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
             @Override
             public void run() {
-                long lastTipTime = PandoraConfig.newInstance(mContext)
-                        .getLastTipOpenNightModeTime();
-                long current = System.currentTimeMillis();
-                if (isNewsPanelExpanded()
-                        && current - lastTipTime > (BuildConfig.DEBUG ? 60 * 1000
-                                : 3 * 60 * 60 * 1000)) {
-                    Calendar cal = Calendar.getInstance();
-                    int hour = cal.get(Calendar.HOUR_OF_DAY);
-                    if (PandoraConfig.newInstance(mContext).isNightModeOn()) {
-                        if (hour > 6 && hour < 21) {
-                            // 如果当前是白昼，且当前模式为夜间模式，则自动切换为白昼模式
-                            switchNewsTheme(NEWS_THEME_DAY);
-                        }
-                    } else {
-                        if (hour >= 21) {
-                            // 当前时间是晚上21点之后，则开启提示，是否打开夜间模式
-                            openTipLayout(createOpenNightModeView(), true, 8000);
-                            PandoraConfig.newInstance(mContext).saveLastTipOpenNightModeTime(
-                                    current);
-                        }
-                    }
-                }
+                openNightModeTip();
             }
         }, 10000);
 
         BottomDockUmengEventManager.statisticalNewsPanelExpanded();
     }
 
+    private void openNightModeTip() {
+        long lastTipTime = PandoraConfig.newInstance(mContext)
+                .getLastTipOpenNightModeTime();
+        long current = System.currentTimeMillis();
+        if (isNewsPanelExpanded()
+                && current - lastTipTime > (BuildConfig.DEBUG ? 60 * 1000
+                        : 3 * 60 * 60 * 1000)) {
+            Calendar cal = Calendar.getInstance();
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            if (PandoraConfig.newInstance(mContext).isNightModeOn()) {
+                if (hour > 6 && hour < 21) {
+                    // 如果当前是白昼，且当前模式为夜间模式，则自动切换为白昼模式
+                    switchNewsTheme(NEWS_THEME_DAY);
+                }
+            } else {
+                if (hour >= 21) {
+                    // 当前时间是晚上21点之后，则开启提示，是否打开夜间模式
+                    openTipLayout(createOpenNightModeView(), true, 8000);
+                    PandoraConfig.newInstance(mContext).saveLastTipOpenNightModeTime(
+                            current);
+                }
+            }
+        }
+    }
+    
     private View createOpenNightModeView() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.news_tip_layout, null);
         TextView tv = (TextView) view.findViewById(R.id.news_tip_title);
@@ -679,9 +740,12 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     public void notifyNewsPanelCollapsed() {
-        hideDateView();
-        ivArrowUp.animate().rotation(0).setDuration(300);
-        PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
+        isNewsExpanded = false;
+//        hideDateView();
+//        ivArrowUp.animate().rotation(0).setDuration(300);
+//        expandTopCircle();
+
+        closeDetailPage(false);
         // PandoraBoxManager.newInstance(mContext).resetDefaultPage();
         if (mBackBtn != null) {
             mBackBtn.setTranslationY(BaseInfoHelper.dip2px(mContext, 100));
@@ -803,15 +867,15 @@ public class PandoraBoxManager implements View.OnClickListener {
             mGossipRefreshView, mHotRefreshView;
 
     public void freeMemory() {
-        if (mPages != null) {
-            mPages.clear();
-        }
-        mHotNews.clear();
-        mGossipNews.clear();
-        mGossipNews.clear();
-        mGossipNews.clear();
-        mJokeNews.clear();
-        mPbManager = null;
+//        if (mPages != null) {
+//            mPages.clear();
+//        }
+//        mHotNews.clear();
+//        mGossipNews.clear();
+//        mGossipNews.clear();
+//        mGossipNews.clear();
+//        mJokeNews.clear();
+//        mPbManager = null;
     }
 
     private View createEmptyView() {

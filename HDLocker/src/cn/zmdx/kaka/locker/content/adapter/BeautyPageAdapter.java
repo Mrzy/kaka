@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.utils.TimeUtils;
@@ -65,12 +67,15 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
 
     private Resources mRes;
 
+    private int mCoverMaxHeight;
+
     public BeautyPageAdapter(Context context, List<ServerImageData> data) {
         mContext = context;
         mData = data;
         mRes = context.getResources();
         mTheme = PandoraConfig.newInstance(context).isNightModeOn() ? PandoraBoxManager.NEWS_THEME_NIGHT
                 : PandoraBoxManager.NEWS_THEME_DAY;
+        mCoverMaxHeight = BaseInfoHelper.dip2px(context, 250);
     }
 
     @Override
@@ -111,48 +116,54 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
         } catch (Exception e) {
         }
         holder.mTimeTv.setText(time);
-        Picasso picasso = PicassoHelper.getPicasso(mContext);
-        picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
-        RequestCreator rc = null;
-        try {
-            rc = picasso.load(data.getUrl());
-        } catch (Exception e) {
-        }
-        if (rc == null) {
-            picasso.load(R.drawable.icon_newsimage_load_error).into(holder.mImageView);
+        
+        if (TextUtils.isEmpty(data.getUrl())) {
+            holder.mImageView.setVisibility(View.GONE);
         } else {
-            int errorRes = R.drawable.icon_newsimage_load_error;
-            if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
-                    && !HDBNetworkState.isWifiNetwork()) {
-                rc.networkPolicy(NetworkPolicy.OFFLINE);
-                errorRes = R.drawable.icon_newsimage_loading;
+            holder.mImageView.setVisibility(View.VISIBLE);
+            Picasso picasso = PicassoHelper.getPicasso(mContext);
+            picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
+            RequestCreator rc = null;
+            try {
+                rc = picasso.load(data.getUrl());
+            } catch (Exception e) {
             }
-            rc.placeholder(R.drawable.icon_newsimage_loading).error(errorRes)
-                    .transform(new Transformation() {
-
-                        @Override
-                        public String key() {
-                            return "matrix()";
+            if (rc == null) {
+                picasso.load(R.drawable.icon_newsimage_load_error).into(holder.mImageView);
+            } else {
+                int errorRes = R.drawable.icon_newsimage_load_error;
+                if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
+                        && !HDBNetworkState.isWifiNetwork()) {
+                    rc.networkPolicy(NetworkPolicy.OFFLINE);
+                    errorRes = R.drawable.icon_newsimage_loading;
+                }
+                rc.placeholder(R.drawable.icon_newsimage_loading).error(errorRes)
+                .transform(new Transformation() {
+                    
+                    @Override
+                    public String key() {
+                        return "matrix()";
+                    }
+                    
+                    @Override
+                    public Bitmap transform(Bitmap source) {
+                        int cardWidth = holder.mCardView.getWidth();
+                        int imgWidth = source.getWidth();
+                        int imgHeight = source.getHeight();
+                        float scaleRate = (float) cardWidth / (float) imgWidth;
+                        int newHeight = (int) (scaleRate * imgHeight);
+                        Bitmap result = ImageUtils.scaleTo(source, cardWidth, newHeight, false);
+                        if (newHeight > 800) {
+                            result = Bitmap.createBitmap(result, 0, 0, cardWidth, mCoverMaxHeight);
                         }
-
-                        @Override
-                        public Bitmap transform(Bitmap source) {
-                            int cardWidth = holder.mCardView.getWidth();
-                            int imgWidth = source.getWidth();
-                            int imgHeight = source.getHeight();
-                            float scaleRate = (float) cardWidth / (float) imgWidth;
-                            int newHeight = (int) (scaleRate * imgHeight);
-                            Bitmap result = ImageUtils.scaleTo(source, cardWidth, newHeight, false);
-                            if (newHeight > 800) {
-                                result = Bitmap.createBitmap(result, 0, 0, cardWidth, 800);
-                            }
-                            if (source != result) {
-                                source.recycle();
-                                source = null;
-                            }
-                            return result == null ? source : result;
+                        if (source != result) {
+                            source.recycle();
+                            source = null;
                         }
-                    }).into(holder.mImageView);
+                        return result == null ? source : result;
+                    }
+                }).into(holder.mImageView);
+            }
         }
     }
 
