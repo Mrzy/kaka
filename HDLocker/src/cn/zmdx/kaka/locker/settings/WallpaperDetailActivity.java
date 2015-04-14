@@ -1,16 +1,15 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import com.umeng.analytics.MobclickAgent;
-
-import cn.zmdx.kaka.locker.LockScreenManager;
-import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView.IWallpaperDetailListener;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.FrameLayout.LayoutParams;
+import cn.zmdx.kaka.locker.LockScreenManager;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView.IWallpaperDetailListener;
+
+import com.umeng.analytics.MobclickAgent;
 
 public class WallpaperDetailActivity extends Activity {
 

@@ -7,7 +7,10 @@ import java.util.Calendar;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.WallpaperManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v4.view.ViewCompat;
@@ -18,6 +21,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
@@ -78,6 +83,8 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
 
     private boolean isApplyDesktop;
 
+    private WallpaperObserver mObserver;
+
     public WallpaperDetailView(Context context, boolean isScreen) {
         super(context);
         mContext = context;
@@ -104,7 +111,7 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
         mWallpaperDesktop = (CheckBox) mView.findViewById(R.id.wallpaper_to_desktop);
         mWallpaperDesktop.setOnCheckedChangeListener(this);
         mWallpaperDesktop.setChecked(isApplyDesktopOn());
-        
+
         mBackButton = (BaseButton) mView.findViewById(R.id.wallpaper_return);
         mBackButton.setOnClickListener(new OnClickListener() {
 
@@ -123,29 +130,10 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
                 if (null == mPreBitmap || null == mContext) {
                     return;
                 }
-                OnlineWallpaperManager.getInstance().mkDirs();
-                final String md5ImageUrl = HDBHashUtils.getStringMD5(mImageUrl);
-                OnlineWallpaperManager.getInstance().saveThemeId(mContext,
-                        ThemeManager.THEME_ID_ONLINE);
+                String md5Url = HDBHashUtils.getStringMD5(mImageUrl);
+                saveOnlineWallpaperState(md5Url);
                 ThemeManager.addBitmapToCache(mPreBitmap);
-                OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(mContext,
-                        md5ImageUrl);
-                PandoraConfig.newInstance(mContext).saveOnlineWallPaperDesc(md5ImageUrl, mDesc);
-                HDBThreadUtils.runOnWorker(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        ImageUtils.saveImageToFile(mPreBitmap, OnlineWallpaperManager.getInstance()
-                                .getFilePath(md5ImageUrl));
-                        if (isApplyDesktop) {
-                            try {
-                                WallpaperManager.getInstance(mContext).setBitmap(mPreBitmap);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
+                saveBitmapToFile(md5Url);
                 if (isLockScreen) {
                     UmengCustomEventManager.statisticalLockScreenWallpaperDetailApplyTimes();
                 }
@@ -164,6 +152,59 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
             }
         });
 
+    }
+
+    private void saveOnlineWallpaperState(String md5Url) {
+        OnlineWallpaperManager.getInstance().mkDirs();
+        OnlineWallpaperManager.getInstance().saveThemeId(mContext, ThemeManager.THEME_ID_ONLINE);
+        OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(mContext, md5Url);
+        PandoraConfig.newInstance(mContext).saveOnlineWallPaperDesc(md5Url, mDesc);
+    }
+
+    private void saveBitmapToFile(final String url) {
+        HDBThreadUtils.runOnWorker(new Runnable() {
+
+            @Override
+            public void run() {
+                ImageUtils.saveImageToFile(mPreBitmap, OnlineWallpaperManager.getInstance()
+                        .getFilePath(url));
+                if (isApplyDesktop) {
+                    @SuppressWarnings("deprecation")
+                    IntentFilter filter = new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED);
+                    mObserver = new WallpaperObserver();
+                    HDApplication.getContext().registerReceiver(mObserver, filter);
+                    HDBThreadUtils.runOnUi(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, "桌面壁纸设置中...", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    try {
+                        WallpaperManager.getInstance(mContext).setBitmap(mPreBitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    class WallpaperObserver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            HDBThreadUtils.runOnUi(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(mContext, "桌面壁纸设置成功", Toast.LENGTH_LONG).show();
+                }
+            });
+            if (null != mObserver) {
+                HDApplication.getContext().unregisterReceiver(mObserver);
+            }
+        }
     }
 
     public void setDate() {
