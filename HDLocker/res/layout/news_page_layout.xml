@@ -15,28 +15,45 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal" >
 
-            <ImageView
+            <cn.zmdx.kaka.locker.content.view.HeaderCircleButton
                 android:id="@+id/header_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher" />
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/upArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_up"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/newsTv"
+                    android:textColor="#d0ffffff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:text="爆点" />
+            </cn.zmdx.kaka.locker.content.view.HeaderCircleButton>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/header_part2"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:background="#50000000"
             android:orientation="horizontal"
-            android:paddingRight="15dp"
-            android:paddingLeft="15dp" >
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" >
 
             <cn.zmdx.kaka.locker.widget.TextClockCompat
                 android:id="@+id/digitalClockDateNow"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="bottom"
                 android:layout_marginTop="10dp"
+                android:gravity="bottom"
                 android:shadowColor="#30000000"
                 android:shadowDx="2"
                 android:shadowDy="2"

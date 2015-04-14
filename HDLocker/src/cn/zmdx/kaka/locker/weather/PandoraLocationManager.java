@@ -116,7 +116,7 @@ public class PandoraLocationManager {
 
                 @Override
                 public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
-                    PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
+//                    PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
                 }
 
                 @Override

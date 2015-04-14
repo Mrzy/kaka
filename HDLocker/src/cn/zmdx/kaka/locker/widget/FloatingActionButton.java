@@ -115,14 +115,18 @@ public class FloatingActionButton extends LinearLayout {
     }
 
     private void updateBackground() {
+        setBackgroundCompat(createBackgroundDrawable());
+    }
+
+    protected Drawable createBackgroundDrawable() {
         StateListDrawable drawable = new StateListDrawable();
         drawable.addState(new int[]{android.R.attr.state_pressed}, createDrawable(mColorPressed));
         drawable.addState(new int[]{-android.R.attr.state_enabled}, createDrawable(mColorDisabled));
         drawable.addState(new int[]{}, createDrawable(mColorNormal));
-        setBackgroundCompat(drawable);
+        return drawable;
     }
 
-    private Drawable createDrawable(int color) {
+    protected Drawable createDrawable(int color) {
         OvalShape ovalShape = new OvalShape();
         ShapeDrawable shapeDrawable = new ShapeDrawable(ovalShape);
         shapeDrawable.getPaint().setColor(color);

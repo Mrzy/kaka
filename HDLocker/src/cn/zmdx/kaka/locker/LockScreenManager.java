@@ -515,7 +515,6 @@ public class LockScreenManager {
     public void processWeatherInfo() {
         SmartWeatherInfo smartWeatherInfo = PandoraWeatherManager.getInstance()
                 .getWeatherFromCache();
-        PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
 
         long str2TimeMillis = mPandoraConfig.getLastCheckWeatherTime();
         if (System.currentTimeMillis() - str2TimeMillis >= PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
@@ -526,7 +525,6 @@ public class LockScreenManager {
 
                 @Override
                 public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
-                    PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
                 }
 
                 @Override
@@ -722,6 +720,10 @@ public class LockScreenManager {
         }
     }
 
+    public View getSliderView() {
+        return mSlidingUpView.getSliderView();
+    }
+ 
     public void onScreenOn() {
         if (mIsLocked) {
 
@@ -731,7 +733,7 @@ public class LockScreenManager {
             if (mSlidingUpView != null && mPager != null && mPager.getCurrentItem() == 1) {
                 View sliderView = mSlidingUpView.getSliderView();
                 if (sliderView != null) {
-                    sliderView.animate().translationY(0).setDuration(400)
+                    sliderView.animate().translationY(0).setDuration(800)
                             .setInterpolator(new DecelerateInterpolator()).start();
                 }
             }

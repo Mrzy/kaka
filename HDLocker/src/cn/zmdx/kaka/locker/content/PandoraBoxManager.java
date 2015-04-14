@@ -7,9 +7,6 @@ import java.util.List;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,19 +26,17 @@ import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.view.animation.Transformation;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
@@ -52,12 +47,12 @@ import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.GeneralNewsPageAdapter;
 import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
+import cn.zmdx.kaka.locker.content.view.HeaderCircleButton;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.font.FontManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
-import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -67,7 +62,6 @@ import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.PandoraRecyclerView;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
@@ -96,6 +90,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private OnlineWallpaperView mWallpaperView;
 
+    private HeaderCircleButton mCircle;
+
     // private ImageView mNotifyTip;
 
     private ViewPagerCompat mViewPager;
@@ -113,58 +109,13 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private static final int NEWS_TIP_HEIGHT = BaseInfoHelper
             .dip2px(HDApplication.getContext(), 40);
-    private static final int NEWS_TOP_CIRCLE_HEIGHT = BaseInfoHelper
-            .dip2px(HDApplication.getContext(), 80);
+
+    private static final int NEWS_TOP_CIRCLE_HEIGHT = BaseInfoHelper.dip2px(
+            HDApplication.getContext(), 80);
 
     protected static final int KEEP_TIP_TIME_DEFAULT = 4000;
 
-    private TextView tvLunarCalendar;
-
-    private TextView tvWeatherFeature;
-
-    private TextView tvWeatherCentTemp;
-
-    private TextView tvUnreadNews;
-
-    private TextView tvWeatherWind;
-
-    private TextView tvWeatherWindForce;
-
-    private TextView tvNoWeatherInfo;
-
-    private int featureIndexPicResId;
-
-    private String featureNameByNo;
-
-    private String centTempDay;
-
-    private String centTempNight;
-
-    private ImageView ivWeatherFeaturePic;
-
-    private ImageView ivArrowUp;
-
-    private String daytimeWindForce;
-
-    private String nightWindForce;
-
-    private String daytimeWind;
-
-    private String nightWind;
-
-    private String forecastReleasedTime;
-
-    private String sunriseAndSunset;
-
     private TextClockCompat mClock;
-
-    private LinearLayout mWeatherWindLayout;
-
-    private boolean isNight;
-
-    private int timeHour;
-
-    private boolean isAppearedUnreadNews = true;
 
     private List<View> mPages;
 
@@ -187,157 +138,99 @@ public class PandoraBoxManager implements View.OnClickListener {
     public void initHeader() {
         mHeaderPart1 = mEntireView.findViewById(R.id.header_part1);
         mHeaderPart2 = mEntireView.findViewById(R.id.header_part2);
-//        tvLunarCalendar = (TextView) mHeaderView.findViewById(R.id.tvLunarCalendar);
-//        tvWeatherFeature = (TextView) mHeaderView.findViewById(R.id.tvWeatherFeature);
-//        tvWeatherCentTemp = (TextView) mHeaderView.findViewById(R.id.tvWeatherCentTemp);
-//        tvUnreadNews = (TextView) mHeaderView.findViewById(R.id.tvUnreadNews);
-//        mWeatherWindLayout = (LinearLayout) mHeaderView.findViewById(R.id.llWeatherWind);
-//        tvWeatherWind = (TextView) mHeaderView.findViewById(R.id.tvWeatherWind);
-//        tvWeatherWindForce = (TextView) mHeaderView.findViewById(R.id.tvWeatherWindForce);
-//        tvNoWeatherInfo = (TextView) mHeaderView.findViewById(R.id.tvNoWeatherInfo);
-//        ivWeatherFeaturePic = (ImageView) mHeaderView.findViewById(R.id.ivWeatherFeaturePic);
-//        ivArrowUp = (ImageView) mHeaderView.findViewById(R.id.ivArrowUp);
+        mCircle = (HeaderCircleButton) mHeaderPart1.findViewById(R.id.header_circle);
+        // 处理点击时间
+        mCircle.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        View slider = LockScreenManager.getInstance().getSliderView();
+                        if (slider != null) {
+                            slider.animate().translationY(-60).setDuration(200).start();
+                        }
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                    case MotionEvent.ACTION_UP:
+                        View sliderView = LockScreenManager.getInstance().getSliderView();
+                        if (sliderView != null) {
+                            sliderView.animate().translationY(0).setDuration(200).start();
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
         mClock = (TextClockCompat) mHeaderPart2.findViewById(R.id.digitalClockDateNow);
         mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
     }
 
-    @SuppressLint("NewApi")
-    public void updateView(SmartWeatherInfo smartWeatherInfo) {
-//        String lunarCal = SmartWeatherUtils.getLunarCal();
-//        if (tvLunarCalendar != null) {
-//            tvLunarCalendar.setText(lunarCal);
-//        }
-//        if (smartWeatherInfo == null) {
-//            // if ((tvNoWeatherInfo != null)) {
-//            // if (!HDBNetworkState.isNetworkAvailable()) {
-//            // tvNoWeatherInfo.setText(mContext.getString(R.string.get_weather_failure));
-//            // } else {
-//            // tvNoWeatherInfo.setText(mContext.getString(R.string.no_weather_info_str));
-//            // }
-//            // tvNoWeatherInfo.setVisibility(View.VISIBLE);
-//            // }
-//            return;
-//        }
-//        if ((tvNoWeatherInfo != null)) {
-//            tvNoWeatherInfo.setVisibility(View.GONE);
-//        }
-//        SmartWeatherFeatureInfo smartWeatherFeatureInfo = smartWeatherInfo
-//                .getSmartWeatherFeatureInfo();
-//        List<SmartWeatherFeatureIndexInfo> smartWeatherFeatureIndexInfoList = smartWeatherFeatureInfo
-//                .getSmartWeatherFeatureIndexInfoList();
-//
-//        SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
-//                .get(0);
-//        if (smartWeatherFeatureIndexInfo != null) {
-//            daytimeWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
-//                    .getDaytimeWindForceNo());
-//            nightWindForce = SmartWeatherUtils.getWindForceByNo(smartWeatherFeatureIndexInfo
-//                    .getNightWindForceNo());
-//            daytimeWind = SmartWeatherUtils.getWindByNo(smartWeatherFeatureIndexInfo
-//                    .getDaytimeWindNo());
-//            nightWind = SmartWeatherUtils
-//                    .getWindByNo(smartWeatherFeatureIndexInfo.getNightWindNo());
-//        }
-//        if (smartWeatherFeatureInfo != null) {
-//            forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
-//            sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
-//        }
-//        if (!TextUtils.isEmpty(sunriseAndSunset)) {
-//            isNight = SmartWeatherUtils.isNight(sunriseAndSunset);
-//        } else {
-//            timeHour = SmartWeatherUtils.str2TimeHour(forecastReleasedTime);
-//        }
-//        centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
-//        centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
-//
-//        if (isNight || timeHour == 18) {
-//            String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
-//            if (!TextUtils.isEmpty(nightFeatureNo)) {
-//                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
-//                featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
-//            }
-//            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
-//                featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
-//            }
-//            if (tvWeatherWind != null) {
-//                tvWeatherWind.setText(nightWind == null ? "" : nightWind);
-//            }
-//            if (tvWeatherWindForce != null) {
-//                tvWeatherWindForce.setText(" " + (nightWindForce == null ? "" : nightWindForce));
-//            }
-//        } else {
-//            String daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
-//            if (!TextUtils.isEmpty(daytimeFeatureNo)) {
-//                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
-//                featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
-//            }
-//            if (tvWeatherWind != null) {
-//                tvWeatherWind.setText(daytimeWind == null ? "" : daytimeWind);
-//            }
-//            if (tvWeatherWindForce != null) {
-//                tvWeatherWindForce
-//                        .setText(" " + (daytimeWindForce == null ? "" : daytimeWindForce));
-//            }
-//        }
-//        if (tvWeatherFeature != null) {
-//            tvWeatherFeature.setText(featureNameByNo == null ? "" : featureNameByNo);
-//        }
-//        if (ivWeatherFeaturePic != null) {
-//            ivWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
-//        }
-//        if (tvWeatherCentTemp != null) {
-//            if (!TextUtils.isEmpty(centTempDay)) {
-//                tvWeatherCentTemp.setText(centTempDay + "℃"
-//                        + (centTempNight == null ? "" : ("~" + centTempNight + "℃")));
-//            } else {
-//                if (!TextUtils.isEmpty(centTempNight)) {
-//                    tvWeatherCentTemp.setText(centTempNight + "℃");
-//                } else {
-//                    tvWeatherCentTemp.setText("");
-//                }
-//            }
-//        }
-    }
+    private boolean mIsHeaderCircleAnimating = false;
 
-    /**
-     * 显示当前时间
-     */
-    private void showDateView() {
-//        if (mWeatherWindLayout != null) {
-//            mWeatherWindLayout.setVisibility(View.GONE);
-//        }
-//        if (mClock != null) {
-//            mClock.setVisibility(View.VISIBLE);
-//        }
-//        float windDimenUp = mContext.getResources()
-//                .getDimension(R.dimen.weather_wind_margin_top_up);
-//        float clockDimenUp = mContext.getResources().getDimension(
-//                R.dimen.weather_clock_margin_top_up);
-//        mWeatherWindLayout.animate().translationY(-windDimenUp);
-//        mWeatherWindLayout.animate().alpha(0).setDuration(2000);
-//        mClock.animate().translationY(clockDimenUp);
-//        mClock.animate().alpha(1).setDuration(500);
-    }
+    public void startHeaderCircleAnimation() {
+        if (mIsHeaderCircleAnimating || mCircle == null) {
+            return;
+        }
 
-    /**
-     * 隐藏当前时间
-     */
-    private void hideDateView() {
-//        if (mWeatherWindLayout != null) {
-//            mWeatherWindLayout.setVisibility(View.VISIBLE);
-//        }
-//        LockScreenManager.getInstance().onScreenOn();
-//        if (mClock != null) {
-//            mClock.setVisibility(View.GONE);
-//        }
-//        float windDimenDown = mContext.getResources().getDimension(
-//                R.dimen.weather_wind_margin_top_down);
-//        float clockDimenDown = mContext.getResources().getDimension(
-//                R.dimen.weather_clock_margin_top_down);
-//        mWeatherWindLayout.animate().translationY(windDimenDown);
-//        mWeatherWindLayout.animate().alpha(1).setDuration(500);
-//        mClock.animate().translationY(clockDimenDown);
-//        mClock.animate().alpha(0).setDuration(500);
+        mIsHeaderCircleAnimating = true;
+        final int offset = mCircle.getHeight() / 3;
+        final View arrow = mCircle.findViewById(R.id.upArrow);
+        final View newsTv = mCircle.findViewById(R.id.newsTv);
+        newsTv.setVisibility(View.GONE);
+        arrow.setTranslationY(mCircle.getHeight() / 3);
+        arrow.setAlpha(0f);
+        arrow.setVisibility(View.VISIBLE);
+        arrow.animate().translationY(0).alpha(1f).setDuration(500)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        arrow.animate().translationY(-offset).alpha(0f).setStartDelay(500)
+                                .setListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        arrow.setVisibility(View.GONE);
+                                        newsTv.setTranslationY(offset);
+                                        newsTv.setAlpha(0f);
+                                        newsTv.setVisibility(View.VISIBLE);
+                                        newsTv.animate().translationY(0).alpha(1f).setDuration(500)
+                                                .setListener(new AnimatorListenerAdapter() {
+                                                    @Override
+                                                    public void onAnimationEnd(Animator animation) {
+                                                        newsTv.animate()
+                                                                .translationY(-offset)
+                                                                .alpha(0f)
+                                                                .setStartDelay(500)
+                                                                .setListener(
+                                                                        new AnimatorListenerAdapter() {
+                                                                            @Override
+                                                                            public void onAnimationEnd(
+                                                                                    Animator animation) {
+                                                                                newsTv.setVisibility(View.GONE);
+                                                                                arrow.setTranslationY(offset);
+                                                                                arrow.setVisibility(View.VISIBLE);
+                                                                                arrow.animate()
+                                                                                        .translationY(
+                                                                                                0)
+                                                                                        .alpha(1f)
+                                                                                        .setDuration(
+                                                                                                500)
+                                                                                        .setListener(
+                                                                                                new AnimatorListenerAdapter() {
+                                                                                                    public void onAnimationEnd(
+                                                                                                            Animator animation) {
+                                                                                                        mIsHeaderCircleAnimating = false;
+                                                                                                    };
+                                                                                                });
+                                                                            }
+                                                                        });
+                                                    }
+                                                }).start();
+                                    }
+                                }).setDuration(500).start();
+                    }
+                });
+        mCircle.startTransitionDrawable(2500);
     }
 
     private boolean mInitBody = false;
@@ -526,114 +419,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
     };
 
-    private void animateHideUnreadNews() {
-        if (tvUnreadNews == null || tvUnreadNews.getVisibility() == View.INVISIBLE) {
-            return;
-        }
-
-        ObjectAnimator animTransY = ObjectAnimator.ofFloat(tvUnreadNews, "translationY", 0,
-                -BaseInfoHelper.dip2px(mContext, 20));
-        animTransY.setInterpolator(new DecelerateInterpolator());
-        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(tvUnreadNews, "alpha", 1f, 0f);
-        ObjectAnimator animX1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleX", 1f, 0f);
-        ObjectAnimator animY1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleY", 1f, 0f);
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(animAlpha, animTransY, animX1, animY1);
-        set.setDuration(600);
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                tvUnreadNews.setVisibility(View.INVISIBLE);
-                super.onAnimationEnd(animation);
-            }
-        });
-        set.start();
-        isAppearedUnreadNews = false;
-    }
-
-    private void animateShowUnreadNews() {
-        if (tvUnreadNews == null || tvUnreadNews.getVisibility() == View.INVISIBLE) {
-            return;
-        }
-
-        ObjectAnimator animX1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleX", 0f, 1f);
-        animX1.setInterpolator(new OvershootInterpolator());
-        ObjectAnimator animY1 = ObjectAnimator.ofFloat(tvUnreadNews, "scaleY", 0f, 1f);
-        animY1.setInterpolator(new OvershootInterpolator());
-        ObjectAnimator animTransY = ObjectAnimator.ofFloat(tvUnreadNews, "translationY",
-                BaseInfoHelper.dip2px(mContext, 33), 0);
-        animTransY.setInterpolator(new OvershootInterpolator());
-        ObjectAnimator animAlpha = ObjectAnimator.ofFloat(tvUnreadNews, "alpha", 0.4f, 1f);
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(animX1, animY1, animAlpha, animTransY);
-        set.setDuration(700);
-        set.setStartDelay(500);
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                tvUnreadNews.setAlpha(0f);
-                tvUnreadNews.setVisibility(View.VISIBLE);
-                super.onAnimationStart(animation);
-            }
-        });
-        set.start();
-    }
-
     private boolean isNewsPanelExpanded() {
         return LockScreenManager.getInstance().isNewsPanelExpanded();
-    }
-
-    private void expandTopCircle() {
-        if (mHeaderPart1 != null) {
-            final int targetHeight = NEWS_TOP_CIRCLE_HEIGHT;
-            ViewGroup.LayoutParams lp = mTipLayout.getLayoutParams();
-            lp.height = 0;
-            mHeaderPart1.setVisibility(View.VISIBLE);
-            Animation anim = new Animation() {
-                @Override
-                protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    if (interpolatedTime == 1) {
-                    } else {
-                        mHeaderPart1.getLayoutParams().height = (int) (targetHeight * interpolatedTime);
-                        mHeaderPart1.requestLayout();
-                    }
-                }
-
-                @Override
-                public boolean willChangeBounds() {
-                    return true;
-                }
-            };
-
-            anim.setDuration(600);
-            mHeaderPart1.startAnimation(anim);
-        }
-    }
-
-    private void shrinkTopCircle() {
-        if (mHeaderPart1 != null) {
-            final int initHeight = mHeaderPart1.getHeight();
-            Animation a = new Animation() {
-                @Override
-                protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    if (interpolatedTime == 1) {
-                        mHeaderPart1.setVisibility(View.GONE);
-                    } else {
-                        mHeaderPart1.getLayoutParams().height = initHeight
-                                - (int) (initHeight * interpolatedTime);
-                        mHeaderPart1.requestLayout();
-                    }
-                }
-
-                @Override
-                public boolean willChangeBounds() {
-                    return true;
-                }
-            };
-
-            a.setDuration(600);
-            mHeaderPart1.startAnimation(a);
-        }
     }
 
     private boolean isNewsExpanded = false;
@@ -650,7 +437,7 @@ public class PandoraBoxManager implements View.OnClickListener {
     public void notifyNewsPanelExpanded() {
         isNewsExpanded = true;
         // 缩小顶部区域
-//        shrinkTopCircle();
+        // shrinkTopCircle();
 
         initBody();
 
@@ -659,12 +446,12 @@ public class PandoraBoxManager implements View.OnClickListener {
             int category = position;
             refreshNewsByCategory(category);
         }
-//        showDateView();
+        // showDateView();
         PandoraConfig.newInstance(mContext).saveLastShowUnreadNews(System.currentTimeMillis());
-//        if (isAppearedUnreadNews) {
-//            animateHideUnreadNews();
-//        }
-//        ivArrowUp.animate().rotation(180).setDuration(300);
+        // if (isAppearedUnreadNews) {
+        // animateHideUnreadNews();
+        // }
+        // ivArrowUp.animate().rotation(180).setDuration(300);
         mBackBtn.startAppearAnimator();
 
         requestWakeLock();
@@ -681,12 +468,10 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     private void openNightModeTip() {
-        long lastTipTime = PandoraConfig.newInstance(mContext)
-                .getLastTipOpenNightModeTime();
+        long lastTipTime = PandoraConfig.newInstance(mContext).getLastTipOpenNightModeTime();
         long current = System.currentTimeMillis();
         if (isNewsPanelExpanded()
-                && current - lastTipTime > (BuildConfig.DEBUG ? 60 * 1000
-                        : 3 * 60 * 60 * 1000)) {
+                && current - lastTipTime > (BuildConfig.DEBUG ? 60 * 1000 : 3 * 60 * 60 * 1000)) {
             Calendar cal = Calendar.getInstance();
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             if (PandoraConfig.newInstance(mContext).isNightModeOn()) {
@@ -698,13 +483,12 @@ public class PandoraBoxManager implements View.OnClickListener {
                 if (hour >= 21) {
                     // 当前时间是晚上21点之后，则开启提示，是否打开夜间模式
                     openTipLayout(createOpenNightModeView(), true, 8000);
-                    PandoraConfig.newInstance(mContext).saveLastTipOpenNightModeTime(
-                            current);
+                    PandoraConfig.newInstance(mContext).saveLastTipOpenNightModeTime(current);
                 }
             }
         }
     }
-    
+
     private View createOpenNightModeView() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.news_tip_layout, null);
         TextView tv = (TextView) view.findViewById(R.id.news_tip_title);
@@ -741,9 +525,9 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     public void notifyNewsPanelCollapsed() {
         isNewsExpanded = false;
-//        hideDateView();
-//        ivArrowUp.animate().rotation(0).setDuration(300);
-//        expandTopCircle();
+        // hideDateView();
+        // ivArrowUp.animate().rotation(0).setDuration(300);
+        // expandTopCircle();
 
         closeDetailPage(false);
         // PandoraBoxManager.newInstance(mContext).resetDefaultPage();
@@ -867,15 +651,15 @@ public class PandoraBoxManager implements View.OnClickListener {
             mGossipRefreshView, mHotRefreshView;
 
     public void freeMemory() {
-//        if (mPages != null) {
-//            mPages.clear();
-//        }
-//        mHotNews.clear();
-//        mGossipNews.clear();
-//        mGossipNews.clear();
-//        mGossipNews.clear();
-//        mJokeNews.clear();
-//        mPbManager = null;
+        // if (mPages != null) {
+        // mPages.clear();
+        // }
+        // mHotNews.clear();
+        // mGossipNews.clear();
+        // mGossipNews.clear();
+        // mGossipNews.clear();
+        // mJokeNews.clear();
+        // mPbManager = null;
     }
 
     private View createEmptyView() {
@@ -1387,18 +1171,18 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     public void onScreenOn() {
-        long lastShowUnreadNews = PandoraConfig.newInstance(mContext).getLastShowUnreadNews();
-        if (System.currentTimeMillis() - lastShowUnreadNews >= PandoraPolicy.MIN_SHOW_UNREAD_NEWS_TIME
-                && HDBNetworkState.isNetworkAvailable()) {
-            animateShowUnreadNews();
-            isAppearedUnreadNews = true;
-        }
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startHeaderCircleAnimation();
+            }
+        }, 1000);
     }
 
     public void onScreenOff() {
-        if (tvUnreadNews != null) {
-            tvUnreadNews.setAlpha(0f);
-            isAppearedUnreadNews = false;
+        if (mCircle != null) {
+            mCircle.findViewById(R.id.newsTv).setVisibility(View.GONE);
+            mCircle.findViewById(R.id.upArrow).setVisibility(View.GONE);
         }
     }
 }
