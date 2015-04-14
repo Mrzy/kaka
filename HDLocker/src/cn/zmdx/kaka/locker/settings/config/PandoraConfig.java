@@ -577,7 +577,7 @@ public class PandoraConfig {
     }
 
     public boolean isShowWeather() {
-        return mSp.getBoolean(KEY_SHOW_WEATHER, false);
+        return mSp.getBoolean(KEY_SHOW_WEATHER, true);
     }
 
     public boolean isDelayLockScreenOn() {
