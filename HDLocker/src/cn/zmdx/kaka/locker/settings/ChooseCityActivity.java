@@ -29,8 +29,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
@@ -88,7 +88,6 @@ public class ChooseCityActivity extends ActionBarActivity {
         mCityNameEditText = (EditText) this.findViewById(R.id.etcity);
         mCityNameEditText.addTextChangedListener(cnSearch_TextChanged);
         mSearchCityBtn = (ImageButton) this.findViewById(R.id.btnSearch);
-        // mSearchCityBtn.setOnClickListener(this);
         mHotCitiesGridView = (GridView) this.findViewById(R.id.gvcitynames);
         mHotCitiesLayout = (LinearLayout) this.findViewById(R.id.hot_cities_layout);
         mPossibleCitiesLayout = (FrameLayout) this.findViewById(R.id.possible_cities_layout);
@@ -242,8 +241,6 @@ public class ChooseCityActivity extends ActionBarActivity {
      * @param cityNameStr
      */
     public void processCityWeather(final String aimCityStr) {
-        Toast.makeText(ChooseCityActivity.this, "获取天气中...", Toast.LENGTH_SHORT).show();
-
         String[] split = aimCityStr.split(",");
         final String cityStr = split[0];
         final String provinceStr = split[1];
@@ -252,6 +249,7 @@ public class ChooseCityActivity extends ActionBarActivity {
             @Override
             public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
                 if (smartWeatherInfo != null) {
+                    LockScreenManager.getInstance().updateWeatherView(smartWeatherInfo);
                     mPandoraConfig.saveLastCityName(cityStr);
                     mPandoraConfig.saveLastCityProvinceName(provinceStr);
                 }
@@ -263,25 +261,6 @@ public class ChooseCityActivity extends ActionBarActivity {
         });
 
     }
-
-    // 搜索按钮
-    // @Override
-    // public void onClick(View v) {
-    // mSelectedCityName = mCityNameEditText.getText().toString().trim();
-    // if (!TextUtils.isEmpty(mSelectedCityName)) {
-    // if (mPossibleCityList.contains(mSelectedCityName)) {
-    //
-    // }
-    // String theCityHasSet = mPandoraConfig.getTheCityHasSet();
-    // mPandoraConfig.saveTheCityHasSet(mSelectedCityName);
-    // if (TextUtils.isEmpty(theCityHasSet) ||
-    // !mSelectedCityName.contains(theCityHasSet)) {
-    // mAimCityName = mSelectedCityName;
-    // processCityWeather(mSelectedCityName);
-    // finishPage();
-    // }
-    // }
-    // }
 
     class MyGridViewAdapter extends BaseAdapter {
 
