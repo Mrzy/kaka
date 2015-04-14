@@ -4,7 +4,7 @@ package cn.zmdx.kaka.locker.weather;
 import android.content.Context;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
@@ -116,7 +116,7 @@ public class PandoraLocationManager {
 
                 @Override
                 public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
-//                    PandoraBoxManager.newInstance(mContext).updateView(smartWeatherInfo);
+                    LockScreenManager.getInstance().updateWeatherView(smartWeatherInfo);
                 }
 
                 @Override

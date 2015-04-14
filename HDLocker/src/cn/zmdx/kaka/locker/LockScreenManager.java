@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -14,12 +17,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -60,7 +63,13 @@ import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
+import cn.zmdx.kaka.locker.weather.entity.MeteorologicalCodeConstant;
+import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureIndexInfo;
+import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
+import cn.zmdx.kaka.locker.weather.utils.ParseWeatherJsonUtils;
+import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
+import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
@@ -126,6 +135,34 @@ public class LockScreenManager {
     private LinearLayout mCommonWidgetLayout;
 
     private ImageView mWifiIcon;
+
+    private TextView mLunarCalendar;
+
+    private TextView mWeatherCentTemp;
+
+    private TextView mCityName;
+
+    private ImageView mWeatherFeaturePic;
+
+    private int featureIndexPicResId;
+
+    private String featureNameByNo;
+
+    private String centTempDay;
+
+    private String centTempNight;
+
+    private String forecastReleasedTime;
+
+    private String sunriseAndSunset;
+
+    private String daytimeFeatureNo;
+
+    private boolean isNight;
+
+    private int timeHour;
+
+    private int curHour;
 
     public interface ILockScreenListener {
         void onLock();
@@ -289,6 +326,12 @@ public class LockScreenManager {
         mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
         setDate();
 
+        mLunarCalendar = (TextView) mMainPage.findViewById(R.id.tv_lunar_calendar);
+        setLunarCalendar();
+        mWeatherFeaturePic = (ImageView) mMainPage.findViewById(R.id.iv_weather_feature_pic);
+        mWeatherCentTemp = (TextView) mMainPage.findViewById(R.id.tv_weather_centtemp);
+        mCityName = (TextView) mMainPage.findViewById(R.id.tv_city_name);
+        setCityName();
         mBatteryInfo = (TextView) mMainPage.findViewById(R.id.battery_info);
         batteryView = (BatteryView) mMainPage.findViewById(R.id.batteryView);
         if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
@@ -443,7 +486,7 @@ public class LockScreenManager {
                 }
                 // 渐隐时间，天气文字
                 setMainPageAlpha(1.0f - slideOffset);
-                
+
                 PandoraBoxManager.newInstance(mContext).notifyNewsPanelSlide(panel, slideOffset);
             }
         };
@@ -530,7 +573,7 @@ public class LockScreenManager {
     public void processWeatherInfo() {
         SmartWeatherInfo smartWeatherInfo = PandoraWeatherManager.getInstance()
                 .getWeatherFromCache();
-
+        updateWeatherView(smartWeatherInfo);
         long str2TimeMillis = mPandoraConfig.getLastCheckWeatherTime();
         if (System.currentTimeMillis() - str2TimeMillis >= PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
             if (BuildConfig.DEBUG) {
@@ -540,6 +583,7 @@ public class LockScreenManager {
 
                 @Override
                 public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
+                    updateWeatherView(smartWeatherInfo);
                 }
 
                 @Override
@@ -547,6 +591,93 @@ public class LockScreenManager {
 
                 }
             });
+        }
+    }
+
+    public void updateWeatherView(SmartWeatherInfo smartWeatherInfo) {
+        if (smartWeatherInfo == null) {
+            // if ((tvNoWeatherInfo != null)) {
+            // if (!HDBNetworkState.isNetworkAvailable()) {
+            // tvNoWeatherInfo.setText(mContext.getString(R.string.get_weather_failure));
+            // } else {
+            // tvNoWeatherInfo.setText(mContext.getString(R.string.no_weather_info_str));
+            // }
+            // tvNoWeatherInfo.setVisibility(View.VISIBLE);
+            // }
+            return;
+        }
+        SmartWeatherFeatureInfo smartWeatherFeatureInfo = smartWeatherInfo
+                .getSmartWeatherFeatureInfo();
+        List<SmartWeatherFeatureIndexInfo> smartWeatherFeatureIndexInfoList = smartWeatherFeatureInfo
+                .getSmartWeatherFeatureIndexInfoList();
+
+        SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
+                .get(0);
+        if (smartWeatherFeatureInfo != null) {
+            forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
+            sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
+        }
+        timeHour = SmartWeatherUtils.str2TimeHour(forecastReleasedTime);
+        if (!TextUtils.isEmpty(sunriseAndSunset)) {
+            isNight = SmartWeatherUtils.isNight(sunriseAndSunset);
+        } else {
+            curHour = timeHour;
+        }
+        if (timeHour == 18) {
+            String lastWeatherInfo = mPandoraConfig.getLastWeatherInfo();
+            try {
+                if (!TextUtils.isEmpty(lastWeatherInfo)) {
+                    SmartWeatherInfo weatherInfo = ParseWeatherJsonUtils
+                            .parseWeatherJson(new JSONObject(lastWeatherInfo));
+                    SmartWeatherFeatureIndexInfo featureIndexInfo = weatherInfo
+                            .getSmartWeatherFeatureInfo().getSmartWeatherFeatureIndexInfoList()
+                            .get(0);
+                    if (featureIndexInfo != null) {
+                        centTempDay = featureIndexInfo.getDaytimeCentTemp();
+                        centTempNight = featureIndexInfo.getNightCentTemp();
+                        daytimeFeatureNo = featureIndexInfo.getDaytimeFeatureNo();
+                        if (daytimeFeatureNo != null) {
+                            featureIndexPicResId = SmartWeatherUtils
+                                    .getFeatureIndexPicByNo(daytimeFeatureNo);
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
+        centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
+        if (isNight || curHour == 18) {
+            String nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
+            if (!TextUtils.isEmpty(nightFeatureNo) && !TextUtils.isEmpty(centTempNight)) {
+                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
+                featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
+                if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
+                    featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
+                }
+            }
+        } else {
+            daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
+            if (!TextUtils.isEmpty(daytimeFeatureNo)) {
+                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
+                featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
+            }
+        }
+        if (mWeatherFeaturePic != null) {
+            mWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
+        }
+        if (mWeatherCentTemp != null) {
+            if (!TextUtils.isEmpty(centTempDay)) {
+                mWeatherCentTemp.setText((centTempNight == null ? "" : (centTempNight + "℃")) + "~"
+                        + centTempDay + "℃");
+            } else {
+                if (!TextUtils.isEmpty(centTempNight)) {
+                    mWeatherCentTemp.setText(centTempNight + "℃");
+                } else {
+                    mWeatherCentTemp.setText("");
+                }
+            }
         }
     }
 
@@ -601,6 +732,23 @@ public class LockScreenManager {
         String weekString = PandoraUtils.getWeekString(mContext, week);
         String dateString = "" + month + "月" + "" + day + "日 " + weekString;
         mDate.setText(dateString);
+    }
+
+    public void setLunarCalendar() {
+        String lunarCal = SmartWeatherUtils.getLunarCal();
+        if (mLunarCalendar != null && !TextUtils.isEmpty(lunarCal)) {
+            mLunarCalendar.setText(lunarCal);
+        }
+    }
+
+    private void setCityName() {
+        String theCityHasSet = mPandoraConfig.getTheCityHasSet();
+        if (!TextUtils.isEmpty(theCityHasSet)) {
+            String[] split = theCityHasSet.split(",");
+            if (mCityName != null && !TextUtils.isEmpty(split[0])) {
+                mCityName.setText(split[0]);
+            }
+        }
     }
 
     private Bitmap mWallpaperBg;
@@ -738,7 +886,7 @@ public class LockScreenManager {
     public View getSliderView() {
         return mSlidingUpView.getSliderView();
     }
- 
+
     public void onScreenOn() {
         if (mIsLocked) {
 

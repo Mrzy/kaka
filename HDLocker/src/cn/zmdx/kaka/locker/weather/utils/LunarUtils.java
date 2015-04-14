@@ -194,6 +194,6 @@ public class LunarUtils {
     }
 
     public String toString() {
-        return "农历" + (leap ? "闰" : "") + chineseNumber[month - 1] + "月" + getChinaDayString(day);
+        return (leap ? "闰" : "") + chineseNumber[month - 1] + "月" + getChinaDayString(day);
     }
 }
