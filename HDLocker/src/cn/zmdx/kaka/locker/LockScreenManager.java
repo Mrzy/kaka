@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -30,6 +31,7 @@ import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.BatteryView;
@@ -52,6 +54,7 @@ import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
@@ -120,6 +123,10 @@ public class LockScreenManager {
 
     private TextClockCompat mClock;
 
+    private LinearLayout mCommonWidgetLayout;
+
+    private ImageView mWifiIcon;
+
     public interface ILockScreenListener {
         void onLock();
 
@@ -174,8 +181,9 @@ public class LockScreenManager {
 
         mIsNeedNotice = mPandoraConfig.isNotifyFunctionOn();
         mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
+                | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_HARDWARE_ACCELERATED
+                | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         if (!mIsNeedNotice || BaseInfoHelper.isSupportTranslucentStatus()) { // 如果不显示通知栏或者系统版本大于等于19(支持透明通知栏),则添加下面flag从屏幕顶部开始绘制
             mWinParams.flags |= LayoutParams.FLAG_LAYOUT_IN_SCREEN;
             final Display display = mWinManager.getDefaultDisplay();
@@ -217,6 +225,7 @@ public class LockScreenManager {
         String currentDate = BaseInfoHelper.getCurrentDate();
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
 
+        WallpaperUtils.autoChangeWallpaper();
     }
 
     private void startShimmer() {
@@ -271,6 +280,8 @@ public class LockScreenManager {
         mShimmer.setDuration(5000);// 默认是1s
         mShimmer.setStartDelay(1000);// 默认间隔为0
 
+        mCommonWidgetLayout = (LinearLayout) mMainPage.findViewById(R.id.commonWidgetArea);
+        mWifiIcon = (ImageView) mMainPage.findViewById(R.id.wifi_icon);
         mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         mDate = (TextView) mMainPage.findViewById(R.id.lock_date);
@@ -281,8 +292,9 @@ public class LockScreenManager {
         mBatteryInfo = (TextView) mMainPage.findViewById(R.id.battery_info);
         batteryView = (BatteryView) mMainPage.findViewById(R.id.batteryView);
         if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
-            mBatteryInfo.setVisibility(View.GONE);
-            batteryView.setVisibility(View.GONE);
+            // mBatteryInfo.setVisibility(View.GONE);
+            // batteryView.setVisibility(View.GONE);
+            mCommonWidgetLayout.setVisibility(View.GONE);
         } else {
             batteryView.setLevelListener(new ILevelCallBack() {
 
@@ -291,6 +303,9 @@ public class LockScreenManager {
                     mBatteryInfo.setText(level + "%");
                 }
             });
+            if (!HDBNetworkState.isWifiNetwork()) {
+                mWifiIcon.setVisibility(View.GONE);
+            }
         }
         pages.add(page1);
         pages.add(mMainPage);

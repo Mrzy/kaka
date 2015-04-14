@@ -118,6 +118,12 @@ public class PandoraConfig {
 
     private static final String KEY_LAST_TIME_OPEN_NIGHT_MODE = "kltonm";
 
+    private static final String KEY_THE_CITY_HAS_SET = "ktchs";
+
+    private static final String KEY_THE_SELECTED_HOT_CITY_POSITION = "ktshcp";
+
+    private static final String KEY_SHOW_WEATHER = "ksw";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -282,6 +288,26 @@ public class PandoraConfig {
 
     public long getLastCheckLocationTime() {
         return mSp.getLong(KEY_LAST_CHECK_LOCATION, 0l);
+    }
+
+    public void saveTheCityHasSet(String theSetCity) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_THE_CITY_HAS_SET, theSetCity);
+        editor.commit();
+    }
+
+    public String getTheCityHasSet() {
+        return mSp.getString(KEY_THE_CITY_HAS_SET, "");
+    }
+
+    public String getSelectedHotCityPosition() {
+        return mSp.getString(KEY_THE_SELECTED_HOT_CITY_POSITION, "0");
+    }
+
+    public void saveSelectedHotCityPosition(int position) {
+        Editor editor = mSp.edit();
+        editor.putString(KEY_THE_SELECTED_HOT_CITY_POSITION, String.valueOf(position));
+        editor.commit();
     }
 
     public void saveHasGuided() {
@@ -544,6 +570,14 @@ public class PandoraConfig {
 
     public void saveWeatherCity(String city) {
         mSp.edit().putString(KEY_SAVE_CITY_NAME, city).commit();
+    }
+
+    public void saveWeatherState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_SHOW_WEATHER, isEnable).commit();
+    }
+
+    public boolean isShowWeather() {
+        return mSp.getBoolean(KEY_SHOW_WEATHER, false);
     }
 
     public boolean isDelayLockScreenOn() {

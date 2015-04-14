@@ -140,6 +140,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         mHeaderPart2 = mEntireView.findViewById(R.id.header_part2);
         mCircle = (HeaderCircleButton) mHeaderPart1.findViewById(R.id.header_circle);
         // 处理点击时间
+        final int height = BaseInfoHelper.dip2px(mContext, 20);
         mCircle.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -148,7 +149,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                     case MotionEvent.ACTION_DOWN:
                         View slider = LockScreenManager.getInstance().getSliderView();
                         if (slider != null) {
-                            slider.animate().translationY(-60).setDuration(200).start();
+                            slider.animate().translationY(-height).setDuration(200).start();
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
@@ -164,6 +165,11 @@ public class PandoraBoxManager implements View.OnClickListener {
         });
         mClock = (TextClockCompat) mHeaderPart2.findViewById(R.id.digitalClockDateNow);
         mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
+        if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
+            mClock.setVisibility(View.GONE);
+        } else {
+            mClock.setVisibility(View.VISIBLE);
+        }
     }
 
     private boolean mIsHeaderCircleAnimating = false;

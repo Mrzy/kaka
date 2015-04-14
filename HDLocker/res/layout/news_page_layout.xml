@@ -31,19 +31,20 @@
 
                 <TextView
                     android:id="@+id/newsTv"
-                    android:textColor="#d0ffffff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:text="爆点" />
+                    android:text="爆点"
+                    android:textColor="#d0ffffff"
+                    android:visibility="invisible" />
             </cn.zmdx.kaka.locker.content.view.HeaderCircleButton>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/header_part2"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:background="#50000000"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp" >
@@ -51,7 +52,7 @@
             <cn.zmdx.kaka.locker.widget.TextClockCompat
                 android:id="@+id/digitalClockDateNow"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="bottom"
                 android:shadowColor="#30000000"

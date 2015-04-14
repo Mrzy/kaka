@@ -60,4 +60,10 @@ public class MeteorologicalCodeConstant {
             "10~11级",// 8
             "11~12级",// 9
     };
+
+    // 热门城市
+    public static final String[] hotCityNameStrings = new String[] {
+            "定位", "北京", "上海", "广州", "深圳", "天津", "南京", "杭州", "成都", "武汉", "重庆", "沈阳", "西安", "大连",
+            "青岛", "苏州", "长沙", "宁波", "无锡", "郑州", "香港", "台北", "澳门", "高雄"
+    };
 }

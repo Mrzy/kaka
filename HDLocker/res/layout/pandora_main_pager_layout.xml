@@ -11,9 +11,18 @@
         android:orientation="vertical" >
 
         <LinearLayout
+            android:id="@+id/commonWidgetArea"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/wifi_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/wifi_icon" />
 
             <cn.zmdx.kaka.locker.battery.BatteryView
                 android:id="@+id/batteryView"

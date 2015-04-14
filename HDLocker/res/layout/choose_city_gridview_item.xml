@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/choose_city_gridview_item_bg_selector"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp" >
+
+    <TextView
+        android:id="@+id/tvhotcities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="wqewe"
+        android:textColor="@color/setting_text_normal_color"
+        android:textSize="16dp" />
+
+    <ImageView
+        android:id="@+id/iv_is_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/notify_filter_select"
+        android:layout_alignBottom="@+id/tvhotcities"
+        android:layout_toRightOf="@+id/tvhotcities" />
+
+</RelativeLayout>

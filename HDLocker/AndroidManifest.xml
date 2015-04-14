@@ -148,6 +148,11 @@
             android:name=".settings.PasswordPromptActivity"
             android:screenOrientation="portrait"
             android:theme="@style/password_prompt_style" />
+        <activity
+            android:name=".settings.ChooseCityActivity"
+            android:label="@string/pandora_setting_weather_choose_city"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat" />
         <!-- 分享 -->
         <activity
             android:name="cn.sharesdk.framework.ShareSDKUIShell"

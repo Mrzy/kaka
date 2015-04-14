@@ -212,4 +212,10 @@
     <string name="pandora_setting_general_news_item">新闻选项</string>
     <string name="pandora_setting_general_night_mode">开启夜间模式</string>
     <string name="news_tip_open_nightmode">保护眼睛，建议开启夜间模式</string>
+    <string name="pandora_setting_weather_choose_city">添加城市</string>
+    <string name="choose_city_max_length_tip">最多不可超过10个字符</string>
+    <string name="choose_city_not_find_tip">没有您要查询的地区</string>
+    <string name="choose_city_hot_cities_title">热门城市</string>
+    <string name="choose_city_search_city_hint">搜索全国城市（中文/拼音）</string>
+    
 </resources>
