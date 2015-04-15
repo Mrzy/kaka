@@ -33,6 +33,7 @@ import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
 import cn.zmdx.kaka.locker.weather.entity.CityInfo;
@@ -149,7 +150,18 @@ public class ChooseCityActivity extends ActionBarActivity {
                 mHotCitiesGridView.setSelection(position);
                 mPandoraConfig.saveSelectedHotCityPosition(position);
                 myGridViewAdapter.notifyDataSetChanged();
-                mSelectedCityName = mGVCityNameList.get(position);
+                if (position == 0) {
+                    String cityName = PandoraLocationManager.getInstance(ChooseCityActivity.this)
+                            .getCityName();
+                    String lastCityName = mPandoraConfig.getLastCityName();
+                    if (!TextUtils.isEmpty(lastCityName)) {
+                        mSelectedCityName = lastCityName;
+                    } else if (!TextUtils.isEmpty(cityName)) {
+                        mSelectedCityName = cityName;
+                    }
+                } else {
+                    mSelectedCityName = mGVCityNameList.get(position);
+                }
                 if (!TextUtils.isEmpty(mSelectedCityName)) {
                     String provinceByCity = XMLParserUtils.getProvinceByCity(mSelectedCityName);
                     mPandoraConfig.saveTheCityHasSet(mSelectedCityName + "," + provinceByCity);
@@ -250,8 +262,8 @@ public class ChooseCityActivity extends ActionBarActivity {
             public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
                 if (smartWeatherInfo != null) {
                     LockScreenManager.getInstance().updateWeatherView(smartWeatherInfo);
-                    mPandoraConfig.saveLastCityName(cityStr);
-                    mPandoraConfig.saveLastCityProvinceName(provinceStr);
+                    // mPandoraConfig.saveLastCityName(cityStr);
+                    // mPandoraConfig.saveLastCityProvinceName(provinceStr);
                 }
             }
 
