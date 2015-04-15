@@ -443,7 +443,6 @@ public class PandoraBoxManager implements View.OnClickListener {
     public void notifyNewsPanelExpanded() {
         isNewsExpanded = true;
         // 缩小顶部区域
-        // shrinkTopCircle();
 
         initBody();
 
@@ -452,12 +451,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             int category = position;
             refreshNewsByCategory(category);
         }
-        // showDateView();
         PandoraConfig.newInstance(mContext).saveLastShowUnreadNews(System.currentTimeMillis());
-        // if (isAppearedUnreadNews) {
-        // animateHideUnreadNews();
-        // }
-        // ivArrowUp.animate().rotation(180).setDuration(300);
         mBackBtn.startAppearAnimator();
 
         requestWakeLock();
@@ -1189,6 +1183,9 @@ public class PandoraBoxManager implements View.OnClickListener {
         if (mCircle != null) {
             mCircle.findViewById(R.id.newsTv).setVisibility(View.GONE);
             mCircle.findViewById(R.id.upArrow).setVisibility(View.GONE);
+            int theme = PandoraConfig.newInstance(mContext).isNightModeOn() ? NEWS_THEME_NIGHT
+                    : NEWS_THEME_DAY;
+            switchNewsTheme(theme);
         }
     }
 }
