@@ -30,16 +30,16 @@ public class SplashActivity extends Activity {
 
             @Override
             public void run() {
-//                boolean isMeizu = PandoraUtils.isMeizu(SplashActivity.this);
-//                boolean isDeviceAvailable = !NotificationInterceptor.getInstance(
-//                        SplashActivity.this).isDeviceAvailable();
-//                if (isFirstIn && !(isMeizu && isDeviceAvailable)) {
-//                    Intent intent = new Intent(SplashActivity.this, InitSettingActivity.class);
-//                    startActivity(intent);
-//                }
-//                finish();
-//                overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
-//                        R.anim.umeng_fb_slide_out_from_left);
+                boolean isMeizu = PandoraUtils.isMeizu(SplashActivity.this);
+                boolean isDeviceAvailable = !NotificationInterceptor.getInstance(
+                        SplashActivity.this).isDeviceAvailable();
+                if (isFirstIn && !(isMeizu && isDeviceAvailable)) {
+                    Intent intent = new Intent(SplashActivity.this, InitSettingActivity.class);
+                    startActivity(intent);
+                }
+                finish();
+                overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                        R.anim.umeng_fb_slide_out_from_left);
             }
         }, 2000);
     }
