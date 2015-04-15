@@ -17,11 +17,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
-import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.MainSettingFragment.IMainSettingListener;
-import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.splash.SplashActivity;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 
 import com.umeng.analytics.MobclickAgent;
@@ -66,7 +65,8 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
             MainSettingActivity activity = mActivity.get();
             switch (msg.what) {
                 case GO_INIT_SETTING:
-                    activity.goInitSetting();
+                    activity.gotoSplash();
+//                    activity.goInitSetting();
                     break;
             }
             super.handleMessage(msg);
@@ -105,20 +105,25 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
     }
 
     private void init() {
-        isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
-        if (isFirstIn) {
+//        isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
+//        if (isFirstIn) {
             mHandler.sendEmptyMessage(GO_INIT_SETTING);
-        }
+//        }
     }
 
-    private void goInitSetting() {
-        boolean isMeizu = PandoraUtils.isMeizu(this);
-        if (isMeizu && !NotificationInterceptor.getInstance(this).isDeviceAvailable()) {
-            return;
-        }
-        Intent intent = new Intent(this, InitSettingActivity.class);
+    private void gotoSplash() {
+        Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
     }
+
+//    private void goInitSetting() {
+//        boolean isMeizu = PandoraUtils.isMeizu(this);
+//        if (isMeizu && !NotificationInterceptor.getInstance(this).isDeviceAvailable()) {
+//            return;
+//        }
+//        Intent intent = new Intent(this, InitSettingActivity.class);
+//        startActivity(intent);
+//    }
 
     public void onResume() {
         super.onResume();

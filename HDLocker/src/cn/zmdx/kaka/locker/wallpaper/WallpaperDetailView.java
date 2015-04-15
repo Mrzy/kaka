@@ -177,7 +177,7 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
 
                         @Override
                         public void run() {
-                            Toast.makeText(mContext, "桌面壁纸设置中...", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, "桌面壁纸设置中...", Toast.LENGTH_SHORT).show();
                         }
                     });
                     try {
@@ -198,7 +198,7 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
 
                 @Override
                 public void run() {
-                    Toast.makeText(mContext, "桌面壁纸设置成功", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "桌面壁纸设置成功", Toast.LENGTH_SHORT).show();
                 }
             });
             if (null != mObserver) {

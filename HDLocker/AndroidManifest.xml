@@ -153,6 +153,10 @@
             android:label="@string/pandora_setting_weather_choose_city"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat" />
+        <activity
+            android:name=".splash.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
         <!-- 分享 -->
         <activity
             android:name="cn.sharesdk.framework.ShareSDKUIShell"

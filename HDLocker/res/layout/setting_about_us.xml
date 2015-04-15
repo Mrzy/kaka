@@ -50,7 +50,8 @@
             android:gravity="center_horizontal"
             android:text="@string/setting_about_text"
             android:textColor="#7b7c7e"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
