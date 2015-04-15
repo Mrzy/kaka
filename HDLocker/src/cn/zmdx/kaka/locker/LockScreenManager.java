@@ -119,7 +119,7 @@ public class LockScreenManager {
 
     private SensorImageView mSensorImageView, mBlurImageView;
 
-    private View mMainPage, mDimBg, mMainPagePart1;
+    private View mMainPage, mDimBg, mMainPagePart1, mFakeStatusDate;
 
     private SlidingUpPanelLayout mSlidingUpView;
 
@@ -133,7 +133,9 @@ public class LockScreenManager {
 
     private TextClockCompat mClock;
 
-    private LinearLayout mCommonWidgetLayout;
+    private View mCommonWidgetLayout;
+
+    private View mDateWidget;
 
     private LinearLayout mWeatherInfoLayout;
 
@@ -315,12 +317,14 @@ public class LockScreenManager {
         initSecurePanel(page1);
         mMainPage = LayoutInflater.from(mContext).inflate(R.layout.pandora_main_pager_layout, null);
         mMainPagePart1 = mMainPage.findViewById(R.id.part1);
+        mFakeStatusDate = mMainPage.findViewById(R.id.fakeStatusDate);
         mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
         mShimmer = new Shimmer();
         mShimmer.setDuration(5000);// 默认是1s
         mShimmer.setStartDelay(1000);// 默认间隔为0
 
-        mCommonWidgetLayout = (LinearLayout) mMainPage.findViewById(R.id.commonWidgetArea);
+        mDateWidget = mMainPage.findViewById(R.id.dateWidget);
+        mCommonWidgetLayout = mMainPage.findViewById(R.id.commonWidgetArea);
         mWifiIcon = (ImageView) mMainPage.findViewById(R.id.wifi_icon);
         mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -490,7 +494,7 @@ public class LockScreenManager {
                     setWallpaperBlurEffect(Math.max(0, slideOffset));
                 }
                 // 渐隐时间，天气文字
-                setMainPageAlpha(1.0f - slideOffset);
+                setDateViewAlpha(1.0f - slideOffset);
 
                 PandoraBoxManager.newInstance(mContext).notifyNewsPanelSlide(panel, slideOffset);
             }
@@ -500,14 +504,14 @@ public class LockScreenManager {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelExpanded();
             pauseWallpaperTranslation();
             pauseShimmer();
-            mSlidingUpView.setDragView(panel.findViewById(R.id.header_part2));
+            mFakeStatusDate.setVisibility(View.VISIBLE);
         };
 
         public void onPanelCollapsed(View panel) {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelCollapsed();
             resumeWallpaperTranslation();
             startShimmer();
-            mSlidingUpView.setDragView(panel.findViewById(R.id.header_part1));
+            mFakeStatusDate.setVisibility(View.INVISIBLE);
         };
     };
 
@@ -538,6 +542,12 @@ public class LockScreenManager {
     private void setMainPageAlpha(float alpha) {
         if (mMainPage != null) {
             mMainPage.setAlpha(alpha);
+        }
+    }
+
+    private void setDateViewAlpha(float alpha) {
+        if (mDateWidget != null) {
+            mDateWidget.setAlpha(alpha);
         }
     }
 

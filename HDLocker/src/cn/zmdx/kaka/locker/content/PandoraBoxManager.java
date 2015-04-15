@@ -163,13 +163,13 @@ public class PandoraBoxManager implements View.OnClickListener {
                 return false;
             }
         });
-        mClock = (TextClockCompat) mHeaderPart2.findViewById(R.id.digitalClockDateNow);
-        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
-        if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
-            mClock.setVisibility(View.GONE);
-        } else {
-            mClock.setVisibility(View.VISIBLE);
-        }
+//        mClock = (TextClockCompat) mHeaderPart2.findViewById(R.id.digitalClockDateNow);
+//        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
+//        if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
+//            mClock.setVisibility(View.GONE);
+//        } else {
+//            mClock.setVisibility(View.VISIBLE);
+//        }
     }
 
     private boolean mIsHeaderCircleAnimating = false;

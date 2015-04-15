@@ -46,14 +46,14 @@
         <LinearLayout
             android:id="@+id/header_part2"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="25dp"
             android:background="#50000000"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp" >
 
-            <cn.zmdx.kaka.locker.widget.TextClockCompat
+            <!-- <cn.zmdx.kaka.locker.widget.TextClockCompat
                 android:id="@+id/digitalClockDateNow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                 android:shadowDy="2"
                 android:shadowRadius="1"
                 android:textColor="@color/white"
-                android:textSize="23sp" />
+                android:textSize="23sp" /> -->
         </LinearLayout>
 
         <LinearLayout
