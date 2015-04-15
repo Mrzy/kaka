@@ -91,7 +91,7 @@ public class PandoraService extends Service {
                 System.currentTimeMillis());
         Intent notificationIntent = new Intent(this, MainSettingActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-        notification.setLatestEventInfo(this, "潘多拉守护神", "点击可关闭守护", pendingIntent);
+        notification.setLatestEventInfo(this, "潘多拉守护神正在运行", "点击可关闭守护", pendingIntent);
         return notification;
     }
 
