@@ -141,7 +141,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         mCircle = (HeaderCircleButton) mHeaderPart1.findViewById(R.id.header_circle);
         // 处理点击时间
         final int height = BaseInfoHelper.dip2px(mContext, 20);
-        mCircle.setOnTouchListener(new OnTouchListener() {
+        mHeaderPart1.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int action = event.getAction();
@@ -250,8 +250,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         mTipLayout = (FrameLayout) mEntireView.findViewById(R.id.news_tip_layout);
 
         mBackBtn = (CircleSpiritButton) mEntireView.findViewById(R.id.backBtn);
-        mBackBtn.setColorNormal(mFloatingButtonColors[1]);
-        mBackBtn.setColorPressed(mFloatingButtonColors[1]);
+        mBackBtn.setColorNormal(mFloatingButtonColors[2]);
+        mBackBtn.setColorPressed(mFloatingButtonColors[2]);
         mBackBtn.setOnClickListener(this);
         mBackBtn.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
 

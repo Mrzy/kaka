@@ -47,8 +47,10 @@ public class CircleSpiritButton extends FloatingActionButton {
         mContainer = new FrameLayout(getContext());
         int size = getDimension(getType() == TYPE_NORMAL ? R.dimen.fab_size_normal
                 : R.dimen.fab_size_mini) - BaseInfoHelper.dip2px(getContext(), 25);
-        mArrowRes = R.drawable.arrow_down;
+        mArrowRes = R.drawable.arrow_up;
         mArrawView = new ImageView(getContext());
+        int paddint = BaseInfoHelper.dip2px(getContext(), 6);
+        mArrawView.setPadding(paddint, paddint, paddint, paddint);
         mArrawView.setImageResource(mArrowRes);
         mContainer.addView(mArrawView, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));

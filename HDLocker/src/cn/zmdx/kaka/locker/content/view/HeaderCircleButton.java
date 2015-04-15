@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.util.AttributeSet;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.widget.FloatingActionButton;
 
 public class HeaderCircleButton extends FloatingActionButton {
@@ -24,8 +25,8 @@ public class HeaderCircleButton extends FloatingActionButton {
 
     @Override
     protected Drawable createBackgroundDrawable() {
-        Drawable d = createDrawable(Color.parseColor("#80ff0000"));
-        Drawable d1 = createDrawable(Color.parseColor("#cff00000"));
+        Drawable d = createDrawable(Color.parseColor("#30ffffff"));
+        Drawable d1 = createDrawable(Color.parseColor("#60ffffff"));
         Drawable[] drawables = new Drawable[] {
                 d, d1
         };
@@ -39,7 +40,7 @@ public class HeaderCircleButton extends FloatingActionButton {
         if (bg instanceof TransitionDrawable) {
             final TransitionDrawable td = (TransitionDrawable) bg;
             td.startTransition(time * 2);
-            getHandler().postDelayed(new Runnable() {
+            HDBThreadUtils.postOnUiDelayed(new Runnable() {
                 @Override
                 public void run() {
                     td.reverseTransition(time);
