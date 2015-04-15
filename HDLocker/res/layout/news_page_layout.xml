@@ -93,7 +93,7 @@
                 android:textColor="#ffffff"
                 android:textSize="14dp"
                 psts:pstsDividerColor="@android:color/transparent"
-                psts:pstsIndicatorColor="#a0ffffff"
+                psts:pstsIndicatorColor="#ffffff"
                 psts:pstsIndicatorHeight="2dp"
                 psts:pstsUnderlineColor="@android:color/transparent" />
 

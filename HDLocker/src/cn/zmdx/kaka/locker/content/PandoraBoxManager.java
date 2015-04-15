@@ -120,6 +120,8 @@ public class PandoraBoxManager implements View.OnClickListener {
     private List<View> mPages;
 
     private FrameLayout mTipLayout;
+    
+    private int mCurItem = 2;
 
     private PandoraBoxManager(Context context) {
         mContext = context;
@@ -163,13 +165,14 @@ public class PandoraBoxManager implements View.OnClickListener {
                 return false;
             }
         });
-//        mClock = (TextClockCompat) mHeaderPart2.findViewById(R.id.digitalClockDateNow);
-//        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
-//        if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
-//            mClock.setVisibility(View.GONE);
-//        } else {
-//            mClock.setVisibility(View.VISIBLE);
-//        }
+        // mClock = (TextClockCompat)
+        // mHeaderPart2.findViewById(R.id.digitalClockDateNow);
+        // mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
+        // if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
+        // mClock.setVisibility(View.GONE);
+        // } else {
+        // mClock.setVisibility(View.VISIBLE);
+        // }
     }
 
     private boolean mIsHeaderCircleAnimating = false;
@@ -285,15 +288,17 @@ public class PandoraBoxManager implements View.OnClickListener {
         initTitles(titles);
         NewsPagerAdapter pagerAdapter = new NewsPagerAdapter(mPages, titles);
         mViewPager.setAdapter(pagerAdapter);
-        mViewPager.setCurrentItem(2);
+        mViewPager.setCurrentItem(mCurItem);
 
         final PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) mEntireView
                 .findViewById(R.id.newsTabStrip);
         tabStrip.setViewPager(mViewPager);
         tabStrip.setTabBgColors(mTabColors);
         tabStrip.setShouldExpand(false);
-        // tabStrip.setShouldSizeBigger(true);
-        // tabStrip.setTextPressColor(Color.WHITE);
+        tabStrip.setShouldChangeTextColor(true);
+        tabStrip.setTextColor(0xaaFFFFFF);
+        tabStrip.setTextPressColor(0xFFFFFFFF);
+        tabStrip.setDefaultPosition(mCurItem);
         tabStrip.setOnPageChangeListener(new OnPageChangeListener() {
 
             @Override

@@ -129,6 +129,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     private boolean shouldChangeTextColor = false;
 
+    private int defaultPosition;
+
     public PagerSlidingTabStrip(Context context) {
         this(context, null);
     }
@@ -326,7 +328,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 tab.setTypeface(tabTypeface, tabTypefaceStyle);
                 tab.setTextColor(tabTextColor);
                 if (shouldSizeBigger || shouldChangeTextColor) {
-                    setTextSizeBigger(0);
+                    setTextSizeBigger(defaultPosition);
                 }
                 // setAllCaps() is only available from API 14, so the upper case
                 // is made manually if we are on a
@@ -482,7 +484,11 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                     if (shouldChangeTextColor) {
                         tab.setTextColor(tabPressTextColor);
                     }
-                    setTextAnimator(tab, tabTextSize, tabPressTextSize);
+                    if (shouldSizeBigger) {
+                        setTextAnimator(tab, tabTextSize, tabPressTextSize);
+                    } else {
+                        tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
+                    }
                 } else {
                     if (shouldChangeTextColor) {
                         tab.setTextColor(tabTextColor);
@@ -674,6 +680,15 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     public int getTabPaddingLeftRight() {
         return tabPadding;
+    }
+
+    public void setDefaultPosition(int position) {
+        this.defaultPosition = position;
+        updateTabStyles();
+    }
+
+    public int getDefaultPosition() {
+        return defaultPosition;
     }
 
     @Override
