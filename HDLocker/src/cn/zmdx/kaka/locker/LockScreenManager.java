@@ -61,6 +61,7 @@ import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
+import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
 import cn.zmdx.kaka.locker.weather.entity.MeteorologicalCodeConstant;
@@ -133,6 +134,8 @@ public class LockScreenManager {
     private TextClockCompat mClock;
 
     private LinearLayout mCommonWidgetLayout;
+
+    private LinearLayout mWeatherInfoLayout;
 
     private ImageView mWifiIcon;
 
@@ -326,6 +329,8 @@ public class LockScreenManager {
         mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
         setDate();
 
+        mWeatherInfoLayout = (LinearLayout) mMainPage.findViewById(R.id.ll_weather_info);
+        setWeatherInfoLayout();
         mLunarCalendar = (TextView) mMainPage.findViewById(R.id.tv_lunar_calendar);
         setLunarCalendar();
         mWeatherFeaturePic = (ImageView) mMainPage.findViewById(R.id.iv_weather_feature_pic);
@@ -725,7 +730,7 @@ public class LockScreenManager {
         }
     }
 
-    public void setDate() {
+    private void setDate() {
         int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
         int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         int week = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
@@ -734,15 +739,35 @@ public class LockScreenManager {
         mDate.setText(dateString);
     }
 
-    public void setLunarCalendar() {
+    private void setLunarCalendar() {
         String lunarCal = SmartWeatherUtils.getLunarCal();
+        boolean isLunarCalendarOn = mPandoraConfig.isLunarCalendarOn();
         if (mLunarCalendar != null && !TextUtils.isEmpty(lunarCal)) {
-            mLunarCalendar.setText(lunarCal);
+            if (isLunarCalendarOn) {
+                mLunarCalendar.setText(lunarCal);
+            } else {
+                mLunarCalendar.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void setWeatherInfoLayout() {
+        boolean isShowWeather = mPandoraConfig.isShowWeather();
+        if (isShowWeather) {
+            mWeatherInfoLayout.setVisibility(View.VISIBLE);
+        } else {
+            mWeatherInfoLayout.setVisibility(View.GONE);
         }
     }
 
     private void setCityName() {
+        String cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
         String theCityHasSet = mPandoraConfig.getTheCityHasSet();
+        if (!TextUtils.isEmpty(cityNameStr)) {
+            if (mCityName != null) {
+                mCityName.setText(cityNameStr);
+            }
+        }
         if (!TextUtils.isEmpty(theCityHasSet)) {
             String[] split = theCityHasSet.split(",");
             if (mCityName != null && !TextUtils.isEmpty(split[0])) {
