@@ -318,8 +318,20 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
         getActivity().startActivityForResult(intent, REQUEST_CITY_CHOSEN_CODE);
     }
 
+    @Override
+    public void onStart() {
+        initShowCityTextView();
+        super.onStart();
+    }
+
     private void initShowCityTextView() {
+        String cityNameStr = mPandoraConfig.getLastCityName();
         String theCityHasSet = mPandoraConfig.getTheCityHasSet();
+        if (!TextUtils.isEmpty(cityNameStr)) {
+            if (mShowCityTextView != null) {
+                mShowCityTextView.setText(cityNameStr);
+            }
+        }
         if (!TextUtils.isEmpty(theCityHasSet)) {
             if (mShowCityTextView != null) {
                 String[] split = theCityHasSet.split(",");
