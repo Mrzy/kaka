@@ -177,6 +177,11 @@ public class PandoraBoxManager implements View.OnClickListener {
     public void startHeaderCircleAnimation() {
         if (mIsHeaderCircleAnimating || mCircle == null) {
             return;
+        } else {
+            if (!HDBNetworkState.isNetworkAvailable()) {
+                mCircle.findViewById(R.id.upArrow).setVisibility(View.VISIBLE);
+                return;
+            }
         }
 
         mIsHeaderCircleAnimating = true;
@@ -475,9 +480,10 @@ public class PandoraBoxManager implements View.OnClickListener {
             Calendar cal = Calendar.getInstance();
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             if (PandoraConfig.newInstance(mContext).isNightModeOn()) {
-                if (hour > 6 && hour < 21) {
-                    // 如果当前是白昼，且当前模式为夜间模式，则自动切换为白昼模式
-                    switchNewsTheme(NEWS_THEME_DAY);
+                if (hour > 7 && hour < 21) {
+                    // 如果当前是白昼，且当前模式为夜间模式，则提示是否切换为白昼模式
+                    openTipLayout(createOpenNightModeView(), true, 8000);
+                    PandoraConfig.newInstance(mContext).saveLastTipOpenNightModeTime(current);
                 }
             } else {
                 if (hour >= 21) {
@@ -490,16 +496,25 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     private View createOpenNightModeView() {
+        boolean checked = PandoraConfig.newInstance(mContext).isNightModeOn();
         View view = LayoutInflater.from(mContext).inflate(R.layout.news_tip_layout, null);
         TextView tv = (TextView) view.findViewById(R.id.news_tip_title);
+        if (checked) {
+            tv.setText(R.string.news_tip_close_nightmode);
+        } else {
+            tv.setText(R.string.news_tip_open_nightmode);
+        }
         SwitchButton sb = (SwitchButton) view.findViewById(R.id.news_tip_switch);
+        sb.setChecked(checked);
         sb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     switchNewsTheme(NEWS_THEME_NIGHT);
-                    closeTipLayout(true);
+                } else {
+                    switchNewsTheme(NEWS_THEME_DAY);
                 }
+                closeTipLayout(true);
             }
         });
         return view;
@@ -511,7 +526,7 @@ public class PandoraBoxManager implements View.OnClickListener {
     private void requestWakeLock() {
         if (mWakeLock == null) {
             PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "pandora");
+            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "pandora");
             mWakeLock.setReferenceCounted(false);
         }
         mWakeLock.acquire();
