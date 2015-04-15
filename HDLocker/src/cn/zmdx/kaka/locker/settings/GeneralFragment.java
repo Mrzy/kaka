@@ -325,8 +325,8 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
     }
 
     private void initShowCityTextView() {
-        String cityNameStr = mPandoraConfig.getLastCityName();
         String theCityHasSet = mPandoraConfig.getTheCityHasSet();
+        String cityNameStr = mPandoraConfig.getLastCityName();
         if (!TextUtils.isEmpty(cityNameStr)) {
             if (mShowCityTextView != null) {
                 mShowCityTextView.setText(cityNameStr);
