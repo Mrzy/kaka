@@ -597,7 +597,7 @@ public class PandoraConfig {
     }
 
     public boolean isApplyDesktopOn() {
-        return mSp.getBoolean(KEY_APPLY_DESKTOP_WALLPAPER, true);
+        return mSp.getBoolean(KEY_APPLY_DESKTOP_WALLPAPER, false);
     }
 
     public void saveApplyDesktopState(boolean isEnable) {

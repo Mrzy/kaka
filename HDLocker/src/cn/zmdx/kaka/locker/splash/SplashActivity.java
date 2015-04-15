@@ -41,7 +41,7 @@ public class SplashActivity extends Activity {
                 overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                         R.anim.umeng_fb_slide_out_from_left);
             }
-        }, 2000);
+        }, 1500);
     }
 
 }

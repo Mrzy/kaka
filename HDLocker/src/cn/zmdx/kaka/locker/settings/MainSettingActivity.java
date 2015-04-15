@@ -17,8 +17,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.MainSettingFragment.IMainSettingListener;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.splash.SplashActivity;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
@@ -65,8 +67,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
             MainSettingActivity activity = mActivity.get();
             switch (msg.what) {
                 case GO_INIT_SETTING:
-                    activity.gotoSplash();
-//                    activity.goInitSetting();
+                    activity.handleToActivity();
                     break;
             }
             super.handleMessage(msg);
@@ -104,11 +105,21 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         WallpaperUtils.autoChangeWallpaper();
     }
 
+    public void handleToActivity() {
+        String appMetaData = PandoraUtils.getAppMetaData(this, "UMENG_CHANNEL");
+        if ("baidu".equals(appMetaData)) {
+            gotoSplash();
+        } else {
+            isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
+            if (isFirstIn) {
+                goInitSetting();
+            }
+        }
+
+    }
+
     private void init() {
-//        isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
-//        if (isFirstIn) {
-            mHandler.sendEmptyMessage(GO_INIT_SETTING);
-//        }
+        mHandler.sendEmptyMessage(GO_INIT_SETTING);
     }
 
     private void gotoSplash() {
@@ -116,14 +127,14 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         startActivity(intent);
     }
 
-//    private void goInitSetting() {
-//        boolean isMeizu = PandoraUtils.isMeizu(this);
-//        if (isMeizu && !NotificationInterceptor.getInstance(this).isDeviceAvailable()) {
-//            return;
-//        }
-//        Intent intent = new Intent(this, InitSettingActivity.class);
-//        startActivity(intent);
-//    }
+    private void goInitSetting() {
+        boolean isMeizu = PandoraUtils.isMeizu(this);
+        if (isMeizu && !NotificationInterceptor.getInstance(this).isDeviceAvailable()) {
+            return;
+        }
+        Intent intent = new Intent(this, InitSettingActivity.class);
+        startActivity(intent);
+    }
 
     public void onResume() {
         super.onResume();

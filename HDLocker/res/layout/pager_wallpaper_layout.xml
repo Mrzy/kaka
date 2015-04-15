@@ -17,18 +17,12 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/contentDescription"
-                android:src="@drawable/icon_webview_load_failed" />
-
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:text="壁纸获取失败，请检查网络再试！"
-                android:textColor="@color/setting_text_normal_color" />
+                android:textColor="@color/setting_text_normal_color"
+                android:textSize="18dp" />
         </LinearLayout>
     </RelativeLayout>
 
