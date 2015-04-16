@@ -28,12 +28,15 @@ public class FakeActivity extends Activity {
             finish();
         }
 
+        Window window = getWindow();
         if (Build.VERSION.SDK_INT >= 19) {
-            Window window = getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+        if (Build.VERSION.SDK_INT < 16 && !PandoraConfig.newInstance(this).isNotifyFunctionOn()) {
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         startNotificationServiceIfNeeded();
 
@@ -78,7 +81,9 @@ public class FakeActivity extends Activity {
         }
 
         if (!PandoraConfig.newInstance(this).isNotifyFunctionOn()) {
-            systemUI |= View.SYSTEM_UI_FLAG_FULLSCREEN;
+            if (Build.VERSION.SDK_INT >= 16) {
+                systemUI |= View.SYSTEM_UI_FLAG_FULLSCREEN;
+            }
         }
         getWindow().getDecorView().setSystemUiVisibility(systemUI);
     }

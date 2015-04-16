@@ -223,7 +223,7 @@ public class LockScreenManager {
 
         mIsNeedNotice = mPandoraConfig.isNotifyFunctionOn();
         mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
+        mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_FULLSCREEN
                 | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_HARDWARE_ACCELERATED
                 | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         if (!mIsNeedNotice || BaseInfoHelper.isSupportTranslucentStatus()) { // 如果不显示通知栏或者系统版本大于等于19(支持透明通知栏),则添加下面flag从屏幕顶部开始绘制

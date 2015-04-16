@@ -140,6 +140,10 @@ public class PandoraBoxManager implements View.OnClickListener {
     public void initHeader() {
         mHeaderPart1 = mEntireView.findViewById(R.id.header_part1);
         mHeaderPart2 = mEntireView.findViewById(R.id.header_part2);
+        if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn() && !BaseInfoHelper.isSupportTranslucentStatus()) {
+            // 如果此时设置显示通知栏并且设备不支持通知栏透明，则隐藏此透明区域
+            mHeaderPart2.setVisibility(View.GONE);
+        }
         mCircle = (HeaderCircleButton) mHeaderPart1.findViewById(R.id.header_circle);
         // 处理点击时间
         final int height = BaseInfoHelper.dip2px(mContext, 20);
