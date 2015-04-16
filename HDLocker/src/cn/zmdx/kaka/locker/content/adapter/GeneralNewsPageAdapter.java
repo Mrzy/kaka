@@ -123,6 +123,7 @@ public class GeneralNewsPageAdapter extends Adapter<GeneralNewsPageAdapter.ViewH
         if (TextUtils.isEmpty(data.getUrl())) {
             holder.mImageView.setVisibility(View.GONE);
         } else {
+            holder.mImageView.setVisibility(View.VISIBLE);
             Picasso picasso = PicassoHelper.getPicasso(mContext);
             picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
             RequestCreator rc = null;
