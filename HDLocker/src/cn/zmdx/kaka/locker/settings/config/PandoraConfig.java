@@ -9,7 +9,6 @@ import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 public class PandoraConfig {
 
@@ -350,9 +349,10 @@ public class PandoraConfig {
 
     public boolean isNotifyFunctionOn() {
         boolean defaultValue = false;
-//        if (PandoraUtils.isMIUI(mContext) || (BaseInfoHelper.isSupportTranslucentStatus())) {
-//            defaultValue = true;
-//        }
+        // if (PandoraUtils.isMIUI(mContext) ||
+        // (BaseInfoHelper.isSupportTranslucentStatus())) {
+        // defaultValue = true;
+        // }
         return mSp.getBoolean(KEY_NEED_NOTICE, defaultValue);
     }
 

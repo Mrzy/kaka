@@ -33,12 +33,12 @@ import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
 import cn.zmdx.kaka.locker.weather.entity.CityInfo;
 import cn.zmdx.kaka.locker.weather.entity.MeteorologicalCodeConstant;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
 import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
 
 public class ChooseCityActivity extends ActionBarActivity {
@@ -146,18 +146,40 @@ public class ChooseCityActivity extends ActionBarActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!HDBNetworkState.isNetworkAvailable()) {
+                    Toast.makeText(ChooseCityActivity.this, "请连接网络", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String theCityHasSet = mPandoraConfig.getTheCityHasSet();
+                String[] split = theCityHasSet.split(",");
+                String theCityNameHasSet = split[0];
                 mHotCitiesGridView.setSelection(position);
+                int selectedHotCityPosition = Integer.parseInt(mPandoraConfig
+                        .getSelectedHotCityPosition());
                 mPandoraConfig.saveSelectedHotCityPosition(position);
                 myGridViewAdapter.notifyDataSetChanged();
+                if (selectedHotCityPosition == position && position != 0) {
+                    mSelectedCityName = mGVCityNameList.get(position);
+                }
                 if (position == 0) {
-                    String cityName = PandoraLocationManager.getInstance(ChooseCityActivity.this)
-                            .getCityName();
-                    String lastCityName = mPandoraConfig.getLastCityName();
-                    if (!TextUtils.isEmpty(lastCityName)) {
-                        mSelectedCityName = lastCityName;
-                    } else if (!TextUtils.isEmpty(cityName)) {
-                        mSelectedCityName = cityName;
+                    if (selectedHotCityPosition != position) {
+                        String lastCityName = mPandoraConfig.getLastCityName();
+                        if (!TextUtils.isEmpty(lastCityName)) {
+                            mSelectedCityName = lastCityName;
+                        }
+                        finishPage();
+                    } else {
+                        String cityName = PandoraLocationManager.getInstance(
+                                ChooseCityActivity.this).getCityName();
+                        String lastCityName = mPandoraConfig.getLastCityName();
+                        if (!TextUtils.isEmpty(lastCityName)) {
+                            mAimCityName = lastCityName;
+                        } else if (!TextUtils.isEmpty(cityName)) {
+                            mSelectedCityName = cityName;
+                        } else {
+                            mPandoraConfig.saveLastCityName("");
+                            finishPage();
+                        }
                     }
                 } else {
                     mSelectedCityName = mGVCityNameList.get(position);
@@ -165,8 +187,8 @@ public class ChooseCityActivity extends ActionBarActivity {
                 if (!TextUtils.isEmpty(mSelectedCityName)) {
                     String provinceByCity = XMLParserUtils.getProvinceByCity(mSelectedCityName);
                     mPandoraConfig.saveTheCityHasSet(mSelectedCityName + "," + provinceByCity);
-                    if (TextUtils.isEmpty(theCityHasSet)
-                            || !mSelectedCityName.equals(theCityHasSet)) {
+                    if (!TextUtils.isEmpty(mSelectedCityName) || TextUtils.isEmpty(theCityHasSet)
+                            || !mSelectedCityName.equals(theCityNameHasSet)) {
                         mAimCityName = mSelectedCityName;
                         processCityWeather(mSelectedCityName + "," + provinceByCity);
                         finishPage();
@@ -259,11 +281,9 @@ public class ChooseCityActivity extends ActionBarActivity {
         PandoraWeatherManager.getInstance().getWeatherFromNetwork(new ISmartWeatherCallback() {
 
             @Override
-            public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
+            public void onSuccess(String smartWeatherInfo) {
                 if (smartWeatherInfo != null) {
                     LockScreenManager.getInstance().updateWeatherView(smartWeatherInfo);
-                    // mPandoraConfig.saveLastCityName(cityStr);
-                    // mPandoraConfig.saveLastCityProvinceName(provinceStr);
                 }
             }
 

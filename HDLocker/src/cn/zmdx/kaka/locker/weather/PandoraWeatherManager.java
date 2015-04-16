@@ -1,7 +1,6 @@
 
 package cn.zmdx.kaka.locker.weather;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -43,7 +42,7 @@ public class PandoraWeatherManager {
     }
 
     public interface ISmartWeatherCallback {
-        void onSuccess(SmartWeatherInfo smartWeatherInfo);
+        void onSuccess(String smartWeatherInfoStr);
 
         void onFailure();
     }
@@ -59,19 +58,9 @@ public class PandoraWeatherManager {
         void getCurrentSmartWeather(final ISmartWeatherCallback callback);
     }
 
-    public SmartWeatherInfo getWeatherFromCache() {
-        SmartWeatherInfo smartWeatherInfo = null;
+    public String getWeatherFromCache() {
         String lastWeatherInfo = PandoraConfig.newInstance(mContext).getLastWeatherInfo();
-        JSONObject weatherObj;
-        try {
-            if (!TextUtils.isEmpty(lastWeatherInfo)) {
-                weatherObj = new JSONObject(lastWeatherInfo);
-                smartWeatherInfo = ParseWeatherJsonUtils.parseWeatherJson(weatherObj);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return smartWeatherInfo;
+        return lastWeatherInfo;
     }
 
     public void getWeatherFromNetwork(final ISmartWeatherCallback callback) {
@@ -106,16 +95,23 @@ public class PandoraWeatherManager {
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("--response-->>" + response);
                     }
+                    boolean weatherInfoLegal = ParseWeatherJsonUtils.isWeatherInfoLegal(response
+                            .toString());
+
+                    if (!weatherInfoLegal) {
+                        callback.onFailure();
+                        return;
+                    }
+                    String lastWeatherInfo = PandoraConfig.newInstance(mContext)
+                            .getLastWeatherInfo();
+                    if (!TextUtils.isEmpty(lastWeatherInfo)
+                            && lastWeatherInfo.equals(response.toString())) {
+                        return;
+                    }
                     PandoraConfig.newInstance(mContext).saveLastCheckWeatherTime(
                             System.currentTimeMillis());
-                    SmartWeatherInfo smartWeatherInfo = ParseWeatherJsonUtils
-                            .parseWeatherJson(response);
                     PandoraConfig.newInstance(mContext).saveLastWeatherInfo(response.toString());
-                    if (smartWeatherInfo != null) {
-                        callback.onSuccess(smartWeatherInfo);
-                    } else {
-                        callback.onFailure();
-                    }
+                    callback.onSuccess(response.toString());
                 }
             }
         }, new Response.ErrorListener() {
