@@ -116,8 +116,10 @@ public class ChooseCityActivity extends ActionBarActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                String theCityHasSet = mPandoraConfig.getTheCityHasSet();
+                if (!HDBNetworkState.isNetworkAvailable()) {
+                    Toast.makeText(ChooseCityActivity.this, "请连接网络", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 mSelectedCityName = mPossibleCityList.get(position);
                 if (!TextUtils.isEmpty(mSelectedCityName)) {
                     String[] split = mSelectedCityName.split(",");
@@ -128,11 +130,8 @@ public class ChooseCityActivity extends ActionBarActivity {
                         }
                     }
                     mPandoraConfig.saveTheCityHasSet(mSelectedCityName);
-                    if (TextUtils.isEmpty(theCityHasSet)
-                            || !mSelectedCityName.contains(theCityHasSet)) {
-                        processCityWeather(mSelectedCityName);
-                        finishPage();
-                    }
+                    processCityWeather(mSelectedCityName);
+                    finishPage();
                 }
             }
         });
@@ -150,9 +149,6 @@ public class ChooseCityActivity extends ActionBarActivity {
                     Toast.makeText(ChooseCityActivity.this, "请连接网络", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String theCityHasSet = mPandoraConfig.getTheCityHasSet();
-                String[] split = theCityHasSet.split(",");
-                String theCityNameHasSet = split[0];
                 mHotCitiesGridView.setSelection(position);
                 int selectedHotCityPosition = Integer.parseInt(mPandoraConfig
                         .getSelectedHotCityPosition());
@@ -187,12 +183,9 @@ public class ChooseCityActivity extends ActionBarActivity {
                 if (!TextUtils.isEmpty(mSelectedCityName)) {
                     String provinceByCity = XMLParserUtils.getProvinceByCity(mSelectedCityName);
                     mPandoraConfig.saveTheCityHasSet(mSelectedCityName + "," + provinceByCity);
-                    if (!TextUtils.isEmpty(mSelectedCityName) || TextUtils.isEmpty(theCityHasSet)
-                            || !mSelectedCityName.equals(theCityNameHasSet)) {
-                        mAimCityName = mSelectedCityName;
-                        processCityWeather(mSelectedCityName + "," + provinceByCity);
-                        finishPage();
-                    }
+                    mAimCityName = mSelectedCityName;
+                    processCityWeather(mSelectedCityName + "," + provinceByCity);
+                    finishPage();
                 }
             }
         });
