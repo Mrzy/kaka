@@ -205,10 +205,10 @@
     <string name="pandora_setting_general_weather">显示天气</string>
     <string name="pandora_setting_general_choose_city">选择所在城市</string>
     <string name="pandora_setting_password_delay_lockscreen">开启延时锁定屏幕</string>
-    
+
     <string name="pandora_setting_notify_light_screen">收到消息点亮屏幕</string>
     <string name="pandora_setting_wallpaper_to_desktop">同时应用壁纸到桌面</string>
-    
+
     <string name="pandora_setting_general_news_item">阅读选项</string>
     <string name="pandora_setting_general_night_mode">开启夜间模式</string>
     <string name="news_tip_open_nightmode">保护眼睛，建议开启夜间模式</string>
@@ -218,5 +218,7 @@
     <string name="choose_city_not_find_tip">没有您要查询的地区</string>
     <string name="choose_city_hot_cities_title">热门城市</string>
     <string name="choose_city_search_city_hint">搜索全国城市（中文/拼音）</string>
-    
+
+    <string name="toast_open_protected">开启成功，再也不用担心锁屏被杀死导致打不开锁屏了</string>
+    <string name="toast_close_protected">停止守护</string>
 </resources>

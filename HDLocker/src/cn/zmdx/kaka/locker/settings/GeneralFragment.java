@@ -480,10 +480,12 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
     private void enablePandoraProtect() {
         mPandoraConfig.savePandoraProtecttState(true);
+        Toast.makeText(getActivity(), R.string.toast_open_protected, Toast.LENGTH_LONG).show();
     }
 
     private void disablePandoraProtect() {
         mPandoraConfig.savePandoraProtecttState(false);
+        Toast.makeText(getActivity(), R.string.toast_close_protected, Toast.LENGTH_LONG).show();
     }
 
     private String getWeatherCity() {
