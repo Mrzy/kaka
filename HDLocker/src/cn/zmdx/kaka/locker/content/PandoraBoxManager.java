@@ -339,6 +339,7 @@ public class PandoraBoxManager implements View.OnClickListener {
      */
     private void openTipLayout(View contentView, boolean withAnimator, final int keepTime) {
         if (mTipLayout != null) {
+            mTipLayout.removeAllViews();
             mTipLayout.addView(contentView, ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
             if (!withAnimator) {
