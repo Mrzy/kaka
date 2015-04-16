@@ -49,6 +49,7 @@ import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager.IUnlockListener;
 import cn.zmdx.kaka.locker.service.PandoraService;
+import cn.zmdx.kaka.locker.settings.ChooseCityActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
@@ -628,7 +629,21 @@ public class LockScreenManager {
                         mNoWeather.setText("请连接网络");
                     } else if (TextUtils.isEmpty(mPandoraConfig.getLastCityName())
                             && TextUtils.isEmpty(mPandoraConfig.getTheCityHasSet())) {
-                        mNoWeather.setText("请手动设置城市");
+                        mNoWeather.setText("设置城市");
+                        mNoWeather.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                setRunnableAfterUnLock(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent in = new Intent(mContext, ChooseCityActivity.class);
+                                        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        mContext.startActivity(in);
+                                    }
+                                });
+                                unLock();
+                            }
+                        });
                     } else {
                         mWeatherInfoLayout.setVisibility(View.GONE);
                     }
