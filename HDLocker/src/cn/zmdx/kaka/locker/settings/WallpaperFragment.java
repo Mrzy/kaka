@@ -117,6 +117,11 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
                 UmengCustomEventManager.statisticalCloseGravitySenorTimes();
             }
         } else if (buttonView == mAutoChangeSButton) {
+            if (isChecked) {
+                UmengCustomEventManager.statisticalOpenAutoChangeWallpaper();
+            } else {
+                UmengCustomEventManager.statisticalCloseAutoChangeWallpaper();
+            }
             saveAutoChangeState(isChecked);
         }
     }

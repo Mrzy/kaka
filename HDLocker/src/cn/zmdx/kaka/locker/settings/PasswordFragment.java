@@ -352,12 +352,14 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (buttonView == mDelayLockScreen) {
             if (isChecked) {
-                Toast.makeText(getActivity(), "锁屏将会在屏幕熄灭后1.5秒锁定屏幕", Toast.LENGTH_SHORT).show();
+                if (!isDelayLockScreenOn()) {
+                    Toast.makeText(getActivity(), R.string.toast_delay_locksrceen, Toast.LENGTH_SHORT).show();
+                }
                 enableDelayLockScreen();
-                UmengCustomEventManager.statisticalPandoraSwitchOpenTimes();
+                UmengCustomEventManager.statisticalOpenDelayLockScreen();
             } else {
                 disableDelayLockScreen();
-                UmengCustomEventManager.statisticalPandoraSwitchCloseTimes();
+                UmengCustomEventManager.statisticalCloseDelayLockScreen();
             }
         }
     }

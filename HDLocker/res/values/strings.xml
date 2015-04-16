@@ -221,4 +221,7 @@
 
     <string name="toast_open_protected">开启成功，再也不用担心锁屏被杀死导致打不开锁屏了</string>
     <string name="toast_close_protected">停止守护</string>
+    
+    <string name="toast_delay_locksrceen">锁屏将会在屏幕熄灭后1.5秒锁定屏幕</string>
+    
 </resources>

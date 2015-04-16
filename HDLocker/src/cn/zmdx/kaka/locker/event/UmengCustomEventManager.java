@@ -17,7 +17,7 @@ public class UmengCustomEventManager {
 
     public static final String EVENT_GUESTURE_UNLOCK_SUCCESS_TIMES = "guestureUnLockSuccessTimes";// 手势锁成功解锁的次数；
 
-    public static final String EVENT_GUESTURE_UNLOCK_FAIL_TIMES = "guestureUnLockFailTimes";// 手势锁成功解锁的次数；
+    public static final String EVENT_GUESTURE_UNLOCK_FAIL_TIMES = "guestureUnLockFailTimes";// 手势锁失败解锁的次数；
 
     public static final String EVENT_PANDORA_SWITCH_OPEN_TIMES = "pandoraSwitchOpen"; // 打开/关闭锁屏开关，上报对应事件；
 
@@ -64,6 +64,18 @@ public class UmengCustomEventManager {
     private static final String EVENT_CLOSE_GRAVITY_SENOR = "closeGravitySenor";// 关闭重力感应
 
     private static final String EVENT_SYCCESS_SET_LOCAL_WALLPAPER = "successSetLocalWallpaperTimes";// 成功设置本地壁纸
+
+    private static final String EVENT_OPEN_PANDORA_PROTECT = "openPandoraProtect";// 开启潘多拉守护神
+
+    private static final String EVENT_CLOSE_PANDORA_PROTECT = "closePandoraProtect";// 关闭潘多拉守护神
+
+    private static final String EVENT_OPEN_DELAY_LOCKSCREEN = "openDelayLockScreen";// 开启延迟锁定屏幕
+
+    private static final String EVENT_CLOSE_DELAY_LOCKSCREEN = "closeDelayLockScreen";// 关闭延迟锁定屏幕
+    
+    private static final String EVENT_OPEN_AUTO_CHANGE_WALLPAPER = "openAutoChangeWallpaper";// 开启每天自动更换壁纸
+
+    private static final String EVENT_CLOSE_AUTO_CHANGE_WALLPAPER = "closeAutoChangeWallpaper";// 关闭每天自动更换壁纸
 
     public static void statisticalOpenNewsDetail(int id, String newsType) {
         HashMap<String, String> map = new HashMap<String, String>();
@@ -317,5 +329,50 @@ public class UmengCustomEventManager {
     public static void statisticalSuccessSetLocalWallpaperTimes() {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_SYCCESS_SET_LOCAL_WALLPAPER);
+    }
+    
+    /**
+     * 统计用户开启潘多拉守护神的次数
+     */
+    public static void statisticalOpenPandoraProtect() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_OPEN_PANDORA_PROTECT);
+    }
+    /**
+     * 统计用户关闭潘多拉守护神的次数
+     */
+    public static void statisticalClosePandoraProtect() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_CLOSE_PANDORA_PROTECT);
+    }
+    
+    /**
+     * 统计用户开启延迟锁定屏幕的次数
+     */
+    public static void statisticalOpenDelayLockScreen() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_OPEN_DELAY_LOCKSCREEN);
+    }
+    /**
+     * 统计用户关闭延迟锁定屏幕的次数
+     */
+    public static void statisticalCloseDelayLockScreen() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_CLOSE_DELAY_LOCKSCREEN);
+    }
+    
+    /**
+     * 统计用户开启每天自动更换壁纸的次数
+     */
+    public static void statisticalOpenAutoChangeWallpaper() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_OPEN_AUTO_CHANGE_WALLPAPER);
+    }
+    /**
+     * 统计用户关闭每天自动更换壁纸的次数
+     */
+    public static void statisticalCloseAutoChangeWallpaper() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_CLOSE_AUTO_CHANGE_WALLPAPER);
     }
 }

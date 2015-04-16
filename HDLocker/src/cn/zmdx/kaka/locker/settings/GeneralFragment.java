@@ -242,11 +242,13 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
                 if (!PandoraConfig.newInstance(mContext).isPandoraProtectOn()) {
                     Toast.makeText(getActivity(), R.string.toast_open_protected, Toast.LENGTH_LONG).show();
                     enablePandoraProtect();
+                    UmengCustomEventManager.statisticalOpenPandoraProtect();
                 }
             } else {
                 if (PandoraConfig.newInstance(mContext).isPandoraProtectOn()) {
                     Toast.makeText(getActivity(), R.string.toast_close_protected, Toast.LENGTH_LONG).show();
                     disablePandoraProtect();
+                    UmengCustomEventManager.statisticalClosePandoraProtect();
                 }
             }
         } else if (buttonView == mWeatherSButton) {
