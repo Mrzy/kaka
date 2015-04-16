@@ -117,6 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="0dp"
+                    android:textColor="@color/white"
                     android:text="@string/pandora_setting_wallpaper_to_desktop"
                     android:textSize="14dp" />
 
