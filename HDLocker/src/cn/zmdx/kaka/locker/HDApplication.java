@@ -28,8 +28,8 @@ public class HDApplication extends Application {
         crashHandler.setCollectDeviceInfo(false);
         crashHandler.setWrite2File(false);
         super.onCreate();
-        if (!BuildConfig.DEBUG) {
-            AppUninstall.openUrlWhenUninstall(this, "http://www.mikecrm.com/f.php?t=rlfi3n");
-        }
+//        if (!BuildConfig.DEBUG) {
+//            AppUninstall.openUrlWhenUninstall(this, "http://www.mikecrm.com/f.php?t=rlfi3n");
+//        }
     }
 }
