@@ -2,6 +2,7 @@
 package cn.zmdx.kaka.locker.wallpaper;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -31,6 +32,7 @@ import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWa
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
+import com.android.volley.Response.ProgressListener;
 import com.android.volley.error.VolleyError;
 
 public class WallpaperUtils {
@@ -183,6 +185,8 @@ public class WallpaperUtils {
     }
 
     public interface IDownLoadWallpaper {
+        void onProgress(String progress);
+
         void onSuccess(Bitmap bitmap);
 
         void onFail();
@@ -203,6 +207,16 @@ public class WallpaperUtils {
             @Override
             public void onErrorResponse(VolleyError error) {
                 listener.onFail();
+            }
+        });
+        mRequest.setOnProgressListener(new ProgressListener() {
+
+            @Override
+            public void onProgress(long transferredBytes, long totalSize) {
+                float progress = (((float) transferredBytes) / ((float) totalSize));
+                float result = Math.min(progress, 1f);
+                DecimalFormat fmt = new DecimalFormat("##%");
+                listener.onProgress(fmt.format(result));
             }
         });
         mRequest.setShouldCache(false);
@@ -279,6 +293,11 @@ public class WallpaperUtils {
 
             @Override
             public void onFail() {
+
+            }
+
+            @Override
+            public void onProgress(String progress) {
 
             }
         });

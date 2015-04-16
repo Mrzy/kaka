@@ -294,6 +294,13 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
                     public void onFail() {
                         showView(false);
                     }
+
+                    @Override
+                    public void onProgress(String progress) {
+                        if (null != mLoadingView) {
+                            mLoadingView.setProgress(progress);
+                        }
+                    }
                 });
             } else {
                 setImageBitmap(result);

@@ -10,17 +10,26 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
-
-import com.android.volley.misc.Utils;
 
 public class ProgressBarMaterial extends CustomView {
 
     final static String ANDROIDXML = "http://schemas.android.com/apk/res/android";
 
     int backgroundColor = R.color.progressBarMaterialColor;
+
+    private float textSize;
+
+    private String progress = "0%";
+
+    public String getProgress() {
+        return this.progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
 
     public ProgressBarMaterial(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,6 +39,8 @@ public class ProgressBarMaterial extends CustomView {
 
     // Set atributtes of XML to View
     protected void setAttributes(AttributeSet attrs) {
+
+        textSize = BaseInfoHelper.dip2px(getContext(), 8);
 
         setMinimumHeight(BaseInfoHelper.dip2px(getContext(), 32));
         setMinimumWidth(BaseInfoHelper.dip2px(getContext(), 32));
@@ -140,6 +151,14 @@ public class ProgressBarMaterial extends CustomView {
      * @param canvas
      */
     private void drawSecondAnimation(Canvas canvas) {
+        Paint textPaint = new Paint();
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextSize(textSize);
+        textPaint.setAntiAlias(true);
+        float textHeight = textPaint.descent() + textPaint.ascent();
+        canvas.drawText(getProgress(), (getWidth() - textPaint.measureText(getProgress())) / 2.0f,
+                (getWidth() - textHeight) / 2.0f, textPaint);
+
         if (arcO == limite)
             arcD += 6;
         if (arcD >= 290 || arcO > limite) {
@@ -170,6 +189,7 @@ public class ProgressBarMaterial extends CustomView {
                 (getWidth() / 2) - BaseInfoHelper.dip2px(getContext(), 4), transparentPaint);
 
         canvas.drawBitmap(bitmap, 0, 0, new Paint());
+
     }
 
     // Set color of background
