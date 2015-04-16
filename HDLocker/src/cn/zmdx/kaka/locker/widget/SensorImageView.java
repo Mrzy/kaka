@@ -242,6 +242,7 @@ public class SensorImageView extends ImageView {
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         getContext().registerReceiver(mScreenReceiver, filter);
+        registSensorListener();
     };
 
     @Override
