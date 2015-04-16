@@ -281,13 +281,19 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
 
                     @Override
                     public void onSuccess(Bitmap bitmap) {
+                        showView(false);
                         if (null != bitmap) {
                             setImageBitmap(bitmap);
                             mPreBitmap = bitmap;
-                            ImageLoaderManager.getOnlineImageCache(mContext).putBitmap(
-                                    HDBHashUtils.getStringMD5(mImageUrl), mPreBitmap);
+                            HDBThreadUtils.runOnWorker(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    ImageLoaderManager.getOnlineImageCache(mContext).putBitmap(
+                                            HDBHashUtils.getStringMD5(mImageUrl), mPreBitmap);
+                                }
+                            });
                         }
-                        showView(false);
                     }
 
                     @Override
