@@ -143,6 +143,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn() && !BaseInfoHelper.isSupportTranslucentStatus()) {
             // 如果此时设置显示通知栏并且设备不支持通知栏透明，则隐藏此透明区域
             mHeaderPart2.setVisibility(View.GONE);
+        } else {
+            mHeaderPart2.setVisibility(View.VISIBLE);
         }
         mCircle = (HeaderCircleButton) mHeaderPart1.findViewById(R.id.header_circle);
         // 处理点击时间
