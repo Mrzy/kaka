@@ -136,7 +136,30 @@
                     android:layout_height="90dp"
                     android:background="#d0ffffff" />
 
+                <FrameLayout
+                    android:id="@+id/fl_no_weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="3dp"
+                    android:visibility="gone" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/tv_no_weather"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:gravity="bottom"
+                        android:shadowColor="#30000000"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="1"
+                        android:textColor="#d0ffffff"
+                        android:textSize="15dp" />
+                </FrameLayout>
+
                 <RelativeLayout
+                    android:id="@+id/rl_weather_feature"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"

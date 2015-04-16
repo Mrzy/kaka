@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.TextUtils;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherCityInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureIndexInfo;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
@@ -15,10 +16,11 @@ import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
 
 public class ParseWeatherJsonUtils {
 
-    public static SmartWeatherInfo parseWeatherJson(JSONObject weatherObj) {
+    public static SmartWeatherInfo parseWeatherJson(String weatherInfo) {
         SmartWeatherInfo smartWeatherInfo = new SmartWeatherInfo();
-        if (weatherObj != null) {
+        if (!TextUtils.isEmpty(weatherInfo)) {
             try {
+                JSONObject weatherObj = new JSONObject(weatherInfo);
                 JSONObject cityInfoObj = weatherObj.getJSONObject("c");
                 SmartWeatherCityInfo cityInfo = new SmartWeatherCityInfo();
                 cityInfo.setCityId(cityInfoObj.optString("c1"));
@@ -57,5 +59,49 @@ public class ParseWeatherJsonUtils {
             }
         }
         return smartWeatherInfo;
+    }
+
+    public static boolean isWeatherInfoLegal(String smartWeatherInfoStr) {
+        boolean isWeatherInfoLegal = false;
+        if (TextUtils.isEmpty(smartWeatherInfoStr)) {
+            return isWeatherInfoLegal;
+        } else {
+            SmartWeatherInfo smartWeatherInfo = null;
+
+            String forecastReleasedTime = null;
+
+            String sunriseAndSunset = null;
+
+            String centTempDay = null;
+
+            String centTempNight = null;
+
+            String daytimeFeatureNo = null;
+
+            String nightFeatureNo = null;
+            smartWeatherInfo = parseWeatherJson(smartWeatherInfoStr);
+
+            SmartWeatherFeatureInfo smartWeatherFeatureInfo = smartWeatherInfo
+                    .getSmartWeatherFeatureInfo();
+            List<SmartWeatherFeatureIndexInfo> smartWeatherFeatureIndexInfoList = smartWeatherFeatureInfo
+                    .getSmartWeatherFeatureIndexInfoList();
+
+            SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
+                    .get(0);
+            if (smartWeatherFeatureInfo != null) {
+                forecastReleasedTime = smartWeatherFeatureInfo.getForecastReleasedTime();
+                sunriseAndSunset = smartWeatherFeatureIndexInfo.getSunriseAndSunset();
+                centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
+                centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
+                daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
+                nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
+            }
+            if (!TextUtils.isEmpty(forecastReleasedTime) && !TextUtils.isEmpty(sunriseAndSunset)
+                    && !TextUtils.isEmpty(centTempDay) && !TextUtils.isEmpty(centTempNight)
+                    && !TextUtils.isEmpty(daytimeFeatureNo) && !TextUtils.isEmpty(nightFeatureNo)) {
+                isWeatherInfoLegal = true;
+            }
+        }
+        return isWeatherInfoLegal;
     }
 }

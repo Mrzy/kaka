@@ -8,7 +8,6 @@ import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -87,6 +86,9 @@ public class PandoraLocationManager {
     public String getCityName() {
         if (mBdLocation != null) {
             cityName = mBdLocation.getDistrict();
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("--cityName-->>" + cityName);
+            }
         }
         return cityName;
     }
@@ -115,7 +117,7 @@ public class PandoraLocationManager {
             PandoraWeatherManager.getInstance().getWeatherFromNetwork(new ISmartWeatherCallback() {
 
                 @Override
-                public void onSuccess(SmartWeatherInfo smartWeatherInfo) {
+                public void onSuccess(String smartWeatherInfo) {
                     LockScreenManager.getInstance().updateWeatherView(smartWeatherInfo);
                 }
 

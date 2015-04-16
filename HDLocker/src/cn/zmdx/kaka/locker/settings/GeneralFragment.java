@@ -338,12 +338,22 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
                 mShowCityTextView.setText(split[0]);
             }
         }
+
+        if (TextUtils.isEmpty(cityNameStr) && TextUtils.isEmpty(theCityHasSet)) {
+            if (mShowCityTextView != null) {
+                mShowCityTextView.setText("");
+            }
+        }
     }
 
     public void setChosenCity(String cityNameChosen) {
         if (!TextUtils.isEmpty(cityNameChosen)) {
             if (mShowCityTextView != null) {
                 mShowCityTextView.setText(cityNameChosen);
+            }
+        } else {
+            if (mShowCityTextView != null) {
+                mShowCityTextView.setText("");
             }
         }
     }
