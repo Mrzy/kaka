@@ -20,6 +20,7 @@ import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -476,13 +477,7 @@ public class LockScreenManager {
                 // 滑动同时，底部新闻面板同步下滑
                 int translationY = (int) (mSlidingUpView.getPanelHeight() * (1.0f - positionOffset));
                 mSlidingUpView.smoothSlideTo(translationY, 0);
-
-                // 时间控件同步向上滑动
-                // int offset = (int) -(mMainPagePart1.getHeight() * (1.0f -
-                // positionOffset));
-                // mMainPagePart1.setTranslationY(offset);
             }
-
         }
     };
 

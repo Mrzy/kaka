@@ -116,7 +116,7 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
         } catch (Exception e) {
         }
         holder.mTimeTv.setText(time);
-        
+
         if (TextUtils.isEmpty(data.getUrl())) {
             holder.mImageView.setVisibility(View.GONE);
         } else {
@@ -144,7 +144,7 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
                     public String key() {
                         return "matrix()";
                     }
-                    
+
                     @Override
                     public Bitmap transform(Bitmap source) {
                         int cardWidth = holder.mCardView.getWidth();

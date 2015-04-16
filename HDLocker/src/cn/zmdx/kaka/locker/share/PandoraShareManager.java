@@ -86,7 +86,12 @@ public class PandoraShareManager {
         }
         PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
         LockScreenManager.getInstance().collapseNewsPanel();
-        LockScreenManager.getInstance().unLock();
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LockScreenManager.getInstance().unLock();
+            }
+        }, 500);
     }
 
     private static PlatformActionListener mPlatformActionListener = new PlatformActionListener() {
