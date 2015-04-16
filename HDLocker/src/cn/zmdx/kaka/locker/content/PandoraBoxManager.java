@@ -51,7 +51,6 @@ import cn.zmdx.kaka.locker.content.view.HeaderCircleButton;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
-import cn.zmdx.kaka.locker.font.FontManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -65,7 +64,6 @@ import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWa
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.PandoraRecyclerView;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
-import cn.zmdx.kaka.locker.widget.TextClockCompat;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
 public class PandoraBoxManager implements View.OnClickListener {
@@ -115,8 +113,6 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     protected static final int KEEP_TIP_TIME_DEFAULT = 4000;
 
-    private TextClockCompat mClock;
-
     private List<View> mPages;
 
     private FrameLayout mTipLayout;
@@ -139,6 +135,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     public void initHeader() {
         mHeaderPart1 = mEntireView.findViewById(R.id.header_part1);
+        mHeaderPart1.getLayoutParams().height = BaseInfoHelper.dip2px(mContext, 80);
+        mHeaderPart1.requestLayout();
         mHeaderPart2 = mEntireView.findViewById(R.id.header_part2);
         if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn() && !BaseInfoHelper.isSupportTranslucentStatus()) {
             // 如果此时设置显示通知栏并且设备不支持通知栏透明，则隐藏此透明区域
@@ -171,14 +169,6 @@ public class PandoraBoxManager implements View.OnClickListener {
                 return false;
             }
         });
-        // mClock = (TextClockCompat)
-        // mHeaderPart2.findViewById(R.id.digitalClockDateNow);
-        // mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
-        // if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
-        // mClock.setVisibility(View.GONE);
-        // } else {
-        // mClock.setVisibility(View.VISIBLE);
-        // }
     }
 
     private boolean mIsHeaderCircleAnimating = false;
