@@ -95,19 +95,19 @@ public class PandoraWeatherManager {
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("--response-->>" + response);
                     }
-                    boolean weatherInfoLegal = ParseWeatherJsonUtils.isWeatherInfoLegal(response
-                            .toString());
-
-                    if (!weatherInfoLegal) {
-                        callback.onFailure();
-                        return;
-                    }
-                    String lastWeatherInfo = PandoraConfig.newInstance(mContext)
-                            .getLastWeatherInfo();
-                    if (!TextUtils.isEmpty(lastWeatherInfo)
-                            && lastWeatherInfo.equals(response.toString())) {
-                        return;
-                    }
+//                    boolean weatherInfoLegal = ParseWeatherJsonUtils.isWeatherInfoLegal(response
+//                            .toString());
+//
+//                    if (!weatherInfoLegal) {
+//                        callback.onFailure();
+//                        return;
+//                    }
+//                    String lastWeatherInfo = PandoraConfig.newInstance(mContext)
+//                            .getLastWeatherInfo();
+//                    if (!TextUtils.isEmpty(lastWeatherInfo)
+//                            && lastWeatherInfo.equals(response.toString())) {
+//                        return;
+//                    }
                     PandoraConfig.newInstance(mContext).saveLastCheckWeatherTime(
                             System.currentTimeMillis());
                     PandoraConfig.newInstance(mContext).saveLastWeatherInfo(response.toString());

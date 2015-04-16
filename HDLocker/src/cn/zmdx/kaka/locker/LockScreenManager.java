@@ -174,8 +174,6 @@ public class LockScreenManager {
 
     private String nightFeatureNo;
 
-    private int timeHour;
-
     public interface ILockScreenListener {
         void onLock();
 
@@ -230,9 +228,9 @@ public class LockScreenManager {
 
         mIsNeedNotice = mPandoraConfig.isNotifyFunctionOn();
         mWinParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_FULLSCREEN
-                | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_HARDWARE_ACCELERATED
-                | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
+                | LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         if (!mIsNeedNotice || BaseInfoHelper.isSupportTranslucentStatus()) { // 如果不显示通知栏或者系统版本大于等于19(支持透明通知栏),则添加下面flag从屏幕顶部开始绘制
             mWinParams.flags |= LayoutParams.FLAG_LAYOUT_IN_SCREEN;
             final Display display = mWinManager.getDefaultDisplay();
@@ -596,7 +594,7 @@ public class LockScreenManager {
         long str2TimeMillis = mPandoraConfig.getLastCheckWeatherTime();
         if (System.currentTimeMillis() - str2TimeMillis >= PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
             if (BuildConfig.DEBUG) {
-                HDBLOG.logD("检查天气条件满足,请求网络数据");
+                HDBLOG.logD(mContext.getString(R.string.enable_to_process_weather_info));
             }
             PandoraWeatherManager.getInstance().getWeatherFromNetwork(new ISmartWeatherCallback() {
 
@@ -621,10 +619,10 @@ public class LockScreenManager {
                 mNoWeatherLayout.setVisibility(View.VISIBLE);
                 if (mNoWeather != null) {
                     if (!HDBNetworkState.isNetworkAvailable()) {
-                        mNoWeather.setText("请连接网络");
+                        mNoWeather.setText(R.string.tip_no_news);
                     } else if (TextUtils.isEmpty(mPandoraConfig.getLastCityName())
                             && TextUtils.isEmpty(mPandoraConfig.getTheCityHasSet())) {
-                        mNoWeather.setText("设置城市");
+                        mNoWeather.setText(R.string.guide_to_choose_city);
                         mNoWeather.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -658,39 +656,43 @@ public class LockScreenManager {
 
         SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
                 .get(0);
-        if (!TextUtils.isEmpty(sunriseAndSunset)) {
-            isNight = SmartWeatherUtils.isNight(sunriseAndSunset);
-        }
+        // if (!TextUtils.isEmpty(sunriseAndSunset)) {
+        // isNight = SmartWeatherUtils.isNight(sunriseAndSunset);
+        // }
         if (smartWeatherFeatureIndexInfo != null) {
             nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
             centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
             centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
             daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
         }
-        if (isNight) {
-            if (!TextUtils.isEmpty(nightFeatureNo) && !TextUtils.isEmpty(centTempNight)) {
-                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
-                featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
-                if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
-                    featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
-                }
-            } else {
-                if (mWeatherInfoLayout != null) {
-                    mWeatherInfoLayout.setVisibility(View.GONE);
-                }
-            }
-        } else {
-            if (!TextUtils.isEmpty(daytimeFeatureNo)) {
-                featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
-                featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
-            }
-
+        if (!TextUtils.isEmpty(daytimeFeatureNo) && !TextUtils.isEmpty(centTempDay)) {
+            featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
+            featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
             if (mWeatherFeaturePic != null) {
                 mWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
             }
             if (mWeatherCentTemp != null) {
-                mWeatherCentTemp.setText((centTempNight == null ? "" : (centTempNight + "℃")) + "~"
-                        + centTempDay + "℃");
+                if (!TextUtils.isEmpty(centTempNight)) {
+                    mWeatherCentTemp.setText((centTempNight + "℃") + "~" + (centTempDay + "℃"));
+                } else {
+                    mWeatherCentTemp.setText((centTempDay + "℃"));
+                }
+            }
+        } else if (!TextUtils.isEmpty(nightFeatureNo) && !TextUtils.isEmpty(centTempNight)) {
+            featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
+            featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
+            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
+                featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
+            }
+            if (mWeatherFeaturePic != null) {
+                mWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
+            }
+            if (mWeatherCentTemp != null) {
+                mWeatherCentTemp.setText((centTempNight + "℃"));
+            }
+        } else {
+            if (mWeatherInfoLayout != null) {
+                mWeatherInfoLayout.setVisibility(View.GONE);
             }
         }
     }

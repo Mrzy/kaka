@@ -224,4 +224,8 @@
     
     <string name="toast_delay_locksrceen">锁屏将会在屏幕熄灭后1.5秒锁定屏幕</string>
     
+    <string name="guide_to_choose_city">设置城市</string>
+    
+    <string name="enable_to_process_weather_info">检查天气条件满足,请求网络数据</string>
+    
 </resources>
