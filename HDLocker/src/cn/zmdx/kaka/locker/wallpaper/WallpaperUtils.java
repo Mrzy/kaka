@@ -197,10 +197,22 @@ public class WallpaperUtils {
         ByteArrayRequest mRequest = new ByteArrayRequest(imageUrl, new Listener<byte[]>() {
 
             @Override
-            public void onResponse(byte[] data) {
-                Bitmap bitmap = doParse(data, BaseInfoHelper.getRealWidth(context),
-                        BaseInfoHelper.getRealHeight(context));
-                listener.onSuccess(bitmap);
+            public void onResponse(final byte[] data) {
+                HDBThreadUtils.runOnWorker(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        final Bitmap bitmap = doParse(data, BaseInfoHelper.getRealWidth(context),
+                                BaseInfoHelper.getRealHeight(context));
+                        HDBThreadUtils.runOnUi(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                listener.onSuccess(bitmap);
+                            }
+                        });
+                    }
+                });
             }
         }, new ErrorListener() {
 

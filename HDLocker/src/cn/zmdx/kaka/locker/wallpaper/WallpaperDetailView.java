@@ -292,6 +292,10 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
 
                     @Override
                     public void onFail() {
+                        if (null != mListener) {
+                            mListener.onBack();
+                        }
+                        Toast.makeText(mContext, "下载壁纸失败，请重试", Toast.LENGTH_SHORT).show();
                         showView(false);
                     }
 
