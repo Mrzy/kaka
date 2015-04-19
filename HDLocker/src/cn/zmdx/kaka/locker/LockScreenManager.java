@@ -20,7 +20,6 @@ import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -880,14 +879,7 @@ public class LockScreenManager {
 
         INSTANCE = null;
 
-        HDBThreadUtils.postOnWorkerDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                LockerUtils.recycleBlurBitmap();
-                System.gc();
-            }
-        }, 300);
+        System.gc();
         UmengCustomEventManager.statisticalGuestureUnLockSuccess();
     }
 
@@ -930,7 +922,7 @@ public class LockScreenManager {
     }
 
     public View getSliderView() {
-        return mSlidingUpView.getSliderView();
+        return mSlidingUpView == null ? null : mSlidingUpView.getSliderView();
     }
 
     public void onScreenOn() {

@@ -153,7 +153,7 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
                         float scaleRate = (float) cardWidth / (float) imgWidth;
                         int newHeight = (int) (scaleRate * imgHeight);
                         Bitmap result = ImageUtils.scaleTo(source, cardWidth, newHeight, false);
-                        if (newHeight > 800) {
+                        if (newHeight > mCoverMaxHeight) {
                             result = Bitmap.createBitmap(result, 0, 0, cardWidth, mCoverMaxHeight);
                         }
                         if (source != result) {

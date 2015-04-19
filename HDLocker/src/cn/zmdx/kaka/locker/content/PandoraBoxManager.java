@@ -1115,8 +1115,10 @@ public class PandoraBoxManager implements View.OnClickListener {
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            mDetailLayout.setVisibility(View.INVISIBLE);
-                            mDetailLayout.removeAllViews();
+                            if (mDetailLayout != null) {
+                                mDetailLayout.setVisibility(View.INVISIBLE);
+                                mDetailLayout.removeAllViews();
+                            }
                         }
                     }).start();
         } else {
