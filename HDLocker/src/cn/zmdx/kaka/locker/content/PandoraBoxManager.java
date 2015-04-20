@@ -320,7 +320,6 @@ public class PandoraBoxManager implements View.OnClickListener {
             }
         });
 
-        LockScreenManager.getInstance().registBackPressedListener(mBackPressedListener);
         int theme = PandoraConfig.newInstance(mContext).isNightModeOn() ? NEWS_THEME_NIGHT
                 : NEWS_THEME_DAY;
         switchNewsTheme(theme);
@@ -471,6 +470,8 @@ public class PandoraBoxManager implements View.OnClickListener {
             }
         }, 5000);
 
+        LockScreenManager.getInstance().registBackPressedListener(mBackPressedListener);
+
         BottomDockUmengEventManager.statisticalNewsPanelExpanded();
     }
 
@@ -566,6 +567,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         if (mHotRefreshView != null) {
             mHotRefreshView.setRefreshing(false);
         }
+
+        LockScreenManager.getInstance().unRegistBackPressedListener(mBackPressedListener);
 
         releaseWakeLock();
         BottomDockUmengEventManager.statisticalNewsPanelCollapsed();
