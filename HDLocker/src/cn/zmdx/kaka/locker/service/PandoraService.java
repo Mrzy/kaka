@@ -4,6 +4,8 @@ package cn.zmdx.kaka.locker.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -15,7 +17,9 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.FakeActivity;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
@@ -144,6 +148,7 @@ public class PandoraService extends Service {
         filter.setPriority(1000);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         addAlarmActions(filter);
         registerReceiver(mReceiver, filter);
     }
@@ -248,7 +253,42 @@ public class PandoraService extends Service {
                 timingUpdateCurLocation();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 LockScreenManager.getInstance().onScreenOn();
+            } else if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra("reason");
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("监听到触按了导航键：" + reason);
+                }
+                if (TextUtils.equals(reason, "homekey")) {
+                    // 由于系统对home键的保护机制，当按下home键后5s中是不能从service中启动activity的
+                        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+                            public void run() {
+                                if (LockScreenManager.getInstance().isLocked()) {
+                                    FakeActivity.startup(PandoraService.this);
+                                }
+                            };
+                        }, 5200);
+//                        moveFakeActivityToFront();
+                } else if (TextUtils.equals(reason, "recentapps")) {
+                    if (LockScreenManager.getInstance().isLocked()) {
+                        FakeActivity.startup(PandoraService.this);
+//                        moveFakeActivityToFront();
+                    }
+                }
             }
         }
     };
+
+    protected void moveFakeActivityToFront() {
+        final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        final List<RunningTaskInfo> recentTasks = activityManager
+                .getRunningTasks(Integer.MAX_VALUE);
+
+        for (int i = 0; i < recentTasks.size(); i++) {
+            // bring to front
+            if (recentTasks.get(i).baseActivity.toShortString().indexOf("FakeActivity") > -1) {
+                activityManager.moveTaskToFront(recentTasks.get(i).id,
+                        0);
+            }
+        }
+    }
 }

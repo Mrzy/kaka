@@ -4,6 +4,7 @@ package cn.zmdx.kaka.locker;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -104,5 +105,11 @@ public class FakeActivity extends Activity {
     @Override
     public void onBackPressed() {
         LockScreenManager.getInstance().onBackPressed();
+    }
+
+    public static void startup(Context context) {
+        Intent in = new Intent(context, FakeActivity.class);
+        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(in);
     }
 }
