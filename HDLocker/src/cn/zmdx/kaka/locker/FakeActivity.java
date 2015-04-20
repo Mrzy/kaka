@@ -24,6 +24,12 @@ public class FakeActivity extends Activity {
     @SuppressLint("InlinedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        boolean isDisplayStatusbar = PandoraConfig.newInstance(this).isNotifyFunctionOn();
+        if (isDisplayStatusbar) {
+            setTheme(android.R.style.Theme_Translucent_NoTitleBar);
+        } else {
+            setTheme(android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        }
         super.onCreate(savedInstanceState);
         if (!LockScreenManager.getInstance().isLocked()) {
             finish();
