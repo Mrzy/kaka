@@ -117,6 +117,10 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
     private long mNewModified = System.currentTimeMillis();
 
     public void refreshData() {
+        if (null == mList || mList.size() == 0) {
+            pullWallpaperData();
+            return;
+        }
         OnlineWallpaperManager.getInstance().pullWallpaperData(mContext, this, 0, mNewModified);
     }
 
