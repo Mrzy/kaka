@@ -37,7 +37,8 @@ public class FakeActivity extends Activity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
         if (Build.VERSION.SDK_INT < 16 && !PandoraConfig.newInstance(this).isNotifyFunctionOn()) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         startNotificationServiceIfNeeded();
 
