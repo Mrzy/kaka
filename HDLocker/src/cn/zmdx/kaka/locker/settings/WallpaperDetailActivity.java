@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.FrameLayout.LayoutParams;
 import cn.zmdx.kaka.locker.LockScreenManager;
+import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView.IWallpaperDetailListener;
 
@@ -29,13 +30,15 @@ public class WallpaperDetailActivity extends Activity {
 
             @Override
             public void onBack() {
-                onBackPressed();
+                finish();
             }
 
             @Override
             public void onApplyWallpaper() {
                 LockScreenManager.getInstance().lock();
-                onBackPressed();
+                finish();
+                overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
+                        R.anim.umeng_fb_slide_out_from_right);
             }
         });
         setContentView(detailView, new LayoutParams(LayoutParams.MATCH_PARENT,

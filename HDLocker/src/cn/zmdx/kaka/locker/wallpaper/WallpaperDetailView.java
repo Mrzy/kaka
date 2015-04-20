@@ -217,7 +217,7 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
     }
 
     public void setData(String imageUrl, String desc) {
-        mImageUrl = imageUrl;
+        mImageUrl = null == imageUrl ? "" : imageUrl;
         mDesc = desc;
         showView(true);
         HDBThreadUtils.postOnUiDelayed(new Runnable() {

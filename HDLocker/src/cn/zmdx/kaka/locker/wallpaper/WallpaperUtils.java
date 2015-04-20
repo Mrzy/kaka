@@ -269,6 +269,9 @@ public class WallpaperUtils {
 
                         @Override
                         public void onSuccecc(List<ServerOnlineWallpaper> list) {
+                            if (null == list) {
+                                return;
+                            }
                             Collections.sort(list, WallpaperUtils.comparator);
                             final ServerOnlineWallpaper item = list.get(0);
                             if (isNeedToChangeWallpaper(curDate, item.getPublishDATE())) {
