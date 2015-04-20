@@ -20,6 +20,7 @@ import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -267,7 +268,6 @@ public class LockScreenManager {
             LockSoundManager.play(LockSoundManager.SOUND_ID_LOCK);
         }
 
-        WallpaperUtils.autoChangeWallpaper();
         String currentDate = BaseInfoHelper.getCurrentDate();
         UmengCustomEventManager.statisticalGuestureLockTime(pandoraConfig, currentDate);
 
@@ -773,23 +773,23 @@ public class LockScreenManager {
     private void setCityName() {
         String cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
         String theCityHasSet = mPandoraConfig.getTheCityHasSet();
-        if (!TextUtils.isEmpty(cityNameStr)) {
-            if (mCityName != null) {
-                mCityName.setText(cityNameStr);
-            }
-        } else {
-            if (mCityName != null) {
-                String lastCityName = mPandoraConfig.getLastCityName();
-                if (!TextUtils.isEmpty(lastCityName)) {
-                    mCityName.setText(lastCityName);
-                }
-            }
-        }
+        String cityName = "";
         if (!TextUtils.isEmpty(theCityHasSet)) {
             String[] split = theCityHasSet.split(",");
-            if (mCityName != null && !TextUtils.isEmpty(split[0])) {
-                mCityName.setText(split[0]);
+            if (!TextUtils.isEmpty(split[0])) {
+                cityName = split[0];
+            } else {
+                cityName = mPandoraConfig.getLastCityName();
             }
+        } else {
+            if (!TextUtils.isEmpty(cityNameStr)) {
+                cityName = cityNameStr;
+            } else {
+                cityName = mPandoraConfig.getLastCityName();
+            }
+        }
+        if (mCityName != null) {
+            mCityName.setText(cityName);
         }
     }
 
