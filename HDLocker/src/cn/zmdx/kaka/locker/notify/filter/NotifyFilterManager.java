@@ -74,7 +74,7 @@ public class NotifyFilterManager {
             NotifyFilterEntity myAppInfo = new NotifyFilterEntity();
             myAppInfo.setNotifyCHName(appLabel);
             String usName = NotifyFilterUtil.getChinesePinyinStr(appLabel);
-            if (Character.isDigit(usName.charAt(0))) {
+            if (usName.length() > 0 && Character.isDigit(usName.charAt(0))) {
                 usName = APP_NUMBER_TASK_MARK + usName;
             }
             myAppInfo.setNotifyUSName(usName);

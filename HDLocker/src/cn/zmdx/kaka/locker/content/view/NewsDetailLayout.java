@@ -271,7 +271,9 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
     @Override
     protected void onAttachedToWindow() {
-        mWebView.resumeTimers();
+        if (mWebView != null) {
+            mWebView.resumeTimers();
+        }
         super.onAttachedToWindow();
     }
 
