@@ -20,7 +20,6 @@ import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +29,7 @@ import android.view.ViewGroup.OnHierarchyChangeListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -553,6 +553,8 @@ public class LockScreenManager {
         }
     }
 
+    private Interpolator mBlurInterpolator = new DecelerateInterpolator();
+
     /**
      * 设置锁屏页壁纸的模糊效果。level值范围为[0, 1]，值越大，模糊程度越高。
      * 
@@ -560,7 +562,8 @@ public class LockScreenManager {
      */
     private void setWallpaperBlurEffect(float level) {
         if (mBlurImageView != null) {
-            mBlurImageView.setAlpha(level);
+            float result = mBlurInterpolator.getInterpolation(level);
+            mBlurImageView.setAlpha(result);
         }
     }
 

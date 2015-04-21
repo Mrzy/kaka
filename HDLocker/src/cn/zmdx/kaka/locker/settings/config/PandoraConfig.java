@@ -123,6 +123,8 @@ public class PandoraConfig {
 
     private static final String KEY_SHOW_WEATHER = "ksw";
 
+    private static final String KEY_CURRENT_LAYOUT_ID = "kcli";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -626,5 +628,13 @@ public class PandoraConfig {
 
     public void saveLastTipOpenNightModeTime(long time) {
         mSp.edit().putLong(KEY_LAST_TIME_OPEN_NIGHT_MODE, time).commit();
+    }
+
+    public int getCurrentLayout() {
+        return mSp.getInt(KEY_CURRENT_LAYOUT_ID, 1);// 默认使用布局1
+    }
+
+    public void saveCurrentLayout(int layoutId) {
+        mSp.edit().putInt(KEY_CURRENT_LAYOUT_ID, layoutId).commit();
     }
 }

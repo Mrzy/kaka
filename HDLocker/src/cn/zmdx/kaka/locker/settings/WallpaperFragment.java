@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.layout.PandoraLayoutActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
@@ -147,7 +148,10 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
         if (v == mLocalWallpaper) {
             PandoraUtils.gotoGalleryActivity(getActivity(), PandoraUtils.REQUEST_CODE_GALLERY);
         } else if (v == mWallpaperLayout) {
-
+            Intent in = new Intent(getActivity(), PandoraLayoutActivity.class);
+            getActivity().startActivity(in);
+            getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
+                    R.anim.umeng_fb_slide_out_from_left);
         }
     }
 

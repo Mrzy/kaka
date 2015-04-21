@@ -78,7 +78,7 @@ public class LockerUtils {
     }
 
     static void renderScreenLockerBlurEffect(ImageView mBlurImageView, Bitmap bmp) {
-        sBlurBmp = BlurUtils.doFastBlur(sContext, bmp, mBlurImageView, 15);
+        sBlurBmp = BlurUtils.doFastBlur(sContext, bmp, mBlurImageView, 40);
     }
 
     static void recycleBlurBitmap() {

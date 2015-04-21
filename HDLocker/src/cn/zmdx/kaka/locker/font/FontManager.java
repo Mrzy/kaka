@@ -196,7 +196,6 @@ public class FontManager {
                         }
                     }
                 });
-        requset.setShouldCache(false);
         RequestManager.getRequestQueue().add(requset);
     }
 

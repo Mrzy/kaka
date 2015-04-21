@@ -135,6 +135,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/init_prompt_style" />
         <activity
+            android:name=".layout.PandoraLayoutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat" />
+        <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="false"
             android:screenOrientation="portrait"
