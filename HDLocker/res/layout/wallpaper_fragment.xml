@@ -75,8 +75,7 @@
                 android:layout_marginLeft="17dp"
                 android:layout_marginRight="17dp"
                 android:background="@drawable/setting_line"
-                android:contentDescription="@string/contentDescription"
-                android:visibility="gone" />
+                android:contentDescription="@string/contentDescription" />
 
             <LinearLayout
                 android:id="@+id/wallpaper_local_wallpaper_item"
@@ -90,6 +89,35 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/pandora_setting_wallpaper_local_wallpaper" />
+
+                <ImageView
+                    style="@style/setting_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/contentDescription"
+                    android:src="@drawable/setting_arrow" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
+                android:background="@drawable/setting_line"
+                android:contentDescription="@string/contentDescription" />
+
+            <LinearLayout
+                android:id="@+id/wallpaper_layout_item"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:orientation="horizontal" >
+
+                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    style="@style/setting_textview"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="壁纸布局" />
 
                 <ImageView
                     style="@style/setting_switch"

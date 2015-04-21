@@ -37,6 +37,8 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
     private LinearLayout mLocalWallpaper;
 
+    private LinearLayout mWallpaperLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
     ViewGroup container, @Nullable
@@ -58,6 +60,9 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
         mLocalWallpaper = (LinearLayout) mEntireView
                 .findViewById(R.id.wallpaper_local_wallpaper_item);
         mLocalWallpaper.setOnClickListener(this);
+
+        mWallpaperLayout = (LinearLayout) mEntireView.findViewById(R.id.wallpaper_layout_item);
+        mWallpaperLayout.setOnClickListener(this);
 
         initWallpaperListView();
     }
@@ -139,7 +144,11 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
     @Override
     public void onClick(View v) {
-        PandoraUtils.gotoGalleryActivity(getActivity(), PandoraUtils.REQUEST_CODE_GALLERY);
+        if (v == mLocalWallpaper) {
+            PandoraUtils.gotoGalleryActivity(getActivity(), PandoraUtils.REQUEST_CODE_GALLERY);
+        } else if (v == mWallpaperLayout) {
+
+        }
     }
 
     private boolean isGravitySenorOn() {
