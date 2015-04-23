@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
+import cn.zmdx.kaka.locker.swipe.PandoraSwipeRefreshLayout;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 
@@ -34,6 +34,10 @@ public class NewsFactory {
 
     public static final int NEWS_TYPE_JOKE = 5;
 
+    public interface IOnLoadingListener {
+        void onLoaded(List<ServerImageData> stickData);
+    }
+
     /**
      * @param type 新闻类型
      * @param adapter
@@ -42,8 +46,8 @@ public class NewsFactory {
      * @param older 是要显示更老的数据还是更新的数据
      */
     static void updateNews(int type, final RecyclerView.Adapter adapter,
-            final List<ServerImageData> data, final SwipeRefreshLayout srl, final boolean older,
-            boolean showRefresh) {
+            final List<ServerImageData> data, final PandoraSwipeRefreshLayout srl, final boolean older,
+            boolean showRefresh, final IOnLoadingListener listener) {
         if (adapter == null || data == null) {
             return;
         }
@@ -86,6 +90,7 @@ public class NewsFactory {
             @Override
             public void onResponse(JSONObject response) {
                 final List<ServerImageData> newData = ServerImageData.parseJson(response);
+                List<ServerImageData> stickData = ServerImageData.parseStickJson(response);
                 if (older) {
                     data.addAll(newData);
                 } else {
@@ -93,9 +98,14 @@ public class NewsFactory {
                 }
 
                 if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("请求新闻数据成功，本次返回：" + newData.size() + ",条，共" + data.size() + "条新闻");
+                    HDBLOG.logD("请求新闻数据成功，本次返回：" + newData.size() + ",条，共" + data.size() + "条新闻"+"  "+stickData.size()+"条Stick新闻");
                 }
 
+                if (null != listener) {
+                    if (!older) {
+                        listener.onLoaded(stickData);
+                    }
+                }
                 adapter.notifyDataSetChanged();
                 if (srl != null) {
                     srl.setRefreshing(false);

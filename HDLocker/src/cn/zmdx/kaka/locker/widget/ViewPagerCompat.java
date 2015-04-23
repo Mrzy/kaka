@@ -49,7 +49,7 @@ public class ViewPagerCompat extends ViewPager {
     @Override
     protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
         //如果当前触摸的view是通知view或者手势锁view或密码锁view，则滑动事件交给这些view来处理，避免事件冲突
-        if (v instanceof SwipeLayout || v instanceof PandoraLockPatternView || v instanceof PandoraNumberLockView) {
+        if (v instanceof SwipeLayout || v instanceof PandoraLockPatternView || v instanceof PandoraNumberLockView || v instanceof AutoScrollViewPager) {
             return true;
         }
         return super.canScroll(v, checkV, dx, x, y);

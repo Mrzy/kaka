@@ -111,6 +111,16 @@ public class ServerImageDataManager {
             this.isLiked = isLiked;
         }
 
+        public boolean isStickData = false;
+
+        public boolean isStickData() {
+            return isStickData;
+        }
+
+        public void setStickData(boolean isStickData) {
+            this.isStickData = isStickData;
+        }
+
         /**
          * 图片或者说文章的收藏状态
          */
@@ -180,6 +190,36 @@ public class ServerImageDataManager {
                             serverImageData.setLiked(false);
                             sdList.add(serverImageData);
                         }
+                    }
+                }
+            }
+
+            return sdList;
+        }
+
+        public static List<ServerImageData> parseStickJson(JSONObject jsonObj) {
+            List<ServerImageData> sdList = new ArrayList<ServerImageData>();
+            JSONArray stickArray = jsonObj.optJSONArray("stickData");
+            if (null != stickArray) {
+                for (int i = 0; i < stickArray.length(); i++) {
+                    JSONObject jsonObject = stickArray.optJSONObject(i);
+                    if (jsonObject != null) {
+                        ServerImageData serverImageData = new ServerImageData();
+                        serverImageData.parseBaseJson(jsonObject);
+                        String url = jsonObject.optString("url");
+                        String imgUrl = jsonObject.optString("imgUrl");
+                        serverImageData.setUrl(url);
+                        serverImageData.setImageDesc(imgUrl);
+                        String dataType = serverImageData.getDataType();
+                        if (!TextUtils.isEmpty(dataType)
+                                && dataType.equals(ServerDataMapping.S_DATATYPE_HTML)) {
+                            serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_TRUE);
+                        } else {
+                            serverImageData.setIsImageDownloaded(MySqlitDatabase.DOWNLOAD_FALSE);
+                        }
+                        serverImageData.setLiked(false);
+                        serverImageData.setStickData(true);
+                        sdList.add(serverImageData);
                     }
                 }
             }
