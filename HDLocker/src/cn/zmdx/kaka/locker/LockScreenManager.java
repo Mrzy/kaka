@@ -2,7 +2,6 @@
 package cn.zmdx.kaka.locker;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,51 +30,34 @@ import android.view.WindowManager.LayoutParams;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.BatteryView;
 import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
-import cn.zmdx.kaka.locker.font.FontManager;
+import cn.zmdx.kaka.locker.layout.TimeLayoutManager;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationFactory;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
-import cn.zmdx.kaka.locker.policy.PandoraPolicy;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager.IUnlockListener;
 import cn.zmdx.kaka.locker.service.PandoraService;
-import cn.zmdx.kaka.locker.settings.ChooseCityActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
-import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
-import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
-import cn.zmdx.kaka.locker.weather.PandoraWeatherManager.ISmartWeatherCallback;
-import cn.zmdx.kaka.locker.weather.entity.MeteorologicalCodeConstant;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureIndexInfo;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherFeatureInfo;
-import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
-import cn.zmdx.kaka.locker.weather.utils.ParseWeatherJsonUtils;
-import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
-import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
-import cn.zmdx.kaka.locker.widget.TextClockCompat;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
 import com.romainpiel.shimmer.Shimmer;
@@ -102,7 +84,7 @@ public class LockScreenManager {
 
     private Theme mCurTheme;
 
-    private TextView mDate, mBatteryInfo;
+    private TextView mBatteryInfo;
 
     private KeyguardLock mKeyguard;
 
@@ -132,47 +114,13 @@ public class LockScreenManager {
 
     private Shimmer mShimmer;
 
-    private TextClockCompat mClock;
-
     private View mCommonWidgetLayout;
 
-    private View mDateWidget;
-
-    private LinearLayout mWeatherInfoLayout;
-
-    private RelativeLayout mWeatherFeatureLayout;
-
-    private FrameLayout mNoWeatherLayout;
+    private ViewGroup mDateWidget;
 
     private ImageView mWifiIcon;
 
-    private TextView mLunarCalendar;
-
-    private TextView mWeatherCentTemp;
-
-    private TextView mCityName;
-
-    private TextView mNoWeather;
-
-    private ImageView mWeatherFeaturePic;
-
-    private int featureIndexPicResId;
-
-    private String featureNameByNo;
-
-    private String centTempDay;
-
-    private String centTempNight;
-
-    private String forecastReleasedTime;
-
-    private String sunriseAndSunset;
-
-    private String daytimeFeatureNo;
-
-    private boolean isNight;
-
-    private String nightFeatureNo;
+    private TimeLayoutManager mTimeLayoutManager;
 
     public interface ILockScreenListener {
         void onLock();
@@ -262,8 +210,6 @@ public class LockScreenManager {
 
         checkNewVersion();
 
-        processWeatherInfo();
-
         if (PandoraConfig.newInstance(mContext).isLockSoundOn()) {
             LockSoundManager.play(LockSoundManager.SOUND_ID_LOCK);
         }
@@ -320,6 +266,8 @@ public class LockScreenManager {
                 R.layout.pandora_password_pager_layout, null);
         initSecurePanel(page1);
         mMainPage = LayoutInflater.from(mContext).inflate(R.layout.pandora_main_pager_layout, null);
+        mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
         mMainPagePart1 = mMainPage.findViewById(R.id.part1);
         mFakeStatusDate = mMainPage.findViewById(R.id.fakeStatusDate);
         mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
@@ -327,28 +275,14 @@ public class LockScreenManager {
         mShimmer.setDuration(5000);// 默认是1s
         mShimmer.setStartDelay(1000);// 默认间隔为0
 
-        mDateWidget = mMainPage.findViewById(R.id.dateWidget);
         mCommonWidgetLayout = mMainPage.findViewById(R.id.commonWidgetArea);
         mWifiIcon = (ImageView) mMainPage.findViewById(R.id.wifi_icon);
-        mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        mDate = (TextView) mMainPage.findViewById(R.id.lock_date);
-        mClock = (TextClockCompat) mMainPage.findViewById(R.id.clock);
-        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
-        setDate();
 
-        mWeatherInfoLayout = (LinearLayout) mMainPage.findViewById(R.id.ll_weather_info);
-        setWeatherInfoLayout();
-        mWeatherFeatureLayout = (RelativeLayout) mMainPage.findViewById(R.id.rl_weather_feature);
-        mNoWeatherLayout = (FrameLayout) mMainPage.findViewById(R.id.fl_no_weather);
-        mNoWeather = (TextView) mMainPage.findViewById(R.id.tv_no_weather);
-        mLunarCalendar = (TextView) mMainPage.findViewById(R.id.tv_lunar_calendar);
-        setLunarCalendar();
-        mWeatherFeaturePic = (ImageView) mMainPage.findViewById(R.id.iv_weather_feature_pic);
-        mWeatherCentTemp = (TextView) mMainPage.findViewById(R.id.tv_weather_centtemp);
-        mCityName = (TextView) mMainPage.findViewById(R.id.tv_city_name);
-        String lastWeatherInfo = mPandoraConfig.getLastWeatherInfo();
-        updateWeatherView(lastWeatherInfo);
+        mDateWidget = (ViewGroup) mMainPage.findViewById(R.id.dateWeatherLayout);
+        mTimeLayoutManager = TimeLayoutManager.getInstance(mContext);
+        View dateWeatherView = mTimeLayoutManager.createLayoutViewByID(TimeLayoutManager.getInstance(mContext).getCurrentLayout());
+        mDateWidget.addView(dateWeatherView);
+
         mBatteryInfo = (TextView) mMainPage.findViewById(R.id.battery_info);
         batteryView = (BatteryView) mMainPage.findViewById(R.id.batteryView);
         if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
@@ -590,112 +524,9 @@ public class LockScreenManager {
         mContext.startActivity(intent);
     }
 
-    public void processWeatherInfo() {
-        String smartWeatherInfo = PandoraWeatherManager.getInstance().getWeatherFromCache();
-        updateWeatherView(smartWeatherInfo);
-        long str2TimeMillis = mPandoraConfig.getLastCheckWeatherTime();
-        if (System.currentTimeMillis() - str2TimeMillis >= PandoraPolicy.MIN_CHECK_WEATHER_DURAION) {
-            if (BuildConfig.DEBUG) {
-                HDBLOG.logD(mContext.getString(R.string.enable_to_process_weather_info));
-            }
-            PandoraWeatherManager.getInstance().getWeatherFromNetwork(new ISmartWeatherCallback() {
-
-                @Override
-                public void onSuccess(String smartWeatherInfo) {
-                    updateWeatherView(smartWeatherInfo);
-                }
-
-                @Override
-                public void onFailure() {
-
-                }
-            });
-        }
-    }
-
-    public void updateWeatherView(String smartWeatherInfoStr) {
-        setCityName();
-        if (TextUtils.isEmpty(smartWeatherInfoStr)) {
-            if (mWeatherInfoLayout != null) {
-                mWeatherFeatureLayout.setVisibility(View.GONE);
-                mNoWeatherLayout.setVisibility(View.VISIBLE);
-                if (mNoWeather != null) {
-                    if (!HDBNetworkState.isNetworkAvailable()) {
-                        mNoWeather.setText(R.string.tip_no_news);
-                    } else if (TextUtils.isEmpty(mPandoraConfig.getLastCityName())
-                            && TextUtils.isEmpty(mPandoraConfig.getTheCityHasSet())) {
-                        mNoWeather.setText(R.string.guide_to_choose_city);
-                        mNoWeather.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                setRunnableAfterUnLock(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Intent in = new Intent(mContext, ChooseCityActivity.class);
-                                        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        mContext.startActivity(in);
-                                    }
-                                });
-                                unLock();
-                            }
-                        });
-                    } else {
-                        mWeatherInfoLayout.setVisibility(View.GONE);
-                    }
-                }
-            }
-            return;
-        }
-        SmartWeatherInfo smartWeatherInfo = null;
-        smartWeatherInfo = ParseWeatherJsonUtils.parseWeatherJson(smartWeatherInfoStr);
-        if (smartWeatherInfo == null) {
-            return;
-        }
-        SmartWeatherFeatureInfo smartWeatherFeatureInfo = smartWeatherInfo
-                .getSmartWeatherFeatureInfo();
-        List<SmartWeatherFeatureIndexInfo> smartWeatherFeatureIndexInfoList = smartWeatherFeatureInfo
-                .getSmartWeatherFeatureIndexInfoList();
-
-        SmartWeatherFeatureIndexInfo smartWeatherFeatureIndexInfo = smartWeatherFeatureIndexInfoList
-                .get(0);
-        // if (!TextUtils.isEmpty(sunriseAndSunset)) {
-        // isNight = SmartWeatherUtils.isNight(sunriseAndSunset);
-        // }
-        if (smartWeatherFeatureIndexInfo != null) {
-            nightFeatureNo = smartWeatherFeatureIndexInfo.getNightFeatureNo();
-            centTempNight = smartWeatherFeatureIndexInfo.getNightCentTemp();
-            centTempDay = smartWeatherFeatureIndexInfo.getDaytimeCentTemp();
-            daytimeFeatureNo = smartWeatherFeatureIndexInfo.getDaytimeFeatureNo();
-        }
-        if (!TextUtils.isEmpty(daytimeFeatureNo) && !TextUtils.isEmpty(centTempDay)) {
-            featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
-            featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
-            if (mWeatherFeaturePic != null) {
-                mWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
-            }
-            if (mWeatherCentTemp != null) {
-                if (!TextUtils.isEmpty(centTempNight)) {
-                    mWeatherCentTemp.setText((centTempNight + "℃") + "~" + (centTempDay + "℃"));
-                } else {
-                    mWeatherCentTemp.setText((centTempDay + "℃"));
-                }
-            }
-        } else if (!TextUtils.isEmpty(nightFeatureNo) && !TextUtils.isEmpty(centTempNight)) {
-            featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(nightFeatureNo);
-            featureNameByNo = XMLParserUtils.getFeatureNameByNo(nightFeatureNo);
-            if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
-                featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
-            }
-            if (mWeatherFeaturePic != null) {
-                mWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
-            }
-            if (mWeatherCentTemp != null) {
-                mWeatherCentTemp.setText((centTempNight + "℃"));
-            }
-        } else {
-            if (mWeatherInfoLayout != null) {
-                mWeatherInfoLayout.setVisibility(View.GONE);
-            }
+    public void updateWeatherInfo() {
+        if (mTimeLayoutManager != null) {
+            mTimeLayoutManager.updateWeather();
         }
     }
 
@@ -740,59 +571,6 @@ public class LockScreenManager {
             mNeedPassword = true;
         } else {
             mNeedPassword = false;
-        }
-    }
-
-    private void setDate() {
-        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        int week = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        String weekString = PandoraUtils.getWeekString(mContext, week);
-        String dateString = "" + month + "月" + "" + day + "日 " + weekString;
-        mDate.setText(dateString);
-    }
-
-    private void setLunarCalendar() {
-        String lunarCal = SmartWeatherUtils.getLunarCal();
-        boolean isLunarCalendarOn = mPandoraConfig.isLunarCalendarOn();
-        if (mLunarCalendar != null && !TextUtils.isEmpty(lunarCal)) {
-            if (isLunarCalendarOn) {
-                mLunarCalendar.setText(lunarCal);
-            } else {
-                mLunarCalendar.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    private void setWeatherInfoLayout() {
-        boolean isShowWeather = mPandoraConfig.isShowWeather();
-        if (isShowWeather) {
-            mWeatherInfoLayout.setVisibility(View.VISIBLE);
-        } else {
-            mWeatherInfoLayout.setVisibility(View.GONE);
-        }
-    }
-
-    private void setCityName() {
-        String cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
-        String theCityHasSet = mPandoraConfig.getTheCityHasSet();
-        String cityName = "";
-        if (!TextUtils.isEmpty(theCityHasSet)) {
-            String[] split = theCityHasSet.split(",");
-            if (!TextUtils.isEmpty(split[0])) {
-                cityName = split[0];
-            } else {
-                cityName = mPandoraConfig.getLastCityName();
-            }
-        } else {
-            if (!TextUtils.isEmpty(cityNameStr)) {
-                cityName = cityNameStr;
-            } else {
-                cityName = mPandoraConfig.getLastCityName();
-            }
-        }
-        if (mCityName != null) {
-            mCityName.setText(cityName);
         }
     }
 
@@ -947,7 +725,7 @@ public class LockScreenManager {
 
         PandoraBoxManager.newInstance(mContext).onScreenOn();
 
-        processWeatherInfo();
+        updateWeatherInfo();
 
         // 检查是否有读取通知权限
         NotificationInterceptor.getInstance(mContext).checkPermission();

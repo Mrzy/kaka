@@ -118,7 +118,10 @@ public class PandoraLocationManager {
 
                 @Override
                 public void onSuccess(String smartWeatherInfo) {
-                    LockScreenManager.getInstance().updateWeatherView(smartWeatherInfo);
+                    if (smartWeatherInfo != null) {
+                        PandoraConfig.newInstance(mContext).saveLastWeatherInfo(smartWeatherInfo);
+                        LockScreenManager.getInstance().updateWeatherInfo();
+                    }
                 }
 
                 @Override

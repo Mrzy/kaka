@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Context;
 import android.view.View;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.layout.generator.BaseLayoutGenerator;
 import cn.zmdx.kaka.locker.layout.generator.LayoutGenerator1;
 import cn.zmdx.kaka.locker.layout.generator.LayoutGenerator2;
 import cn.zmdx.kaka.locker.layout.generator.LayoutGenerator3;
@@ -62,23 +63,28 @@ public class TimeLayoutManager {
         PandoraConfig.newInstance(mContext).saveCurrentLayout(layoutId);
     }
 
+    private BaseLayoutGenerator mLayoutGenerator;
+
     public View createLayoutViewByID(int layoutId) {
-        LayoutGenerator lg = null;
         switch (layoutId) {
             case LAYOUT_ID1:
-                lg = new LayoutGenerator1();
+                mLayoutGenerator = new LayoutGenerator1(mContext);
                 break;
             case LAYOUT_ID2:
-                lg = new LayoutGenerator2();
+                mLayoutGenerator = new LayoutGenerator2(mContext);
                 break;
             case LAYOUT_ID3:
-                lg = new LayoutGenerator3();
+                mLayoutGenerator = new LayoutGenerator3(mContext);
                 break;
             case LAYOUT_ID4:
-                lg = new LayoutGenerator4();
+                mLayoutGenerator = new LayoutGenerator4(mContext);
                 break;
         }
-        return lg != null ? lg.createView() : null;
+        return mLayoutGenerator != null ? mLayoutGenerator.getView() : null;
+    }
+
+    public void updateWeather() {
+        mLayoutGenerator.updateWeather();
     }
 
     public List<LayoutInfo> getAllLayout() {

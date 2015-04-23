@@ -229,6 +229,5 @@ public class ServerImageDataManager {
         public static void saveToDatabase(List<ServerImageData> sidList) {
             ServerImageDataModel.getInstance().saveServerImageData(sidList);
         }
-
     }
 }

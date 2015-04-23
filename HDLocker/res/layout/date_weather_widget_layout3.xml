@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:paddingLeft="10dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/ll_date_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <cn.zmdx.kaka.locker.widget.TextClockCompat
+            android:id="@+id/clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:shadowColor="#30000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="1"
+            android:textColor="@color/white"
+            android:textSize="50dp" />
+
+        <cn.zmdx.kaka.locker.widget.TextClockCompat
+            android:id="@+id/lock_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:shadowColor="#30000000"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="-3dp"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="1"
+            android:textColor="#d0ffffff"
+            android:textSize="15dp" />
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:id="@+id/tv_lunar_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:layout_marginLeft="8dp"
+            android:shadowColor="#30000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="1"
+            android:textColor="#d0ffffff"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/ll_weather_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:paddingRight="8dp"
+        android:paddingBottom="15dp"
+        android:layout_gravity="right|bottom" >
+
+        <FrameLayout
+            android:id="@+id/fl_no_weather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_gravity="right"
+            android:layout_marginTop="3dp"
+            android:visibility="gone" >
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/tv_no_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="#30000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="1"
+                android:textColor="#d0ffffff"
+                android:textSize="15dp" />
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_weather_feature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/iv_weather_feature_pic"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"/>
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/tv_weather_centtemp"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginRight="3dp"
+                android:layout_toLeftOf="@id/iv_weather_feature_pic"
+                android:gravity="center_vertical"
+                android:shadowColor="#30000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="1"
+                android:textColor="#d0ffffff"
+                android:textSize="15dp" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/tv_city_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/dingwei_icon"
+                android:layout_below="@id/tv_weather_centtemp"
+                android:drawablePadding="2dp"
+                android:shadowColor="#30000000"
+                android:layout_marginTop="8dp"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="1"
+                android:textColor="#d0ffffff"
+                android:textSize="15dp" />
+        </RelativeLayout>
+    </FrameLayout>
+</LinearLayout>

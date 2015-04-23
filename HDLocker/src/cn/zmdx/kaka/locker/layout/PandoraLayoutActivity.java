@@ -17,10 +17,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.BlurUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 import com.umeng.analytics.MobclickAgent;
@@ -30,6 +32,8 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
     private GridView mGrid;
 
     private List<LayoutInfo> mData;
+
+    private TimeLayoutAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +47,11 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
 
     private void initView() {
         mGrid = (GridView) findViewById(R.id.layoutGridView);
+        mGrid.setVerticalFadingEdgeEnabled(true);
+        mGrid.setFadingEdgeLength(BaseInfoHelper.dip2px(this, 5));
         mData = TimeLayoutManager.getInstance(this).getAllLayout();
-        TimeLayoutAdapter adapter = new TimeLayoutAdapter(this, mData);
-        mGrid.setAdapter(adapter);
+        mAdapter = new TimeLayoutAdapter(this, mData);
+        mGrid.setAdapter(mAdapter);
         mGrid.setOnItemClickListener(this);
     }
 
@@ -91,7 +97,8 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
         private Bitmap createLayoutBg() {
             Drawable drawable = ThemeManager.getCurrentTheme().getCurDrawable();
             Bitmap bmp = ImageUtils.drawable2Bitmap(drawable, true);
-            return ImageUtils.scaleTo(bmp, bmp.getWidth() / 2, bmp.getHeight() / 2);
+            Bitmap scaledBmp = ImageUtils.scaleTo(bmp, bmp.getWidth() / 8, bmp.getHeight() / 8);
+            return BlurUtils.getBlurBitmap(mContext, scaledBmp, 5f, true);
         }
 
         @Override
@@ -134,6 +141,11 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
             holder.timeImg.setImageResource(info.getCoverResId());
             return convertView;
         }
+        @Override
+        public void notifyDataSetChanged() {
+            mCurLayoutId = PandoraConfig.newInstance(mContext).getCurrentLayout();
+            super.notifyDataSetChanged();
+        }
     }
 
     static class ViewHolder {
@@ -147,5 +159,9 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final LayoutInfo info = mData.get(position);
+        final TimeLayoutManager tm = TimeLayoutManager.getInstance(this);
+        tm.saveCurrentLayout(info.getLayoutId());
+        mAdapter.notifyDataSetChanged();
+        LockScreenManager.getInstance().lock();
     }
 }

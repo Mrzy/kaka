@@ -6,8 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -214,13 +217,19 @@ public class FontManager {
         return 0;
     }
 
-    public static Typeface sCacheTypeface;
+    public static Map<String, WeakReference<Typeface>> sTypeCache = new HashMap<String, WeakReference<Typeface>>();
 
     public static Typeface getTypeface(String path) {
-        if (sCacheTypeface == null) {
-            sCacheTypeface = Typeface.createFromAsset(HDApplication.getContext().getAssets(), path);
+        if (sTypeCache.containsKey(path)) {
+            WeakReference<Typeface> typeface = sTypeCache.get(path);
+            Typeface tf = typeface.get();
+            if (tf != null) {
+                return tf;
+            }
         }
-        return sCacheTypeface;
+        final Typeface newTf = Typeface.createFromAsset(HDApplication.getContext().getAssets(), path);
+        sTypeCache.put(path, new WeakReference<Typeface>(newTf));
+        return newTf;
     }
 
     private static String getHash(String url) {

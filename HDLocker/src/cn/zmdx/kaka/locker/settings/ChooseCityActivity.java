@@ -276,7 +276,7 @@ public class ChooseCityActivity extends ActionBarActivity {
             @Override
             public void onSuccess(String smartWeatherInfo) {
                 if (smartWeatherInfo != null) {
-                    LockScreenManager.getInstance().updateWeatherView(smartWeatherInfo);
+                    PandoraConfig.newInstance(getApplicationContext()).saveLastWeatherInfo(smartWeatherInfo);
                 }
             }
 
@@ -284,7 +284,6 @@ public class ChooseCityActivity extends ActionBarActivity {
             public void onFailure() {
             }
         });
-
     }
 
     class MyGridViewAdapter extends BaseAdapter {
