@@ -83,6 +83,7 @@ public class LayoutGenerator4 extends BaseLayoutGenerator {
         mDate = (TextClockCompat) view.findViewById(R.id.lock_date);
         mDate.setLocale(Locale.ENGLISH);
         mDate.setFormat24Hour("MMM dd E");
+        mDate.setFormat12Hour("MMM dd E");
         final Typeface tf = FontManager.getTypeface("fonts/Haettenschweiler.ttf");
         mDate.setTypeface(tf);
         mClock = (TextClockCompat) view.findViewById(R.id.clock);

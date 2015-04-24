@@ -78,6 +78,7 @@ public class LayoutGenerator1 extends BaseLayoutGenerator {
         View view = LayoutInflater.from(HDApplication.getContext()).inflate(R.layout.date_weather_widget_layout1, null);
         mDate = (TextClockCompat) view.findViewById(R.id.lock_date);
         mDate.setFormat24Hour("MM月dd日 E");
+        mDate.setFormat12Hour("MM月dd日 E");
         mClock = (TextClockCompat) view.findViewById(R.id.clock);
         mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
 
