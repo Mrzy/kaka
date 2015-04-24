@@ -25,6 +25,7 @@ import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
+import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -40,11 +41,16 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
     private LinearLayout mWallpaperLayout;
 
+    private TypefaceTextView mWallpaperLayoutPrompt;
+
+    private boolean isShowNew;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
     ViewGroup container, @Nullable
     Bundle savedInstanceState) {
         mEntireView = inflater.inflate(R.layout.wallpaper_fragment, container, false);
+        isShowNew = PandoraConfig.newInstance(getActivity()).isShowPromptNew();
         initView();
         initSwitchButtonState();
         return mEntireView;
@@ -64,6 +70,12 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
 
         mWallpaperLayout = (LinearLayout) mEntireView.findViewById(R.id.wallpaper_layout_item);
         mWallpaperLayout.setOnClickListener(this);
+
+        mWallpaperLayoutPrompt = (TypefaceTextView) mEntireView
+                .findViewById(R.id.wallpaper_layout_item_new);
+        if (isShowNew) {
+            mWallpaperLayoutPrompt.setVisibility(View.VISIBLE);
+        }
 
         initWallpaperListView();
     }
@@ -152,6 +164,10 @@ public class WallpaperFragment extends Fragment implements OnClickListener, OnCh
             getActivity().startActivity(in);
             getActivity().overridePendingTransition(R.anim.umeng_fb_slide_in_from_right,
                     R.anim.umeng_fb_slide_out_from_left);
+            if (isShowNew) {
+                mWallpaperLayoutPrompt.setVisibility(View.GONE);
+                PandoraConfig.newInstance(getActivity()).savePromptNewState(false);
+            }
         }
     }
 

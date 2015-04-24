@@ -1280,8 +1280,8 @@ public class PandoraBoxManager implements View.OnClickListener {
                             }
                             NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this, sid);
                             openDetailPage(ndl);
-                            // UmengCustomEventManager.statisticalOpenNewsDetail(sid.getId(),
-                            // "headline");
+                            UmengCustomEventManager.statisticalOpenNewsDetail(sid.getId(),
+                                    "headline");
                         }
                     }
                     mPrevX = 0;

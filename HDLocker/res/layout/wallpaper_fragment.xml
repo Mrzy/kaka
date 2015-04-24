@@ -112,12 +112,29 @@
                 android:layout_height="@dimen/setting_item_height"
                 android:orientation="horizontal" >
 
-                <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                    style="@style/setting_textview"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="壁纸布局" />
+                    android:layout_weight="1" >
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        style="@style/setting_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="壁纸布局" />
+
+                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                        android:id="@+id/wallpaper_layout_item_new"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:text="NEW!"
+                        android:textColor="#e84f41"
+                        android:textSize="15dp"
+                        android:textStyle="italic"
+                        android:visibility="gone" />
+                </LinearLayout>
 
                 <ImageView
                     style="@style/setting_switch"
