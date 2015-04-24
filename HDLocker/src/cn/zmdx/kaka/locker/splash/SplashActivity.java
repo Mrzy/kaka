@@ -11,10 +11,13 @@ import cn.zmdx.kaka.locker.settings.InitSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
+import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 public class SplashActivity extends Activity {
 
     private boolean isFirstIn;
+
+    private TypefaceTextView mVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,8 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.pandora_splash);
         isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
         goToMainSettingsActivity();
+        mVersion = (TypefaceTextView) findViewById(R.id.splash_version);
+        initVersion();
     }
 
     private void goToMainSettingsActivity() {
@@ -42,6 +47,11 @@ public class SplashActivity extends Activity {
                         R.anim.umeng_fb_slide_out_from_left);
             }
         }, 1500);
+    }
+
+    private void initVersion() {
+        String version = PandoraUtils.getVersionCode(getApplicationContext());
+        mVersion.setText("v" + version);
     }
 
 }

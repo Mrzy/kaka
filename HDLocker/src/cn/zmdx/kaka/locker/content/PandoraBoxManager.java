@@ -989,7 +989,9 @@ public class PandoraBoxManager implements View.OnClickListener {
                 // mMicroViewPager.stopAutoScroll();
                 return;
             }
-            mMicroHeaderLayout.setVisibility(View.VISIBLE);
+            if (mMicroHeaderLayout.getVisibility() == View.GONE) {
+                mMicroHeaderLayout.setVisibility(View.VISIBLE);
+            }
             mMicroStickData.clear();
             mMicroStickData.addAll(stickData);
             if (null == mMicroStickAdapter) {
@@ -1192,7 +1194,9 @@ public class PandoraBoxManager implements View.OnClickListener {
                 mHotHeaderLayout.setVisibility(View.GONE);
                 return;
             }
-            mHotHeaderLayout.setVisibility(View.VISIBLE);
+            if (mHotHeaderLayout.getVisibility() == View.GONE) {
+                mHotHeaderLayout.setVisibility(View.VISIBLE);
+            }
             mHotStickData.clear();
             mHotStickData.addAll(stickData);
             if (null == mHotStickAdapter) {
