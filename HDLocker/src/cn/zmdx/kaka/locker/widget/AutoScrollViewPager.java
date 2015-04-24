@@ -34,7 +34,7 @@ import android.view.animation.Interpolator;
  */
 public class AutoScrollViewPager extends ViewPagerCompat {
 
-    public static final int        DEFAULT_INTERVAL            = 1500;
+    public static final int        DEFAULT_INTERVAL            = 4000;
 
     public static final int        LEFT                        = 0;
     public static final int        RIGHT                       = 1;
@@ -185,7 +185,7 @@ public class AutoScrollViewPager extends ViewPagerCompat {
                 isStopByTouch = true;
                 stopAutoScroll();
             } else if (ev.getAction() == MotionEvent.ACTION_UP && isStopByTouch) {
-                startAutoScroll(3000);
+                startAutoScroll();
             }
         }
 
