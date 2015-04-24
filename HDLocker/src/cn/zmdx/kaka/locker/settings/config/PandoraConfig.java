@@ -303,13 +303,13 @@ public class PandoraConfig {
         return mSp.getString(KEY_THE_CITY_HAS_SET, "");
     }
 
-    public String getSelectedHotCityPosition() {
-        return mSp.getString(KEY_THE_SELECTED_HOT_CITY_POSITION, "0");
+    public int getSelectedHotCityPosition() {
+        return mSp.getInt(KEY_THE_SELECTED_HOT_CITY_POSITION, 0);
     }
 
     public void saveSelectedHotCityPosition(int position) {
         Editor editor = mSp.edit();
-        editor.putString(KEY_THE_SELECTED_HOT_CITY_POSITION, String.valueOf(position));
+        editor.putInt(KEY_THE_SELECTED_HOT_CITY_POSITION, position);
         editor.commit();
     }
 

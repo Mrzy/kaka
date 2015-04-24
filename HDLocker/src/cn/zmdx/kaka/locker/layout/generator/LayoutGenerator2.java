@@ -9,14 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.font.FontManager;
-import cn.zmdx.kaka.locker.layout.LayoutGenerator;
 import cn.zmdx.kaka.locker.layout.TimeLayoutManager;
 import cn.zmdx.kaka.locker.settings.ChooseCityActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -174,7 +171,7 @@ public class LayoutGenerator2 extends BaseLayoutGenerator{
                 mWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
             }
             if (mWeatherCentTemp != null) {
-                mWeatherCentTemp.setText((centTempNight + "℃"));
+                mWeatherCentTemp.setText((centTempNight + "°"));
             }
         } else {
             if (mWeatherInfoLayout != null) {

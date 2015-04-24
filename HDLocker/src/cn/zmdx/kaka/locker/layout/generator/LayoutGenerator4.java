@@ -179,7 +179,7 @@ public class LayoutGenerator4 extends BaseLayoutGenerator {
                 mWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
             }
             if (mWeatherCentTemp != null) {
-                mWeatherCentTemp.setText((centTempNight + "℃"));
+                mWeatherCentTemp.setText((centTempNight + "°"));
             }
         } else {
             if (mWeatherInfoLayout != null) {

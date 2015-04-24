@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
@@ -173,7 +171,7 @@ public class LayoutGenerator1 extends BaseLayoutGenerator {
                 mWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
             }
             if (mWeatherCentTemp != null) {
-                mWeatherCentTemp.setText((centTempNight + "℃"));
+                mWeatherCentTemp.setText((centTempNight + "°"));
             }
         } else {
             if (mWeatherInfoLayout != null) {

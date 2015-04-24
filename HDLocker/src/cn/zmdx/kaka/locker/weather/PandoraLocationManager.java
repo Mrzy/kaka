@@ -111,6 +111,7 @@ public class PandoraLocationManager {
             mBdLocation = location;
             PandoraConfig.newInstance(mContext).saveLastCityName(mBdLocation.getDistrict());
             PandoraConfig.newInstance(mContext).saveLastCityProvinceName(mBdLocation.getProvince());
+            PandoraConfig.newInstance(mContext).saveTheCityHasSet(mBdLocation.getDistrict() + "," + mBdLocation.getProvince());
             PandoraConfig.newInstance(mContext).saveLastCheckLocationTime(
                     System.currentTimeMillis());
             stopRequestLocation();
