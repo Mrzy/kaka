@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.zmdx.kaka.locker"
-    android:versionCode="100"
-    android:versionName="2.0.4" >
+    android:versionCode="101"
+    android:versionName="2.0.5" >
 
     <uses-sdk
         android:minSdkVersion="14"
