@@ -277,18 +277,12 @@ public class LockScreenManager {
 
         mCommonWidgetLayout = mMainPage.findViewById(R.id.commonWidgetArea);
         mWifiIcon = (ImageView) mMainPage.findViewById(R.id.wifi_icon);
-
-        mDateWidget = (ViewGroup) mMainPage.findViewById(R.id.dateWeatherLayout);
-        mTimeLayoutManager = TimeLayoutManager.getInstance(mContext);
-        View dateWeatherView = mTimeLayoutManager.createLayoutViewByID(TimeLayoutManager.getInstance(mContext).getCurrentLayout());
-        mDateWidget.addView(dateWeatherView);
-
         mBatteryInfo = (TextView) mMainPage.findViewById(R.id.battery_info);
         batteryView = (BatteryView) mMainPage.findViewById(R.id.batteryView);
         if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
             // mBatteryInfo.setVisibility(View.GONE);
             // batteryView.setVisibility(View.GONE);
-            mCommonWidgetLayout.setVisibility(View.GONE);
+            mCommonWidgetLayout.setVisibility(View.INVISIBLE);
         } else {
             batteryView.setLevelListener(new ILevelCallBack() {
 
@@ -301,6 +295,12 @@ public class LockScreenManager {
                 mWifiIcon.setVisibility(View.GONE);
             }
         }
+
+        mDateWidget = (ViewGroup) mMainPage.findViewById(R.id.dateWeatherLayout);
+        mTimeLayoutManager = TimeLayoutManager.getInstance(mContext);
+        View dateWeatherView = mTimeLayoutManager.createLayoutViewByID(TimeLayoutManager.getInstance(mContext).getCurrentLayout());
+        mDateWidget.addView(dateWeatherView);
+
         pages.add(page1);
         pages.add(mMainPage);
         LockerPagerAdapter pagerAdapter = new LockerPagerAdapter(mContext, mPager, pages);
