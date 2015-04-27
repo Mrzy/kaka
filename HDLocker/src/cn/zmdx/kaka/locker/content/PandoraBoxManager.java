@@ -1242,6 +1242,10 @@ public class PandoraBoxManager implements View.OnClickListener {
         return mEntireView;
     }
 
+    public View getHeaderView() {
+        return mHeaderPart1;
+    }
+
     @Override
     public void onClick(View v) {
         if (v == mBackBtn) {

@@ -37,12 +37,49 @@ public class ViewPagerCompat extends ViewPager {
         return super.onInterceptTouchEvent(event);
     }
 
+    private int mTouchAction = -1;
+
+    public int getCurrentTouchAction() {
+        return mTouchAction;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        mTouchAction = ev.getAction();
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                dispatchActionDown();
+                break;
+            case MotionEvent.ACTION_UP:
+                dispatchActionUp();
+                break;
+        }
         try {
             return super.onTouchEvent(ev);
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public interface OnTouchActionListener {
+        void onActionDown();
+        void onActionUp();
+    }
+    private OnTouchActionListener mActionListener;
+
+    public void setTouchActionListener(OnTouchActionListener listener) {
+        mActionListener = listener;
+    }
+
+    private void dispatchActionDown() {
+        if (mActionListener != null) {
+            mActionListener.onActionDown();
+        }
+    }
+
+    private void dispatchActionUp() {
+        if (mActionListener != null) {
+            mActionListener.onActionUp();
         }
     }
 

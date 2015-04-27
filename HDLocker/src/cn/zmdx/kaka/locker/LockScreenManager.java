@@ -19,9 +19,11 @@ import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.OnHierarchyChangeListener;
@@ -298,7 +300,8 @@ public class LockScreenManager {
 
         mDateWidget = (ViewGroup) mMainPage.findViewById(R.id.dateWeatherLayout);
         mTimeLayoutManager = TimeLayoutManager.getInstance(mContext);
-        View dateWeatherView = mTimeLayoutManager.createLayoutViewByID(TimeLayoutManager.getInstance(mContext).getCurrentLayout());
+        View dateWeatherView = mTimeLayoutManager.createLayoutViewByID(TimeLayoutManager
+                .getInstance(mContext).getCurrentLayout());
         mDateWidget.addView(dateWeatherView);
 
         pages.add(page1);
@@ -367,8 +370,11 @@ public class LockScreenManager {
         public void onPageSelected(int position) {
             if (position == 0) {
                 // dismiss news panel
-                // mSlidingUpView.hidePanel();
+                if (mNeedPassword) {
+                    mSlidingUpView.hidePanel();
+                }
             } else if (position == 1) {
+                mSlidingUpView.showPanel();
                 if (mNeedPassword) {
                     // 如果从密码页滑回锁屏页，将之前设置的解锁后执行动作清除。即此处认为用户没有输入密码解锁，又滑回了锁屏页
                     setRunnableAfterUnLock(null);
@@ -401,13 +407,20 @@ public class LockScreenManager {
                 if (!mKeepBlurEffect) {
                     setWallpaperBlurEffect(1.0f - positionOffset);
                 }
-                setMainPageAlpha(positionOffset);
-            }
 
-            if (position == 0) {
-                // 滑动同时，底部新闻面板同步下滑
-                int translationY = (int) (mSlidingUpView.getPanelHeight() * (1.0f - positionOffset));
-                mSlidingUpView.smoothSlideTo(translationY, 0);
+                float tmp = 2f * positionOffset - 1f;
+                setMainPageAlpha(tmp);
+                // PandoraBoxManager.newInstance(mContext).getHeaderView().setAlpha(tmp);
+
+                if (tmp <= 0 && mPager.getCurrentTouchAction() == MotionEvent.ACTION_UP
+                        && !mNeedPassword) {
+                    HDBThreadUtils.runOnUi(new Runnable() {
+                        @Override
+                        public void run() {
+                            unLock();
+                        }
+                    });
+                }
             }
         }
     };
@@ -658,10 +671,10 @@ public class LockScreenManager {
 
         PandoraBoxManager.newInstance(mContext).freeMemory();
 
-        INSTANCE = null;
+        // INSTANCE = null;
 
-        System.gc();
         UmengCustomEventManager.statisticalGuestureUnLockSuccess();
+        System.gc();
     }
 
     public boolean isLocked() {
