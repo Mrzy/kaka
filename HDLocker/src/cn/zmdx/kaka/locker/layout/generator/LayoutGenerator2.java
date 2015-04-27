@@ -81,6 +81,7 @@ public class LayoutGenerator2 extends BaseLayoutGenerator{
         mDate.setFormat12Hour("MM月dd日 E");
         mClock = (TextClockCompat) view.findViewById(R.id.clock);
         mClock.setTypeface(FontManager.getTypeface("fonts/Eurostile.otf"));
+        mClock.force24Format();
 
         mWeatherInfoLayout = view.findViewById(R.id.ll_weather_info);
         boolean isShowWeather = mPandoraConfig.isShowWeather();
@@ -201,7 +202,11 @@ public class LayoutGenerator2 extends BaseLayoutGenerator{
             }
         }
         if (mCityName != null) {
-            mCityName.setText(cityName);
+            if (!TextUtils.isEmpty(cityName)) {
+                mCityName.setText(cityName);
+            } else {
+                mCityName.setVisibility(View.INVISIBLE);
+            }
         }
     }
 

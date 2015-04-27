@@ -88,6 +88,7 @@ public class LayoutGenerator4 extends BaseLayoutGenerator {
         mDate.setTypeface(tf);
         mClock = (TextClockCompat) view.findViewById(R.id.clock);
         mClock.setTypeface(tf);
+        mClock.force24Format();
 
         mWeatherInfoLayout = view.findViewById(R.id.ll_weather_info);
         boolean isShowWeather = mPandoraConfig.isShowWeather();
@@ -208,7 +209,11 @@ public class LayoutGenerator4 extends BaseLayoutGenerator {
             }
         }
         if (mCityName != null) {
-            mCityName.setText(cityName);
+            if (!TextUtils.isEmpty(cityName)) {
+                mCityName.setText(cityName);
+            } else {
+                mCityName.setVisibility(View.INVISIBLE);
+            }
         }
     }
 

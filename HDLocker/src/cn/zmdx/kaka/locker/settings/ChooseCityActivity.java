@@ -137,8 +137,13 @@ public class ChooseCityActivity extends ActionBarActivity {
     }
 
     private void setHotCitiesGridView() {
-        myGridViewAdapter = new MyGridViewAdapter();
-        myGridViewAdapter.bindData(MeteorologicalCodeConstant.hotCityNameStrings);
+        mGVCityNameList = new ArrayList<String>();
+        for (String cityName : MeteorologicalCodeConstant.hotCityNameStrings) {
+            if (!TextUtils.isEmpty(cityName)) {
+                mGVCityNameList.add(cityName);
+            }
+        }
+        myGridViewAdapter = new MyGridViewAdapter(mGVCityNameList);
         mHotCitiesGridView.setAdapter(myGridViewAdapter);
         mHotCitiesGridView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -149,34 +154,34 @@ public class ChooseCityActivity extends ActionBarActivity {
                     return;
                 }
                 mHotCitiesGridView.setSelection(position);
-//                int selectedHotCityPosition = Integer.parseInt(mPandoraConfig
-//                        .getSelectedHotCityPosition());
+                // int selectedHotCityPosition = Integer.parseInt(mPandoraConfig
+                // .getSelectedHotCityPosition());
                 mPandoraConfig.saveSelectedHotCityPosition(position);
                 myGridViewAdapter.notifyDataSetChanged();
-//                if (selectedHotCityPosition == position && position != 0) {
-//                    mSelectedCityName = mGVCityNameList.get(position);
-//                }
+                // if (selectedHotCityPosition == position && position != 0) {
+                // mSelectedCityName = mGVCityNameList.get(position);
+                // }
                 if (position == 0) {
                     PandoraLocationManager.getInstance(ChooseCityActivity.this).requestLocation();
-//                    if (selectedHotCityPosition != position) {
-//                        String lastCityName = mPandoraConfig.getLastCityName();
-//                        if (!TextUtils.isEmpty(lastCityName)) {
-//                            mSelectedCityName = lastCityName;
-//                        }
-//                        finishPage();
-//                    } else {
-//                        String cityName = PandoraLocationManager.getInstance(
-//                                ChooseCityActivity.this).getCityName();
-//                        String lastCityName = mPandoraConfig.getLastCityName();
-//                        if (!TextUtils.isEmpty(lastCityName)) {
-//                            mAimCityName = lastCityName;
-//                        } else if (!TextUtils.isEmpty(cityName)) {
-//                            mSelectedCityName = cityName;
-//                        } else {
-//                            mPandoraConfig.saveLastCityName("");
-//                            
-//                        }
-//                    }
+                    // if (selectedHotCityPosition != position) {
+                    // String lastCityName = mPandoraConfig.getLastCityName();
+                    // if (!TextUtils.isEmpty(lastCityName)) {
+                    // mSelectedCityName = lastCityName;
+                    // }
+                    // finishPage();
+                    // } else {
+                    // String cityName = PandoraLocationManager.getInstance(
+                    // ChooseCityActivity.this).getCityName();
+                    // String lastCityName = mPandoraConfig.getLastCityName();
+                    // if (!TextUtils.isEmpty(lastCityName)) {
+                    // mAimCityName = lastCityName;
+                    // } else if (!TextUtils.isEmpty(cityName)) {
+                    // mSelectedCityName = cityName;
+                    // } else {
+                    // mPandoraConfig.saveLastCityName("");
+                    //
+                    // }
+                    // }
                 } else {
                     mSelectedCityName = mGVCityNameList.get(position);
                 }
@@ -273,7 +278,8 @@ public class ChooseCityActivity extends ActionBarActivity {
             @Override
             public void onSuccess(String smartWeatherInfo) {
                 if (smartWeatherInfo != null) {
-                    PandoraConfig.newInstance(getApplicationContext()).saveLastWeatherInfo(smartWeatherInfo);
+                    PandoraConfig.newInstance(getApplicationContext()).saveLastWeatherInfo(
+                            smartWeatherInfo);
                 }
             }
 
@@ -285,29 +291,23 @@ public class ChooseCityActivity extends ActionBarActivity {
 
     class MyGridViewAdapter extends BaseAdapter {
 
-        private int mLastSelectPosition = 0;
+        private List<String> mData;
 
-        public MyGridViewAdapter() {
+        public MyGridViewAdapter(List<String> data) {
             mLastSelectPosition = mPandoraConfig.getSelectedHotCityPosition();
+            mData = data;
         }
 
-        private void bindData(String[] cityNameStrings) {
-            mGVCityNameList = new ArrayList<String>();
-            for (String cityName : cityNameStrings) {
-                if (!TextUtils.isEmpty(cityName)) {
-                    mGVCityNameList.add(cityName);
-                }
-            }
-        }
+        private int mLastSelectPosition = 0;
 
         @Override
         public int getCount() {
-            return mGVCityNameList.size();
+            return mData.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return mGVCityNameList.get(position);
+            return mData.get(position);
         }
 
         @Override
@@ -336,7 +336,7 @@ public class ChooseCityActivity extends ActionBarActivity {
                 retView = convertView;
                 holder = (ViewHolder) retView.getTag();
             }
-            holder.hotCitiesName.setText(mGVCityNameList.get(position));
+            holder.hotCitiesName.setText(mData.get(position));
             if (mLastSelectPosition == position) {
                 holder.imgSelectState.setVisibility(View.VISIBLE);
             } else {

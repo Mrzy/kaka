@@ -409,6 +409,12 @@ public class TextClockCompat extends TextView {
         return mFormat;
     }
 
+    private boolean isForce24Format = false;
+
+    public void force24Format() {
+        isForce24Format = true;
+    }
+
     /**
      * Selects either one of {@link #getFormat12Hour()} or
      * {@link #getFormat24Hour()} depending on whether the user has selected
@@ -418,8 +424,11 @@ public class TextClockCompat extends TextView {
      *            schedule/unschedule the time ticker, false otherwise
      */
     private void chooseFormat(boolean handleTicker) {
-        final boolean format24Requested = is24HourModeEnabled();
+        boolean format24Requested = is24HourModeEnabled();
 
+        if (isForce24Format) {
+            format24Requested = true;
+        }
         // LocaleData ld =
         // LocaleData.get(getContext().getResources().getConfiguration().locale);
 
@@ -524,6 +533,13 @@ public class TextClockCompat extends TextView {
         } else {
             dateFormat = new SimpleDateFormat(mFormat.toString());
         }
-        setText(dateFormat.format(mTime.getTimeInMillis()));
+        String time = dateFormat.format(mTime.getTimeInMillis());
+        if (time.startsWith("24")) {
+            char[] charTime = time.toCharArray();
+            charTime[0] = '0';
+            charTime[1] = '0';
+            time = String.copyValueOf(charTime);
+        }
+        setText(time);
     }
 }
