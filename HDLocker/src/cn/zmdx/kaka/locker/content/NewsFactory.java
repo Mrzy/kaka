@@ -11,9 +11,9 @@ import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
-import cn.zmdx.kaka.locker.swipe.PandoraSwipeRefreshLayout;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
+import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;

@@ -1,9 +1,6 @@
 
 package cn.zmdx.kaka.locker.content;
 
-import it.carlom.stikkyheader.core.StikkyHeaderBuilder;
-import it.carlom.stikkyheader.core.StikkyHeaderBuilder.IOnLoadMoreData;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -21,6 +18,7 @@ import android.os.PowerManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
@@ -31,7 +29,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -39,8 +36,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
@@ -50,8 +45,8 @@ import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.NewsFactory.IOnLoadingListener;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
-import cn.zmdx.kaka.locker.content.adapter.GeneralNewsPageAdapter;
-import cn.zmdx.kaka.locker.content.adapter.StickPageAdapter;
+import cn.zmdx.kaka.locker.content.adapter.StickRecyclerAdapter;
+import cn.zmdx.kaka.locker.content.adapter.StickRecyclerAdapter.OnStickClickListener;
 import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
 import cn.zmdx.kaka.locker.content.view.HeaderCircleButton;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
@@ -59,8 +54,6 @@ import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.swipe.PandoraSwipeRefreshLayout;
-import cn.zmdx.kaka.locker.swipe.PandoraSwipeRefreshLayout.OnRefreshListener;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -69,11 +62,10 @@ import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
-import cn.zmdx.kaka.locker.widget.AutoScrollViewPager;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.PandoraRecyclerView;
+import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
-import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
 public class PandoraBoxManager implements View.OnClickListener {
@@ -134,7 +126,6 @@ public class PandoraBoxManager implements View.OnClickListener {
         mInflater = LayoutInflater.from(context);
         mEntireView = mInflater.inflate(R.layout.news_page_layout, null);
         mDetailLayout = (FrameLayout) mEntireView.findViewById(R.id.detailLayout);
-        mTouchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
     }
 
     public synchronized static PandoraBoxManager newInstance(Context context) {
@@ -688,7 +679,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private BeautyPageAdapter mBeautyAdapter, mJokeAdapter, mGossipAdapter;
 
-    private GeneralNewsPageAdapter mMicroMediaAdapter, mHotAdapter;
+    private StickRecyclerAdapter mHotAdapter, mMicroMediaAdapter;
 
     private PandoraSwipeRefreshLayout mJokeRefreshView, mBeautyRefreshView, mMicroMediaRefreshView,
             mGossipRefreshView, mHotRefreshView;
@@ -772,16 +763,6 @@ public class PandoraBoxManager implements View.OnClickListener {
                 UmengCustomEventManager.statisticalPullRefreshNews("joke");
             }
 
-            @Override
-            public void onStartRefresh() {
-
-            }
-
-            @Override
-            public void onFailRefresh() {
-                // TODO Auto-generated method stub
-
-            }
         });
 
         rv.setOnScrollListener(new OnScrollListener() {
@@ -853,16 +834,6 @@ public class PandoraBoxManager implements View.OnClickListener {
                 UmengCustomEventManager.statisticalPullRefreshNews("beauty");
             }
 
-            @Override
-            public void onStartRefresh() {
-
-            }
-
-            @Override
-            public void onFailRefresh() {
-                // TODO Auto-generated method stub
-
-            }
         });
 
         rv.setOnScrollListener(new OnScrollListener() {
@@ -885,36 +856,31 @@ public class PandoraBoxManager implements View.OnClickListener {
         return view;
     }
 
+    private PandoraRecyclerView mMicroRecyclerView;
+
     private View initMicroMediaView() {
-        ViewGroup view = (ViewGroup) mInflater.inflate(R.layout.pager_stick_layout, null);
-        final PandoraRecyclerView rv = (PandoraRecyclerView) view.findViewById(R.id.recyclerView);
-        rv.setEmptyView(createEmptyView());
-        rv.setVerticalFadingEdgeEnabled(true);
-        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
+        ViewGroup view = (ViewGroup) mInflater.inflate(R.layout.pager_news_layout, null);
+        mMicroRecyclerView = (PandoraRecyclerView) view.findViewById(R.id.recyclerView);
+        mMicroRecyclerView.setEmptyView(createEmptyView());
+        mMicroRecyclerView.setVerticalFadingEdgeEnabled(true);
+        mMicroRecyclerView.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         final LinearLayoutManager llm = new LinearLayoutManager(mContext,
                 LinearLayoutManager.VERTICAL, false);
-        rv.setLayoutManager(llm);
-        rv.setHasFixedSize(true);
-        StikkyHeaderBuilder.stickTo(rv).setHeader(R.id.hot_header_layout, (ViewGroup) view)
-                .build(new IOnLoadMoreData() {
-
-                    @Override
-                    public void onLoadMore() {
-                        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE,
-                                mMicroMediaAdapter, mMicroMediaNews, mMicroMediaRefreshView, true,
-                                false, null);
-                    }
-                });
+        mMicroRecyclerView.setLayoutManager(llm);
+        mMicroRecyclerView.setHasFixedSize(true);
 
         // final List<ServerImageData> news = new ArrayList<ServerImageData>();
-        mMicroMediaAdapter = new GeneralNewsPageAdapter(mContext, mMicroMediaNews);
-        rv.setAdapter(mMicroMediaAdapter);
+        // mMicroMediaAdapter = new GeneralNewsPageAdapter(mContext,
+        // mMicroMediaNews);
+
+        mMicroMediaAdapter = new StickRecyclerAdapter(mContext, mMicroMediaNews, mMicroStickData);
+        mMicroRecyclerView.setAdapter(mMicroMediaAdapter);
 
         View emptyView = createEmptyView();
-        rv.setEmptyView(emptyView);
+        mMicroRecyclerView.setEmptyView(emptyView);
         view.addView(emptyView);
 
-        mMicroMediaAdapter.setOnItemClickListener(new GeneralNewsPageAdapter.OnItemClickListener() {
+        mMicroMediaAdapter.setOnItemClickListener(new StickRecyclerAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClicked(View view, int position) {
@@ -923,6 +889,16 @@ public class PandoraBoxManager implements View.OnClickListener {
                 NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this, sid);
                 openDetailPage(ndl);
                 UmengCustomEventManager.statisticalOpenNewsDetail(sid.getId(), "microMedia");
+            }
+        });
+        mMicroMediaAdapter.setOnStickClickListener(new OnStickClickListener() {
+
+            @Override
+            public void onItemClicked(ServerImageData serverImageData) {
+                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this, serverImageData);
+                openDetailPage(ndl);
+                UmengCustomEventManager.statisticalOpenNewsDetail(serverImageData.getId(),
+                        "microMedia");
             }
         });
 
@@ -934,33 +910,26 @@ public class PandoraBoxManager implements View.OnClickListener {
 
             @Override
             public void onRefresh() {
-                if (null != mMicroHeaderLayout) {
-                    mMicroHeaderLayout.bringToFront();
-                }
                 NewsFactory
                         .updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
                                 mMicroMediaNews, mMicroMediaRefreshView, false, true,
                                 mMicroLoadingListener);
                 UmengCustomEventManager.statisticalPullRefreshNews("microMedia");
             }
-
+        });
+        mMicroRecyclerView.setOnScrollListener(new OnScrollListener() {
             @Override
-            public void onStartRefresh() {
-                mMicroMediaRefreshView.bringToFront();
-            }
-
-            @Override
-            public void onFailRefresh() {
-                if (null != mMicroHeaderLayout) {
-                    mMicroHeaderLayout.bringToFront();
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int lastVisibleItem = llm.findLastVisibleItemPosition();
+                int totalItemCount = llm.getItemCount();
+                // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
+                // dy>0 表示向下滑动
+                if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
+                    NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
+                            mMicroMediaNews, mMicroMediaRefreshView, true, false, null);
                 }
             }
         });
-
-        mMicroHeaderLayout = view.findViewById(R.id.hot_header_layout);
-        mMicroTitleView = (TypefaceTextView) view.findViewById(R.id.hot_title);
-        mMicroPointViewGroup = (ViewGroup) view.findViewById(R.id.hot_point);
-        mMicroViewPager = (AutoScrollViewPager) view.findViewById(R.id.hot_header_viewpaper);
 
         // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE,
         // mMicroMediaAdapter,
@@ -968,50 +937,15 @@ public class PandoraBoxManager implements View.OnClickListener {
         return view;
     }
 
-    private AutoScrollViewPager mMicroViewPager;
-
-    private ViewGroup mMicroPointViewGroup;
-
-    private TypefaceTextView mMicroTitleView;
-
-    private View mMicroHeaderLayout;
-
-    private StickPageAdapter mMicroStickAdapter;
-
     private List<ServerImageData> mMicroStickData = new ArrayList<ServerImageData>();
 
     private IOnLoadingListener mMicroLoadingListener = new IOnLoadingListener() {
 
         @Override
         public void onLoaded(List<ServerImageData> stickData) {
-            if (stickData.size() == 0) {
-                mMicroHeaderLayout.setVisibility(View.GONE);
-                // mMicroViewPager.stopAutoScroll();
-                return;
-            }
-            if (mMicroHeaderLayout.getVisibility() == View.GONE) {
-                mMicroHeaderLayout.setVisibility(View.VISIBLE);
-            }
             mMicroStickData.clear();
             mMicroStickData.addAll(stickData);
-            if (null == mMicroStickAdapter) {
-                mMicroStickAdapter = new StickPageAdapter(getStickView(mMicroStickData.size()),
-                        initStickPointView(mMicroStickData.size(), mMicroPointViewGroup),
-                        mMicroTitleView, mMicroStickData);
-                mMicroViewPager.setAdapter(mMicroStickAdapter);
-                mMicroViewPager.setOnPageChangeListener(mMicroStickAdapter);
-                // int n = StickPageAdapter.MAX_COUNT / 2 % 3;
-                // int itemPosition = StickPageAdapter.MAX_COUNT / 2 - n;
-                // Log.d("syc", "n="+n+" itemPosition="+itemPosition);
-                mMicroViewPager.setCurrentItem(0);
-                mMicroTitleView.setText(mMicroStickData.get(0).getTitle());
-                mMicroViewPager.setOnTouchListener(mStickTouchListener);
-                mMicroViewPager.startAutoScroll();
-                mMicroViewPager.setAutoScrollDurationFactor(5);
-                // mMicroViewPager.setBorderAnimation(false);
-            } else {
-                mMicroStickAdapter.notifyDataSetChanged();
-            }
+            mMicroMediaAdapter.notifyDataSetChanged();
         }
     };
 
@@ -1062,16 +996,6 @@ public class PandoraBoxManager implements View.OnClickListener {
                 UmengCustomEventManager.statisticalPullRefreshNews("gossip");
             }
 
-            @Override
-            public void onStartRefresh() {
-
-            }
-
-            @Override
-            public void onFailRefresh() {
-                // TODO Auto-generated method stub
-
-            }
         });
 
         rv.setOnScrollListener(new OnScrollListener() {
@@ -1094,35 +1018,28 @@ public class PandoraBoxManager implements View.OnClickListener {
         return view;
     }
 
+    private PandoraRecyclerView mHotRecyclerView;
+
     private View initHotNewsView() {
-        ViewGroup view = (ViewGroup) mInflater.inflate(R.layout.pager_stick_layout, null);
-        PandoraRecyclerView rv = (PandoraRecyclerView) view.findViewById(R.id.recyclerView);
-        rv.setVerticalFadingEdgeEnabled(true);
-        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
+        ViewGroup view = (ViewGroup) mInflater.inflate(R.layout.pager_news_layout, null);
+        mHotRecyclerView = (PandoraRecyclerView) view.findViewById(R.id.recyclerView);
+        mHotRecyclerView.setVerticalFadingEdgeEnabled(true);
+        mHotRecyclerView.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         final LinearLayoutManager llm = new LinearLayoutManager(mContext,
                 LinearLayoutManager.VERTICAL, false);
-        rv.setLayoutManager(llm);
-        rv.setHasFixedSize(true);
-        StikkyHeaderBuilder.stickTo(rv).setHeader(R.id.hot_header_layout, (ViewGroup) view)
-                .build(new IOnLoadMoreData() {
-
-                    @Override
-                    public void onLoadMore() {
-                        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter,
-                                mHotNews, mHotRefreshView, true, false, null);
-                    }
-                });
+        mHotRecyclerView.setLayoutManager(llm);
+        mHotRecyclerView.setHasFixedSize(true);
 
         // final List<ServerImageData> news = new ArrayList<ServerImageData>();
-        mHotAdapter = new GeneralNewsPageAdapter(mContext, mHotNews);
-        rv.setAdapter(mHotAdapter);
+        mHotAdapter = new StickRecyclerAdapter(mContext, mHotNews, mHotStickData);
+        mHotRecyclerView.setAdapter(mHotAdapter);
 
         View emptyView = createEmptyView();
-        rv.setEmptyView(emptyView);
+        mHotRecyclerView.setEmptyView(emptyView);
         view.addView(emptyView, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
 
-        mHotAdapter.setOnItemClickListener(new GeneralNewsPageAdapter.OnItemClickListener() {
+        mHotAdapter.setOnItemClickListener(new StickRecyclerAdapter.OnItemClickListener() {
 
             @Override
             public void onItemClicked(View view, int position) {
@@ -1134,6 +1051,17 @@ public class PandoraBoxManager implements View.OnClickListener {
             }
         });
 
+        mHotAdapter.setOnStickClickListener(new OnStickClickListener() {
+
+            @Override
+            public void onItemClicked(ServerImageData serverImageData) {
+                NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this, serverImageData);
+                openDetailPage(ndl);
+                UmengCustomEventManager.statisticalOpenNewsDetail(serverImageData.getId(),
+                        "microMedia");
+            }
+        });
+
         mHotRefreshView = (PandoraSwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
         mHotRefreshView.setProgressBackgroundColorSchemeColor(mFloatingButtonColors[1]);
         mHotRefreshView.setColorSchemeColors(Color.WHITE);
@@ -1141,31 +1069,12 @@ public class PandoraBoxManager implements View.OnClickListener {
 
             @Override
             public void onRefresh() {
-                if (null != mHotHeaderLayout) {
-                    mHotHeaderLayout.bringToFront();
-                }
                 NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
                         mHotRefreshView, false, true, mLoadingListener);
                 UmengCustomEventManager.statisticalPullRefreshNews("headline");
             }
 
-            @Override
-            public void onStartRefresh() {
-                mHotRefreshView.bringToFront();
-            }
-
-            @Override
-            public void onFailRefresh() {
-                if (null != mHotHeaderLayout) {
-                    mHotHeaderLayout.bringToFront();
-                }
-            }
         });
-
-        mHotHeaderLayout = view.findViewById(R.id.hot_header_layout);
-        mHotTitleView = (TypefaceTextView) view.findViewById(R.id.hot_title);
-        mHotPointViewGroup = (ViewGroup) view.findViewById(R.id.hot_point);
-        mHotViewPager = (AutoScrollViewPager) view.findViewById(R.id.hot_header_viewpaper);
 
         // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter,
         // mHotNews,
@@ -1174,144 +1083,26 @@ public class PandoraBoxManager implements View.OnClickListener {
         return view;
     }
 
-    private AutoScrollViewPager mHotViewPager;
-
-    private ViewGroup mHotPointViewGroup;
-
-    private TypefaceTextView mHotTitleView;
-
-    private View mHotHeaderLayout;
-
-    private StickPageAdapter mHotStickAdapter;
-
     private List<ServerImageData> mHotStickData = new ArrayList<ServerImageData>();
 
     private IOnLoadingListener mLoadingListener = new IOnLoadingListener() {
 
         @Override
         public void onLoaded(List<ServerImageData> stickData) {
-            if (stickData.size() == 0) {
-                mHotHeaderLayout.setVisibility(View.GONE);
-                return;
-            }
-            if (mHotHeaderLayout.getVisibility() == View.GONE) {
-                mHotHeaderLayout.setVisibility(View.VISIBLE);
-            }
             mHotStickData.clear();
             mHotStickData.addAll(stickData);
-            if (null == mHotStickAdapter) {
-                mHotStickAdapter = new StickPageAdapter(getStickView(mHotStickData.size()),
-                        initStickPointView(mHotStickData.size(), mHotPointViewGroup),
-                        mHotTitleView, mHotStickData);
-                mHotViewPager.setAdapter(mHotStickAdapter);
-                mHotViewPager.setOnPageChangeListener(mHotStickAdapter);
-                // int n = StickPageAdapter.MAX_COUNT / 2 % 3;
-                // int itemPosition = StickPageAdapter.MAX_COUNT / 2 - n;
-                mHotViewPager.setCurrentItem(0);
-                mHotTitleView.setText(mHotStickData.get(0).getTitle());
-                mHotViewPager.setOnTouchListener(mStickTouchListener);
-                mHotViewPager.startAutoScroll();
-                mHotViewPager.setAutoScrollDurationFactor(5);
-                // mHotViewPager.setBorderAnimation(false);
-            } else {
-                mHotStickAdapter.notifyDataSetChanged();
-            }
-        }
-    };
-
-    private ArrayList<ImageView> getStickView(int size) {
-        ArrayList<ImageView> pageViews = new ArrayList<ImageView>();
-        for (int i = 0; i < size; i++) {
-            ImageView imageView = new ImageView(mContext);
-            pageViews.add(imageView);
-        }
-        return pageViews;
-    }
-
-    private ImageView[] initStickPointView(int size, ViewGroup group) {
-        ImageView[] pointViews = new ImageView[size];
-        for (int i = 0; i < size; i++) {
-            ImageView imageView = new ImageView(mContext);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(20, 20);
-            lp.setMargins(5, 0, 5, 0);
-            imageView.setLayoutParams(lp);
-            pointViews[i] = imageView;
-            if (i == 0) {
-                imageView.setBackgroundResource(R.drawable.page_indicator_focused);
-            } else {
-                imageView.setBackgroundResource(R.drawable.page_indicator_normal);
-            }
-            group.addView(imageView);
-        }
-        return pointViews;
-    }
-
-    private boolean isOnItemClick = false;
-
-    private int mTouchSlop;
-
-    private float mPrevX;
-
-    private OnTouchListener mStickTouchListener = new OnTouchListener() {
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    mPrevX = MotionEvent.obtain(event).getX();
-                    isOnItemClick = true;
-                    return false;
-                case MotionEvent.ACTION_MOVE:
-                    final float eventX = event.getX();
-                    float xDiff = Math.abs(eventX - mPrevX);
-                    if (xDiff < mTouchSlop) {
-                        isOnItemClick = true;
-                        return true;
-                    }
-                    isOnItemClick = false;
-                    return false;
-                case MotionEvent.ACTION_UP:
-                    if (isOnItemClick) {
-                        if (null != mViewPager) {
-                            ServerImageData sid = null;
-                            int category = mViewPager.getCurrentItem();
-                            if (category == NewsFactory.NEWS_TYPE_HEADLINE) {
-                                sid = mHotStickData.get(mHotViewPager.getCurrentItem()
-                                        % mHotStickData.size());
-                            } else if (category == NewsFactory.NEWS_TYPE_MICRO_CHOICE) {
-                                sid = mMicroStickData.get(mMicroViewPager.getCurrentItem()
-                                        % mMicroStickData.size());
-                            }
-                            NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this, sid);
-                            openDetailPage(ndl);
-                            UmengCustomEventManager.statisticalOpenNewsDetail(sid.getId(),
-                                    "headline");
-                        }
-                    }
-                    mPrevX = 0;
-                    return false;
-
-                default:
-                    return false;
-            }
-
+            mHotAdapter.notifyDataSetChanged();
         }
     };
 
     private void controlAutoScroll(boolean isHotAutoScroll, boolean isMicroAutoScroll) {
-        if (null != mHotViewPager) {
-            if (isHotAutoScroll) {
-                mHotViewPager.startAutoScroll();
-            } else {
-                mHotViewPager.stopAutoScroll();
-            }
+        if (null != mMicroMediaAdapter) {
+            mMicroMediaAdapter.setAutoScroll(isMicroAutoScroll);
+            mMicroMediaAdapter.notifyDataSetChanged();
         }
-        if (null != mMicroViewPager) {
-            if (isMicroAutoScroll) {
-                mMicroViewPager.startAutoScroll();
-            } else {
-                mMicroViewPager.stopAutoScroll();
-            }
+        if (null != mHotAdapter) {
+            mHotAdapter.setAutoScroll(isHotAutoScroll);
+            mHotAdapter.notifyDataSetChanged();
         }
     }
 

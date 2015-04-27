@@ -1,6 +1,7 @@
 
 package cn.zmdx.kaka.locker.content.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v4.view.PagerAdapter;
@@ -55,7 +56,7 @@ public class StickPageAdapter extends PagerAdapter implements OnPageChangeListen
 
     @Override
     public void destroyItem(View view, int position, Object object) {
-        ((ViewPager) view).removeView(mPageViews.get(position));
+        // ((ViewPager) view).removeView(mPageViews.get(position));
     }
 
     @Override
@@ -63,13 +64,13 @@ public class StickPageAdapter extends PagerAdapter implements OnPageChangeListen
         // int realPos = position % mStickData.size();
         int realPos = position;
         int targetWidth = BaseInfoHelper.getRealWidth(HDApplication.getContext())
-                - BaseInfoHelper.dip2px(HDApplication.getContext(), 8);
+                - BaseInfoHelper.dip2px(HDApplication.getContext(), 16);
         int targetHeight = BaseInfoHelper.dip2px(HDApplication.getContext(), 240);
         ImageView imageView = mPageViews.get(realPos);
         Picasso.with(HDApplication.getContext()).load(mStickData.get(realPos).getUrl())
                 .placeholder(R.drawable.icon_newsimage_loading).resize(targetWidth, targetHeight)
                 .centerCrop().into(imageView);
-        // ((ViewPager) view).removeView(imageView);
+        ((ViewPager) view).removeView(imageView);
         ((ViewPager) view).addView(imageView);
         return mPageViews.get(realPos);
     }
@@ -102,6 +103,14 @@ public class StickPageAdapter extends PagerAdapter implements OnPageChangeListen
     @Override
     public CharSequence getPageTitle(int position) {
         return mStickData.get(position).getTitle();
+    }
+
+    public void notifyDataChanged(ArrayList<ImageView> pageViews, ImageView[] pointViews) {
+        mPageViews.clear();
+        mPointViews = null;
+        mPageViews = pageViews;
+        mPointViews = pointViews;
+        notifyDataSetChanged();
     }
 
 }

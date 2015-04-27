@@ -5,7 +5,7 @@
     android:paddingLeft="8dp"
     android:paddingRight="8dp" >
 
-    <cn.zmdx.kaka.locker.swipe.PandoraSwipeRefreshLayout
+    <cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,6 +17,6 @@
             android:layout_height="wrap_content"
             android:fadingEdge="none"
             android:scrollbars="vertical" />
-    </cn.zmdx.kaka.locker.swipe.PandoraSwipeRefreshLayout>
+    </cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout>
 
 </FrameLayout>
