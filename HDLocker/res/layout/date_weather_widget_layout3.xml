@@ -2,72 +2,90 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:paddingLeft="10dp"
+    android:layout_marginTop="30dp"
     android:gravity="center_vertical"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/ll_date_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
 
         <cn.zmdx.kaka.locker.widget.TextClockCompat
             android:id="@+id/clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:background="#40000000"
             android:gravity="center_horizontal"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:shadowColor="#30000000"
             android:shadowDx="2"
             android:shadowDy="2"
             android:shadowRadius="1"
             android:textColor="@color/white"
-            android:textSize="50dp" />
+            android:textSize="40dp" />
+
+        <cn.zmdx.kaka.locker.widget.TextClockCompat
+            android:id="@+id/week"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="#88dfdfdf"
+            android:gravity="center"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:shadowColor="#30000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="1"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp" >
 
         <cn.zmdx.kaka.locker.widget.TextClockCompat
             android:id="@+id/lock_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:shadowColor="#30000000"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="-3dp"
             android:shadowDx="2"
             android:shadowDy="2"
             android:shadowRadius="1"
             android:textColor="#d0ffffff"
-            android:textSize="15dp" />
+            android:textSize="20dp" />
 
         <cn.zmdx.kaka.locker.widget.TypefaceTextView
             android:id="@+id/tv_lunar_calendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-             android:layout_marginLeft="8dp"
+            android:layout_marginLeft="8dp"
             android:shadowColor="#30000000"
             android:shadowDx="2"
             android:shadowDy="2"
             android:shadowRadius="1"
             android:textColor="#d0ffffff"
-            android:textSize="15dp" />
+            android:textSize="12dp" />
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/ll_weather_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:paddingRight="8dp"
-        android:paddingBottom="15dp"
-        android:layout_gravity="right|bottom" >
+        android:layout_marginTop="5dp"
+        android:paddingLeft="10dp" >
 
         <FrameLayout
             android:id="@+id/fl_no_weather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_gravity="right"
-            android:layout_marginTop="3dp"
             android:visibility="gone" >
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
@@ -87,19 +105,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
-            <ImageView
-                android:id="@+id/iv_weather_feature_pic"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentRight="true"/>
-
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:id="@+id/tv_weather_centtemp"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginRight="3dp"
-                android:layout_toLeftOf="@id/iv_weather_feature_pic"
-                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
                 android:shadowColor="#30000000"
                 android:shadowDx="2"
                 android:shadowDy="2"
@@ -108,15 +117,27 @@
                 android:textSize="15dp" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                android:id="@+id/iv_weather_feature_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tv_weather_centtemp"
+                android:layout_toRightOf="@+id/tv_weather_centtemp"
+                android:shadowColor="#30000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="1"
+                android:textColor="#d0ffffff"
+                android:textSize="12dp" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:id="@+id/tv_city_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:drawableLeft="@drawable/dingwei_icon"
                 android:layout_below="@id/tv_weather_centtemp"
+                android:layout_marginTop="5dp"
+                android:drawableLeft="@drawable/dingwei_icon"
                 android:drawablePadding="2dp"
                 android:shadowColor="#30000000"
-                android:layout_marginTop="8dp"
                 android:shadowDx="2"
                 android:shadowDy="2"
                 android:shadowRadius="1"
@@ -124,4 +145,5 @@
                 android:textSize="15dp" />
         </RelativeLayout>
     </FrameLayout>
+
 </LinearLayout>

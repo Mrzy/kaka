@@ -1,6 +1,8 @@
+
 package cn.zmdx.kaka.locker.layout.generator;
 
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +29,7 @@ import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
 import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
 import cn.zmdx.kaka.locker.widget.TextClockCompat;
 
-public class LayoutGenerator2 extends BaseLayoutGenerator{
+public class LayoutGenerator2 extends BaseLayoutGenerator {
 
     private Context mContext;
 
@@ -75,20 +77,25 @@ public class LayoutGenerator2 extends BaseLayoutGenerator{
 
     @Override
     protected View createView() {
-        View view = LayoutInflater.from(HDApplication.getContext()).inflate(R.layout.date_weather_widget_layout2, null);
+        View view = LayoutInflater.from(HDApplication.getContext()).inflate(
+                R.layout.date_weather_widget_layout2, null);
         mDate = (TextClockCompat) view.findViewById(R.id.lock_date);
-        mDate.setFormat24Hour("MM月dd日 E");
-        mDate.setFormat12Hour("MM月dd日 E");
+        mDate.setLocale(Locale.ENGLISH);
+        mDate.setFormat24Hour("E MMM dd");
+        mDate.setFormat12Hour("E MMM dd");
         mClock = (TextClockCompat) view.findViewById(R.id.clock);
-        mClock.setTypeface(FontManager.getTypeface("fonts/Eurostile.otf"));
+        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
         mClock.force24Format();
 
         mWeatherInfoLayout = view.findViewById(R.id.ll_weather_info);
+        mCityName = (TextView) view.findViewById(R.id.tv_city_name);
         boolean isShowWeather = mPandoraConfig.isShowWeather();
         if (isShowWeather) {
             mWeatherInfoLayout.setVisibility(View.VISIBLE);
+            mCityName.setVisibility(View.VISIBLE);
         } else {
             mWeatherInfoLayout.setVisibility(View.GONE);
+            mCityName.setVisibility(View.GONE);
         }
         mWeatherFeatureLayout = view.findViewById(R.id.rl_weather_feature);
         mNoWeatherLayout = (FrameLayout) view.findViewById(R.id.fl_no_weather);
@@ -97,7 +104,6 @@ public class LayoutGenerator2 extends BaseLayoutGenerator{
         setLunarCalendar();
         mWeatherFeaturePic = (ImageView) view.findViewById(R.id.iv_weather_feature_pic);
         mWeatherCentTemp = (TextView) view.findViewById(R.id.tv_weather_centtemp);
-        mCityName = (TextView) view.findViewById(R.id.tv_city_name);
         return view;
     }
 
@@ -116,14 +122,16 @@ public class LayoutGenerator2 extends BaseLayoutGenerator{
                         mNoWeather.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Intent in = new Intent(mContext, ChooseCityActivity.class);
-                                        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        mContext.startActivity(in);
-                                    }
-                                });
+                                LockScreenManager.getInstance().setRunnableAfterUnLock(
+                                        new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Intent in = new Intent(mContext,
+                                                        ChooseCityActivity.class);
+                                                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                mContext.startActivity(in);
+                                            }
+                                        });
                                 LockScreenManager.getInstance().unLock();
                             }
                         });
@@ -180,9 +188,9 @@ public class LayoutGenerator2 extends BaseLayoutGenerator{
                 mWeatherInfoLayout.setVisibility(View.GONE);
             }
         }
-        
+
     }
-    
+
     private void setCityName() {
         String cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
         String theCityHasSet = mPandoraConfig.getTheCityHasSet();

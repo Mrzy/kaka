@@ -2,6 +2,7 @@
 package cn.zmdx.kaka.locker.layout.generator;
 
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +10,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
@@ -34,7 +34,7 @@ public class LayoutGenerator3 extends BaseLayoutGenerator {
 
     private PandoraConfig mPandoraConfig;
 
-    private TextClockCompat mClock, mDate;
+    private TextClockCompat mClock, mDate, mWeek;
 
     private View mWeatherInfoLayout;
 
@@ -50,7 +50,7 @@ public class LayoutGenerator3 extends BaseLayoutGenerator {
 
     private TextView mNoWeather;
 
-    private ImageView mWeatherFeaturePic;
+    private TextView mWeatherFeatureText;
 
     private int featureIndexPicResId;
 
@@ -79,11 +79,15 @@ public class LayoutGenerator3 extends BaseLayoutGenerator {
         View view = LayoutInflater.from(HDApplication.getContext()).inflate(
                 R.layout.date_weather_widget_layout3, null);
         mDate = (TextClockCompat) view.findViewById(R.id.lock_date);
-        mDate.setFormat24Hour("MM月dd日 E");
-        mDate.setFormat12Hour("MM月dd日 E");
+        mDate.setFormat24Hour("MM月dd日");
+        mDate.setFormat12Hour("MM月dd日");
         mClock = (TextClockCompat) view.findViewById(R.id.clock);
-        mClock.setTypeface(FontManager.getTypeface("fonts/CenturyGothic.ttf"));
+        mClock.setTypeface(FontManager.getTypeface("fonts/Eurostile.otf"));
         mClock.force24Format();
+        mWeek = (TextClockCompat) view.findViewById(R.id.week);
+        mWeek.setLocale(Locale.ENGLISH);
+        mWeek.setFormat24Hour("E");
+        mWeek.setFormat12Hour("E");
 
         mWeatherInfoLayout = view.findViewById(R.id.ll_weather_info);
         boolean isShowWeather = mPandoraConfig.isShowWeather();
@@ -97,7 +101,7 @@ public class LayoutGenerator3 extends BaseLayoutGenerator {
         mNoWeather = (TextView) view.findViewById(R.id.tv_no_weather);
         mLunarCalendar = (TextView) view.findViewById(R.id.tv_lunar_calendar);
         setLunarCalendar();
-        mWeatherFeaturePic = (ImageView) view.findViewById(R.id.iv_weather_feature_pic);
+        mWeatherFeatureText = (TextView) view.findViewById(R.id.iv_weather_feature_text);
         mWeatherCentTemp = (TextView) view.findViewById(R.id.tv_weather_centtemp);
         mCityName = (TextView) view.findViewById(R.id.tv_city_name);
         return view;
@@ -118,14 +122,16 @@ public class LayoutGenerator3 extends BaseLayoutGenerator {
                         mNoWeather.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Intent in = new Intent(mContext, ChooseCityActivity.class);
-                                        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        mContext.startActivity(in);
-                                    }
-                                });
+                                LockScreenManager.getInstance().setRunnableAfterUnLock(
+                                        new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Intent in = new Intent(mContext,
+                                                        ChooseCityActivity.class);
+                                                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                mContext.startActivity(in);
+                                            }
+                                        });
                                 LockScreenManager.getInstance().unLock();
                             }
                         });
@@ -155,8 +161,8 @@ public class LayoutGenerator3 extends BaseLayoutGenerator {
         if (!TextUtils.isEmpty(daytimeFeatureNo) && !TextUtils.isEmpty(centTempDay)) {
             featureIndexPicResId = SmartWeatherUtils.getFeatureIndexPicByNo(daytimeFeatureNo);
             featureNameByNo = XMLParserUtils.getFeatureNameByNo(daytimeFeatureNo);
-            if (mWeatherFeaturePic != null) {
-                mWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
+            if (mWeatherFeatureText != null) {
+                mWeatherFeatureText.setText(featureNameByNo);
             }
             if (mWeatherCentTemp != null) {
                 if (!TextUtils.isEmpty(centTempNight)) {
@@ -171,8 +177,8 @@ public class LayoutGenerator3 extends BaseLayoutGenerator {
             if (featureNameByNo.equals(MeteorologicalCodeConstant.meterologicalNames[0])) {
                 featureIndexPicResId = MeteorologicalCodeConstant.meteorologicalCodePics[16];
             }
-            if (mWeatherFeaturePic != null) {
-                mWeatherFeaturePic.setBackgroundResource(featureIndexPicResId);
+            if (mWeatherFeatureText != null) {
+                mWeatherFeatureText.setText(featureNameByNo);
             }
             if (mWeatherCentTemp != null) {
                 mWeatherCentTemp.setText((centTempNight + "°"));
