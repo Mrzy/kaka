@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/channelName"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/channel_grid_item_bg"
+    android:paddingBottom="5dp"
+    android:paddingLeft="8dp"
+    android:gravity="center"
+    android:paddingRight="8dp"
+    android:paddingTop="5dp"
+    android:textColor="#a8a8a8" />

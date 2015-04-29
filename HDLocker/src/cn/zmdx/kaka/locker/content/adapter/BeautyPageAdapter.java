@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,16 +31,16 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Transformation;
 
-public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.ViewHolder> {
+public class BeautyPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder1 extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView mTextView, mLikeCount, mTimeTv;
 
         public ImageView mImageView;
 
         public CardView mCardView;
 
-        public ViewHolder(View view) {
+        public ViewHolder1(View view) {
             super(view);
             mTextView = (TextView) view.findViewById(R.id.text);
             mLikeCount = (TextView) view.findViewById(R.id.likeCount);
@@ -84,7 +85,8 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        final ViewHolder1 holder = (ViewHolder1) viewHolder;
         if (mTheme == PandoraBoxManager.NEWS_THEME_DAY) {
             holder.mCardView.setCardBackgroundColor(mRes
                     .getColor(R.color.beauty_news_day_mode_card_color));
@@ -178,10 +180,10 @@ public class BeautyPageAdapter extends RecyclerView.Adapter<BeautyPageAdapter.Vi
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup vg, final int position) {
+    public ViewHolder1 onCreateViewHolder(ViewGroup vg, final int position) {
         View view = LayoutInflater.from(vg.getContext()).inflate(
                 R.layout.news_page_beauty_item_layout, vg, false);
-        ViewHolder vh = new ViewHolder(view);
+        ViewHolder1 vh = new ViewHolder1(view);
         return vh;
     }
 

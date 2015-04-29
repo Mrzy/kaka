@@ -121,6 +121,16 @@
     <string name="pandora_news_classify_micro_choice">微精选</string>
     <string name="pandora_news_classify_beauty">美女</string>
     <string name="pandora_news_classify_funny">搞笑</string>
+    <string name="pandora_news_classify_finance">财经</string>
+    <string name="pandora_news_classify_sports">体育</string>
+    <string name="pandora_news_classify_fashion">时尚</string>
+    <string name="pandora_news_classify_app">潮应用</string>
+    <string name="pandora_news_classify_technology">科技</string>
+    <string name="pandora_news_classify_game">游戏</string>
+    <string name="pandora_news_classify_bussiness">创业</string>
+    
+    
+    
     <string name="pandora_setting_general">通用</string>
     <string name="pandora_setting_notify">通知</string>
     <string name="pandora_setting_password">密码</string>
