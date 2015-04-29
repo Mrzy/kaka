@@ -22,9 +22,12 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -45,6 +48,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 import com.android.volley.misc.ViewCompat;
 
@@ -131,6 +136,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     private int defaultPosition;
 
+    private boolean shouldShowNew;
+
+    private boolean isShouldShowNewFuction;
+
     public PagerSlidingTabStrip(Context context) {
         this(context, null);
     }
@@ -206,7 +215,12 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 scrollOffset);
         textAllCaps = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsTextAllCaps, textAllCaps);
 
+        shouldShowNew = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsShouldShowNew,
+                shouldShowNew);
+
         a.recycle();
+
+        isShouldShowNewFuction = PandoraConfig.newInstance(getContext()).isShowPromptNew();
 
         rectPaint = new Paint();
         rectPaint.setAntiAlias(true);
@@ -403,6 +417,14 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         canvas.drawRect(lineLeft + indicatorPadding, height - indicatorHeight, lineRight
                 - indicatorPadding, height, rectPaint);
 
+        // draw new
+        if (shouldShowNew && isShouldShowNewFuction) {
+            rectPaint.setColor(Color.RED);
+            float cx = tabsContainer.getWidth()
+                    - ((tabsContainer.getWidth() / 4 - 2 * getTextSize()) / 2) + 12;
+            float cy = (height - getTextSize()) / 2;
+            canvas.drawCircle(cx, cy, 12, rectPaint);
+        }
         // draw underline
 
         rectPaint.setColor(underlineColor);
@@ -416,6 +438,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             canvas.drawLine(tab.getRight(), dividerPadding, tab.getRight(),
                     height - dividerPadding, dividerPaint);
         }
+
     }
 
     private int mLastPosition;
@@ -470,6 +493,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             }
             if (shouldSizeBigger || shouldChangeTextColor) {
                 setTextSizeBigger(position);
+            }
+            if (position == 3) {
+                shouldShowNew = false;
             }
         }
     }

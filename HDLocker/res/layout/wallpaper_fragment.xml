@@ -121,7 +121,7 @@
                         style="@style/setting_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="壁纸布局" />
+                        android:text="@string/pandora_setting_wallpaper_layout_prompt" />
 
                     <cn.zmdx.kaka.locker.widget.TypefaceTextView
                         android:id="@+id/wallpaper_layout_item_new"

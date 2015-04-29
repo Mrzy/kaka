@@ -1058,7 +1058,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                 NewsDetailLayout ndl = new NewsDetailLayout(PandoraBoxManager.this, serverImageData);
                 openDetailPage(ndl);
                 UmengCustomEventManager.statisticalOpenNewsDetail(serverImageData.getId(),
-                        "microMedia");
+                        "headline");
             }
         });
 

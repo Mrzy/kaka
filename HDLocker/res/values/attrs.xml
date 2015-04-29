@@ -175,6 +175,7 @@
         <attr name="pstsTabBackground" format="reference" />
         <attr name="pstsShouldExpand" format="boolean" />
         <attr name="pstsTextAllCaps" format="boolean" />
+        <attr name="pstsShouldShowNew" format="boolean" />
     </declare-styleable>
     <declare-styleable name="RippleView">
         <attr name="rv_alpha" format="integer" />

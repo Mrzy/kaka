@@ -3,6 +3,9 @@ package cn.zmdx.kaka.locker.layout;
 
 import java.util.List;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -23,6 +26,7 @@ import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.BlurUtils;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 
 import com.umeng.analytics.MobclickAgent;
@@ -135,16 +139,34 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
             holder.bg.setImageBitmap(mLayoutBg);
             if (mCurLayoutId == layoutId) {
                 holder.selectedImg.setVisibility(View.VISIBLE);
+                alphaAnimator(holder.selectedImg, View.VISIBLE);
             } else {
-                holder.selectedImg.setVisibility(View.INVISIBLE);
+                alphaAnimator(holder.selectedImg, View.INVISIBLE);
+                // holder.selectedImg.setVisibility(View.INVISIBLE);
             }
+
             holder.timeImg.setImageResource(info.getCoverResId());
             return convertView;
         }
+
         @Override
         public void notifyDataSetChanged() {
             mCurLayoutId = PandoraConfig.newInstance(mContext).getCurrentLayout();
             super.notifyDataSetChanged();
+        }
+
+        private void alphaAnimator(final View view, final int visibility) {
+            float star = visibility == View.INVISIBLE ? 1f : 0f;
+            float end = visibility == View.INVISIBLE ? 0f : 1f;
+            ObjectAnimator animator = ObjectAnimator.ofFloat(view, "alpha", star, end);
+            animator.setDuration(300);
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    view.setVisibility(visibility);
+                }
+            });
+            animator.start();
         }
     }
 
@@ -162,6 +184,12 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
         final TimeLayoutManager tm = TimeLayoutManager.getInstance(this);
         tm.saveCurrentLayout(info.getLayoutId());
         mAdapter.notifyDataSetChanged();
-        LockScreenManager.getInstance().lock();
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+            
+            @Override
+            public void run() {
+                LockScreenManager.getInstance().lock();
+            }
+        }, 300);
     }
 }

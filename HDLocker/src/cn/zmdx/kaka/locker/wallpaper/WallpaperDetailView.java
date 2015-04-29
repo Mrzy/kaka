@@ -2,7 +2,6 @@
 package cn.zmdx.kaka.locker.wallpaper;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -16,20 +15,19 @@ import android.os.AsyncTask;
 import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
-import cn.zmdx.kaka.locker.font.FontManager;
+import cn.zmdx.kaka.locker.layout.TimeLayoutManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -40,7 +38,6 @@ import cn.zmdx.kaka.locker.widget.BaseButton;
 import cn.zmdx.kaka.locker.widget.CheckBox;
 import cn.zmdx.kaka.locker.widget.ProgressBarMaterial;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
-import cn.zmdx.kaka.locker.widget.TextClockCompat;
 
 public class WallpaperDetailView extends LinearLayout implements OnCheckedChangeListener {
     private Context mContext;
@@ -59,8 +56,6 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
 
     private BaseButton mApplyButton;
 
-    // private ServerOnlineWallpaper mData;
-
     private String mImageUrl;
 
     private String mDesc;
@@ -74,10 +69,6 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
     }
 
     private IWallpaperDetailListener mListener;
-
-    private TextView mDate;
-
-    private TextClockCompat mClock;
 
     private Bitmap mPreBitmap;
 
@@ -98,11 +89,10 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
     private void initView() {
         mView = LayoutInflater.from(mContext).inflate(R.layout.wallpaper_detail, null);
         addView(mView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
-        mDate = (TextView) mView.findViewById(R.id.lock_date);
-        mClock = (TextClockCompat) mView.findViewById(R.id.digitalClock);
-        mClock.setTypeface(FontManager.getTypeface("fonts/Roboto-Thin.ttf"));
-        setDate();
+        ViewGroup dateWidget = (ViewGroup) mView.findViewById(R.id.wallpaper_element);
+        View dateWeatherView = TimeLayoutManager.getInstance(mContext).createLayoutViewByID(
+                TimeLayoutManager.getInstance(mContext).getCurrentLayout());
+        dateWidget.addView(dateWeatherView);
         mLoadingView = (ProgressBarMaterial) mView.findViewById(R.id.wallpaper_loading);
         mContentView = (FrameLayout) mView.findViewById(R.id.wallpaper_content);
         mImageView = (SensorImageView) mView.findViewById(R.id.wallpaper_detail_image);
@@ -205,15 +195,6 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
                 HDApplication.getContext().unregisterReceiver(mObserver);
             }
         }
-    }
-
-    public void setDate() {
-        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        int week = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        String weekString = PandoraUtils.getWeekString(mContext, week);
-        String dateString = "" + month + "月" + "" + day + "日 " + weekString;
-        mDate.setText(dateString);
     }
 
     public void setData(String imageUrl, String desc) {

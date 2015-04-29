@@ -77,6 +77,10 @@ public class UmengCustomEventManager {
 
     private static final String EVENT_CLOSE_AUTO_CHANGE_WALLPAPER = "closeAutoChangeWallpaper";// 关闭每天自动更换壁纸
 
+    private static final String EVENT_OPEN_HIDDEN_LINE = "openHiddenLine";// 打开隐藏手机轨迹
+
+    private static final String EVENT_CLOSE_HIDDEN_LINE= "closeHiddenLine";// 关闭隐藏手机轨迹
+
     public static void statisticalOpenNewsDetail(int id, String newsType) {
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("newsId", String.valueOf(id));
@@ -374,5 +378,20 @@ public class UmengCustomEventManager {
     public static void statisticalCloseAutoChangeWallpaper() {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_CLOSE_AUTO_CHANGE_WALLPAPER);
+    }
+    
+    /**
+     * 统计用户开启隐藏手势轨迹的次数
+     */
+    public static void statisticalOpenHiddenLine() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_OPEN_HIDDEN_LINE);
+    }
+    /**
+     * 统计用户关闭隐藏手势轨迹的次数
+     */
+    public static void statisticalCloseHiddenLine() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_CLOSE_HIDDEN_LINE);
     }
 }

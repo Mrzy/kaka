@@ -126,6 +126,9 @@ public class PandoraConfig {
     private static final String KEY_CURRENT_LAYOUT_ID = "kcli";
     
     private static final String KEY_PROMPT_NEW = "kpnew";
+    
+    private static final String KEY_HIDDEN_LINE = "khline";
+    
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -646,6 +649,14 @@ public class PandoraConfig {
 
     public boolean isShowPromptNew() {
         return mSp.getBoolean(KEY_PROMPT_NEW, true);
+    }
+
+    public boolean isHiddenLineOn() {
+        return mSp.getBoolean(KEY_HIDDEN_LINE, false);
+    }
+
+    public void saveHiddenLineState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_HIDDEN_LINE, isEnable).commit();
     }
     
 }

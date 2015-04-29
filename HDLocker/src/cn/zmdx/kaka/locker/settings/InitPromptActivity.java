@@ -1,15 +1,21 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -95,15 +101,19 @@ public class InitPromptActivity extends Activity {
                 switch (mPromptType) {
                     case PROMPT_CLOSE_SYSTEM_LOCKER:
                         mV6CloseSystemLockerView.setVisibility(View.VISIBLE);
+                        translationAnimator(mV6CloseSystemLockerView);
                         break;
                     case PROMPT_ALLOW_FLOAT_WINDOW:
                         mV6AllowFloatWindowView.setVisibility(View.VISIBLE);
+                        translationAnimator(mV6AllowFloatWindowView);
                         break;
                     case PROMPT_TRRST:
                         mV6TrustView.setVisibility(View.VISIBLE);
+                        translationAnimator(mV6TrustView);
                         break;
                     case PROMPT_READ_NOTIFICATION:
                         mReadNotificationView.setVisibility(View.VISIBLE);
+                        translationAnimator(mReadNotificationView);
                         break;
 
                     default:
@@ -115,15 +125,19 @@ public class InitPromptActivity extends Activity {
                 switch (mPromptType) {
                     case PROMPT_CLOSE_SYSTEM_LOCKER:
                         mV5CloseSystemLockerView.setVisibility(View.VISIBLE);
+                        translationAnimator(mV5CloseSystemLockerView);
                         break;
                     case PROMPT_ALLOW_FLOAT_WINDOW:
                         mV5AllowFloatWindowView.setVisibility(View.VISIBLE);
+                        translationAnimator(mV5AllowFloatWindowView);
                         break;
                     case PROMPT_TRRST:
                         mV5TrustView.setVisibility(View.VISIBLE);
+                        translationAnimator(mV5TrustView);
                         break;
                     case PROMPT_READ_NOTIFICATION:
                         mReadNotificationView.setVisibility(View.VISIBLE);
+                        translationAnimator(mReadNotificationView);
                         break;
 
                     default:
@@ -135,9 +149,11 @@ public class InitPromptActivity extends Activity {
             switch (mPromptType) {
                 case PROMPT_CLOSE_SYSTEM_LOCKER:
                     mCloseSystemLockerView.setVisibility(View.VISIBLE);
+                    translationAnimator(mCloseSystemLockerView);
                     break;
                 case PROMPT_READ_NOTIFICATION:
                     mReadNotificationView.setVisibility(View.VISIBLE);
+                    translationAnimator(mReadNotificationView);
                     break;
 
                 default:
@@ -145,6 +161,13 @@ public class InitPromptActivity extends Activity {
             }
         }
 
+    }
+
+    private void translationAnimator(View view) {
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(view,
+                "translationX", BaseInfoHelper.getRealWidth(this), 0);
+        animator2.setDuration(500);
+        animator2.start();
     }
 
     @Override

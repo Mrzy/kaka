@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fadingEdge="none"
+            android:scrollbarThumbVertical="@drawable/ic_scrollbar"
             android:scrollbars="vertical" />
     </cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout>
 

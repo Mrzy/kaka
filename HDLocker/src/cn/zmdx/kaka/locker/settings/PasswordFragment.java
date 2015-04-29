@@ -1,6 +1,9 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -80,7 +83,7 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
 
     private TypefaceTextView mMidsummerStylePrompt;
 
-    private SwitchButton mDelayLockScreen;
+    private SwitchButton mDelayLockScreen, mHiddenLine;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
@@ -96,7 +99,12 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
                 .findViewById(R.id.setting_delay_lockscreen_switch_button);
         mDelayLockScreen.setOnCheckedChangeListener(this);
 
+        mHiddenLine = (SwitchButton) mEntireView
+                .findViewById(R.id.setting_hidden_lock_pattern_line_switch_button);
+        mHiddenLine.setOnCheckedChangeListener(this);
+
         mDelayLockScreen.setChecked(isDelayLockScreenOn());
+        mHiddenLine.setChecked(isHiddenLineOn());
 
         mNoneItem = (BaseLinearLayout) mEntireView.findViewById(R.id.setting_password_none_item);
         mNoneItem.setOnClickListener(this);
@@ -188,15 +196,21 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
 
     private void initPasswordTypeState() {
         int type = PandoraConfig.newInstance(getActivity()).getUnLockType();
-        mNoneItemSelect
-                .setVisibility(type == KeyguardLockerManager.UNLOCKER_TYPE_NONE ? View.VISIBLE
-                        : View.GONE);
-        mLockPatternItemSelect
-                .setVisibility(type == KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN ? View.VISIBLE
-                        : View.GONE);
-        mNumberLockItemSelect
-                .setVisibility(type == KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK ? View.VISIBLE
-                        : View.GONE);
+
+        int noneItemVisibility = type == KeyguardLockerManager.UNLOCKER_TYPE_NONE ? View.VISIBLE
+                : View.GONE;
+        alphaAnimator(mNoneItemSelect, mNoneItemSelect.getVisibility(), noneItemVisibility);
+
+        int lockPatternItemVisibility = type == KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN ? View.VISIBLE
+                : View.GONE;
+        alphaAnimator(mLockPatternItemSelect, mLockPatternItemSelect.getVisibility(),
+                lockPatternItemVisibility);
+
+        int numberLocknItemVisibility = type == KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK ? View.VISIBLE
+                : View.GONE;
+        alphaAnimator(mNumberLockItemSelect, mNumberLockItemSelect.getVisibility(),
+                numberLocknItemVisibility);
+
         if (type == KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN) {
             initLockPatternStyle(true);
         } else {
@@ -306,12 +320,39 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
         initPasswordTypeState();
     }
 
-    private void setLockPatternViewSelectState(View view) {
-        mNoneItemSelect.setVisibility(view == mNoneItemSelect ? View.VISIBLE : View.GONE);
-        mLockPatternItemSelect.setVisibility(view == mLockPatternItemSelect ? View.VISIBLE
-                : View.GONE);
-        mNumberLockItemSelect.setVisibility(view == mNumberLockItemSelect ? View.VISIBLE
-                : View.GONE);
+    private void setLockPatternViewSelectState(final View view) {
+        int noneItemVisibility = view == mNoneItemSelect ? View.VISIBLE : View.GONE;
+        alphaAnimator(mNoneItemSelect, mNoneItemSelect.getVisibility(), noneItemVisibility);
+
+        int lockPatternItemVisibility = view == mLockPatternItemSelect ? View.VISIBLE : View.GONE;
+        alphaAnimator(mLockPatternItemSelect, mLockPatternItemSelect.getVisibility(),
+                lockPatternItemVisibility);
+
+        int numberLockItemVisibility = view == mNumberLockItemSelect ? View.VISIBLE : View.GONE;
+        alphaAnimator(mNumberLockItemSelect, mNumberLockItemSelect.getVisibility(),
+                numberLockItemVisibility);
+
+    }
+
+    private void alphaAnimator(final View view, final int oldState, final int targetState) {
+        if (oldState == targetState) {
+            return;
+        }
+
+        if (targetState == View.VISIBLE) {
+            view.setVisibility(targetState);
+        }
+        float star = targetState == View.GONE ? 1f : 0f;
+        float end = targetState == View.GONE ? 0f : 1f;
+        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "alpha", star, end);
+        animator.setDuration(400);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(targetState);
+            }
+        });
+        animator.start();
     }
 
     private void setStyleViewSelectState(View view) {
@@ -353,13 +394,23 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
         if (buttonView == mDelayLockScreen) {
             if (isChecked) {
                 if (!isDelayLockScreenOn()) {
-                    Toast.makeText(getActivity(), R.string.toast_delay_locksrceen, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.toast_delay_locksrceen,
+                            Toast.LENGTH_SHORT).show();
                 }
                 enableDelayLockScreen();
                 UmengCustomEventManager.statisticalOpenDelayLockScreen();
             } else {
                 disableDelayLockScreen();
                 UmengCustomEventManager.statisticalCloseDelayLockScreen();
+            }
+        }
+        if (buttonView == mHiddenLine) {
+            if (isChecked) {
+                enableHiddenLine();
+                UmengCustomEventManager.statisticalOpenHiddenLine();
+            } else {
+                disableHiddenLine();
+                UmengCustomEventManager.statisticalCloseHiddenLine();
             }
         }
     }
@@ -374,5 +425,17 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
 
     private void disableDelayLockScreen() {
         PandoraConfig.newInstance(getActivity()).saveDelayLockScreenState(false);
+    }
+
+    private boolean isHiddenLineOn() {
+        return PandoraConfig.newInstance(getActivity()).isHiddenLineOn();
+    }
+
+    private void enableHiddenLine() {
+        PandoraConfig.newInstance(getActivity()).saveHiddenLineState(true);
+    }
+
+    private void disableHiddenLine() {
+        PandoraConfig.newInstance(getActivity()).saveHiddenLineState(false);
     }
 }

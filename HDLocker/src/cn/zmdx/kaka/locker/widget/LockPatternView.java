@@ -45,6 +45,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.pattern.LockPatternManager;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 /**
  * Displays and detects the user's unlock attempt, which is a drag of a finger
@@ -119,6 +120,8 @@ public class LockPatternView extends View {
     private boolean mInputEnabled = true;
 
     private boolean mInStealthMode = false;
+
+    private boolean isShouldPath;
 
     private boolean mEnableHapticFeedback = true;
 
@@ -319,6 +322,8 @@ public class LockPatternView extends View {
 
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
+        
+        isShouldPath = PandoraConfig.newInstance(getContext()).isHiddenLineOn();
 
         initRegularDotColor(LockPatternManager.getInstance().getLockPatternStyle(getContext(),
                 LockPatternManager.LOCK_PATTERN_STYLE_PURE));
@@ -360,7 +365,7 @@ public class LockPatternView extends View {
     public void setColorStyle(int style) {
         initRegularDotColor(LockPatternManager.getInstance().getLockPatternStyle(getContext(),
                 style));
-//        invalidate();
+        // invalidate();
     }
 
     public CellState[][] getCellStates() {
@@ -1019,7 +1024,7 @@ public class LockPatternView extends View {
         // a cell
         // only the last segment of the path should be computed here
         // draw the path of the pattern (unless we are in stealth mode)
-        final boolean drawPath = !mInStealthMode;
+        final boolean drawPath = !isShouldPath;
 
         if (drawPath) {
             // mPathPaint.setColor(getCurrentColor(true /* partOfPattern */));

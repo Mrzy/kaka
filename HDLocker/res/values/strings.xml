@@ -229,5 +229,8 @@
     <string name="enable_to_process_weather_info">检查天气条件满足,请求网络数据</string>
 
     <string name="more_layout_tip">更多布局，敬请期待</string>
+    
+    <string name="pandora_setting_wallpaper_layout_prompt">锁屏布局</string>
 
+    <string name="pandora_setting_password_hidden_line">隐藏手势密码轨迹</string>
 </resources>

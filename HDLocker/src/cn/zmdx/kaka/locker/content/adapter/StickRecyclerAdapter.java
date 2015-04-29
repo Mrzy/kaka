@@ -329,7 +329,7 @@ public class StickRecyclerAdapter extends Adapter<RecyclerView.ViewHolder> {
         group.removeAllViews();
         for (int i = 0; i < size; i++) {
             ImageView imageView = new ImageView(HDApplication.getContext());
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(20, 20);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(16, 16);
             lp.setMargins(5, 0, 5, 0);
             imageView.setLayoutParams(lp);
             pointViews[i] = imageView;
