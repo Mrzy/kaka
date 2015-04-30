@@ -600,12 +600,14 @@ public class PandoraBoxManager implements View.OnClickListener {
             mBackBtn.setTranslationY(BaseInfoHelper.dip2px(mContext, 100));
         }
 
-        for (Integer i : mPages) {
-            ChannelPageGenerator cpg = ChannelPageFactory.getPageGenerator(i);
-            if (cpg != null) {
-                SwipeRefreshLayout srl = cpg.getRefreshView();
-                if (srl != null) {
-                    srl.setRefreshing(false);
+        if (mPages != null) {
+            for (Integer i : mPages) {
+                ChannelPageGenerator cpg = ChannelPageFactory.getPageGenerator(i);
+                if (cpg != null) {
+                    SwipeRefreshLayout srl = cpg.getRefreshView();
+                    if (srl != null) {
+                        srl.setRefreshing(false);
+                    }
                 }
             }
         }
