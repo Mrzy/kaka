@@ -72,14 +72,16 @@ public class UmengCustomEventManager {
     private static final String EVENT_OPEN_DELAY_LOCKSCREEN = "openDelayLockScreen";// 开启延迟锁定屏幕
 
     private static final String EVENT_CLOSE_DELAY_LOCKSCREEN = "closeDelayLockScreen";// 关闭延迟锁定屏幕
-    
+
     private static final String EVENT_OPEN_AUTO_CHANGE_WALLPAPER = "openAutoChangeWallpaper";// 开启每天自动更换壁纸
 
     private static final String EVENT_CLOSE_AUTO_CHANGE_WALLPAPER = "closeAutoChangeWallpaper";// 关闭每天自动更换壁纸
 
     private static final String EVENT_OPEN_HIDDEN_LINE = "openHiddenLine";// 打开隐藏手机轨迹
 
-    private static final String EVENT_CLOSE_HIDDEN_LINE= "closeHiddenLine";// 关闭隐藏手机轨迹
+    private static final String EVENT_CLOSE_HIDDEN_LINE = "closeHiddenLine";// 关闭隐藏手机轨迹
+
+    private static final String EVENT_PANDORA_LAYOUT = "pandoraLayout";// 锁屏布局使用
 
     public static void statisticalOpenNewsDetail(int id, String newsType) {
         HashMap<String, String> map = new HashMap<String, String>();
@@ -334,7 +336,7 @@ public class UmengCustomEventManager {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_SYCCESS_SET_LOCAL_WALLPAPER);
     }
-    
+
     /**
      * 统计用户开启潘多拉守护神的次数
      */
@@ -342,6 +344,7 @@ public class UmengCustomEventManager {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_OPEN_PANDORA_PROTECT);
     }
+
     /**
      * 统计用户关闭潘多拉守护神的次数
      */
@@ -349,7 +352,7 @@ public class UmengCustomEventManager {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_CLOSE_PANDORA_PROTECT);
     }
-    
+
     /**
      * 统计用户开启延迟锁定屏幕的次数
      */
@@ -357,6 +360,7 @@ public class UmengCustomEventManager {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_OPEN_DELAY_LOCKSCREEN);
     }
+
     /**
      * 统计用户关闭延迟锁定屏幕的次数
      */
@@ -364,7 +368,7 @@ public class UmengCustomEventManager {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_CLOSE_DELAY_LOCKSCREEN);
     }
-    
+
     /**
      * 统计用户开启每天自动更换壁纸的次数
      */
@@ -372,6 +376,7 @@ public class UmengCustomEventManager {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_OPEN_AUTO_CHANGE_WALLPAPER);
     }
+
     /**
      * 统计用户关闭每天自动更换壁纸的次数
      */
@@ -379,7 +384,7 @@ public class UmengCustomEventManager {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_CLOSE_AUTO_CHANGE_WALLPAPER);
     }
-    
+
     /**
      * 统计用户开启隐藏手势轨迹的次数
      */
@@ -387,6 +392,7 @@ public class UmengCustomEventManager {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_OPEN_HIDDEN_LINE);
     }
+
     /**
      * 统计用户关闭隐藏手势轨迹的次数
      */
@@ -394,4 +400,15 @@ public class UmengCustomEventManager {
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_CLOSE_HIDDEN_LINE);
     }
+
+    /**
+     * 统计用户使用每种布局的次数
+     */
+    public static void statisticalPandoraLayout(int layoutId) {
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("layoutId", "" + layoutId);
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_PANDORA_LAYOUT, map);
+    }
+
 }

@@ -23,6 +23,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -86,6 +87,16 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
 
     @Override
     public void onBackPressed() {
+        HDBThreadUtils.runOnWorker(new Runnable() {
+
+            @Override
+            public void run() {
+                int layoutId = TimeLayoutManager.getInstance(PandoraLayoutActivity.this)
+                        .getCurrentLayout();
+                UmengCustomEventManager.statisticalPandoraLayout(layoutId);
+            }
+        });
+
         finish();
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                 R.anim.umeng_fb_slide_out_from_right);
