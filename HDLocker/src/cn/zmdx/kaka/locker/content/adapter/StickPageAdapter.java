@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -67,7 +68,7 @@ public class StickPageAdapter extends PagerAdapter implements OnPageChangeListen
                 - BaseInfoHelper.dip2px(HDApplication.getContext(), 16);
         int targetHeight = BaseInfoHelper.dip2px(HDApplication.getContext(), 240);
         ImageView imageView = mPageViews.get(realPos);
-        Picasso.with(HDApplication.getContext()).load(mStickData.get(realPos).getUrl())
+        PicassoHelper.getPicasso(HDApplication.getContext()).load(mStickData.get(realPos).getUrl())
                 .placeholder(R.drawable.icon_newsimage_loading).resize(targetWidth, targetHeight)
                 .centerCrop().into(imageView);
         ((ViewPager) view).removeView(imageView);

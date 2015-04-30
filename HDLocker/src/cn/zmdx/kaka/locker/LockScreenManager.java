@@ -38,6 +38,7 @@ import android.widget.TextView;
 import cn.zmdx.kaka.locker.battery.BatteryView;
 import cn.zmdx.kaka.locker.battery.BatteryView.ILevelCallBack;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.layout.TimeLayoutManager;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
@@ -407,7 +408,10 @@ public class LockScreenManager {
 
                 float tmp = 2f * positionOffset - 1f;
                 setMainPageAlpha(tmp);
-                PandoraBoxManager.newInstance(mContext).getHeaderView().setAlpha(tmp);
+                try {
+                    PandoraBoxManager.newInstance(mContext).getHeaderView().setAlpha(tmp);
+                } catch (Exception e) {
+                }
 
                 if (tmp <= 0 && mPager.getCurrentTouchAction() == MotionEvent.ACTION_UP
                         && !mNeedPassword) {
@@ -666,12 +670,23 @@ public class LockScreenManager {
             mUnLockRunnable = null;
         }
 
-        PandoraBoxManager.newInstance(mContext).freeMemory();
-
-        // INSTANCE = null;
-
         UmengCustomEventManager.statisticalGuestureUnLockSuccess();
-        System.gc();
+
+        freeMemory();
+    }
+
+    private void freeMemory() {
+        HDBThreadUtils.postOnWorkerDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 释放新闻面板所占的内存
+                PandoraBoxManager.freeMemory();
+                // INSTANCE = null;
+                // picasso的图片内存缓存
+                PicassoHelper.clearMemoryCache();
+                System.gc();
+            }
+        }, 700);
     }
 
     public boolean isLocked() {
@@ -770,5 +785,12 @@ public class LockScreenManager {
 
     public interface OnBackPressedListener {
         void onBackPressed();
+    }
+
+    // 按下home键调用
+    public void onHomePressed() {
+        if (isNewsPanelExpanded()) {
+            collapseNewsPanel();
+        }
     }
 }

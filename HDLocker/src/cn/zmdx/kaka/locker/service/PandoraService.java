@@ -267,6 +267,7 @@ public class PandoraService extends Service {
                                 }
                             };
                         }, 5200);
+                        LockScreenManager.getInstance().onHomePressed();
 //                        moveFakeActivityToFront();
                 } else if (TextUtils.equals(reason, "recentapps")) {
                     if (LockScreenManager.getInstance().isLocked()) {

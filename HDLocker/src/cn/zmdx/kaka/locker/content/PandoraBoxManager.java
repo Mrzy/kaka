@@ -685,16 +685,9 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
     }
 
-    public void freeMemory() {
-        // if (mPages != null) {
-        // mPages.clear();
-        // }
-        // mHotNews.clear();
-        // mGossipNews.clear();
-        // mGossipNews.clear();
-        // mGossipNews.clear();
-        // mJokeNews.clear();
-        // mPbManager = null;
+    public static void freeMemory() {
+        ChannelPageFactory.forceRelease();
+        mPbManager = null;
     }
 
     private void controlAutoScroll(boolean isHotAutoScroll, boolean isMicroAutoScroll) {

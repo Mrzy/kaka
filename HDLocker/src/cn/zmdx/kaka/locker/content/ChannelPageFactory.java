@@ -29,6 +29,10 @@ public class ChannelPageFactory {
         return cpg;
     }
 
+    public static void forceRelease() {
+        sPageGenCache.clear();
+    }
+
     public static int getColorByChannelId(int channelId) {
         return PandoraBoxManager.mTabColors[channelId];
     }

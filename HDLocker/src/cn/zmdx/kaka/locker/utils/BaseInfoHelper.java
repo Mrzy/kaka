@@ -13,8 +13,8 @@ import java.util.Calendar;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
-import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -38,6 +38,23 @@ public class BaseInfoHelper {
     public static String getPkgName(Context context) {
         return context.getApplicationContext().getPackageName();
     }
+
+    private static class ActivityManagerHoneycomb {
+      static int getLargeMemoryClass(ActivityManager activityManager) {
+        return activityManager.getLargeMemoryClass();
+      }
+    }
+
+    public static int calculateMemoryCacheSize(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        boolean largeHeap = (context.getApplicationInfo().flags & ApplicationInfo.FLAG_LARGE_HEAP) != 0;
+        int memoryClass = am.getMemoryClass();
+        if (largeHeap && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+          memoryClass = ActivityManagerHoneycomb.getLargeMemoryClass(am);
+        }
+        // Target ~15% of the available heap.
+        return 1024 * 1024 * memoryClass / 7;
+      }
 
     private static int mRealScreenHeight = -1;
 
