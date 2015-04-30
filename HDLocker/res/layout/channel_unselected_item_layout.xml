@@ -27,11 +27,12 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <Button
+    <TextView
         android:id="@+id/checkChannelBtn"
         android:layout_width="75dp"
         android:layout_height="35dp"
         android:textColor="#ffffff"
         android:textSize="15dp"
+        android:gravity="center"
         android:layout_gravity="right" />
 </FrameLayout>

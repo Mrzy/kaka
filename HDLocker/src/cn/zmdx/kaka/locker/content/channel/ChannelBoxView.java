@@ -162,7 +162,7 @@ public class ChannelBoxView extends FrameLayout {
                 holder.chName = (TextView) convertView.findViewById(R.id.chName);
                 holder.enName = (TextView) convertView.findViewById(R.id.enName);
                 holder.bg = convertView.findViewById(R.id.bg);
-                holder.checkBtn = (Button) convertView.findViewById(R.id.checkChannelBtn);
+                holder.checkBtn = (TextView) convertView.findViewById(R.id.checkChannelBtn);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -202,7 +202,7 @@ public class ChannelBoxView extends FrameLayout {
 
             private TextView enName;
 
-            private Button checkBtn;
+            private TextView checkBtn;
         }
     }
 }
