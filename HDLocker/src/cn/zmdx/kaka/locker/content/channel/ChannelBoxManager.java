@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.view.View;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 
 public class ChannelBoxManager {
 
@@ -55,7 +56,7 @@ public class ChannelBoxManager {
 
     private SharedPreferences mPreference;
 
-    private static final String DEFAULT_CHANNEL = "0,1,2,5,7,11";
+    private static final String DEFAULT_CHANNEL = "0,2,1,4,5,7";
 
     private ChannelBoxManager(Context context) {
         mContext = context;
@@ -130,12 +131,12 @@ public class ChannelBoxManager {
         ci.setChannelImgResId(R.drawable.channel_bg_shishang);
         set.add(ci);
 
-        ci = new ChannelInfo();
-        ci.setChannelId(CHANNEL_APP);
-        ci.setChannelName(getChannelNameById(CHANNEL_APP));
-        ci.setSelected(selected.contains(ci));
-        ci.setChannelImgResId(R.drawable.channel_bg_app);
-        set.add(ci);
+//        ci = new ChannelInfo();
+//        ci.setChannelId(CHANNEL_APP);
+//        ci.setChannelName(getChannelNameById(CHANNEL_APP));
+//        ci.setSelected(selected.contains(ci));
+//        ci.setChannelImgResId(R.drawable.channel_bg_app);
+//        set.add(ci);
 
         ci = new ChannelInfo();
         ci.setChannelId(CHANNEL_TECHNOLOGY);
@@ -170,6 +171,7 @@ public class ChannelBoxManager {
             sb.append(ci.getChannelId() + ",");
         }
         mPreference.edit().putString(PREFER_KEY_SELECTED_CHANNELS, sb.toString()).commit();
+        BottomDockUmengEventManager.statisticalSelectedChannel(channels);
     }
 
     public List<ChannelInfo> getSelectedChannels() {

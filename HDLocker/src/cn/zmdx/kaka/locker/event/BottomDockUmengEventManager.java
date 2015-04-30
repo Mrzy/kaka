@@ -2,8 +2,10 @@
 package cn.zmdx.kaka.locker.event;
 
 import java.util.HashMap;
+import java.util.List;
 
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.content.channel.ChannelInfo;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -20,6 +22,8 @@ public class BottomDockUmengEventManager {
     public static final String EVENT_NEWS_PANEL_BACK_CLICKED = "newsPanelBackClicked";// 点击新闻页右下角圈圈收起新闻面板
 
     public static final String EVENT_NEWS_DETAIL_PAGE_RIGHT_SLIDE_TO_BACK = "newsDetailPageRightSlideToBack";// 新闻详情页右划返回
+
+    public static final String EVENT_NEWS_SELECTED_CHANNEL_NAME = "newsPanelFeedChannelName";// 新闻详情页右划返回
 
     /**
      * 统计新闻面板打开次数
@@ -71,4 +75,13 @@ public class BottomDockUmengEventManager {
                 BottomDockUmengEventManager.EVENT_NEWS_DETAIL_PAGE_RIGHT_SLIDE_TO_BACK);
     }
 
+    public static void statisticalSelectedChannel(List<ChannelInfo> channels) {
+        for (ChannelInfo ci : channels) {
+            String name = ci.getChannelEnName();
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put("channelName", name);
+            MobclickAgent.onEvent(HDApplication.getContext(),
+                    BottomDockUmengEventManager.EVENT_NEWS_SELECTED_CHANNEL_NAME, map);
+        }
+    }
 }

@@ -125,11 +125,12 @@ public class PandoraConfig {
     private static final String KEY_SHOW_WEATHER = "ksw";
 
     private static final String KEY_CURRENT_LAYOUT_ID = "kcli";
-    
+
     private static final String KEY_PROMPT_NEW = "kpnew";
-    
+
     private static final String KEY_HIDDEN_LINE = "khline";
-    
+
+    private static final String KEY_TIP_ADD_CHANNEL_FUNCTION = "ktacf";
 
     private PandoraConfig(Context context) {
         mContext = context;
@@ -643,7 +644,7 @@ public class PandoraConfig {
     public void saveCurrentLayout(int layoutId) {
         mSp.edit().putInt(KEY_CURRENT_LAYOUT_ID, layoutId).commit();
     }
-    
+
     public void savePromptNewState(boolean isEnable) {
         mSp.edit().putBoolean(KEY_PROMPT_NEW, isEnable).commit();
     }
@@ -659,5 +660,12 @@ public class PandoraConfig {
     public void saveHiddenLineState(boolean isEnable) {
         mSp.edit().putBoolean(KEY_HIDDEN_LINE, isEnable).commit();
     }
-    
+
+    public boolean isTipAddChannelFunction() {
+        return mSp.getBoolean(KEY_TIP_ADD_CHANNEL_FUNCTION, false);
+    }
+
+    public void saveTipAddChannelFunction() {
+        mSp.edit().putBoolean(KEY_TIP_ADD_CHANNEL_FUNCTION, true).commit();
+    }
 }

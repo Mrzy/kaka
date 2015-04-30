@@ -1,3 +1,4 @@
+
 package cn.zmdx.kaka.locker.content;
 
 import java.util.ArrayList;
@@ -290,8 +291,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         int currentItem = calCurrentItem();
         mViewPager.setCurrentItem(currentItem);
 
-        tabStrip = (PagerSlidingTabStrip) mEntireView
-                .findViewById(R.id.newsTabStrip);
+        tabStrip = (PagerSlidingTabStrip) mEntireView.findViewById(R.id.newsTabStrip);
         tabStrip.setViewPager(mViewPager);
         tabStrip.setTabBgColors(mTabColors);
         tabStrip.setShouldExpand(false);
@@ -330,14 +330,22 @@ public class PandoraBoxManager implements View.OnClickListener {
                 : NEWS_THEME_DAY;
         switchNewsTheme(theme);
 
+        final View redPoint = mEntireView.findViewById(R.id.redPoint);
         mAddNewsTabBtn = (ImageView) mEntireView.findViewById(R.id.addNewsTabBtn);
         mAddNewsTabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PandoraConfig.newInstance(mContext).saveTipAddChannelFunction();
+                redPoint.setVisibility(View.GONE);
                 View view = ChannelBoxManager.getInstance(mContext).createChannelView();
                 openDetailPage(view);
             }
         });
+        if (PandoraConfig.newInstance(mContext).isTipAddChannelFunction()) {
+            redPoint.setVisibility(View.GONE);
+        } else {
+            redPoint.setVisibility(View.VISIBLE);
+        }
     }
 
     public void notifyDataSetChanged() {
@@ -620,40 +628,45 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         ChannelPageGenerator cpg = ChannelPageFactory.getPageGenerator(channelId);
         if (cpg != null) {
-            NewsFactory.updateNews(channelId, cpg.getAdapter(), cpg.getData(), cpg.getRefreshView(), false, false,
-                    cpg.getHeaderLoadingListener());
+            NewsFactory.updateNews(channelId, cpg.getAdapter(), cpg.getData(),
+                    cpg.getRefreshView(), false, false, cpg.getHeaderLoadingListener());
         }
     }
 
     /**
      * 立即拉取热门和八卦的数据，2秒后，加载微精选和美女的数据，4秒后加载搞笑的数据.
      */
-//    public void refreshAllNews() {
-//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter, mHotNews,
-//                mHotRefreshView, false, false, mLoadingListener);
-//        NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter, mGossipNews,
-//                mGossipRefreshView, false, false, null);
-//        HDBThreadUtils.postOnUiDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE, mMicroMediaAdapter,
-//                        mMicroMediaNews, mMicroMediaRefreshView, false, false,
-//                        mMicroLoadingListener);
-//                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter, mBeautyNews,
-//                        mBeautyRefreshView, false, false, null);
-//            }
-//        }, 2000);
-//        HDBThreadUtils.postOnUiDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter, mJokeNews,
-//                        mJokeRefreshView, false, false, null);
-//            }
-//        }, 4000);
-//        if (null != mWallpaperView) {
-//            mWallpaperView.refreshData();
-//        }
-//    }
+    // public void refreshAllNews() {
+    // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_HEADLINE, mHotAdapter,
+    // mHotNews,
+    // mHotRefreshView, false, false, mLoadingListener);
+    // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_GOSSIP, mGossipAdapter,
+    // mGossipNews,
+    // mGossipRefreshView, false, false, null);
+    // HDBThreadUtils.postOnUiDelayed(new Runnable() {
+    // @Override
+    // public void run() {
+    // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_MICRO_CHOICE,
+    // mMicroMediaAdapter,
+    // mMicroMediaNews, mMicroMediaRefreshView, false, false,
+    // mMicroLoadingListener);
+    // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_BEAUTY, mBeautyAdapter,
+    // mBeautyNews,
+    // mBeautyRefreshView, false, false, null);
+    // }
+    // }, 2000);
+    // HDBThreadUtils.postOnUiDelayed(new Runnable() {
+    // @Override
+    // public void run() {
+    // NewsFactory.updateNews(NewsFactory.NEWS_TYPE_JOKE, mJokeAdapter,
+    // mJokeNews,
+    // mJokeRefreshView, false, false, null);
+    // }
+    // }, 4000);
+    // if (null != mWallpaperView) {
+    // mWallpaperView.refreshData();
+    // }
+    // }
 
     private List<String> mTabTitles = new ArrayList<String>();
 
@@ -662,7 +675,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         mTabTitles.clear();
         for (ChannelInfo ci : channels) {
-            mTabTitles.add(ChannelBoxManager.getInstance(mContext).getChannelNameById(ci.getChannelId()));
+            mTabTitles.add(ChannelBoxManager.getInstance(mContext).getChannelNameById(
+                    ci.getChannelId()));
         }
 
         mPages.clear();
@@ -684,14 +698,14 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     private void controlAutoScroll(boolean isHotAutoScroll, boolean isMicroAutoScroll) {
-//        if (null != mMicroMediaAdapter) {
-//            mMicroMediaAdapter.setAutoScroll(isMicroAutoScroll);
-//            mMicroMediaAdapter.notifyDataSetChanged();
-//        }
-//        if (null != mHotAdapter) {
-//            mHotAdapter.setAutoScroll(isHotAutoScroll);
-//            mHotAdapter.notifyDataSetChanged();
-//        }
+        // if (null != mMicroMediaAdapter) {
+        // mMicroMediaAdapter.setAutoScroll(isMicroAutoScroll);
+        // mMicroMediaAdapter.notifyDataSetChanged();
+        // }
+        // if (null != mHotAdapter) {
+        // mHotAdapter.setAutoScroll(isHotAutoScroll);
+        // mHotAdapter.notifyDataSetChanged();
+        // }
     }
 
     private void switchNewsTheme(int theme) {
@@ -780,7 +794,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         private PandoraBoxManager mBoxManager;
 
-        public NewsPagerAdapter(PandoraBoxManager boxManager, List<Integer> pages, List<String> titles) {
+        public NewsPagerAdapter(PandoraBoxManager boxManager, List<Integer> pages,
+                List<String> titles) {
             mBoxManager = boxManager;
             this.mPages = pages;
             this.mTitles = titles;
@@ -804,7 +819,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             final int channelId = mPages.get(position);
-            final ChannelPageGenerator cpg = ChannelPageFactory.createPageGenerator(mBoxManager, channelId);
+            final ChannelPageGenerator cpg = ChannelPageFactory.createPageGenerator(mBoxManager,
+                    channelId);
             View view = cpg.getView();
             container.addView(view, 0);
             return view;
