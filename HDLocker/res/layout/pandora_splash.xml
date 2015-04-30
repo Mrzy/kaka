@@ -3,7 +3,6 @@
     android:id="@+id/pandora_splash_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_background"
     android:orientation="vertical" >
 
     <View
@@ -27,8 +26,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/contentDescription"
-                android:src="@drawable/splash_logo" />
+                android:contentDescription="@string/contentDescription" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:layout_width="wrap_content"
@@ -66,8 +64,7 @@
             <ImageView
                 android:layout_width="160dp"
                 android:layout_height="40dp"
-                android:contentDescription="@string/contentDescription"
-                android:src="@drawable/icon_sougou" />
+                android:contentDescription="@string/contentDescription" />
         </LinearLayout>
     </RelativeLayout>
 
