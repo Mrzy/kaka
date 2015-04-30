@@ -353,6 +353,7 @@ public class LockScreenManager {
         }
         // 初始化新闻页header
         PandoraBoxManager.newInstance(mContext).initHeader();
+        PandoraBoxManager.newInstance(mContext).getHeaderView().setAlpha(1);
     }
 
     public void pauseWallpaperTranslation() {
@@ -370,11 +371,7 @@ public class LockScreenManager {
         public void onPageSelected(int position) {
             if (position == 0) {
                 // dismiss news panel
-                if (mNeedPassword) {
-                    mSlidingUpView.hidePanel();
-                }
             } else if (position == 1) {
-                mSlidingUpView.showPanel();
                 if (mNeedPassword) {
                     // 如果从密码页滑回锁屏页，将之前设置的解锁后执行动作清除。即此处认为用户没有输入密码解锁，又滑回了锁屏页
                     setRunnableAfterUnLock(null);
@@ -410,7 +407,7 @@ public class LockScreenManager {
 
                 float tmp = 2f * positionOffset - 1f;
                 setMainPageAlpha(tmp);
-                // PandoraBoxManager.newInstance(mContext).getHeaderView().setAlpha(tmp);
+                PandoraBoxManager.newInstance(mContext).getHeaderView().setAlpha(tmp);
 
                 if (tmp <= 0 && mPager.getCurrentTouchAction() == MotionEvent.ACTION_UP
                         && !mNeedPassword) {
