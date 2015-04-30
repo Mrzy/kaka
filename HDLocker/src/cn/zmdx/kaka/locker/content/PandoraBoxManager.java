@@ -1,4 +1,3 @@
-
 package cn.zmdx.kaka.locker.content;
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +32,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.ImageView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
@@ -88,7 +87,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private ViewPagerCompat mViewPager;
 
-    private TextView mAddNewsTabBtn;
+    private ImageView mAddNewsTabBtn;
 
     public static final int[] mTabColors = new int[] {
             Color.parseColor("#26a69a"), Color.parseColor("#e84e40"), Color.parseColor("#ab47bc"),
@@ -331,7 +330,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                 : NEWS_THEME_DAY;
         switchNewsTheme(theme);
 
-        mAddNewsTabBtn = (TextView) mEntireView.findViewById(R.id.addNewsTabBtn);
+        mAddNewsTabBtn = (ImageView) mEntireView.findViewById(R.id.addNewsTabBtn);
         mAddNewsTabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -3,8 +3,6 @@ package cn.zmdx.kaka.locker.content.channel;
 
 import java.util.List;
 
-import com.squareup.picasso.Picasso;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
-import cn.zmdx.kaka.locker.content.PicassoHelper;
+import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 public class ChannelBoxView extends FrameLayout {
 
@@ -59,6 +57,8 @@ public class ChannelBoxView extends FrameLayout {
         mSelectedChannelGrid.setAdapter(mGridAdapter);
 
         mAllChannelListView = (ListView) view.findViewById(R.id.allChannelList);
+        mAllChannelListView.setVerticalFadingEdgeEnabled(true);
+        mAllChannelListView.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         mListAdapter = new AllChannelAdapter();
         mAllChannelListView.setAdapter(mListAdapter);
 
@@ -172,8 +172,10 @@ public class ChannelBoxView extends FrameLayout {
             holder.enName.setText(ci.getChannelEnName());
             holder.bg.setBackgroundResource(ci.getChannelImgResId());
             if (ci.isSelected()) {
-                holder.checkBtn.setText("取消订阅");
+                holder.checkBtn.setBackgroundResource(R.drawable.channel_feed_btn_bg);
+                holder.checkBtn.setText("取消");
             } else {
+                holder.checkBtn.setBackgroundResource(R.drawable.channel_unfeed_btn_bg);
                 holder.checkBtn.setText("订阅 +");
             }
             holder.checkBtn.setOnClickListener(new View.OnClickListener() {

@@ -36,7 +36,7 @@ import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWa
 import cn.zmdx.kaka.locker.widget.PandoraRecyclerView;
 import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
 
-public class ChannelPageGenerator {
+    class ChannelPageGenerator {
 
     public static final int NEWS_THEME_LIST = 1;// 列表式新闻
 
@@ -126,6 +126,7 @@ public class ChannelPageGenerator {
         });
         return mWallpaperView;
     }
+
     private View initStaggeredThemeView() {
         ViewGroup view = (ViewGroup) mInflater.inflate(R.layout.pager_news_layout, null);
         PandoraRecyclerView rv = (PandoraRecyclerView) view.findViewById(R.id.recyclerView);
@@ -159,8 +160,8 @@ public class ChannelPageGenerator {
         view.addView(emptyView);
 
         mRefreshView = (PandoraSwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
-        mRefreshView.setProgressBackgroundColorSchemeColor(mColor);
-        mRefreshView.setColorSchemeColors(Color.WHITE);
+//        mRefreshView.setProgressBackgroundColorSchemeColor(mColor);
+//        mRefreshView.setColorSchemeColors(Color.WHITE);
 
         mRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
@@ -202,8 +203,6 @@ public class ChannelPageGenerator {
         mRecyclerView.setLayoutManager(llm);
         mRecyclerView.setHasFixedSize(true);
 
-        // final List<ServerImageData> news = new
-        // ArrayList<ServerImageData>();
         mAdapter = new StickRecyclerAdapter(mContext, mNewsData, mStickData);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -247,8 +246,8 @@ public class ChannelPageGenerator {
             }
         };
         mRefreshView = (PandoraSwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
-        mRefreshView.setProgressBackgroundColorSchemeColor(mColor);
-        mRefreshView.setColorSchemeColors(Color.WHITE);
+//        mRefreshView.setProgressBackgroundColorSchemeColor(mColor);
+//        mRefreshView.setColorSchemeColors(Color.WHITE);
         mRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
@@ -257,7 +256,20 @@ public class ChannelPageGenerator {
                         true, mLoadingListener);
                 UmengCustomEventManager.statisticalPullRefreshNews(mChannelId + "");
             }
+        });
 
+        mRecyclerView.setOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int lastVisibleItem = llm.findLastVisibleItemPosition();
+                int totalItemCount = llm.getItemCount();
+                // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
+                // dy>0 表示向下滑动
+                if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
+                    NewsFactory.updateNews(mChannelId, mAdapter,
+                            mNewsData, mRefreshView, true, false, null);
+                }
+            }
         });
         return view;
     }

@@ -103,16 +103,17 @@
                     psts:pstsIndicatorHeight="2dp"
                     psts:pstsPaddingRight="45dp"
                     psts:pstsUnderlineColor="@android:color/transparent" />
-                <TextView
+
+                <ImageView
                     android:id="@+id/addNewsTabBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="right"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:text="+"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/channel_entrance_icon"
                     android:gravity="center"
                     android:textColor="#a0000000"
-                    android:textSize="25dp"
-                    />
+                    android:textSize="25dp" />
             </FrameLayout>
 
             <FrameLayout

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.layout.TimeLayoutManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
@@ -636,7 +637,7 @@ public class PandoraConfig {
     }
 
     public int getCurrentLayout() {
-        return mSp.getInt(KEY_CURRENT_LAYOUT_ID, 1);// 默认使用布局1
+        return mSp.getInt(KEY_CURRENT_LAYOUT_ID, TimeLayoutManager.LAYOUT_ID4);// 默认使用布局1
     }
 
     public void saveCurrentLayout(int layoutId) {
