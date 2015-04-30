@@ -91,6 +91,7 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
         setContentView(R.layout.activity_notify_manager);
         getSupportActionBar().setBackgroundDrawable(
                 getResources().getDrawable(R.drawable.action_bar_bg_blue));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContext = this;
         mCurType = getIntent().getIntExtra("type", TYPE_FILTER);
         mPosition = getIntent().getIntExtra("position", -1);
@@ -499,7 +500,7 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
                 mSearchView.clearFocus();
             }
         } else {
-            super.onBackPressed();
+            finish();
             overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                     R.anim.umeng_fb_slide_out_from_right);
         }

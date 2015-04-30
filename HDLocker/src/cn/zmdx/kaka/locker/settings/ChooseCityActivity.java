@@ -4,6 +4,8 @@ package cn.zmdx.kaka.locker.settings;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -80,6 +83,7 @@ public class ChooseCityActivity extends ActionBarActivity {
         setContentView(R.layout.activity_choose_city);
         getSupportActionBar().setBackgroundDrawable(
                 getResources().getDrawable(R.drawable.action_bar_bg_blue));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
         setHotCitiesGridView();
     }
@@ -353,6 +357,17 @@ public class ChooseCityActivity extends ActionBarActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         finishPage();
     }
@@ -364,5 +379,17 @@ public class ChooseCityActivity extends ActionBarActivity {
         finish();
         overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
                 R.anim.umeng_fb_slide_out_from_right);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart("ChooseCityActivity");
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd("ChooseCityActivity");
+        MobclickAgent.onPause(this);
     }
 }

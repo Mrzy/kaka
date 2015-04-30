@@ -3,6 +3,7 @@ package cn.zmdx.kaka.locker.settings;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
@@ -21,6 +22,7 @@ public class AboutActivity extends ActionBarActivity {
         setContentView(R.layout.setting_about_us);
         getSupportActionBar().setBackgroundDrawable(
                 getResources().getDrawable(R.drawable.action_bar_bg_blue));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
     }
 
@@ -40,6 +42,17 @@ public class AboutActivity extends ActionBarActivity {
         super.onPause();
         MobclickAgent.onPageEnd("MAboutActivity");
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

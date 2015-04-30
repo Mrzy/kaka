@@ -2,7 +2,6 @@
     android:id="@+id/hot_header_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
     android:clickable="true"
     android:orientation="vertical"
     android:paddingTop="5dp" >

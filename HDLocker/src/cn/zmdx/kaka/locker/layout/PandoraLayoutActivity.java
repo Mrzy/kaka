@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -46,6 +47,7 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
         setContentView(R.layout.pandora_layoutpage_layout);
         getSupportActionBar().setBackgroundDrawable(
                 getResources().getDrawable(R.drawable.action_bar_bg_blue));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
     }
 
@@ -59,15 +61,26 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
         mGrid.setOnItemClickListener(this);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("MAboutActivity");
+        MobclickAgent.onPageStart("PandoraLayoutActivity");
         MobclickAgent.onResume(this);
     }
 
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("MAboutActivity");
+        MobclickAgent.onPageEnd("PandoraLayoutActivity");
         MobclickAgent.onPause(this);
     }
 
@@ -185,7 +198,7 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
         tm.saveCurrentLayout(info.getLayoutId());
         mAdapter.notifyDataSetChanged();
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
-            
+
             @Override
             public void run() {
                 LockScreenManager.getInstance().lock();

@@ -257,14 +257,14 @@ public class StickRecyclerAdapter extends Adapter<RecyclerView.ViewHolder> {
 
                         }
                     });
-                    headerHolder.mViewPager.startAutoScroll();
-                    headerHolder.mViewPager.setAutoScrollDurationFactor(5);
+//                    headerHolder.mViewPager.startAutoScroll();
+//                    headerHolder.mViewPager.setAutoScrollDurationFactor(5);
                 } else {
-                    if (isAutoScroll) {
-                        headerHolder.mViewPager.startAutoScroll();
-                    } else {
-                        headerHolder.mViewPager.stopAutoScroll();
-                    }
+//                    if (isAutoScroll) {
+//                        headerHolder.mViewPager.startAutoScroll();
+//                    } else {
+//                        headerHolder.mViewPager.stopAutoScroll();
+//                    }
                     mMicroStickAdapter.notifyDataChanged(
                             getStickView(mStickData.size()),
                             initStickPointView(headerHolder.mViewPager, mStickData.size(),

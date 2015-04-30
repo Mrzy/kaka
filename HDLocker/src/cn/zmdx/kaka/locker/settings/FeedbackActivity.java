@@ -13,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class FeedbackActivity extends ActionBarActivity {
         setContentView(R.layout.pandora_feedback_activity);
         getSupportActionBar().setBackgroundDrawable(
                 getResources().getDrawable(R.drawable.action_bar_bg_blue));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mContext = this;
 
         initView();
@@ -245,6 +247,17 @@ public class FeedbackActivity extends ActionBarActivity {
             ImageView replyStateFailed;
 
             TextView replyData;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
