@@ -13,12 +13,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.RequestManager;
-import cn.zmdx.kaka.locker.network.ByteArrayRequest;
+import cn.zmdx.kaka.locker.network.DownloadRequest;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
@@ -38,6 +39,9 @@ import com.android.volley.error.VolleyError;
 public class WallpaperUtils {
 
     private static final String DESKTOP_WALLPAPER_FILE_NAME = "/desktop";
+
+    private static final String ONLINR_WALLPAPER_PATH = Environment.getExternalStorageDirectory()
+            .getPath() + "/.Pandora/onlineWallpaper/tmp/";
 
     public interface ILoadBitmapCallback {
         void imageLoaded(Bitmap bitmap, String filePath);
@@ -192,36 +196,61 @@ public class WallpaperUtils {
         void onFail();
     }
 
+    public static void mkDirs() {
+        File dir = new File(ONLINR_WALLPAPER_PATH);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+    }
+
     public static void downloadWallpaper(final Context context, String imageUrl,
             final IDownLoadWallpaper listener) {
-        ByteArrayRequest mRequest = new ByteArrayRequest(imageUrl, new Listener<byte[]>() {
-
-            @Override
-            public void onResponse(final byte[] data) {
-                HDBThreadUtils.runOnWorker(new Runnable() {
+        mkDirs();
+        DownloadRequest request = new DownloadRequest(imageUrl, ONLINR_WALLPAPER_PATH + "tmp.jpg",
+                new Listener<String>() {
 
                     @Override
-                    public void run() {
-                        final Bitmap bitmap = doParse(data, BaseInfoHelper.getRealWidth(context),
-                                BaseInfoHelper.getRealHeight(context));
-                        HDBThreadUtils.runOnUi(new Runnable() {
+                    public void onResponse(final String response) {
+
+                        HDBThreadUtils.runOnWorker(new Runnable() {
 
                             @Override
                             public void run() {
-                                listener.onSuccess(bitmap);
+                                BitmapFactory.Options outOptions = new BitmapFactory.Options();
+                                outOptions.inJustDecodeBounds = true;
+                                outOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+                                BitmapFactory.decodeFile(response, outOptions);
+                                
+                                int reqHeight = BaseInfoHelper.getRealHeight(context);
+                                BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
+                                decodeOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+                                decodeOptions.inSampleSize = computeSampleSize(outOptions,
+                                        reqHeight);
+
+                                final Bitmap bitmap = BitmapFactory.decodeFile(response,
+                                        decodeOptions);
+
+                                HDBThreadUtils.runOnUi(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        listener.onSuccess(bitmap);
+                                    }
+                                });
                             }
                         });
+
+                    }
+                }, new ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        listener.onFail();
+
                     }
                 });
-            }
-        }, new ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                listener.onFail();
-            }
-        });
-        mRequest.setOnProgressListener(new ProgressListener() {
+        request.setOnProgressListener(new ProgressListener() {
 
             @Override
             public void onProgress(long transferredBytes, long totalSize) {
@@ -231,8 +260,19 @@ public class WallpaperUtils {
                 listener.onProgress(fmt.format(result));
             }
         });
-        mRequest.setShouldCache(false);
-        RequestManager.getRequestQueue().add(mRequest);
+        request.setShouldCache(false);
+        RequestManager.getRequestQueue().add(request);
+    }
+
+    public static int computeSampleSize(BitmapFactory.Options options, int reqHeight) {
+        try {
+            // int widRate = Math.round((float) options.outWidth / (float)
+            // reqWidth);
+            int heightRate = Math.round((float) options.outHeight / (float) reqHeight);
+            return heightRate;
+        } catch (Exception e) {
+            return 1;
+        }
     }
 
     private static Bitmap doParse(byte[] data, int mMaxWidth, int mMaxHeight) {
