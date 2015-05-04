@@ -404,6 +404,7 @@ public class PandoraUtils {
         PandoraConfig pandoraConfig = PandoraConfig.newInstance(HDApplication.getContext());
         if (pandoraConfig.isInitState()) {
             ImageLoaderManager.getOnlineImageCache(HDApplication.getContext()).clear();
+            ImageLoaderManager.sOnlineImageCache = null;
             OnlineWallpaperManager.getInstance().saveThemeId(HDApplication.getContext(),
                     ThemeManager.THEME_ID_DEFAULT);
             pandoraConfig.saveInitState();
