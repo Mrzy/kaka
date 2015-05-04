@@ -132,6 +132,8 @@ public class PandoraConfig {
 
     private static final String KEY_TIP_ADD_CHANNEL_FUNCTION = "ktacf";
 
+    private static final String KEY_INIT_STATE = "kistate";
+
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -668,4 +670,13 @@ public class PandoraConfig {
     public void saveTipAddChannelFunction() {
         mSp.edit().putBoolean(KEY_TIP_ADD_CHANNEL_FUNCTION, true).commit();
     }
+
+    public boolean isInitState() {
+        return mSp.getBoolean(KEY_INIT_STATE, true);
+    }
+
+    public void saveInitState() {
+        mSp.edit().putBoolean(KEY_INIT_STATE, false).commit();
+    }
+
 }

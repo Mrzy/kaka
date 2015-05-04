@@ -30,7 +30,11 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.theme.ThemeManager;
+import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager;
 
 public class PandoraUtils {
     private PandoraUtils() {
@@ -396,4 +400,13 @@ public class PandoraUtils {
         return resultData;
     }
 
+    public static void initState() {
+        PandoraConfig pandoraConfig = PandoraConfig.newInstance(HDApplication.getContext());
+        if (pandoraConfig.isInitState()) {
+            ImageLoaderManager.getOnlineImageCache(HDApplication.getContext()).clear();
+            OnlineWallpaperManager.getInstance().saveThemeId(HDApplication.getContext(),
+                    ThemeManager.THEME_ID_DEFAULT);
+            pandoraConfig.saveInitState();
+        }
+    }
 }

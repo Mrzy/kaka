@@ -397,4 +397,5 @@ public class WallpaperUtils {
                 || ((HDBNetworkState.isNetworkAvailable() && !HDBNetworkState.isWifiNetwork()) && !PandoraConfig
                         .newInstance(context).isOnlyWifiLoadImage());
     }
+
 }

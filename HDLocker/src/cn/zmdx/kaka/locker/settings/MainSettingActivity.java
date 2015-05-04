@@ -103,6 +103,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
                 .commit();
         UmengCustomEventManager.statisticalNeedInterceptApp();
         WallpaperUtils.autoChangeWallpaper();
+        PandoraUtils.initState();
     }
 
     public void handleToActivity() {
