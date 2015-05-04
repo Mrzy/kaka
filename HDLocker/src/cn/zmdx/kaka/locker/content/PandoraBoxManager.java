@@ -473,9 +473,11 @@ public class PandoraBoxManager implements View.OnClickListener {
     private boolean isNewsExpanded = false;
 
     public void notifyNewsPanelSlide(View panel, float slideOffset) {
-        ViewGroup.LayoutParams lp = mHeaderPart1.getLayoutParams();
-        lp.height = (int) (NEWS_TOP_CIRCLE_HEIGHT * (1.0f - slideOffset));
-        mHeaderPart1.requestLayout();
+        if (mHeaderPart1 != null) {
+            ViewGroup.LayoutParams lp = mHeaderPart1.getLayoutParams();
+            lp.height = (int) (NEWS_TOP_CIRCLE_HEIGHT * (1.0f - slideOffset));
+            mHeaderPart1.requestLayout();
+        }
     }
 
     /**
