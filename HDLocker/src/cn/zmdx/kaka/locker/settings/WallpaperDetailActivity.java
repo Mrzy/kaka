@@ -24,25 +24,28 @@ public class WallpaperDetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         mImageUrl = getIntent().getStringExtra("imageUrl");
         mDesc = getIntent().getStringExtra("desc");
-        WallpaperDetailView detailView = new WallpaperDetailView(this, false);
+        WallpaperDetailView detailView = new WallpaperDetailView(this, null);
         detailView.setData(mImageUrl, mDesc);
         detailView.setWallpaperDetailListener(new IWallpaperDetailListener() {
 
             @Override
             public void onBack() {
-                finish();
+                onBackPressed();
             }
 
             @Override
             public void onApplyWallpaper() {
                 LockScreenManager.getInstance().lock();
-                finish();
-                overridePendingTransition(R.anim.umeng_fb_slide_in_from_left,
-                        R.anim.umeng_fb_slide_out_from_right);
+                onBackPressed();
             }
         });
         setContentView(detailView, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     public void onResume() {

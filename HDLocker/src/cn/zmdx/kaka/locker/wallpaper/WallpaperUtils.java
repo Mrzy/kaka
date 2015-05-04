@@ -220,7 +220,7 @@ public class WallpaperUtils {
                                 outOptions.inJustDecodeBounds = true;
                                 outOptions.inPreferredConfig = Bitmap.Config.RGB_565;
                                 BitmapFactory.decodeFile(response, outOptions);
-                                
+
                                 int reqHeight = BaseInfoHelper.getRealHeight(context);
                                 BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
                                 decodeOptions.inPreferredConfig = Bitmap.Config.RGB_565;
@@ -234,7 +234,11 @@ public class WallpaperUtils {
 
                                     @Override
                                     public void run() {
-                                        listener.onSuccess(bitmap);
+                                        if (null == bitmap) {
+                                            listener.onFail();
+                                        } else {
+                                            listener.onSuccess(bitmap);
+                                        }
                                     }
                                 });
                             }
@@ -245,9 +249,7 @@ public class WallpaperUtils {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
                         listener.onFail();
-
                     }
                 });
         request.setOnProgressListener(new ProgressListener() {
@@ -275,6 +277,7 @@ public class WallpaperUtils {
         }
     }
 
+    @SuppressWarnings("unused")
     private static Bitmap doParse(byte[] data, int mMaxWidth, int mMaxHeight) {
         BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
         decodeOptions.inInputShareable = true;

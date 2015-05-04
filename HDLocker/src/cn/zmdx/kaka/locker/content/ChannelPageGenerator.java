@@ -25,18 +25,18 @@ import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.StickRecyclerAdapter;
 import cn.zmdx.kaka.locker.content.adapter.StickRecyclerAdapter.OnStickClickListener;
+import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
-import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
-import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView.IOnlineWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
+import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView;
 import cn.zmdx.kaka.locker.widget.PandoraRecyclerView;
 import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
 
-    class ChannelPageGenerator {
+class ChannelPageGenerator {
 
     public static final int NEWS_THEME_LIST = 1;// 列表式新闻
 
@@ -69,6 +69,8 @@ import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
 
     private List<ServerImageData> mStickData = new ArrayList<ServerImageData>();
 
+    private List<ServerOnlineWallpaper> mWallpaperList = new ArrayList<ServerOnlineWallpaper>();
+
     private View mPageView;
 
     private IOnLoadingListener mLoadingListener;
@@ -78,7 +80,8 @@ import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
     }
 
     public ChannelPageGenerator(PandoraBoxManager boxManager, int channelId, int style, int color) {
-        if (style != NEWS_THEME_LIST && style != NEWS_THEME_STAGGERED && style != NEWS_THEME_WALLPAPER) {
+        if (style != NEWS_THEME_LIST && style != NEWS_THEME_STAGGERED
+                && style != NEWS_THEME_WALLPAPER) {
             throw new IllegalArgumentException("error theme");
         }
 
@@ -106,25 +109,66 @@ import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
     }
 
     private View initWallpaperView() {
-        OnlineWallpaperView mWallpaperView = new OnlineWallpaperView(mContext, true);
-        mWallpaperView.setOnlineWallpaperListener(new IOnlineWallpaperListener() {
+        ViewGroup view = (ViewGroup) mInflater.inflate(R.layout.pager_news_layout, null);
+        PandoraRecyclerView rv = (PandoraRecyclerView) view.findViewById(R.id.recyclerView);
+        rv.setVerticalFadingEdgeEnabled(true);
+        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
+        rv = (PandoraRecyclerView) view.findViewById(R.id.recyclerView);
+        rv.setVerticalFadingEdgeEnabled(true);
+        rv.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
+        final LinearLayoutManager llm = new LinearLayoutManager(mContext,
+                LinearLayoutManager.VERTICAL, false);
+        rv.setLayoutManager(llm);
+        rv.setHasFixedSize(true);
+
+        mAdapter = new WallpaperPageAdapter(mContext, mRecyclerView, mWallpaperList);
+
+        WallpaperPageAdapter adapetr = (WallpaperPageAdapter) mAdapter;
+        adapetr.setOnItemClickListener(new WallpaperPageAdapter.OnItemClickListener() {
 
             @Override
-            public void onOpenDetailPage(View view) {
-                mBoxManager.openDetailPage(view);
-            }
-
-            @Override
-            public void onCloseDetailPage(boolean withAnimator) {
-                mBoxManager.closeDetailPage(withAnimator);
-            }
-
-            @Override
-            public void onGoToDetailClick(ServerOnlineWallpaper item) {
-
+            public void onItemClicked(View view, int position) {
+                ServerOnlineWallpaper data = mWallpaperList.get(position);
+                WallpaperDetailView detailView = new WallpaperDetailView(mContext, mBoxManager);
+                detailView.setData(data.getImageURL(), data.getDesc());
+                mBoxManager.openDetailPage(detailView);
             }
         });
-        return mWallpaperView;
+        rv.setAdapter(mAdapter);
+
+        View emptyView = createEmptyView();
+        rv.setEmptyView(emptyView);
+        view.addView(emptyView);
+
+        mRefreshView = (PandoraSwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
+        // mRefreshView.setProgressBackgroundColorSchemeColor(mColor);
+        // mRefreshView.setColorSchemeColors(Color.WHITE);
+
+        mRefreshView.setOnRefreshListener(new OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                NewsFactory.updateWallpaper(mAdapter, mWallpaperList, mRefreshView, false, true);
+                // UmengCustomEventManager.statisticalPullRefreshNews(mChannelId
+                // + "");
+            }
+        });
+
+        rv.setOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int lastVisibleItem = llm.findLastVisibleItemPosition();
+                int totalItemCount = llm.getItemCount();
+                // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
+                // dy>0 表示向下滑动
+                if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
+                    NewsFactory
+                            .updateWallpaper(mAdapter, mWallpaperList, mRefreshView, true, false);
+                }
+            }
+        });
+        return view;
+
     }
 
     private View initStaggeredThemeView() {
@@ -150,7 +194,7 @@ import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
                 String url = sid.getImageDesc();
                 NewsDetailLayout ndl = new NewsDetailLayout(mBoxManager, sid);
                 mBoxManager.openDetailPage(ndl);
-                UmengCustomEventManager.statisticalOpenNewsDetail(sid.getId(), mChannelId+"");
+                UmengCustomEventManager.statisticalOpenNewsDetail(sid.getId(), mChannelId + "");
             }
         });
         rv.setAdapter(mAdapter);
@@ -160,15 +204,15 @@ import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
         view.addView(emptyView);
 
         mRefreshView = (PandoraSwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
-//        mRefreshView.setProgressBackgroundColorSchemeColor(mColor);
-//        mRefreshView.setColorSchemeColors(Color.WHITE);
+        // mRefreshView.setProgressBackgroundColorSchemeColor(mColor);
+        // mRefreshView.setColorSchemeColors(Color.WHITE);
 
         mRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                NewsFactory.updateNews(mChannelId, mAdapter, mNewsData,
-                        mRefreshView, false, true, null);
+                NewsFactory.updateNews(mChannelId, mAdapter, mNewsData, mRefreshView, false, true,
+                        null);
                 UmengCustomEventManager.statisticalPullRefreshNews(mChannelId + "");
             }
         });
@@ -185,8 +229,8 @@ import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
                 if (lastItem >= totalItemCount - 4 && dy > 0) {
-                    NewsFactory.updateNews(mChannelId, mAdapter,
-                            mNewsData, mRefreshView, true, false, null);
+                    NewsFactory.updateNews(mChannelId, mAdapter, mNewsData, mRefreshView, true,
+                            false, null);
                 }
             }
         });
@@ -246,14 +290,14 @@ import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
             }
         };
         mRefreshView = (PandoraSwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
-//        mRefreshView.setProgressBackgroundColorSchemeColor(mColor);
-//        mRefreshView.setColorSchemeColors(Color.WHITE);
+        // mRefreshView.setProgressBackgroundColorSchemeColor(mColor);
+        // mRefreshView.setColorSchemeColors(Color.WHITE);
         mRefreshView.setOnRefreshListener(new OnRefreshListener() {
 
             @Override
             public void onRefresh() {
-                NewsFactory.updateNews(mChannelId, mAdapter, mNewsData, mRefreshView, false,
-                        true, mLoadingListener);
+                NewsFactory.updateNews(mChannelId, mAdapter, mNewsData, mRefreshView, false, true,
+                        mLoadingListener);
                 UmengCustomEventManager.statisticalPullRefreshNews(mChannelId + "");
             }
         });
@@ -266,8 +310,8 @@ import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
                 // lastVisibleItem >= totalItemCount - 4 表示剩下4个item自动加载
                 // dy>0 表示向下滑动
                 if (lastVisibleItem >= totalItemCount - 4 && dy > 0) {
-                    NewsFactory.updateNews(mChannelId, mAdapter,
-                            mNewsData, mRefreshView, true, false, null);
+                    NewsFactory.updateNews(mChannelId, mAdapter, mNewsData, mRefreshView, true,
+                            false, null);
                 }
             }
         });
@@ -314,5 +358,9 @@ import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
 
     public List<ServerImageData> getData() {
         return mNewsData;
+    }
+
+    public List<ServerOnlineWallpaper> getWallpaperData() {
+        return mWallpaperList;
     }
 }

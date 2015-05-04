@@ -25,6 +25,7 @@ import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.PandoraBoxManager;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.layout.TimeLayoutManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -60,8 +61,6 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
 
     private String mDesc;
 
-    private boolean isLockScreen;
-
     public interface IWallpaperDetailListener {
         void onBack();
 
@@ -76,12 +75,14 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
 
     private WallpaperObserver mObserver;
 
-    public WallpaperDetailView(Context context, boolean isScreen) {
+    private PandoraBoxManager mBoxManager;
+
+    public WallpaperDetailView(Context context, PandoraBoxManager boxManager) {
         super(context);
         mContext = context;
-        isLockScreen = isScreen;
+        mBoxManager = boxManager;
         initView();
-        if (isScreen) {
+        if (null == mBoxManager) {
             UmengCustomEventManager.statisticalLockScreenWallpaperDetailTimes();
         }
     }
@@ -107,8 +108,12 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
 
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    mListener.onBack();
+                if (null == mBoxManager) {
+                    if (null != mListener) {
+                        mListener.onBack();
+                    }
+                } else {
+                    mBoxManager.closeDetailPage(true);
                 }
             }
         });
@@ -124,20 +129,23 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
                 saveOnlineWallpaperState(md5Url);
                 ThemeManager.addBitmapToCache(mPreBitmap);
                 saveBitmapToFile(md5Url);
-                if (isLockScreen) {
+                if (null == mBoxManager) {
                     UmengCustomEventManager.statisticalLockScreenWallpaperDetailApplyTimes();
                 }
-                if (null != mListener) {
-                    mListener.onApplyWallpaper();
-                    if (isLockScreen) {
-                        LockScreenManager.getInstance().collapseNewsPanel();
-                        HDBThreadUtils.postOnUiDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                LockScreenManager.getInstance().initWallpaper();
-                            }
-                        }, 300);
+
+                if (null == mBoxManager) {
+                    if (null != mListener) {
+                        mListener.onApplyWallpaper();
                     }
+                } else {
+                    mBoxManager.closeDetailPage(false);
+                    LockScreenManager.getInstance().collapseNewsPanel();
+                    HDBThreadUtils.postOnUiDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            LockScreenManager.getInstance().initWallpaper();
+                        }
+                    }, 300);
                 }
             }
         });

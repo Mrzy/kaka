@@ -10,21 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
-import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
 import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
-public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdapter.ViewHolder> {
+public class WallpaperPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<ServerOnlineWallpaper> mData;
 
@@ -39,20 +36,19 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
+        public void onItemClicked(View view, int position);
     }
 
     public WallpaperPageAdapter(Context context, RecyclerView recyclerView,
             List<ServerOnlineWallpaper> list) {
         mData = list;
         mContext = context;
-        mMargins = BaseInfoHelper.dip2px(mContext, 10);
+        mMargins = BaseInfoHelper.dip2px(mContext, 8);
         mImageWidth = BaseInfoHelper.getRealWidth(mContext) - mMargins * 2;
         mImageHeight = (720 * mImageWidth) / 1080;
-        // 916 512
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewItemHolder extends RecyclerView.ViewHolder {
         public ImageView mImageView;
 
         public TypefaceTextView mPublicDay;
@@ -61,7 +57,7 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
 
         public TypefaceTextView mWallpaperName;
 
-        public ViewHolder(View view) {
+        public ViewItemHolder(View view) {
             super(view);
             mImageView = (ImageView) view.findViewById(R.id.wallpaper_imageView);
             mPublicDay = (TypefaceTextView) view.findViewById(R.id.wallpaper_date_day);
@@ -71,11 +67,11 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
             params.width = mImageWidth;
             params.height = mImageHeight;
             mImageView.setLayoutParams(params);
-            LinearLayout mLayout = (LinearLayout) view.findViewById(R.id.wallpaper_layout);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            lp.setMargins(mMargins - 5, 0, mMargins, 0);
-            mLayout.setLayoutParams(lp);
+//            LinearLayout mLayout = (LinearLayout) view.findViewById(R.id.wallpaper_layout);
+//            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+//            lp.setMargins(mMargins - 5, 0, mMargins, 0);
+//            mLayout.setLayoutParams(lp);
         }
     }
 
@@ -89,7 +85,8 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, final int position) {
+        final ViewItemHolder holder = (ViewItemHolder) viewHolder;
         final ServerOnlineWallpaper item = mData.get(position);
         RequestCreator rc = PicassoHelper.getPicasso(mContext).load(item.getThumbURL());
         if (PandoraConfig.newInstance(mContext).isOnlyWifiLoadImage()
@@ -107,7 +104,7 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onItemClick(itemView, position);
+                    mListener.onItemClicked(itemView, position);
                 }
             }
         });
@@ -153,10 +150,10 @@ public class WallpaperPageAdapter extends RecyclerView.Adapter<WallpaperPageAdap
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup vg, final int position) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup vg, final int position) {
         final View view = View.inflate(vg.getContext(), R.layout.pager_news_wallpaper_item_layout,
                 null);
-        ViewHolder vh = new ViewHolder(view);
+        ViewItemHolder vh = new ViewItemHolder(view);
         return vh;
     }
 

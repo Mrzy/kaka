@@ -20,7 +20,6 @@ import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter.OnItemClickListe
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager.IPullWallpaperListener;
 import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
-import cn.zmdx.kaka.locker.wallpaper.WallpaperDetailView.IWallpaperDetailListener;
 
 public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperListener,
         OnItemClickListener {
@@ -38,17 +37,11 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
 
     private List<ServerOnlineWallpaper> mList = new ArrayList<ServerOnlineWallpaperManager.ServerOnlineWallpaper>();
 
-    private boolean isLockScreen;
-
     private boolean isNetWorkError = false;
 
     private IOnlineWallpaperListener mListener;
 
     public interface IOnlineWallpaperListener {
-        void onCloseDetailPage(boolean withAnimator);
-
-        void onOpenDetailPage(View view);
-
         void onGoToDetailClick(ServerOnlineWallpaper item);
     }
 
@@ -64,10 +57,9 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         initView();
     }
 
-    public OnlineWallpaperView(Context context, boolean isScreen) {
+    public OnlineWallpaperView(Context context) {
         super(context);
         mContext = context;
-        isLockScreen = isScreen;
         initView();
     }
 
@@ -114,16 +106,6 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
 
     private long mLastModified = System.currentTimeMillis();
 
-    private long mNewModified = System.currentTimeMillis();
-
-    public void refreshData() {
-        if (null == mList || mList.size() == 0) {
-            pullWallpaperData();
-            return;
-        }
-        OnlineWallpaperManager.getInstance().pullWallpaperData(mContext, this, 0, mNewModified);
-    }
-
     public void pullWallpaperData() {
         OnlineWallpaperManager.getInstance().pullWallpaperData(mContext, this, 1, mLastModified);
     }
@@ -138,7 +120,6 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         }
         mList.addAll(list);
         Collections.sort(mList, WallpaperUtils.comparator);
-        mNewModified = mList.get(0).getPublishDATE();
         mLastModified = mList.get(mList.size() - 1).getPublishDATE();
         mAdapter.notifyDataSetChanged();
         if (!isLoadMore) {
@@ -156,36 +137,12 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClicked(View view, int position) {
         if (isNetWorkError) {
             return;
         }
-        if (isLockScreen) {
-            WallpaperDetailView detailView = new WallpaperDetailView(mContext, isLockScreen);
-            detailView.setData(mList.get(position).getImageURL(), mList.get(position).getDesc());
-            detailView.setWallpaperDetailListener(new IWallpaperDetailListener() {
-
-                @Override
-                public void onBack() {
-                    if (null != mListener) {
-                        mListener.onCloseDetailPage(true);
-                    }
-                }
-
-                @Override
-                public void onApplyWallpaper() {
-                    if (null != mListener) {
-                        mListener.onCloseDetailPage(false);
-                    }
-                }
-            });
-            if (null != mListener) {
-                mListener.onOpenDetailPage(detailView);
-            }
-        } else {
-            if (null != mListener) {
-                mListener.onGoToDetailClick(mList.get(position));
-            }
+        if (null != mListener) {
+            mListener.onGoToDetailClick(mList.get(position));
         }
     }
 

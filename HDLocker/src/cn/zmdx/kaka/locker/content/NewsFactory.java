@@ -13,6 +13,8 @@ import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.network.UrlBuilder;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
+import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager;
+import cn.zmdx.kaka.locker.wallpaper.ServerOnlineWallpaperManager.ServerOnlineWallpaper;
 import cn.zmdx.kaka.locker.widget.PandoraSwipeRefreshLayout;
 
 import com.android.volley.Response.ErrorListener;
@@ -34,8 +36,8 @@ public class NewsFactory {
      * @param older 是要显示更老的数据还是更新的数据
      */
     static void updateNews(int type, final RecyclerView.Adapter adapter,
-            final List<ServerImageData> data, final PandoraSwipeRefreshLayout srl, final boolean older,
-            boolean showRefresh, final IOnLoadingListener listener) {
+            final List<ServerImageData> data, final PandoraSwipeRefreshLayout srl,
+            final boolean older, boolean showRefresh, final IOnLoadingListener listener) {
         if (adapter == null || data == null) {
             return;
         }
@@ -86,7 +88,8 @@ public class NewsFactory {
                 }
 
                 if (BuildConfig.DEBUG) {
-                    HDBLOG.logD("请求新闻数据成功，本次返回：" + newData.size() + ",条，共" + data.size() + "条新闻"+"  "+stickData.size()+"条Stick新闻");
+                    HDBLOG.logD("请求新闻数据成功，本次返回：" + newData.size() + ",条，共" + data.size() + "条新闻"
+                            + "  " + stickData.size() + "条Stick新闻");
                 }
 
                 if (null != listener) {
@@ -158,5 +161,135 @@ public class NewsFactory {
         }
         return UrlBuilder.getBaseUrl() + "locker!queryDataImgTableNew.action?type=" + type
                 + "&lastModified=" + time + "&flag=" + flag + "&limit=" + limit;
+    }
+
+    /**
+     * @param adapter
+     * @param data 已经加载的数据集
+     * @param srl 下拉刷新的控件，方便控制显示状态
+     * @param older 是要显示更老的数据还是更新的数据
+     */
+    static void updateWallpaper(final RecyclerView.Adapter adapter,
+            final List<ServerOnlineWallpaper> data, final PandoraSwipeRefreshLayout srl,
+            final boolean older, boolean showRefresh) {
+        if (adapter == null || data == null) {
+            return;
+        }
+
+        boolean isLoading = false;
+        if (srl.getTag() != null) {
+            isLoading = (Boolean) srl.getTag();
+        }
+
+        if (isLoading) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("正在加载壁纸数据，中断此次请求");
+            }
+            return;
+        }
+        isLoading = true;
+        srl.setTag(isLoading);
+        if (!HDBNetworkState.isNetworkAvailable()) {
+            srl.setRefreshing(false);
+
+            isLoading = false;
+            srl.setTag(isLoading);
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("无网络，中断请求新闻数据");
+            }
+            return;
+        }
+
+        if (showRefresh) {
+            srl.setRefreshing(true);
+        }
+
+        JsonObjectRequest request = null;
+        final String url = getWallpaperUrl(data, older);
+        if (BuildConfig.DEBUG) {
+            HDBLOG.logD("加载壁纸url:" + url);
+        }
+        request = new JsonObjectRequest(url, null, new Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                List<ServerOnlineWallpaper> newData = ServerOnlineWallpaperManager
+                        .parseJson(response);
+                if (older) {
+                    data.addAll(newData);
+                } else {
+                    data.addAll(0, newData);
+                }
+
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("请求壁纸数据成功，本次返回：" + newData.size() + ",张，共" + data.size() + "张壁纸");
+                }
+
+                adapter.notifyDataSetChanged();
+                if (srl != null) {
+                    srl.setRefreshing(false);
+                    // 标记已加载完数据
+                    srl.setTag(false);
+                }
+            }
+
+        }, new ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (BuildConfig.DEBUG) {
+                    error.printStackTrace();
+                }
+                if (srl != null) {
+                    srl.setRefreshing(false);
+                    // 标记已加载完数据
+                    srl.setTag(false);
+                }
+            }
+        });
+        request.setShouldCache(!BuildConfig.DEBUG);
+        RequestManager.getRequestQueue().add(request);
+    }
+
+    private static String getWallpaperUrl(List<ServerOnlineWallpaper> data, boolean older) {
+        long time = -1;
+        if (data != null && data.size() == 0) {
+            time = System.currentTimeMillis();
+        } else if (data != null && data.size() > 0) {
+            for (ServerOnlineWallpaper sid : data) {
+                final String modifyTime = "" + sid.getPublishDATE();
+                if (!TextUtils.isEmpty(modifyTime)) {
+                    long lm = Long.valueOf(modifyTime);
+                    if (time == -1) {
+                        time = lm;
+                    } else {
+                        if (older) {
+                            if (lm < time) {
+                                time = lm;
+                            }
+                        } else {
+                            if (lm > time) {
+                                time = lm;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        String flag = null;
+        if (data.size() == 0) {
+            flag = "1"; // 第一次加载壁纸，flag为1
+        } else {
+            flag = older ? "1" : "0";
+        }
+
+        int limit = 20;
+        if (!HDBNetworkState.isWifiNetwork()) {
+            limit = 10;
+        }
+        boolean isDebug = BuildConfig.DEBUG ? true : false;
+        return UrlBuilder.getBaseUrl() + "locker!queryWallPaperNew.action?flag=" + flag
+                + "&lastModified=" + time + "&limit=" + limit + "&isDebug=" + isDebug;
     }
 }

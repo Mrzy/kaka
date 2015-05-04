@@ -55,7 +55,6 @@ import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
-import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperView;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
@@ -79,8 +78,6 @@ public class PandoraBoxManager implements View.OnClickListener {
     private FrameLayout mDetailLayout;
 
     private CircleSpiritButton mBackBtn;
-
-    private OnlineWallpaperView mWallpaperView;
 
     private HeaderCircleButton mCircle;
 
@@ -621,14 +618,13 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     public void refreshNewsByChannelId(int channelId) {
+        ChannelPageGenerator cpg = ChannelPageFactory.getPageGenerator(channelId);
         if (channelId == ChannelBoxManager.CHANNEL_WALLPAPER) {
-            if (null != mWallpaperView) {
-                mWallpaperView.refreshData();
-            }
+            NewsFactory.updateWallpaper(cpg.getAdapter(), cpg.getWallpaperData(),
+                    cpg.getRefreshView(), false, false);
             return;
         }
 
-        ChannelPageGenerator cpg = ChannelPageFactory.getPageGenerator(channelId);
         if (cpg != null) {
             NewsFactory.updateNews(channelId, cpg.getAdapter(), cpg.getData(),
                     cpg.getRefreshView(), false, false, cpg.getHeaderLoadingListener());

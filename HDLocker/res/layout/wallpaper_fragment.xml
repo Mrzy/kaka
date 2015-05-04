@@ -9,7 +9,9 @@
         android:id="@+id/setting_online_wallpaper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp" >
     </LinearLayout>
 
     <cn.zmdx.kaka.locker.widget.BaseLinearLayout
