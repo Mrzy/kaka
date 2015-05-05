@@ -311,7 +311,11 @@ public class PandoraConfig {
     }
 
     public int getSelectedHotCityPosition() {
-        return mSp.getInt(KEY_THE_SELECTED_HOT_CITY_POSITION, 0);
+        try {
+            return mSp.getInt(KEY_THE_SELECTED_HOT_CITY_POSITION, 0);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public void saveSelectedHotCityPosition(int position) {
