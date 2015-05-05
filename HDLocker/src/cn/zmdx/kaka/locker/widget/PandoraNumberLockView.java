@@ -21,27 +21,15 @@ import cn.zmdx.kaka.locker.widget.KeyboardView.OnKeyboardActionListener;
 
 public class PandoraNumberLockView extends LinearLayout {
 
-    public interface IVerifyListener {
-        void onVerifySuccess();
-    }
-
     public interface INumberLockListener {
-        void onSetNumberLock(int type, boolean success);
+        void onComplete(int type, boolean success);
     }
 
-    public PandoraNumberLockView(Context context, int type, INumberLockListener numberLockListener) {
-        super(context);
-        mContext = context;
-        mNumberLockListener = numberLockListener;
-        mNumberLockType = type;
-        init();
-    }
-
-    public PandoraNumberLockView(Context context, int type, IVerifyListener verifyListener,
+    public PandoraNumberLockView(Context context, int type, INumberLockListener numberLockListener,
             boolean isScreen) {
         super(context);
         mContext = context;
-        mVerifyListener = verifyListener;
+        mNumberLockListener = numberLockListener;
         mNumberLockType = type;
         isLockScreen = isScreen;
         init();
@@ -50,8 +38,6 @@ public class PandoraNumberLockView extends LinearLayout {
     private boolean isLockScreen;
 
     private INumberLockListener mNumberLockListener;
-
-    private IVerifyListener mVerifyListener;
 
     private Context mContext;
 
@@ -76,6 +62,8 @@ public class PandoraNumberLockView extends LinearLayout {
     public static final int LOCK_NUMBER_TYPE_CLOSE = 98;
 
     public static final int LOCK_NUMBER_TYPE_VERIFY = 97;
+
+    public static final int LOCK_NUMBER_TYPE_RESET = 96;
 
     private int mNumberLockType = 99;
 
@@ -112,7 +100,8 @@ public class PandoraNumberLockView extends LinearLayout {
             mNumberFour.setImageResource(R.drawable.pandora_number_lock_white_line);
             mKeyboardView.setKeyboard(new Keyboard(mContext,
                     R.layout.pandora_number_lock_white_content));
-            mKeyboardView.setKeyBackground(getResources().getDrawable(R.drawable.pandora_number_lock_screen_key_selector));
+            mKeyboardView.setKeyBackground(getResources().getDrawable(
+                    R.drawable.pandora_number_lock_screen_key_selector));
         } else {
             mKeyboardView.setKeyboard(new Keyboard(mContext, R.layout.pandora_number_lock_content));
         }
@@ -297,6 +286,9 @@ public class PandoraNumberLockView extends LinearLayout {
                             case LOCK_NUMBER_TYPE_VERIFY:
                                 verifyNumberLock();
                                 break;
+                            case LOCK_NUMBER_TYPE_RESET:
+                                resetNumberLock();
+                                break;
 
                             default:
                                 break;
@@ -357,7 +349,7 @@ public class PandoraNumberLockView extends LinearLayout {
             // TODO   success to set munber lock
             setUnLockType(KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK);
             if (null != mNumberLockListener) {
-                mNumberLockListener.onSetNumberLock(LOCK_NUMBER_TYPE_OPEN, true);
+                mNumberLockListener.onComplete(LOCK_NUMBER_TYPE_OPEN, true);
             }
             return;
         }
@@ -371,7 +363,7 @@ public class PandoraNumberLockView extends LinearLayout {
             clearSaveNumberLockString();
             setUnLockType(KeyguardLockerManager.UNLOCKER_TYPE_NONE);
             if (null != mNumberLockListener) {
-                mNumberLockListener.onSetNumberLock(LOCK_NUMBER_TYPE_CLOSE, true);
+                mNumberLockListener.onComplete(LOCK_NUMBER_TYPE_CLOSE, true);
             }
         } else {
             setPromptString(mContext.getResources().getString(R.string.number_lock_verify_fail));
@@ -382,8 +374,27 @@ public class PandoraNumberLockView extends LinearLayout {
 
     protected void verifyNumberLock() {
         if (checkNumberLock()) {
-            if (null != mVerifyListener) {
-                mVerifyListener.onVerifySuccess();
+            if (null != mNumberLockListener) {
+                mNumberLockListener.onComplete(LOCK_NUMBER_TYPE_VERIFY, true);
+            }
+        } else {
+            setPromptString(mContext.getResources().getString(R.string.number_lock_verify_fail));
+            clearPasswordStringBuffer(true);
+        }
+
+    }
+
+    protected void resetNumberLock() {
+        if (checkNumberLock()) {
+            if (mNumberLockType == LOCK_NUMBER_TYPE_RESET) {
+                mNumberLockType = LOCK_NUMBER_TYPE_OPEN;
+                setPromptString(mContext.getResources().getString(
+                        R.string.number_lock_reset_new_prompt));
+                clearPasswordStringBuffer(false);
+                return;
+            }
+            if (null != mNumberLockListener) {
+                mNumberLockListener.onComplete(LOCK_NUMBER_TYPE_RESET, true);
             }
         } else {
             setPromptString(mContext.getResources().getString(R.string.number_lock_verify_fail));

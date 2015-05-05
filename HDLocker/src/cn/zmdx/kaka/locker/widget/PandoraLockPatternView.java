@@ -30,6 +30,8 @@ public class PandoraLockPatternView extends LinearLayout {
 
     public static final int TYPE_LOCK_PATTERN_VERIFY = 119;
 
+    public static final int TYPE_LOCK_PATTERN_RESET = 118;
+
     private int mLockPatternType = 120;
 
     private View mRootView;
@@ -52,8 +54,6 @@ public class PandoraLockPatternView extends LinearLayout {
 
     private int mErrorTimes = 0;
 
-    private IVerifyListener mVerifyListener;
-
     private ILockPatternListener mLockPatternListener;
 
     public static double SCALE_LOCK_PATTERN_WIDTH = 0.8;
@@ -64,12 +64,8 @@ public class PandoraLockPatternView extends LinearLayout {
 
     private boolean isLockScreen;
 
-    public interface IVerifyListener {
-        void onVerifySuccess();
-    }
-
     public interface ILockPatternListener {
-        void onPatternDetected(int type, boolean success);
+        void onComplete(int type, boolean success);
     }
 
     /**
@@ -88,10 +84,10 @@ public class PandoraLockPatternView extends LinearLayout {
     }
 
     public PandoraLockPatternView(Context context, int type, int colorStyle,
-            IVerifyListener verifyListener, boolean isScreen) {
+            ILockPatternListener lockPatternListener, boolean isScreen) {
         super(context);
         mContext = context;
-        mVerifyListener = verifyListener;
+        mLockPatternListener = lockPatternListener;
         mLockPatternType = type;
         mColorStyle = (isScreen == true && LockPatternManager.LOCK_PATTERN_STYLE_PURE == colorStyle) ? LockPatternManager.LOCK_PATTERN_STYLE_White
                 : colorStyle;
@@ -154,6 +150,9 @@ public class PandoraLockPatternView extends LinearLayout {
                 case TYPE_LOCK_PATTERN_VERIFY:
                     verifyLockPattern(pattern);
                     break;
+                case TYPE_LOCK_PATTERN_RESET:
+                    resetLockPattern(pattern);
+                    break;
 
                 default:
                     break;
@@ -188,7 +187,7 @@ public class PandoraLockPatternView extends LinearLayout {
             setUnLockType(KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN);
             setLockPatternStyle();
             if (null != mLockPatternListener) {
-                mLockPatternListener.onPatternDetected(TYPE_LOCK_PATTERN_OPEN, true);
+                mLockPatternListener.onComplete(TYPE_LOCK_PATTERN_OPEN, true);
             }
             return;
         }
@@ -242,6 +241,13 @@ public class PandoraLockPatternView extends LinearLayout {
                                     : false);
                 }
                 break;
+            case TYPE_LOCK_PATTERN_RESET:
+                if (!stored.equals(null)) {
+                    return (stored.equals(patternString) ? true : false)
+                            || (stored.equals(HDBHashUtils.getStringMD5(patternString)) ? true
+                                    : false);
+                }
+                break;
 
             default:
                 break;
@@ -262,7 +268,7 @@ public class PandoraLockPatternView extends LinearLayout {
             clearSaveLockPattern();
             setUnLockType(KeyguardLockerManager.UNLOCKER_TYPE_NONE);
             if (null != mLockPatternListener) {
-                mLockPatternListener.onPatternDetected(TYPE_LOCK_PATTERN_CLOSE, true);
+                mLockPatternListener.onComplete(TYPE_LOCK_PATTERN_CLOSE, true);
             }
         } else {
             mLockPatternView.setDisplayMode(DisplayMode.Wrong);
@@ -299,8 +305,15 @@ public class PandoraLockPatternView extends LinearLayout {
     }
 
     private void verifySuccess() {
-        if (null != mVerifyListener) {
-            mVerifyListener.onVerifySuccess();
+        if (mLockPatternType == TYPE_LOCK_PATTERN_RESET) {
+            mLockPatternType = TYPE_LOCK_PATTERN_OPEN;
+            setPromptString(mContext.getResources().getString(
+                    R.string.lock_pattern_reset_new_prompt));
+            mLockPatternView.clearPattern();
+            return;
+        }
+        if (null != mLockPatternListener) {
+            mLockPatternListener.onComplete(mLockPatternType, true);
         }
     }
 
@@ -319,18 +332,17 @@ public class PandoraLockPatternView extends LinearLayout {
         mErrorTimes++;
     }
 
+    private void resetLockPattern(final List<Cell> pattern) {
+        if (checkPattern(pattern)) {
+            verifySuccess();
+        } else {
+            verifyFails();
+        }
+
+    }
+
     private void setPromptString(String prompt) {
         mPromptTextView.setText(prompt);
-    }
-
-    public TextView getPromptTextView() {
-        // TODO Auto-generated method stub
-        return mPromptTextView;
-    }
-
-    public LockPatternView getLockPatternView() {
-        return mLockPatternView;
-
     }
 
 }

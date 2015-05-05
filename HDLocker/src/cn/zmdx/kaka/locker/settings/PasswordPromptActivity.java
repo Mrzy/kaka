@@ -62,14 +62,22 @@ public class PasswordPromptActivity extends BaseActivity {
                     setLockPatternViewVisibleWithLockPatternListener(
                             PandoraLockPatternView.TYPE_LOCK_PATTERN_CLOSE, mLockPatternStyle);
                 } else if (targetType == KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK) {
-                    setLockPatternViewVisibleWithVerifyListener(true, mLockPatternStyle);
+                    setLockPatternViewVisibleWithVerifyListener(true, mLockPatternStyle,
+                            PandoraLockPatternView.TYPE_LOCK_PATTERN_VERIFY);
+                } else {
+                    setLockPatternViewVisibleWithVerifyListener(false, mLockPatternStyle,
+                            PandoraLockPatternView.TYPE_LOCK_PATTERN_RESET);
                 }
                 break;
             case KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK:
                 if (targetType == KeyguardLockerManager.UNLOCKER_TYPE_NONE) {
                     setNumberLockViewVisibleWithNumberLockListener(PandoraNumberLockView.LOCK_NUMBER_TYPE_CLOSE);
                 } else if (targetType == KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN) {
-                    setNumberLockViewVisibleWithVerifyListener(true, mLockPatternStyle);
+                    setNumberLockViewVisibleWithVerifyListener(true, mLockPatternStyle,
+                            PandoraNumberLockView.LOCK_NUMBER_TYPE_VERIFY);
+                } else {
+                    setNumberLockViewVisibleWithVerifyListener(false, mLockPatternStyle,
+                            PandoraNumberLockView.LOCK_NUMBER_TYPE_RESET);
                 }
                 break;
 
@@ -80,13 +88,12 @@ public class PasswordPromptActivity extends BaseActivity {
     }
 
     private void setLockPatternViewVisibleWithVerifyListener(final boolean isNeedNumberLockView,
-            int lockPatternStyle) {
-        mLockPatternView = new PandoraLockPatternView(this,
-                PandoraLockPatternView.TYPE_LOCK_PATTERN_VERIFY, lockPatternStyle,
-                new PandoraLockPatternView.IVerifyListener() {
+            int lockPatternStyle, int lockPatternType) {
+        mLockPatternView = new PandoraLockPatternView(this, lockPatternType, lockPatternStyle,
+                new PandoraLockPatternView.ILockPatternListener() {
 
                     @Override
-                    public void onVerifySuccess() {
+                    public void onComplete(int type, boolean success) {
                         // TODO
                         if (isNeedNumberLockView) {
                             setNumberLockViewVisibleWithNumberLockListener(PandoraNumberLockView.LOCK_NUMBER_TYPE_OPEN);
@@ -108,7 +115,7 @@ public class PasswordPromptActivity extends BaseActivity {
                 new ILockPatternListener() {
 
                     @Override
-                    public void onPatternDetected(int type, boolean success) {
+                    public void onComplete(int type, boolean success) {
                         // TODO
                         finishWithResult();
                     }
@@ -128,13 +135,12 @@ public class PasswordPromptActivity extends BaseActivity {
     }
 
     private void setNumberLockViewVisibleWithVerifyListener(final boolean isNeedLockPatternView,
-            final int lockPatternStyle) {
-        mNumberLockView = new PandoraNumberLockView(this,
-                PandoraNumberLockView.LOCK_NUMBER_TYPE_VERIFY,
-                new PandoraNumberLockView.IVerifyListener() {
+            final int lockPatternStyle, int numberLockType) {
+        mNumberLockView = new PandoraNumberLockView(this, numberLockType,
+                new PandoraNumberLockView.INumberLockListener() {
 
                     @Override
-                    public void onVerifySuccess() {
+                    public void onComplete(int type, boolean success) {
                         // TODO
                         if (isNeedLockPatternView) {
                             setLockPatternViewVisibleWithLockPatternListener(
@@ -158,11 +164,11 @@ public class PasswordPromptActivity extends BaseActivity {
                 new PandoraNumberLockView.INumberLockListener() {
 
                     @Override
-                    public void onSetNumberLock(int type, boolean success) {
+                    public void onComplete(int type, boolean success) {
                         // TODO
                         finishWithResult();
                     }
-                });
+                }, false);
         mNumberLockView.setGravity(Gravity.CENTER);
         if (mNumberLockLayout.getChildCount() != 0) {
             mNumberLockLayout.removeAllViews();
@@ -188,6 +194,7 @@ public class PasswordPromptActivity extends BaseActivity {
         finishWithResult();
         return false;
     }
+
     @Override
     public void onBackPressed() {
         finishWithResult();

@@ -44,10 +44,10 @@ public class KeyguardLockerManager {
                 LockPatternManager.LOCK_PATTERN_STYLE_PURE);
         PandoraLockPatternView lockPatternView = new PandoraLockPatternView(mContext,
                 PandoraLockPatternView.TYPE_LOCK_PATTERN_VERIFY, style,
-                new PandoraLockPatternView.IVerifyListener() {
+                new PandoraLockPatternView.ILockPatternListener() {
 
                     @Override
-                    public void onVerifySuccess() {
+                    public void onComplete(int type, boolean success) {
                         listener.onSuccess();
                     }
                 }, true);
@@ -58,10 +58,10 @@ public class KeyguardLockerManager {
     private View makeNumberLockView(final IUnlockListener listener) {
         PandoraNumberLockView numberLockView = new PandoraNumberLockView(mContext,
                 PandoraNumberLockView.LOCK_NUMBER_TYPE_VERIFY,
-                new PandoraNumberLockView.IVerifyListener() {
+                new PandoraNumberLockView.INumberLockListener() {
 
                     @Override
-                    public void onVerifySuccess() {
+                    public void onComplete(int type, boolean success) {
                         listener.onSuccess();
                     }
 

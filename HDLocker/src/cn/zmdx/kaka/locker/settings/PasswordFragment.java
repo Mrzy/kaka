@@ -85,11 +85,18 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
 
     private SwitchButton mDelayLockScreen, mHiddenLine;
 
+    private ImageView mResetLine;
+
+    private LinearLayout mResetLayout;
+
+    private PandoraConfig mPandoraConfig;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
     ViewGroup container, @Nullable
     Bundle savedInstanceState) {
         mEntireView = inflater.inflate(R.layout.password_fragment, container, false);
+        mPandoraConfig = PandoraConfig.newInstance(getActivity());
         initView();
         return mEntireView;
     }
@@ -105,6 +112,14 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
 
         mDelayLockScreen.setChecked(isDelayLockScreenOn());
         mHiddenLine.setChecked(isHiddenLineOn());
+
+        mResetLine = (ImageView) mEntireView
+                .findViewById(R.id.pandora_setting_password_reset_item_line);
+
+        mResetLayout = (LinearLayout) mEntireView.findViewById(R.id.pandora_setting_password_reset);
+        mResetLayout.setOnClickListener(this);
+        int curType = mPandoraConfig.getUnLockType();
+        checkResetLayoutVisibility(curType);
 
         mNoneItem = (BaseLinearLayout) mEntireView.findViewById(R.id.setting_password_none_item);
         mNoneItem.setOnClickListener(this);
@@ -195,7 +210,7 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
     }
 
     private void initPasswordTypeState() {
-        int type = PandoraConfig.newInstance(getActivity()).getUnLockType();
+        int type = mPandoraConfig.getUnLockType();
 
         int noneItemVisibility = type == KeyguardLockerManager.UNLOCKER_TYPE_NONE ? View.VISIBLE
                 : View.GONE;
@@ -216,6 +231,8 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
         } else {
             initLockPatternStyle(false);
         }
+
+        checkResetLayoutVisibility(type);
     }
 
     private void initLockPatternStyle(boolean isLockPatternType) {
@@ -223,8 +240,7 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
             setStyleViewSelectState(null);
             return;
         }
-        int style = PandoraConfig.newInstance(getActivity()).getLockPatternStyle(
-                LockPatternManager.LOCK_PATTERN_STYLE_PURE);
+        int style = mPandoraConfig.getLockPatternStyle(LockPatternManager.LOCK_PATTERN_STYLE_PURE);
         if (style == LockPatternManager.LOCK_PATTERN_STYLE_PURE) {
             setStyleViewSelectState(mPureStyle);
         } else if (style == LockPatternManager.LOCK_PATTERN_STYLE_NEON) {
@@ -245,14 +261,14 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
         setStyleViewSelectState(view);
 
         if (view == mNoneItem) {
-            int lockPatternStyle = PandoraConfig.newInstance(getActivity()).getLockPatternStyle(
-                    LockPatternManager.LOCK_PATTERN_STYLE_PURE);
+            int lockPatternStyle = mPandoraConfig
+                    .getLockPatternStyle(LockPatternManager.LOCK_PATTERN_STYLE_PURE);
             setLockTypeNone(lockPatternStyle);
             setLockPatternViewSelectState(mNoneItemSelect);
             setStyleViewSelectState(null);
         } else if (view == mNumberLockItem) {
-            int lockPatternStyle = PandoraConfig.newInstance(getActivity()).getLockPatternStyle(
-                    LockPatternManager.LOCK_PATTERN_STYLE_PURE);
+            int lockPatternStyle = mPandoraConfig
+                    .getLockPatternStyle(LockPatternManager.LOCK_PATTERN_STYLE_PURE);
             setLockTypeNumber(lockPatternStyle);
             setLockPatternViewSelectState(mNumberLockItemSelect);
             setStyleViewSelectState(null);
@@ -268,13 +284,18 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
             setLockPatternWithStyle(LockPatternManager.LOCK_PATTERN_STYLE_DEEPSEA);
         } else if (view == mMidsummerStyle) {
             setLockPatternWithStyle(LockPatternManager.LOCK_PATTERN_STYLE_MIDSUMMER);
+        } else if (view == mResetLayout) {
+            int curType = mPandoraConfig.getUnLockType();
+            int lockPatternStyle = mPandoraConfig
+                    .getLockPatternStyle(LockPatternManager.LOCK_PATTERN_STYLE_PURE);
+            gotoLockerPasswordTypeActivity(curType, curType, lockPatternStyle);
         }
     }
 
     private void setLockPatternWithStyle(int style) {
-        int type = PandoraConfig.newInstance(getActivity()).getUnLockType();
+        int type = mPandoraConfig.getUnLockType();
         if (type == KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN) {
-            PandoraConfig.newInstance(getActivity()).saveLockPatternStyle(style);
+            mPandoraConfig.saveLockPatternStyle(style);
         } else {
             setLockTypePattern(style);
             setLockPatternViewSelectState(mLockPatternItemSelect);
@@ -282,7 +303,7 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
     }
 
     private void setLockTypeNone(int lockPatternStyle) {
-        int curType = PandoraConfig.newInstance(getActivity()).getUnLockType();
+        int curType = mPandoraConfig.getUnLockType();
         if (curType != KeyguardLockerManager.UNLOCKER_TYPE_NONE) {
             gotoLockerPasswordTypeActivity(curType, KeyguardLockerManager.UNLOCKER_TYPE_NONE,
                     lockPatternStyle);
@@ -290,7 +311,7 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
     }
 
     private void setLockTypePattern(int lockPatternStyle) {
-        int curType = PandoraConfig.newInstance(getActivity()).getUnLockType();
+        int curType = mPandoraConfig.getUnLockType();
         if (curType != KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN) {
             gotoLockerPasswordTypeActivity(curType,
                     KeyguardLockerManager.UNLOCKER_TYPE_LOCK_PATTERN, lockPatternStyle);
@@ -298,7 +319,7 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
     }
 
     private void setLockTypeNumber(int lockPatternStyle) {
-        int curType = PandoraConfig.newInstance(getActivity()).getUnLockType();
+        int curType = mPandoraConfig.getUnLockType();
         if (curType != KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK) {
             gotoLockerPasswordTypeActivity(curType,
                     KeyguardLockerManager.UNLOCKER_TYPE_NUMBER_LOCK, lockPatternStyle);
@@ -378,6 +399,16 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
         mMidsummerStylePrompt.setTextColor(view == mMidsummerStyle ? greyColor : normalColor);
     }
 
+    private void checkResetLayoutVisibility(int type) {
+        if (type != KeyguardLockerManager.UNLOCKER_TYPE_NONE) {
+            mResetLine.setVisibility(View.VISIBLE);
+            mResetLayout.setVisibility(View.VISIBLE);
+        } else {
+            mResetLine.setVisibility(View.GONE);
+            mResetLayout.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -416,26 +447,26 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
     }
 
     private boolean isDelayLockScreenOn() {
-        return PandoraConfig.newInstance(getActivity()).isDelayLockScreenOn();
+        return mPandoraConfig.isDelayLockScreenOn();
     }
 
     private void enableDelayLockScreen() {
-        PandoraConfig.newInstance(getActivity()).saveDelayLockScreenState(true);
+        mPandoraConfig.saveDelayLockScreenState(true);
     }
 
     private void disableDelayLockScreen() {
-        PandoraConfig.newInstance(getActivity()).saveDelayLockScreenState(false);
+        mPandoraConfig.saveDelayLockScreenState(false);
     }
 
     private boolean isHiddenLineOn() {
-        return PandoraConfig.newInstance(getActivity()).isHiddenLineOn();
+        return mPandoraConfig.isHiddenLineOn();
     }
 
     private void enableHiddenLine() {
-        PandoraConfig.newInstance(getActivity()).saveHiddenLineState(true);
+        mPandoraConfig.saveHiddenLineState(true);
     }
 
     private void disableHiddenLine() {
-        PandoraConfig.newInstance(getActivity()).saveHiddenLineState(false);
+        mPandoraConfig.saveHiddenLineState(false);
     }
 }
