@@ -122,7 +122,7 @@ public class LockScreenManager {
 
     private ViewGroup mDateWidget;
 
-    private ImageView mWifiIcon;
+//    private ImageView mWifiIcon;
 
     private TimeLayoutManager mTimeLayoutManager;
 
@@ -282,7 +282,7 @@ public class LockScreenManager {
         mShimmer.setStartDelay(1000);// 默认间隔为0
 
         mCommonWidgetLayout = mMainPage.findViewById(R.id.commonWidgetArea);
-        mWifiIcon = (ImageView) mMainPage.findViewById(R.id.wifi_icon);
+//        mWifiIcon = (ImageView) mMainPage.findViewById(R.id.wifi_icon);
         mBatteryInfo = (TextView) mMainPage.findViewById(R.id.battery_info);
         batteryView = (BatteryView) mMainPage.findViewById(R.id.batteryView);
         if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
@@ -297,9 +297,9 @@ public class LockScreenManager {
                     mBatteryInfo.setText(level + "%");
                 }
             });
-            if (!HDBNetworkState.isWifiNetwork()) {
-                mWifiIcon.setVisibility(View.GONE);
-            }
+//            if (!HDBNetworkState.isWifiNetwork()) {
+//                mWifiIcon.setVisibility(View.GONE);
+//            }
         }
 
         mDateWidget = (ViewGroup) mMainPage.findViewById(R.id.dateWeatherLayout);
