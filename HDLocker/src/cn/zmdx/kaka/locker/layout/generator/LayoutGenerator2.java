@@ -116,8 +116,7 @@ public class LayoutGenerator2 extends BaseLayoutGenerator {
                 if (mNoWeather != null) {
                     if (!HDBNetworkState.isNetworkAvailable()) {
                         mNoWeather.setText(R.string.tip_no_news);
-                    } else if (TextUtils.isEmpty(mPandoraConfig.getLastCityName())
-                            && TextUtils.isEmpty(mPandoraConfig.getTheCityHasSet())) {
+                    } else if (TextUtils.isEmpty(mPandoraConfig.getTheCityHasSet())) {
                         mNoWeather.setText(R.string.guide_to_choose_city);
                         mNoWeather.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -199,14 +198,10 @@ public class LayoutGenerator2 extends BaseLayoutGenerator {
             String[] split = theCityHasSet.split(",");
             if (!TextUtils.isEmpty(split[0])) {
                 cityName = split[0];
-            } else {
-                cityName = mPandoraConfig.getLastCityName();
             }
         } else {
             if (!TextUtils.isEmpty(cityNameStr)) {
                 cityName = cityNameStr;
-            } else {
-                cityName = mPandoraConfig.getLastCityName();
             }
         }
         if (mCityName != null) {

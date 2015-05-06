@@ -77,7 +77,7 @@ public class BottomDockUmengEventManager {
 
     public static void statisticalSelectedChannel(List<ChannelInfo> channels) {
         for (ChannelInfo ci : channels) {
-            String name = ci.getChannelEnName();
+            String name = ci.getChannelName();
             HashMap<String, String> map = new HashMap<String, String>();
             map.put("channelName", name);
             MobclickAgent.onEvent(HDApplication.getContext(),

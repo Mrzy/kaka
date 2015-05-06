@@ -59,6 +59,7 @@ import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
+import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
@@ -711,11 +712,6 @@ public class LockScreenManager {
 
         pauseShimmer();
 
-        PandoraBoxManager.newInstance(mContext).onScreenOff();
-        String lastCityName = mPandoraConfig.getLastCityName();
-        if (TextUtils.isEmpty(lastCityName)) {
-            PandoraLocationManager.getInstance(mContext).requestLocation();
-        }
         if (BuildConfig.DEBUG && false) {
             for (int i = 0; i < 20; i++) {
                 NotificationInterceptor.getInstance(mContext).sendCustomNotification(

@@ -23,6 +23,9 @@ public class LockSoundManager {
         SOUND_ID_UNLOCK = sPool.load(sContext, R.raw.unlock, 1);
     }
 
+    public static void init() {
+    }
+
     /**
      * 播放对应音频文件
      * 

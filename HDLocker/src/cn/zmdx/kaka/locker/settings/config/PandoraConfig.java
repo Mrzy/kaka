@@ -266,26 +266,6 @@ public class PandoraConfig {
         editor.commit();
     }
 
-    public void saveLastCityName(String cityName) {
-        Editor editor = mSp.edit();
-        editor.putString(KEY_LAST_CITY_NAME, cityName);
-        editor.commit();
-    }
-
-    public String getLastCityName() {
-        return mSp.getString(KEY_LAST_CITY_NAME, "");
-    }
-
-    public void saveLastCityProvinceName(String cityProvinceName) {
-        Editor editor = mSp.edit();
-        editor.putString(KEY_LAST_CITY_PROVINCE_NAME, cityProvinceName);
-        editor.commit();
-    }
-
-    public String getLastCityProvinceName() {
-        return mSp.getString(KEY_LAST_CITY_PROVINCE_NAME, "");
-    }
-
     public String getLastWeatherInfo() {
         return mSp.getString(KEY_LAST_WEATHER_INFO, null);
     }

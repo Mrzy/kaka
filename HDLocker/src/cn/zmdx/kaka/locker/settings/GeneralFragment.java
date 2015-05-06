@@ -26,6 +26,7 @@ import cn.zmdx.kaka.locker.initialization.InitializationManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 
 import com.umeng.analytics.MobclickAgent;
@@ -333,23 +334,10 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
     }
 
     private void initShowCityTextView() {
-        String theCityHasSet = mPandoraConfig.getTheCityHasSet();
-        String cityNameStr = mPandoraConfig.getLastCityName();
+        String cityNameStr = PandoraWeatherManager.getInstance().getLastCity();
         if (!TextUtils.isEmpty(cityNameStr)) {
             if (mShowCityTextView != null) {
                 mShowCityTextView.setText(cityNameStr);
-            }
-        }
-        if (!TextUtils.isEmpty(theCityHasSet)) {
-            if (mShowCityTextView != null) {
-                String[] split = theCityHasSet.split(",");
-                mShowCityTextView.setText(split[0]);
-            }
-        }
-
-        if (TextUtils.isEmpty(cityNameStr) && TextUtils.isEmpty(theCityHasSet)) {
-            if (mShowCityTextView != null) {
-                mShowCityTextView.setText("");
             }
         }
     }

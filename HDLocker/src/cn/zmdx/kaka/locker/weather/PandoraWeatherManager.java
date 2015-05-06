@@ -11,9 +11,7 @@ import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
-import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.weather.entity.SmartWeatherInfo;
-import cn.zmdx.kaka.locker.weather.utils.ParseWeatherJsonUtils;
 import cn.zmdx.kaka.locker.weather.utils.SmartWeatherUtils;
 import cn.zmdx.kaka.locker.weather.utils.XMLParserUtils;
 
@@ -124,21 +122,9 @@ public class PandoraWeatherManager {
     }
 
     private String getCurWeatherURL() {
-        String aimCityName = PandoraConfig.newInstance(mContext).getTheCityHasSet();
-        String cityNameStr = PandoraLocationManager.getInstance(mContext).getCityName();
-        String cityProvince = PandoraLocationManager.getInstance(mContext).getCityProvince();
-        if (!TextUtils.isEmpty(aimCityName)) {
-            String[] split = aimCityName.split(",");
-            String city = split[0];
-            String province = split[1];
-            if (!TextUtils.isEmpty(city) && !TextUtils.isEmpty(province)) {
-                areaId = XMLParserUtils.getAreaId(city, province);
-            }
-        } else if (!TextUtils.isEmpty(cityNameStr) && !TextUtils.isEmpty(cityProvince)) {
-            areaId = XMLParserUtils.getAreaId(cityNameStr, cityProvince);
-        } else {
-            String lastCityName = PandoraConfig.newInstance(mContext).getLastCityName();
-            String cityProvinceName = PandoraConfig.newInstance(mContext).getLastCityProvinceName();
+        String lastCityName = PandoraWeatherManager.getInstance().getLastCity();
+        String cityProvinceName = PandoraWeatherManager.getInstance().getLastProvince();
+        if (!TextUtils.isEmpty(lastCityName) && !TextUtils.isEmpty(cityProvinceName)) {
             areaId = XMLParserUtils.getAreaId(lastCityName, cityProvinceName);
         }
         if (TextUtils.isEmpty(areaId)) {
@@ -147,9 +133,25 @@ public class PandoraWeatherManager {
         weatherUrl = SmartWeatherUtils.getWeatherUrl(areaId);
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("--areaid-->>" + areaId + "\n--weatherUrl-->>" + weatherUrl);
-            HDBLOG.logD("cityNameStr: ---->" + cityNameStr);
-            HDBLOG.logD("aimCityName: ---->" + aimCityName);
+            HDBLOG.logD("cityNameStr: ---->" + lastCityName);
+            HDBLOG.logD("aimCityName: ---->" + cityProvinceName);
         }
         return weatherUrl;
+    }
+
+    public String getLastCity() {
+        String theCityHasSet = PandoraConfig.newInstance(mContext).getTheCityHasSet();
+        if (!TextUtils.isEmpty(theCityHasSet)) {
+            return theCityHasSet.split(",")[0];
+        }
+        return null;
+    }
+
+    public String getLastProvince() {
+        String theCityHasSet = PandoraConfig.newInstance(mContext).getTheCityHasSet();
+        if (!TextUtils.isEmpty(theCityHasSet)) {
+            return theCityHasSet.split(",")[1];
+        }
+        return null;
     }
 }
