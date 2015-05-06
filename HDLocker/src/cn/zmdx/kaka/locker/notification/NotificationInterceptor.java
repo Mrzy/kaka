@@ -59,7 +59,8 @@ public class NotificationInterceptor extends Handler {
 
     protected static final int MSG_CHECK_PERMISSION_RESULT = 7;
 
-    private static final long CHECK_PERMISSION_DURATION = BuildConfig.DEBUG ? 60 * 1000 : 24 * 60 * 60 * 1000;
+    private static final long CHECK_PERMISSION_DURATION = BuildConfig.DEBUG ? 60 * 1000
+            : 24 * 60 * 60 * 1000;
 
     private static NotificationInterceptor INSTANCE;
 
@@ -215,12 +216,15 @@ public class NotificationInterceptor extends Handler {
                     HDBLOG.logD("----返回是否开启通知权限的结果:" + granted);
                 }
                 if (!granted) {
-                    long lastTime = NotificationPreferences.getInstance(mContext).getLastTimeCheckNotificationPermission();
+                    long lastTime = NotificationPreferences.getInstance(mContext)
+                            .getLastTimeCheckNotificationPermission();
                     long cur = System.currentTimeMillis();
                     if (cur - lastTime > CHECK_PERMISSION_DURATION) {
-                        final NotificationInfo info = PandoraNotificationFactory.createGuideOpenNotifyPermissionNotification();
+                        final NotificationInfo info = PandoraNotificationFactory
+                                .createGuideOpenNotifyPermissionNotification();
                         sendCustomNotification(info);
-                        NotificationPreferences.getInstance(mContext).saveLastTimeCheckNotificationPermission(cur);
+                        NotificationPreferences.getInstance(mContext)
+                                .saveLastTimeCheckNotificationPermission(cur);
                     }
                 }
                 break;
@@ -295,8 +299,8 @@ public class NotificationInterceptor extends Handler {
      * @return
      */
     private String getUrl(long lastModified) {
-        return UrlBuilder.getBaseUrl() + "notify!queryNotifyList.action" + "?lastModified="
-                + lastModified;
+        return UrlBuilder.getBaseUrl("notify!queryNotifyList.action" + "?lastModified="
+                + lastModified);
     }
 
     private void handlePullCustomNotificationData() {

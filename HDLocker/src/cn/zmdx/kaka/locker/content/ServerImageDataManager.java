@@ -81,10 +81,7 @@ public class ServerImageDataManager {
     }
 
     public String getUrl(long lastModified) {
-        StringBuilder sb = new StringBuilder(UrlBuilder.getBaseUrl());
-        sb.append("locker!queryDataImgTable.action?");
-        sb.append("lastModified=" + lastModified);
-        return sb.toString();
+        return UrlBuilder.getBaseUrl("locker!queryDataImgTable.action?" + "lastModified=" + lastModified);
     }
 
     public static class ServerImageData extends BaseDataManager {

@@ -159,8 +159,8 @@ public class NewsFactory {
         if (!HDBNetworkState.isWifiNetwork()) {
             limit = 10;
         }
-        return UrlBuilder.getBaseUrl() + "locker!queryDataImgTableNew.action?type=" + type
-                + "&lastModified=" + time + "&flag=" + flag + "&limit=" + limit;
+        return UrlBuilder.getBaseUrl("locker!queryDataImgTableNew.action?type=" + type
+                + "&lastModified=" + time + "&flag=" + flag + "&limit=" + limit);
     }
 
     /**
@@ -289,7 +289,7 @@ public class NewsFactory {
             limit = 10;
         }
         boolean isDebug = BuildConfig.DEBUG ? true : false;
-        return UrlBuilder.getBaseUrl() + "locker!queryWallPaperNew.action?flag=" + flag
-                + "&lastModified=" + time + "&limit=" + limit + "&isDebug=" + isDebug;
+        return UrlBuilder.getBaseUrl("locker!queryWallPaperNew.action?flag=" + flag
+                + "&lastModified=" + time + "&limit=" + limit + "&isDebug=" + isDebug);
     }
 }

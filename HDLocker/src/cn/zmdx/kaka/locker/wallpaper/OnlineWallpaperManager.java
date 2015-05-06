@@ -30,8 +30,6 @@ import com.android.volley.request.JsonObjectRequest;
 @SuppressLint("InflateParams")
 public class OnlineWallpaperManager {
 
-    private static String URL = UrlBuilder.getBaseUrl() + "locker!queryWallPaperNew.action";
-
     public static String ONLINE_WALLPAPER_SDCARD_LOCATION = Environment
             .getExternalStorageDirectory().getPath() + "/.Pandora/onlineWallpaper/background/";
 
@@ -133,8 +131,9 @@ public class OnlineWallpaperManager {
      */
     public void getWallpaperFromServer(final IPullWallpaperListener listener,
             final String lastPullJson, long flag, long lastModified) {
+        final String url = UrlBuilder.getBaseUrl("locker!queryWallPaperNew.action" + getParam(flag, lastModified));
         JsonObjectRequest request = null;
-        request = new JsonObjectRequest(URL + getParam(flag, lastModified), null,
+        request = new JsonObjectRequest(url , null,
                 new Listener<JSONObject>() {
 
                     @Override

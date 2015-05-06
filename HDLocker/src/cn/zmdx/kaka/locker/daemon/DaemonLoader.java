@@ -11,6 +11,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.text.TextUtils;
+import cn.zmdx.kaka.locker.utils.HDBHashUtils;
+import cn.zmdx.kaka.locker.utils.PackageInfoCompat;
+import cn.zmdx.kaka.locker.utils.PackageUtils;
 
 
 public class DaemonLoader extends DaemonBase {
@@ -245,19 +248,19 @@ public class DaemonLoader extends DaemonBase {
     static String getAppHash() {
         if (sAppHash == null) {
             // no randomness allowed here
-//            try {
-//                Context ctx = Utilities.getApplicationContext();
-//                String packageName = ctx.getPackageName();
-//                PackageInfo pi = ctx.getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
-//                String cert = HashUtils.getBytesSHA1(pi.signatures[0].toByteArray());
-//
-//                String hashTarget = packageName + "_" + cert + "_" + pi.versionCode + "_"
-//                        + PackageInfoCompat.getLastUpdateTime(pi);
-//
-//                sAppHash = HashUtils.getStringUTF8SHA1(hashTarget);
-//            } catch (Throwable e) {
-//                sAppHash = "E01CC792-4275-423A-A0CD-2ED6249E872F_" + PackageUtils.getVersionCode();
-//            }
+            try {
+                Context ctx = Utilities.getApplicationContext();
+                String packageName = ctx.getPackageName();
+                PackageInfo pi = ctx.getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+                String cert = HDBHashUtils.getBytesSHA1(pi.signatures[0].toByteArray());
+
+                String hashTarget = packageName + "_" + cert + "_" + pi.versionCode + "_"
+                        + PackageInfoCompat.getLastUpdateTime(pi);
+
+                sAppHash = HDBHashUtils.getStringUTF8SHA1(hashTarget);
+            } catch (Throwable e) {
+                sAppHash = "E01CC792-4275-423A-A0CD-2ED6249E872F_" + PackageUtils.getVersionCode();
+            }
         }
 
         return sAppHash;

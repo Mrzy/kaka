@@ -24,7 +24,7 @@ public class FAQActivity extends ActionBarActivity {
         setContentView(R.layout.activity_faq);
         WebView mWebView = (WebView) findViewById(R.id.faq_webview);
         if (HDBNetworkState.isWifiNetwork()) {
-            mWebView.loadUrl(UrlBuilder.getBaseUrl() + "commonQuestions.html");
+            mWebView.loadUrl("http://pandora.hdlocker.com/pandora/commonQuestions.html");
         } else {
             mWebView.loadUrl("file:///android_asset/commonQuestions.html");
         }

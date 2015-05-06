@@ -49,8 +49,6 @@ import com.android.volley.request.JsonObjectRequest;
 public class NewsDetailLayout extends FrameLayout implements View.OnClickListener, OnTouchListener,
         OnGestureListener {
 
-    private static String URL = UrlBuilder.getBaseUrl() + "locker!addDataImgTableTop.action";
-
     private View mEntireView, mShareViewStub;
 
     private WebView mWebView;
@@ -347,7 +345,8 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
     }
 
     private void toLikeNews() {
-        JsonObjectRequest request = new JsonObjectRequest(URL + "?id=" + mData.getCloudId(), null,
+        String url = UrlBuilder.getBaseUrl("locker!addDataImgTableTop.action?id=" + mData.getCloudId());
+        JsonObjectRequest request = new JsonObjectRequest(url, null,
                 new Listener<JSONObject>() {
 
                     @Override
