@@ -18,9 +18,9 @@ public class DaemonBase {
 
     private static final boolean SHOW_LOG = false;
 
-    protected static String PATH_APP_VERSION_FILE = "APP1.ver"; // versionCode + lastUpdate
-    protected static String PATH_SERVICE_PID_FILE = "VOICE1.pid";
-    protected static String PATH_DAEMON_PID_FILE = "DAEMON1.pid";
+    protected static String PATH_APP_VERSION_FILE = "APP.ver"; // versionCode + lastUpdate
+    protected static String PATH_SERVICE_PID_FILE = "VOICE.pid";
+    protected static String PATH_DAEMON_PID_FILE = "DAEMON.pid";
 
     // --------------------------------------------------------------------------------------------------------------
 

@@ -35,12 +35,12 @@ public class HDApplication extends Application {
         LockSoundManager.init();
 
         Utilities.initEnvironment(instance);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DaemonLoader.startDaemonIfNeeded(true);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                DaemonLoader.startDaemonIfNeeded(true);
+//            }
+//        }).start();
 //        if (!BuildConfig.DEBUG) {
 //            AppUninstall.openUrlWhenUninstall(this, "http://www.mikecrm.com/f.php?t=rlfi3n");
 //        }
