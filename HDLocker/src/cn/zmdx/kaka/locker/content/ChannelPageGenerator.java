@@ -120,6 +120,7 @@ class ChannelPageGenerator {
                 LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);
+        rv.setPadding(0, BaseInfoHelper.dip2px(mContext, 5), 0, 0);
 
         mAdapter = new WallpaperPageAdapter(mContext, mRecyclerView, mWallpaperList);
 
