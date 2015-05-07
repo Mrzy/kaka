@@ -10,8 +10,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -125,7 +128,8 @@ public class NotificationInterceptor extends Handler {
                 }
 
                 if (mListener != null) {
-                    Bundle bundle = sbn.getNotification().extras;
+                    Notification notification = sbn.getNotification();
+                    Bundle bundle = notification.extras;
                     String title = bundle.getString("android.title");
                     String content = bundle.getString("android.text");
                     Bitmap largeIcon = (Bitmap) bundle.getParcelable("android.largeIcon");
@@ -134,7 +138,20 @@ public class NotificationInterceptor extends Handler {
                     // TODO
                     // 有的通知不是用的标准通知接口开发，所有title都为null，针对这种情况，可以自定义通知标题处理，而不是忽略
                     if (TextUtils.isEmpty(title) && TextUtils.isEmpty(content)) {
-                        title = mContext.getString(R.string.new_message_title);
+                        try {
+                            PackageManager packageManager = mContext.getPackageManager();
+                            String appName = packageManager.getApplicationLabel(
+                                    packageManager.getApplicationInfo(sbn.getPackageName(),
+                                            PackageManager.GET_META_DATA)).toString();
+                            title = appName;
+                        } catch (NameNotFoundException e) {
+                            title = "";
+                        }
+                        if (!TextUtils.isEmpty(notification.tickerText)) {
+                            content = notification.tickerText.toString();
+                        } else {
+                            content = mContext.getString(R.string.new_message_title);
+                        }
                     }
 
                     final NotificationInfo ni = new NotificationInfo();
