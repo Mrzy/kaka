@@ -2,6 +2,7 @@
 package cn.zmdx.kaka.locker.weather;
 
 import android.content.Context;
+import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
@@ -109,7 +110,11 @@ public class PandoraLocationManager {
                 return;
             }
             mBdLocation = location;
-            PandoraConfig.newInstance(mContext).saveTheCityHasSet(mBdLocation.getDistrict() + "," + mBdLocation.getProvince());
+            final String district = location.getDistrict();
+            if (TextUtils.isEmpty(district)) {
+                return;
+            }
+            PandoraConfig.newInstance(mContext).saveTheCityHasSet(district + "," + mBdLocation.getProvince());
             PandoraConfig.newInstance(mContext).saveLastCheckLocationTime(
                     System.currentTimeMillis());
             stopRequestLocation();

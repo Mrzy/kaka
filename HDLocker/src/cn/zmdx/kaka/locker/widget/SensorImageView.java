@@ -37,7 +37,7 @@ public class SensorImageView extends ImageView {
 
     public static final int TRANSITION_MODE_STATIC = 3;
 
-    private static final int DEFAULT_TRANSITION_SPEED = 1;
+    private static final float DEFAULT_TRANSITION_SPEED = 1;
 
     private int mCurMode = TRANSITION_MODE_SENSOR;
 
@@ -219,14 +219,8 @@ public class SensorImageView extends ImageView {
             // float y = event.values[1];
             // float z = event.values[2];
 
-            if (x > 2) {
-                mTransSpeed = -(DEFAULT_TRANSITION_SPEED + DEFAULT_TRANSITION_SPEED);
-            } else if (x < -2) {
-                mTransSpeed = DEFAULT_TRANSITION_SPEED + DEFAULT_TRANSITION_SPEED;
-            } else if (x > 1) {
-                mTransSpeed = -DEFAULT_TRANSITION_SPEED;
-            } else if (x < -1) {
-                mTransSpeed = DEFAULT_TRANSITION_SPEED;
+            if (Math.abs(x) > 0.5) {
+                mTransSpeed = -x * DEFAULT_TRANSITION_SPEED;
             } else {
                 mTransSpeed = 0;
             }
@@ -291,9 +285,9 @@ public class SensorImageView extends ImageView {
     /**
      * 每绘制一帧，移动的偏移量，单位px
      */
-    private int mTransSpeed;
+    private float mTransSpeed;
 
-    private int mCurTransX = 0;
+    private float mCurTransX = 0;
 
     // 确保将背景drawable调整到合适大小后，其宽度比view容器宽，这样才可以做平移的动画
     private boolean ensureEnoughWidth() {
