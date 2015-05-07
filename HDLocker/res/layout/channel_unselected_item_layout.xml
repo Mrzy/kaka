@@ -2,37 +2,46 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:layout_marginBottom="10dp"
-    android:id="@+id/bg"
-    android:padding="10dp" >
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/bg"
+        android:scaleType="fitXY"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical" >
+        android:layout_gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/chName"
-            android:textSize="30dp"
-            android:textColor="#ffffff"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="30dp" />
 
         <TextView
             android:id="@+id/enName"
-            android:textColor="#ffffff"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/checkChannelBtn"
         android:layout_width="75dp"
         android:layout_height="35dp"
-        android:textColor="#ffffff"
-        android:textSize="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="right"
         android:gravity="center"
-        android:layout_gravity="right" />
+        android:textColor="#ffffff"
+        android:textSize="15dp" />
+
 </FrameLayout>

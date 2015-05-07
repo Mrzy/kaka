@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.content.PandoraBoxManager;
+import cn.zmdx.kaka.locker.content.PicassoHelper;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 public class ChannelBoxView extends FrameLayout {
@@ -44,7 +45,7 @@ public class ChannelBoxView extends FrameLayout {
 
     private void init() {
         mSelectedChannels = mChannelManager.getSelectedChannels();
-        //由于壁纸为必选，所以去掉壁纸
+        // 由于壁纸为必选，所以去掉壁纸
         mSelectedChannels.remove(0);
 
         mUnSelectedChannels = mChannelManager.getAllChannels();
@@ -59,20 +60,22 @@ public class ChannelBoxView extends FrameLayout {
         mListAdapter = new AllChannelAdapter();
         mAllChannelListView.setAdapter(mListAdapter);
 
-//        mSelectedChannelGrid.setOnItemClickListener(new OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mSelectedChannels.remove(position);
-//                for (ChannelInfo info : mUnSelectedChannels) {
-//                    if (info.getChannelId() == id) {
-//                        info.setSelected(false);
-//                        break;
-//                    }
-//                }
-//                mGridAdapter.notifyDataSetChanged();
-//                mListAdapter.notifyDataSetChanged();
-//            }
-//        });
+        // mSelectedChannelGrid.setOnItemClickListener(new OnItemClickListener()
+        // {
+        // @Override
+        // public void onItemClick(AdapterView<?> parent, View view, int
+        // position, long id) {
+        // mSelectedChannels.remove(position);
+        // for (ChannelInfo info : mUnSelectedChannels) {
+        // if (info.getChannelId() == id) {
+        // info.setSelected(false);
+        // break;
+        // }
+        // }
+        // mGridAdapter.notifyDataSetChanged();
+        // mListAdapter.notifyDataSetChanged();
+        // }
+        // });
 
         mBackBtn = (ImageView) view.findViewById(R.id.backBtn);
         mBackBtn.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +128,7 @@ public class ChannelBoxView extends FrameLayout {
                 convertView.setTag(tag);
             } else {
                 Object[] tag = (Object[]) convertView.getTag();
+                tag[1] = position;
                 holder = (ViewHolder1) tag[0];
             }
             holder.channelName.setText(mSelectedChannels.get(position).getChannelName());
@@ -172,14 +176,14 @@ public class ChannelBoxView extends FrameLayout {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
+            final ViewHolder holder;
             if (convertView == null) {
                 holder = new ViewHolder();
                 convertView = LayoutInflater.from(mContext).inflate(
                         R.layout.channel_unselected_item_layout, null);
                 holder.chName = (TextView) convertView.findViewById(R.id.chName);
                 holder.enName = (TextView) convertView.findViewById(R.id.enName);
-                holder.bg = convertView.findViewById(R.id.bg);
+                holder.bg = (ImageView) convertView.findViewById(R.id.bg);
                 holder.checkBtn = (TextView) convertView.findViewById(R.id.checkChannelBtn);
                 convertView.setTag(holder);
             } else {
@@ -188,7 +192,8 @@ public class ChannelBoxView extends FrameLayout {
             final ChannelInfo ci = mUnSelectedChannels.get(position);
             holder.chName.setText(ci.getChannelName());
             holder.enName.setText(ci.getChannelEnName());
-            holder.bg.setBackgroundResource(ci.getChannelImgResId());
+            PicassoHelper.getPicasso(getContext()).load(ci.getChannelImgResId()).into(holder.bg);
+//            holder.bg.setBackgroundResource(ci.getChannelImgResId());
             if (ci.isSelected()) {
                 holder.checkBtn.setBackgroundResource(R.drawable.channel_feed_btn_bg);
                 holder.checkBtn.setText("取消");
@@ -214,7 +219,7 @@ public class ChannelBoxView extends FrameLayout {
         }
 
         class ViewHolder {
-            private View bg;
+            private ImageView bg;
 
             private TextView chName;
 
