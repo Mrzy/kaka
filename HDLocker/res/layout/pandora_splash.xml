@@ -61,13 +61,24 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
-            android:paddingLeft="20dp" >
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1" />
 
             <ImageView
-                android:layout_width="160dp"
-                android:layout_height="40dp"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
                 android:contentDescription="@string/contentDescription"
-                android:src="@drawable/icon_sougou" />
+                android:src="@drawable/icon_first" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1" />
         </LinearLayout>
     </RelativeLayout>
 
