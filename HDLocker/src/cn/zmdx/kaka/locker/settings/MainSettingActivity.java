@@ -107,15 +107,15 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
     }
 
     public void handleToActivity() {
-//        String appMetaData = PandoraUtils.getAppMetaData(this, "UMENG_CHANNEL");
-//        if ("sougou".equals(appMetaData)) {
-//            gotoSplash();
-//        } else {
+        String appMetaData = PandoraUtils.getAppMetaData(this, "UMENG_CHANNEL");
+        if ("sougou".equals(appMetaData)) {
+            gotoSplash();
+        } else {
             isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
             if (isFirstIn) {
                 goInitSetting();
             }
-//        }
+        }
 
     }
 
