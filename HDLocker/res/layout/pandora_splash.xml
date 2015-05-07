@@ -63,22 +63,31 @@
             android:layout_marginBottom="20dp"
             android:orientation="horizontal" >
 
-            <View
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:contentDescription="@string/contentDescription"
-                android:src="@drawable/icon_first" />
+                android:orientation="vertical" >
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1" />
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/contentDescription"
+                    android:src="@drawable/icon_first" />
+
+                <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:shadowColor="#30555555"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="1"
+                    android:text="360独家首发"
+                    android:textColor="#555555"
+                    android:textSize="18dp" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
