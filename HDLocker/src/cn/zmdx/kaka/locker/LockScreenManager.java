@@ -592,16 +592,13 @@ public class LockScreenManager {
         }
     }
 
-    private Bitmap mWallpaperBg;
-
     public void initWallpaper() {
         mCurTheme = ThemeManager.getCurrentTheme();
         final Drawable curWallpaper = mCurTheme.getCurDrawable();
-        mWallpaperBg = ImageUtils.drawable2Bitmap(curWallpaper, true);
         LockerUtils.renderScreenLockerWallpaper(
-                ((ImageView) mEntireView.findViewById(R.id.lockerBg)), mWallpaperBg, true);
+                ((ImageView) mEntireView.findViewById(R.id.lockerBg)), curWallpaper, false);
 
-        LockerUtils.renderScreenLockerBlurEffect(mBlurImageView, mWallpaperBg);
+        LockerUtils.renderScreenLockerBlurEffect(mBlurImageView, ImageUtils.drawable2Bitmap(curWallpaper, true));
     }
 
     /**

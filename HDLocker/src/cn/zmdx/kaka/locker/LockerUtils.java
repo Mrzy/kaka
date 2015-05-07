@@ -1,13 +1,10 @@
 
 package cn.zmdx.kaka.locker;
 
-import com.android.volley.misc.ViewCompat;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Drawable.Callback;
 import android.graphics.drawable.TransitionDrawable;
 import android.text.TextUtils;
 import android.view.View;
@@ -26,7 +23,7 @@ public class LockerUtils {
         sContext = HDApplication.getContext();
     }
 
-    static Bitmap renderScreenLockerWallpaper(ImageView view, String fileName) {
+    static Drawable renderScreenLockerWallpaper(ImageView view, String fileName) {
         if (TextUtils.isEmpty(fileName)) {
             if (BuildConfig.DEBUG) {
                 throw new NullPointerException("fileName must not be null");
@@ -45,27 +42,27 @@ public class LockerUtils {
             }
             return null;
         }
-        return renderScreenLockerWallpaper(view, bitmap, true);
+        return renderScreenLockerWallpaper(view, ImageUtils.bitmap2Drawable(sContext, bitmap), true);
     }
 
-    static Bitmap renderScreenLockerWallpaper(ImageView view, final Bitmap resBmp, boolean withAnimator) {
+    static Drawable renderScreenLockerWallpaper(ImageView view, final Drawable resDrawable, boolean withAnimator) {
         final ImageView iv = (ImageView) view;
         Drawable drawable = iv.getDrawable();
         if (drawable != null && withAnimator) {
-            Drawable[] drawables = new Drawable[]{drawable, ImageUtils.bitmap2Drawable(sContext, resBmp)};
+            Drawable[] drawables = new Drawable[]{drawable, resDrawable};
             TransitionDrawable td = new TransitionDrawable(drawables);
             iv.setImageDrawable(td);
             td.startTransition(300);
             HDBThreadUtils.postOnUiDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    iv.setImageBitmap(resBmp);
+                    iv.setImageDrawable(resDrawable);
                 }
             }, 300);
         } else {
-            iv.setImageBitmap(resBmp);
+            iv.setImageDrawable(resDrawable);
         }
-        return resBmp;
+        return resDrawable;
     }
 
     public static Bitmap getViewBitmap(View v) {
@@ -78,6 +75,10 @@ public class LockerUtils {
     }
 
     static void renderScreenLockerBlurEffect(ImageView mBlurImageView, Bitmap bmp) {
+        if (sBlurBmp != null && !sBlurBmp.isRecycled()) {
+            sBlurBmp.recycle();
+            sBlurBmp = null;
+        }
         sBlurBmp = BlurUtils.doFastBlur(sContext, bmp, mBlurImageView, 40);
     }
 
