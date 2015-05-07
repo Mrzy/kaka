@@ -592,7 +592,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         closeDetailPage(false);
 
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
 
         // PandoraBoxManager.newInstance(mContext).resetDefaultPage();
         if (mBackBtn != null) {
@@ -777,7 +777,6 @@ public class PandoraBoxManager implements View.OnClickListener {
                 notifyDataSetChanged();
             }
         }
-
     }
 
     private static class NewsPagerAdapter extends PagerAdapter {

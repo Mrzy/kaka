@@ -7,10 +7,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -62,20 +59,20 @@ public class ChannelBoxView extends FrameLayout {
         mListAdapter = new AllChannelAdapter();
         mAllChannelListView.setAdapter(mListAdapter);
 
-        mSelectedChannelGrid.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedChannels.remove(position);
-                for (ChannelInfo info : mUnSelectedChannels) {
-                    if (info.getChannelId() == id) {
-                        info.setSelected(false);
-                        break;
-                    }
-                }
-                mGridAdapter.notifyDataSetChanged();
-                mListAdapter.notifyDataSetChanged();
-            }
-        });
+//        mSelectedChannelGrid.setOnItemClickListener(new OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                mSelectedChannels.remove(position);
+//                for (ChannelInfo info : mUnSelectedChannels) {
+//                    if (info.getChannelId() == id) {
+//                        info.setSelected(false);
+//                        break;
+//                    }
+//                }
+//                mGridAdapter.notifyDataSetChanged();
+//                mListAdapter.notifyDataSetChanged();
+//            }
+//        });
 
         mBackBtn = (ImageView) view.findViewById(R.id.backBtn);
         mBackBtn.setOnClickListener(new View.OnClickListener() {
@@ -122,11 +119,32 @@ public class ChannelBoxView extends FrameLayout {
                 convertView = LayoutInflater.from(mContext).inflate(
                         R.layout.channel_selected_grid_item_layout, null);
                 holder.channelName = (TextView) convertView.findViewById(R.id.channelName);
-                convertView.setTag(holder);
+                Object[] tag = new Object[2];
+                tag[0] = holder;
+                tag[1] = position;
+                convertView.setTag(tag);
             } else {
-                holder = (ViewHolder1) convertView.getTag();
+                Object[] tag = (Object[]) convertView.getTag();
+                holder = (ViewHolder1) tag[0];
             }
             holder.channelName.setText(mSelectedChannels.get(position).getChannelName());
+            holder.channelName.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Object[] tag = (Object[]) v.getTag();
+                    int pos = (Integer) tag[1];
+                    for (ChannelInfo info : mUnSelectedChannels) {
+                        if (info.getChannelId() == getItemId(pos)) {
+                            info.setSelected(false);
+                            break;
+                        }
+                    }
+                    mSelectedChannels.remove(pos);
+                    mGridAdapter.notifyDataSetChanged();
+                    mListAdapter.notifyDataSetChanged();
+                }
+            });
             return convertView;
         }
 
