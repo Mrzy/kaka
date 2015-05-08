@@ -317,10 +317,13 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
     }
 
     private void closeDetailView() {
-        if (!mPreBitmap.isRecycled()) {
-            mPreBitmap.recycle();
-            mPreBitmap = null;
+        if (null != mPreBitmap) {
+            if (!mPreBitmap.isRecycled()) {
+                mPreBitmap.recycle();
+                mPreBitmap = null;
+            }
         }
+
         if (null == mBoxManager) {
             if (null != mListener) {
                 mListener.onBack();
