@@ -198,9 +198,9 @@ public class SensorImageView extends ImageView {
     }
 
     private Sensor getRightSensor(SensorManager sm) {
-        Sensor sensor = sm.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        Sensor sensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (sensor == null) {
-            sensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            sensor = sm.getDefaultSensor(Sensor.TYPE_GRAVITY);
         }
         return sensor;
     }
