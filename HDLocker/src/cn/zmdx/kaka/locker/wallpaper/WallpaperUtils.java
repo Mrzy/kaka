@@ -23,6 +23,7 @@ import cn.zmdx.kaka.locker.network.DownloadRequest;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.HDBConfig;
 import cn.zmdx.kaka.locker.utils.HDBHashUtils;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
@@ -226,21 +227,32 @@ public class WallpaperUtils {
                                 decodeOptions.inPreferredConfig = Bitmap.Config.RGB_565;
                                 decodeOptions.inSampleSize = computeSampleSize(outOptions,
                                         reqHeight);
+                                try {
+                                    final Bitmap bitmap = BitmapFactory.decodeFile(response,
+                                            decodeOptions);
+                                    HDBThreadUtils.runOnUi(new Runnable() {
 
-                                final Bitmap bitmap = BitmapFactory.decodeFile(response,
-                                        decodeOptions);
-
-                                HDBThreadUtils.runOnUi(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        if (null == bitmap) {
-                                            listener.onFail();
-                                        } else {
-                                            listener.onSuccess(bitmap);
+                                        @Override
+                                        public void run() {
+                                            if (null == bitmap) {
+                                                listener.onFail();
+                                            } else {
+                                                listener.onSuccess(bitmap);
+                                            }
                                         }
+                                    });
+                                } catch (OutOfMemoryError e) {
+                                    if (BuildConfig.DEBUG) {
+                                        e.printStackTrace();
                                     }
-                                });
+                                    HDBThreadUtils.runOnUi(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            listener.onFail();
+                                        }
+                                    });
+                                }
                             }
                         });
 

@@ -108,13 +108,7 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
 
             @Override
             public void onClick(View v) {
-                if (null == mBoxManager) {
-                    if (null != mListener) {
-                        mListener.onBack();
-                    }
-                } else {
-                    mBoxManager.closeDetailPage(true);
-                }
+                closeDetailView();
             }
         });
         mApplyButton = (BaseButton) mView.findViewById(R.id.wallpaper_apply);
@@ -292,6 +286,7 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
                         }
                         Toast.makeText(mContext, "下载壁纸失败，请重试", Toast.LENGTH_SHORT).show();
                         showView(false);
+                        closeDetailView();
                     }
 
                     @Override
@@ -318,6 +313,20 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
                 disableApplyDesktop();
             }
             isApplyDesktop = isChecked;
+        }
+    }
+
+    private void closeDetailView() {
+        if (!mPreBitmap.isRecycled()) {
+            mPreBitmap.recycle();
+            mPreBitmap = null;
+        }
+        if (null == mBoxManager) {
+            if (null != mListener) {
+                mListener.onBack();
+            }
+        } else {
+            mBoxManager.closeDetailPage(true);
         }
     }
 
