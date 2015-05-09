@@ -47,4 +47,11 @@ public class PicassoHelper {
             sCache.clear();
         }
     }
+
+    public static void shutdown() {
+        if (sPicasso != null) {
+            sPicasso.shutdown();
+            sPicasso = null;
+        }
+    }
 }

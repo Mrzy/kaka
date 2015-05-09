@@ -165,7 +165,17 @@ public class ThemeManager {
 
     public static void addBitmapToCache(Bitmap bitmap) {
         invalidateBitmapCache();
-        // mCurThemeCache.clear();
+        // recycle old cached bitmap object
+        final SoftReference<Bitmap> oldSoftRef = mCurThemeCache.get(CURRENT_THEME_CACHE_KEY);
+        if (oldSoftRef != null && oldSoftRef.get() != null) {
+            Bitmap oldBmp = oldSoftRef.get();
+            if (!oldBmp.isRecycled()) {
+                oldBmp.recycle();
+                oldBmp = null;
+            }
+        }
+
+        // invalidate bitmap cache
         mCurThemeCache.put(CURRENT_THEME_CACHE_KEY, new SoftReference<Bitmap>(bitmap));
     }
 

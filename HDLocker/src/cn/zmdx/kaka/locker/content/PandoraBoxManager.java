@@ -49,6 +49,7 @@ import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
 import cn.zmdx.kaka.locker.content.view.HeaderCircleButton;
 import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
+import cn.zmdx.kaka.locker.settings.MainSettingActivity;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
@@ -78,6 +79,8 @@ public class PandoraBoxManager implements View.OnClickListener {
     private FrameLayout mDetailLayout;
 
     private CircleSpiritButton mBackBtn;
+
+    private View mSettingsBtn;
 
     private HeaderCircleButton mCircle;
 
@@ -343,6 +346,9 @@ public class PandoraBoxManager implements View.OnClickListener {
         } else {
             redPoint.setVisibility(View.VISIBLE);
         }
+
+        mSettingsBtn = mEntireView.findViewById(R.id.settingBtn);
+        mSettingsBtn.setOnClickListener(this);
     }
 
     public void notifyDataSetChanged() {
@@ -837,6 +843,22 @@ public class PandoraBoxManager implements View.OnClickListener {
         if (v == mBackBtn) {
             LockScreenManager.getInstance().collapseNewsPanel();
             BottomDockUmengEventManager.statisticalNewsPanelBackClicked();
+        } else if (v == mSettingsBtn) {
+            LockScreenManager.getInstance().setRunnableAfterUnLock(new Runnable() {
+                @Override
+                public void run() {
+                    Intent in = new Intent (mContext, MainSettingActivity.class);
+                    in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(in);
+                }
+            });
+            LockScreenManager.getInstance().collapseNewsPanel();
+            HDBThreadUtils.postOnUiDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    LockScreenManager.getInstance().unLock();
+                }
+            }, 500);
         }
     }
 
