@@ -173,6 +173,7 @@ public class ThemeManager {
                 oldBmp.recycle();
                 oldBmp = null;
             }
+            mCurThemeCache.remove(CURRENT_THEME_CACHE_KEY);
         }
 
         // invalidate bitmap cache

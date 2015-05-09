@@ -140,7 +140,9 @@ public class PandoraService extends Service {
         super.onDestroy();
         unRegisterBroadcastReceiver();
         stopForeground(true);
-        startService(new Intent(this, PandoraService.class));
+        if (PandoraConfig.newInstance(this).isPandolaLockerOn()) {
+            startService(new Intent(this, PandoraService.class));
+        }
     }
 
     private void registerBroadcastReceiver() {

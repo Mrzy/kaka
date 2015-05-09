@@ -2,6 +2,7 @@
 package cn.zmdx.kaka.locker.settings.config;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import cn.zmdx.kaka.locker.BuildConfig;
@@ -9,6 +10,7 @@ import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.layout.TimeLayoutManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.service.PandoraService;
+import cn.zmdx.kaka.locker.service.PandoraServiceManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 
 public class PandoraConfig {
@@ -164,6 +166,11 @@ public class PandoraConfig {
         Editor editor = mSp.edit();
         editor.putBoolean(PANDORA_LOCKER_SP_NAME, isEnable);
         editor.commit();
+        if (isEnable) {
+            PandoraServiceManager.startServiceIfNeeded(mContext);
+        } else {
+            PandoraServiceManager.stopService(mContext);
+        }
     }
 
     public void saveUnlockType(int type) {

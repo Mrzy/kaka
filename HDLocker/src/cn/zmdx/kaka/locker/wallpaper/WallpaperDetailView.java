@@ -123,7 +123,7 @@ public class WallpaperDetailView extends LinearLayout implements OnCheckedChange
                 saveOnlineWallpaperState(md5Url);
                 ThemeManager.addBitmapToCache(mPreBitmap);
                 saveBitmapToFile(md5Url);
-                if (null == mBoxManager) {
+                if (null != mBoxManager) {
                     UmengCustomEventManager.statisticalLockScreenWallpaperDetailApplyTimes();
                 }
 

@@ -23,6 +23,7 @@ import android.service.notification.StatusBarNotification;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import cn.zmdx.kaka.locker.BuildConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
 @SuppressLint("NewApi")
@@ -271,6 +272,12 @@ public final class PandoraNotificationService extends NotificationListenerServic
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+        if (!PandoraConfig.newInstance(this).isPandolaLockerOn()) {
+            if (BuildConfig.DEBUG) {
+                HDBLOG.logD("锁屏未开启，中断处理收到的通知消息");
+            }
+            return;
+        }
         NotificationInterceptor interceptor = NotificationInterceptor.getInstance(this);
         Message msg = interceptor.obtainMessage();
         msg.what = NotificationInterceptor.MSG_NOTIFICATION_POST;
