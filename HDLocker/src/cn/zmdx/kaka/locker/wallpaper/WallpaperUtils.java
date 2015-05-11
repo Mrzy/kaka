@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import android.util.SparseIntArray;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
+import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.RequestManager;
 import cn.zmdx.kaka.locker.network.DownloadRequest;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -381,6 +382,7 @@ public class WallpaperUtils {
         OnlineWallpaperManager.getInstance().saveThemeId(HDApplication.getContext(),
                 ThemeManager.THEME_ID_ONLINE);
         ThemeManager.addBitmapToCache(bitmap);
+        LockScreenManager.getInstance().initWallpaper();
         OnlineWallpaperManager.getInstance().saveCurrentWallpaperFileName(
                 HDApplication.getContext(), md5ImageUrl);
         PandoraConfig.newInstance(HDApplication.getContext()).saveOnlineWallPaperDesc(md5ImageUrl,
