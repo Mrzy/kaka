@@ -52,6 +52,7 @@ public class KeyguardLockerManager {
                     }
                 }, true);
         lockPatternView.setGravity(Gravity.CENTER);
+        lockPatternView.setShouldPath(PandoraConfig.newInstance(mContext).isHiddenLineOn());
         return lockPatternView;
     }
 

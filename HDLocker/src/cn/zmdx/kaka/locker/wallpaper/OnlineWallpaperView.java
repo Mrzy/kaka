@@ -120,7 +120,10 @@ public class OnlineWallpaperView extends LinearLayout implements IPullWallpaperL
         }
         mList.addAll(list);
         Collections.sort(mList, WallpaperUtils.comparator);
-        mLastModified = mList.get(mList.size() - 1).getPublishDATE();
+        if (mList.size() > 0) {
+            mLastModified = mList.get(mList.size() - 1).getPublishDATE();
+        }
+
         mAdapter.notifyDataSetChanged();
         if (!isLoadMore) {
             mRecyclerView.scrollToPosition(0);

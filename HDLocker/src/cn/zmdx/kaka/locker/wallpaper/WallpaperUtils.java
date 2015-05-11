@@ -324,7 +324,7 @@ public class WallpaperUtils {
 
                         @Override
                         public void onSuccecc(List<ServerOnlineWallpaper> list) {
-                            if (null == list) {
+                            if (null == list || list.size() == 0) {
                                 return;
                             }
                             Collections.sort(list, WallpaperUtils.comparator);

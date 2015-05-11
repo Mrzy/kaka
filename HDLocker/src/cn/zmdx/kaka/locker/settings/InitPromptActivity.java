@@ -166,7 +166,7 @@ public class InitPromptActivity extends Activity {
     private void translationAnimator(View view) {
         ObjectAnimator animator2 = ObjectAnimator.ofFloat(view,
                 "translationX", BaseInfoHelper.getRealWidth(this), 0);
-        animator2.setDuration(500);
+        animator2.setDuration(300);
         animator2.start();
     }
 

@@ -35,6 +35,8 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
 
     private LinearLayout mNotifyManager;
 
+    private LinearLayout mNotifyBlur;
+
     private Context mContext;
 
     private PandoraConfig mPandoraConfig;
@@ -75,12 +77,23 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
 
         mNotifyManager = (LinearLayout) mEntireView.findViewById(R.id.setting_notify_manage_item);
         mNotifyManager.setOnClickListener(this);
+
+        mNotifyBlur = (LinearLayout) mEntireView.findViewById(R.id.notify_item_blur);
     }
 
     private void initSwitchButtonState() {
         mOpenNotificationRemindSButton.setChecked(isNotificationRemindOn());
         mHideNotifyContentSButton.setChecked(isHideNotifyContent());
         mLightScreenSButton.setChecked(isLightScreenOn());
+        showLayoutEnable(mOpenNotificationRemindSButton.isChecked());
+    }
+
+    private void showLayoutEnable(boolean isChecked) {
+        if (isChecked) {
+            mNotifyBlur.setVisibility(View.GONE);
+        } else {
+            mNotifyBlur.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -118,6 +131,7 @@ public class NotifyFragment extends Fragment implements OnClickListener, OnCheck
                 UmengCustomEventManager.statisticalCloseNotificationRemindTimes();
                 disableNotificationRemind();
             }
+            showLayoutEnable(isChecked);
         } else if (buttonView == mHideNotifyContentSButton) {
             if (isChecked) {
                 enableHideNotifyContent();

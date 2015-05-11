@@ -114,9 +114,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
     private int tabPressTextSize = 17;
 
-    private int tabTextColor = 0xFFa1a1a1;
+    private int tabTextColor = getResources().getColor(R.color.setting_text_grey_color);
 
-    private int tabPressTextColor = 0xFF555555;
+    private int tabPressTextColor = getResources().getColor(R.color.setting_text_normal_color);
 
     private Typeface tabTypeface = null;
 
@@ -205,8 +205,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 R.styleable.PagerSlidingTabStrip_pstsDividerPadding, dividerPadding);
         tabPadding = a.getDimensionPixelSize(
                 R.styleable.PagerSlidingTabStrip_pstsTabPaddingLeftRight, tabPadding);
-        mPaddingRight = a.getDimensionPixelSize(
-                R.styleable.PagerSlidingTabStrip_pstsPaddingRight, 45);
+        mPaddingRight = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsPaddingRight,
+                45);
         tabBackgroundResId = a.getResourceId(R.styleable.PagerSlidingTabStrip_pstsTabBackground,
                 tabBackgroundResId);
         shouldExpand = a
@@ -503,6 +503,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     private int mPaddingRight;
+
     /**
      * 设置整个Tab条的右padding
      * 

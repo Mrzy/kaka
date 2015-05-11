@@ -36,7 +36,7 @@
     <dimen name="pandora_number_lock_translation_x_displacement">4dp</dimen>
     <dimen name="init_prompt_layout_margin_left">5dp</dimen>
     <!--  -->
-    <dimen name="setting_item_height">50dp</dimen>
+    <dimen name="setting_item_height">60dp</dimen>
     <dimen name="setting_sub_item_height">35dp</dimen>
     <dimen name="setting_password_lock_pattern_image_padding">40dp</dimen>
 

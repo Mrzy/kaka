@@ -66,10 +66,10 @@
     <string name="init_setting_V6_close_systemlocker_prompt">潘多拉锁屏已经经过测试，不会引起您的设备以及设备上应用的问题</string>
     <string name="init_setting_V6_allow_floating_window_title">开启显示悬浮窗</string>
     <string name="init_setting_V6_allow_floating_window_prompt">开启悬浮窗是为了防止按Home键跳出，潘多拉锁屏不会往您的桌面添加任何悬浮窗</string>
-    <string name="init_setting_V6_trust_title">设置信任列表&amp;自动启动</string>
+    <string name="init_setting_V6_trust_title">设置信任&amp;自动启动</string>
     <string name="init_setting_V6_trust_prompt_one">1.进入『授权管理』</string>
     <string name="init_setting_V6_trust_prompt_two">2.进入『自启动管理』</string>
-    <string name="init_setting_V6_trust_prompt_three">3.开启『潘多拉锁屏』开关</string>
+    <string name="init_setting_V6_trust_prompt_three">开启『潘多拉锁屏』开关</string>
     <string name="init_setting_V6_trust_prompt">潘多拉锁屏需要能够在您手机开机时自动启动，只需要一次设置，以后就不需要麻烦啦</string>
     <string name="init_setting_V6_read_notification_title">请勾选『潘多拉锁屏』的读取通知权限</string>
     <string name="init_setting_V6_read_notification_prompt">潘多拉锁屏严格保护您的隐私，只在本机使用这些权限，用以显示通知</string>
@@ -137,12 +137,14 @@
     
     <string name="pandora_setting_general_pandoralocker">开启潘多拉锁屏</string>
     <string name="pandora_setting_general_close_system_lock">关闭系统锁屏</string>
-    <string name="pandora_setting_general_open_lock_sound">开启锁屏声音</string>
+    <string name="pandora_setting_general_open_lock_sound">解锁音效</string>
     <string name="pandora_setting_general_show_notify">显示通知栏</string>
     <string name="pandora_setting_general_download_image_with_wifi">仅在Wifi下下载图片</string>
     <string name="pandora_setting_general_xiaomi_setting">小米用户专用设置</string>
-    <string name="pandora_setting_general_allow_floating_window">允许显示悬浮窗</string>
-    <string name="pandora_setting_general_trust">信任程序和允许自动启动</string>
+    <string name="pandora_setting_general_allow_floating_window">打开[显示悬浮窗]</string>
+    <string name="pandora_setting_general_allow_floating_window_detail">设置后才能正常使用潘多拉锁屏</string>
+    <string name="pandora_setting_general_trust">打开[信任&amp;自动启动]</string>
+    <string name="pandora_setting_general_trust_detail">设置后才能正常使用潘多拉锁屏</string>
     <string name="pandora_setting_general_faq">常见问题</string>
     <string name="pandora_setting_general_feedback">意见反馈</string>
     <string name="pandora_setting_general_checkout_new_version">检查新版本</string>
@@ -152,9 +154,10 @@
     <string name="pandora_setting_general_evaluation_bad_review">差评</string>
     
     <string name="pandora_setting_notify_open_permission">打开通知权限</string>
-    <string name="pandora_setting_notify_open_notification">开启通知提醒</string>
-    <string name="pandora_setting_notify_hide_content">隐藏通知内容</string>
-    <string name="pandora_setting_notify_manage">通知管理</string>
+    <string name="pandora_setting_notify_open_notification">开启消息通知</string>
+    <string name="pandora_setting_notify_hide_content">隐私保护</string>
+    <string name="pandora_setting_notify_hide_content_detail">只显示消息条目，不显示内容</string>
+    <string name="pandora_setting_notify_manage">选择需要显示的通知</string>
     <string name="pandora_setting_notify_manage_chosen">已选</string>
     
     <string name="pandora_setting_password_none">无密码</string>
@@ -215,7 +218,8 @@
     <string name="pandora_setting_general_choose_city">选择所在城市</string>
     <string name="pandora_setting_password_delay_lockscreen">开启延时锁定屏幕</string>
 
-    <string name="pandora_setting_notify_light_screen">收到消息点亮屏幕</string>
+    <string name="pandora_setting_notify_light_screen">亮屏通知</string>
+    <string name="pandora_setting_notify_light_screen_detail">收到消息时自动亮屏</string>
     <string name="pandora_setting_wallpaper_to_desktop">同时应用壁纸到桌面</string>
 
     <string name="pandora_setting_general_news_item">阅读选项</string>
@@ -241,7 +245,7 @@
     
     <string name="pandora_setting_wallpaper_layout_prompt">锁屏布局</string>
 
-    <string name="pandora_setting_password_hidden_line">隐藏手势密码轨迹</string>
+    <string name="pandora_setting_password_hidden_line">隐藏图案轨迹</string>
     
     <string name="pandora_setting_password_reset">修改密码</string>
 </resources>

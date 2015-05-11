@@ -48,7 +48,8 @@ public class WifiImageView extends ImageView {
                         .getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                 if (null != parcelableExtra) {
                     NetworkInfo networkInfo = (NetworkInfo) parcelableExtra;
-                    if (networkInfo.isAvailable()) {
+                    if (networkInfo != null && networkInfo.isAvailable()
+                            && networkInfo.isConnected()) {
                         setVisibility(View.VISIBLE);
                     } else {
                         setVisibility(View.GONE);

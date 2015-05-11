@@ -36,9 +36,10 @@ public class NotifyFilterManager {
                 // if (list.size() <= MAX_NOTIFY_FILTER_COUNT) {
                 NotifyFilterEntity interceptEntity = new NotifyFilterEntity();
                 Drawable icon = packageManager.getApplicationIcon(pkgName);
-                String appName = packageManager.getApplicationLabel(
-                        packageManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA))
-                        .toString();
+                String appName = packageManager
+                        .getApplicationLabel(
+                                packageManager.getApplicationInfo(pkgName,
+                                        PackageManager.GET_META_DATA)).toString().trim();
                 interceptEntity.setNotifyCHName(appName);
                 interceptEntity.setNotifyUSName(NotifyFilterUtil.getChinesePinyinStr(appName));
                 interceptEntity.setPkgName(pkgName);
@@ -69,12 +70,12 @@ public class NotifyFilterManager {
                 PackageManager.GET_INTENT_FILTERS);
         for (ResolveInfo reInfo : resolveInfos) {
             String pkgName = reInfo.activityInfo.packageName;
-            String appLabel = (String) reInfo.loadLabel(pm);
+            String appLabel = reInfo.loadLabel(pm).toString().trim();
             Drawable icon = reInfo.loadIcon(pm);
             NotifyFilterEntity myAppInfo = new NotifyFilterEntity();
             myAppInfo.setNotifyCHName(appLabel);
-            String usName = NotifyFilterUtil.getChinesePinyinStr(appLabel);
-            if (usName.length() > 0 && Character.isDigit(usName.charAt(0))) {
+            String usName = NotifyFilterUtil.getChinesePinyinStr(appLabel).trim();
+            if (usName.length() > 0 && !Character.isLetter(usName.charAt(0))) {
                 usName = APP_NUMBER_TASK_MARK + usName;
             }
             myAppInfo.setNotifyUSName(usName);
@@ -107,7 +108,7 @@ public class NotifyFilterManager {
                     if (resolveInfo != null) {
                         if (resolveInfo.getIconResource() != 0) {
                             String labelString = resolveInfo
-                                    .loadLabel(mContext.getPackageManager()).toString();
+                                    .loadLabel(mContext.getPackageManager()).toString().trim();
                             recentEntity.setNotifyCHName(labelString);
                             recentEntity.setNotifyIcon(resolveInfo.loadIcon(mContext
                                     .getPackageManager()));

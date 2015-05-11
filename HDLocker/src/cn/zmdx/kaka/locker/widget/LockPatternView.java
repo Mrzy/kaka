@@ -45,7 +45,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.pattern.LockPatternManager;
-import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 
 /**
  * Displays and detects the user's unlock attempt, which is a drag of a finger
@@ -121,7 +120,11 @@ public class LockPatternView extends View {
 
     private boolean mInStealthMode = false;
 
-    private boolean isShouldPath;
+    private boolean isShouldPath = false;
+    
+    public void setShouldPath(boolean isShouldPath) {
+        this.isShouldPath = isShouldPath;
+    }
 
     private boolean mEnableHapticFeedback = true;
 
@@ -323,8 +326,6 @@ public class LockPatternView extends View {
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
         
-        isShouldPath = PandoraConfig.newInstance(getContext()).isHiddenLineOn();
-
         initRegularDotColor(LockPatternManager.getInstance().getLockPatternStyle(getContext(),
                 LockPatternManager.LOCK_PATTERN_STYLE_PURE));
 

@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Locale;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,9 @@ public class StickyGridHeadersSimpleArrayAdapter extends BaseAdapter implements
     public long getHeaderId(int position) {
         NotifyFilterEntity item = getItem(position);
         String value = item.getNotifyUSName();
+        if (TextUtils.isEmpty(value)) {
+            value = "#";
+        }
         return ((String) value).substring(0, 1).toUpperCase(Locale.getDefault()).charAt(0);
     }
 

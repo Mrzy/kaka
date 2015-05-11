@@ -24,8 +24,8 @@
     <color name="progressBarMaterialColor">#03a9f4</color>
     <!--  -->
     <color name="setting_background_color">#f5f5f5</color>
-    <color name="setting_text_grey_color">#a1a1a1</color>
-    <color name="setting_text_normal_color">#555555</color>
+    <color name="setting_text_grey_color">#a8a8a8</color>
+    <color name="setting_text_normal_color">#646464</color>
     <color name="setting_psts_indicator_color">#3db7ff</color>
 
     <color name="material_blue_500">#5677fc</color>
@@ -67,4 +67,6 @@
     <color name="general_news_day_mode_divider_color">#50000000</color>
     <color name="general_news_day_mode_title_color">#ab000000</color>
     <color name="general_news_day_mode_time_color">#50000000</color>
+    
+    <color name="notify_layout_enabled_color">#55ffffff</color>
 </resources>

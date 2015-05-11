@@ -442,7 +442,8 @@
                 android:text="@string/init_setting_V6_trust_prompt_one"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                android:visibility="gone" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:layout_width="wrap_content"
@@ -453,7 +454,8 @@
                 android:text="@string/init_setting_V6_trust_prompt_two"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                android:visibility="gone" />
 
             <cn.zmdx.kaka.locker.widget.TypefaceTextView
                 android:layout_width="wrap_content"

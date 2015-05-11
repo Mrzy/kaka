@@ -64,6 +64,8 @@ public class PandoraLockPatternView extends LinearLayout {
 
     private boolean isLockScreen;
 
+    private boolean isShouldPath = false;
+
     public interface ILockPatternListener {
         void onComplete(int type, boolean success);
     }
@@ -343,6 +345,13 @@ public class PandoraLockPatternView extends LinearLayout {
 
     private void setPromptString(String prompt) {
         mPromptTextView.setText(prompt);
+    }
+
+    public void setShouldPath(boolean isShouldPath) {
+        this.isShouldPath = isShouldPath;
+        if (null != mLockPatternView) {
+            mLockPatternView.setShouldPath(isShouldPath);
+        }
     }
 
 }

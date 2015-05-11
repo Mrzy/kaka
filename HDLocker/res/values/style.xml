@@ -8,7 +8,15 @@
 
     <style name="setting_textview">
         <item name="android:textColor">@color/setting_text_normal_color</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">27dp</item>
+        <item name="android:clickable">false</item>
+    </style>
+    
+    <style name="setting_textview_detail">
+        <item name="android:textColor">@color/setting_text_grey_color</item>
+        <item name="android:textSize">12dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">27dp</item>
         <item name="android:clickable">false</item>
@@ -41,6 +49,7 @@
         <item name="android:backgroundDimAmount">0.50</item>
         <item name="android:windowAnimationStyle">@null</item>
     </style>
+    
 
     <style name="password_prompt_style" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@android:color/transparent</item>

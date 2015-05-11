@@ -85,9 +85,9 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
 
     private SwitchButton mDelayLockScreen, mHiddenLine;
 
-    private ImageView mResetLine;
+    private ImageView mResetLine, mHiddenLineView;
 
-    private LinearLayout mResetLayout;
+    private LinearLayout mResetLayout, mHiddenLineLayout;
 
     private PandoraConfig mPandoraConfig;
 
@@ -106,6 +106,13 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
                 .findViewById(R.id.setting_delay_lockscreen_switch_button);
         mDelayLockScreen.setOnCheckedChangeListener(this);
 
+        int curType = mPandoraConfig.getUnLockType();
+
+        mHiddenLineView = (ImageView) mEntireView
+                .findViewById(R.id.pandora_setting_password_hidden_line_item_line);
+        mHiddenLineLayout = (LinearLayout) mEntireView
+                .findViewById(R.id.pandora_setting_password_hidden_line_item);
+
         mHiddenLine = (SwitchButton) mEntireView
                 .findViewById(R.id.setting_hidden_lock_pattern_line_switch_button);
         mHiddenLine.setOnCheckedChangeListener(this);
@@ -118,8 +125,7 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
 
         mResetLayout = (LinearLayout) mEntireView.findViewById(R.id.pandora_setting_password_reset);
         mResetLayout.setOnClickListener(this);
-        int curType = mPandoraConfig.getUnLockType();
-        checkResetLayoutVisibility(curType);
+        checkSettingLayoutVisibility(curType);
 
         mNoneItem = (BaseLinearLayout) mEntireView.findViewById(R.id.setting_password_none_item);
         mNoneItem.setOnClickListener(this);
@@ -232,7 +238,7 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
             initLockPatternStyle(false);
         }
 
-        checkResetLayoutVisibility(type);
+        checkSettingLayoutVisibility(type);
     }
 
     private void initLockPatternStyle(boolean isLockPatternType) {
@@ -399,13 +405,17 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
         mMidsummerStylePrompt.setTextColor(view == mMidsummerStyle ? greyColor : normalColor);
     }
 
-    private void checkResetLayoutVisibility(int type) {
+    private void checkSettingLayoutVisibility(int type) {
         if (type != KeyguardLockerManager.UNLOCKER_TYPE_NONE) {
             mResetLine.setVisibility(View.VISIBLE);
             mResetLayout.setVisibility(View.VISIBLE);
+            mHiddenLineView.setVisibility(View.VISIBLE);
+            mHiddenLineLayout.setVisibility(View.VISIBLE);
         } else {
             mResetLine.setVisibility(View.GONE);
             mResetLayout.setVisibility(View.GONE);
+            mHiddenLineView.setVisibility(View.GONE);
+            mHiddenLineLayout.setVisibility(View.GONE);
         }
     }
 
