@@ -12,11 +12,13 @@ import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -52,9 +54,12 @@ import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
+import cn.zmdx.kaka.locker.weather.PandoraLocationManager;
+import cn.zmdx.kaka.locker.weather.PandoraWeatherManager;
 import cn.zmdx.kaka.locker.widget.SensorImageView;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
@@ -165,7 +170,7 @@ public class LockScreenManager {
             return;
 
         PandoraUtils.initState();
-
+        
         PandoraConfig pandoraConfig = PandoraConfig.newInstance(mContext);
         boolean isLockerOn = pandoraConfig.isPandolaLockerOn();
         if (!isLockerOn) {
@@ -454,7 +459,6 @@ public class LockScreenManager {
             pauseWallpaperTranslation();
             pauseShimmer();
             mFakeStatusDate.setVisibility(View.VISIBLE);
-            mSlidingUpView.setDragView(panel.findViewById(R.id.news_header_layout));
         };
 
         public void onPanelCollapsed(View panel) {
@@ -462,7 +466,6 @@ public class LockScreenManager {
             resumeWallpaperTranslation();
             startShimmer();
             mFakeStatusDate.setVisibility(View.INVISIBLE);
-            mSlidingUpView.setDragView(panel.findViewById(R.id.header_part1));
         };
     };
 
