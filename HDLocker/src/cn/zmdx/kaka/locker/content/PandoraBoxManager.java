@@ -511,7 +511,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             public void run() {
                 openNightModeTip();
             }
-        }, 2000);
+        }, 1000);
 
         LockScreenManager.getInstance().registBackPressedListener(mBackPressedListener);
 
@@ -532,7 +532,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                     PandoraConfig.newInstance(mContext).saveLastTipOpenNightModeTime(current);
                 }
             } else {
-                if (hour >= 21 || hour <= 7) {
+                if (hour >= 21 || hour <= 5) {
                     // 当前时间是晚上21点之后，则开启提示，是否打开夜间模式
                     openTipLayout(createOpenNightModeView(), true, 8000);
                     PandoraConfig.newInstance(mContext).saveLastTipOpenNightModeTime(current);
