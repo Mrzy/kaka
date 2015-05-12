@@ -62,7 +62,7 @@ public class FakeActivity extends Activity {
     }
 
     private void startNotificationServiceIfNeeded() {
-        if (NotificationInterceptor.getInstance(this).isDeviceAvailable()) {
+        if (NotificationInterceptor.isDeviceAvailable()) {
             startService(new Intent(this, PandoraNotificationService.class));
         }
     }

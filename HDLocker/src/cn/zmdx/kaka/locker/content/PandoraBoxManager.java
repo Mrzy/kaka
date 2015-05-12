@@ -40,19 +40,19 @@ import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.LockScreenManager;
 import cn.zmdx.kaka.locker.LockScreenManager.OnBackPressedListener;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.content.ServerImageDataManager.ServerImageData;
 import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.StickRecyclerAdapter;
 import cn.zmdx.kaka.locker.content.channel.ChannelBoxManager;
 import cn.zmdx.kaka.locker.content.channel.ChannelBoxView;
 import cn.zmdx.kaka.locker.content.channel.ChannelInfo;
 import cn.zmdx.kaka.locker.content.view.CircleSpiritButton;
-import cn.zmdx.kaka.locker.content.view.HeaderCircleButton;
+import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
-import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
@@ -79,13 +79,19 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private CircleSpiritButton mBackBtn;
 
-    private HeaderCircleButton mCircle;
+    // private HeaderCircleButton mCircle;
 
     // private ImageView mNotifyTip;
 
     private ViewPagerCompat mViewPager;
 
     private ImageView mAddNewsTabBtn;
+
+    private TextView mNewsHeaderTitle;
+
+    private View mHeaderHasNewsArea;
+
+    private View mHeaderNoNewsArea;
 
     public static final int[] mTabColors = new int[] {
             Color.parseColor("#26a69a"), Color.parseColor("#e84e40"), Color.parseColor("#ab47bc"),
@@ -135,6 +141,12 @@ public class PandoraBoxManager implements View.OnClickListener {
         mHeaderPart1 = mEntireView.findViewById(R.id.header_part1);
         mHeaderPart1.getLayoutParams().height = BaseInfoHelper.dip2px(mContext, 80);
         mHeaderPart1.requestLayout();
+        mNewsHeaderTitle = (TextView) mHeaderPart1.findViewById(R.id.news_header_title);
+        mHeaderHasNewsArea = mHeaderPart1.findViewById(R.id.news_header_hasContent);
+        mHeaderHasNewsArea.setVisibility(View.GONE);
+        mHeaderNoNewsArea = mHeaderPart1.findViewById(R.id.news_header_noData);
+        mHeaderNoNewsArea.setVisibility(View.VISIBLE);
+        renderNewsHeader();
         mHeaderPart2 = mEntireView.findViewById(R.id.header_part2);
         if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()
                 && !BaseInfoHelper.isSupportTranslucentStatus()) {
@@ -143,7 +155,6 @@ public class PandoraBoxManager implements View.OnClickListener {
         } else {
             mHeaderPart2.setVisibility(View.VISIBLE);
         }
-        mCircle = (HeaderCircleButton) mHeaderPart1.findViewById(R.id.header_circle);
         // 处理点击时间
         final int height = BaseInfoHelper.dip2px(mContext, 20);
         mHeaderPart1.setOnTouchListener(new OnTouchListener() {
@@ -168,78 +179,6 @@ public class PandoraBoxManager implements View.OnClickListener {
                 return false;
             }
         });
-    }
-
-    private boolean mIsHeaderCircleAnimating = false;
-
-    public void startHeaderCircleAnimation() {
-        if (mIsHeaderCircleAnimating || mCircle == null) {
-            return;
-        } else {
-            if (!HDBNetworkState.isNetworkAvailable()) {
-                mCircle.findViewById(R.id.upArrow).setVisibility(View.VISIBLE);
-                return;
-            }
-        }
-
-        mIsHeaderCircleAnimating = true;
-        final int offset = mCircle.getHeight() / 3;
-        final View arrow = mCircle.findViewById(R.id.upArrow);
-        final View newsTv = mCircle.findViewById(R.id.newsTv);
-        newsTv.setVisibility(View.GONE);
-        arrow.setTranslationY(mCircle.getHeight() / 3);
-        arrow.setAlpha(0f);
-        arrow.setVisibility(View.VISIBLE);
-        arrow.animate().translationY(0).alpha(1f).setDuration(500)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        arrow.animate().translationY(-offset).alpha(0f).setStartDelay(500)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        arrow.setVisibility(View.GONE);
-                                        newsTv.setTranslationY(offset);
-                                        newsTv.setAlpha(0f);
-                                        newsTv.setVisibility(View.VISIBLE);
-                                        newsTv.animate().translationY(0).alpha(1f).setDuration(500)
-                                                .setListener(new AnimatorListenerAdapter() {
-                                                    @Override
-                                                    public void onAnimationEnd(Animator animation) {
-                                                        newsTv.animate()
-                                                                .translationY(-offset)
-                                                                .alpha(0f)
-                                                                .setStartDelay(500)
-                                                                .setListener(
-                                                                        new AnimatorListenerAdapter() {
-                                                                            @Override
-                                                                            public void onAnimationEnd(
-                                                                                    Animator animation) {
-                                                                                newsTv.setVisibility(View.GONE);
-                                                                                arrow.setTranslationY(offset);
-                                                                                arrow.setVisibility(View.VISIBLE);
-                                                                                arrow.animate()
-                                                                                        .translationY(
-                                                                                                0)
-                                                                                        .alpha(1f)
-                                                                                        .setDuration(
-                                                                                                500)
-                                                                                        .setListener(
-                                                                                                new AnimatorListenerAdapter() {
-                                                                                                    public void onAnimationEnd(
-                                                                                                            Animator animation) {
-                                                                                                        mIsHeaderCircleAnimating = false;
-                                                                                                    };
-                                                                                                });
-                                                                            }
-                                                                        });
-                                                    }
-                                                }).start();
-                                    }
-                                }).setDuration(500).start();
-                    }
-                });
-        mCircle.startTransitionDrawable(2500);
     }
 
     private boolean mInitBody = false;
@@ -342,6 +281,13 @@ public class PandoraBoxManager implements View.OnClickListener {
             redPoint.setVisibility(View.GONE);
         } else {
             redPoint.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void openDetailPage(ServerImageData sid) {
+        if (sid != null) {
+            final NewsDetailLayout view = new NewsDetailLayout(this, sid);
+            openDetailPage(view);
         }
     }
 
@@ -480,6 +426,12 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
     }
 
+    private Runnable mExpandedAction;
+
+    public void setExpandedAction(Runnable action) {
+        mExpandedAction = action;
+    }
+
     /**
      * 新闻面板完全展开时会调用该方法
      */
@@ -488,6 +440,10 @@ public class PandoraBoxManager implements View.OnClickListener {
         // 缩小顶部区域
 
         initBody();
+
+        if (mExpandedAction != null) {
+            HDBThreadUtils.runOnUi(mExpandedAction);
+        }
 
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
             public void run() {
@@ -592,7 +548,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         closeDetailPage(false);
 
-//        notifyDataSetChanged();
+        // notifyDataSetChanged();
 
         // PandoraBoxManager.newInstance(mContext).resetDefaultPage();
         if (mBackBtn != null) {
@@ -621,13 +577,12 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     public void refreshNewsByChannelId(int channelId) {
         ChannelPageGenerator cpg = ChannelPageFactory.getPageGenerator(channelId);
-        if (channelId == ChannelBoxManager.CHANNEL_WALLPAPER) {
-            NewsFactory.updateWallpaper(cpg.getAdapter(), cpg.getWallpaperData(),
-                    cpg.getRefreshView(), false, false);
-            return;
-        }
-
         if (cpg != null) {
+            if (channelId == ChannelBoxManager.CHANNEL_WALLPAPER) {
+                NewsFactory.updateWallpaper(cpg.getAdapter(), cpg.getWallpaperData(),
+                        cpg.getRefreshView(), false, false);
+                return;
+            }
             NewsFactory.updateNews(channelId, cpg.getAdapter(), cpg.getData(),
                     cpg.getRefreshView(), false, false, cpg.getHeaderLoadingListener());
         }
@@ -841,21 +796,37 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     public void onScreenOn() {
-        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+        HDBThreadUtils.runOnUi(new Runnable() {
             @Override
             public void run() {
-                startHeaderCircleAnimation();
+                // startHeaderCircleAnimation();
+                renderNewsHeader();
             }
-        }, 1000);
+        });
+    }
+
+    private void renderNewsHeader() {
+        final List<ServerImageData> headerData = ChannelPageFactory.getNewsHeaderData();
+        if (headerData != null && headerData.size() > 0) {
+            final ServerImageData sid = headerData.get(0);
+            mNewsHeaderTitle.setText(sid.getTitle());
+            mHeaderHasNewsArea.setVisibility(View.VISIBLE);
+            mHeaderNoNewsArea.setVisibility(View.GONE);
+            setExpandedAction(new Runnable() {
+                @Override
+                public void run() {
+                    openDetailPage(sid);
+                }
+            });
+        } else {
+            mHeaderHasNewsArea.setVisibility(View.GONE);
+            mHeaderNoNewsArea.setVisibility(View.VISIBLE);
+        }
     }
 
     public void onScreenOff() {
-        if (mCircle != null) {
-            mCircle.findViewById(R.id.newsTv).setVisibility(View.GONE);
-            mCircle.findViewById(R.id.upArrow).setVisibility(View.GONE);
-            int theme = PandoraConfig.newInstance(mContext).isNightModeOn() ? NEWS_THEME_NIGHT
-                    : NEWS_THEME_DAY;
-            switchNewsTheme(theme);
-        }
+        int theme = PandoraConfig.newInstance(mContext).isNightModeOn() ? NEWS_THEME_NIGHT
+                : NEWS_THEME_DAY;
+        switchNewsTheme(theme);
     }
 }

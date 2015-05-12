@@ -33,7 +33,7 @@ public final class PandoraNotificationService extends NotificationListenerServic
 
     public static final String ACTION_OBTAIN_ACTIVE_NOTIFICATIONS = "action_obtain_active_notification";
 
-    public static final String ACTION_CHECK_PERMISSION = "action_check_permission";
+//    public static final String ACTION_CHECK_PERMISSION = "action_check_permission";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -54,7 +54,7 @@ public final class PandoraNotificationService extends NotificationListenerServic
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_CANCEL_NOTIFICATION);
         filter.addAction(ACTION_OBTAIN_ACTIVE_NOTIFICATIONS);
-        filter.addAction(ACTION_CHECK_PERMISSION);
+//        filter.addAction(ACTION_CHECK_PERMISSION);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
         super.onCreate();
     }
@@ -248,23 +248,6 @@ public final class PandoraNotificationService extends NotificationListenerServic
                 Message msg = interceptor.obtainMessage();
                 msg.obj = sbns;
                 msg.what = NotificationInterceptor.MSG_ACTIVE_NOTIFICATIONS_ARRIVED;
-                interceptor.sendMessage(msg);
-            } else if (action.equals(ACTION_CHECK_PERMISSION)) {
-                // 当没有权限时，调用getActiveNotifications()会抛出异常，这里认为若出现异常，
-                boolean granted = false;
-                try {
-                    getActiveNotifications();
-                    granted = true;
-                } catch (Exception e) {
-                    if (BuildConfig.DEBUG) {
-                        HDBLOG.logE("getActiveNotifications error, may be not obtain notification permission");
-                    }
-                }
-                NotificationInterceptor interceptor = NotificationInterceptor
-                        .getInstance(getApplicationContext());
-                Message msg = interceptor.obtainMessage();
-                msg.arg1 = granted ? 1 : 0; // 有读取通知的权限
-                msg.what = NotificationInterceptor.MSG_CHECK_PERMISSION_RESULT;
                 interceptor.sendMessage(msg);
             }
         }

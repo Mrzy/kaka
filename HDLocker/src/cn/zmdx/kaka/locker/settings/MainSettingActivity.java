@@ -130,7 +130,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
 
     private void goInitSetting() {
         boolean isMeizu = PandoraUtils.isMeizu(this);
-        if (isMeizu && !NotificationInterceptor.getInstance(this).isDeviceAvailable()) {
+        if (isMeizu && !NotificationInterceptor.isDeviceAvailable()) {
             return;
         }
         Intent intent = new Intent(this, InitSettingActivity.class);

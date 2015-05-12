@@ -8,40 +8,62 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/header_part1"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal" >
+            android:layout_height="80dp" >
 
-            <cn.zmdx.kaka.locker.content.view.HeaderCircleButton
-                android:id="@+id/header_circle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical" >
+            <View
+                android:id="@+id/news_header_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#47ffffff"
+                android:layout_margin="8dp" />
 
-                <ImageView
-                    android:id="@+id/upArrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_up"
-                    android:visibility="visible" />
+            <RelativeLayout
+                android:id="@+id/news_header_hasContent"
+                android:layout_below="@id/news_header_divider"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
                 <TextView
-                    android:id="@+id/newsTv"
+                    android:id="@+id/news_header_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:shadowColor="#30000000"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="1"
-                    android:text="爆点"
-                    android:textColor="#f6f6f6"
-                    android:visibility="gone" />
-            </cn.zmdx.kaka.locker.content.view.HeaderCircleButton>
-        </LinearLayout>
+                    android:drawableLeft="@drawable/red_block"
+                    android:drawablePadding="4dp"
+                    android:textColor="#47ffffff"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/news_header_title"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="3dp"
+                    android:layout_toRightOf="@id/news_header_title"
+                    android:drawableLeft="@drawable/news_header_slideup_icon"
+                    android:drawablePadding="4dp"
+                    android:text="上滑查看"
+                    android:textColor="#75ffffff"
+                    android:textSize="15dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/news_header_noData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/news_header_divider"
+                android:layout_marginLeft="3dp"
+                android:drawableLeft="@drawable/news_header_slideup_icon"
+                android:drawablePadding="4dp"
+                android:text="上滑查看"
+                android:layout_centerHorizontal="true"
+                android:visibility="visible"
+                android:textColor="#75ffffff"
+                android:textSize="15dp" />
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/header_part2"
@@ -109,20 +131,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="right"
+                    android:gravity="center"
                     android:scaleType="fitXY"
                     android:src="@drawable/channel_entrance_icon"
-                    android:gravity="center"
                     android:textColor="#a0000000"
                     android:textSize="25dp" />
-                <ImageView 
+
+                <ImageView
                     android:id="@+id/redPoint"
-                    android:paddingRight="5dp"
-                    android:paddingTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/add_channel_dot_icon"
                     android:layout_gravity="right|top"
-                    />
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
+                    android:src="@drawable/add_channel_dot_icon" />
             </FrameLayout>
 
             <FrameLayout

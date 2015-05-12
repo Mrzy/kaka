@@ -36,8 +36,7 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 boolean isMeizu = PandoraUtils.isMeizu(SplashActivity.this);
-                boolean isDeviceAvailable = !NotificationInterceptor.getInstance(
-                        SplashActivity.this).isDeviceAvailable();
+                boolean isDeviceAvailable = !NotificationInterceptor.isDeviceAvailable();
                 if (isFirstIn && !(isMeizu && isDeviceAvailable)) {
                     Intent intent = new Intent(SplashActivity.this, InitSettingActivity.class);
                     startActivity(intent);

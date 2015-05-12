@@ -85,6 +85,7 @@ public class NewsFactory {
                     data.addAll(newData);
                 } else {
                     data.addAll(0, newData);
+                    
                 }
 
                 if (BuildConfig.DEBUG) {
