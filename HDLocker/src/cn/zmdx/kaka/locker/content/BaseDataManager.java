@@ -38,6 +38,16 @@ public class BaseDataManager {
 
     public String mDataType;
 
+    public int mType;
+
+    public int getmType() {
+        return mType;
+    }
+
+    public void setmType(int mType) {
+        this.mType = mType;
+    }
+
     public int getId() {
         return mId;
     }
@@ -121,5 +131,6 @@ public class BaseDataManager {
         mReleaseTime = jsonObject.optString("release_time");
         mCollectWebsite = jsonObject.optString("collect_website");
         mDataType = jsonObject.optString("data_type");
+        mType = jsonObject.optInt("type");
     }
 }

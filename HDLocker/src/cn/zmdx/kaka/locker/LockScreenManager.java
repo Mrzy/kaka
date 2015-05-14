@@ -116,7 +116,11 @@ public class LockScreenManager {
 
     private ViewGroup mDateWidget;
 
-//    private ImageView mWifiIcon;
+    // private ImageView mWifiIcon;
+
+    private ShimmerTextView mShimmerTextView;
+
+    private Shimmer mShimmer;
 
     private TimeLayoutManager mTimeLayoutManager;
 
@@ -163,7 +167,7 @@ public class LockScreenManager {
             return;
 
         PandoraUtils.initState();
-        
+
         PandoraConfig pandoraConfig = PandoraConfig.newInstance(mContext);
         boolean isLockerOn = pandoraConfig.isPandolaLockerOn();
         if (!isLockerOn) {
@@ -220,13 +224,13 @@ public class LockScreenManager {
         WallpaperUtils.autoChangeWallpaper();
     }
 
-//    private void startShimmer() {
-//        if (mShimmer != null) {
-//            if (!mShimmer.isAnimating()) {
-//                mShimmer.start(mShimmerTextView);
-//            }
-//        }
-//    }
+    private void startShimmer() {
+        if (mShimmer != null) {
+            if (!mShimmer.isAnimating()) {
+                mShimmer.start(mShimmerTextView);
+            }
+        }
+    }
 
     public boolean isNewsPanelExpanded() {
         return (mSlidingUpView != null) && mSlidingUpView.isPanelExpanded();
@@ -270,13 +274,13 @@ public class LockScreenManager {
                 ViewGroup.LayoutParams.MATCH_PARENT));
         mMainPagePart1 = mMainPage.findViewById(R.id.part1);
         mFakeStatusDate = mMainPage.findViewById(R.id.fakeStatusDate);
-//        mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
-//        mShimmer = new Shimmer();
-//        mShimmer.setDuration(5000);// 默认是1s
-//        mShimmer.setStartDelay(1000);// 默认间隔为0
+        mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
+        mShimmer = new Shimmer();
+        mShimmer.setDuration(5000);// 默认是1s
+        mShimmer.setStartDelay(1000);// 默认间隔为0
 
         mCommonWidgetLayout = mMainPage.findViewById(R.id.commonWidgetArea);
-//        mWifiIcon = (ImageView) mMainPage.findViewById(R.id.wifi_icon);
+        // mWifiIcon = (ImageView) mMainPage.findViewById(R.id.wifi_icon);
         mBatteryInfo = (TextView) mMainPage.findViewById(R.id.battery_info);
         batteryView = (BatteryView) mMainPage.findViewById(R.id.batteryView);
         if (PandoraConfig.newInstance(mContext).isNotifyFunctionOn()) {
@@ -291,9 +295,9 @@ public class LockScreenManager {
                     mBatteryInfo.setText(level + "%");
                 }
             });
-//            if (!HDBNetworkState.isWifiNetwork()) {
-//                mWifiIcon.setVisibility(View.GONE);
-//            }
+            // if (!HDBNetworkState.isWifiNetwork()) {
+            // mWifiIcon.setVisibility(View.GONE);
+            // }
         }
 
         mDateWidget = (ViewGroup) mMainPage.findViewById(R.id.dateWeatherLayout);
@@ -352,6 +356,13 @@ public class LockScreenManager {
         // 初始化新闻页header
         PandoraBoxManager.newInstance(mContext).initHeader();
         PandoraBoxManager.newInstance(mContext).getHeaderView().setAlpha(1);
+        HDBThreadUtils.postOnUiDelayed(new Runnable() {
+            @Override
+            public void run() {
+                PandoraBoxManager.newInstance(mContext).initBody();
+                PandoraBoxManager.newInstance(mContext).refreshCurrentNews();
+            }
+        }, 1000);
     }
 
     public void pauseWallpaperTranslation() {
@@ -450,7 +461,7 @@ public class LockScreenManager {
         public void onPanelExpanded(View panel) {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelExpanded();
             pauseWallpaperTranslation();
-//            pauseShimmer();
+             pauseShimmer();
             mFakeStatusDate.setVisibility(View.VISIBLE);
             mSlidingUpView.setDragView(panel.findViewById(R.id.dragview2));
         };
@@ -458,7 +469,7 @@ public class LockScreenManager {
         public void onPanelCollapsed(View panel) {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelCollapsed();
             resumeWallpaperTranslation();
-//            startShimmer();
+             startShimmer();
             mFakeStatusDate.setVisibility(View.INVISIBLE);
             mSlidingUpView.setDragView(panel.findViewById(R.id.header_part1));
         };
@@ -598,7 +609,8 @@ public class LockScreenManager {
         LockerUtils.renderScreenLockerWallpaper(
                 ((ImageView) mEntireView.findViewById(R.id.lockerBg)), curWallpaper, false);
 
-        LockerUtils.renderScreenLockerBlurEffect(mBlurImageView, ImageUtils.drawable2Bitmap(curWallpaper, true));
+        LockerUtils.renderScreenLockerBlurEffect(mBlurImageView,
+                ImageUtils.drawable2Bitmap(curWallpaper, true));
     }
 
     /**
@@ -657,7 +669,7 @@ public class LockScreenManager {
         if (isCloseFakeActivity)
             notifyUnLocked();
 
-//        pauseShimmer();
+         pauseShimmer();
         mWinManager.removeView(mEntireView);
         mEntireView = null;
         mIsLocked = false;
@@ -708,8 +720,9 @@ public class LockScreenManager {
             }
         }
 
-//        pauseShimmer();
+         pauseShimmer();
 
+         PandoraBoxManager.newInstance(mContext).onScreenOff();
         if (BuildConfig.DEBUG && false) {
             for (int i = 0; i < 20; i++) {
                 NotificationInterceptor.getInstance(mContext).sendCustomNotification(
@@ -718,11 +731,11 @@ public class LockScreenManager {
         }
     }
 
-//    public void pauseShimmer() {
-//        if (mShimmer != null) {
-//            mShimmer.cancel();
-//        }
-//    }
+    public void pauseShimmer() {
+        if (mShimmer != null) {
+            mShimmer.cancel();
+        }
+    }
 
     public View getSliderView() {
         return mSlidingUpView == null ? null : mSlidingUpView.getSliderView();
@@ -731,7 +744,7 @@ public class LockScreenManager {
     public void onScreenOn() {
         if (mIsLocked) {
 
-//            startShimmer();
+             startShimmer();
 
             // 将缩到屏幕底部的新闻栏展开
             if (mSlidingUpView != null && mPager != null && mPager.getCurrentItem() == 1) {

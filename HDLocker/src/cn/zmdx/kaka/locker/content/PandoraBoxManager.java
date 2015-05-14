@@ -199,8 +199,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         mTipLayout = (FrameLayout) mEntireView.findViewById(R.id.news_tip_layout);
 
         mBackBtn = (CircleSpiritButton) mEntireView.findViewById(R.id.backBtn);
-        mBackBtn.setColorNormal(mFloatingButtonColors[2]);
-        mBackBtn.setColorPressed(mFloatingButtonColors[2]);
+        mBackBtn.setColorNormal(mFloatingButtonColors[1]);
+        mBackBtn.setColorPressed(mFloatingButtonColors[1]);
         mBackBtn.setOnClickListener(this);
         mBackBtn.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
 
@@ -578,6 +578,14 @@ public class PandoraBoxManager implements View.OnClickListener {
         BottomDockUmengEventManager.statisticalNewsPanelCollapsed();
     }
 
+    public void refreshCurrentNews() {
+        if (mPages == null) 
+            return;
+
+        final int id = mPages.get(calCurrentItem());
+        refreshNewsByChannelId(id);
+    }
+
     public void refreshNewsByChannelId(int channelId) {
         ChannelPageGenerator cpg = ChannelPageFactory.getPageGenerator(channelId);
         if (cpg != null) {
@@ -816,7 +824,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         final List<ServerImageData> headerData = ChannelPageFactory.getNewsHeaderData();
         if (headerData != null && headerData.size() > 0 && HDBNetworkState.isNetworkAvailable()) {
             final ServerImageData sid = headerData.get(0);
-            mNewsHeaderTitle.setText(sid.getTitle());
+            String name = ChannelBoxManager.getInstance(mContext).getChannelNameById(sid.getmType());
+            mNewsHeaderTitle.setText(name + ":" + sid.getTitle());
             mHeaderHasNewsArea.setVisibility(View.VISIBLE);
             mHeaderNoNewsArea.setVisibility(View.GONE);
             setExpandedAction(new Runnable() {
@@ -830,6 +839,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             });
             headerData.remove(0);
         } else {
+            setExpandedAction(null);
             mHeaderHasNewsArea.setVisibility(View.GONE);
             mHeaderNoNewsArea.setVisibility(View.VISIBLE);
         }

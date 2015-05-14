@@ -38,6 +38,9 @@ public class ChannelPageFactory {
         if (size >= NEWS_HEADER_CACHEDDATA_MAX_COUNT) {
             sNewsHeaderData.remove(size - 1);
         }
+        if (sid.getTitle().length() <= 4) {
+            return false;
+        }
         sNewsHeaderData.add(0, sid);
         return true;
     }
