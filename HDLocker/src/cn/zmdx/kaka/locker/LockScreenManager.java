@@ -62,6 +62,8 @@ import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout;
 import cn.zmdx.kaka.locker.widget.SlidingUpPanelLayout.SimplePanelSlideListener;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateStatus;
 
@@ -102,7 +104,7 @@ public class LockScreenManager {
 
     private SensorImageView mSensorImageView, mBlurImageView;
 
-    private View mMainPage, mDimBg, mFakeStatusDate;
+    private View mMainPage, mDimBg, mMainPagePart1, mFakeStatusDate;
 
     private SlidingUpPanelLayout mSlidingUpView;
 
@@ -113,6 +115,8 @@ public class LockScreenManager {
     private View mCommonWidgetLayout;
 
     private ViewGroup mDateWidget;
+
+//    private ImageView mWifiIcon;
 
     private TimeLayoutManager mTimeLayoutManager;
 
@@ -264,7 +268,7 @@ public class LockScreenManager {
         mMainPage = LayoutInflater.from(mContext).inflate(R.layout.pandora_main_pager_layout, null);
         mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-//        mMainPagePart1 = mMainPage.findViewById(R.id.part1);
+        mMainPagePart1 = mMainPage.findViewById(R.id.part1);
         mFakeStatusDate = mMainPage.findViewById(R.id.fakeStatusDate);
 //        mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
 //        mShimmer = new Shimmer();
