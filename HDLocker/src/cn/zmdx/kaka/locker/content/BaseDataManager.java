@@ -112,6 +112,7 @@ public class BaseDataManager {
 
     public void parseBaseJson(JSONObject jsonObject) {
         this.mCloudId = jsonObject.optString("id");
+        mId = jsonObject.optInt("id");
         mTitle = jsonObject.optString("title");
         mTop = jsonObject.optString("top");
         // mSetp = jsonObject.optString("step");
@@ -121,5 +122,4 @@ public class BaseDataManager {
         mCollectWebsite = jsonObject.optString("collect_website");
         mDataType = jsonObject.optString("data_type");
     }
-
 }

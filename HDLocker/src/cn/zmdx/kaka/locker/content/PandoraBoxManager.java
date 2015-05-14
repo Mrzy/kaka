@@ -26,6 +26,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -53,6 +54,7 @@ import cn.zmdx.kaka.locker.notification.view.NotificationListView;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
+import cn.zmdx.kaka.locker.utils.HDBNetworkState;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
@@ -139,7 +141,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     public void initHeader() {
         mHeaderPart1 = mEntireView.findViewById(R.id.header_part1);
-        mHeaderPart1.getLayoutParams().height = BaseInfoHelper.dip2px(mContext, 80);
+        final boolean hasNavbar = !ViewConfiguration.get(mContext).hasPermanentMenuKey();
+        mHeaderPart1.getLayoutParams().height = BaseInfoHelper.dip2px(mContext, hasNavbar ? 80 : 40);
         mHeaderPart1.requestLayout();
         mNewsHeaderTitle = (TextView) mHeaderPart1.findViewById(R.id.news_header_title);
         mHeaderHasNewsArea = mHeaderPart1.findViewById(R.id.news_header_hasContent);
@@ -274,7 +277,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                 PandoraConfig.newInstance(mContext).saveTipAddChannelFunction();
                 redPoint.setVisibility(View.GONE);
                 View view = ChannelBoxManager.getInstance(mContext).createChannelView();
-                openDetailPage(view);
+                openDetailPage(view, true);
             }
         });
         if (PandoraConfig.newInstance(mContext).isTipAddChannelFunction()) {
@@ -284,10 +287,10 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
     }
 
-    public void openDetailPage(ServerImageData sid) {
+    public void openDetailPage(ServerImageData sid, boolean withAnimator) {
         if (sid != null) {
             final NewsDetailLayout view = new NewsDetailLayout(this, sid);
-            openDetailPage(view);
+            openDetailPage(view, withAnimator);
         }
     }
 
@@ -691,21 +694,25 @@ public class PandoraBoxManager implements View.OnClickListener {
         return mDetailLayout.getChildCount() > 0;
     }
 
-    public void openDetailPage(View view) {
+    public void openDetailPage(View view, boolean withAnimator) {
         mDetailLayout.removeAllViews();
         mDetailLayout.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
-        mDetailLayout.setTranslationX(mDetailLayout.getWidth());
         mDetailLayout.bringToFront();
         mDetailLayout.setVisibility(View.VISIBLE);
-        mDetailLayout.animate().translationX(0).setDuration(300)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mDetailLayout.setVisibility(View.VISIBLE);
-                        super.onAnimationEnd(animation);
-                    }
-                }).start();
+        if (withAnimator) {
+            mDetailLayout.setTranslationX(mDetailLayout.getWidth());
+            mDetailLayout.animate().translationX(0).setDuration(300)
+            .setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mDetailLayout.setVisibility(View.VISIBLE);
+                    super.onAnimationEnd(animation);
+                }
+            }).start();
+        } else {
+            mDetailLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     public void closeDetailPage(boolean withAnimator) {
@@ -800,14 +807,14 @@ public class PandoraBoxManager implements View.OnClickListener {
             @Override
             public void run() {
                 // startHeaderCircleAnimation();
-                renderNewsHeader();
+//                renderNewsHeader();
             }
         });
     }
 
     private void renderNewsHeader() {
         final List<ServerImageData> headerData = ChannelPageFactory.getNewsHeaderData();
-        if (headerData != null && headerData.size() > 0) {
+        if (headerData != null && headerData.size() > 0 && HDBNetworkState.isNetworkAvailable()) {
             final ServerImageData sid = headerData.get(0);
             mNewsHeaderTitle.setText(sid.getTitle());
             mHeaderHasNewsArea.setVisibility(View.VISIBLE);
@@ -815,9 +822,13 @@ public class PandoraBoxManager implements View.OnClickListener {
             setExpandedAction(new Runnable() {
                 @Override
                 public void run() {
-                    openDetailPage(sid);
+                    openDetailPage(sid, false);
+                    mHeaderHasNewsArea.setVisibility(View.GONE);
+                    mHeaderNoNewsArea.setVisibility(View.VISIBLE);
+                    setExpandedAction(null);
                 }
             });
+            headerData.remove(0);
         } else {
             mHeaderHasNewsArea.setVisibility(View.GONE);
             mHeaderNoNewsArea.setVisibility(View.VISIBLE);
@@ -828,5 +839,13 @@ public class PandoraBoxManager implements View.OnClickListener {
         int theme = PandoraConfig.newInstance(mContext).isNightModeOn() ? NEWS_THEME_NIGHT
                 : NEWS_THEME_DAY;
         switchNewsTheme(theme);
+
+        HDBThreadUtils.runOnUi(new Runnable() {
+            @Override
+            public void run() {
+                // startHeaderCircleAnimation();
+                renderNewsHeader();
+            }
+        });
     }
 }

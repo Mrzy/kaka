@@ -112,10 +112,6 @@ public class LockScreenManager {
 
     private ListView mNotificationListView;
 
-    private ShimmerTextView mShimmerTextView;
-
-    private Shimmer mShimmer;
-
     private View mCommonWidgetLayout;
 
     private ViewGroup mDateWidget;
@@ -224,13 +220,13 @@ public class LockScreenManager {
         WallpaperUtils.autoChangeWallpaper();
     }
 
-    private void startShimmer() {
-        if (mShimmer != null) {
-            if (!mShimmer.isAnimating()) {
-                mShimmer.start(mShimmerTextView);
-            }
-        }
-    }
+//    private void startShimmer() {
+//        if (mShimmer != null) {
+//            if (!mShimmer.isAnimating()) {
+//                mShimmer.start(mShimmerTextView);
+//            }
+//        }
+//    }
 
     public boolean isNewsPanelExpanded() {
         return (mSlidingUpView != null) && mSlidingUpView.isPanelExpanded();
@@ -274,10 +270,10 @@ public class LockScreenManager {
                 ViewGroup.LayoutParams.MATCH_PARENT));
         mMainPagePart1 = mMainPage.findViewById(R.id.part1);
         mFakeStatusDate = mMainPage.findViewById(R.id.fakeStatusDate);
-        mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
-        mShimmer = new Shimmer();
-        mShimmer.setDuration(5000);// 默认是1s
-        mShimmer.setStartDelay(1000);// 默认间隔为0
+//        mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
+//        mShimmer = new Shimmer();
+//        mShimmer.setDuration(5000);// 默认是1s
+//        mShimmer.setStartDelay(1000);// 默认间隔为0
 
         mCommonWidgetLayout = mMainPage.findViewById(R.id.commonWidgetArea);
 //        mWifiIcon = (ImageView) mMainPage.findViewById(R.id.wifi_icon);
@@ -454,14 +450,14 @@ public class LockScreenManager {
         public void onPanelExpanded(View panel) {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelExpanded();
             pauseWallpaperTranslation();
-            pauseShimmer();
+//            pauseShimmer();
             mFakeStatusDate.setVisibility(View.VISIBLE);
         };
 
         public void onPanelCollapsed(View panel) {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelCollapsed();
             resumeWallpaperTranslation();
-            startShimmer();
+//            startShimmer();
             mFakeStatusDate.setVisibility(View.INVISIBLE);
         };
     };
@@ -659,7 +655,7 @@ public class LockScreenManager {
         if (isCloseFakeActivity)
             notifyUnLocked();
 
-        pauseShimmer();
+//        pauseShimmer();
         mWinManager.removeView(mEntireView);
         mEntireView = null;
         mIsLocked = false;
@@ -710,7 +706,7 @@ public class LockScreenManager {
             }
         }
 
-        pauseShimmer();
+//        pauseShimmer();
 
         if (BuildConfig.DEBUG && false) {
             for (int i = 0; i < 20; i++) {
@@ -720,11 +716,11 @@ public class LockScreenManager {
         }
     }
 
-    public void pauseShimmer() {
-        if (mShimmer != null) {
-            mShimmer.cancel();
-        }
-    }
+//    public void pauseShimmer() {
+//        if (mShimmer != null) {
+//            mShimmer.cancel();
+//        }
+//    }
 
     public View getSliderView() {
         return mSlidingUpView == null ? null : mSlidingUpView.getSliderView();
@@ -733,7 +729,7 @@ public class LockScreenManager {
     public void onScreenOn() {
         if (mIsLocked) {
 
-            startShimmer();
+//            startShimmer();
 
             // 将缩到屏幕底部的新闻栏展开
             if (mSlidingUpView != null && mPager != null && mPager.getCurrentItem() == 1) {

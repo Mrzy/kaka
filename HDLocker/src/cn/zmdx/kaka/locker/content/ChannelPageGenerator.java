@@ -132,7 +132,7 @@ class ChannelPageGenerator {
                 ServerOnlineWallpaper data = mWallpaperList.get(position);
                 WallpaperDetailView detailView = new WallpaperDetailView(mContext, mBoxManager);
                 detailView.setData(data.getImageURL(), data.getDesc());
-                mBoxManager.openDetailPage(detailView);
+                mBoxManager.openDetailPage(detailView, true);
             }
         });
         rv.setAdapter(mAdapter);
@@ -194,7 +194,7 @@ class ChannelPageGenerator {
                 final ServerImageData sid = mNewsData.get(position);
                 String url = sid.getImageDesc();
                 NewsDetailLayout ndl = new NewsDetailLayout(mBoxManager, sid);
-                mBoxManager.openDetailPage(ndl);
+                mBoxManager.openDetailPage(ndl, true);
                 UmengCustomEventManager.statisticalOpenNewsDetail(sid.getId(), mChannelId + "");
             }
         });
@@ -265,7 +265,7 @@ class ChannelPageGenerator {
                 final ServerImageData sid = mNewsData.get(position);
                 String url = sid.getImageDesc();
                 NewsDetailLayout ndl = new NewsDetailLayout(mBoxManager, sid);
-                mBoxManager.openDetailPage(ndl);
+                mBoxManager.openDetailPage(ndl, true);
                 UmengCustomEventManager.statisticalOpenNewsDetail(sid.getId(), mChannelId + "");
             }
         });
@@ -275,7 +275,7 @@ class ChannelPageGenerator {
             @Override
             public void onItemClicked(ServerImageData serverImageData) {
                 NewsDetailLayout ndl = new NewsDetailLayout(mBoxManager, serverImageData);
-                mBoxManager.openDetailPage(ndl);
+                mBoxManager.openDetailPage(ndl, true);
                 UmengCustomEventManager.statisticalOpenNewsDetail(serverImageData.getId(),
                         mChannelId + "");
             }

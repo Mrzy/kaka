@@ -85,7 +85,7 @@ public class NewsFactory {
                     data.addAll(newData);
                 } else {
                     data.addAll(0, newData);
-                    
+                    handleNewsHeader(newData);
                 }
 
                 if (BuildConfig.DEBUG) {
@@ -121,6 +121,17 @@ public class NewsFactory {
             }
         });
         RequestManager.getRequestQueue().add(request);
+    }
+
+    private static void handleNewsHeader(List<ServerImageData> data) {
+        int oldS = ChannelPageFactory.getNewsHeaderData().size();
+        int limit = 0;
+        if (oldS >= ChannelPageFactory.NEWS_HEADER_CACHEDDATA_MAX_COUNT) {
+            limit = Math.max(0, data.size() - 4);
+        }
+        for (int i = data.size() - 1; i > limit; i--) {
+            ChannelPageFactory.addNewsHeaderData(data.get(i));
+        }
     }
 
     private static String getUrl(int type, List<ServerImageData> data, boolean older) {

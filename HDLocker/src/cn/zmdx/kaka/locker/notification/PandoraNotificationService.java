@@ -33,8 +33,6 @@ public final class PandoraNotificationService extends NotificationListenerServic
 
     public static final String ACTION_OBTAIN_ACTIVE_NOTIFICATIONS = "action_obtain_active_notification";
 
-//    public static final String ACTION_CHECK_PERMISSION = "action_check_permission";
-
     @Override
     public IBinder onBind(Intent intent) {
         return super.onBind(intent);
@@ -54,7 +52,6 @@ public final class PandoraNotificationService extends NotificationListenerServic
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_CANCEL_NOTIFICATION);
         filter.addAction(ACTION_OBTAIN_ACTIVE_NOTIFICATIONS);
-//        filter.addAction(ACTION_CHECK_PERMISSION);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
         super.onCreate();
     }
@@ -96,7 +93,7 @@ public final class PandoraNotificationService extends NotificationListenerServic
         np.putInterceptPkgName(Constants.PKGNAME_MEIPAI);
         np.putInterceptPkgName(Constants.PKGNAME_WUBA);
         np.putInterceptPkgName(Constants.PKGNAME_GANJI);
-        
+
         np.putInterceptPkgName("com.android.phone");
         // 获取拨号的包名
         Set<String> dialerPkgNameSet = getDialerPkgName(this, Intent.ACTION_DIAL);

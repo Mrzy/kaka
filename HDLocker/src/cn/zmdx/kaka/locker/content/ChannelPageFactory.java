@@ -16,18 +16,30 @@ public class ChannelPageFactory {
 
     private static List<ServerImageData> sNewsHeaderData = new LinkedList<ServerImageData>();
 
-    private static final int NEWS_HEADER_CACHEDDATA_MAX_COUNT = 10;
+    public static final int NEWS_HEADER_CACHEDDATA_MAX_COUNT = 10;
+
+    private static long sLastModified = 0;
 
     public static List<ServerImageData> getNewsHeaderData() {
         return sNewsHeaderData;
     }
 
-    public static void addNewsHeaderData(ServerImageData sid) {
+    public static boolean addNewsHeaderData(ServerImageData sid) {
+        long time = Long.parseLong(sid.getCollectTime());
+
+        if (time <= sLastModified) {
+            return false;
+        } else {
+            sLastModified = time;
+        }
+
         int size = sNewsHeaderData.size();
+        // 确保头条缓存区不大于10条数据
         if (size >= NEWS_HEADER_CACHEDDATA_MAX_COUNT) {
             sNewsHeaderData.remove(size - 1);
         }
         sNewsHeaderData.add(0, sid);
+        return true;
     }
 
     public static ChannelPageGenerator createPageGenerator(PandoraBoxManager boxManager,
