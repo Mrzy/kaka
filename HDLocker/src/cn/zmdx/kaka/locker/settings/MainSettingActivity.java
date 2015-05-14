@@ -18,9 +18,11 @@ import android.view.Window;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.guide.CloseSystemLockGuideFragment;
+import cn.zmdx.kaka.locker.guide.CloseSystemLockGuideFragment.ICloseSystemLockListener;
 import cn.zmdx.kaka.locker.guide.InitSettingFragment;
 import cn.zmdx.kaka.locker.guide.InitSettingFragment.ISettingFragmentListener;
 import cn.zmdx.kaka.locker.guide.ReadNotificationGuideFragment;
+import cn.zmdx.kaka.locker.guide.ReadNotificationGuideFragment.IReadNotificationListener;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.MainSettingFragment.IMainSettingListener;
@@ -33,7 +35,8 @@ import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 import com.umeng.analytics.MobclickAgent;
 
 public class MainSettingActivity extends ActionBarActivity implements IMainSettingListener,
-        ISettingFragmentListener, ISplashFragmentListener {
+        ISettingFragmentListener, ISplashFragmentListener, IReadNotificationListener,
+        ICloseSystemLockListener {
 
     private static boolean isSplash = true;
 
@@ -70,6 +73,8 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
     private static final String TAG_CLOSE_SYSTEM_LOCK_GUIDE = "closeSystenLockGuideFragment";
 
     private static final String TAG_READ_NOTIFICATION_GUIDE = "readNotificationGuideFragment";
+
+    private static final String TAG_MAIN_SETTING_FRAGMENT = "mainSettingFragment";
 
     @SuppressLint("InlinedApi")
     @Override
@@ -195,24 +200,24 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
                 addFragment(mReadNotificationGuideFragment, TAG_READ_NOTIFICATION_GUIDE, true, true);
                 return;
             }
-            addFragment(mMainSettingFragment, "", false, false);
+            addFragment(mMainSettingFragment, TAG_MAIN_SETTING_FRAGMENT, false, false);
         }
 
     }
 
     @Override
     public void onInitSettingSkip() {
-        if (!NotificationInterceptor.isDeviceAvailable()
-                || PandoraConfig.newInstance(this).isReadNotifitionGuided()) {
-            removeFragment(mInitSettingFragment, false);
-            addFragment(mMainSettingFragment, "", false, false);
+        if (NotificationInterceptor.isDeviceAvailable()
+                && !PandoraConfig.newInstance(this).isReadNotifitionGuided()
+                && !NotificationInterceptor.isGrantedNotifyPermission(this)) {
+            addFragment(mReadNotificationGuideFragment, TAG_READ_NOTIFICATION_GUIDE, true, true);
         } else {
-            if (!NotificationInterceptor.isGrantedNotifyPermission(this)) {
-                addFragment(mReadNotificationGuideFragment, TAG_READ_NOTIFICATION_GUIDE, true, true);
-            }
+            removeFragment(mInitSettingFragment, false);
+            addFragment(mMainSettingFragment, TAG_MAIN_SETTING_FRAGMENT, false, false);
         }
     }
 
+    @Override
     public void onReadNotificationBack() {
         removeFragment(mReadNotificationGuideFragment, true);
         getSupportFragmentManager().popBackStack(TAG_READ_NOTIFICATION_GUIDE,
@@ -220,23 +225,24 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         if (isMIUI) {
             if (PandoraUtils.isMiuiFloatWindowOpAllowed(this)) {
                 removeFragment(mInitSettingFragment, false);
-                addFragment(mMainSettingFragment, "", false, false);
+                addFragment(mMainSettingFragment, TAG_MAIN_SETTING_FRAGMENT, false, false);
             }
         } else {
             if (!PandoraConfig.newInstance(this).isHasGuided() && !PandoraUtils.isMeizu(this)
                     && !PandoraConfig.newInstance(this).isCloseSystemLockGuided()) {
                 addFragment(mCloseSystemLockGuideFragment, TAG_CLOSE_SYSTEM_LOCK_GUIDE, false, true);
             } else {
-                addFragment(mMainSettingFragment, "", false, false);
+                addFragment(mMainSettingFragment, TAG_MAIN_SETTING_FRAGMENT, false, false);
             }
         }
     }
 
+    @Override
     public void onCloseSystemLockBack() {
         removeFragment(mCloseSystemLockGuideFragment, false);
         getSupportFragmentManager().popBackStack(TAG_CLOSE_SYSTEM_LOCK_GUIDE,
                 FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        addFragment(mMainSettingFragment, "", false, false);
+        addFragment(mMainSettingFragment, TAG_MAIN_SETTING_FRAGMENT, false, false);
     }
 
     @Override
@@ -259,7 +265,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
             addFragment(mCloseSystemLockGuideFragment, TAG_CLOSE_SYSTEM_LOCK_GUIDE, false, true);
             return;
         }
-        addFragment(mMainSettingFragment, "", false, false);
+        addFragment(mMainSettingFragment, TAG_MAIN_SETTING_FRAGMENT, false, false);
     }
 
     private void addFragment(Fragment fragment, String tag, boolean isAddToBackStack,
@@ -311,6 +317,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
                     return false;
                 }
             }
+
         }
         return super.onKeyDown(keyCode, event);
     }

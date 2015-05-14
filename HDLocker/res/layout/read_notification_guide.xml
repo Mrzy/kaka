@@ -26,4 +26,23 @@
         android:paddingTop="10dp"
         android:text="开启消息通知" />
 
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/close_system_lock_next_step"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="5dp"
+        android:clickable="true"
+        android:drawableRight="@drawable/init_setting_arrow"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:text="下一步"
+        android:textColor="@color/white"
+        android:textSize="14dp" />
+
 </RelativeLayout>

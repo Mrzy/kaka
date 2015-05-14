@@ -1,6 +1,7 @@
 
 package cn.zmdx.kaka.locker.guide;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,6 +25,20 @@ public class CloseSystemLockGuideFragment extends Fragment implements OnClickLis
 
     private TypefaceTextView mCloseSystemLock;
 
+    private TypefaceTextView mNextStep;
+
+    public interface ICloseSystemLockListener {
+        void onCloseSystemLockBack();
+    }
+
+    private ICloseSystemLockListener mCallback;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallback = (ICloseSystemLockListener) activity;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
     ViewGroup container, @Nullable
@@ -32,6 +47,8 @@ public class CloseSystemLockGuideFragment extends Fragment implements OnClickLis
         mLayout = mEntireView.findViewById(R.id.background);
         mCloseSystemLock = (TypefaceTextView) mEntireView.findViewById(R.id.close_system_lock);
         mCloseSystemLock.setOnClickListener(this);
+        mNextStep = (TypefaceTextView) mEntireView.findViewById(R.id.close_system_lock_next_step);
+        mNextStep.setOnClickListener(this);
         renderScreenLockerBlurEffect(ImageUtils.drawable2Bitmap(getResources().getDrawable(
                 R.drawable.pandora_default_background)));
         PandoraConfig.newInstance(getActivity()).saveCloseSystemLockState(true);
@@ -54,6 +71,10 @@ public class CloseSystemLockGuideFragment extends Fragment implements OnClickLis
         if (view == mCloseSystemLock) {
             InitializationManager.getInstance(getActivity()).initializationLockScreen(
                     InitializationManager.TYPE_CLOSE_SYSTEM_LOCKER);
+        } else if (view == mNextStep) {
+            if (null != mCallback) {
+                mCallback.onCloseSystemLockBack();
+            }
         }
     }
 }
