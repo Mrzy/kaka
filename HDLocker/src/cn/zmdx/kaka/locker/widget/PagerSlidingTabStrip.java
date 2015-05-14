@@ -18,6 +18,7 @@ package cn.zmdx.kaka.locker.widget;
 
 import java.util.Locale;
 
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -422,9 +423,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         if (shouldShowNew && isShouldShowNewFuction) {
             rectPaint.setColor(Color.RED);
             float cx = tabsContainer.getWidth()
-                    - ((tabsContainer.getWidth() / 4 - 2 * getTextSize()) / 2) + 12;
+                    - ((tabsContainer.getWidth() / 4 - 2 * getTextSize()) / 2)
+                    + BaseInfoHelper.dip2px(getContext(), 4);
             float cy = (height - getTextSize()) / 2;
-            canvas.drawCircle(cx, cy, 12, rectPaint);
+            canvas.drawCircle(cx, cy, BaseInfoHelper.dip2px(getContext(), 4), rectPaint);
         }
         // draw underline
 
@@ -525,29 +527,37 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                         tab.setTextColor(tabPressTextColor);
                     }
                     if (shouldSizeBigger) {
-                        setTextAnimator(tab, tabTextSize, tabPressTextSize);
-                    } else {
-                        tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
+                        setTextAnimator(tab);
                     }
                 } else {
                     if (shouldChangeTextColor) {
                         tab.setTextColor(tabTextColor);
                     }
-                    tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
+                    if (shouldSizeBigger) {
+                        setTextReturnAnimator(tab);
+                    }
                 }
+                tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
             }
         }
     }
 
-    private void setTextAnimator(final TextView view, float tabSize, float tabPressSize) {
-        DisplayMetrics dm = getResources().getDisplayMetrics();
-        float tabSizePx = tabSize / dm.density + 0.5f;
-        float tabPressSizePx = tabPressSize / dm.density + 0.5f;
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(view, "textSize", tabSizePx,
-                tabPressSizePx);
-        objectAnimator.setDuration(500);
-        objectAnimator.start();
+    private void setTextAnimator(final TextView view) {
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1, 1.2f);
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1, 1.2f);
+        AnimatorSet starSet = new AnimatorSet();
+        starSet.setDuration(500);
+        starSet.playTogether(scaleXAnimator, scaleYAnimator);
+        starSet.start();
+    }
 
+    private void setTextReturnAnimator(final TextView view) {
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1);
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1);
+        AnimatorSet starSet = new AnimatorSet();
+        starSet.setDuration(500);
+        starSet.playTogether(scaleXAnimator, scaleYAnimator);
+        starSet.start();
     }
 
     public void setIndicatorColor(int indicatorColor) {

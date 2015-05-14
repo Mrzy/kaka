@@ -36,6 +36,7 @@ public class ReadNotificationGuideFragment extends Fragment implements OnClickLi
         renderScreenLockerBlurEffect(ImageUtils.drawable2Bitmap(getResources().getDrawable(
                 R.drawable.pandora_default_background)));
         PandoraConfig.newInstance(getActivity()).saveReadNotifitionGuidedState(true);
+        PandoraConfig.newInstance(getActivity()).saveHasGuided();
         return mEntireView;
     }
 

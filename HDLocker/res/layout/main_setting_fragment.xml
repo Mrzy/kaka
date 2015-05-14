@@ -14,6 +14,7 @@
         psts:pstsIndicatorColor="@color/setting_psts_indicator_color"
         psts:pstsIndicatorHeight="2dp"
         psts:pstsIndicatorPadding="15dp"
+        psts:pstsShouldShowNew="false"
         psts:pstsTabBackground="@android:color/transparent"
         psts:pstsUnderlineColor="@android:color/transparent" />
 

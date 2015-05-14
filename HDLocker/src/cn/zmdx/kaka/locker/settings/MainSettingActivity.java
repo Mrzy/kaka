@@ -223,7 +223,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
                 addFragment(mMainSettingFragment, "", false, false);
             }
         } else {
-            if (!PandoraUtils.isMeizu(this)
+            if (!PandoraConfig.newInstance(this).isHasGuided() && !PandoraUtils.isMeizu(this)
                     && !PandoraConfig.newInstance(this).isCloseSystemLockGuided()) {
                 addFragment(mCloseSystemLockGuideFragment, TAG_CLOSE_SYSTEM_LOCK_GUIDE, false, true);
             } else {
@@ -253,7 +253,8 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
             return;
         }
 
-        if (!isMIUI && !PandoraUtils.isMeizu(this)
+        if (!PandoraConfig.newInstance(this).isHasGuided() && !isMIUI
+                && !PandoraUtils.isMeizu(this)
                 && !PandoraConfig.newInstance(this).isCloseSystemLockGuided()) {
             addFragment(mCloseSystemLockGuideFragment, TAG_CLOSE_SYSTEM_LOCK_GUIDE, false, true);
             return;

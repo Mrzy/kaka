@@ -35,6 +35,7 @@ public class CloseSystemLockGuideFragment extends Fragment implements OnClickLis
         renderScreenLockerBlurEffect(ImageUtils.drawable2Bitmap(getResources().getDrawable(
                 R.drawable.pandora_default_background)));
         PandoraConfig.newInstance(getActivity()).saveCloseSystemLockState(true);
+        PandoraConfig.newInstance(getActivity()).saveHasGuided();
         return mEntireView;
     }
 
