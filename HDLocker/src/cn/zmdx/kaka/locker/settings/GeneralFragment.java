@@ -482,14 +482,6 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
         mPandoraConfig.savePandoraProtecttState(false);
     }
 
-    private String getWeatherCity() {
-        return mPandoraConfig.getWeatherCity();
-    }
-
-    private void saveWeatherCity(String city) {
-        mPandoraConfig.saveWeatherCity(city);
-    }
-
     private boolean isLunarCalendarOn() {
         return mPandoraConfig.isLunarCalendarOn();
     }

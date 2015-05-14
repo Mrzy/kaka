@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
 
 /**
  * 基础Activity 所有子类需要调用initBackground()和initTitleHeight()这两个方法，以保证背景和当前壁纸一致并且不变形

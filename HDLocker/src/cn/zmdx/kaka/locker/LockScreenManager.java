@@ -534,9 +534,11 @@ public class LockScreenManager {
     }
 
     private void startFakeActivity() {
-        Intent intent = new Intent(mContext, FakeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(intent);
+        if (PandoraUtils.isMiuiFloatWindowOpAllowed(mContext)) {
+            Intent intent = new Intent(mContext, FakeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
+        }
     }
 
     public void updateWeatherInfo() {
@@ -590,6 +592,9 @@ public class LockScreenManager {
     }
 
     public void initWallpaper() {
+        if (null == mEntireView || null == mBlurImageView) {
+            return;
+        }
         mCurTheme = ThemeManager.getCurrentTheme();
         final Drawable curWallpaper = mCurTheme.getCurDrawable();
         LockerUtils.renderScreenLockerWallpaper(

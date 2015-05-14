@@ -1,16 +1,15 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import com.umeng.analytics.MobclickAgent;
-
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.Window;
 import android.webkit.WebView;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.network.UrlBuilder;
 import cn.zmdx.kaka.locker.utils.HDBNetworkState;
+
+import com.umeng.analytics.MobclickAgent;
 
 public class FAQActivity extends ActionBarActivity {
 

@@ -16,6 +16,7 @@ import cn.zmdx.kaka.locker.LockScreenManager.ILockScreenListener;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.notification.PandoraNotificationService;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -116,8 +117,10 @@ public class FakeActivity extends Activity {
     }
 
     public static void startup(Context context) {
-        Intent in = new Intent(context, FakeActivity.class);
-        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(in);
+        if (PandoraUtils.isMiuiFloatWindowOpAllowed(context)) {
+            Intent in = new Intent(context, FakeActivity.class);
+            in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(in);
+        }
     }
 }

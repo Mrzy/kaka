@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/init_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="45dp"
+        android:orientation="vertical" >
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            style="@style/pandora_init_setting_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/init_setting_title_icon"
+            android:drawablePadding="20dp"
+            android:text="@string/app_name" />
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            style="@style/pandora_init_setting_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="23dp"
+            android:text="小米系统特别设置"
+            android:textSize="18dp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/init_setting_MIUI_allow_floating_window_guide"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:layout_below="@+id/init_title_layout"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/init_setting_item_selector"
+        android:clickable="true" >
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:id="@+id/serial_number_one"
+            style="@style/pandora_init_setting_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="1"
+            android:textSize="19dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@+id/serial_number_one"
+            android:orientation="vertical" >
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                style="@style/pandora_init_setting_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/init_setting_MIUI_allow_floating_window" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                style="@style/pandora_init_setting_detail_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/init_setting_xiaomi_prompt" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/init_setting_MIUI_allow_floating_window_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:contentDescription="@string/contentDescription"
+            android:src="@drawable/init_setting_arrow" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/init_setting_MIUI_trust_guide"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:layout_below="@+id/init_setting_MIUI_allow_floating_window_guide"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/init_setting_item_selector"
+        android:clickable="true" >
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:id="@+id/serial_number_two"
+            style="@style/pandora_init_setting_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="2"
+            android:textSize="19dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@+id/serial_number_two"
+            android:orientation="vertical" >
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                style="@style/pandora_init_setting_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/init_setting_MIUI_trust" />
+
+            <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                style="@style/pandora_init_setting_detail_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/init_setting_MIUI_trust_detail" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/init_setting_MIUI_trust_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:contentDescription="@string/contentDescription"
+            android:src="@drawable/init_setting_arrow" />
+    </RelativeLayout>
+
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        style="@style/pandora_init_setting_detail_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/init_setting_MIUI_trust_guide"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="15dp"
+        android:text="设置后才能正常使用潘多拉锁屏"
+        android:textSize="13dp" />
+
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/init_setting_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="5dp"
+        android:clickable="true"
+        android:drawableRight="@drawable/init_setting_arrow"
+        android:gravity="center"
+        android:text="跳过"
+        android:textColor="@color/white"
+        android:textSize="14dp" />
+
+</RelativeLayout>

@@ -1,11 +1,10 @@
 
 package cn.zmdx.kaka.locker.settings;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
-import java.lang.reflect.Field;
 
 import android.content.Context;
 import android.content.Intent;
@@ -510,12 +509,12 @@ public class NotifyManagerActivity extends ActionBarActivity implements OnItemCl
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        Set<String> pkgNameSet = NotificationPreferences.getInstance(mContext)
-                .getInterceptPkgNames();
-        String notifyFilterApp = "|";
-        for (Iterator iterator = pkgNameSet.iterator(); iterator.hasNext();) {
-            notifyFilterApp += (String) iterator.next() + "|";
-        }
+//        Set<String> pkgNameSet = NotificationPreferences.getInstance(mContext)
+//                .getInterceptPkgNames();
+//        String notifyFilterApp = "|";
+//        for (Iterator iterator = pkgNameSet.iterator(); iterator.hasNext();) {
+//            notifyFilterApp += (String) iterator.next() + "|";
+//        }
         // UmengCustomEventManager.statisticalNotifyFilterApps(notifyFilterApp);
     }
 

@@ -117,6 +117,7 @@ public class CropImageActivity extends Activity implements OnClickListener {
      * @return
      * @throws FileNotFoundException
      */
+    @SuppressWarnings("deprecation")
     public Bitmap getBitmap(Uri uri) throws FileNotFoundException {
         InputStream inputStream = getContentResolver().openInputStream(uri);
         BitmapFactory.Options opts = new Options();

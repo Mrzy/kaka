@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AppOpsManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -31,10 +34,7 @@ import android.view.Display;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.HDApplication;
-import cn.zmdx.kaka.locker.ImageLoaderManager;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.theme.ThemeManager;
-import cn.zmdx.kaka.locker.wallpaper.OnlineWallpaperManager;
 
 public class PandoraUtils {
     private PandoraUtils() {
@@ -407,5 +407,58 @@ public class PandoraUtils {
             pandoraConfig.saveNotifyFunctionState(false);
             pandoraConfig.saveInitState();
         }
+    }
+
+    public static final int OP_SYSTEM_ALERT_WINDOW = 24;// 悬浮窗权限
+
+    public static boolean isMiuiFloatWindowOpAllowed(Context context) {
+        final int version = Build.VERSION.SDK_INT;
+
+        if (version >= 19) {
+            return checkOp(context, OP_SYSTEM_ALERT_WINDOW);
+        } else {
+            if ((context.getApplicationInfo().flags & 1 << 27) == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    private static boolean checkOp(Context context, int op) {
+        if (AppOpsManager.MODE_ALLOWED == invokeMethod(context, op)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @SuppressWarnings({
+            "rawtypes", "unchecked"
+    })
+    private static int invokeMethod(Context context, int op) {
+        final int version = Build.VERSION.SDK_INT;
+        if (version >= 19) {
+            Object object = context.getSystemService("appops");
+            Class c = object.getClass();
+            try {
+                Class[] cArg = new Class[3];
+                cArg[0] = int.class;
+                cArg[1] = int.class;
+                cArg[2] = String.class;
+                Method method = c.getDeclaredMethod("checkOp", cArg);
+                return (Integer) method.invoke(object, op, Binder.getCallingUid(),
+                        context.getPackageName());
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return 1;
     }
 }

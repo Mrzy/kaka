@@ -1,8 +1,6 @@
 
 package cn.zmdx.kaka.locker.settings;
 
-import java.lang.ref.WeakReference;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -11,29 +9,35 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Window;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
+import cn.zmdx.kaka.locker.guide.CloseSystemLockGuideFragment;
+import cn.zmdx.kaka.locker.guide.InitSettingFragment;
+import cn.zmdx.kaka.locker.guide.InitSettingFragment.ISettingFragmentListener;
+import cn.zmdx.kaka.locker.guide.ReadNotificationGuideFragment;
 import cn.zmdx.kaka.locker.notification.NotificationInterceptor;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.MainSettingFragment.IMainSettingListener;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
 import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
-import cn.zmdx.kaka.locker.splash.SplashActivity;
+import cn.zmdx.kaka.locker.splash.SplashFragment;
+import cn.zmdx.kaka.locker.splash.SplashFragment.ISplashFragmentListener;
 import cn.zmdx.kaka.locker.wallpaper.WallpaperUtils;
 
 import com.umeng.analytics.MobclickAgent;
 
-public class MainSettingActivity extends ActionBarActivity implements IMainSettingListener {
+public class MainSettingActivity extends ActionBarActivity implements IMainSettingListener,
+        ISettingFragmentListener, ISplashFragmentListener {
+
+    private static boolean isSplash = true;
 
     private Intent mServiceIntent = null;
-
-    boolean isFirstIn = false;
-
-    private static final int GO_INIT_SETTING = 1001;
 
     private int[] mBackgroundDrawable = {
             R.drawable.action_bar_bg_blue, R.drawable.action_bar_bg_purple,
@@ -53,26 +57,19 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
 
     private MainSettingFragment mMainSettingFragment;
 
-    private MyHandler mHandler = new MyHandler(this);
+    private CloseSystemLockGuideFragment mCloseSystemLockGuideFragment;
 
-    private static class MyHandler extends Handler {
-        WeakReference<MainSettingActivity> mActivity;
+    private ReadNotificationGuideFragment mReadNotificationGuideFragment;
 
-        public MyHandler(MainSettingActivity activity) {
-            mActivity = new WeakReference<MainSettingActivity>(activity);
-        }
+    private InitSettingFragment mInitSettingFragment;
 
-        @Override
-        public void handleMessage(Message msg) {
-            MainSettingActivity activity = mActivity.get();
-            switch (msg.what) {
-                case GO_INIT_SETTING:
-                    activity.handleToActivity();
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    }
+    private SplashFragment mSplashFragment;
+
+    private boolean isMIUI = false;
+
+    private static final String TAG_CLOSE_SYSTEM_LOCK_GUIDE = "closeSystenLockGuideFragment";
+
+    private static final String TAG_READ_NOTIFICATION_GUIDE = "readNotificationGuideFragment";
 
     @SuppressLint("InlinedApi")
     @Override
@@ -86,55 +83,31 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         // }
         mServiceIntent = new Intent(getApplicationContext(), PandoraService.class);
         startService(mServiceIntent);
-        init();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+
         // AppUninstall.openUrlWhenUninstall(this, "http://www.hdlocker.com");
         MobclickAgent.openActivityDurationTrack(false);
         // UmengUpdateAgent.silentUpdate(this);
         setContentView(R.layout.main_setting_activity);
 
+        isMIUI = PandoraUtils.isMIUI(this);
+
         setBackground(getResources().getDrawable(R.drawable.action_bar_bg_blue));
         getSupportActionBar().setTitle(getResources().getString(R.string.pandora_setting_general));
+        getSupportActionBar().hide();
         // getWindow().getAttributes().flags |=
         // LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+
         mMainSettingFragment = new MainSettingFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.content, mMainSettingFragment)
-                .commit();
+        mCloseSystemLockGuideFragment = new CloseSystemLockGuideFragment();
+        mReadNotificationGuideFragment = new ReadNotificationGuideFragment();
+        mInitSettingFragment = new InitSettingFragment();
+        mSplashFragment = new SplashFragment();
+
+        initFragment();
         UmengCustomEventManager.statisticalNeedInterceptApp();
         WallpaperUtils.autoChangeWallpaper();
-        PandoraUtils.initState();
-    }
-
-    public void handleToActivity() {
-//        String appMetaData = PandoraUtils.getAppMetaData(this, "UMENG_CHANNEL");
-//        if ("m360".equals(appMetaData)) {
-//            gotoSplash();
-//        } else {
-            isFirstIn = !PandoraConfig.newInstance(this).isHasGuided();
-            if (isFirstIn) {
-                goInitSetting();
-            }
-//        }
-
-    }
-
-    private void init() {
-        mHandler.sendEmptyMessage(GO_INIT_SETTING);
-    }
-
-    private void gotoSplash() {
-        Intent intent = new Intent(this, SplashActivity.class);
-        startActivity(intent);
-    }
-
-    private void goInitSetting() {
-        boolean isMeizu = PandoraUtils.isMeizu(this);
-        if (isMeizu && !NotificationInterceptor.isDeviceAvailable()) {
-            return;
-        }
-        Intent intent = new Intent(this, InitSettingActivity.class);
-        startActivity(intent);
     }
 
     public void onResume() {
@@ -205,5 +178,147 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
                 break;
             }
         }
+    }
+
+    private void initFragment() {
+        if (isMIUI && !PandoraUtils.isMiuiFloatWindowOpAllowed(this)) {
+            addFragment(mInitSettingFragment, "", false, true);
+        } else {
+            if (isSplash) {
+                addFragment(mSplashFragment, "", false, true);
+                isSplash = false;
+                return;
+            }
+            if (NotificationInterceptor.isDeviceAvailable()
+                    && !PandoraConfig.newInstance(this).isReadNotifitionGuided()
+                    && !NotificationInterceptor.isGrantedNotifyPermission(this)) {
+                addFragment(mReadNotificationGuideFragment, TAG_READ_NOTIFICATION_GUIDE, true, true);
+                return;
+            }
+            addFragment(mMainSettingFragment, "", false, false);
+        }
+
+    }
+
+    @Override
+    public void onInitSettingSkip() {
+        if (!NotificationInterceptor.isDeviceAvailable()
+                || PandoraConfig.newInstance(this).isReadNotifitionGuided()) {
+            removeFragment(mInitSettingFragment, false);
+            addFragment(mMainSettingFragment, "", false, false);
+        } else {
+            if (!NotificationInterceptor.isGrantedNotifyPermission(this)) {
+                addFragment(mReadNotificationGuideFragment, TAG_READ_NOTIFICATION_GUIDE, true, true);
+            }
+        }
+    }
+
+    public void onReadNotificationBack() {
+        removeFragment(mReadNotificationGuideFragment, true);
+        getSupportFragmentManager().popBackStack(TAG_READ_NOTIFICATION_GUIDE,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (isMIUI) {
+            if (PandoraUtils.isMiuiFloatWindowOpAllowed(this)) {
+                removeFragment(mInitSettingFragment, false);
+                addFragment(mMainSettingFragment, "", false, false);
+            }
+        } else {
+            if (!PandoraUtils.isMeizu(this)
+                    && !PandoraConfig.newInstance(this).isCloseSystemLockGuided()) {
+                addFragment(mCloseSystemLockGuideFragment, TAG_CLOSE_SYSTEM_LOCK_GUIDE, false, true);
+            } else {
+                addFragment(mMainSettingFragment, "", false, false);
+            }
+        }
+    }
+
+    public void onCloseSystemLockBack() {
+        removeFragment(mCloseSystemLockGuideFragment, false);
+        getSupportFragmentManager().popBackStack(TAG_CLOSE_SYSTEM_LOCK_GUIDE,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        addFragment(mMainSettingFragment, "", false, false);
+    }
+
+    @Override
+    public void onSplashEnd() {
+        if (isDestroy) {
+            return;
+        }
+        removeFragment(mSplashFragment, false);
+
+        if (NotificationInterceptor.isDeviceAvailable()
+                && !PandoraConfig.newInstance(this).isReadNotifitionGuided()
+                && !NotificationInterceptor.isGrantedNotifyPermission(this)) {
+            addFragment(mReadNotificationGuideFragment, TAG_READ_NOTIFICATION_GUIDE, true, true);
+            return;
+        }
+
+        if (!isMIUI && !PandoraUtils.isMeizu(this)
+                && !PandoraConfig.newInstance(this).isCloseSystemLockGuided()) {
+            addFragment(mCloseSystemLockGuideFragment, TAG_CLOSE_SYSTEM_LOCK_GUIDE, false, true);
+            return;
+        }
+        addFragment(mMainSettingFragment, "", false, false);
+    }
+
+    private void addFragment(Fragment fragment, String tag, boolean isAddToBackStack,
+            boolean isNeedAnimator) {
+        if (!fragment.isAdded()) {
+            FragmentTransaction beginTransaction = getSupportFragmentManager().beginTransaction();
+            if (isNeedAnimator) {
+                beginTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            }
+            beginTransaction.add(R.id.content, fragment, tag);
+            if (isAddToBackStack) {
+                beginTransaction.addToBackStack(tag);
+            }
+            beginTransaction.commitAllowingStateLoss();
+
+            if (fragment instanceof MainSettingFragment) {
+                getSupportActionBar().show();
+            } else {
+                getSupportActionBar().hide();
+            }
+        }
+    }
+
+    private void removeFragment(Fragment fragment, boolean isNeedAnimator) {
+        FragmentTransaction beginTransaction = getSupportFragmentManager().beginTransaction();
+        if (isNeedAnimator) {
+            beginTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+        }
+        beginTransaction.remove(fragment).commitAllowingStateLoss();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Fragment fragment_byTag = getSupportFragmentManager().findFragmentByTag(
+                    TAG_READ_NOTIFICATION_GUIDE);
+            Fragment close = getSupportFragmentManager().findFragmentByTag(
+                    TAG_CLOSE_SYSTEM_LOCK_GUIDE);
+            if (fragment_byTag != null) {
+                if (fragment_byTag.isVisible()) {
+                    onReadNotificationBack();
+                    return false;
+                }
+            } else {
+                if (close != null) {
+                    if (close.isVisible()) {
+                        onCloseSystemLockBack();
+                    }
+                    return false;
+                }
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean isDestroy = false;
+
+    @Override
+    protected void onDestroy() {
+        isDestroy = true;
+        super.onDestroy();
     }
 }

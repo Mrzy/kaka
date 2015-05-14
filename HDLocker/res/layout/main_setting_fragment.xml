@@ -15,8 +15,7 @@
         psts:pstsIndicatorHeight="2dp"
         psts:pstsIndicatorPadding="15dp"
         psts:pstsTabBackground="@android:color/transparent"
-        psts:pstsUnderlineColor="@android:color/transparent" 
-        psts:pstsShouldShowNew="true"/>
+        psts:pstsUnderlineColor="@android:color/transparent" />
 
     <cn.zmdx.kaka.locker.widget.ViewPagerCompat
         android:id="@+id/setting_viewpaper"

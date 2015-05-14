@@ -34,7 +34,6 @@
     <color name="password_key_pressed">#29a4ec</color>
     
     <color name="init_setting_no_progress">#bcbcbc</color>
-    <color name="init_setting_progress">#3db7ff</color>
 
     <!-- CheckBox Default -->
     <dimen name="checkbox_width">17dp</dimen>

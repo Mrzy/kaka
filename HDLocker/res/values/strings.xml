@@ -13,8 +13,6 @@
     <string name="determine">确定</string>
 
     <!-- setting -->
-    <string name="init_setting_close_systemlocker">关闭系统锁屏</string>
-    <string name="init_setting_close_systemlocker_detail">避免出现双锁屏</string>
     <string name="contentDescription"></string>
     <string name="setting_about_text">全网爆点 1步到位</string>
     <string name="setting_about_email">pandora@hdlocker.com</string>
@@ -31,24 +29,17 @@
     <string name="lock_pattern_verify_fail">图案不匹配，请重新绘制</string>
     <string name="lock_pattern_reset_new_prompt">绘制新解锁图案</string>
 
-    <!-- guide -->
-    <string name="guide_button_text">前往初始设置</string>
-
     <!-- init setting -->
     <string name="init_setting_title">初始设置</string>
-    <string name="init_setting_MIUI_allow_floating_window">允许显示悬浮窗</string>
-    <string name="init_setting_MIUI_trust">信任程序和允许自动启动</string>
-    <string name="init_setting_MIUI_trust_detail">确保潘多拉锁屏不被系统关闭</string>
-    <string name="init_setting_to_set">立即设置</string>
-    <string name="init_setting_complete_to_set">体验潘多拉锁屏</string>
+    <string name="init_setting_MIUI_allow_floating_window">开启[显示悬浮窗]</string>
+    <string name="init_setting_MIUI_trust">开启[信任&amp;自启]</string>
+    <string name="init_setting_MIUI_trust_detail">打开[信任&amp;自动启动]</string>
     <string name="init_setting_close_systemlocker_prompt">请选择『无』模式</string>
     <string name="init_setting_MIUI_close_systemlocker_prompt_miui_one">开启『开发者选项』开关</string>
     <string name="init_setting_MIUI_close_systemlocker_prompt_miui_two">开启『直接进入系统』开关</string>
     <string name="init_setting_MIUI_allow_floating_window_prompt">请开启『显示悬浮窗』开关</string>
     <string name="init_setting_MIUI_trust_prompt_one">开启『我信任该程序』</string>
     <string name="init_setting_MIUI_trust_prompt_two">和『自动启动』开关</string>
-    <string name="init_setting_read_notification_title">开启消息通知</string>
-    <string name="init_setting_read_notification_prompt">未接来电、qq、微信等消息显示在锁屏</string>
     <string name="lock_week_monday">星期一</string>
     <string name="lock_week_tuesday">星期二</string>
     <string name="lock_week_wednesday">星期三</string>
@@ -61,7 +52,6 @@
     <string name="update_prompt_no_internet">网络连接超时，请稍候再试！</string>
     <string name="pandora_box_no_net_tip">网络未连接，猛料拉不出</string>
     <string name="error">出现异常，给您带来的不便，敬请谅解，我们会尽快解决</string>
-    <string name="pandora_guide_start">开始体验</string>
     <string name="init_setting_V6_close_systemlocker_title">请按照以下方式关闭系统锁屏</string>
     <string name="init_setting_V6_close_systemlocker_prompt">潘多拉锁屏已经经过测试，不会引起您的设备以及设备上应用的问题</string>
     <string name="init_setting_V6_allow_floating_window_title">开启显示悬浮窗</string>
@@ -73,10 +63,6 @@
     <string name="init_setting_V6_trust_prompt">潘多拉锁屏需要能够在您手机开机时自动启动，只需要一次设置，以后就不需要麻烦啦</string>
     <string name="init_setting_V6_read_notification_title">请勾选『潘多拉锁屏』的读取通知权限</string>
     <string name="init_setting_V6_read_notification_prompt">潘多拉锁屏严格保护您的隐私，只在本机使用这些权限，用以显示通知</string>
-
-    <!-- onlinePaper -->
-    <string name="sdcard_error">未检测到SDCARD,请检查后重试！</string>
-    <string name="setting_network_error">您已设置禁止在3G/4G时下载。\n如需正常使用功能，请打开开关！</string>
 
     <!-- keyboardview -->
     <string name="keyboardview_keycode_alt" msgid="4856868820040051939">"Alt"</string>
@@ -198,15 +184,12 @@
     <string name="pandora_wallpaper_month_november">Nov</string>
     <string name="pandora_wallpaper_month_december">Dec</string>
 
-    <string name="init_setting_xiaomi_prompt">小米用户必备设置</string>
-    <string name="init_setting_recommended_setting_prompt">强烈推荐</string>
+    <string name="init_setting_xiaomi_prompt">打开[显示悬浮窗]</string>
 
     <string name="open_notification">右划打开</string>
     <string name="remove_notification">左划忽略</string>
 
     <string name="pandora_locker_shimmer_unlock_str">〉滑动来解锁</string>
-    <string name="no_weather_info_str">正在获取天气</string>
-    <string name="get_weather_failure">获取天气失败</string>
 
     <string name="tip_no_news">请检查网络</string>
     <string name="tip_loading_news">正在加载</string>

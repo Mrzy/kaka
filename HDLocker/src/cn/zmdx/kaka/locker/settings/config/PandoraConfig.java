@@ -2,7 +2,6 @@
 package cn.zmdx.kaka.locker.settings.config;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import cn.zmdx.kaka.locker.BuildConfig;
@@ -136,6 +135,10 @@ public class PandoraConfig {
 
     private static final String KEY_INIT_STATE = "kistate";
 
+    private static final String KEY_READ_NOTIFITION_GUIDE = "krngd";
+    
+    private static final String KEY_CLOSE_SYSTEM_LOCK_GUIDE = "kcslgd";
+    
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -668,6 +671,22 @@ public class PandoraConfig {
 
     public void saveInitState() {
         mSp.edit().putBoolean(KEY_INIT_STATE, false).commit();
+    }
+
+    public boolean isReadNotifitionGuided() {
+        return mSp.getBoolean(KEY_READ_NOTIFITION_GUIDE, false);
+    }
+
+    public void saveReadNotifitionGuidedState(boolean isGuided) {
+        mSp.edit().putBoolean(KEY_READ_NOTIFITION_GUIDE, isGuided).commit();
+    }
+    
+    public boolean isCloseSystemLockGuided() {
+        return mSp.getBoolean(KEY_CLOSE_SYSTEM_LOCK_GUIDE, false);
+    }
+
+    public void saveCloseSystemLockState(boolean isGuided) {
+        mSp.edit().putBoolean(KEY_CLOSE_SYSTEM_LOCK_GUIDE, isGuided).commit();
     }
 
 }
