@@ -448,6 +448,7 @@ public class LockScreenManager {
             pauseWallpaperTranslation();
 //            pauseShimmer();
             mFakeStatusDate.setVisibility(View.VISIBLE);
+            mSlidingUpView.setDragView(panel.findViewById(R.id.dragview2));
         };
 
         public void onPanelCollapsed(View panel) {
@@ -455,6 +456,7 @@ public class LockScreenManager {
             resumeWallpaperTranslation();
 //            startShimmer();
             mFakeStatusDate.setVisibility(View.INVISIBLE);
+            mSlidingUpView.setDragView(panel.findViewById(R.id.header_part1));
         };
     };
 
