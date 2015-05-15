@@ -53,6 +53,8 @@ public class SplashFragment extends Fragment {
 
     private ImageView mBlurView;
 
+    private boolean isDestroy = false;
+
     public interface ISplashFragmentListener {
         void onSplashEnd();
     }
@@ -191,8 +193,11 @@ public class SplashFragment extends Fragment {
             starSet.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    renderScreenLockerBlurEffect(ImageUtils.drawable2Bitmap(getResources()
-                            .getDrawable(R.drawable.pandora_default_background)));
+                    if (!isDestroy) {
+                        renderScreenLockerBlurEffect(ImageUtils.drawable2Bitmap(getResources()
+                                .getDrawable(R.drawable.pandora_default_background)));
+                    }
+
                 }
             });
         }
@@ -218,5 +223,11 @@ public class SplashFragment extends Fragment {
             }
         });
         blurBmpAlpha.start();
+    }
+
+    @Override
+    public void onDestroy() {
+        isDestroy = true;
+        super.onDestroy();
     }
 }

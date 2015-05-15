@@ -189,7 +189,7 @@
     <string name="open_notification">右划打开</string>
     <string name="remove_notification">左划忽略</string>
 
-    <string name="pandora_locker_shimmer_unlock_str">〉滑动来解锁</string>
+    <string name="pandora_locker_shimmer_unlock_str">＞️滑动来解锁</string>
 
     <string name="tip_no_news">请检查网络</string>
     <string name="tip_loading_news">正在加载</string>

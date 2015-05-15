@@ -276,7 +276,7 @@ public class LockScreenManager {
         mFakeStatusDate = mMainPage.findViewById(R.id.fakeStatusDate);
         mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
         mShimmer = new Shimmer();
-        mShimmer.setDuration(5000);// 默认是1s
+        mShimmer.setDuration(3000);// 默认是1s
         mShimmer.setStartDelay(1000);// 默认间隔为0
 
         mCommonWidgetLayout = mMainPage.findViewById(R.id.commonWidgetArea);
