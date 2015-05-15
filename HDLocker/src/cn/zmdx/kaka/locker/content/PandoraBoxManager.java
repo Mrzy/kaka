@@ -840,8 +840,10 @@ public class PandoraBoxManager implements View.OnClickListener {
             headerData.remove(0);
         } else {
             setExpandedAction(null);
-            mHeaderHasNewsArea.setVisibility(View.GONE);
-            mHeaderNoNewsArea.setVisibility(View.VISIBLE);
+            if (mHeaderHasNewsArea != null) {
+                mHeaderHasNewsArea.setVisibility(View.GONE);
+                mHeaderNoNewsArea.setVisibility(View.VISIBLE);
+            }
         }
     }
 

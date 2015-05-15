@@ -361,7 +361,7 @@ public class LockScreenManager {
                 PandoraBoxManager.newInstance(mContext).initBody();
                 PandoraBoxManager.newInstance(mContext).refreshCurrentNews();
             }
-        }, 1000);
+        }, 3000);
     }
 
     public void pauseWallpaperTranslation() {
