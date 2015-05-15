@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/init_title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_marginTop="45dp"
         android:orientation="vertical" >
 
@@ -35,7 +35,6 @@
         android:id="@+id/init_setting_MIUI_allow_floating_window_guide"
         android:layout_width="match_parent"
         android:layout_height="57dp"
-        android:layout_below="@+id/init_title_layout"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="20dp"
@@ -90,7 +89,6 @@
         android:id="@+id/init_setting_MIUI_trust_guide"
         android:layout_width="match_parent"
         android:layout_height="57dp"
-        android:layout_below="@+id/init_setting_MIUI_allow_floating_window_guide"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="20dp"
@@ -146,39 +144,42 @@
         style="@style/pandora_init_setting_detail_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/init_setting_MIUI_trust_guide"
+        android:layout_gravity="right"
         android:layout_marginRight="25dp"
         android:layout_marginTop="15dp"
         android:text="设置后才能正常使用潘多拉锁屏"
         android:textSize="13dp" />
 
-    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-        android:id="@+id/pandora_init_setting_complete"
-        style="@style/pandora_init_setting_detail_textview"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pandora_init_setting_prompt"
-        android:layout_centerHorizontal="true"
+        android:layout_height="0dp"
         android:layout_marginLeft="42dp"
         android:layout_marginRight="42dp"
-        android:layout_marginTop="120dp"
-        android:background="@drawable/init_complete_selector"
-        android:clickable="true"
-        android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:text="设置完成"
-        android:textColor="@color/white"
-        android:textSize="24dp"
-        android:visibility="gone" />
+        android:layout_weight="1" >
+
+        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+            android:id="@+id/pandora_init_setting_complete"
+            style="@style/pandora_init_setting_detail_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:background="@drawable/init_complete_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="设置完成"
+            android:textColor="@color/white"
+            android:textSize="24dp"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/init_setting_skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="5dp"
         android:clickable="true"
@@ -192,4 +193,4 @@
         android:textColor="@color/white"
         android:textSize="14dp" />
 
-</RelativeLayout>
+</LinearLayout>

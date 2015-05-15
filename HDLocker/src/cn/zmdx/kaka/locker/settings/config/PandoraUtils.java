@@ -33,7 +33,6 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.BuildConfig;
-import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
 
 public class PandoraUtils {
@@ -409,9 +408,10 @@ public class PandoraUtils {
         if (version >= 19) {
             return checkOp(context, OP_SYSTEM_ALERT_WINDOW);
         } else {
-            if ((context.getApplicationInfo().flags & 1 << 27) == 1) {
+            if (PandoraConfig.newInstance(context).isMIUILow19Prompt()) {
                 return true;
             } else {
+                PandoraConfig.newInstance(context).saveMIUILow19PromptState(true);
                 return false;
             }
         }

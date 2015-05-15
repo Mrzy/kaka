@@ -133,8 +133,6 @@ public class PandoraConfig {
 
     private static final String KEY_TIP_ADD_CHANNEL_FUNCTION = "ktacf";
 
-    private static final String KEY_INIT_STATE = "kistate";
-
     private static final String KEY_READ_NOTIFITION_GUIDE = "krngd";
     
     private static final String KEY_CLOSE_SYSTEM_LOCK_GUIDE = "kcslgd";
@@ -142,6 +140,8 @@ public class PandoraConfig {
     private static final String KEY_INIT_SETP_ONE = "kisone";
     
     private static final String KEY_INIT_SETP_TWO = "kistwo";
+    
+    private static final String KEY_MIUI_LOW_KITKAT_PROMPT = "k17prompt";
     
     private PandoraConfig(Context context) {
         mContext = context;
@@ -701,5 +701,13 @@ public class PandoraConfig {
     public void saveInitSetpTwoState(boolean isInit) {
         mSp.edit().putBoolean(KEY_INIT_SETP_TWO, isInit).commit();
     }
+    
+    public boolean isMIUILow19Prompt() {
+        return mSp.getBoolean(KEY_MIUI_LOW_KITKAT_PROMPT, false);
+    }
 
+    public void saveMIUILow19PromptState(boolean inPrompt) {
+        mSp.edit().putBoolean(KEY_MIUI_LOW_KITKAT_PROMPT, inPrompt).commit();
+    }
+    
 }
