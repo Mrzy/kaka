@@ -204,8 +204,7 @@ public class LockScreenManager {
         initNewLockScreenViews();
         mWinManager.addView(mEntireView, mWinParams);
 
-            startFakeActivity();
-
+        FakeActivity.startup(mContext);
 
         notifyLocked();
 
@@ -540,12 +539,6 @@ public class LockScreenManager {
         if (mLockListener != null) {
             mLockListener.onUnLock();
         }
-    }
-
-    private void startFakeActivity() {
-        Intent intent = new Intent(mContext, FakeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(intent);
     }
 
     public void updateWeatherInfo() {

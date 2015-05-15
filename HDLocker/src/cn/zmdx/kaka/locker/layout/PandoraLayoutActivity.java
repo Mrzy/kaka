@@ -213,6 +213,7 @@ public class PandoraLayoutActivity extends ActionBarActivity implements OnItemCl
             @Override
             public void run() {
                 LockScreenManager.getInstance().lock();
+                LockScreenManager.getInstance().startShimmer();
             }
         }, 300);
     }

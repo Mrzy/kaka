@@ -29,10 +29,6 @@ public class FakeActivity extends Activity {
             finish();
         }
 
-        if (PandoraUtils.isMIUI(this) && !PandoraUtils.isMiuiFloatWindowOpAllowed(this)) {
-            return;
-        }
-
         boolean isDisplayStatusbar = PandoraConfig.newInstance(this).isNotifyFunctionOn();
         if (isDisplayStatusbar) {
             setTheme(android.R.style.Theme_Translucent_NoTitleBar);
@@ -122,10 +118,11 @@ public class FakeActivity extends Activity {
     }
 
     public static void startup(Context context) {
-        if (PandoraUtils.isMiuiFloatWindowOpAllowed(context)) {
-            Intent in = new Intent(context, FakeActivity.class);
-            in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(in);
+        if (PandoraUtils.isMIUI(context) && !PandoraUtils.isMiuiFloatWindowOpAllowed(context)) {
+            return;
         }
+        Intent in = new Intent(context, FakeActivity.class);
+        in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(in);
     }
 }
