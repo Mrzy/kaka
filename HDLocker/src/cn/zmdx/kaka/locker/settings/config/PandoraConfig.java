@@ -651,7 +651,7 @@ public class PandoraConfig {
     }
 
     public boolean isShowPromptNew() {
-        return mSp.getBoolean(KEY_PROMPT_NEW, true);
+        return mSp.getBoolean(KEY_PROMPT_NEW, false);
     }
 
     public boolean isHiddenLineOn() {
