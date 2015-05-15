@@ -13,7 +13,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.initialization.InitializationManager;
-import cn.zmdx.kaka.locker.utils.BlurUtils;
+import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
@@ -29,8 +30,10 @@ public class InitSettingFragment extends Fragment implements OnClickListener {
 
     private RelativeLayout mTrustLayout;
 
+    private TypefaceTextView mCompleteBtn;
+
     public interface ISettingFragmentListener {
-        void onInitSettingSkip();
+        void onInitSettingSkip(boolean isComplete);
     }
 
     private ISettingFragmentListener mCallBack;
@@ -50,6 +53,7 @@ public class InitSettingFragment extends Fragment implements OnClickListener {
         initView();
         renderScreenLockerBlurEffect(ImageUtils.drawable2Bitmap(getResources().getDrawable(
                 R.drawable.pandora_default_background)));
+        showCompleteBtn();
         return mEntireView;
     }
 
@@ -65,16 +69,14 @@ public class InitSettingFragment extends Fragment implements OnClickListener {
                 .findViewById(R.id.init_setting_MIUI_trust_guide);
         mTrustLayout.setOnClickListener(this);
 
+        mCompleteBtn = (TypefaceTextView) mEntireView
+                .findViewById(R.id.pandora_init_setting_complete);
+        mCompleteBtn.setOnClickListener(this);
+
     }
 
-    private Bitmap mBlurBmp;
-
     private void renderScreenLockerBlurEffect(Bitmap bmp) {
-        if (mBlurBmp != null && !mBlurBmp.isRecycled()) {
-            mBlurBmp.recycle();
-            mBlurBmp = null;
-        }
-        mBlurBmp = BlurUtils.doFastBlur(getActivity(), bmp, mLayout, 40);
+        GuideUtil.renderScreenLockerBlurEffect(getActivity(), mLayout, bmp);
     }
 
     @Override
@@ -82,13 +84,34 @@ public class InitSettingFragment extends Fragment implements OnClickListener {
         if (view == mFolatfingWindowLayout) {
             InitializationManager.getInstance(getActivity()).initializationLockScreen(
                     InitializationManager.TYPE_ALLOW_FOLAT_WINDOW);
+            PandoraConfig.newInstance(getActivity()).saveInitSetpOneState(true);
+            showCompleteBtn();
         } else if (view == mTrustLayout) {
             InitializationManager.getInstance(getActivity()).initializationLockScreen(
                     InitializationManager.TYPE_TRUST);
+            PandoraConfig.newInstance(getActivity()).saveInitSetpTwoState(true);
+            showCompleteBtn();
         } else if (view == mSkipBtn) {
             if (null != mCallBack) {
-                mCallBack.onInitSettingSkip();
+                mCallBack.onInitSettingSkip(false);
             }
+        } else if (view == mCompleteBtn) {
+            if (null != mCallBack) {
+                mCallBack.onInitSettingSkip(true);
+            }
+        }
+    }
+
+    private void showCompleteBtn() {
+        if (PandoraConfig.newInstance(getActivity()).isInitSetpOne()
+                && PandoraConfig.newInstance(getActivity()).isInitSetpTwo()) {
+            HDBThreadUtils.postOnUiDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    mCompleteBtn.setVisibility(View.VISIBLE);
+                }
+            }, 600);
         }
     }
 }

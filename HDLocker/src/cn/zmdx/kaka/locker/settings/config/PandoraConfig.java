@@ -139,6 +139,10 @@ public class PandoraConfig {
     
     private static final String KEY_CLOSE_SYSTEM_LOCK_GUIDE = "kcslgd";
     
+    private static final String KEY_INIT_SETP_ONE = "kisone";
+    
+    private static final String KEY_INIT_SETP_TWO = "kistwo";
+    
     private PandoraConfig(Context context) {
         mContext = context;
         mSp = context.getSharedPreferences(SP_NAME_SETTINGS, Context.MODE_PRIVATE);
@@ -680,6 +684,22 @@ public class PandoraConfig {
 
     public void saveCloseSystemLockState(boolean isGuided) {
         mSp.edit().putBoolean(KEY_CLOSE_SYSTEM_LOCK_GUIDE, isGuided).commit();
+    }
+    
+    public boolean isInitSetpOne() {
+        return mSp.getBoolean(KEY_INIT_SETP_ONE, false);
+    }
+
+    public void saveInitSetpOneState(boolean isInit) {
+        mSp.edit().putBoolean(KEY_INIT_SETP_ONE, isInit).commit();
+    }
+    
+    public boolean isInitSetpTwo() {
+        return mSp.getBoolean(KEY_INIT_SETP_TWO, false);
+    }
+
+    public void saveInitSetpTwoState(boolean isInit) {
+        mSp.edit().putBoolean(KEY_INIT_SETP_TWO, isInit).commit();
     }
 
 }

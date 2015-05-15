@@ -21,8 +21,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.guide.GuideUtil;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
-import cn.zmdx.kaka.locker.utils.BlurUtils;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
@@ -205,14 +205,8 @@ public class SplashFragment extends Fragment {
         starSet.start();
     }
 
-    private Bitmap mBlurBmp;
-
     private void renderScreenLockerBlurEffect(Bitmap bmp) {
-        if (mBlurBmp != null && !mBlurBmp.isRecycled()) {
-            mBlurBmp.recycle();
-            mBlurBmp = null;
-        }
-        mBlurBmp = BlurUtils.doFastBlur(getActivity(), bmp, mBlurView, 20);
+        GuideUtil.renderScreenLockerBlurEffect(getActivity(), mBlurView, bmp);
         mBlurView.setVisibility(View.VISIBLE);
         ObjectAnimator blurBmpAlpha = ObjectAnimator.ofFloat(mBlurView, "alpha", 0, 1);
         blurBmpAlpha.setDuration(1000);

@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.initialization.InitializationManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.utils.BlurUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
@@ -56,14 +55,8 @@ public class CloseSystemLockGuideFragment extends Fragment implements OnClickLis
         return mEntireView;
     }
 
-    private Bitmap mBlurBmp;
-
     private void renderScreenLockerBlurEffect(Bitmap bmp) {
-        if (mBlurBmp != null && !mBlurBmp.isRecycled()) {
-            mBlurBmp.recycle();
-            mBlurBmp = null;
-        }
-        mBlurBmp = BlurUtils.doFastBlur(getActivity(), bmp, mLayout, 30);
+        GuideUtil.renderScreenLockerBlurEffect(getActivity(), mLayout, bmp);
     }
 
     @Override

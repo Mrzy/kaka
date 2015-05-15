@@ -142,6 +142,7 @@
     </RelativeLayout>
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/pandora_init_setting_prompt"
         style="@style/pandora_init_setting_detail_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -151,6 +152,26 @@
         android:layout_marginTop="15dp"
         android:text="设置后才能正常使用潘多拉锁屏"
         android:textSize="13dp" />
+
+    <cn.zmdx.kaka.locker.widget.TypefaceTextView
+        android:id="@+id/pandora_init_setting_complete"
+        style="@style/pandora_init_setting_detail_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pandora_init_setting_prompt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="42dp"
+        android:layout_marginRight="42dp"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/init_complete_selector"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="设置完成"
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        android:visibility="gone" />
 
     <cn.zmdx.kaka.locker.widget.TypefaceTextView
         android:id="@+id/init_setting_skip"
