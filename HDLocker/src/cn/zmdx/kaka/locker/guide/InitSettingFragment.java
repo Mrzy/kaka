@@ -51,9 +51,9 @@ public class InitSettingFragment extends Fragment implements OnClickListener {
         mEntireView = inflater.inflate(R.layout.init_setting_guide, container, false);
         mLayout = mEntireView.findViewById(R.id.background);
         initView();
+        showCompleteBtn();
         renderScreenLockerBlurEffect(ImageUtils.drawable2Bitmap(getResources().getDrawable(
                 R.drawable.pandora_default_background)));
-        showCompleteBtn();
         return mEntireView;
     }
 

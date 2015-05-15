@@ -224,7 +224,7 @@ public class LockScreenManager {
         WallpaperUtils.autoChangeWallpaper();
     }
 
-    private void startShimmer() {
+    public void startShimmer() {
         if (mShimmer != null) {
             if (!mShimmer.isAnimating()) {
                 mShimmer.start(mShimmerTextView);

@@ -35,6 +35,7 @@ public class WallpaperDetailActivity extends Activity {
             @Override
             public void onApplyWallpaper() {
                 LockScreenManager.getInstance().lock();
+                LockScreenManager.getInstance().startShimmer();
                 onBackPressed();
             }
         });
