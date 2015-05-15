@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.initialization.InitializationManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
 
@@ -72,4 +71,9 @@ public class ReadNotificationGuideFragment extends Fragment implements OnClickLi
         }
     }
 
+    @Override
+    public void onDestroy() {
+        GuideUtil.recycleBitmap();
+        super.onDestroy();
+    }
 }

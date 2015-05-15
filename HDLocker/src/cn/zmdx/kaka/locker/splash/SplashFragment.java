@@ -110,6 +110,8 @@ public class SplashFragment extends Fragment {
         }, 200);
     }
 
+    private AnimatorSet mIconAnimatorSet;
+
     private void processAnimations() {
         ObjectAnimator iconAlpha = ObjectAnimator.ofFloat(mIcon, "alpha", 0, 1);
         ObjectAnimator iconTrans = ObjectAnimator.ofFloat(mIcon, "translationY",
@@ -132,11 +134,11 @@ public class SplashFragment extends Fragment {
         versionSet.setStartDelay(500);
         versionSet.playTogether(versionAlpha, versionTrans);
 
-        AnimatorSet finalSet = new AnimatorSet();
-        finalSet.playTogether(iconSet, appNameSet, versionSet);
-        finalSet.setDuration(800);
-        finalSet.setInterpolator(new DecelerateInterpolator());
-        finalSet.addListener(new AnimatorListenerAdapter() {
+        mIconAnimatorSet = new AnimatorSet();
+        mIconAnimatorSet.playTogether(iconSet, appNameSet, versionSet);
+        mIconAnimatorSet.setDuration(800);
+        mIconAnimatorSet.setInterpolator(new DecelerateInterpolator());
+        mIconAnimatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 processStarAnimations(mStar1, DELAY_STAR1, DURATION_STAR1_TIME, mStar1.getY(),
@@ -146,7 +148,7 @@ public class SplashFragment extends Fragment {
                 processStarAnimations(mStar3, DELAY_STAR3, DURATION_STAR3_TIME, mStar3.getY(), true);
             }
         });
-        finalSet.start();
+        mIconAnimatorSet.start();
     }
 
     private void invisiableViews(View... views) {
@@ -170,12 +172,16 @@ public class SplashFragment extends Fragment {
         mVersion.setText("v" + versionName);
     }
 
+    private ObjectAnimator mStarTrans;
+
+    private AnimatorSet mStarAnimatorSet;
+
     private void processStarAnimations(final View view, int startDelay, int duration,
             final float param, boolean isEnd) {
         ObjectAnimator starAlpha = ObjectAnimator.ofFloat(view, "alpha", 1, 0);
         starAlpha.setInterpolator(new DecelerateInterpolator());
-        ObjectAnimator starTrans = ObjectAnimator.ofFloat(view, "translationX", 0, mScreenWidth);
-        starTrans.addUpdateListener(new AnimatorUpdateListener() {
+        mStarTrans = ObjectAnimator.ofFloat(view, "translationX", 0, mScreenWidth);
+        mStarTrans.addUpdateListener(new AnimatorUpdateListener() {
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -185,12 +191,12 @@ public class SplashFragment extends Fragment {
             }
         });
 
-        AnimatorSet starSet = new AnimatorSet();
-        starSet.setStartDelay(startDelay);
-        starSet.setDuration(duration);
-        starSet.playTogether(starAlpha, starTrans);
+        mStarAnimatorSet = new AnimatorSet();
+        mStarAnimatorSet.setStartDelay(startDelay);
+        mStarAnimatorSet.setDuration(duration);
+        mStarAnimatorSet.playTogether(starAlpha, mStarTrans);
         if (isEnd) {
-            starSet.addListener(new AnimatorListenerAdapter() {
+            mStarAnimatorSet.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     if (!isDestroy) {
@@ -202,26 +208,51 @@ public class SplashFragment extends Fragment {
             });
         }
 
-        starSet.start();
+        mStarAnimatorSet.start();
     }
+
+    private ObjectAnimator mBlurBmpAlpha;
 
     private void renderScreenLockerBlurEffect(Bitmap bmp) {
         GuideUtil.renderScreenLockerBlurEffect(getActivity(), mBlurView, bmp);
         mBlurView.setVisibility(View.VISIBLE);
-        ObjectAnimator blurBmpAlpha = ObjectAnimator.ofFloat(mBlurView, "alpha", 0, 1);
-        blurBmpAlpha.setDuration(1000);
-        blurBmpAlpha.addListener(new AnimatorListenerAdapter() {
+        mBlurBmpAlpha = ObjectAnimator.ofFloat(mBlurView, "alpha", 0, 1);
+        mBlurBmpAlpha.setDuration(1000);
+        mBlurBmpAlpha.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 splashEnd();
             }
         });
-        blurBmpAlpha.start();
+        mBlurBmpAlpha.start();
     }
 
     @Override
     public void onDestroy() {
         isDestroy = true;
+        GuideUtil.recycleBitmap();
+        if (null != mIconAnimatorSet) {
+            mIconAnimatorSet.removeAllListeners();
+            mIconAnimatorSet.getChildAnimations().clear();
+            mIconAnimatorSet.cancel();
+            mIconAnimatorSet = null;
+        }
+        if (null != mStarTrans) {
+            mStarTrans.removeAllListeners();
+            mStarTrans.cancel();
+            mStarTrans = null;
+        }
+        if (null != mStarAnimatorSet) {
+            mStarAnimatorSet.removeAllListeners();
+            mStarAnimatorSet.getChildAnimations().clear();
+            mStarAnimatorSet.cancel();
+            mStarAnimatorSet = null;
+        }
+        if (null != mBlurBmpAlpha) {
+            mBlurBmpAlpha.removeAllListeners();
+            mBlurBmpAlpha.cancel();
+            mBlurBmpAlpha = null;
+        }
         super.onDestroy();
     }
 }

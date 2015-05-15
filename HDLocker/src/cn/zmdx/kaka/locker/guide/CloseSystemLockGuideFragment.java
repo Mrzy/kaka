@@ -70,4 +70,10 @@ public class CloseSystemLockGuideFragment extends Fragment implements OnClickLis
             }
         }
     }
+
+    @Override
+    public void onDestroy() {
+        GuideUtil.recycleBitmap();
+        super.onDestroy();
+    }
 }

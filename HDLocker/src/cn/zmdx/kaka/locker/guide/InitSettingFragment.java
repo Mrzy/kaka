@@ -114,4 +114,10 @@ public class InitSettingFragment extends Fragment implements OnClickListener {
             }, 600);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        GuideUtil.recycleBitmap();
+        super.onDestroy();
+    }
 }
