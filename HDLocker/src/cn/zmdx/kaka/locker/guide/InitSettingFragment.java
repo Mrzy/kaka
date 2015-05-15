@@ -33,7 +33,7 @@ public class InitSettingFragment extends Fragment implements OnClickListener {
     private TypefaceTextView mCompleteBtn;
 
     public interface ISettingFragmentListener {
-        void onInitSettingSkip(boolean isComplete);
+        void onInitSettingSkip();
     }
 
     private ISettingFragmentListener mCallBack;
@@ -93,11 +93,11 @@ public class InitSettingFragment extends Fragment implements OnClickListener {
             showCompleteBtn();
         } else if (view == mSkipBtn) {
             if (null != mCallBack) {
-                mCallBack.onInitSettingSkip(false);
+                mCallBack.onInitSettingSkip();
             }
         } else if (view == mCompleteBtn) {
             if (null != mCallBack) {
-                mCallBack.onInitSettingSkip(true);
+                mCallBack.onInitSettingSkip();
             }
         }
     }

@@ -207,8 +207,8 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
     }
 
     @Override
-    public void onInitSettingSkip(boolean isComplete) {
-        if (!isComplete && NotificationInterceptor.isDeviceAvailable()
+    public void onInitSettingSkip() {
+        if (NotificationInterceptor.isDeviceAvailable()
                 && !PandoraConfig.newInstance(this).isReadNotifitionGuided()
                 && !NotificationInterceptor.isGrantedNotifyPermission(this)) {
             addFragment(mReadNotificationGuideFragment, TAG_READ_NOTIFICATION_GUIDE, true, true);

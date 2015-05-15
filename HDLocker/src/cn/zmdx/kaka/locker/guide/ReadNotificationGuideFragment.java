@@ -49,10 +49,6 @@ public class ReadNotificationGuideFragment extends Fragment implements OnClickLi
         mReadNotify.setOnClickListener(this);
         mNextStep = (TypefaceTextView) mEntireView.findViewById(R.id.close_system_lock_next_step);
         mNextStep.setOnClickListener(this);
-        if (PandoraUtils.isMIUI(getActivity())
-                || PandoraConfig.newInstance(getActivity()).isHasGuided()) {
-            mNextStep.setText("完成");
-        }
         renderScreenLockerBlurEffect(ImageUtils.drawable2Bitmap(getResources().getDrawable(
                 R.drawable.pandora_default_background)));
         PandoraConfig.newInstance(getActivity()).saveReadNotifitionGuidedState(true);
