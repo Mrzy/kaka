@@ -166,8 +166,6 @@ public class LockScreenManager {
         if (mIsLocked || PandoraService.isCalling())
             return;
 
-        PandoraUtils.initState();
-
         PandoraConfig pandoraConfig = PandoraConfig.newInstance(mContext);
         boolean isLockerOn = pandoraConfig.isPandolaLockerOn();
         if (!isLockerOn) {
@@ -205,7 +203,9 @@ public class LockScreenManager {
 
         initNewLockScreenViews();
         mWinManager.addView(mEntireView, mWinParams);
-        startFakeActivity();
+
+            startFakeActivity();
+
 
         notifyLocked();
 
@@ -543,11 +543,9 @@ public class LockScreenManager {
     }
 
     private void startFakeActivity() {
-        if (PandoraUtils.isMiuiFloatWindowOpAllowed(mContext)) {
-            Intent intent = new Intent(mContext, FakeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mContext.startActivity(intent);
-        }
+        Intent intent = new Intent(mContext, FakeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
     }
 
     public void updateWeatherInfo() {

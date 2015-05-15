@@ -401,14 +401,6 @@ public class PandoraUtils {
         return resultData;
     }
 
-    public static void initState() {
-        PandoraConfig pandoraConfig = PandoraConfig.newInstance(HDApplication.getContext());
-        if (pandoraConfig.isInitState()) {
-            pandoraConfig.saveNotifyFunctionState(false);
-            pandoraConfig.saveInitState();
-        }
-    }
-
     public static final int OP_SYSTEM_ALERT_WINDOW = 24;// 悬浮窗权限
 
     public static boolean isMiuiFloatWindowOpAllowed(Context context) {

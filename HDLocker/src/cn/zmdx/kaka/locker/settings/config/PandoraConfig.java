@@ -358,7 +358,8 @@ public class PandoraConfig {
         // (BaseInfoHelper.isSupportTranslucentStatus())) {
         // defaultValue = true;
         // }
-        return mSp.getBoolean(KEY_NEED_NOTICE, defaultValue);
+        return false;
+//        return mSp.getBoolean(KEY_NEED_NOTICE, defaultValue);
     }
 
     public void saveMessageNotification(boolean isMessage) {
@@ -663,14 +664,6 @@ public class PandoraConfig {
 
     public void saveTipAddChannelFunction() {
         mSp.edit().putBoolean(KEY_TIP_ADD_CHANNEL_FUNCTION, true).commit();
-    }
-
-    public boolean isInitState() {
-        return mSp.getBoolean(KEY_INIT_STATE, true);
-    }
-
-    public void saveInitState() {
-        mSp.edit().putBoolean(KEY_INIT_STATE, false).commit();
     }
 
     public boolean isReadNotifitionGuided() {

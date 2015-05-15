@@ -25,6 +25,14 @@ public class FakeActivity extends Activity {
     @SuppressLint("InlinedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (!LockScreenManager.getInstance().isLocked()) {
+            finish();
+        }
+
+        if (PandoraUtils.isMIUI(this) && !PandoraUtils.isMiuiFloatWindowOpAllowed(this)) {
+            return;
+        }
+
         boolean isDisplayStatusbar = PandoraConfig.newInstance(this).isNotifyFunctionOn();
         if (isDisplayStatusbar) {
             setTheme(android.R.style.Theme_Translucent_NoTitleBar);
@@ -32,9 +40,6 @@ public class FakeActivity extends Activity {
             setTheme(android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         }
         super.onCreate(savedInstanceState);
-        if (!LockScreenManager.getInstance().isLocked()) {
-            finish();
-        }
 
         Window window = getWindow();
         if (Build.VERSION.SDK_INT >= 19) {
