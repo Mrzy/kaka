@@ -117,7 +117,8 @@ public class NotificationInterceptor extends Handler {
                     return;
                 }
 
-                if (!sbn.isClearable()) {
+                // qq老版本消息也是不能clearable的，所以要排除qq
+                if (!sbn.isClearable() && !sbn.getPackageName().equals(Constants.PKGNAME_QQ)) {
                     if (BuildConfig.DEBUG) {
                         HDBLOG.logD("忽略不能clear的应用通知，包名：" + sbn.getPackageName());
                     }
@@ -132,7 +133,6 @@ public class NotificationInterceptor extends Handler {
                     Bitmap largeIcon = (Bitmap) bundle.getParcelable("android.largeIcon");
                     long postTime = sbn.getPostTime();
 
-                    // TODO
                     // 有的通知不是用的标准通知接口开发，所有title都为null，针对这种情况，可以自定义通知标题处理，而不是忽略
                     if (TextUtils.isEmpty(title) && TextUtils.isEmpty(content)) {
                         try {
@@ -149,6 +149,9 @@ public class NotificationInterceptor extends Handler {
                         } else {
                             content = mContext.getString(R.string.new_message_title);
                         }
+                    } else if (!TextUtils.isEmpty(content) && content.contains("正在后台运行") || (!TextUtils.isEmpty(title) && title.contains("正在运行"))) {
+                        // 有的qq版本会有不能clearable的正在运行的通知，要排除
+                        return;
                     }
 
                     final NotificationInfo ni = new NotificationInfo();

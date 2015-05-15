@@ -56,7 +56,7 @@ public class ChannelBoxManager {
 
     private SharedPreferences mPreference;
 
-    private static final String DEFAULT_CHANNEL = "0,2,1,4,5,7";
+    private static final String DEFAULT_CHANNEL = "2,1,4,5,7,0";
 
     private ChannelBoxManager(Context context) {
         mContext = context;

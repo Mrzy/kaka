@@ -32,31 +32,13 @@
                 android:visibility="gone" >
 
                 <TextView
-                    android:id="@+id/tip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:drawableLeft="@drawable/news_header_slideup_icon_small"
-                    android:drawablePadding="4dp"
-                    android:shadowColor="#30000000"
-                    android:layout_centerVertical="true"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:text="上滑查看"
-                    android:shadowRadius="1"
-                    android:singleLine="true"
-                    android:textColor="#80ffffff"
-                    android:textSize="12dp"
-                    />
-                <TextView
                     android:id="@+id/news_header_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_centerInParent="true"
                     android:drawableLeft="@drawable/red_block"
-                    android:layout_alignParentLeft="true"
-                    android:layout_toLeftOf="@id/tip"
                     android:drawablePadding="4dp"
+                    android:ellipsize="end"
                     android:shadowColor="#30000000"
                     android:shadowDx="1"
                     android:shadowDy="1"
@@ -64,6 +46,23 @@
                     android:singleLine="true"
                     android:textColor="#c0ffffff"
                     android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:drawableLeft="@drawable/news_header_slideup_icon_small"
+                    android:drawablePadding="4dp"
+                    android:shadowColor="#30000000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
+                    android:singleLine="true"
+                    android:text="上滑查看"
+                    android:textColor="#80ffffff"
+                    android:textSize="12dp" />
             </RelativeLayout>
 
             <ImageView

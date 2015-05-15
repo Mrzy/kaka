@@ -6,6 +6,7 @@ import java.util.Set;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.utils.HDBLOG;
 
@@ -78,7 +79,8 @@ public class NotificationPreferences {
     }
 
     public boolean isIntercepted(String pkgName) {
-        return mActiveNotificationCache.contains(pkgName);
+        boolean result = mActiveNotificationCache.contains(pkgName);
+        return result;
     }
 
     public long getLastPullCustomNotificationTime() {

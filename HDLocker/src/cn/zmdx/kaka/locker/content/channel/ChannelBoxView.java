@@ -46,7 +46,7 @@ public class ChannelBoxView extends FrameLayout {
     private void init() {
         mSelectedChannels = mChannelManager.getSelectedChannels();
         // 由于壁纸为必选，所以去掉壁纸
-        mSelectedChannels.remove(0);
+        mSelectedChannels.remove(mSelectedChannels.size() - 1);
 
         mUnSelectedChannels = mChannelManager.getAllChannels();
         View view = LayoutInflater.from(mContext).inflate(R.layout.news_channel_box_layout, null);
@@ -92,7 +92,7 @@ public class ChannelBoxView extends FrameLayout {
         // 由于显示时去掉了壁纸项，保存时要再加上壁纸，确保新闻页显示壁纸项
         ChannelInfo ci = new ChannelInfo();
         ci.setChannelId(ChannelBoxManager.CHANNEL_WALLPAPER);
-        mSelectedChannels.add(0, ci);
+        mSelectedChannels.add(ci);
         mChannelManager.saveSelectedChannels(mSelectedChannels);
         super.onDetachedFromWindow();
     }

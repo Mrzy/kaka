@@ -461,7 +461,7 @@ public class LockScreenManager {
         public void onPanelExpanded(View panel) {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelExpanded();
             pauseWallpaperTranslation();
-             pauseShimmer();
+            pauseShimmer();
             mFakeStatusDate.setVisibility(View.VISIBLE);
             mSlidingUpView.setDragView(panel.findViewById(R.id.dragview2));
         };
@@ -469,7 +469,7 @@ public class LockScreenManager {
         public void onPanelCollapsed(View panel) {
             PandoraBoxManager.newInstance(mContext).notifyNewsPanelCollapsed();
             resumeWallpaperTranslation();
-             startShimmer();
+            startShimmer();
             mFakeStatusDate.setVisibility(View.INVISIBLE);
             mSlidingUpView.setDragView(panel.findViewById(R.id.header_part1));
         };
@@ -669,7 +669,7 @@ public class LockScreenManager {
         if (isCloseFakeActivity)
             notifyUnLocked();
 
-         pauseShimmer();
+        pauseShimmer();
         mWinManager.removeView(mEntireView);
         mEntireView = null;
         mIsLocked = false;
@@ -720,9 +720,9 @@ public class LockScreenManager {
             }
         }
 
-         pauseShimmer();
+        pauseShimmer();
 
-         PandoraBoxManager.newInstance(mContext).onScreenOff();
+        PandoraBoxManager.newInstance(mContext).onScreenOff();
         if (BuildConfig.DEBUG && false) {
             for (int i = 0; i < 20; i++) {
                 NotificationInterceptor.getInstance(mContext).sendCustomNotification(
@@ -744,7 +744,7 @@ public class LockScreenManager {
     public void onScreenOn() {
         if (mIsLocked) {
 
-             startShimmer();
+            startShimmer();
 
             // 将缩到屏幕底部的新闻栏展开
             if (mSlidingUpView != null && mPager != null && mPager.getCurrentItem() == 1) {
@@ -767,6 +767,10 @@ public class LockScreenManager {
     }
 
     private void showNotificationPermissionTip() {
+        if (!NotificationInterceptor.isDeviceAvailable()) {
+            return;
+        }
+
         boolean granted = NotificationInterceptor.isGrantedNotifyPermission(mContext);
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("检查“读取通知权限”状态：" + granted);

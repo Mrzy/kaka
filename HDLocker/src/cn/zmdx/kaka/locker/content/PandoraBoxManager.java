@@ -26,7 +26,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -116,8 +115,7 @@ public class PandoraBoxManager implements View.OnClickListener {
     private static final int NEWS_TIP_HEIGHT = BaseInfoHelper
             .dip2px(HDApplication.getContext(), 40);
 
-    private static final int NEWS_TOP_CIRCLE_HEIGHT = BaseInfoHelper.dip2px(
-            HDApplication.getContext(), 80);
+    private int mNewsHeaderHeight = 0;
 
     protected static final int KEEP_TIP_TIME_DEFAULT = 4000;
 
@@ -130,6 +128,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         mInflater = LayoutInflater.from(context);
         mEntireView = mInflater.inflate(R.layout.news_page_layout, null);
         mDetailLayout = (FrameLayout) mEntireView.findViewById(R.id.detailLayout);
+//        final boolean hasNavbar = !ViewConfiguration.get(mContext).hasPermanentMenuKey();
+        mNewsHeaderHeight = BaseInfoHelper.dip2px(mContext, 80);
     }
 
     public synchronized static PandoraBoxManager newInstance(Context context) {
@@ -141,9 +141,8 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     public void initHeader() {
         mHeaderPart1 = mEntireView.findViewById(R.id.header_part1);
-        final boolean hasNavbar = !ViewConfiguration.get(mContext).hasPermanentMenuKey();
-        mHeaderPart1.getLayoutParams().height = BaseInfoHelper.dip2px(mContext, hasNavbar ? 80 : 40);
-        mHeaderPart1.requestLayout();
+        mHeaderPart1.getLayoutParams().height = mNewsHeaderHeight;
+        mEntireView.requestLayout();
         mNewsHeaderTitle = (TextView) mHeaderPart1.findViewById(R.id.news_header_title);
         mHeaderHasNewsArea = mHeaderPart1.findViewById(R.id.news_header_hasContent);
         mHeaderHasNewsArea.setVisibility(View.GONE);
@@ -306,7 +305,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
     private int calCurrentItem() {
         int count = mNewsPagerAdapter.getCount();
-        return count > 2 ? 1 : 0;
+        return 0;//暂默认显示第一个tab
     }
 
     /**
@@ -424,7 +423,7 @@ public class PandoraBoxManager implements View.OnClickListener {
     public void notifyNewsPanelSlide(View panel, float slideOffset) {
         if (mHeaderPart1 != null) {
             ViewGroup.LayoutParams lp = mHeaderPart1.getLayoutParams();
-            lp.height = (int) (NEWS_TOP_CIRCLE_HEIGHT * (1.0f - slideOffset));
+            lp.height = (int) (mNewsHeaderHeight * (1.0f - slideOffset));
             mHeaderPart1.requestLayout();
         }
     }
@@ -824,8 +823,9 @@ public class PandoraBoxManager implements View.OnClickListener {
         final List<ServerImageData> headerData = ChannelPageFactory.getNewsHeaderData();
         if (headerData != null && headerData.size() > 0 && HDBNetworkState.isNetworkAvailable()) {
             final ServerImageData sid = headerData.get(0);
-            String name = ChannelBoxManager.getInstance(mContext).getChannelNameById(sid.getmType());
-            mNewsHeaderTitle.setText(name + ":" + sid.getTitle());
+//            String name = ChannelBoxManager.getInstance(mContext).getChannelNameById(sid.getmType());
+//            mNewsHeaderTitle.setText(name + ":" + sid.getTitle());
+            mNewsHeaderTitle.setText(sid.getTitle());
             mHeaderHasNewsArea.setVisibility(View.VISIBLE);
             mHeaderNoNewsArea.setVisibility(View.GONE);
             setExpandedAction(new Runnable() {
