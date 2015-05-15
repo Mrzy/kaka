@@ -107,6 +107,7 @@ public class CropImageActivity extends Activity implements OnClickListener {
             }
         });
         LockScreenManager.getInstance().lock();
+        LockScreenManager.getInstance().startShimmer();
     }
 
     /**
