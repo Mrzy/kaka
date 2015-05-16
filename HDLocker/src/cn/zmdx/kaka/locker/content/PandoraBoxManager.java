@@ -718,6 +718,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                 }
             }).start();
         } else {
+            mDetailLayout.setTranslationX(0);
             mDetailLayout.setVisibility(View.VISIBLE);
         }
     }
@@ -820,6 +821,9 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     private void renderNewsHeader() {
+        if (mNewsHeaderTitle == null) {
+            return;
+        }
         final List<ServerImageData> headerData = ChannelPageFactory.getNewsHeaderData();
         if (headerData != null && headerData.size() > 0 && HDBNetworkState.isNetworkAvailable()) {
             final ServerImageData sid = headerData.get(0);

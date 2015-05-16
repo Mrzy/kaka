@@ -131,12 +131,12 @@ public class ChannelBoxManager {
         ci.setChannelImgResId(R.drawable.channel_bg_shishang);
         set.add(ci);
 
-//        ci = new ChannelInfo();
-//        ci.setChannelId(CHANNEL_APP);
-//        ci.setChannelName(getChannelNameById(CHANNEL_APP));
-//        ci.setSelected(selected.contains(ci));
-//        ci.setChannelImgResId(R.drawable.channel_bg_app);
-//        set.add(ci);
+        // ci = new ChannelInfo();
+        // ci.setChannelId(CHANNEL_APP);
+        // ci.setChannelName(getChannelNameById(CHANNEL_APP));
+        // ci.setSelected(selected.contains(ci));
+        // ci.setChannelImgResId(R.drawable.channel_bg_app);
+        // set.add(ci);
 
         ci = new ChannelInfo();
         ci.setChannelId(CHANNEL_TECHNOLOGY);
@@ -190,6 +190,19 @@ public class ChannelBoxManager {
                 } catch (Exception e) {
                     continue;
                 }
+            }
+        }
+
+        // 针对老用户，把壁纸放到最后一位
+        if (result.size() > 0
+                && result.get(0).getChannelId() == ChannelBoxManager.CHANNEL_WALLPAPER) {
+            result.remove(0);
+            if (result.get(result.size() - 1).getChannelId() != CHANNEL_WALLPAPER) {
+                ChannelInfo ci = new ChannelInfo();
+                ci.setChannelId(CHANNEL_WALLPAPER);
+                ci.setChannelName(getChannelNameById(CHANNEL_WALLPAPER));
+                ci.setSelected(true);
+                result.add(ci);
             }
         }
         return result;

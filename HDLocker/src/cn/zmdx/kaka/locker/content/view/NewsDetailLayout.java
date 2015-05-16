@@ -8,12 +8,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
@@ -379,32 +378,26 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
 
     @Override
     public boolean onDown(MotionEvent e) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void onShowPress(MotionEvent e) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void onLongPress(MotionEvent e) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
