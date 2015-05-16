@@ -18,7 +18,6 @@ import android.view.Window;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.guide.CloseSystemLockGuideFragment;
-import cn.zmdx.kaka.locker.guide.GuideUtil;
 import cn.zmdx.kaka.locker.guide.CloseSystemLockGuideFragment.ICloseSystemLockListener;
 import cn.zmdx.kaka.locker.guide.InitSettingFragment;
 import cn.zmdx.kaka.locker.guide.InitSettingFragment.ISettingFragmentListener;
@@ -328,7 +327,6 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
     @Override
     protected void onDestroy() {
         isDestroy = true;
-        GuideUtil.recycleBitmap();
         super.onDestroy();
     }
 }

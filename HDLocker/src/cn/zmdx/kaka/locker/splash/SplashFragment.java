@@ -21,8 +21,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import cn.zmdx.kaka.locker.HDApplication;
 import cn.zmdx.kaka.locker.R;
-import cn.zmdx.kaka.locker.guide.GuideUtil;
 import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
+import cn.zmdx.kaka.locker.utils.BlurUtils;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
@@ -213,8 +213,10 @@ public class SplashFragment extends Fragment {
 
     private ObjectAnimator mBlurBmpAlpha;
 
+    private Bitmap mBlurBmp;
+
     private void renderScreenLockerBlurEffect(Bitmap bmp) {
-        GuideUtil.renderScreenLockerBlurEffect(getActivity(), mBlurView, bmp);
+        mBlurBmp = BlurUtils.doFastBlur(getActivity(), bmp, mBlurView, 30);
         mBlurView.setVisibility(View.VISIBLE);
         mBlurBmpAlpha = ObjectAnimator.ofFloat(mBlurView, "alpha", 0, 1);
         mBlurBmpAlpha.setDuration(1000);
@@ -230,7 +232,10 @@ public class SplashFragment extends Fragment {
     @Override
     public void onDestroy() {
         isDestroy = true;
-        GuideUtil.recycleBitmap();
+        if (mBlurBmp != null && !mBlurBmp.isRecycled()) {
+            mBlurBmp.recycle();
+            mBlurBmp = null;
+        }
         if (null != mIconAnimatorSet) {
             mIconAnimatorSet.removeAllListeners();
             mIconAnimatorSet.getChildAnimations().clear();

@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.initialization.InitializationManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.utils.BlurUtils;
 import cn.zmdx.kaka.locker.utils.HDBThreadUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
@@ -75,8 +76,10 @@ public class InitSettingFragment extends Fragment implements OnClickListener {
 
     }
 
+    private Bitmap mBlurBmp;
+
     private void renderScreenLockerBlurEffect(Bitmap bmp) {
-        GuideUtil.renderScreenLockerBlurEffect(getActivity(), mLayout, bmp);
+        mBlurBmp = BlurUtils.doFastBlur(getActivity(), bmp, mLayout, 30);
     }
 
     @Override
@@ -117,7 +120,10 @@ public class InitSettingFragment extends Fragment implements OnClickListener {
 
     @Override
     public void onDestroy() {
-        GuideUtil.recycleBitmap();
+        if (mBlurBmp != null && !mBlurBmp.isRecycled()) {
+            mBlurBmp.recycle();
+            mBlurBmp = null;
+        }
         super.onDestroy();
     }
 }
