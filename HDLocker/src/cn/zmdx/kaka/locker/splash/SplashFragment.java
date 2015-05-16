@@ -8,6 +8,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -72,7 +73,7 @@ public class SplashFragment extends Fragment {
     ViewGroup container, @Nullable
     Bundle savedInstanceState) {
         mEntireView = inflater.inflate(R.layout.pandora_splash, container, false);
-        mScreenWidth = BaseInfoHelper.getRealWidth(getActivity());
+        mScreenWidth = BaseInfoHelper.getRealWidth(HDApplication.getContext());
         mBlurView = (ImageView) mEntireView.findViewById(R.id.splash_blur);
         mVersion = (TypefaceTextView) mEntireView.findViewById(R.id.splash_version);
         mAppName = (TypefaceTextView) mEntireView.findViewById(R.id.splash_appname);
@@ -90,7 +91,7 @@ public class SplashFragment extends Fragment {
             public void onGlobalLayout() {
                 mStar1.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 mStarWidth = mStar1.getWidth();
-                int paddingLeft = mStarWidth + BaseInfoHelper.dip2px(getActivity(), 10);
+                int paddingLeft = mStarWidth + BaseInfoHelper.dip2px(HDApplication.getContext(), 10);
                 mStar2.setPadding(paddingLeft, 0, 0, 0);
                 mStar3.setPadding(2 * paddingLeft, 0, 0, 0);
             }
@@ -168,7 +169,7 @@ public class SplashFragment extends Fragment {
             HDApplication.getContext(), 80);
 
     private void initVersion() {
-        String versionName = BaseInfoHelper.getPkgVersionName(getActivity());
+        String versionName = BaseInfoHelper.getPkgVersionName(HDApplication.getContext());
         mVersion.setText("v" + versionName);
     }
 
