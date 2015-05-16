@@ -154,6 +154,18 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PandoraUtils.REQUEST_CODE_CLOSE_SYSTEM_LOCK) {
+            if (null != mCloseSystemLockGuideFragment) {
+                mCloseSystemLockGuideFragment.changePromptText();
+            }
+            return;
+        }
+        if (requestCode == PandoraUtils.REQUEST_CODE_READ_NOTIFICATION) {
+            if (null != mReadNotificationGuideFragment) {
+                mReadNotificationGuideFragment.changePromptText();
+            }
+            return;
+        }
         if (resultCode != Activity.RESULT_OK) {
             return;
         }

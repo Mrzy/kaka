@@ -57,7 +57,7 @@ public class CloseSystemLockGuideFragment extends Fragment implements OnClickLis
     }
 
     private Bitmap mBlurBmp;
-    
+
     private void renderScreenLockerBlurEffect(Bitmap bmp) {
         mBlurBmp = BlurUtils.doFastBlur(getActivity(), bmp, mLayout, 30);
     }
@@ -81,5 +81,11 @@ public class CloseSystemLockGuideFragment extends Fragment implements OnClickLis
             mBlurBmp = null;
         }
         super.onDestroy();
+    }
+
+    public void changePromptText() {
+        if (null != mNextStep) {
+            mNextStep.setText("完成");
+        }
     }
 }

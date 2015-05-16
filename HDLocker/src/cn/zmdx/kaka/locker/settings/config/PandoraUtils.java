@@ -34,6 +34,7 @@ import android.view.Display;
 import android.widget.Toast;
 import cn.zmdx.kaka.locker.BuildConfig;
 import cn.zmdx.kaka.locker.R;
+import cn.zmdx.kaka.locker.settings.MainSettingActivity;
 
 public class PandoraUtils {
     private PandoraUtils() {
@@ -48,16 +49,25 @@ public class PandoraUtils {
 
     public static final int REQUEST_CODE_GALLERY = 1;
 
+    public static final int REQUEST_CODE_CLOSE_SYSTEM_LOCK = 731;
+
+    public static final int REQUEST_CODE_READ_NOTIFICATION = 732;
+
     public static void closeSystemLocker(Context context, boolean isMIUI) {
         try {
+            Intent intent = null;
             if (isMIUI) {
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
-                context.startActivity(intent);
+                intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
             } else {
-                Intent intent = new Intent("/");
+                intent = new Intent("/");
                 ComponentName cm = new ComponentName("com.android.settings",
                         "com.android.settings.ChooseLockGeneric");
                 intent.setComponent(cm);
+            }
+            if (context instanceof MainSettingActivity) {
+                ((MainSettingActivity) context).startActivityForResult(intent,
+                        REQUEST_CODE_CLOSE_SYSTEM_LOCK);
+            } else {
                 context.startActivity(intent);
             }
         } catch (Exception e) {
@@ -158,17 +168,22 @@ public class PandoraUtils {
 
     private static void setMIUIAllowReadNotification(Context mContext, String version) {
         try {
+            Intent intent = null;
             if (version.equals(MUIU_V5)) {
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                    mContext.startActivity(i);
+                    intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
                 } else {
-                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                    mContext.startActivity(intent);
+                    intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                 }
             } else if (version.equals(MUIU_V6)) {
-                Intent i = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                mContext.startActivity(i);
+                intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            }
+
+            if (mContext instanceof MainSettingActivity) {
+                ((MainSettingActivity) mContext).startActivityForResult(intent,
+                        REQUEST_CODE_READ_NOTIFICATION);
+            } else {
+                mContext.startActivity(intent);
             }
         } catch (Exception e) {
             Toast.makeText(mContext, R.string.error, Toast.LENGTH_SHORT).show();
@@ -177,14 +192,18 @@ public class PandoraUtils {
 
     private static void setMeizuAllowReadNotification(Context mContext) {
         try {
+            Intent intent = null;
             if (Build.VERSION.SDK_INT >= 18) {
-                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                mContext.startActivity(intent);
+                intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
             } else {
-                Intent intent = new Intent("android.settings.ACCESSIBILITY_SETTINGS");
+                intent = new Intent("android.settings.ACCESSIBILITY_SETTINGS");
+            }
+            if (mContext instanceof MainSettingActivity) {
+                ((MainSettingActivity) mContext).startActivityForResult(intent,
+                        REQUEST_CODE_READ_NOTIFICATION);
+            } else {
                 mContext.startActivity(intent);
             }
-
         } catch (Exception e) {
             Toast.makeText(mContext, R.string.error, Toast.LENGTH_SHORT).show();
         }
@@ -192,11 +211,16 @@ public class PandoraUtils {
 
     private static void setRegularAllowReadNotification(Context mContext) {
         try {
+            Intent intent = null;
             if (Build.VERSION.SDK_INT >= 18) {
-                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                mContext.startActivity(intent);
+                intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
             } else {
-                Intent intent = new Intent("android.settings.ACCESSIBILITY_SETTINGS");
+                intent = new Intent("android.settings.ACCESSIBILITY_SETTINGS");
+            }
+            if (mContext instanceof MainSettingActivity) {
+                ((MainSettingActivity) mContext).startActivityForResult(intent,
+                        REQUEST_CODE_READ_NOTIFICATION);
+            } else {
                 mContext.startActivity(intent);
             }
         } catch (Exception e) {

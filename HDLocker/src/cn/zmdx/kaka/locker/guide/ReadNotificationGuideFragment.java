@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.initialization.InitializationManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
+import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.utils.BlurUtils;
 import cn.zmdx.kaka.locker.utils.ImageUtils;
 import cn.zmdx.kaka.locker.widget.TypefaceTextView;
@@ -81,5 +82,20 @@ public class ReadNotificationGuideFragment extends Fragment implements OnClickLi
             mBlurBmp = null;
         }
         super.onDestroy();
+    }
+
+    public void changePromptText() {
+        if (!PandoraUtils.isMIUI(getActivity())
+                && !PandoraConfig.newInstance(getActivity()).isHasGuided()
+                && !PandoraUtils.isMeizu(getActivity())
+                && !PandoraConfig.newInstance(getActivity()).isCloseSystemLockGuided()) {
+            if (null != mNextStep) {
+                mNextStep.setText("下一步");
+            }
+        } else {
+            if (null != mNextStep) {
+                mNextStep.setText("完成");
+            }
+        }
     }
 }
