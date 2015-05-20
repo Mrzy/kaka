@@ -3,6 +3,7 @@ package cn.zmdx.kaka.locker.settings;
 
 import java.util.Locale;
 
+import android.R.id;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -84,6 +85,10 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
     private boolean isShowWeatherChecked = false;
 
+    private SwitchButton mNewsSButton;
+
+    private View mNewsLayout;
+
     public static final int REQUEST_CITY_CHOSEN_CODE = 453;
 
     @Override
@@ -136,6 +141,15 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
         mNightModeSButton = (SwitchButton) mEntireView
                 .findViewById(R.id.setting_night_mode_switch_button);
         mNightModeSButton.setOnCheckedChangeListener(this);
+        
+        mNewsSButton = (SwitchButton) mEntireView
+                .findViewById(R.id.setting_general_news_switch_button);
+        mNewsSButton.setOnCheckedChangeListener(this);
+        
+        mNewsLayout =  mEntireView
+                .findViewById(R.id.pandora_news_item);
+        
+        checkNewsLayoutVisibility(isNewsOpen());
 
         initSettingMeizu();
 
@@ -202,6 +216,7 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
         mLunarCalendarSButton.setChecked(isLunarCalendarOn());
         mNightModeSButton.setChecked(isNightModeOn());
         mWeatherSButton.setChecked(isShowWeather());
+        mNewsSButton.setChecked(isNewsOpen());
     }
 
     @Override
@@ -266,8 +281,23 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
             } else {
                 disableNightMode();
             }
+        } else if (buttonView ==mNewsSButton) {
+            checkNewsLayoutVisibility(isChecked);
+            if (isChecked) {
+                enableNews();
+            } else {
+                disableNews();
+            }
         }
 
+    }
+
+    private void checkNewsLayoutVisibility(boolean isChecked) {
+        if (isChecked) {
+            mNewsLayout.setVisibility(View.VISIBLE);
+        }else {
+            mNewsLayout.setVisibility(View.GONE);
+        }
     }
 
     private void showCity(boolean isChecked) {
@@ -516,5 +546,17 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
 
     private boolean isShowWeather() {
         return mPandoraConfig.isShowWeather();
+    }
+    
+    private void enableNews() {
+        mPandoraConfig.saveNewsState(true);
+    }
+
+    private void disableNews() {
+        mPandoraConfig.saveNewsState(false);
+    }
+
+    private boolean isNewsOpen() {
+        return mPandoraConfig.isNewsOpen();
     }
 }

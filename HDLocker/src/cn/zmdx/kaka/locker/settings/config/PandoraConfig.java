@@ -142,6 +142,8 @@ public class PandoraConfig {
     private static final String KEY_INIT_SETP_TWO = "kistwo";
     
     private static final String KEY_MIUI_LOW_KITKAT_PROMPT = "k17prompt";
+
+    private static final String KEY_NEWS_STATE = "knstate";
     
     private PandoraConfig(Context context) {
         mContext = context;
@@ -708,6 +710,14 @@ public class PandoraConfig {
 
     public void saveMIUILow19PromptState(boolean inPrompt) {
         mSp.edit().putBoolean(KEY_MIUI_LOW_KITKAT_PROMPT, inPrompt).commit();
+    }
+
+    public void saveNewsState(boolean isEnable) {
+        mSp.edit().putBoolean(KEY_NEWS_STATE, isEnable).commit();
+    }
+
+    public boolean isNewsOpen() {
+        return mSp.getBoolean(KEY_NEWS_STATE, true);
     }
     
 }

@@ -387,40 +387,74 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/pandora_setting_general_night_mode" />
+                        android:text="@string/pandora_setting_general_news" />
 
                     <cn.zmdx.kaka.locker.widget.SwitchButton
-                        android:id="@+id/setting_night_mode_switch_button"
+                        android:id="@+id/setting_general_news_switch_button"
                         style="@style/setting_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="17dp"
-                    android:layout_marginRight="17dp"
-                    android:background="@drawable/setting_line"
-                    android:contentDescription="@string/contentDescription" />
-
                 <LinearLayout
+                    android:id="@+id/pandora_news_item"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/setting_item_height"
-                    android:orientation="horizontal" >
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        style="@style/setting_textview"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="@string/pandora_setting_general_download_image_with_wifi" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="17dp"
+                        android:layout_marginRight="17dp"
+                        android:background="@drawable/setting_line"
+                        android:contentDescription="@string/contentDescription" />
 
-                    <cn.zmdx.kaka.locker.widget.SwitchButton
-                        android:id="@+id/setting_allow_3g4g_switch_button"
-                        style="@style/setting_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/setting_item_height"
+                        android:orientation="horizontal" >
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            style="@style/setting_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="@string/pandora_setting_general_night_mode" />
+
+                        <cn.zmdx.kaka.locker.widget.SwitchButton
+                            android:id="@+id/setting_night_mode_switch_button"
+                            style="@style/setting_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="17dp"
+                        android:layout_marginRight="17dp"
+                        android:background="@drawable/setting_line"
+                        android:contentDescription="@string/contentDescription" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/setting_item_height"
+                        android:orientation="horizontal" >
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            style="@style/setting_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="@string/pandora_setting_general_download_image_with_wifi" />
+
+                        <cn.zmdx.kaka.locker.widget.SwitchButton
+                            android:id="@+id/setting_allow_3g4g_switch_button"
+                            style="@style/setting_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </cn.zmdx.kaka.locker.widget.BaseLinearLayout>
