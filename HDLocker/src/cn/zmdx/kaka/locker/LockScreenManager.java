@@ -48,7 +48,6 @@ import cn.zmdx.kaka.locker.security.KeyguardLockerManager;
 import cn.zmdx.kaka.locker.security.KeyguardLockerManager.IUnlockListener;
 import cn.zmdx.kaka.locker.service.PandoraService;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
-import cn.zmdx.kaka.locker.settings.config.PandoraUtils;
 import cn.zmdx.kaka.locker.sound.LockSoundManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager;
 import cn.zmdx.kaka.locker.theme.ThemeManager.Theme;
@@ -341,27 +340,29 @@ public class LockScreenManager {
             }
         });
 
-        // 初始化新闻页
-        View newsView = PandoraBoxManager.newInstance(mContext).getEntireView();
-        ViewGroup newsLayout = (ViewGroup) mSlidingUpView.findViewById(R.id.newsLayout);
-        if (newsLayout.getChildCount() == 0) {
-            ViewGroup vg = (ViewGroup) newsView.getParent();
-            if (vg != null) {
-                vg.removeView(newsView);
+        if (PandoraConfig.newInstance(mContext).isNewsOpen()) {
+            // 初始化新闻页
+            View newsView = PandoraBoxManager.newInstance(mContext).getEntireView();
+            ViewGroup newsLayout = (ViewGroup) mSlidingUpView.findViewById(R.id.newsLayout);
+            if (newsLayout.getChildCount() == 0) {
+                ViewGroup vg = (ViewGroup) newsView.getParent();
+                if (vg != null) {
+                    vg.removeView(newsView);
+                }
+                newsLayout.addView(newsView);
+                mSlidingUpView.setDragView(newsLayout.findViewById(R.id.header_part1));
             }
-            newsLayout.addView(newsView);
-            mSlidingUpView.setDragView(newsLayout.findViewById(R.id.header_part1));
+            // 初始化新闻页header
+            PandoraBoxManager.newInstance(mContext).initHeader();
+            PandoraBoxManager.newInstance(mContext).getHeaderView().setAlpha(1);
+            HDBThreadUtils.postOnUiDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    PandoraBoxManager.newInstance(mContext).initBody();
+                    PandoraBoxManager.newInstance(mContext).refreshCurrentNews();
+                }
+            }, 3000);
         }
-        // 初始化新闻页header
-        PandoraBoxManager.newInstance(mContext).initHeader();
-        PandoraBoxManager.newInstance(mContext).getHeaderView().setAlpha(1);
-        HDBThreadUtils.postOnUiDelayed(new Runnable() {
-            @Override
-            public void run() {
-                PandoraBoxManager.newInstance(mContext).initBody();
-                PandoraBoxManager.newInstance(mContext).refreshCurrentNews();
-            }
-        }, 3000);
     }
 
     public void pauseWallpaperTranslation() {
