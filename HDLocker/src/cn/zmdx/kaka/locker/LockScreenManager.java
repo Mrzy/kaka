@@ -344,6 +344,7 @@ public class LockScreenManager {
             // 初始化新闻页
             View newsView = PandoraBoxManager.newInstance(mContext).getEntireView();
             ViewGroup newsLayout = (ViewGroup) mSlidingUpView.findViewById(R.id.newsLayout);
+            newsLayout.setVisibility(View.VISIBLE);
             if (newsLayout.getChildCount() == 0) {
                 ViewGroup vg = (ViewGroup) newsView.getParent();
                 if (vg != null) {
@@ -362,6 +363,8 @@ public class LockScreenManager {
                     PandoraBoxManager.newInstance(mContext).refreshCurrentNews();
                 }
             }, 3000);
+        } else {
+            mSlidingUpView.findViewById(R.id.newsLayout).setVisibility(View.GONE);
         }
     }
 
