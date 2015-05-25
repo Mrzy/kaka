@@ -99,7 +99,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             Color.parseColor("#8bc34a"), Color.parseColor("#ea861c"), Color.parseColor("#3db7ff"),
             Color.parseColor("#26a69a"), Color.parseColor("#e84e40"), Color.parseColor("#ab47bc"),
             Color.parseColor("#8bc34a"), Color.parseColor("#ea861c"), Color.parseColor("#3db7ff"),
-            Color.parseColor("#26a69a")
+            Color.parseColor("#26a69a"), Color.parseColor("#e84e40")
     };
 
     private static final int[] mFloatingButtonColors = new int[] {
@@ -109,7 +109,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             Color.parseColor("#a026a69a"), Color.parseColor("#a0e84e40"),
             Color.parseColor("#a0ab47bc"), Color.parseColor("#a08bc34a"),
             Color.parseColor("#a0ea861c"), Color.parseColor("#a03db7ff"),
-            Color.parseColor("#a026a69a")
+            Color.parseColor("#a026a69a"), Color.parseColor("#a0e84e40")
     };
 
     private static final int NEWS_TIP_HEIGHT = BaseInfoHelper

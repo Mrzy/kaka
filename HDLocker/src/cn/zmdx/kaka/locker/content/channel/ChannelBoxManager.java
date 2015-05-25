@@ -46,6 +46,8 @@ public class ChannelBoxManager {
     // 创业
     public static final int CHANNEL_BUSINESS = 12;
 
+    public static final int CHANNEL_TRAVEL = 13;
+
     private static ChannelBoxManager INSTANCE;
 
     private static final String PREFERENCE_NAME = "yuchajjgh";
@@ -111,13 +113,6 @@ public class ChannelBoxManager {
         set.add(ci);
 
         ci = new ChannelInfo();
-        ci.setChannelId(CHANNEL_FINANCE);
-        ci.setChannelName(getChannelNameById(CHANNEL_FINANCE));
-        ci.setSelected(selected.contains(ci));
-        ci.setChannelImgResId(R.drawable.channel_bg_caijing);
-        set.add(ci);
-
-        ci = new ChannelInfo();
         ci.setChannelId(CHANNEL_SPORTS);
         ci.setChannelName(getChannelNameById(CHANNEL_SPORTS));
         ci.setSelected(selected.contains(ci));
@@ -131,6 +126,12 @@ public class ChannelBoxManager {
         ci.setChannelImgResId(R.drawable.channel_bg_shishang);
         set.add(ci);
 
+        ci = new ChannelInfo();
+        ci.setChannelId(CHANNEL_FINANCE);
+        ci.setChannelName(getChannelNameById(CHANNEL_FINANCE));
+        ci.setSelected(selected.contains(ci));
+        ci.setChannelImgResId(R.drawable.channel_bg_caijing);
+        set.add(ci);
         // ci = new ChannelInfo();
         // ci.setChannelId(CHANNEL_APP);
         // ci.setChannelName(getChannelNameById(CHANNEL_APP));
@@ -143,6 +144,14 @@ public class ChannelBoxManager {
         ci.setChannelName(getChannelNameById(CHANNEL_TECHNOLOGY));
         ci.setSelected(selected.contains(ci));
         ci.setChannelImgResId(R.drawable.channel_bg_keji);
+        set.add(ci);
+
+
+        ci = new ChannelInfo();
+        ci.setChannelId(CHANNEL_TRAVEL);
+        ci.setChannelName(getChannelNameById(CHANNEL_TRAVEL));
+        ci.setSelected(selected.contains(ci));
+        ci.setChannelImgResId(R.drawable.channel_bg_travel);
         set.add(ci);
 
         ci = new ChannelInfo();
@@ -158,6 +167,7 @@ public class ChannelBoxManager {
         ci.setSelected(selected.contains(ci));
         ci.setChannelImgResId(R.drawable.channel_bg_chuangye);
         set.add(ci);
+
         return set;
     }
 
@@ -194,18 +204,16 @@ public class ChannelBoxManager {
         }
 
         // 针对老用户，把壁纸放到最后一位
-        if (result.size() > 0) {
+        if (result.size() > 1) {
             if (result.get(0).getChannelId() == ChannelBoxManager.CHANNEL_WALLPAPER) {
                 result.remove(0);
             }
-            if (result.size() > 0) {
-                if (result.get(result.size() - 1).getChannelId() != ChannelBoxManager.CHANNEL_WALLPAPER) {
-                    ChannelInfo ci = new ChannelInfo();
-                    ci.setChannelId(CHANNEL_WALLPAPER);
-                    ci.setChannelName(getChannelNameById(CHANNEL_WALLPAPER));
-                    ci.setSelected(true);
-                    result.add(ci);
-                }
+            if (result.get(result.size() - 1).getChannelId() != ChannelBoxManager.CHANNEL_WALLPAPER) {
+                ChannelInfo ci = new ChannelInfo();
+                ci.setChannelId(CHANNEL_WALLPAPER);
+                ci.setChannelName(getChannelNameById(CHANNEL_WALLPAPER));
+                ci.setSelected(true);
+                result.add(ci);
             }
         }
         return result;
@@ -252,6 +260,9 @@ public class ChannelBoxManager {
                 break;
             case CHANNEL_BUSINESS:
                 result = mContext.getString(R.string.pandora_news_classify_bussiness);
+                break;
+            case CHANNEL_TRAVEL:
+                result = mContext.getString(R.string.pandora_news_classify_travel);
                 break;
             default:
         }
