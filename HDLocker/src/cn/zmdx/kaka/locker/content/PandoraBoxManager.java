@@ -198,8 +198,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         mTipLayout = (FrameLayout) mEntireView.findViewById(R.id.news_tip_layout);
 
         mBackBtn = (CircleSpiritButton) mEntireView.findViewById(R.id.backBtn);
-        mBackBtn.setColorNormal(mFloatingButtonColors[1]);
-        mBackBtn.setColorPressed(mFloatingButtonColors[1]);
+        mBackBtn.setColorNormal(mFloatingButtonColors[0]);
+        mBackBtn.setColorPressed(mFloatingButtonColors[0]);
         mBackBtn.setOnClickListener(this);
         mBackBtn.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
 
