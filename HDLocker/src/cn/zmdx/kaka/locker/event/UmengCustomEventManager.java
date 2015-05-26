@@ -83,6 +83,10 @@ public class UmengCustomEventManager {
 
     private static final String EVENT_PANDORA_LAYOUT = "pandoraLayout";// 锁屏布局使用
 
+    private static final String EVENT_OPEN_PANDORA_NEWS = "openPandoraNews";// 开启锁屏新闻
+
+    private static final String EVENT_CLOSE_PANDORA_NEWS = "closePandoraNews";// 关闭锁屏新闻
+
     public static void statisticalOpenNewsDetail(int id, String newsType) {
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("newsId", String.valueOf(id));
@@ -409,6 +413,22 @@ public class UmengCustomEventManager {
         map.put("layoutId", "" + layoutId);
         MobclickAgent.onEvent(HDApplication.getContext(),
                 UmengCustomEventManager.EVENT_PANDORA_LAYOUT, map);
+    }
+
+    /**
+     * 统计用户开启锁屏新闻的次数
+     */
+    public static void statisticalOpenPandoraNews() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_OPEN_PANDORA_NEWS);
+    }
+
+    /**
+     * 统计用户关闭锁屏新闻的次数
+     */
+    public static void statisticalClosePandoraNews() {
+        MobclickAgent.onEvent(HDApplication.getContext(),
+                UmengCustomEventManager.EVENT_CLOSE_PANDORA_NEWS);
     }
 
 }

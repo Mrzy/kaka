@@ -3,7 +3,6 @@ package cn.zmdx.kaka.locker.settings;
 
 import java.util.Locale;
 
-import android.R.id;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -285,8 +284,10 @@ public class GeneralFragment extends Fragment implements OnCheckedChangeListener
             checkNewsLayoutVisibility(isChecked);
             if (isChecked) {
                 enableNews();
+                UmengCustomEventManager.statisticalOpenPandoraNews();
             } else {
                 disableNews();
+                UmengCustomEventManager.statisticalClosePandoraNews();
             }
         }
 
