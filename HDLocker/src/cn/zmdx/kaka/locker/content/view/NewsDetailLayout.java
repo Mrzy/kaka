@@ -11,8 +11,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
@@ -209,7 +209,11 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
                 // 增加from的key表明此请求是来自pandora客户端的
                 String theme = PandoraConfig.newInstance(getContext()).isNightModeOn() ? "night"
                         : "day";
-                load(mData.getImageDesc() + "&from=pandora&theme=" + theme);
+                String detailUrl = mData.getImageDesc();
+                if (!TextUtils.isEmpty(detailUrl) && detailUrl.contains("hdlocker")) {
+                    detailUrl += "&from=pandora&theme=" + theme;
+                }
+                load(detailUrl);
             }
         }, 300);
 
