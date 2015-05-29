@@ -18,7 +18,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import cn.zmdx.kaka.locker.R;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.pattern.LockPatternManager;
@@ -434,10 +433,10 @@ public class PasswordFragment extends Fragment implements OnClickListener, OnChe
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (buttonView == mDelayLockScreen) {
             if (isChecked) {
-                if (!isDelayLockScreenOn()) {
-                    Toast.makeText(getActivity(), R.string.toast_delay_locksrceen,
-                            Toast.LENGTH_SHORT).show();
-                }
+//                if (!isDelayLockScreenOn()) {
+//                    Toast.makeText(getActivity(), R.string.toast_delay_locksrceen,
+//                            Toast.LENGTH_SHORT).show();
+//                }
                 enableDelayLockScreen();
                 UmengCustomEventManager.statisticalOpenDelayLockScreen();
             } else {

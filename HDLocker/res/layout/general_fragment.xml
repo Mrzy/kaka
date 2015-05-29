@@ -57,12 +57,25 @@
                     android:layout_height="@dimen/setting_item_height"
                     android:orientation="horizontal" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        style="@style/setting_textview"
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/pandora_setting_general_close_system_lock" />
+                        android:gravity="center_vertical"
+                        android:orientation="vertical" >
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            style="@style/setting_textview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pandora_setting_general_close_system_lock" />
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            style="@style/setting_textview_detail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pandora_setting_general_close_system_lock_detail" />
+                    </LinearLayout>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -143,12 +156,25 @@
                     android:layout_height="@dimen/setting_item_height"
                     android:orientation="horizontal" >
 
-                    <cn.zmdx.kaka.locker.widget.TypefaceTextView
-                        style="@style/setting_textview"
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/pandora_setting_general_protect" />
+                        android:gravity="center_vertical"
+                        android:orientation="vertical" >
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            style="@style/setting_textview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pandora_setting_general_protect" />
+
+                        <cn.zmdx.kaka.locker.widget.TypefaceTextView
+                            style="@style/setting_textview_detail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pandora_setting_general_protect_detail" />
+                    </LinearLayout>
 
                     <cn.zmdx.kaka.locker.widget.SwitchButton
                         android:id="@+id/setting_protect_switch_button"

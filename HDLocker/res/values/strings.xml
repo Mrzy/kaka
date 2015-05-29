@@ -122,8 +122,9 @@
     <string name="pandora_setting_password">密码</string>
     <string name="pandora_setting_wallpaper">壁纸</string>
     
-    <string name="pandora_setting_general_pandoralocker">开启潘多拉锁屏</string>
+    <string name="pandora_setting_general_pandoralocker">启动潘多拉锁屏</string>
     <string name="pandora_setting_general_close_system_lock">关闭系统锁屏</string>
+    <string name="pandora_setting_general_close_system_lock_detail">设置后可解决和系统锁屏的冲突问题</string>
     <string name="pandora_setting_general_open_lock_sound">解锁音效</string>
     <string name="pandora_setting_general_show_notify">显示通知栏</string>
     <string name="pandora_setting_general_download_image_with_wifi">仅在Wifi下下载图片</string>
@@ -142,6 +143,7 @@
     
     <string name="pandora_setting_notify_open_permission">打开通知权限</string>
     <string name="pandora_setting_notify_open_notification">开启消息通知</string>
+    <string name="pandora_setting_notify_open_notification_detail">在锁屏及时提醒重要的通知</string>
     <string name="pandora_setting_notify_hide_content">隐私保护</string>
     <string name="pandora_setting_notify_hide_content_detail">只显示消息条目，不显示内容</string>
     <string name="pandora_setting_notify_manage">选择需要显示的通知</string>
@@ -196,11 +198,13 @@
     <string name="tip_loading_news">正在加载</string>
     
     <string name="pandora_setting_general_protect">开启潘多拉守护神</string>
+    <string name="pandora_setting_general_protect_detail">开启后，可以防止锁屏被意外关闭</string>
     <string name="pandora_setting_general_weather_prompt">时间天气设置</string>
     <string name="pandora_setting_general_lunar_calendar">显示农历</string>
     <string name="pandora_setting_general_weather">显示天气</string>
     <string name="pandora_setting_general_choose_city">选择所在城市</string>
     <string name="pandora_setting_password_delay_lockscreen">开启延时锁定屏幕</string>
+    <string name="pandora_setting_password_delay_lockscreen_Detail">开启后，屏幕会在熄灭后1.5秒锁定</string>
 
     <string name="pandora_setting_notify_light_screen">亮屏通知</string>
     <string name="pandora_setting_notify_light_screen_detail">收到消息时自动亮屏</string>
