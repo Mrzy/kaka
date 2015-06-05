@@ -180,7 +180,7 @@ public class LockScreenManager {
         mWinParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_DISMISS_KEYGUARD
                 | LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | LayoutParams.FLAG_HARDWARE_ACCELERATED | LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-        if (!mIsNeedNotice || BaseInfoHelper.isSupportTranslucentStatus()) { // 如果不显示通知栏或者系统版本大于等于19(支持透明通知栏),则添加下面flag从屏幕顶部开始绘制
+        if (!mIsNeedNotice || BaseInfoHelper.isSupportTranslucentStatus()) {
             mWinParams.flags |= LayoutParams.FLAG_LAYOUT_IN_SCREEN;
             final Display display = mWinManager.getDefaultDisplay();
             mWinParams.height = BaseInfoHelper.getRealHeight(display);
@@ -238,14 +238,12 @@ public class LockScreenManager {
         mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.new_pandora_lockscreen, null);
 
-        // 初始化用于显示热点头条的上拉面板view
         mSlidingUpView = (SlidingUpPanelLayout) mEntireView.findViewById(R.id.slidingUpPanelLayout);
         mSlidingUpView.setPanelSlideListener(mSlidingUpPanelListener);
         mSlidingUpView.setDragViewClickable(false);
 
-        // 初始化处理壁纸模糊的view
         mBlurImageView = (SensorImageView) mEntireView.findViewById(R.id.blurImageView);
-        mBlurImageView.setAlpha(0.0f);// 默认模糊的view不显示，透明度设置为0
+        mBlurImageView.setAlpha(0.0f);
         mSensorImageView = (SensorImageView) mEntireView.findViewById(R.id.lockerBg);
         if (!PandoraConfig.newInstance(mContext).isGravitySenorOn()) {
             mBlurImageView.setTransitionMode(SensorImageView.TRANSITION_MODE_STATIC);
@@ -260,7 +258,6 @@ public class LockScreenManager {
 
         initWallpaper();
 
-        // 初始化右划解锁的viewpager
         mPager = (ViewPagerCompat) mEntireView.findViewById(R.id.viewPager);
 
         List<View> pages = new ArrayList<View>();
@@ -274,8 +271,8 @@ public class LockScreenManager {
         mFakeStatusDate = mMainPage.findViewById(R.id.fakeStatusDate);
         mShimmerTextView = (ShimmerTextView) mMainPage.findViewById(R.id.unlockShimmerTextView);
         mShimmer = new Shimmer();
-        mShimmer.setDuration(3000);// 默认是1s
-        mShimmer.setStartDelay(1000);// 默认间隔为0
+        mShimmer.setDuration(3000);
+        mShimmer.setStartDelay(1000);
 
         mCommonWidgetLayout = mMainPage.findViewById(R.id.commonWidgetArea);
         // mWifiIcon = (ImageView) mMainPage.findViewById(R.id.wifi_icon);
@@ -293,9 +290,6 @@ public class LockScreenManager {
                     mBatteryInfo.setText(level + "%");
                 }
             });
-            // if (!HDBNetworkState.isWifiNetwork()) {
-            // mWifiIcon.setVisibility(View.GONE);
-            // }
         }
 
         mDateWidget = (ViewGroup) mMainPage.findViewById(R.id.dateWeatherLayout);
@@ -311,7 +305,6 @@ public class LockScreenManager {
         mPager.setCurrentItem(1);
         mPager.setOnPageChangeListener(mViewPagerChangeListener);
 
-        // 监听是否有通知，以处理背景模糊效果
         mNotificationListView = ((NotificationListView) mMainPage
                 .findViewById(R.id.lock_bottom_notification_layout)).getListView();
         if (mNotificationListView.getChildCount() > 0) {
@@ -341,7 +334,6 @@ public class LockScreenManager {
         });
 
         if (PandoraConfig.newInstance(mContext).isNewsOpen()) {
-            // 初始化新闻页
             View newsView = PandoraBoxManager.newInstance(mContext).getEntireView();
             ViewGroup newsLayout = (ViewGroup) mSlidingUpView.findViewById(R.id.newsLayout);
             newsLayout.setVisibility(View.VISIBLE);
@@ -353,7 +345,6 @@ public class LockScreenManager {
                 newsLayout.addView(newsView);
                 mSlidingUpView.setDragView(newsLayout.findViewById(R.id.header_part1));
             }
-            // 初始化新闻页header
             PandoraBoxManager.newInstance(mContext).initHeader();
             PandoraBoxManager.newInstance(mContext).getHeaderView().setAlpha(1);
             HDBThreadUtils.postOnUiDelayed(new Runnable() {
@@ -385,10 +376,8 @@ public class LockScreenManager {
                 // dismiss news panel
             } else if (position == 1) {
                 if (mNeedPassword) {
-                    // 如果从密码页滑回锁屏页，将之前设置的解锁后执行动作清除。即此处认为用户没有输入密码解锁，又滑回了锁屏页
                     setRunnableAfterUnLock(null);
 
-                    // 刷新通知的items恢复原位
                     if (mNotificationListView != null) {
                         BaseAdapter adapter = (BaseAdapter) mNotificationListView.getAdapter();
                         adapter.notifyDataSetChanged();
@@ -437,24 +426,20 @@ public class LockScreenManager {
         }
     };
 
-    // 展开上拉的新闻面板
     public void expandNewsPanel() {
         mSlidingUpView.expandPanel();
     }
 
-    // 收缩上拉的新闻面板
     public void collapseNewsPanel() {
         mSlidingUpView.collapsePanel();
     }
 
     private SimplePanelSlideListener mSlidingUpPanelListener = new SimplePanelSlideListener() {
         public void onPanelSlide(View panel, float slideOffset) {
-            // 模糊背景
             if (slideOffset >= 0) {
                 if (!mKeepBlurEffect) {
                     setWallpaperBlurEffect(Math.max(0, slideOffset));
                 }
-                // 渐隐时间，天气文字
                 setDateViewAlpha(1.0f - slideOffset);
 
                 PandoraBoxManager.newInstance(mContext).notifyNewsPanelSlide(panel, slideOffset);
@@ -497,11 +482,6 @@ public class LockScreenManager {
         }
     }
 
-    /**
-     * 设置锁屏主页（包含时间，天气等信息）的整体透明度
-     * 
-     * @param alpha
-     */
     private void setMainPageAlpha(float alpha) {
         if (mMainPage != null) {
             mMainPage.setAlpha(alpha);
@@ -516,11 +496,6 @@ public class LockScreenManager {
 
     private Interpolator mBlurInterpolator = new DecelerateInterpolator();
 
-    /**
-     * 设置锁屏页壁纸的模糊效果。level值范围为[0, 1]，值越大，模糊程度越高。
-     * 
-     * @param level 模糊的程度
-     */
     private void setWallpaperBlurEffect(float level) {
         if (mBlurImageView != null) {
             float result = mBlurInterpolator.getInterpolation(level);
@@ -571,14 +546,7 @@ public class LockScreenManager {
         final View view = klm.getCurrentLockerView(new IUnlockListener() {
             @Override
             public void onSuccess() {
-                // delay 3s 是为了解决从windowmanager中将view立即移除时出现的残影bug
-                HDBThreadUtils.postOnUiDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        internalUnLock();
-                    }
-                }, 3);
+                internalUnLock();
             }
 
             @Override
@@ -635,7 +603,6 @@ public class LockScreenManager {
      */
     public void unLock(boolean isCloseFakeActivity, boolean forceClose) {
         if (forceClose) {
-            // 修复，锁屏时，来电话后，再次打开锁屏时，底部新闻栏会显示新闻详情的问题，这里要关闭详情页
             if (PandoraBoxManager.newInstance(mContext).isDetailPageOpened()) {
                 PandoraBoxManager.newInstance(mContext).closeDetailPage(false);
             }
@@ -693,9 +660,8 @@ public class LockScreenManager {
                 // picasso的图片内存缓存
                 PicassoHelper.clearMemoryCache();
                 PicassoHelper.shutdown();
-                System.gc();
             }
-        }, 700);
+        }, 200);
     }
 
     public boolean isLocked() {
@@ -709,13 +675,10 @@ public class LockScreenManager {
             if (mSlidingUpView.isPanelExpanded()) {
                 mSlidingUpView.collapsePanel();
             }
-            // 如果当前页在锁屏主页（而不是密码锁页），在关闭屏幕时将底部新闻栏缩回到屏幕底部
             if (mSlidingUpView.getSliderView() != null && mPager.getCurrentItem() == 1) {
                 mSlidingUpView.getSliderView().setTranslationY(mSlidingUpView.getHeight());
             }
         }
-
-        pauseShimmer();
 
         PandoraBoxManager.newInstance(mContext).onScreenOff();
         if (BuildConfig.DEBUG && false) {
@@ -741,7 +704,6 @@ public class LockScreenManager {
 
             startShimmer();
 
-            // 将缩到屏幕底部的新闻栏展开
             if (mSlidingUpView != null && mPager != null && mPager.getCurrentItem() == 1) {
                 View sliderView = mSlidingUpView.getSliderView();
                 if (sliderView != null) {
@@ -757,7 +719,6 @@ public class LockScreenManager {
 
         updateWeatherInfo();
 
-        // 检查是否有读取通知权限
         showNotificationPermissionTip();
     }
 
