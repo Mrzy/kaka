@@ -35,6 +35,26 @@ public class PandoraService extends Service {
     // 安卓原生系统闹钟action
     private static final String ALARM_ALERT_ACTION = "com.android.deskclock.ALARM_ALERT";
 
+    /**
+     * 中兴手机闹钟的action
+     */
+    private static final String ALARMALERT_ACTION_ZX = "com.zdworks.android.zdclock.ACTION_ALARM_ALERT";
+
+    // 三星手机闹钟action
+    private static final String ALARMALERT_ACTION_SAMSUNG = "com.samsung.sec.android.clockpackage.alarm.ALARM_ALERT";
+
+    // 索尼手机闹钟action
+    private static final String ALARMALERT_ACTION_SONY = "com.sonyericsson.alarm.ALARM_ALERT";
+
+    // 联想手机闹钟action
+    private static final String ALARMALERT_ACTION_LENOVO = "com.lenovo.deskclock.ALARM_ALERT";
+
+    // vivo手机闹钟action
+    private static final String ALARMALERT_ACTION_VIVO = "com.cn.google.AlertClock.ALARM_ALERT";
+
+    // 魅族手机闹钟action
+    private static final String ALARMALERT_ACTION_MEIZU = "com.android.alarmclock.ALARM_ALERT";
+
     private static final int FOREGROUND_SERVICE_ID = 123465;
 
     private Context mContext = HDApplication.getContext();
@@ -61,6 +81,12 @@ public class PandoraService extends Service {
 
     private void loadAlarmActions() {
         mAlarmActions.add(ALARM_ALERT_ACTION);
+        mAlarmActions.add(ALARMALERT_ACTION_ZX);
+        mAlarmActions.add(ALARMALERT_ACTION_SAMSUNG);
+        mAlarmActions.add(ALARMALERT_ACTION_SONY);
+        mAlarmActions.add(ALARMALERT_ACTION_LENOVO);
+        mAlarmActions.add(ALARMALERT_ACTION_VIVO);
+        mAlarmActions.add(ALARMALERT_ACTION_MEIZU);
     }
 
     @SuppressWarnings("deprecation")
@@ -86,7 +112,7 @@ public class PandoraService extends Service {
             Notification noti = createNotification();
             startForeground(FOREGROUND_SERVICE_ID, noti);
         }
-        return 0;
+        return START_STICKY;
     }
 
     @Override
@@ -114,6 +140,9 @@ public class PandoraService extends Service {
         super.onDestroy();
         unRegisterBroadcastReceiver();
         stopForeground(true);
+        if (PandoraConfig.newInstance(this).isPandolaLockerOn()) {
+            startService(new Intent(this, PandoraService.class));
+        }
     }
 
     private void registerBroadcastReceiver() {
@@ -162,18 +191,27 @@ public class PandoraService extends Service {
             try {
                 switch (state) {
                     case TelephonyManager.CALL_STATE_IDLE: // 当前电话处于闲置状态
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("当前电话处于闲置状态CALL_STATE_IDLE, isRinging:");
+                        }
                         isCalling = false;
                         if (isComingCall && isLockedWhenComingCall) {
                             LockScreenManager.getInstance().lock();
                         }
                         break;
                     case TelephonyManager.CALL_STATE_RINGING: // 当前电话处于零响状态
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("CALL_STATE_RINGING电话号码为 " + incomingNumber);
+                        }
                         isCalling = true;
                         isLockedWhenComingCall = LockScreenManager.getInstance().isLocked();
                         isComingCall = true;
                         LockScreenManager.getInstance().unLock(true, true);
                         break;
                     case TelephonyManager.CALL_STATE_OFFHOOK: // 当前电话处于接听状态
+                        if (BuildConfig.DEBUG) {
+                            HDBLOG.logD("当前电话处于通话状态CALL_STATE_OFFHOOK ");
+                        }
                         isCalling = true;
                         isLockedWhenComingCall = false;
                         break;
@@ -219,7 +257,11 @@ public class PandoraService extends Service {
                 LockScreenManager.getInstance().onScreenOn();
             } else if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
                 String reason = intent.getStringExtra("reason");
+                if (BuildConfig.DEBUG) {
+                    HDBLOG.logD("监听到触按了导航键：" + reason);
+                }
                 if (TextUtils.equals(reason, "homekey")) {
+                    // 由于系统对home键的保护机制，当按下home键后5s中是不能从service中启动activity的
                         HDBThreadUtils.postOnUiDelayed(new Runnable() {
                             public void run() {
                                 if (LockScreenManager.getInstance().isLocked()) {
