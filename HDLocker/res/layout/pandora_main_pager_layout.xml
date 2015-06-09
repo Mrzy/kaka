@@ -16,14 +16,6 @@
             android:layout_height="25dp"
             android:gravity="center_vertical" >
 
-            <cn.zmdx.kaka.locker.widget.WifiImageView
-                android:id="@+id/wifi_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="1dp"
-                android:src="@drawable/wifi_icon" />
-
             <cn.zmdx.kaka.locker.battery.BatteryView
                 android:id="@+id/batteryView"
                 android:layout_width="10dp"
@@ -44,11 +36,22 @@
                 android:textColor="@color/white"
                 android:textSize="12dp" />
 
+            <cn.zmdx.kaka.locker.widget.WifiImageView
+                android:id="@+id/wifi_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginRight="6dp"
+                android:layout_toLeftOf="@id/batteryView"
+                android:src="@drawable/wifi_icon" />
+
             <cn.zmdx.kaka.locker.widget.TextClockCompat
                 android:id="@+id/fakeStatusDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="1dp"
                 android:shadowColor="#30000000"
                 android:shadowDx="1"
                 android:shadowDy="1"
