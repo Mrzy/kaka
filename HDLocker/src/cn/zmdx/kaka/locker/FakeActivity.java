@@ -54,7 +54,6 @@ public class FakeActivity extends Activity {
             @Override
             public void onUnLock() {
                 finish();
-                overridePendingTransition(0, 0);
             }
 
             @Override
