@@ -304,4 +304,32 @@ public class NewsFactory {
         return UrlBuilder.getBaseUrl("locker!queryWallPaperNew.action?flag=" + flag
                 + "&lastModified=" + time + "&limit=" + limit + "&isDebug=" + isDebug);
     }
+
+    static void statisticalChannelTravelNews() {
+        JsonObjectRequest request = null;
+        String baseUrl = "http://nb.hdlocker.com/pandora/locker!addViews.action?id=270941";
+        // String time = "&time=" + String.valueOf(System.currentTimeMillis());
+        request = new JsonObjectRequest(baseUrl, null, new Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                if (response == null) {
+                    return;
+                } else {
+                    if (BuildConfig.DEBUG) {
+                        HDBLOG.logD("--response-->>" + response);
+                    }
+                }
+            }
+        }, new ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (BuildConfig.DEBUG) {
+                    error.printStackTrace();
+                }
+            }
+        });
+        RequestManager.getRequestQueue().add(request);
+    }
 }

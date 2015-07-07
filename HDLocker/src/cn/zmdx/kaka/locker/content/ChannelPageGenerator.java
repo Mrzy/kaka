@@ -26,6 +26,7 @@ import cn.zmdx.kaka.locker.content.adapter.BeautyPageAdapter;
 import cn.zmdx.kaka.locker.content.adapter.StickRecyclerAdapter;
 import cn.zmdx.kaka.locker.content.adapter.StickRecyclerAdapter.OnStickClickListener;
 import cn.zmdx.kaka.locker.content.adapter.WallpaperPageAdapter;
+import cn.zmdx.kaka.locker.content.channel.ChannelBoxManager;
 import cn.zmdx.kaka.locker.content.view.NewsDetailLayout;
 import cn.zmdx.kaka.locker.event.UmengCustomEventManager;
 import cn.zmdx.kaka.locker.settings.config.PandoraConfig;
@@ -196,6 +197,9 @@ class ChannelPageGenerator {
                 NewsDetailLayout ndl = new NewsDetailLayout(mBoxManager, sid);
                 mBoxManager.openDetailPage(ndl, true);
                 UmengCustomEventManager.statisticalOpenNewsDetail(sid.getId(), mChannelId + "");
+                if (sid.getmType() == ChannelBoxManager.CHANNEL_TRAVEL) {
+                    NewsFactory.statisticalChannelTravelNews();
+                }
             }
         });
         rv.setAdapter(mAdapter);
