@@ -198,7 +198,7 @@ class ChannelPageGenerator {
                 mBoxManager.openDetailPage(ndl, true);
                 UmengCustomEventManager.statisticalOpenNewsDetail(sid.getId(), mChannelId + "");
                 if (sid.getmType() == ChannelBoxManager.CHANNEL_TRAVEL) {
-                    NewsFactory.statisticalChannelTravelNews();
+                    NewsFactory.statisticalChannelTravelNews(sid.getId());
                 }
             }
         });

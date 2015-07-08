@@ -305,9 +305,9 @@ public class NewsFactory {
                 + "&lastModified=" + time + "&limit=" + limit + "&isDebug=" + isDebug);
     }
 
-    static void statisticalChannelTravelNews() {
+    static void statisticalChannelTravelNews(int id) {
         JsonObjectRequest request = null;
-        String baseUrl = "http://nb.hdlocker.com/pandora/locker!addViews.action?id=270941";
+        String baseUrl = "http://nb.hdlocker.com/pandora/locker!addViews.action?id=" + id + "&time=" + System.currentTimeMillis();
         // String time = "&time=" + String.valueOf(System.currentTimeMillis());
         request = new JsonObjectRequest(baseUrl, null, new Listener<JSONObject>() {
 
