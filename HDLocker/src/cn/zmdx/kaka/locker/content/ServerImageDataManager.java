@@ -222,7 +222,7 @@ public class ServerImageDataManager {
             }
             return sdList;
         }
-
+        //保存到数据库
         public static void saveToDatabase(List<ServerImageData> sidList) {
             ServerImageDataModel.getInstance().saveServerImageData(sidList);
         }

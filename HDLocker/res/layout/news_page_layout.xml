@@ -45,7 +45,7 @@
                     android:shadowRadius="1"
                     android:singleLine="true"
                     android:textColor="#c0ffffff"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"/>
 
                 <TextView
                     android:id="@+id/tip"

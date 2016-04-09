@@ -60,6 +60,10 @@ public class MainSettingFragment extends Fragment {
         return mEntireView;
     }
 
+    /**
+     * 初始化fragments标题
+     * @return
+     */
     private List<String> initFragmentTitleList() {
         List<String> titleList = new ArrayList<String>();
         titleList.add(getResources().getString(R.string.pandora_setting_general));
@@ -71,6 +75,10 @@ public class MainSettingFragment extends Fragment {
         return titleList;
     }
 
+    /**
+     * 初始化fragments
+     * @return
+     */
     private List<Fragment> initFragmentList() {
         List<Fragment> fragmentList = new ArrayList<Fragment>();
         mGeneralFragment = new GeneralFragment();
@@ -85,6 +93,7 @@ public class MainSettingFragment extends Fragment {
         fragmentList.add(wallpaperFragment);
         return fragmentList;
     }
+
 
     public class PageFragmentAdapter extends FragmentPagerAdapter implements OnPageChangeListener {
 

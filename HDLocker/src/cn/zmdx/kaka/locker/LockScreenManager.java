@@ -132,24 +132,28 @@ public class LockScreenManager {
         mLockListener = listener;
     }
 
+   
     private LockScreenManager() {
         mContext = HDApplication.getContext();
         mWinManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        //KeyguardManager用于锁屏和解锁的类
         KeyguardManager keyguard = (KeyguardManager) mContext
                 .getSystemService(Context.KEYGUARD_SERVICE);
+        //键盘锁 解锁键盘用的 
         mKeyguard = keyguard.newKeyguardLock("pandora");
         mPandoraConfig = PandoraConfig.newInstance(mContext);
         disableSystemLock();
     }
-
+    
+    //解锁键盘
     public void disableSystemLock() {
         mKeyguard.disableKeyguard();
     }
-
+    
     public void enableSystemLock() {
         mKeyguard.reenableKeyguard();
     }
-
+      //LockScreenManager单例  
     public static LockScreenManager getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new LockScreenManager();
@@ -159,13 +163,14 @@ public class LockScreenManager {
 
     private boolean mIsNeedNotice = false;
 
+    //锁屏
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public void lock() {
         if (mIsLocked || PandoraService.isCalling())
             return;
 
         PandoraConfig pandoraConfig = PandoraConfig.newInstance(mContext);
-        boolean isLockerOn = pandoraConfig.isPandolaLockerOn();
+        boolean isLockerOn = pandoraConfig.isPandolaLockerOn();//是否是潘多拉锁屏
         if (!isLockerOn) {
             return;
         }
@@ -233,6 +238,7 @@ public class LockScreenManager {
         return (mSlidingUpView != null) && mSlidingUpView.isPanelExpanded();
     }
 
+    //初始化锁屏页面
     private void initNewLockScreenViews() {
         mEntireView = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.new_pandora_lockscreen, null);
@@ -257,15 +263,19 @@ public class LockScreenManager {
         mDimBg = mEntireView.findViewById(R.id.dimBg);
         mDimBg.setAlpha(0);
 
+        
         initWallpaper();
 
         // 初始化右划解锁的viewpager
         mPager = (ViewPagerCompat) mEntireView.findViewById(R.id.viewPager);
 
         List<View> pages = new ArrayList<View>();
+        //锁屏
         ViewGroup page1 = (ViewGroup) LayoutInflater.from(mContext).inflate(
                 R.layout.pandora_password_pager_layout, null);
+        //密码页
         initSecurePanel(page1);
+        //锁屏页上半部分
         mMainPage = LayoutInflater.from(mContext).inflate(R.layout.pandora_main_pager_layout, null);
         mMainPage.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -297,12 +307,13 @@ public class LockScreenManager {
             // }
         }
 
+        //时间天气部分
         mDateWidget = (ViewGroup) mMainPage.findViewById(R.id.dateWeatherLayout);
         mTimeLayoutManager = TimeLayoutManager.getInstance(mContext);
         View dateWeatherView = mTimeLayoutManager.createLayoutViewByID(TimeLayoutManager
                 .getInstance(mContext).getCurrentLayout());
         mDateWidget.addView(dateWeatherView);
-
+        
         pages.add(page1);
         pages.add(mMainPage);
         LockerPagerAdapter pagerAdapter = new LockerPagerAdapter(mContext, mPager, pages);
@@ -340,7 +351,6 @@ public class LockScreenManager {
         });
 
         if (PandoraConfig.newInstance(mContext).isNewsOpen()) {
-            // 初始化新闻页
             View newsView = PandoraBoxManager.newInstance(mContext).getEntireView();
             ViewGroup newsLayout = (ViewGroup) mSlidingUpView.findViewById(R.id.newsLayout);
             newsLayout.setVisibility(View.VISIBLE);
@@ -565,6 +575,7 @@ public class LockScreenManager {
         config.setFlagCheckNewVersionTime(today);
     }
 
+    //初始化密码页
     private void initSecurePanel(ViewGroup container) {
         final KeyguardLockerManager klm = new KeyguardLockerManager(mContext);
         final View view = klm.getCurrentLockerView(new IUnlockListener() {
@@ -594,6 +605,7 @@ public class LockScreenManager {
         }
     }
 
+    //初始化壁纸
     public void initWallpaper() {
         if (null == mEntireView || null == mBlurImageView) {
             return;

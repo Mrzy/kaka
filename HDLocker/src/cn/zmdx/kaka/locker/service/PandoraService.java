@@ -68,6 +68,7 @@ public class PandoraService extends Service {
         }
         timingUpdateCurLocation();
         loadAlarmActions();
+        //TODO
         registerBroadcastReceiver();
         TelephonyManager manager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
         manager.listen(new MyPhoneListener(), PhoneStateListener.LISTEN_CALL_STATE);
@@ -223,6 +224,7 @@ public class PandoraService extends Service {
         }
     }
 
+    //TODO  注册广播
     public final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override

@@ -18,7 +18,7 @@ public class ChannelPageFactory {
 
     public static final int NEWS_HEADER_CACHEDDATA_MAX_COUNT = 10;
 
-    private static long sLastModified = 0;
+    private static long sLastModified = 0;//采集日期
 
     public static List<ServerImageData> getNewsHeaderData() {
         return sNewsHeaderData;
@@ -45,8 +45,8 @@ public class ChannelPageFactory {
         return true;
     }
 
-    public static ChannelPageGenerator createPageGenerator(PandoraBoxManager boxManager,
-            int channelId) {
+    //TODO 创建新闻页的页面
+    public static ChannelPageGenerator createPageGenerator(PandoraBoxManager boxManager,int channelId) {
         ChannelPageGenerator cpg = null;
         final WeakReference<ChannelPageGenerator> wr = sPageGenCache.get(channelId);
         if (wr != null && wr.get() != null) {
@@ -54,16 +54,13 @@ public class ChannelPageFactory {
         } else {
             int color = getColorByChannelId(channelId);
             if (channelId == ChannelBoxManager.CHANNEL_WALLPAPER) {
-                cpg = new ChannelPageGenerator(boxManager, channelId,
-                        ChannelPageGenerator.NEWS_THEME_WALLPAPER, color);
+                cpg = new ChannelPageGenerator(boxManager, channelId, ChannelPageGenerator.NEWS_THEME_WALLPAPER, color);
             } else if (channelId == ChannelBoxManager.CHANNEL_HEADLINES
                     || channelId == ChannelBoxManager.CHANNEL_MICRO
                     || channelId == ChannelBoxManager.CHANNEL_FINANCE) {
-                cpg = new ChannelPageGenerator(boxManager, channelId,
-                        ChannelPageGenerator.NEWS_THEME_LIST, color);
+                cpg = new ChannelPageGenerator(boxManager, channelId,ChannelPageGenerator.NEWS_THEME_LIST, color);
             } else {
-                cpg = new ChannelPageGenerator(boxManager, channelId,
-                        ChannelPageGenerator.NEWS_THEME_STAGGERED, color);
+                cpg = new ChannelPageGenerator(boxManager, channelId,ChannelPageGenerator.NEWS_THEME_STAGGERED, color);
             }
             sPageGenCache.put(channelId, new WeakReference<ChannelPageGenerator>(cpg));
         }
@@ -84,6 +81,7 @@ public class ChannelPageFactory {
      */
     public static ChannelPageGenerator getPageGenerator(int channelId) {
         ChannelPageGenerator cpg = null;
+        
         final WeakReference<ChannelPageGenerator> wr = sPageGenCache.get(channelId);
         if (wr != null) {
             cpg = wr.get();

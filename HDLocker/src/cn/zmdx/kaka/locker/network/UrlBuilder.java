@@ -17,8 +17,8 @@ import cn.zmdx.kaka.locker.utils.BaseInfoHelper;
 
 public class UrlBuilder {
 
-    private static String sBaseDebugUrl = "http://nb.hdlocker.com/pandora/";
-
+//    private static String sBaseDebugUrl = "http://nb.hdlocker.com/pandora/";
+    private static String sBaseDebugUrl = "http://pandora.hdlocker.com/pandora/";
     private static String sBaseProdUrl = "http://pandora.hdlocker.com/pandora/";
 
     public static String getBaseUrl(String action) {

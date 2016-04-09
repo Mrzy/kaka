@@ -123,7 +123,7 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
         mWebView = (WebView) mEntireView.findViewById(R.id.webView);
         mWebView.getSettings().setJavaScriptEnabled(true);
         if (Build.VERSION.SDK_INT >= 19) {
-            mWebView.getSettings().setLoadsImagesAutomatically(true);
+            mWebView.getSettings().setLoadsImagesAutomatically(true);//支持图片自动加载
         } else {
             mWebView.getSettings().setLoadsImagesAutomatically(false);
         }
@@ -169,10 +169,13 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
                 super.onReceivedError(view, errorCode, description, failingUrl);
             }
         });
+      //支持缩放
         mWebView.getSettings().setSupportZoom(true);
         mWebView.getSettings().setBuiltInZoomControls(false);
+        
         if (PandoraConfig.newInstance(getContext()).isOnlyWifiLoadImage()
                 && !HDBNetworkState.isWifiNetwork()) {
+            //把图片加载放在最后来加载渲染
             mWebView.getSettings().setBlockNetworkImage(true);
         }
         mWebView.setOnTouchListener(this);
@@ -209,10 +212,12 @@ public class NewsDetailLayout extends FrameLayout implements View.OnClickListene
                 // 增加from的key表明此请求是来自pandora客户端的
                 String theme = PandoraConfig.newInstance(getContext()).isNightModeOn() ? "night"
                         : "day";
+                //网页服务器地址
                 String detailUrl = mData.getImageDesc();
                 if (!TextUtils.isEmpty(detailUrl) && detailUrl.contains("hdlocker")) {
                     detailUrl += "&from=pandora&theme=" + theme;
                 }
+                //webView加载
                 load(detailUrl);
             }
         }, 300);

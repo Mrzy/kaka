@@ -13,16 +13,22 @@ import cn.zmdx.kaka.locker.event.BottomDockUmengEventManager;
 
 public class ChannelBoxManager {
 
+    // 壁纸
     public static final int CHANNEL_WALLPAPER = 0;
 
+    // 头条
     public static final int CHANNEL_HEADLINES = 1;
 
+    // 八卦
     public static final int CHANNEL_GOSSIP = 2;
 
+    // 微精选
     public static final int CHANNEL_MICRO = 3;
 
+    // 美女
     public static final int CHANNEL_BEAUTY = 4;
 
+    // 搞笑
     public static final int CHANNEL_FUNNY = 5;
 
     // 财经
@@ -46,7 +52,11 @@ public class ChannelBoxManager {
     // 创业
     public static final int CHANNEL_BUSINESS = 12;
 
+    // 旅行
     public static final int CHANNEL_TRAVEL = 13;
+
+    // TODO 享秀
+    public static final int CHANNEL_ENJOYSHOW = 14;
 
     private static ChannelBoxManager INSTANCE;
 
@@ -146,7 +156,6 @@ public class ChannelBoxManager {
         ci.setChannelImgResId(R.drawable.channel_bg_keji);
         set.add(ci);
 
-
         ci = new ChannelInfo();
         ci.setChannelId(CHANNEL_TRAVEL);
         ci.setChannelName(getChannelNameById(CHANNEL_TRAVEL));
@@ -186,6 +195,22 @@ public class ChannelBoxManager {
 
     public List<ChannelInfo> getSelectedChannels() {
         List<ChannelInfo> result = new ArrayList<ChannelInfo>();
+        // TODO 将享秀数据放在首位
+        if (result.size() == 0) {
+            ChannelInfo ci = new ChannelInfo();
+            ci.setChannelId(CHANNEL_ENJOYSHOW);
+            ci.setChannelName(getChannelNameById(CHANNEL_ENJOYSHOW));
+            ci.setSelected(true);
+            result.add(ci);}
+//        } else if (result.size() > 1
+//                && result.get(0).getChannelId() != ChannelBoxManager.CHANNEL_ENJOYSHOW) {
+//            ChannelInfo ci = new ChannelInfo();
+//            ci.setChannelId(CHANNEL_ENJOYSHOW);
+//            ci.setChannelName(getChannelNameById(CHANNEL_ENJOYSHOW));
+//            ci.setSelected(true);
+//            result.add(0, ci);
+//        }
+
         String str = mPreference.getString(PREFER_KEY_SELECTED_CHANNELS, DEFAULT_CHANNEL);
         if (!TextUtils.isEmpty(str)) {
             String[] strs = str.split(",");
@@ -264,6 +289,8 @@ public class ChannelBoxManager {
             case CHANNEL_TRAVEL:
                 result = mContext.getString(R.string.pandora_news_classify_travel);
                 break;
+            case CHANNEL_ENJOYSHOW:
+                result = mContext.getString(R.string.pandora_news_classify_enjoyshow);
             default:
         }
         return result;

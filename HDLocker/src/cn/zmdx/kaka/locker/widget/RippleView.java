@@ -25,6 +25,7 @@ package cn.zmdx.kaka.locker.widget;
  * THE SOFTWARE.
  */
 
+import cn.zmdx.kaka.locker.R;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -45,7 +46,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import cn.zmdx.kaka.locker.R;
+
 
 /**
  * Author : Chutaux Robin Date : 10/8/2014

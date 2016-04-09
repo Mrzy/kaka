@@ -280,8 +280,7 @@ public class MainSettingActivity extends ActionBarActivity implements IMainSetti
         addFragment(mMainSettingFragment, TAG_MAIN_SETTING_FRAGMENT, false, false);
     }
 
-    private void addFragment(Fragment fragment, String tag, boolean isAddToBackStack,
-            boolean isNeedAnimator) {
+    private void addFragment(Fragment fragment, String tag, boolean isAddToBackStack,boolean isNeedAnimator) {
         if (!fragment.isAdded()) {
             FragmentTransaction beginTransaction = getSupportFragmentManager().beginTransaction();
             if (isNeedAnimator) {

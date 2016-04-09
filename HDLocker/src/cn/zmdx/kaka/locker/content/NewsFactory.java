@@ -71,6 +71,7 @@ public class NewsFactory {
         }
 
         JsonObjectRequest request = null;
+        //TODO
         final String url = getUrl(type, data, older);
         if (BuildConfig.DEBUG) {
             HDBLOG.logD("加载新闻url:" + url);
@@ -90,7 +91,7 @@ public class NewsFactory {
 
                 if (BuildConfig.DEBUG) {
                     HDBLOG.logD("请求新闻数据成功，本次返回：" + newData.size() + ",条，共" + data.size() + "条新闻"
-                            + "  " + stickData.size() + "条Stick新闻");
+                            + "  " + stickData.size() + "条Stick新闻"+response.toString());
                 }
 
                 if (null != listener) {
@@ -171,8 +172,8 @@ public class NewsFactory {
         if (!HDBNetworkState.isWifiNetwork()) {
             limit = 10;
         }
-        return UrlBuilder.getBaseUrl("locker!queryDataImgTableNew.action?type=" + type
-                + "&lastModified=" + time + "&flag=" + flag + "&limit=" + limit);
+        //TODO UrlBuilder.getBaseUrl("locker!queryDataImgTableNew.action?type=" + type + "&lastModified=" + time + "&flag=" + flag + "&limit=" + limit);
+        return "http://192.168.0.222:8089/pandora/locker!queryDataImgTableNew.action?type=" + type + "&lastModified=" + time + "&flag=" + flag + "&limit=" + limit;
     }
 
     /**
@@ -307,7 +308,7 @@ public class NewsFactory {
 
     static void statisticalChannelTravelNews(int id) {
         JsonObjectRequest request = null;
-        String baseUrl = "http://nb.hdlocker.com/pandora/locker!addViews.action?id=" + id + "&time=" + System.currentTimeMillis();
+        String baseUrl = UrlBuilder.getBaseUrl("locker!addViews.action?id=" + id + "&time=" + System.currentTimeMillis());
         // String time = "&time=" + String.valueOf(System.currentTimeMillis());
         request = new JsonObjectRequest(baseUrl, null, new Listener<JSONObject>() {
 

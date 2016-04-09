@@ -245,6 +245,7 @@ class ChannelPageGenerator {
     private View initListThemeView() {
         ViewGroup view = (ViewGroup) mInflater.inflate(R.layout.pager_news_layout, null);
         mRecyclerView = (PandoraRecyclerView) view.findViewById(R.id.recyclerView);
+        //组件边界是否使用淡出效果
         mRecyclerView.setVerticalFadingEdgeEnabled(true);
         mRecyclerView.setFadingEdgeLength(BaseInfoHelper.dip2px(mContext, 5));
         final LinearLayoutManager llm = new LinearLayoutManager(mContext,
@@ -252,6 +253,7 @@ class ChannelPageGenerator {
         mRecyclerView.setLayoutManager(llm);
         mRecyclerView.setHasFixedSize(true);
 
+        //TODO
         mAdapter = new StickRecyclerAdapter(mContext, mNewsData, mStickData);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -301,6 +303,7 @@ class ChannelPageGenerator {
 
             @Override
             public void onRefresh() {
+                //TODO 加载数据
                 NewsFactory.updateNews(mChannelId, mAdapter, mNewsData, mRefreshView, false, true,
                         mLoadingListener);
                 UmengCustomEventManager.statisticalPullRefreshNews(mChannelId + "");

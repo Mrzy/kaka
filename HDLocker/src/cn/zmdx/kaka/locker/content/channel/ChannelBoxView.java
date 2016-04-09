@@ -45,9 +45,10 @@ public class ChannelBoxView extends FrameLayout {
 
     private void init() {
         mSelectedChannels = mChannelManager.getSelectedChannels();
-        // 由于壁纸为必选，所以去掉壁纸
+        // 由于壁纸,享秀为必选，所以去掉壁纸,享秀
         mSelectedChannels.remove(mSelectedChannels.size() - 1);
-
+        mSelectedChannels.remove(0);
+        
         mUnSelectedChannels = mChannelManager.getAllChannels();
         View view = LayoutInflater.from(mContext).inflate(R.layout.news_channel_box_layout, null);
         mSelectedChannelGrid = (GridView) view.findViewById(R.id.selectedChannelGrid);

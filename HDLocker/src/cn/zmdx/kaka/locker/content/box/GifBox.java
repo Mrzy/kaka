@@ -71,6 +71,8 @@ public class GifBox implements IPandoraBox {
         }
         File file = DiskImageHelper.getFileByUrl(mData.getmImageUrl());
         try {
+            
+            //TODO
             mImageView.setBackgroundDrawable(true, file);
         } catch (IOException e) {
             e.printStackTrace();

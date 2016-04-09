@@ -34,9 +34,9 @@ public class SplashFragment extends Fragment {
 
     private TypefaceTextView mVersion, mAppName;
 
-    private ImageView mIcon;
+    private ImageView mIcon; //logo图片
 
-    private ImageView mStar1, mStar2, mStar3;
+    private ImageView mStar1, mStar2, mStar3;//流星图片
 
     private int mScreenWidth, mStarWidth;
 
@@ -85,7 +85,7 @@ public class SplashFragment extends Fragment {
         invisiableViews(mIcon, mAppName, mVersion, mStar1, mStar2, mStar3);
         processAnimations();
         ViewTreeObserver vto2 = mStar1.getViewTreeObserver();
-        vto2.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+        vto2.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {//当在一个视图树中全局布局发生改变或者视图树中的某个视图的可视状态发生改变时，所要调用的回调函数的接口类
             @SuppressWarnings("deprecation")
             @Override
             public void onGlobalLayout() {
@@ -113,32 +113,36 @@ public class SplashFragment extends Fragment {
 
     private AnimatorSet mIconAnimatorSet;
 
+    /**
+     * 动画步骤
+     */
     private void processAnimations() {
-        ObjectAnimator iconAlpha = ObjectAnimator.ofFloat(mIcon, "alpha", 0, 1);
-        ObjectAnimator iconTrans = ObjectAnimator.ofFloat(mIcon, "translationY",
-                DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);
+        //logo
+        ObjectAnimator iconAlpha = ObjectAnimator.ofFloat(mIcon, "alpha", 0, 1);//logo透明度
+        ObjectAnimator iconTrans = ObjectAnimator.ofFloat(mIcon, "translationY", DATE_WIDGET_TRANSLATIONY_DISTANCE, 0);//logo位移
         AnimatorSet iconSet = new AnimatorSet();
         iconSet.setStartDelay(100);
         iconSet.playTogether(iconAlpha, iconTrans);
 
+        //应用名
         ObjectAnimator appNameAlpha = ObjectAnimator.ofFloat(mAppName, "alpha", 0, 1);
-        ObjectAnimator appNameTrans = ObjectAnimator.ofFloat(mAppName, "translationY",
-                DATE_WIDGET_TRANSLATIONY_DISTANCE_1, 0);
+        ObjectAnimator appNameTrans = ObjectAnimator.ofFloat(mAppName, "translationY",DATE_WIDGET_TRANSLATIONY_DISTANCE_1, 0);
         AnimatorSet appNameSet = new AnimatorSet();
         appNameSet.setStartDelay(300);
         appNameSet.playTogether(appNameAlpha, appNameTrans);
 
+        //版本号
         ObjectAnimator versionAlpha = ObjectAnimator.ofFloat(mVersion, "alpha", 0, 1);
-        ObjectAnimator versionTrans = ObjectAnimator.ofFloat(mVersion, "translationY",
-                DATE_WIDGET_TRANSLATIONY_DISTANCE_2, 0);
+        ObjectAnimator versionTrans = ObjectAnimator.ofFloat(mVersion, "translationY",DATE_WIDGET_TRANSLATIONY_DISTANCE_2, 0);
         AnimatorSet versionSet = new AnimatorSet();
         versionSet.setStartDelay(500);
         versionSet.playTogether(versionAlpha, versionTrans);
 
+        
         mIconAnimatorSet = new AnimatorSet();
         mIconAnimatorSet.playTogether(iconSet, appNameSet, versionSet);
         mIconAnimatorSet.setDuration(800);
-        mIconAnimatorSet.setInterpolator(new DecelerateInterpolator());
+        mIconAnimatorSet.setInterpolator(new DecelerateInterpolator());//在动画开始的地方速率改变比较慢，然后开始减速
         mIconAnimatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -155,7 +159,7 @@ public class SplashFragment extends Fragment {
     private void invisiableViews(View... views) {
         for (View view : views) {
             if (view != null)
-                view.setAlpha(0);
+                view.setAlpha(0);//透明
         }
     }
 
@@ -177,8 +181,15 @@ public class SplashFragment extends Fragment {
 
     private AnimatorSet mStarAnimatorSet;
 
-    private void processStarAnimations(final View view, int startDelay, int duration,
-            final float param, boolean isEnd) {
+    /**
+     * 流星动画
+     * @param view
+     * @param startDelay
+     * @param duration
+     * @param param
+     * @param isEnd
+     */
+    private void processStarAnimations(final View view, int startDelay, int duration,final float param, boolean isEnd) {
         ObjectAnimator starAlpha = ObjectAnimator.ofFloat(view, "alpha", 1, 0);
         starAlpha.setInterpolator(new DecelerateInterpolator());
         mStarTrans = ObjectAnimator.ofFloat(view, "translationX", 0, mScreenWidth);

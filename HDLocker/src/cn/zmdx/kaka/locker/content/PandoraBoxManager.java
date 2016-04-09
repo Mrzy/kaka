@@ -21,6 +21,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -60,6 +61,11 @@ import cn.zmdx.kaka.locker.widget.PagerSlidingTabStrip;
 import cn.zmdx.kaka.locker.widget.SwitchButton;
 import cn.zmdx.kaka.locker.widget.ViewPagerCompat;
 
+/**
+ * 新闻页管理器
+ * @author shayne
+ *
+ */
 public class PandoraBoxManager implements View.OnClickListener {
 
     public static final int NEWS_THEME_DAY = 1;
@@ -99,7 +105,7 @@ public class PandoraBoxManager implements View.OnClickListener {
             Color.parseColor("#8bc34a"), Color.parseColor("#ea861c"), Color.parseColor("#3db7ff"),
             Color.parseColor("#26a69a"), Color.parseColor("#e84e40"), Color.parseColor("#ab47bc"),
             Color.parseColor("#8bc34a"), Color.parseColor("#ea861c"), Color.parseColor("#3db7ff"),
-            Color.parseColor("#26a69a"), Color.parseColor("#e84e40")
+            Color.parseColor("#26a69a"), Color.parseColor("#e84e40"), Color.parseColor("#e84e40")
     };
 
     private static final int[] mFloatingButtonColors = new int[] {
@@ -109,13 +115,13 @@ public class PandoraBoxManager implements View.OnClickListener {
             Color.parseColor("#a026a69a"), Color.parseColor("#a0e84e40"),
             Color.parseColor("#a0ab47bc"), Color.parseColor("#a08bc34a"),
             Color.parseColor("#a0ea861c"), Color.parseColor("#a03db7ff"),
-            Color.parseColor("#a026a69a"), Color.parseColor("#a0e84e40")
+            Color.parseColor("#a026a69a"), Color.parseColor("#a0e84e40"),Color.parseColor("#e84e40")
     };
 
     private static final int NEWS_TIP_HEIGHT = BaseInfoHelper
             .dip2px(HDApplication.getContext(), 40);
 
-    private int mNewsHeaderHeight = 0;
+    private int mNewsHeaderHeight = 0;//新闻页顶部的高度
 
     protected static final int KEEP_TIP_TIME_DEFAULT = 4000;
 
@@ -139,10 +145,11 @@ public class PandoraBoxManager implements View.OnClickListener {
         return mPbManager;
     }
 
+    //初始化新闻header
     public void initHeader() {
         mHeaderPart1 = mEntireView.findViewById(R.id.header_part1);
         mHeaderPart1.getLayoutParams().height = mNewsHeaderHeight;
-        mEntireView.requestLayout();
+        mEntireView.requestLayout();//重新布局
         mNewsHeaderTitle = (TextView) mHeaderPart1.findViewById(R.id.news_header_title);
         mHeaderHasNewsArea = mHeaderPart1.findViewById(R.id.news_header_hasContent);
         mHeaderHasNewsArea.setVisibility(View.GONE);
@@ -195,6 +202,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
         mInitBody = true;
 
+        //TODO
         mTipLayout = (FrameLayout) mEntireView.findViewById(R.id.news_tip_layout);
 
         mBackBtn = (CircleSpiritButton) mEntireView.findViewById(R.id.backBtn);
@@ -217,18 +225,23 @@ public class PandoraBoxManager implements View.OnClickListener {
                 LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mNotifyReceiver);
             }
         });
+        
+
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mNotifyReceiver);
         IntentFilter filter = new IntentFilter(NotificationListView.ACTION_NOTIFICATION_POSTED);
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mNotifyReceiver, filter);
 
         mViewPager = (ViewPagerCompat) mEntireView.findViewById(R.id.newsViewPager);
         mPages = new ArrayList<Integer>();
+        //TODO
         initNewsPages();
         mNewsPagerAdapter = new NewsPagerAdapter(this, mPages, mTabTitles);
         mViewPager.setAdapter(mNewsPagerAdapter);
         int currentItem = calCurrentItem();
         mViewPager.setCurrentItem(currentItem);
 
+
+        //TODO
         tabStrip = (PagerSlidingTabStrip) mEntireView.findViewById(R.id.newsTabStrip);
         tabStrip.setViewPager(mViewPager);
         tabStrip.setTabBgColors(mTabColors);
@@ -242,13 +255,14 @@ public class PandoraBoxManager implements View.OnClickListener {
 
             @Override
             public void onPageSelected(int position) {
+
                 mBackBtn.setColorNormal(mFloatingButtonColors[position]);
                 mBackBtn.setColorPressed(mFloatingButtonColors[position]);
-
                 final int channelId = mPages.get(position);
                 // 延迟加载，保证切换tab流畅
                 HDBThreadUtils.postOnUiDelayed(new Runnable() {
                     public void run() {
+                        //TODO
                         refreshNewsByChannelId(channelId);
                     };
                 }, 500);
@@ -269,6 +283,8 @@ public class PandoraBoxManager implements View.OnClickListener {
         switchNewsTheme(theme);
 
         final View redPoint = mEntireView.findViewById(R.id.redPoint);
+        
+        //TODO
         mAddNewsTabBtn = (ImageView) mEntireView.findViewById(R.id.addNewsTabBtn);
         mAddNewsTabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -304,7 +320,7 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     private int calCurrentItem() {
-        int count = mNewsPagerAdapter.getCount();
+       // int count = mNewsPagerAdapter.getCount();
         return 0;//暂默认显示第一个tab
     }
 
@@ -463,7 +479,7 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         requestWakeLock();
 
-        // 提示用户开启夜间模式或自动切换到白昼模式
+        // 1s后,提示用户开启夜间模式或自动切换到白昼模式
         HDBThreadUtils.postOnUiDelayed(new Runnable() {
             @Override
             public void run() {
@@ -476,6 +492,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         BottomDockUmengEventManager.statisticalNewsPanelExpanded();
     }
 
+    //夜间模式提示
     private void openNightModeTip() {
         long lastTipTime = PandoraConfig.newInstance(mContext).getLastTipOpenNightModeTime();
         long current = System.currentTimeMillis();
@@ -586,6 +603,7 @@ public class PandoraBoxManager implements View.OnClickListener {
     }
 
     public void refreshNewsByChannelId(int channelId) {
+        
         ChannelPageGenerator cpg = ChannelPageFactory.getPageGenerator(channelId);
         if (cpg != null) {
             if (channelId == ChannelBoxManager.CHANNEL_WALLPAPER) {
@@ -632,10 +650,13 @@ public class PandoraBoxManager implements View.OnClickListener {
     // mWallpaperView.refreshData();
     // }
     // }
-
+    
+    
+    //导航栏标题
     private List<String> mTabTitles = new ArrayList<String>();
 
     private void initNewsPages() {
+        
         List<ChannelInfo> channels = ChannelBoxManager.getInstance(mContext).getSelectedChannels();
 
         mTabTitles.clear();
@@ -644,6 +665,7 @@ public class PandoraBoxManager implements View.OnClickListener {
                     ci.getChannelId()));
         }
 
+        
         mPages.clear();
         for (ChannelInfo ci : channels) {
             mPages.add(ci.getChannelId());
@@ -722,7 +744,8 @@ public class PandoraBoxManager implements View.OnClickListener {
             mDetailLayout.setVisibility(View.VISIBLE);
         }
     }
-
+    
+    //关闭详情页
     public void closeDetailPage(boolean withAnimator) {
         View childView = mDetailLayout.getChildAt(0);
         final boolean channelPage = childView instanceof ChannelBoxView;
@@ -749,6 +772,7 @@ public class PandoraBoxManager implements View.OnClickListener {
         }
     }
 
+    //viewPager适配器
     private static class NewsPagerAdapter extends PagerAdapter {
         private List<Integer> mPages;
 
@@ -780,7 +804,9 @@ public class PandoraBoxManager implements View.OnClickListener {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
+          
             final int channelId = mPages.get(position);
+           
             final ChannelPageGenerator cpg = ChannelPageFactory.createPageGenerator(mBoxManager,
                     channelId);
             View view = cpg.getView();
